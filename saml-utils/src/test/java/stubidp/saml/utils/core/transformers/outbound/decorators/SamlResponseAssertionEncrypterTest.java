@@ -12,7 +12,7 @@ import org.opensaml.xmlsec.encryption.support.EncryptionException;
 import stubidp.saml.security.EncrypterFactory;
 import stubidp.saml.security.EntityToEncryptForLocator;
 import stubidp.saml.security.KeyStoreBackedEncryptionCredentialResolver;
-import stubidp.saml.utils.core.test.OpenSAMLRunner;
+import stubidp.saml.utils.core.test.OpenSAMLMockitoRunner;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,7 +26,7 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-@RunWith(OpenSAMLRunner.class)
+@RunWith(OpenSAMLMockitoRunner.class)
 public class SamlResponseAssertionEncrypterTest {
 
     @Test
