@@ -43,7 +43,7 @@ public abstract class SessionRepositoryBase<T extends Session> implements Sessio
         return jdbi.withHandle(handle -> handle.select(
                 "select count(1) from stub_idp_session where session_id = ?", sessionToken.toString())
                 .mapTo(Boolean.class)
-                .findOnly());
+                .one());
     }
     
     public Optional<T> get(SessionId sessionToken) {
@@ -104,7 +104,7 @@ public abstract class SessionRepositoryBase<T extends Session> implements Sessio
         return jdbi.withHandle(handle -> handle.select("select count(*) from stub_idp_session where last_modified < :lastModified")
                 .bind("lastModified", Instant.now().minusSeconds(duration.getStandardSeconds()))
                 .mapTo(Long.class)
-                .findOnly());
+                .one());
     }
 
     public void deleteSessionsOlderThan(Duration duration) {
@@ -115,7 +115,7 @@ public abstract class SessionRepositoryBase<T extends Session> implements Sessio
         return jdbi.withHandle(handle -> handle.select(
                 "select count(*) from stub_idp_session")
                 .mapTo(Long.class)
-                .findOnly());
+                .one());
     }
     
     protected SessionId insertSession(SessionId sessionToken, T session) {
