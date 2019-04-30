@@ -19,7 +19,7 @@
         <guice.version>4.2.2</guice.version>
         <guava.version>27.1-jre</guava.version>
         <joda_time.version>2.10.1</joda_time.version>
-        <shibboleth_utils.version>7.4.2</shibboleth_utils.version>
+        <shibboleth_utils.version>7.5.0</shibboleth_utils.version>
         <javax_validation.version>2.0.1.Final</javax_validation.version>
         <jackson.version>2.9.8</jackson.version>
         <nimbus_jwt.version>7.1</nimbus_jwt.version>
