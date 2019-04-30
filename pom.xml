@@ -30,7 +30,7 @@
         <commons_lang.version>2.6</commons_lang.version>
         <commons_lang3.version>3.9</commons_lang3.version>
         <commons_validator.version>1.6</commons_validator.version>
-        <aws_java_sdk.version>1.11.541</aws_java_sdk.version>
+        <aws_java_sdk.version>1.11.542</aws_java_sdk.version>
         <logstash_logback_encoder.version>5.3</logstash_logback_encoder.version>
         <logback.version>1.2.3</logback.version>
         <javax_activation.version>1.2.0</javax_activation.version>
