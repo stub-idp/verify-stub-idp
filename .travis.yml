@@ -2,11 +2,10 @@ language: java
 jdk:
   - openjdk11
   - openjdk12
-  - openjdk13 # needs equalsverifier update
+  - openjdk13
   - openjdk14
 matrix:
   fast_finish: true
   allow_failures:
-    - jdk: openjdk13
     - jdk: openjdk14
 
