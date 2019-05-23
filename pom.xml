@@ -22,7 +22,7 @@
         <shibboleth_utils.version>7.5.0</shibboleth_utils.version>
         <javax_validation.version>2.0.1.Final</javax_validation.version>
         <jackson.version>2.9.9</jackson.version>
-        <nimbus_jwt.version>7.1</nimbus_jwt.version>
+        <nimbus_jwt.version>7.2.1</nimbus_jwt.version>
         <slf4j.version>1.7.26</slf4j.version>
         <jaxb.version>2.3.1</jaxb.version>
         <commons_codec.version>1.12</commons_codec.version>
