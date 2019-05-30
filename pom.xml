@@ -40,7 +40,7 @@
         <assertj.version>3.12.2</assertj.version>
         <assertj_jodatime.version>2.2.0</assertj_jodatime.version>
         <junit.version>5.4.2</junit.version>
-        <mockito.version>2.28.1</mockito.version>
+        <mockito.version>2.28.2</mockito.version>
         <hamcrest.version>2.1</hamcrest.version><!-- only in dropwizard-logstash -->
     </properties>
 
