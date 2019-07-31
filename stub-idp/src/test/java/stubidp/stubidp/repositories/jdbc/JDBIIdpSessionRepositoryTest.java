@@ -100,7 +100,7 @@ public class JDBIIdpSessionRepositoryTest {
 		
 		assertThat(actualSession.isPresent()).isEqualTo(true);
 		assertThat(actualSession.get()).isInstanceOf(IdpSession.class);
-		assertThat(actualSession.get()).isEqualToComparingFieldByFieldRecursively(expectedSession);
+		assertThat(actualSession.get()).usingRecursiveComparison().isEqualTo(expectedSession);
 	}
 	
 	@Test
@@ -126,7 +126,7 @@ public class JDBIIdpSessionRepositoryTest {
 		repository.updateSession(insertedSessionId, expectedSession);
 		IdpSession actualSession = repository.get(insertedSessionId).get();
 		
-		assertThat(actualSession).isEqualToComparingFieldByFieldRecursively(expectedSession);
+		assertThat(actualSession).usingRecursiveComparison().isEqualTo(expectedSession);
 	}
 
 	@Test
