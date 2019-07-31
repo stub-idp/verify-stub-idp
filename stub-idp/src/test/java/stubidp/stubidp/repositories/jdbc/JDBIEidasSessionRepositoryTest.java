@@ -67,6 +67,6 @@ public class JDBIEidasSessionRepositoryTest {
 
 		assertThat(actualSession.isPresent()).isEqualTo(true);
 		assertThat(actualSession.get()).isInstanceOf(EidasSession.class);
-		assertThat(actualSession.get()).isEqualToComparingFieldByFieldRecursively(expectedSession);
+		assertThat(actualSession.get()).usingRecursiveComparison().isEqualTo(expectedSession);
 	}
 }
