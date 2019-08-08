@@ -39,7 +39,7 @@
         <freemarker.version>2.3.28</freemarker.version>
 
         <!-- test dependencies -->
-        <assertj.version>3.13.1</assertj.version>
+        <assertj.version>3.13.2</assertj.version>
         <assertj_jodatime.version>2.2.0</assertj_jodatime.version>
         <junit.version>5.5.1</junit.version>
         <mockito.version>3.0.0</mockito.version>
