@@ -23,7 +23,7 @@
         <javax_validation.version>2.0.1.Final</javax_validation.version>
         <jackson_annotations.version>2.9.9</jackson_annotations.version>
         <jackson_databind.version>2.9.9.3</jackson_databind.version>
-        <jackson_datatype_joda.version>2.9.9</jackson_datatype_joda.version>
+        <jackson_datatype_joda.version>2.10.0.pr1</jackson_datatype_joda.version>
         <nimbus_jwt.version>7.7</nimbus_jwt.version>
         <slf4j.version>1.7.27</slf4j.version>
         <jaxb.version>2.3.1</jaxb.version>
