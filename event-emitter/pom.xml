@@ -56,7 +56,9 @@
         </dependency>
         <dependency>
             <groupId>com.amazonaws</groupId>
-            <artifactId>aws-java-sdk-s3</artifactId>
+            <!-- using -osgi as -s3 is not compatible with java modules right now (but osgi jar is ~120MB)
+                 https://github.com/aws/aws-sdk-java/issues/1658 -->
+            <artifactId>aws-java-sdk-osgi</artifactId>
             <version>${aws_java_sdk.version}</version>
             <scope>compile</scope>
         </dependency>

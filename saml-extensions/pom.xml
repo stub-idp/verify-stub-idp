@@ -56,6 +56,18 @@
             <version>${shibboleth_utils.version}</version>
             <scope>compile</scope>
         </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>${slf4j.version}</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>joda-time</groupId>
+            <artifactId>joda-time</artifactId>
+            <version>${joda_time.version}</version>
+            <scope>compile</scope>
+        </dependency>
         <!-- test dependencies -->
         <dependency>
             <groupId>org.junit.vintage</groupId>
