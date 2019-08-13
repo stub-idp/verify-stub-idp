@@ -4,6 +4,7 @@ module saml.security {
     exports stubidp.saml.security.validators;
     exports stubidp.saml.security.validators.signature;
     exports stubidp.saml.security.validators.encryptedelementtype;
+    exports stubidp.saml.security.validators.issuer;
 
     requires com.google.common;
     requires org.slf4j;

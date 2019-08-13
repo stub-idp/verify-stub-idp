@@ -6,6 +6,13 @@ module saml.utils {
     exports stubidp.saml.utils.core.transformers.outbound.decorators;
     exports stubidp.saml.utils.hub.domain;
     exports stubidp.saml.utils.hub.factories;
+    exports stubidp.saml.utils.core.transformers;
+    exports stubidp.saml.utils.metadata.transformers;
+    exports stubidp.saml.utils.hub.validators;
+    exports stubidp.saml.utils.core.api;
+    exports stubidp.saml.utils.hub.transformers.inbound.decorators;
+    exports stubidp.saml.utils.hub.transformers.outbound;
+    exports stubidp.saml.utils.core.transformers.inbound;
 
     requires com.fasterxml.jackson.annotation;
     requires org.opensaml.core;

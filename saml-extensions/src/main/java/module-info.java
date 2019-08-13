@@ -7,6 +7,9 @@ module saml.extensions {
     exports stubidp.saml.extensions.extensions.eidas.impl;
     exports stubidp.saml.extensions.validation;
     exports stubidp.saml.extensions.validation.errors;
+    exports stubidp.saml.extensions.extensions.versioning;
+    exports stubidp.saml.extensions.extensions.versioning.application;
+    exports stubidp.saml.extensions.extensions.impl;
 
     requires net.shibboleth.utilities.java.support;
     requires org.opensaml.saml.impl;
