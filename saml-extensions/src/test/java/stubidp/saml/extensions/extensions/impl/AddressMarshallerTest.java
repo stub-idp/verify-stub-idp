@@ -4,6 +4,7 @@ import net.shibboleth.utilities.java.support.xml.XMLConstants;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
 import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.ISODateTimeFormat;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -100,7 +101,7 @@ public class AddressMarshallerTest {
     @Test
     public void marshall_shouldMarshallFromDateInCorrectFormat() throws Exception {
         String fromDate = "2012-02-09";
-        address.setFrom(DateTime.parse(fromDate));
+        address.setFrom(DateTime.parse(fromDate, ISODateTimeFormat.date().withZoneUTC()));
 
         Element marshalledElement = marshaller.marshall(address);
 
@@ -119,7 +120,7 @@ public class AddressMarshallerTest {
     @Test
     public void marshall_shouldMarshallToDateInCorrectFormat() throws Exception {
         String toDate = "2012-02-09";
-        address.setTo(DateTime.parse(toDate));
+        address.setTo(DateTime.parse(toDate, ISODateTimeFormat.date().withZoneUTC()));
 
         Element marshalledElement = marshaller.marshall(address);
 
