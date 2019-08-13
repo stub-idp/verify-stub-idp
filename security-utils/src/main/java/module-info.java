@@ -7,7 +7,6 @@ module security.utils {
 
     requires com.fasterxml.jackson.annotation;
     requires org.slf4j;
-    requires java.xml.bind; // only for base64 code in CryptoHelper...
     requires org.apache.commons.codec;
 
     requires transitive java.validation;

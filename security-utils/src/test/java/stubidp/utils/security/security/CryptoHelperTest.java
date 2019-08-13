@@ -7,6 +7,7 @@ import org.junit.runners.BlockJUnit4ClassRunner;
 import stubidp.utils.security.security.CryptoHelper;
 
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -22,11 +23,11 @@ public class CryptoHelperTest {
     private static CryptoHelper cryptoHelper;
 
     private static String base64(byte[] data) {
-        return javax.xml.bind.DatatypeConverter.printBase64Binary(data);
+        return Base64.getEncoder().encodeToString(data);
     }
 
     private static byte[] unbase64(String data) {
-        return javax.xml.bind.DatatypeConverter.parseBase64Binary(data);
+        return Base64.getDecoder().decode(data);
     }
 
     @BeforeClass

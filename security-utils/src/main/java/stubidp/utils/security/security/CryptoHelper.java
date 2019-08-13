@@ -12,6 +12,7 @@ import java.io.UnsupportedEncodingException;
 import java.security.GeneralSecurityException;
 import java.security.InvalidKeyException;
 import java.security.SecureRandom;
+import java.util.Base64;
 
 import static java.text.MessageFormat.format;
 
@@ -114,11 +115,11 @@ public class CryptoHelper {
     }
 
     private byte[] unBase64(String data) {
-        return javax.xml.bind.DatatypeConverter.parseBase64Binary(data);
+        return Base64.getDecoder().decode(data);
     }
 
     private String base64(byte[] data) {
-        return javax.xml.bind.DatatypeConverter.printBase64Binary(data);
+        return Base64.getEncoder().encodeToString(data);
     }
 
     private byte[] bytes(String string) throws UnsupportedEncodingException {
