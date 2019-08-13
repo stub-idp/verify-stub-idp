@@ -1,5 +1,8 @@
 @SuppressWarnings({"requires-automatic", "requires-transitive-automatic"})
 module saml.metadata.bindings {
+    exports stubidp.saml.metadata;
+    exports stubidp.saml.metadata.factories;
+
     requires org.opensaml.core;
     requires org.opensaml.saml;
     requires org.opensaml.xmlsec;

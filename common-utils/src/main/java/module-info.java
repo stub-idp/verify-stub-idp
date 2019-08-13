@@ -1,5 +1,7 @@
 @SuppressWarnings("requires-automatic")
 module common.utils {
+    exports stubidp.utils.common.string;
+
     requires org.slf4j;
     requires java.xml;
     requires org.joda.time;

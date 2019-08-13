@@ -1,5 +1,9 @@
 @SuppressWarnings("requires-automatic")
 module stub.idp.saml {
+    exports stubidp.saml.stubidp.configuration;
+    exports stubidp.saml.stubidp.stub.transformers.outbound;
+    exports stubidp.saml.stubidp.stub.transformers.inbound;
+    
     requires javax.inject;
     requires org.joda.time;
     requires org.opensaml.saml;
