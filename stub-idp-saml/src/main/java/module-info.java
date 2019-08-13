@@ -12,4 +12,5 @@ module stub.idp.saml {
     requires saml.extensions;
     requires com.fasterxml.jackson.annotation;
     requires java.validation;
+    requires saml.serializers; // compile dependency, but for tests
 }

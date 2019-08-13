@@ -22,6 +22,13 @@
             <scope>compile</scope>
         </dependency>
         <dependency>
+            <groupId>stub-idp</groupId>
+            <!-- compile dependency, but for tests :/ -->
+            <artifactId>saml-serializers</artifactId>
+            <version>1.0-SNAPSHOT</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
             <groupId>org.opensaml</groupId>
             <artifactId>opensaml-core</artifactId>
             <version>${opensaml.version}</version>
