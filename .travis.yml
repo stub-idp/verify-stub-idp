@@ -4,6 +4,8 @@ jdk:
   - openjdk12
   - openjdk13
   - openjdk14
+install:
+  - mvn test -DskipTests=true -Dmaven.javadoc.skip=true -B -V
 matrix:
   fast_finish: true
   allow_failures:
