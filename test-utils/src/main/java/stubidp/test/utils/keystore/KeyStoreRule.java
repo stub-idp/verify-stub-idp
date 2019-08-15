@@ -1,11 +1,13 @@
 package stubidp.test.utils.keystore;
 
-import org.junit.rules.ExternalResource;
+import org.junit.jupiter.api.extension.AfterAllCallback;
+import org.junit.jupiter.api.extension.BeforeEachCallback;
+import org.junit.jupiter.api.extension.ExtensionContext;
 
 import java.io.File;
 import java.security.KeyStore;
 
-public class KeyStoreRule extends ExternalResource {
+public class KeyStoreRule implements BeforeEachCallback, AfterAllCallback {
     private final KeyStoreResource keyStoreResource;
 
     public KeyStore getKeyStore() {
@@ -13,12 +15,12 @@ public class KeyStoreRule extends ExternalResource {
     }
 
     @Override
-    protected void before() throws Throwable {
+    public void beforeEach(ExtensionContext context) throws Exception {
         keyStoreResource.create();
     }
 
     @Override
-    protected void after() {
+    public void afterAll(ExtensionContext context) throws Exception {
         keyStoreResource.delete();
     }
 

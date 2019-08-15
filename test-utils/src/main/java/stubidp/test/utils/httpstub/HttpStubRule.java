@@ -1,18 +1,15 @@
 package stubidp.test.utils.httpstub;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import org.junit.jupiter.api.extension.AfterAllCallback;
+import org.junit.jupiter.api.extension.ExtensionContext;
 import stubidp.test.utils.httpstub.builders.ExpectedRequestBuilder;
-import org.junit.rules.TestRule;
-import org.junit.runner.Description;
-import org.junit.runners.model.Statement;
 
 import javax.ws.rs.core.UriBuilder;
 import java.net.URI;
 import java.util.List;
 
-import static stubidp.test.utils.httpstub.builders.ExpectedRequestBuilder.expectRequest;
-
-public class HttpStubRule implements TestRule {
+public class HttpStubRule implements AfterAllCallback {
 
     private final AbstractHttpStub httpStub;
 
@@ -30,17 +27,8 @@ public class HttpStubRule implements TestRule {
     }
 
     @Override
-    public Statement apply(final Statement base, Description description) {
-        return new Statement() {
-            @Override
-            public void evaluate() throws Throwable {
-                try {
-                    base.evaluate();
-                } finally {
-                    httpStub.stop();
-                }
-            }
-        };
+    public void afterAll(ExtensionContext context) throws Exception {
+        httpStub.stop();
     }
 
     public URI uri(String path) {

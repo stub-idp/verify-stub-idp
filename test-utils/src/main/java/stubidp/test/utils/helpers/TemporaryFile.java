@@ -1,10 +1,12 @@
 package stubidp.test.utils.helpers;
 
-import org.junit.rules.ExternalResource;
+import org.junit.jupiter.api.extension.AfterEachCallback;
+import org.junit.jupiter.api.extension.BeforeEachCallback;
+import org.junit.jupiter.api.extension.ExtensionContext;
 
 import java.io.File;
 
-public class TemporaryFile extends ExternalResource {
+public class TemporaryFile implements BeforeEachCallback, AfterEachCallback {
     private final TemporaryFileResource temporaryFileResource;
 
     public TemporaryFile(TemporaryFileResource temporaryFileResource) {
@@ -13,12 +15,13 @@ public class TemporaryFile extends ExternalResource {
     }
 
     @Override
-    protected void before() throws Throwable {
-       temporaryFileResource.create();
+    public void beforeEach(ExtensionContext context) throws Exception {
+        temporaryFileResource.create();
+
     }
 
     @Override
-    protected void after() {
+    public void afterEach(ExtensionContext context) throws Exception {
         temporaryFileResource.delete();
     }
 
