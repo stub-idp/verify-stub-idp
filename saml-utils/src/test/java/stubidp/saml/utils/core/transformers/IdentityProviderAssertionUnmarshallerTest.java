@@ -1,18 +1,19 @@
 package stubidp.saml.utils.core.transformers;
 
 import org.joda.time.DateTime;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.opensaml.saml.saml2.core.Assertion;
 import org.opensaml.saml.saml2.core.Attribute;
 import org.opensaml.saml.saml2.core.SubjectConfirmationData;
+import stubidp.saml.utils.OpenSAMLRunner;
 import stubidp.saml.utils.core.domain.AssertionRestrictions;
 import stubidp.saml.utils.core.domain.IdentityProviderAssertion;
 import stubidp.saml.utils.core.domain.IdentityProviderAuthnStatement;
 import stubidp.saml.utils.core.domain.MatchingDataset;
-import stubidp.saml.utils.core.test.OpenSAMLMockitoRunner;
 import stubidp.saml.utils.core.test.builders.AddressAttributeBuilder_1_1;
 import stubidp.saml.utils.core.test.builders.AddressAttributeValueBuilder_1_1;
 import stubidp.saml.utils.core.test.builders.AssertionBuilder;
@@ -29,8 +30,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-@RunWith(OpenSAMLMockitoRunner.class)
-public class IdentityProviderAssertionUnmarshallerTest {
+@ExtendWith(MockitoExtension.class)
+public class IdentityProviderAssertionUnmarshallerTest extends OpenSAMLRunner {
 
     @Mock
     private VerifyMatchingDatasetUnmarshaller matchingDatasetUnmarshaller;
@@ -43,7 +44,7 @@ public class IdentityProviderAssertionUnmarshallerTest {
 
     private IdentityProviderAssertionUnmarshaller unmarshaller;
 
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
         unmarshaller = new IdentityProviderAssertionUnmarshaller(
                 matchingDatasetUnmarshaller,

@@ -1,26 +1,25 @@
 package stubidp.saml.utils.core.transformers;
 
 import org.joda.time.LocalDate;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.opensaml.saml.saml2.core.Assertion;
 import org.opensaml.saml.saml2.core.Attribute;
 import org.opensaml.saml.saml2.core.AttributeValue;
 import stubidp.saml.extensions.IdaConstants;
-import stubidp.saml.extensions.extensions.eidas.EidasGender;
-import stubidp.saml.utils.core.domain.Gender;
-import stubidp.saml.utils.core.domain.MatchingDataset;
 import stubidp.saml.extensions.extensions.eidas.CurrentFamilyName;
 import stubidp.saml.extensions.extensions.eidas.CurrentGivenName;
 import stubidp.saml.extensions.extensions.eidas.DateOfBirth;
+import stubidp.saml.extensions.extensions.eidas.EidasGender;
 import stubidp.saml.extensions.extensions.eidas.PersonIdentifier;
 import stubidp.saml.extensions.extensions.eidas.impl.CurrentFamilyNameBuilder;
 import stubidp.saml.extensions.extensions.eidas.impl.CurrentGivenNameBuilder;
 import stubidp.saml.extensions.extensions.eidas.impl.DateOfBirthBuilder;
 import stubidp.saml.extensions.extensions.eidas.impl.EidasGenderBuilder;
 import stubidp.saml.extensions.extensions.eidas.impl.PersonIdentifierBuilder;
-import stubidp.saml.utils.core.test.OpenSAMLMockitoRunner;
+import stubidp.saml.utils.OpenSAMLRunner;
+import stubidp.saml.utils.core.domain.Gender;
+import stubidp.saml.utils.core.domain.MatchingDataset;
 import stubidp.saml.utils.core.test.OpenSamlXmlObjectFactory;
 import stubidp.saml.utils.core.test.builders.AssertionBuilder;
 import stubidp.saml.utils.core.test.builders.PersonIdentifierAttributeBuilder;
@@ -28,15 +27,13 @@ import stubidp.saml.utils.core.test.builders.PersonIdentifierAttributeBuilder;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static stubidp.saml.utils.core.test.builders.AssertionBuilder.anEidasMatchingDatasetAssertion;
 
-@RunWith(OpenSAMLMockitoRunner.class)
-public class EidasMatchingDatasetUnmarshallerTest {
+public class EidasMatchingDatasetUnmarshallerTest extends OpenSAMLRunner {
 
     private EidasMatchingDatasetUnmarshaller unmarshaller;
     private static OpenSamlXmlObjectFactory openSamlXmlObjectFactory = new OpenSamlXmlObjectFactory();
 
-    @Before
+    @BeforeEach
     public void setUp() {
         this.unmarshaller = new EidasMatchingDatasetUnmarshaller();
     }

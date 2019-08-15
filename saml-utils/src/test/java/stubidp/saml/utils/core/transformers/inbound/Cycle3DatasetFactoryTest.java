@@ -1,12 +1,11 @@
 package stubidp.saml.utils.core.transformers.inbound;
 
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.opensaml.saml.saml2.core.Assertion;
 import org.opensaml.saml.saml2.core.Attribute;
+import stubidp.saml.utils.OpenSAMLRunner;
 import stubidp.saml.utils.core.domain.Cycle3Dataset;
-import stubidp.saml.utils.core.test.OpenSAMLMockitoRunner;
 import stubidp.saml.utils.core.test.SamlTransformationErrorManagerTestHelper;
 import stubidp.saml.utils.core.test.builders.AssertionBuilder;
 import stubidp.saml.utils.core.test.builders.AttributeStatementBuilder;
@@ -18,12 +17,11 @@ import java.util.List;
 import static org.assertj.core.api.Assertions.assertThat;
 import static stubidp.saml.utils.hub.errors.SamlTransformationErrorFactory.missingAttributeStatementInAssertion;
 
-@RunWith(OpenSAMLMockitoRunner.class)
-public class Cycle3DatasetFactoryTest {
+public class Cycle3DatasetFactoryTest extends OpenSAMLRunner {
 
     private Cycle3DatasetFactory cycle3DatasetFactory;
 
-    @Before
+    @BeforeEach
     public void setup() {
         cycle3DatasetFactory = new Cycle3DatasetFactory();
     }

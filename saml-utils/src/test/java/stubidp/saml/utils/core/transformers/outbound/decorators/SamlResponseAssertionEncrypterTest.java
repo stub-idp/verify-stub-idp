@@ -1,7 +1,6 @@
 package stubidp.saml.utils.core.transformers.outbound.decorators;
 
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentMatchers;
 import org.opensaml.saml.saml2.core.Assertion;
 import org.opensaml.saml.saml2.core.EncryptedAssertion;
@@ -12,7 +11,7 @@ import org.opensaml.xmlsec.encryption.support.EncryptionException;
 import stubidp.saml.security.EncrypterFactory;
 import stubidp.saml.security.EntityToEncryptForLocator;
 import stubidp.saml.security.KeyStoreBackedEncryptionCredentialResolver;
-import stubidp.saml.utils.core.test.OpenSAMLMockitoRunner;
+import stubidp.saml.utils.OpenSAMLRunner;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,8 +25,7 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-@RunWith(OpenSAMLMockitoRunner.class)
-public class SamlResponseAssertionEncrypterTest {
+public class SamlResponseAssertionEncrypterTest extends OpenSAMLRunner {
 
     @Test
     public void shouldConvertAssertionIntoEncryptedAssertion() throws EncryptionException {

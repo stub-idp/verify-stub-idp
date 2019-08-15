@@ -1,16 +1,17 @@
 package stubidp.saml.utils.core.transformers.inbound;
 
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.Mockito;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.opensaml.saml.saml2.core.Assertion;
 import org.opensaml.saml.saml2.core.SubjectConfirmationData;
+import stubidp.saml.utils.OpenSAMLRunner;
 import stubidp.saml.utils.core.domain.AssertionRestrictions;
 import stubidp.saml.utils.core.domain.Cycle3Dataset;
 import stubidp.saml.utils.core.domain.HubAssertion;
-import stubidp.saml.utils.core.test.OpenSAMLMockitoRunner;
 import stubidp.saml.utils.core.test.builders.AssertionBuilder;
 import stubidp.saml.utils.core.test.builders.AttributeStatementBuilder;
 import stubidp.saml.utils.core.test.builders.Cycle3DatasetBuilder;
@@ -18,17 +19,16 @@ import stubidp.saml.utils.core.test.builders.IssuerBuilder;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static stubidp.test.devpki.TestEntityIds.HUB_ENTITY_ID;
-import static stubidp.saml.utils.core.test.builders.AssertionBuilder.aCycle3DatasetAssertion;
 
-@RunWith(OpenSAMLMockitoRunner.class)
-public class HubAssertionUnmarshallerTest {
+@ExtendWith(MockitoExtension.class)
+public class HubAssertionUnmarshallerTest extends OpenSAMLRunner {
 
     @Mock
     private Cycle3DatasetFactory assertionCycle3DatasetTransformer;
 
     private HubAssertionUnmarshaller hubAssertionUnmarshaller;
 
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
         hubAssertionUnmarshaller = new HubAssertionUnmarshaller(
                 assertionCycle3DatasetTransformer, HUB_ENTITY_ID);

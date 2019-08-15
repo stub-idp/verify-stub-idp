@@ -2,19 +2,18 @@ package stubidp.saml.utils.core.transformers;
 
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.opensaml.saml.saml2.core.Assertion;
 import org.opensaml.saml.saml2.core.Attribute;
 import org.opensaml.saml.saml2.core.AttributeStatement;
 import stubidp.saml.extensions.extensions.Date;
+import stubidp.saml.utils.OpenSAMLRunner;
 import stubidp.saml.utils.core.domain.AddressFactory;
 import stubidp.saml.utils.core.domain.MatchingDataset;
 import stubidp.saml.extensions.extensions.Address;
 import stubidp.saml.extensions.extensions.Gender;
 import stubidp.saml.extensions.extensions.PersonName;
-import stubidp.saml.utils.core.test.OpenSAMLMockitoRunner;
 import stubidp.saml.utils.core.test.builders.AddressAttributeBuilder_1_1;
 import stubidp.saml.utils.core.test.builders.AddressAttributeValueBuilder_1_1;
 import stubidp.saml.utils.core.test.builders.AssertionBuilder;
@@ -30,12 +29,11 @@ import stubidp.saml.utils.core.test.builders.SubjectBuilder;
 import static java.util.Arrays.asList;
 import static org.assertj.core.api.Assertions.assertThat;
 
-@RunWith(OpenSAMLMockitoRunner.class)
-public class VerifyMatchingDatasetUnmarshallerTest {
+public class VerifyMatchingDatasetUnmarshallerTest extends OpenSAMLRunner {
 
     private VerifyMatchingDatasetUnmarshaller unmarshaller;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         this.unmarshaller = new VerifyMatchingDatasetUnmarshaller(new AddressFactory());
     }

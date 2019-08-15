@@ -1,31 +1,28 @@
 package stubidp.saml.utils.core.transformers.outbound;
 
 import org.assertj.core.api.Assertions;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.opensaml.saml.saml2.core.NameID;
 import org.opensaml.saml.saml2.core.NameIDType;
 import org.opensaml.saml.saml2.core.Subject;
 import org.opensaml.saml.saml2.core.SubjectConfirmation;
+import stubidp.saml.utils.OpenSAMLRunner;
 import stubidp.saml.utils.core.OpenSamlXmlObjectFactory;
 import stubidp.saml.utils.core.domain.AssertionRestrictions;
 import stubidp.saml.utils.core.domain.HubAssertion;
 import stubidp.saml.utils.core.domain.PersistentId;
-import stubidp.saml.utils.core.test.OpenSAMLRunner;
 import stubidp.saml.utils.core.test.builders.HubAssertionBuilder;
 import stubidp.saml.utils.core.test.builders.PersistentIdBuilder;
 
-@RunWith(OpenSAMLRunner.class)
-public class OutboundAssertionToSubjectTransformerTest {
+public class OutboundAssertionToSubjectTransformerTest extends OpenSAMLRunner {
 
     private OutboundAssertionToSubjectTransformer transformer;
 
-    @Before
+    @BeforeEach
     public void setup() {
         transformer = new OutboundAssertionToSubjectTransformer(new OpenSamlXmlObjectFactory());
     }
-
 
     @Test
     public void transform_shouldAddSubjectConfirmationData() throws Exception {

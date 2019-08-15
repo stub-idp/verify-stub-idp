@@ -1,23 +1,21 @@
 package stubidp.saml.utils.hub.transformers.outbound;
 
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.opensaml.saml.saml2.core.Status;
 import org.opensaml.saml.saml2.core.StatusCode;
-import stubidp.saml.utils.core.OpenSamlXmlObjectFactory;
 import stubidp.saml.extensions.domain.SamlStatusCode;
+import stubidp.saml.utils.OpenSAMLRunner;
+import stubidp.saml.utils.core.OpenSamlXmlObjectFactory;
 import stubidp.saml.utils.core.domain.UnknownUserCreationIdaStatus;
-import stubidp.saml.utils.core.test.OpenSAMLRunner;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@RunWith(OpenSAMLRunner.class)
-public class UnknownUserCreationIdaStatusMarshallerTest {
+public class UnknownUserCreationIdaStatusMarshallerTest extends OpenSAMLRunner {
 
     private UnknownUserCreationIdaStatusMarshaller unknownUserCreationIdaStatusToSamlStatusMarshaller;
 
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
         unknownUserCreationIdaStatusToSamlStatusMarshaller = new UnknownUserCreationIdaStatusMarshaller(new OpenSamlXmlObjectFactory());
     }

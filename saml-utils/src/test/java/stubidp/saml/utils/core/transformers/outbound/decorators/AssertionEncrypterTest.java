@@ -1,6 +1,6 @@
 package stubidp.saml.utils.core.transformers.outbound.decorators;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.opensaml.saml.saml2.core.Assertion;
 import org.opensaml.saml.saml2.core.EncryptedAssertion;
 import org.opensaml.saml.saml2.encryption.Encrypter;
@@ -14,6 +14,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 public class AssertionEncrypterTest {
+
     @Test
     public void shouldEncryptAssertion() throws Exception {
         KeyStoreBackedEncryptionCredentialResolver credentialFactory = mock(KeyStoreBackedEncryptionCredentialResolver.class);

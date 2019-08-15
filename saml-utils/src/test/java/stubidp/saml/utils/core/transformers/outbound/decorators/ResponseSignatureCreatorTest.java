@@ -1,21 +1,21 @@
 package stubidp.saml.utils.core.transformers.outbound.decorators;
 
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.opensaml.saml.saml2.core.Response;
 import org.opensaml.xmlsec.signature.Signature;
 import stubidp.saml.security.SignatureFactory;
-import stubidp.saml.utils.core.transformers.outbound.decorators.ResponseSignatureCreator;
+import stubidp.saml.utils.OpenSAMLRunner;
 
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-@RunWith(MockitoJUnitRunner.class)
-public class ResponseSignatureCreatorTest {
+@ExtendWith(MockitoExtension.class)
+public class ResponseSignatureCreatorTest extends OpenSAMLRunner {
 
     private static final String RESPONSE_ID = "response-id";
     private ResponseSignatureCreator responseSignatureCreator;
@@ -26,7 +26,7 @@ public class ResponseSignatureCreatorTest {
     @Mock
     private SignatureFactory signatureFactory;
 
-    @Before
+    @BeforeEach
     public void setup() {
         responseSignatureCreator = new ResponseSignatureCreator(signatureFactory);
     }

@@ -1,16 +1,16 @@
 package stubidp.saml.utils.idp.transformers;
 
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.opensaml.saml.saml2.core.Assertion;
 import org.opensaml.saml.saml2.core.AuthnContext;
 import org.opensaml.saml.saml2.core.AuthnContextClassRef;
 import org.opensaml.saml.saml2.core.AuthnStatement;
-import stubidp.saml.utils.core.domain.IdentityProviderAuthnStatement;
 import stubidp.saml.extensions.extensions.IdaAuthnContext;
-import stubidp.saml.utils.core.test.OpenSAMLMockitoRunner;
+import stubidp.saml.utils.core.domain.IdentityProviderAuthnStatement;
 import stubidp.saml.utils.core.transformers.AuthnContextFactory;
 import stubidp.saml.utils.core.transformers.IdentityProviderAuthnStatementUnmarshaller;
 
@@ -23,15 +23,14 @@ import static stubidp.saml.utils.core.test.builders.AuthnContextClassRefBuilder.
 import static stubidp.saml.utils.core.test.builders.AuthnStatementBuilder.anAuthnStatement;
 import static stubidp.saml.utils.core.test.builders.IPAddressAttributeBuilder.anIPAddress;
 
-
-@RunWith(OpenSAMLMockitoRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class IdentityProviderAuthnStatementUnmarshallerTest {
 
     @Mock
     private AuthnContextFactory authnContextFactory;
     public IdentityProviderAuthnStatementUnmarshaller unmarshaller;
 
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
         unmarshaller = new IdentityProviderAuthnStatementUnmarshaller(
                 authnContextFactory);

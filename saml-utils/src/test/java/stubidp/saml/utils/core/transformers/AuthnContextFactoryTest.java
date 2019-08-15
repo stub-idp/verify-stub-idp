@@ -1,6 +1,6 @@
 package stubidp.saml.utils.core.transformers;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import stubidp.saml.utils.core.domain.AuthnContext;
 import stubidp.saml.extensions.extensions.EidasAuthnContext;
 import stubidp.saml.extensions.extensions.IdaAuthnContext;

@@ -1,12 +1,10 @@
 package stubidp.saml.utils.metadata.transformers;
 
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
 import org.opensaml.saml.saml2.metadata.KeyDescriptor;
-import stubidp.utils.security.security.Certificate;
 import stubidp.saml.utils.core.OpenSamlXmlObjectFactory;
-import stubidp.saml.utils.core.test.OpenSAMLRunner;
-import stubidp.saml.utils.metadata.transformers.KeyDescriptorsUnmarshaller;
+import stubidp.saml.utils.OpenSAMLRunner;
+import stubidp.utils.security.security.Certificate;
 
 import java.util.List;
 
@@ -14,8 +12,7 @@ import static com.google.common.collect.Lists.newArrayList;
 import static org.assertj.core.api.Assertions.assertThat;
 import static stubidp.saml.utils.core.test.builders.CertificateBuilder.aCertificate;
 
-@RunWith(OpenSAMLRunner.class)
-public class KeyDescriptorsUnmarshallerTest {
+public class KeyDescriptorsUnmarshallerTest extends OpenSAMLRunner {
 
     private final KeyDescriptorsUnmarshaller factory = new KeyDescriptorsUnmarshaller(new OpenSamlXmlObjectFactory());
 

@@ -1,13 +1,11 @@
 package stubidp.saml.utils.hub.validators;
 
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.junit.jupiter.api.Test;
+import stubidp.saml.utils.OpenSAMLRunner;
 import stubidp.saml.utils.core.test.SamlTransformationErrorManagerTestHelper;
 import stubidp.saml.utils.hub.errors.SamlTransformationErrorFactory;
 
-@RunWith(MockitoJUnitRunner.class)
-public class StringSizeValidatorTest {
+public class StringSizeValidatorTest extends OpenSAMLRunner {
 
     @Test
     public void shouldPassIfStringSizeIsBetweenLowerAndUpperLimits() throws Exception {

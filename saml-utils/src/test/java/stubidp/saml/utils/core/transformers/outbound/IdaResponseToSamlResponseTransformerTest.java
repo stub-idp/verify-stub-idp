@@ -1,25 +1,23 @@
 package stubidp.saml.utils.core.transformers.outbound;
 
 import org.joda.time.DateTime;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.opensaml.saml.saml2.core.Response;
 import org.opensaml.saml.saml2.core.Status;
+import stubidp.saml.utils.OpenSAMLRunner;
 import stubidp.saml.utils.core.OpenSamlXmlObjectFactory;
 import stubidp.saml.utils.core.domain.OutboundResponseFromHub;
-import stubidp.saml.utils.core.test.OpenSAMLMockitoRunner;
 import stubidp.saml.utils.core.test.builders.ResponseForHubBuilder;
 import stubidp.test.devpki.TestEntityIds;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@RunWith(OpenSAMLMockitoRunner.class)
-public class IdaResponseToSamlResponseTransformerTest {
+public class IdaResponseToSamlResponseTransformerTest extends OpenSAMLRunner {
 
     private IdaResponseToSamlResponseTransformer<OutboundResponseFromHub> systemUnderTest;
 
-    @Before
+    @BeforeEach
     public void setup() {
         OpenSamlXmlObjectFactory openSamlXmlObjectFactory = new OpenSamlXmlObjectFactory();
         systemUnderTest = new TestTransformer(openSamlXmlObjectFactory);

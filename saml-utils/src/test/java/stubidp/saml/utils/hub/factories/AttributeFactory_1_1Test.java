@@ -5,22 +5,21 @@ import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
 import org.joda.time.LocalDate;
 import org.joda.time.format.DateTimeFormat;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.opensaml.core.xml.XMLObject;
 import org.opensaml.saml.saml2.core.Attribute;
 import stubidp.saml.extensions.extensions.Date;
-import stubidp.saml.utils.core.OpenSamlXmlObjectFactory;
-import stubidp.saml.utils.core.domain.Address;
-import stubidp.saml.utils.core.domain.Gender;
-import stubidp.saml.utils.core.domain.SimpleMdsValue;
 import stubidp.saml.extensions.extensions.Gpg45Status;
 import stubidp.saml.extensions.extensions.IPAddress;
 import stubidp.saml.extensions.extensions.IdpFraudEventId;
 import stubidp.saml.extensions.extensions.PersonName;
 import stubidp.saml.extensions.extensions.StringBasedMdsAttributeValue;
-import stubidp.saml.utils.core.test.OpenSAMLMockitoRunner;
+import stubidp.saml.utils.OpenSAMLRunner;
+import stubidp.saml.utils.core.OpenSamlXmlObjectFactory;
+import stubidp.saml.utils.core.domain.Address;
+import stubidp.saml.utils.core.domain.Gender;
+import stubidp.saml.utils.core.domain.SimpleMdsValue;
 import stubidp.saml.utils.core.test.builders.AddressBuilder;
 import stubidp.saml.utils.core.test.builders.SimpleMdsValueBuilder;
 
@@ -30,12 +29,11 @@ import static java.util.Arrays.asList;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.jodatime.api.Assertions.assertThat;
 
-@RunWith(OpenSAMLMockitoRunner.class)
-public class AttributeFactory_1_1Test {
+public class AttributeFactory_1_1Test extends OpenSAMLRunner {
 
     private AttributeFactory_1_1 attributeFactory;
 
-    @Before
+    @BeforeEach
     public void setup() {
         attributeFactory = new AttributeFactory_1_1(new OpenSamlXmlObjectFactory());
     }

@@ -1,9 +1,8 @@
 package stubidp.saml.utils.hub.factories;
 
 import org.joda.time.LocalDate;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.opensaml.saml.saml2.core.Attribute;
 import stubidp.saml.extensions.IdaConstants.Eidas_Attributes;
 import stubidp.saml.extensions.IdaConstants.Eidas_Attributes.FamilyName;
@@ -14,18 +13,17 @@ import stubidp.saml.extensions.extensions.eidas.CurrentGivenName;
 import stubidp.saml.extensions.extensions.eidas.DateOfBirth;
 import stubidp.saml.extensions.extensions.eidas.EidasGender;
 import stubidp.saml.extensions.extensions.eidas.PersonIdentifier;
-import stubidp.saml.utils.core.test.OpenSAMLMockitoRunner;
+import stubidp.saml.utils.OpenSAMLRunner;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.opensaml.saml.saml2.core.Attribute.URI_REFERENCE;
 import static stubidp.saml.extensions.extensions.eidas.impl.DateOfBirthImpl.DATE_OF_BIRTH_FORMAT;
 
-@RunWith(OpenSAMLMockitoRunner.class)
-public class EidasAttributeFactoryTest {
+public class EidasAttributeFactoryTest extends OpenSAMLRunner {
 
     private EidasAttributeFactory eidasAttributeFactory;
 
-    @Before
+    @BeforeEach
     public void setup() {
         eidasAttributeFactory = new EidasAttributeFactory();
     }
