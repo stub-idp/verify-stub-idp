@@ -1,7 +1,6 @@
 package stubidp.utils.common.email;
 
-import org.junit.Test;
-import stubidp.utils.common.email.EmailValidator;
+import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 

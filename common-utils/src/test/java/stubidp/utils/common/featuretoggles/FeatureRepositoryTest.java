@@ -1,6 +1,6 @@
 package stubidp.utils.common.featuretoggles;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static stubidp.utils.common.featuretoggles.FeatureEntryBuilder.aFeatureEntry;
@@ -8,6 +8,7 @@ import static stubidp.utils.common.featuretoggles.IdaFeatures.EncodeAssertions;
 import static stubidp.utils.common.featuretoggles.IdaFeatures.UIRework;
 
 public class FeatureRepositoryTest {
+
     @Test
     public void should_loadActive() throws Exception {
         FeatureConfiguration configuration = FeatureConfigurationBuilder.aFeatureConfiguration()

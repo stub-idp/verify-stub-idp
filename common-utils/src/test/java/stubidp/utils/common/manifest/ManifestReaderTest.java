@@ -1,18 +1,13 @@
 package stubidp.utils.common.manifest;
 
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.ExpectedException;
-import stubidp.utils.common.manifest.ManifestReader;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class ManifestReaderTest {
-
-    @Rule
-    public ExpectedException expectedException = ExpectedException.none();
 
     private ManifestReader manifestReader = new ManifestReader();
 
@@ -25,17 +20,13 @@ public class ManifestReaderTest {
 
     @Test
     public void shouldThrowExceptionWhenManifestFileDoesNotExist() throws IOException {
-        expectedException.expect(IOException.class);
-        expectedException.expectMessage("Manifest file not found for the given class.");
-
-        manifestReader.getAttributeValueFor(manifestReader.getClass(), "any-attribute-name");
+        final IOException exception = Assertions.assertThrows(IOException.class, () -> manifestReader.getAttributeValueFor(manifestReader.getClass(), "any-attribute-name"));
+        assertThat(exception.getMessage()).isEqualTo("Manifest file not found for the given class.");
     }
 
     @Test
     public void shouldThrowExceptionWhenAttributeDoesNotExist() throws IOException {
-        expectedException.expect(IOException.class);
-        expectedException.expectMessage("Unknown attribute name");
-
-        manifestReader.getAttributeValueFor(Test.class, "some-unknown-attribute");
+        final IOException exception = Assertions.assertThrows(IOException.class, () -> manifestReader.getAttributeValueFor(Test.class, "some-unknown-attribute"));
+        assertThat(exception.getMessage()).isEqualTo("Unknown attribute name");
     }
 }

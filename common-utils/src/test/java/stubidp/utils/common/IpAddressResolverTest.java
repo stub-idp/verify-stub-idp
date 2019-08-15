@@ -1,6 +1,6 @@
 package stubidp.utils.common;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import stubidp.utils.common.IpAddressResolver;
 
 import java.net.URI;

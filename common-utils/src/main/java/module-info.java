@@ -2,6 +2,8 @@
 module common.utils {
     exports stubidp.utils.common.string;
 
+    opens stubidp.utils.common.logging; // for LevelLoggerTest
+
     requires org.slf4j;
     requires java.xml;
     requires org.joda.time;

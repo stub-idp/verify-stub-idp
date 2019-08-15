@@ -1,6 +1,6 @@
 package stubidp.utils.common.featuretoggles;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.yaml.snakeyaml.Yaml;
 import org.yaml.snakeyaml.constructor.Constructor;
 

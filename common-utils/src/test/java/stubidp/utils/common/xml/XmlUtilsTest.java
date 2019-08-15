@@ -1,6 +1,6 @@
 package stubidp.utils.common.xml;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.xml.sax.SAXParseException;
 import stubidp.utils.common.xml.XmlUtils;
 
