@@ -1,13 +1,11 @@
 package stubidp.utils.security.security;
 
 import com.google.common.collect.ImmutableList;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.junit.jupiter.MockitoExtension;
 import stubidp.utils.security.configuration.PublicKeyFileConfiguration;
-import stubidp.utils.security.security.Certificate;
-import stubidp.utils.security.security.CertificateStore;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
@@ -19,13 +17,13 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static stubidp.utils.security.security.Certificate.BEGIN_CERT;
 import static stubidp.utils.security.security.Certificate.END_CERT;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class CertificateStoreTest {
 
     PublicKeyFileConfiguration publicKeyConfiguration;
     PublicKeyFileConfiguration publicKeyConfiguration2;
 
-    @Before
+    @BeforeEach
     public void setup() throws Exception {
         publicKeyConfiguration = getPublicKey("public_key.crt");
         publicKeyConfiguration2 = getPublicKey("public_key_2.crt");

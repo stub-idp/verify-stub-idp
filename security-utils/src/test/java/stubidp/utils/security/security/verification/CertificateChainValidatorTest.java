@@ -1,8 +1,8 @@
 package stubidp.utils.security.security.verification;
 
-import org.junit.Before;
-import org.junit.Ignore;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
 import stubidp.utils.security.security.X509CertificateFactory;
 import stubidp.utils.security.security.verification.CertificateChainValidator;
 import stubidp.utils.security.security.verification.CertificateValidity;
@@ -25,7 +25,7 @@ public class CertificateChainValidatorTest {
     private X509CertificateFactory x509CertificateFactory;
     private CertificateChainValidator certificateChainValidator;
 
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
         x509CertificateFactory = new X509CertificateFactory();
         certificateChainValidator = new CertificateChainValidator(new PKIXParametersProvider(), x509CertificateFactory);
@@ -85,7 +85,7 @@ public class CertificateChainValidatorTest {
     }
 
     @Test
-    @Ignore("This test often fails due to the OCSP server not being available. Card #1946 (and possibly others) are raised to investigate")
+    @Disabled("This test often fails due to the OCSP server not being available. Card #1946 (and possibly others) are raised to investigate")
     public void should_doAnOcspCheck() throws Exception {
         final X509Certificate encryptionCertificate = x509CertificateFactory.createCertificate(trustedCertString);
         CertificateChainValidator chainValidator = new CertificateChainValidator(new OCSPPKIXParametersProvider(), x509CertificateFactory);

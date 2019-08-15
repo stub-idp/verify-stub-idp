@@ -2,13 +2,7 @@ package stubidp.utils.security.configuration;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.io.Resources;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.ExpectedException;
-import stubidp.utils.security.configuration.DeserializablePublicKeyConfiguration;
-import stubidp.utils.security.configuration.EncodedCertificateConfiguration;
-import stubidp.utils.security.configuration.PublicKeyFileConfiguration;
-import stubidp.utils.security.configuration.X509CertificateConfiguration;
+import org.junit.jupiter.api.Test;
 
 import java.io.File;
 import java.io.IOException;
@@ -21,9 +15,6 @@ import static stubidp.utils.security.security.Certificate.BEGIN_CERT;
 import static stubidp.utils.security.security.Certificate.END_CERT;
 
 public class DeserializablePublicKeyConfigurationTest {
-
-    @Rule
-    public ExpectedException thrown = ExpectedException.none();
 
     private ObjectMapper objectMapper = new ObjectMapper();
 

@@ -3,9 +3,8 @@ package stubidp.utils.security.configuration;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.exc.InvalidDefinitionException;
 import com.google.common.io.Resources;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.ExpectedException;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import stubidp.utils.security.configuration.DeserializablePublicKeyConfiguration;
 
 import java.io.File;
@@ -20,9 +19,6 @@ import static stubidp.utils.security.security.Certificate.BEGIN_CERT;
 import static stubidp.utils.security.security.Certificate.END_CERT;
 
 public class X509CertificateConfigurationTest {
-
-    @Rule
-    public ExpectedException thrown = ExpectedException.none();
 
     private ObjectMapper objectMapper = new ObjectMapper();
 
@@ -51,17 +47,16 @@ public class X509CertificateConfigurationTest {
 
     @Test
     public void should_ThrowExceptionWhenStringDoesNotContainAPublicKey() throws Exception {
-        thrown.expect(InvalidDefinitionException.class);
-        thrown.expectMessage("Unable to load certificate");
         String encodedKey = Base64.getEncoder().encodeToString("not-a-fullCertificate".getBytes());
-        objectMapper.readValue("{\"type\": \"x509\", \"cert\": \"" + encodedKey + "\", \"name\": \"someId\"}", DeserializablePublicKeyConfiguration.class);
+        final InvalidDefinitionException exception = Assertions.assertThrows(InvalidDefinitionException.class, () -> objectMapper.readValue("{\"type\": \"x509\", \"cert\": \"" + encodedKey + "\", \"name\": \"someId\"}", DeserializablePublicKeyConfiguration.class));
+        assertThat(exception.getMessage()).contains("Unable to load certificate");
     }
 
-    @Test(expected = InvalidDefinitionException.class)
+    @Test
     public void should_ThrowExceptionWhenIncorrectKeySpecified() throws Exception {
         String path = getClass().getClassLoader().getResource("empty_file").getPath();
         String jsonConfig = "{\"type\": \"x509\", \"certFoo\": \"" + path + "\", \"name\": \"someId\"}";
-        objectMapper.readValue(jsonConfig, DeserializablePublicKeyConfiguration.class);
+        Assertions.assertThrows(InvalidDefinitionException.class, () -> objectMapper.readValue(jsonConfig, DeserializablePublicKeyConfiguration.class));
     }
 
     private String getCertificateString() throws IOException {

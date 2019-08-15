@@ -3,10 +3,8 @@ package stubidp.utils.security.configuration;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.exc.InvalidDefinitionException;
 import com.google.common.io.Resources;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.ExpectedException;
-import stubidp.utils.security.configuration.DeserializablePublicKeyConfiguration;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 import java.io.File;
 import java.io.IOException;
@@ -16,8 +14,6 @@ import java.util.Base64;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class EncodedCertificateConfigurationTest {
-    @Rule
-    public ExpectedException thrown = ExpectedException.none();
 
     private ObjectMapper objectMapper = new ObjectMapper();
 
@@ -32,26 +28,26 @@ public class EncodedCertificateConfigurationTest {
 
     @Test
     public void should_ThrowExceptionWhenStringDoesNotContainAPublicKey() throws Exception {
-        thrown.expect(InvalidDefinitionException.class);
-        thrown.expectMessage("Unable to load certificate");
         String path = Resources.getResource("private_key.pk8").getFile();
         byte[] key = Files.readAllBytes(new File(path).toPath());
         String encodedKey = Base64.getEncoder().encodeToString(key);
-        objectMapper.readValue("{\"type\": \"encoded\", \"cert\": \"" + encodedKey + "\", \"name\": \"someId\"}", DeserializablePublicKeyConfiguration.class);
+        final InvalidDefinitionException exception = Assertions.assertThrows(InvalidDefinitionException.class,
+                () -> objectMapper.readValue("{\"type\": \"encoded\", \"cert\": \"" + encodedKey + "\", \"name\": \"someId\"}", DeserializablePublicKeyConfiguration.class));
+        assertThat(exception.getMessage()).contains("Unable to load certificate");
     }
 
     @Test
     public void should_ThrowExceptionWhenStringIsNotBase64Encoded() throws Exception {
-        thrown.expect(InvalidDefinitionException.class);
-
-        objectMapper.readValue("{\"type\": \"encoded\", \"cert\": \"" + "FOOBARBAZ" + "\", \"name\": \"someId\"}", DeserializablePublicKeyConfiguration.class);
+        Assertions.assertThrows(InvalidDefinitionException.class,
+                () -> objectMapper.readValue("{\"type\": \"encoded\", \"cert\": \"" + "FOOBARBAZ" + "\", \"name\": \"someId\"}", DeserializablePublicKeyConfiguration.class));
     }
 
-    @Test(expected = InvalidDefinitionException.class)
+    @Test
     public void should_ThrowExceptionWhenIncorrectKeySpecified() throws Exception {
         String path = getClass().getClassLoader().getResource("empty_file").getPath();
         String jsonConfig = "{\"type\": \"encoded\", \"certFoo\": \"" + path + "\", \"name\": \"someId\"}";
-        objectMapper.readValue(jsonConfig, DeserializablePublicKeyConfiguration.class);
+        Assertions.assertThrows(InvalidDefinitionException.class,
+                () -> objectMapper.readValue(jsonConfig, DeserializablePublicKeyConfiguration.class));
     }
 
     private String getCertificateAsString() throws IOException {

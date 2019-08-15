@@ -1,10 +1,7 @@
 package stubidp.utils.security.security;
 
-import org.junit.BeforeClass;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.BlockJUnit4ClassRunner;
-import stubidp.utils.security.security.CryptoHelper;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 import java.util.Base64;
@@ -14,8 +11,8 @@ import java.util.List;
 import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
-@RunWith(BlockJUnit4ClassRunner.class)
 public class CryptoHelperTest {
 
     static final String EXAMPLE_IDP = "http://example.com/idp";
@@ -30,7 +27,7 @@ public class CryptoHelperTest {
         return Base64.getDecoder().decode(data);
     }
 
-    @BeforeClass
+    @BeforeAll
     public static void setUp() throws Exception {
         cryptoHelper = new CryptoHelper(KEY);
     }
@@ -91,9 +88,9 @@ public class CryptoHelperTest {
         assertThat(otherCryptoHelper.decrypt_yesIKnowThisCryptoCodeHasNotBeenAudited(encryptedValue).isPresent()).isFalse();
     }
 
-    @Test(expected=IllegalArgumentException.class)
+    @Test
     public void testCannotConstructCryptoHelperWithIncorrectKeyLength() {
-        new CryptoHelper(base64(new byte[CryptoHelper.KEY_AND_NONCE_AND_IV_LENGTH_IN_BYTES+1]));
+        assertThrows(IllegalArgumentException.class, () -> new CryptoHelper(base64(new byte[CryptoHelper.KEY_AND_NONCE_AND_IV_LENGTH_IN_BYTES+1])));
     }
 
     @Test
@@ -104,9 +101,9 @@ public class CryptoHelperTest {
         assertThat(unbase64(standedEntityIDEncryptionValue).length).isEqualTo(unbase64(shortEntityIDEncryptionValue).length);
     }
 
-    @Test(expected=IllegalArgumentException.class)
+    @Test
     public void testExtremelyLongEntityIDsShouldNotBeAccepted() {
-        cryptoHelper.encrypt_yesIKnowThisCryptoCodeHasNotBeenAudited(new String(new byte[2000]));
+        assertThrows(IllegalArgumentException.class, () -> cryptoHelper.encrypt_yesIKnowThisCryptoCodeHasNotBeenAudited(new String(new byte[2000])));
     }
 
     @Test

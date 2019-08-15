@@ -2,9 +2,7 @@ package stubidp.utils.security.configuration;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.io.Resources;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.ExpectedException;
+import org.junit.jupiter.api.Test;
 import stubidp.utils.security.configuration.EncodedPrivateKeyConfiguration;
 import stubidp.utils.security.configuration.PrivateKeyConfiguration;
 import stubidp.utils.security.configuration.PrivateKeyFileConfiguration;
@@ -17,9 +15,6 @@ import java.util.Base64;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class PrivateKeyConfigurationTest {
-
-    @Rule
-    public ExpectedException thrown = ExpectedException.none();
 
     private ObjectMapper objectMapper = new ObjectMapper();
 

@@ -4,10 +4,8 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.exc.InvalidDefinitionException;
 import com.google.common.io.Resources;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.ExpectedException;
-import stubidp.utils.security.configuration.PrivateKeyConfiguration;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 import java.io.File;
 import java.io.IOException;
@@ -17,8 +15,6 @@ import java.util.Base64;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class EncodedPrivateKeyConfigurationTest {
-    @Rule
-    public ExpectedException thrown = ExpectedException.none();
 
     private ObjectMapper objectMapper = new ObjectMapper();
 
@@ -31,22 +27,18 @@ public class EncodedPrivateKeyConfigurationTest {
 
     @Test
     public void should_ThrowExceptionWhenKeyIsNotBase64() throws Exception {
-        thrown.expect(InvalidDefinitionException.class);
-
-        objectMapper.configure(DeserializationFeature.FAIL_ON_INVALID_SUBTYPE, false).readValue("{\"type\": \"encoded\", \"key\": \"not-a-key\"}", PrivateKeyConfiguration.class);
+        Assertions.assertThrows(InvalidDefinitionException.class, () -> objectMapper.configure(DeserializationFeature.FAIL_ON_INVALID_SUBTYPE, false).readValue("{\"type\": \"encoded\", \"key\": \"not-a-key\"}", PrivateKeyConfiguration.class));
     }
 
     @Test
     public void should_ThrowExceptionWhenKeyIsNotAValidKey() throws Exception {
-        thrown.expect(InvalidDefinitionException.class);
-        thrown.expectMessage("InvalidKeySpecException");
-
-        objectMapper.configure(DeserializationFeature.FAIL_ON_INVALID_SUBTYPE, false).readValue("{\"type\": \"encoded\", \"key\": \"dGVzdAo=\"}", PrivateKeyConfiguration.class);
+        final InvalidDefinitionException exception = Assertions.assertThrows(InvalidDefinitionException.class, () -> objectMapper.configure(DeserializationFeature.FAIL_ON_INVALID_SUBTYPE, false).readValue("{\"type\": \"encoded\", \"key\": \"dGVzdAo=\"}", PrivateKeyConfiguration.class));
+        assertThat(exception.getMessage()).contains("InvalidKeySpecException");
     }
 
-    @Test(expected = InvalidDefinitionException.class)
+    @Test
     public void should_throwAnExceptionWhenIncorrectFieldSpecified() throws Exception {
-        objectMapper.readValue("{\"privateKeyFoo\": \"" + "foobar" + "\"}", PrivateKeyConfiguration.class);
+        Assertions.assertThrows(InvalidDefinitionException.class, () -> objectMapper.readValue("{\"privateKeyFoo\": \"" + "foobar" + "\"}", PrivateKeyConfiguration.class));
     }
 
     private String getKeyAsBase64() throws IOException {
