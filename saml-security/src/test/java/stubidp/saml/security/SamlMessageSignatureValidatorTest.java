@@ -1,7 +1,6 @@
 package stubidp.saml.security;
 
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
 import org.opensaml.saml.saml2.core.Assertion;
 import org.opensaml.saml.saml2.core.AttributeQuery;
 import org.opensaml.saml.saml2.core.AuthnRequest;
@@ -9,22 +8,20 @@ import org.opensaml.saml.saml2.core.Response;
 import org.opensaml.saml.saml2.metadata.IDPSSODescriptor;
 import org.opensaml.saml.saml2.metadata.SPSSODescriptor;
 import org.opensaml.security.credential.Credential;
-import stubidp.test.devpki.TestCertificateStrings;
-import stubidp.test.devpki.TestEntityIds;
 import stubidp.saml.extensions.validation.SamlValidationResponse;
 import stubidp.saml.security.errors.SamlTransformationErrorFactory;
-import stubidp.saml.security.saml.OpenSAMLMockitoRunner;
 import stubidp.saml.security.saml.TestCredentialFactory;
 import stubidp.saml.security.saml.builders.AttributeQueryBuilder;
 import stubidp.saml.security.saml.builders.ResponseBuilder;
+import stubidp.test.devpki.TestCertificateStrings;
+import stubidp.test.devpki.TestEntityIds;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static stubidp.saml.security.saml.builders.AssertionBuilder.anAssertion;
 import static stubidp.saml.security.saml.builders.AuthnRequestBuilder.anAuthnRequest;
 import static stubidp.saml.security.saml.builders.IssuerBuilder.anIssuer;
 
-@RunWith(OpenSAMLMockitoRunner.class)
-public class SamlMessageSignatureValidatorTest {
+public class SamlMessageSignatureValidatorTest extends OpenSAMLRunner {
 
     private final String issuerId = TestEntityIds.HUB_ENTITY_ID;
     private final SigningCredentialFactory credentialFactory = new SigningCredentialFactory(new HardCodedKeyStore(issuerId));

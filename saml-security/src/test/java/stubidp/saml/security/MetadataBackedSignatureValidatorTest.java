@@ -5,8 +5,8 @@ import com.google.common.io.Resources;
 import net.shibboleth.utilities.java.support.component.ComponentInitializationException;
 import net.shibboleth.utilities.java.support.xml.BasicParserPool;
 import org.joda.time.DateTime;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.opensaml.core.xml.io.MarshallingException;
 import org.opensaml.saml.metadata.resolver.impl.PredicateRoleDescriptorResolver;
 import org.opensaml.saml.saml2.core.Assertion;
@@ -23,7 +23,6 @@ import org.opensaml.xmlsec.signature.support.SignatureException;
 import org.opensaml.xmlsec.signature.support.impl.ExplicitKeySignatureTrustEngine;
 import stubidp.saml.security.saml.EntityDescriptorFactory;
 import stubidp.saml.security.saml.MetadataFactory;
-import stubidp.saml.security.saml.OpenSAMLMockitoRunner;
 import stubidp.saml.security.saml.StringEncoding;
 import stubidp.saml.security.saml.TestCredentialFactory;
 import stubidp.saml.security.saml.builders.AssertionBuilder;
@@ -54,8 +53,7 @@ import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-@RunWith(OpenSAMLMockitoRunner.class)
-public class MetadataBackedSignatureValidatorTest {
+public class MetadataBackedSignatureValidatorTest extends OpenSAMLRunner {
 
     private final String issuerId = TestEntityIds.HUB_ENTITY_ID;
 
@@ -229,89 +227,89 @@ public class MetadataBackedSignatureValidatorTest {
     /*
      * Signature object should exist.
      */
-    @Test(expected = SignatureException.class)
+    @Test
     public void shouldNotValidateMissingSignature() throws Exception {
-        validateAuthnRequestFile("authnRequestNoSignature.xml");
+        Assertions.assertThrows(SignatureException.class, () -> validateAuthnRequestFile("authnRequestNoSignature.xml"));
     }
 
     /*
      * Signature must be an immediate child of the SAML object.
      */
-    @Test(expected = SignatureException.class)
+    @Test
     public void shouldNotValidateSignatureNotImmediateChild() throws Exception {
-        validateAuthnRequestFile("authnRequestNotImmediateChild.xml");
+        Assertions.assertThrows(SignatureException.class, () -> validateAuthnRequestFile("authnRequestNotImmediateChild.xml"));
     }
 
     /*
      * Signature should not contain more than one Reference.
      */
-    @Test(expected = SignatureException.class)
+    @Test
     public void shouldNotValidateSignatureTooManyReferences() throws Exception {
-        validateAuthnRequestFile("authnRequestTooManyRefs.xml");
+        Assertions.assertThrows(SignatureException.class, () -> validateAuthnRequestFile("authnRequestTooManyRefs.xml"));
     }
 
     /*
      * Reference requires a valid URI pointing to a fragment ID.
      */
-    @Test(expected = SignatureException.class)
+    @Test
     public void shouldNotValidateSignatureBadReferenceURI() throws Exception {
-        validateAuthnRequestFile("authnRequestBadRefURI.xml");
+        Assertions.assertThrows(SignatureException.class, () -> validateAuthnRequestFile("authnRequestBadRefURI.xml"));
     }
 
     /*
      * Reference URI should point to parent SAML object.
      */
-    @Test(expected = SignatureException.class)
+    @Test
     public void shouldNotValidateSignatureReferenceURINotParentID() throws Exception {
-        validateAuthnRequestFile("authnRequestRefURINotParentID.xml");
+        Assertions.assertThrows(SignatureException.class, () -> validateAuthnRequestFile("authnRequestRefURINotParentID.xml"));
     }
 
     /*
      * Root SAML object should have an ID.
      */
-    @Test(expected = SignatureException.class)
+    @Test
     public void shouldNotValidateSignatureNoParentID() throws Exception {
-        validateAuthnRequestFile("authnRequestNoParentID.xml");
+        Assertions.assertThrows(SignatureException.class, () -> validateAuthnRequestFile("authnRequestNoParentID.xml"));
     }
 
     /*
      * Signature must have Transforms defined.
      */
-    @Test(expected = SignatureException.class)
+    @Test
     public void shouldNotValidateSignatureNoTransforms() throws Exception {
-        validateAuthnRequestFile("authnRequestNoTransforms.xml");
+        Assertions.assertThrows(SignatureException.class, () -> validateAuthnRequestFile("authnRequestNoTransforms.xml"));
     }
 
     /*
      * Signature should not have more than two Transforms.
      */
-    @Test(expected = SignatureException.class)
+    @Test
     public void shouldNotValidateSignatureTooManyTransforms() throws Exception {
-        validateAuthnRequestFile("authnRequestTooManyTransforms.xml");
+        Assertions.assertThrows(SignatureException.class, () -> validateAuthnRequestFile("authnRequestTooManyTransforms.xml"));
     }
 
     /*
      * Signature must have enveloped-signature Transform.
      */
-    @Test(expected = SignatureException.class)
+    @Test
     public void shouldNotValidateSignatureNoEnvelopeTransform() throws Exception {
-        validateAuthnRequestFile("authnRequestNoEnvTransform.xml");
+        Assertions.assertThrows(SignatureException.class, () -> validateAuthnRequestFile("authnRequestNoEnvTransform.xml"));
     }
 
     /*
      * Signature must have a valid enveloped-signature Transform.
      */
-    @Test(expected = SignatureException.class)
+    @Test
     public void shouldNotValidateSignatureInvalidEnvelopeTransform() throws Exception {
-        validateAuthnRequestFile("authnRequestInvalidEnvTransform.xml");
+        Assertions.assertThrows(SignatureException.class, () -> validateAuthnRequestFile("authnRequestInvalidEnvTransform.xml"));
     }
 
     /*
      * Signature should not contain any Object children.
      */
-    @Test(expected = SignatureException.class)
+    @Test
     public void shouldNotValidateSignatureContainingObject() throws Exception {
-        validateAuthnRequestFile("authnRequestSigContainsChildren.xml");
+        Assertions.assertThrows(SignatureException.class, () -> validateAuthnRequestFile("authnRequestSigContainsChildren.xml"));
     }
 
     private void validateAuthnRequestFile(String fileName) throws Exception {

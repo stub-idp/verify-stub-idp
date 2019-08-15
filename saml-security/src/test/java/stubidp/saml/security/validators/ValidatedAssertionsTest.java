@@ -1,9 +1,8 @@
 package stubidp.saml.security.validators;
 
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
 import org.opensaml.saml.saml2.core.Assertion;
-import stubidp.saml.security.saml.OpenSAMLRunner;
+import stubidp.saml.security.OpenSAMLRunner;
 import stubidp.saml.security.saml.builders.AssertionBuilder;
 import stubidp.saml.security.saml.builders.AttributeStatementBuilder;
 
@@ -13,8 +12,8 @@ import static java.util.Arrays.asList;
 import static java.util.Collections.emptyList;
 import static org.assertj.core.api.Assertions.assertThat;
 
-@RunWith(OpenSAMLRunner.class)
-public class ValidatedAssertionsTest {
+public class ValidatedAssertionsTest extends OpenSAMLRunner {
+
     @Test
     public void should_returnMatchingDatasetAssertion() {
         Assertion mdsAssertion = AssertionBuilder.anAssertion().addAttributeStatement(AttributeStatementBuilder.anAttributeStatement().build()).build();

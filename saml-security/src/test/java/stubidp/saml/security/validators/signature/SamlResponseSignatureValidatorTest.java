@@ -1,61 +1,56 @@
 package stubidp.saml.security.validators.signature;
 
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.ExpectedException;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.opensaml.saml.saml2.core.Response;
 import org.opensaml.saml.saml2.metadata.SPSSODescriptor;
 import stubidp.saml.extensions.validation.SamlTransformationErrorException;
 import stubidp.saml.extensions.validation.SamlValidationResponse;
 import stubidp.saml.security.SamlMessageSignatureValidator;
-import stubidp.saml.security.saml.OpenSAMLMockitoRunner;
+import stubidp.saml.security.OpenSAMLRunner;
 import stubidp.saml.security.validators.ValidatedResponse;
 
-import static org.junit.Assert.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static stubidp.saml.security.errors.SamlTransformationErrorFactory.unableToDecrypt;
 
-@RunWith(OpenSAMLMockitoRunner.class)
-public class SamlResponseSignatureValidatorTest {
+@ExtendWith(MockitoExtension.class)
+public class SamlResponseSignatureValidatorTest extends OpenSAMLRunner {
 
     private static final String RESPONSE_ID = "RESPONSEID";
     private SamlMessageSignatureValidator samlMessageSignatureValidator;
     private SamlResponseSignatureValidator responseSignatureValidator;
     private Response response;
 
-    @Rule
-    public ExpectedException expectedException = ExpectedException.none();
-
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
         samlMessageSignatureValidator = mock(SamlMessageSignatureValidator.class);
         responseSignatureValidator = new SamlResponseSignatureValidator(samlMessageSignatureValidator);
         response = mock(Response.class);
-        when(response.getID()).thenReturn(RESPONSE_ID);
     }
 
     @Test
     public void validate_shouldDoNothingIfResponseSignatureIsValid() {
         when(samlMessageSignatureValidator.validate(response, SPSSODescriptor.DEFAULT_ELEMENT_NAME)).thenReturn(SamlValidationResponse.aValidResponse());
-
+        when(response.getID()).thenReturn(RESPONSE_ID);
+        
         ValidatedResponse validatedResponse = responseSignatureValidator.validate(response, SPSSODescriptor.DEFAULT_ELEMENT_NAME);
 
         verify(samlMessageSignatureValidator).validate(response, SPSSODescriptor.DEFAULT_ELEMENT_NAME);
-        assertEquals(validatedResponse.getID(), RESPONSE_ID);
+        assertThat(validatedResponse.getID()).isEqualTo(RESPONSE_ID);
     }
 
     @Test
     public void validate_shouldThrowExceptionIfResponseSignatureIsInvalid() {
-        expectedException.expect(SamlTransformationErrorException.class);
-        expectedException.expectMessage("Error");
-
         SamlValidationResponse invalidResponse = SamlValidationResponse.anInvalidResponse(unableToDecrypt("Error"));
         when(samlMessageSignatureValidator.validate(response, SPSSODescriptor.DEFAULT_ELEMENT_NAME)).thenReturn(invalidResponse);
 
-        responseSignatureValidator.validate(response, SPSSODescriptor.DEFAULT_ELEMENT_NAME);
+        final SamlTransformationErrorException exception = Assertions.assertThrows(SamlTransformationErrorException.class, () -> responseSignatureValidator.validate(response, SPSSODescriptor.DEFAULT_ELEMENT_NAME));
+        assertThat(exception.getMessage()).contains("Error");
     }
 }

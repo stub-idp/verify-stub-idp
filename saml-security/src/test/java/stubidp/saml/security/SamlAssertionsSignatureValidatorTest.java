@@ -1,22 +1,20 @@
 package stubidp.saml.security;
 
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.opensaml.saml.saml2.core.Assertion;
 import org.opensaml.saml.saml2.metadata.IDPSSODescriptor;
-import stubidp.test.devpki.TestEntityIds;
 import stubidp.saml.extensions.validation.SamlTransformationErrorException;
 import stubidp.saml.extensions.validation.SamlValidationResponse;
 import stubidp.saml.extensions.validation.SamlValidationSpecificationFailure;
-import stubidp.saml.security.saml.OpenSAMLMockitoRunner;
 import stubidp.saml.security.saml.builders.AssertionBuilder;
+import stubidp.test.devpki.TestEntityIds;
 
 import java.util.List;
 
 import static java.util.Arrays.asList;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Fail.fail;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.verify;
@@ -24,8 +22,7 @@ import static org.mockito.Mockito.when;
 import static stubidp.saml.security.errors.SamlTransformationErrorFactory.invalidSignatureForAssertion;
 import static stubidp.saml.security.saml.builders.IssuerBuilder.anIssuer;
 
-@RunWith(OpenSAMLMockitoRunner.class)
-public class SamlAssertionsSignatureValidatorTest {
+public class SamlAssertionsSignatureValidatorTest extends OpenSAMLRunner {
 
     private final String issuerId = TestEntityIds.HUB_ENTITY_ID;
     private final SigningCredentialFactory credentialFactory = new SigningCredentialFactory(new HardCodedKeyStore(issuerId));
@@ -34,7 +31,7 @@ public class SamlAssertionsSignatureValidatorTest {
     private SamlMessageSignatureValidator samlMessageSignatureValidator;
     private SamlAssertionsSignatureValidator samlAssertionsSignatureValidator;
 
-    @Before
+    @BeforeEach
     public void initSpy() {
         samlMessageSignatureValidator = spy(new SamlMessageSignatureValidator(signatureValidator));
         samlAssertionsSignatureValidator = new SamlAssertionsSignatureValidator(samlMessageSignatureValidator);
@@ -52,44 +49,35 @@ public class SamlAssertionsSignatureValidatorTest {
         verify(samlMessageSignatureValidator).validate(assertion2, IDPSSODescriptor.DEFAULT_ELEMENT_NAME);
     }
 
-    @Test(expected = SamlTransformationErrorException.class)
+    @Test
     public void shouldFailOnFirstBadlySignedAssertion() {
         final Assertion assertion1 = AssertionBuilder.anAssertion().withoutSigning().build();
         final Assertion assertion2 = AssertionBuilder.anAuthnStatementAssertion();
         final List<Assertion> assertions = asList(assertion1, assertion2);
 
-        try {
-            samlAssertionsSignatureValidator.validate(assertions, IDPSSODescriptor.DEFAULT_ELEMENT_NAME);
-        } catch(SamlTransformationErrorException e) {
-            verify(samlMessageSignatureValidator).validate(assertion1, IDPSSODescriptor.DEFAULT_ELEMENT_NAME);
-            verify(samlMessageSignatureValidator, never()).validate(assertion2, IDPSSODescriptor.DEFAULT_ELEMENT_NAME);
-            throw e;
-        }
+        Assertions.assertThrows(SamlTransformationErrorException.class, () -> samlAssertionsSignatureValidator.validate(assertions, IDPSSODescriptor.DEFAULT_ELEMENT_NAME));
 
-        fail("Should have failed on badly signed assertion.");
+        verify(samlMessageSignatureValidator).validate(assertion1, IDPSSODescriptor.DEFAULT_ELEMENT_NAME);
+        verify(samlMessageSignatureValidator, never()).validate(assertion2, IDPSSODescriptor.DEFAULT_ELEMENT_NAME);
     }
 
     @Test
     public void shouldFailOnAssertionSignedWithWrongIssuer() throws Exception {
-        try {
-            final Assertion assertion = AssertionBuilder.anAuthnStatementAssertion();
-            when(samlMessageSignatureValidator.validate(assertion, IDPSSODescriptor.DEFAULT_ELEMENT_NAME)).thenReturn(SamlValidationResponse.aValidResponse());
+        final Assertion assertion = AssertionBuilder.anAuthnStatementAssertion();
+        when(samlMessageSignatureValidator.validate(assertion, IDPSSODescriptor.DEFAULT_ELEMENT_NAME)).thenReturn(SamlValidationResponse.aValidResponse());
 
-            final Assertion badAssertion = AssertionBuilder
-                    .anAssertion()
-                    .withIssuer(anIssuer().withIssuerId(TestEntityIds.HUB_ENTITY_ID).build())
-                    .build();
+        final Assertion badAssertion = AssertionBuilder
+                .anAssertion()
+                .withIssuer(anIssuer().withIssuerId(TestEntityIds.HUB_ENTITY_ID).build())
+                .build();
 
-            final SamlValidationSpecificationFailure samlValidationSpecificationFailure = invalidSignatureForAssertion("ID");
+        final SamlValidationSpecificationFailure samlValidationSpecificationFailure = invalidSignatureForAssertion("ID");
 
-            when(samlMessageSignatureValidator.validate(badAssertion, IDPSSODescriptor.DEFAULT_ELEMENT_NAME)).thenReturn(SamlValidationResponse.anInvalidResponse(samlValidationSpecificationFailure));
-            samlAssertionsSignatureValidator.validate(asList(assertion, badAssertion), IDPSSODescriptor.DEFAULT_ELEMENT_NAME);
+        when(samlMessageSignatureValidator.validate(badAssertion, IDPSSODescriptor.DEFAULT_ELEMENT_NAME)).thenReturn(SamlValidationResponse.anInvalidResponse(samlValidationSpecificationFailure));
+        final SamlTransformationErrorException exception = Assertions.assertThrows(SamlTransformationErrorException.class, () -> samlAssertionsSignatureValidator.validate(asList(assertion, badAssertion), IDPSSODescriptor.DEFAULT_ELEMENT_NAME));
 
-            fail("expected exception");
-        } catch (SamlTransformationErrorException e) {
-            final String expected = "SAML Validation Specification: Signature for assertion ID was not valid.\n" +
-                    "DocumentReference{documentName='Hub Service Profile 1.1a', documentSection=''}";
-            assertThat(e.getMessage()).isEqualTo(expected);
-        }
+        final String expected = "SAML Validation Specification: Signature for assertion ID was not valid.\n" +
+                "DocumentReference{documentName='Hub Service Profile 1.1a', documentSection=''}";
+        assertThat(exception.getMessage()).isEqualTo(expected);
     }
 }

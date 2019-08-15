@@ -1,17 +1,15 @@
 package stubidp.saml.security;
 
 import org.apache.commons.codec.binary.Base64;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
 import org.opensaml.saml.saml2.core.Assertion;
 import org.opensaml.xmlsec.algorithm.descriptors.DigestSHA256;
 import org.opensaml.xmlsec.algorithm.descriptors.SignatureRSASHA256;
+import stubidp.test.devpki.TestCertificateStrings;
+import stubidp.test.devpki.TestEntityIds;
 import stubidp.utils.security.security.PrivateKeyFactory;
 import stubidp.utils.security.security.PublicKeyFactory;
 import stubidp.utils.security.security.X509CertificateFactory;
-import stubidp.test.devpki.TestCertificateStrings;
-import stubidp.test.devpki.TestEntityIds;
-import stubidp.saml.security.saml.OpenSAMLMockitoRunner;
 
 import java.security.KeyPair;
 import java.security.PrivateKey;
@@ -22,9 +20,7 @@ import java.util.UUID;
 import static org.assertj.core.api.Assertions.assertThat;
 import static stubidp.saml.security.saml.builders.AssertionBuilder.anAssertion;
 
-
-@RunWith(OpenSAMLMockitoRunner.class)
-public class SignatureWithKeyInfoFactoryTest {
+public class SignatureWithKeyInfoFactoryTest extends OpenSAMLRunner {
 
     private PublicKeyFactory publicKeyFactory;
 

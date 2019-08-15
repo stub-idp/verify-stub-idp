@@ -1,16 +1,15 @@
 package stubidp.saml.security.validators.encryptedelementtype;
 
 import com.google.common.collect.ImmutableSet;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.opensaml.core.xml.config.XMLObjectProviderRegistrySupport;
 import org.opensaml.saml.saml2.core.EncryptedAssertion;
 import org.opensaml.xmlsec.encryption.support.EncryptionConstants;
 import org.w3c.dom.Element;
 import stubidp.saml.extensions.validation.SamlValidationSpecificationFailure;
 import stubidp.saml.security.errors.SamlTransformationErrorFactory;
-import stubidp.saml.security.saml.OpenSAMLMockitoRunner;
+import stubidp.saml.security.OpenSAMLRunner;
 import stubidp.saml.security.saml.SamlTransformationErrorManagerTestHelper;
 import stubidp.saml.security.saml.deserializers.XmlUtils;
 
@@ -18,12 +17,11 @@ import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThatCode;
 
-@RunWith(OpenSAMLMockitoRunner.class)
-public class EncryptionAlgorithmValidatorTest {
+public class EncryptionAlgorithmValidatorTest extends OpenSAMLRunner {
 
     private EncryptionAlgorithmValidator validator;
 
-    @Before
+    @BeforeEach
     public void setup() {
         validator = new EncryptionAlgorithmValidator();
     }

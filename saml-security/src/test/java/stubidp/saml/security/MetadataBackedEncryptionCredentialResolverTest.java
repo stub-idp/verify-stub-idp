@@ -2,8 +2,8 @@ package stubidp.saml.security;
 
 import net.shibboleth.utilities.java.support.xml.BasicParserPool;
 import org.joda.time.DateTime;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.opensaml.core.config.InitializationService;
 import org.opensaml.core.xml.io.MarshallingException;
 import org.opensaml.saml.metadata.resolver.impl.PredicateRoleDescriptorResolver;
@@ -32,7 +32,7 @@ import static stubidp.test.devpki.TestEntityIds.STUB_IDP_ONE;
 public class MetadataBackedEncryptionCredentialResolverTest {
     private MetadataCredentialResolver metadataCredentialResolver;
 
-    @Before
+    @BeforeEach
     public void beforeAll() throws Exception {
         InitializationService.initialize();
 

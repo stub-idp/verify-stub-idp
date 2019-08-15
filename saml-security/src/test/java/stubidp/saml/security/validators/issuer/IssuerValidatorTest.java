@@ -1,22 +1,20 @@
 package stubidp.saml.security.validators.issuer;
 
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.opensaml.saml.saml2.core.Issuer;
 import org.opensaml.saml.saml2.core.NameIDType;
 import stubidp.saml.extensions.validation.SamlValidationSpecificationFailure;
 import stubidp.saml.security.errors.SamlTransformationErrorFactory;
-import stubidp.saml.security.saml.OpenSAMLMockitoRunner;
+import stubidp.saml.security.OpenSAMLRunner;
 import stubidp.saml.security.saml.SamlTransformationErrorManagerTestHelper;
 import stubidp.saml.security.saml.builders.IssuerBuilder;
 
-@RunWith(OpenSAMLMockitoRunner.class)
-public class IssuerValidatorTest {
+public class IssuerValidatorTest extends OpenSAMLRunner {
 
     private IssuerValidator validator;
 
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
         validator = new IssuerValidator();
     }

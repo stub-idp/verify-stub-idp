@@ -7,6 +7,9 @@ module saml.security {
     exports stubidp.saml.security.validators.issuer;
     exports stubidp.saml.security.signature;
 
+    opens stubidp.saml.security; // for tests
+    opens stubidp.saml.security.validators.signature; // for tests
+
     requires com.google.common;
     requires org.slf4j;
     requires xmlsec;
