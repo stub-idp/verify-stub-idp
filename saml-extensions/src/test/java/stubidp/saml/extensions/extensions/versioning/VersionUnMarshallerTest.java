@@ -1,15 +1,14 @@
 package stubidp.saml.extensions.extensions.versioning;
 
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import stubidp.saml.extensions.extensions.versioning.Version;
 import stubidp.saml.Utils;
 import stubidp.saml.test.OpenSAMLRunner;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@RunWith(OpenSAMLRunner.class)
-public class VersionUnMarshallerTest {
+public class VersionUnMarshallerTest extends OpenSAMLRunner {
 
     @Test
     public void shouldUnMarshallVersion() throws Exception {

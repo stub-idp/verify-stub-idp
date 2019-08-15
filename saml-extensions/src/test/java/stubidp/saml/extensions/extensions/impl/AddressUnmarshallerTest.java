@@ -3,8 +3,8 @@ package stubidp.saml.extensions.extensions.impl;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
 import org.joda.time.format.DateTimeFormat;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import stubidp.saml.Utils;
 import stubidp.saml.extensions.extensions.Address;
 import stubidp.saml.extensions.extensions.Line;
@@ -14,8 +14,7 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@RunWith(OpenSAMLRunner.class)
-public class AddressUnmarshallerTest {
+public class AddressUnmarshallerTest extends OpenSAMLRunner {
     @Test
     public void unmarshall_shouldUnmarshallAnAddress() throws Exception {
         String line1Value = "1 Cherry Cottage";

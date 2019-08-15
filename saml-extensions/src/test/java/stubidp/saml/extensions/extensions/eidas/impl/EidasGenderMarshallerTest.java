@@ -1,8 +1,8 @@
 package stubidp.saml.extensions.extensions.eidas.impl;
 
 import net.shibboleth.utilities.java.support.xml.XMLConstants;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.opensaml.core.xml.config.XMLObjectProviderRegistrySupport;
 import org.opensaml.core.xml.io.Marshaller;
 import org.w3c.dom.Element;
@@ -12,8 +12,7 @@ import stubidp.saml.test.OpenSAMLRunner;
 import static org.assertj.core.api.Assertions.assertThat;
 import static stubidp.saml.extensions.IdaConstants.EIDAS_NATURUAL_PREFIX;
 
-@RunWith(OpenSAMLRunner.class)
-public class EidasGenderMarshallerTest {
+public class EidasGenderMarshallerTest extends OpenSAMLRunner {
 
     @Test
     public void shouldMarshallGender() throws Exception {

@@ -1,15 +1,14 @@
 package stubidp.saml.extensions.extensions.eidas.impl;
 
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import stubidp.saml.Utils;
 import stubidp.saml.extensions.extensions.eidas.PersonIdentifier;
 import stubidp.saml.test.OpenSAMLRunner;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@RunWith(OpenSAMLRunner.class)
-public class PersonIdentifierUnmarshallerTest {
+public class PersonIdentifierUnmarshallerTest extends OpenSAMLRunner {
     @Test
     public void shouldUnmarshallPersonIdentifier() throws Exception {
         final PersonIdentifier personIdentifier = Utils.unmarshall("" +

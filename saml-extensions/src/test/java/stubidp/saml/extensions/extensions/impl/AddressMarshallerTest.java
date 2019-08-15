@@ -5,9 +5,9 @@ import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.ISODateTimeFormat;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.opensaml.core.xml.config.XMLObjectProviderRegistrySupport;
 import org.opensaml.core.xml.io.Marshaller;
 import org.opensaml.core.xml.io.MarshallingException;
@@ -23,12 +23,10 @@ import stubidp.saml.extensions.extensions.UPRN;
 import stubidp.saml.test.OpenSAMLRunner;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.Assert.assertNotNull;
 import static stubidp.saml.extensions.IdaConstants.IDA_NS;
 import static stubidp.saml.extensions.IdaConstants.IDA_PREFIX;
 
-@RunWith(OpenSAMLRunner.class)
-public class AddressMarshallerTest {
+public class AddressMarshallerTest extends OpenSAMLRunner {
 
     private static final String FROM_DATE = "2011-10-20";
     private static final String TO_DATE = "2012-12-20";
@@ -40,11 +38,11 @@ public class AddressMarshallerTest {
     private Marshaller marshaller;
     private Address address;
 
-    @Before
+    @BeforeEach
     public void before() {
         address = createAddress();
         marshaller = XMLObjectProviderRegistrySupport.getMarshallerFactory().getMarshaller(address);
-        assertNotNull(marshaller);
+        assertThat(marshaller).isNotNull();
     }
 
     @Test

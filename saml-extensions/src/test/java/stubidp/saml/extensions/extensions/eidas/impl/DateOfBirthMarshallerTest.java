@@ -2,8 +2,8 @@ package stubidp.saml.extensions.extensions.eidas.impl;
 
 import net.shibboleth.utilities.java.support.xml.XMLConstants;
 import org.joda.time.LocalDate;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.opensaml.core.xml.config.XMLObjectProviderRegistrySupport;
 import org.opensaml.core.xml.io.Marshaller;
 import org.w3c.dom.Element;
@@ -15,8 +15,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static stubidp.saml.extensions.IdaConstants.EIDAS_NATURUAL_PREFIX;
 import static stubidp.saml.extensions.extensions.eidas.impl.DateOfBirthImpl.DATE_OF_BIRTH_FORMAT;
 
-@RunWith(OpenSAMLRunner.class)
-public class DateOfBirthMarshallerTest {
+public class DateOfBirthMarshallerTest extends OpenSAMLRunner {
 
     @Test
     public void shouldMarshallDateOfBirth() throws Exception {

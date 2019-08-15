@@ -1,9 +1,9 @@
 package stubidp.saml.extensions.extensions.impl;
 
 import net.shibboleth.utilities.java.support.xml.XMLConstants;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.opensaml.core.xml.config.XMLObjectProviderRegistrySupport;
 import org.opensaml.core.xml.io.Marshaller;
 import org.opensaml.core.xml.io.MarshallingException;
@@ -17,13 +17,12 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static stubidp.saml.extensions.IdaConstants.IDA_NS;
 import static stubidp.saml.extensions.IdaConstants.IDA_PREFIX;
 
-@RunWith(OpenSAMLRunner.class)
-public class GenderMarshallerTest {
+public class GenderMarshallerTest extends OpenSAMLRunner {
 
     private Marshaller marshaller;
     private Gender gender;
 
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
         gender = new GenderBuilder().buildObject();
         marshaller = XMLObjectProviderRegistrySupport.getMarshallerFactory().getMarshaller(gender);

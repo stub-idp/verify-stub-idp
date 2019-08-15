@@ -1,8 +1,8 @@
 package stubidp.saml.extensions.extensions.versioning;
 
 import net.shibboleth.utilities.java.support.xml.XMLConstants;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.w3c.dom.Element;
 import stubidp.saml.extensions.extensions.versioning.Version;
 import stubidp.saml.extensions.extensions.versioning.VersionBuilder;
@@ -12,8 +12,7 @@ import stubidp.saml.test.OpenSAMLRunner;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@RunWith(OpenSAMLRunner.class)
-public class VersionMarshallerTest {
+public class VersionMarshallerTest extends OpenSAMLRunner {
 
     private VersionMarshaller versionMarshaller = new VersionMarshaller();
 

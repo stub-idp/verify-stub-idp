@@ -1,7 +1,7 @@
 package stubidp.saml.extensions.extensions.impl;
 
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import stubidp.saml.Utils;
 import stubidp.saml.extensions.extensions.RequestedAttribute;
 import stubidp.saml.extensions.extensions.RequestedAttributes;
@@ -9,8 +9,7 @@ import stubidp.saml.test.OpenSAMLRunner;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@RunWith(OpenSAMLRunner.class)
-public class RequestedAttributesUnmarshallerTest {
+public class RequestedAttributesUnmarshallerTest extends OpenSAMLRunner {
 
     @Test
     public void shouldUnmarshallAnRequestedAttribute() throws Exception {

@@ -1,15 +1,14 @@
 package stubidp.saml.extensions.extensions.eidas.impl;
 
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import stubidp.saml.Utils;
 import stubidp.saml.extensions.extensions.eidas.PlaceOfBirth;
 import stubidp.saml.test.OpenSAMLRunner;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@RunWith(OpenSAMLRunner.class)
-public class PlaceOfBirthUnmarshallerTest {
+public class PlaceOfBirthUnmarshallerTest extends OpenSAMLRunner {
     @Test
     public void shouldUnmarshallPlaceOfBirth() throws Exception {
         final PlaceOfBirth placeOfBirth = Utils.unmarshall("" +

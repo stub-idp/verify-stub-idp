@@ -1,17 +1,19 @@
 package stubidp.saml.test;
 
-import org.junit.runners.BlockJUnit4ClassRunner;
-import org.junit.runners.model.InitializationError;
 import stubidp.saml.extensions.IdaSamlBootstrap;
 
-public class OpenSAMLRunner extends BlockJUnit4ClassRunner {
+public abstract class OpenSAMLRunner {
 
-    public OpenSAMLRunner(Class<?> klass) throws InitializationError {
-        super(klass);
-        try {
-            IdaSamlBootstrap.bootstrap();
-         } catch (IdaSamlBootstrap.BootstrapException e) {
-            throw new InitializationError(e);
+    private static boolean initialized = false;
+
+    static {
+        if (!initialized) {
+            initialized = true;
+            try {
+                IdaSamlBootstrap.bootstrap();
+            } catch (IdaSamlBootstrap.BootstrapException e) {
+                throw new RuntimeException(e);
+            }
         }
     }
 }

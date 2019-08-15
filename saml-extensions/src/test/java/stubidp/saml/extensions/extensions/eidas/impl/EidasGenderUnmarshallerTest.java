@@ -1,15 +1,14 @@
 package stubidp.saml.extensions.extensions.eidas.impl;
 
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import stubidp.saml.Utils;
 import stubidp.saml.extensions.extensions.eidas.EidasGender;
 import stubidp.saml.test.OpenSAMLRunner;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@RunWith(OpenSAMLRunner.class)
-public class EidasGenderUnmarshallerTest {
+public class EidasGenderUnmarshallerTest extends OpenSAMLRunner {
     @Test
     public void shouldUnmarshallGender() throws Exception {
         final EidasGender eidasGender = Utils.unmarshall("" +

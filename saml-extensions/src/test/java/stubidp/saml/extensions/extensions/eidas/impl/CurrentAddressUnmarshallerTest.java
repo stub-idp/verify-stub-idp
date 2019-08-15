@@ -1,15 +1,14 @@
 package stubidp.saml.extensions.extensions.eidas.impl;
 
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import stubidp.saml.Utils;
 import stubidp.saml.extensions.extensions.eidas.CurrentAddress;
 import stubidp.saml.test.OpenSAMLRunner;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@RunWith(OpenSAMLRunner.class)
-public class CurrentAddressUnmarshallerTest {
+public class CurrentAddressUnmarshallerTest extends OpenSAMLRunner {
     @Test
     public void shouldUnmarshallCurrentFamilyName() throws Exception {
         final CurrentAddress currentAddress = Utils.unmarshall("" +
