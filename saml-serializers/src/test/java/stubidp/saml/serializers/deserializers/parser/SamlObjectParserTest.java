@@ -2,8 +2,8 @@ package stubidp.saml.serializers.deserializers.parser;
 
 import net.shibboleth.utilities.java.support.xml.XMLParserException;
 import org.assertj.core.api.Assertions;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.opensaml.core.config.InitializationException;
 import org.opensaml.core.config.InitializationService;
 import org.opensaml.saml.common.xml.SAMLConstants;
@@ -14,7 +14,7 @@ import stubidp.saml.serializers.deserializers.parser.SamlObjectParser;
 
 public class SamlObjectParserTest {
 
-    @Before
+    @BeforeEach
     public void setup() throws InitializationException {
         InitializationService.initialize();
     }

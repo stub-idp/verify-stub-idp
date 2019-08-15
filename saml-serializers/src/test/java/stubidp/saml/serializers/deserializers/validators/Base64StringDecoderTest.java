@@ -1,24 +1,20 @@
 package stubidp.saml.serializers.deserializers.validators;
 
 import org.apache.xml.security.utils.Base64;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import stubidp.saml.extensions.validation.SamlTransformationErrorException;
 import stubidp.saml.extensions.validation.SamlValidationSpecificationFailure;
-import stubidp.saml.serializers.deserializers.validators.Base64StringDecoder;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.fail;
 import static stubidp.saml.serializers.errors.SamlTransformationErrorFactory.invalidBase64Encoding;
 
-@RunWith(MockitoJUnitRunner.class)
 public class Base64StringDecoderTest {
 
     private Base64StringDecoder samlStringProcessor;
 
-    @Before
+    @BeforeEach
     public void setup() {
         samlStringProcessor = new Base64StringDecoder();
     }

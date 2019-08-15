@@ -1,8 +1,8 @@
 package stubidp.saml.serializers.serializers;
 
 import org.apache.commons.codec.binary.StringUtils;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.opensaml.core.config.InitializationException;
 import org.opensaml.core.config.InitializationService;
 import org.opensaml.saml.saml2.core.AuthnRequest;
@@ -26,7 +26,7 @@ public class XmlObjectToBase64EncodedStringTransformerTest {
 
     private XmlObjectToBase64EncodedStringTransformer<AuthnRequest> xmlObjectToBase64EncodedStringTransformer;
 
-    @Before
+    @BeforeEach
     public void setup() throws InitializationException {
         InitializationService.initialize();
         xmlObjectToBase64EncodedStringTransformer = new XmlObjectToBase64EncodedStringTransformer<>();

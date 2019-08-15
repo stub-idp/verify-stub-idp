@@ -1,7 +1,7 @@
 package stubidp.saml.serializers.serializers;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.opensaml.core.config.InitializationException;
 import org.opensaml.core.config.InitializationService;
 import org.opensaml.saml.saml2.core.AuthnRequest;
@@ -11,10 +11,9 @@ import stubidp.saml.serializers.serializers.XmlObjectToElementTransformer;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-
 public class XmlObjectToElementTransformerTest {
 
-    @Before
+    @BeforeEach
     public void setup() throws InitializationException {
         InitializationService.initialize();
     }
