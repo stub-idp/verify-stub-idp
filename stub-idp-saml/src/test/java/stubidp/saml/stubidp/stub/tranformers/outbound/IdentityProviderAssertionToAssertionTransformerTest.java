@@ -2,11 +2,12 @@ package stubidp.saml.stubidp.stub.tranformers.outbound;
 
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentMatchers;
 import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.opensaml.saml.saml2.core.Assertion;
 import org.opensaml.saml.saml2.core.Attribute;
 import stubidp.saml.stubidp.builders.MatchingDatasetBuilder;
@@ -14,6 +15,7 @@ import stubidp.saml.stubidp.builders.SimpleMdsValueBuilder;
 import stubidp.saml.stubidp.builders.TransliterableMdsValueBuilder;
 import stubidp.saml.stubidp.stub.transformers.outbound.IdentityProviderAssertionToAssertionTransformer;
 import stubidp.saml.stubidp.stub.transformers.outbound.IdentityProviderAuthnStatementToAuthnStatementTransformer;
+import stubidp.saml.utils.test.OpenSAMLRunner;
 import stubidp.saml.utils.core.OpenSamlXmlObjectFactory;
 import stubidp.saml.utils.core.domain.Address;
 import stubidp.saml.utils.core.domain.AddressFactory;
@@ -26,7 +28,6 @@ import stubidp.saml.utils.core.domain.IpAddress;
 import stubidp.saml.utils.core.domain.MatchingDataset;
 import stubidp.saml.utils.core.domain.SimpleMdsValue;
 import stubidp.saml.utils.core.domain.TransliterableMdsValue;
-import stubidp.saml.utils.core.test.OpenSAMLMockitoRunner;
 import stubidp.saml.utils.core.transformers.outbound.OutboundAssertionToSubjectTransformer;
 import stubidp.saml.utils.hub.factories.AttributeFactory;
 
@@ -44,8 +45,8 @@ import static stubidp.saml.stubidp.builders.IdentityProviderAuthnStatementBuilde
 import static stubidp.saml.stubidp.test.builders.IPAddressAttributeBuilder.anIPAddress;
 import static stubidp.saml.stubidp.test.builders.IdentityProviderAssertionBuilder.anIdentityProviderAssertion;
 
-@RunWith(OpenSAMLMockitoRunner.class)
-public class IdentityProviderAssertionToAssertionTransformerTest {
+@ExtendWith(MockitoExtension.class)
+public class IdentityProviderAssertionToAssertionTransformerTest extends OpenSAMLRunner {
 
     private IdentityProviderAssertionToAssertionTransformer transformer;
     @Mock
@@ -60,7 +61,7 @@ public class IdentityProviderAssertionToAssertionTransformerTest {
     private final TransliterableMdsValue previousSurname = TransliterableMdsValueBuilder.asTransliterableMdsValue().withValue("subject-previousSurname").withVerifiedStatus(true).build();
     private final TransliterableMdsValue currentSurname = TransliterableMdsValueBuilder.asTransliterableMdsValue().withValue("subject-currentSurname").withVerifiedStatus(true).build();
 
-    @Before
+    @BeforeEach
     public void setup() {
         OpenSamlXmlObjectFactory openSamlXmlObjectFactory = new OpenSamlXmlObjectFactory();
         transformer = new IdentityProviderAssertionToAssertionTransformer(

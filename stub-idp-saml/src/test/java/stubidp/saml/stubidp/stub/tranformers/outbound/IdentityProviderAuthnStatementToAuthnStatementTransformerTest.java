@@ -1,29 +1,27 @@
 package stubidp.saml.stubidp.stub.tranformers.outbound;
 
+import org.joda.time.DateTime;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.opensaml.saml.saml2.core.AuthnStatement;
+import stubidp.saml.extensions.extensions.IdaAuthnContext;
+import stubidp.saml.stubidp.stub.transformers.outbound.IdentityProviderAuthnStatementToAuthnStatementTransformer;
+import stubidp.saml.utils.test.OpenSAMLRunner;
+import stubidp.saml.utils.core.OpenSamlXmlObjectFactory;
+import stubidp.saml.utils.core.domain.AuthnContext;
+import stubidp.saml.utils.core.domain.IdentityProviderAuthnStatement;
+import stubidp.utils.common.datetime.DateTimeFreezer;
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.jodatime.api.Assertions.assertThat;
 import static stubidp.saml.stubidp.builders.IdentityProviderAuthnStatementBuilder.anIdentityProviderAuthnStatement;
 
-import org.joda.time.DateTime;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.opensaml.saml.saml2.core.AuthnStatement;
-import stubidp.saml.utils.core.OpenSamlXmlObjectFactory;
-import stubidp.saml.utils.core.domain.AuthnContext;
-import stubidp.saml.utils.core.domain.IdentityProviderAuthnStatement;
-import stubidp.saml.extensions.extensions.IdaAuthnContext;
-import stubidp.saml.utils.core.test.OpenSAMLRunner;
-import stubidp.saml.stubidp.stub.transformers.outbound.IdentityProviderAuthnStatementToAuthnStatementTransformer;
-import stubidp.utils.common.datetime.DateTimeFreezer;
-
-@RunWith(OpenSAMLRunner.class)
-public class IdentityProviderAuthnStatementToAuthnStatementTransformerTest {
+public class IdentityProviderAuthnStatementToAuthnStatementTransformerTest extends OpenSAMLRunner {
 
     private IdentityProviderAuthnStatementToAuthnStatementTransformer transformer;
 
-    @Before
+    @BeforeEach
     public void setup() {
         DateTimeFreezer.freezeTime();
         transformer = new IdentityProviderAuthnStatementToAuthnStatementTransformer(new OpenSamlXmlObjectFactory());
@@ -66,7 +64,7 @@ public class IdentityProviderAuthnStatementToAuthnStatementTransformerTest {
         assertThat(transformedAuthnStatement.getAuthnContext().getAuthnContextClassRef().getAuthnContextClassRef()).isEqualTo(expectedLevel);
     }
 
-    @After
+    @AfterEach
     public void after(){
         DateTimeFreezer.unfreezeTime();
     }

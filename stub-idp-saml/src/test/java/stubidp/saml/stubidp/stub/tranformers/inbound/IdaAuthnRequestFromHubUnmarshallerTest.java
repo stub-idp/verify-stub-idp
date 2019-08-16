@@ -1,16 +1,17 @@
 package stubidp.saml.stubidp.stub.tranformers.inbound;
 
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.opensaml.saml.saml2.core.AuthnContextClassRef;
 import org.opensaml.saml.saml2.core.AuthnRequest;
 import org.opensaml.saml.saml2.core.Conditions;
 import org.opensaml.saml.saml2.core.Issuer;
 import org.opensaml.saml.saml2.core.RequestedAuthnContext;
 import stubidp.saml.extensions.extensions.IdaAuthnContext;
-import stubidp.saml.utils.core.test.OpenSAMLMockitoRunner;
+import stubidp.saml.utils.test.OpenSAMLRunner;
 import stubidp.saml.utils.hub.domain.IdaAuthnRequestFromHub;
 import stubidp.saml.stubidp.stub.transformers.inbound.IdaAuthnRequestFromHubUnmarshaller;
 
@@ -22,8 +23,8 @@ import static org.opensaml.saml.saml2.core.AuthnContextComparisonTypeEnumeration
 import static stubidp.saml.utils.core.domain.AuthnContext.LEVEL_1;
 import static stubidp.saml.utils.core.domain.AuthnContext.LEVEL_2;
 
-@RunWith(OpenSAMLMockitoRunner.class)
-public class IdaAuthnRequestFromHubUnmarshallerTest {
+@ExtendWith(MockitoExtension.class)
+public class IdaAuthnRequestFromHubUnmarshallerTest extends OpenSAMLRunner {
 
     @Mock
     private AuthnRequest authnRequest;
@@ -36,7 +37,7 @@ public class IdaAuthnRequestFromHubUnmarshallerTest {
     @Mock
     private Issuer issuer;
 
-    @Before
+    @BeforeEach
     public void setupAuthnRequest() {
         when(authnRequest.getIssuer()).thenReturn(issuer);
         when(authnRequest.getRequestedAuthnContext()).thenReturn(requestedAuthnContext);
