@@ -5,13 +5,11 @@ import ch.qos.logback.core.ContextBase;
 import ch.qos.logback.core.net.SyslogOutputStream;
 import ch.qos.logback.core.status.Status;
 import org.hamcrest.core.Is;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
-import stubidp.dropwizard.logstash.SyslogAppender;
-import stubidp.dropwizard.logstash.SyslogEventFormatter;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.io.IOException;
 import java.util.List;
@@ -26,7 +24,7 @@ import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class SyslogAppenderTest {
 
     private SyslogAppender appender;
@@ -36,11 +34,11 @@ public class SyslogAppenderTest {
     @Mock
     private SyslogOutputStream outputStream;
 
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
         appender = new SyslogAppender(syslogEventFormatter, outputStream);
         appender.start();
-        when(syslogEventFormatter.format(any(ILoggingEvent.class))).thenReturn("");
+//        when(syslogEventFormatter.format(any(ILoggingEvent.class))).thenReturn("");
     }
 
     @Test
@@ -65,6 +63,7 @@ public class SyslogAppenderTest {
 
     @Test
     public void doAppend_shouldRecordAnErrorWhenWritingToSyslogFails() throws Exception {
+        when(syslogEventFormatter.format(any(ILoggingEvent.class))).thenReturn("");
         final IOException ioError = new IOException();
         doThrow(ioError).when(outputStream).write(any());
         appender.setContext(new ContextBase());

@@ -1,10 +1,9 @@
 package stubidp.dropwizard.logstash;
 
-import io.dropwizard.Bundle;
+import io.dropwizard.ConfiguredBundle;
 import io.dropwizard.setup.Bootstrap;
-import io.dropwizard.setup.Environment;
 
-public class LogstashBundle implements Bundle {
+public class LogstashBundle<T> implements ConfiguredBundle<T> {
     @Override
     public void initialize(Bootstrap<?> bootstrap) {
         bootstrap.getObjectMapper().getSubtypeResolver().registerSubtypes(
@@ -13,10 +12,5 @@ public class LogstashBundle implements Bundle {
                 LogstashSyslogAppenderFactory.class,
                 LogstashFileAppenderFactory.class
         );
-    }
-
-    @Override
-    public void run(Environment environment) {
-
     }
 }

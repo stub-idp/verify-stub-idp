@@ -7,9 +7,9 @@ import ch.qos.logback.core.net.SyslogOutputStream;
 import net.logstash.logback.layout.LogstashLayout;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeUtils;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.slf4j.LoggerFactory;
 import stubidp.dropwizard.logstash.support.UdpServer;
 
@@ -21,17 +21,17 @@ public class LogstashSyslogAppenderIntegrationTest {
 
     private UdpServer udpServer = new UdpServer();
 
-    @Before
+    @BeforeEach
     public void startUdpInterceptor() throws Exception {
         udpServer.start();
     }
 
-    @After
+    @AfterEach
     public void stopUdpInteceptor() throws Exception {
         udpServer.stop();
     }
 
-    @After
+    @AfterEach
     public void resetTime() throws Exception {
         DateTimeUtils.setCurrentMillisSystem();
     }

@@ -7,18 +7,18 @@ import ch.qos.logback.core.Layout;
 import io.dropwizard.logging.SyslogAppenderFactory;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeUtils;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.core.StringStartsWith.startsWith;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.when;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class SyslogEventFormatterTest {
 
     public SyslogEventFormatter formatter;
@@ -28,7 +28,7 @@ public class SyslogEventFormatterTest {
     @Mock
     private Layout<ILoggingEvent> layout;
 
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
         formatter = new SyslogEventFormatter(SyslogAppenderFactory.Facility.LOCAL1, hostname, tag, layout);
     }

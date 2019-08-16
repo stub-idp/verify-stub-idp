@@ -3,11 +3,12 @@ package stubidp.dropwizard.logstash;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.dropwizard.testing.ConfigOverride;
 import io.dropwizard.testing.ResourceHelpers;
-import io.dropwizard.testing.junit.DropwizardAppRule;
+import io.dropwizard.testing.junit5.DropwizardAppExtension;
+import io.dropwizard.testing.junit5.DropwizardExtensionsSupport;
 import org.glassfish.jersey.client.JerseyClientBuilder;
-import org.junit.AfterClass;
-import org.junit.ClassRule;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import stubidp.dropwizard.logstash.support.LoggingEventFormat;
 import stubidp.dropwizard.logstash.support.TestApplication;
 import stubidp.dropwizard.logstash.support.TestConfiguration;
@@ -22,7 +23,9 @@ import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.fail;
+import static stubidp.dropwizard.logstash.support.RootResource.TEST_LOG_LINE;
 
+@ExtendWith(DropwizardExtensionsSupport.class)
 public class LogstashFileAppenderAppRuleTest {
 
     private static File requestLog;
@@ -39,14 +42,13 @@ public class LogstashFileAppenderAppRuleTest {
         }
     }
 
-    @ClassRule
-    public static DropwizardAppRule<TestConfiguration> dropwizardAppRule = new DropwizardAppRule<>(TestApplication.class, ResourceHelpers
+    public static DropwizardAppExtension<TestConfiguration> dropwizardAppRule = new DropwizardAppExtension<>(TestApplication.class, ResourceHelpers
             .resourceFilePath("file-appender-test-application.yml"),
             ConfigOverride.config("server.requestLog.appenders[0].currentLogFilename", requestLog.getAbsolutePath()),
             ConfigOverride.config("logging.appenders[0].currentLogFilename", logLog.getAbsolutePath())
             );
 
-    @AfterClass
+    @AfterAll
     public static void after() {
         requestLog.delete();
         logLog.delete();
@@ -82,6 +84,11 @@ public class LogstashFileAppenderAppRuleTest {
     @Test
     public void testLoggingLogstashFileLog() throws IOException {
 
+        Client client = new JerseyClientBuilder().build();
+
+        final Response response = client.target("http://localhost:" + dropwizardAppRule.getLocalPort() + "/log").request()
+                .get();
+
         assertThat(logLog.length()).isGreaterThan(0);
 
         final List<LoggingEventFormat> list = parseLog(logLog);
@@ -89,7 +96,7 @@ public class LogstashFileAppenderAppRuleTest {
         assertThat(list.size()).isGreaterThan(0);
 
         assertThat(list.stream()
-                .filter(logFormat -> logFormat.getMessage().equals("The following paths were found for the configured resources:\n\n    GET     / (stubidp.dropwizard.logstash.support.RootResource)\n"))
+                .filter(logFormat -> logFormat.getMessage().equals(TEST_LOG_LINE))
                 .count()).isEqualTo(1);
     }
 

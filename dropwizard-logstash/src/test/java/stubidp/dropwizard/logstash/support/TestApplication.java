@@ -9,7 +9,7 @@ public class TestApplication extends Application<TestConfiguration> {
     @Override
     public void initialize(Bootstrap<TestConfiguration> bootstrap) {
         super.initialize(bootstrap);
-        bootstrap.addBundle(new LogstashBundle());
+        bootstrap.addBundle(new LogstashBundle<TestConfiguration>());
     }
 
     @Override
