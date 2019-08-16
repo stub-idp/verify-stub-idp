@@ -11,8 +11,6 @@ module saml.extensions {
     exports stubidp.saml.extensions.extensions.versioning.application;
     exports stubidp.saml.extensions.extensions.impl;
 
-    requires net.shibboleth.utilities.java.support;
-    requires org.opensaml.saml.impl;
     requires xmlsec;
     requires bcprov.jdk15on;
     requires org.opensaml.xmlsec;
@@ -24,4 +22,6 @@ module saml.extensions {
     requires transitive org.joda.time;
     requires transitive java.xml;
     requires transitive org.opensaml.saml;
+    requires transitive org.opensaml.saml.impl;
+    requires transitive net.shibboleth.utilities.java.support;
 }
