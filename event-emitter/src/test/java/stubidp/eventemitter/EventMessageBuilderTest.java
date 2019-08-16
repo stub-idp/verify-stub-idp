@@ -3,12 +3,9 @@ package stubidp.eventemitter;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeUtils;
 import org.joda.time.DateTimeZone;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
-import stubidp.eventemitter.Event;
-import stubidp.eventemitter.EventDetailsKey;
-import stubidp.eventemitter.EventMessageBuilder;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import java.util.EnumMap;
 import java.util.HashMap;
@@ -22,12 +19,12 @@ public class EventMessageBuilderTest {
     private static final DateTime NOW = DateTime.now(DateTimeZone.UTC);
     private static final DateTime TIMESTAMP = DateTime.parse("2018-06-28T10:50:24+00:00");
 
-    @Before
+    @BeforeEach
     public void setUp() {
         DateTimeUtils.setCurrentMillisFixed(NOW.getMillis());
     }
 
-    @After
+    @AfterEach
     public void tearDown() {
         DateTimeUtils.setCurrentMillisSystem();
     }

@@ -2,11 +2,8 @@ package stubidp.eventemitter;
 
 import nl.jqno.equalsverifier.EqualsVerifier;
 import org.joda.time.DateTime;
-import org.junit.Before;
-import org.junit.Test;
-import stubidp.eventemitter.EventDetailsKey;
-import stubidp.eventemitter.EventMessage;
-import stubidp.eventemitter.EventMessageBuilder;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import java.util.EnumMap;
 import java.util.UUID;
@@ -26,19 +23,19 @@ public class EventMessageTest {
 
     private EventMessage eventMessage;
 
-    @Before
-        public void setUp() {
+    @BeforeEach
+    public void setUp() {
         details.put(EventDetailsKey.pid, PID);
         details.put(EventDetailsKey.message, MESSAGE);
         eventMessage =
-            EventMessageBuilder.anEventMessage()
-                               .withEventId(EVENT_ID)
-                               .withTimestamp(TIMESTAMP)
-                               .withEventType(EVENT_TYPE)
-                               .withOriginatingService(ORIGINATING_SERVICE)
-                               .withSessionId(SESSION_ID)
-                               .withDetails(details)
-                               .build();
+                EventMessageBuilder.anEventMessage()
+                        .withEventId(EVENT_ID)
+                        .withTimestamp(TIMESTAMP)
+                        .withEventType(EVENT_TYPE)
+                        .withOriginatingService(ORIGINATING_SERVICE)
+                        .withSessionId(SESSION_ID)
+                        .withDetails(details)
+                        .build();
     }
 
     @Test

@@ -1,7 +1,7 @@
 package stubidp.eventemitter;
 
-import org.junit.Test;
-import stubidp.eventemitter.Sha256Util;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -27,15 +27,15 @@ public class Sha256UtilTest {
         assertThat(actualResult).isEqualTo(expectedResult);
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void shouldThrowIllegalArgumentExceptionWhenHashingEmptyArray() {
-        SHA_256_UTIL.hash();
+        Assertions.assertThrows(IllegalArgumentException.class, () -> SHA_256_UTIL.hash());
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void shouldThrowIllegalArgumentExceptionWhenHashingNull() {
         final String[] nullArray = null;
-        SHA_256_UTIL.hash(nullArray);
+        Assertions.assertThrows(IllegalArgumentException.class, () -> SHA_256_UTIL.hash(nullArray));
     }
 }
 

@@ -8,15 +8,14 @@ import com.amazonaws.regions.Regions;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.inject.Injector;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.RegisterExtension;
 import stubidp.eventemitter.utils.HttpResponse;
 import stubidp.eventemitter.utils.TestDecrypter;
 import stubidp.test.utils.httpstub.HttpStubRule;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.ClassRule;
-import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.slf4j.LoggerFactory;
 
@@ -28,7 +27,6 @@ import java.util.Map;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static stubidp.eventemitter.EventMessageBuilder.anEventMessage;
 
-@RunWith(MockitoJUnitRunner.class)
 public class EventEmitterIntegrationTest {
 
     private static final boolean CONFIGURATION_ENABLED = true;
@@ -42,10 +40,10 @@ public class EventEmitterIntegrationTest {
     private static EventEmitter eventEmitter;
     private static ObjectMapper objectMapper;
 
-    @ClassRule
+    @RegisterExtension
     public static HttpStubRule apiGatewayStub = new HttpStubRule();
 
-    @BeforeClass
+    @BeforeAll
     public static void setUp() {
 
         injector = EventEmitterTestHelper.createTestConfiguration(CONFIGURATION_ENABLED,
@@ -58,7 +56,7 @@ public class EventEmitterIntegrationTest {
         objectMapper = injector.getInstance(ObjectMapper.class);
     }
 
-    @Before
+    @BeforeEach
     public void setUpLogAppender() {
         testAppender.start();
         Logger logger = (Logger) LoggerFactory.getLogger(Logger.ROOT_LOGGER_NAME);
@@ -66,7 +64,7 @@ public class EventEmitterIntegrationTest {
         apiGatewayStub.reset();
     }
 
-    @After
+    @AfterEach
     public void tearDownLogAppender() {
         testAppender.stop();
         TestAppender.events.clear();
@@ -154,7 +152,7 @@ public class EventEmitterIntegrationTest {
 
     }
 
-    @Test(expected = Test.None.class)
+    @Test
     public void shouldFailSilentlyWithNullEvent() {
 
         eventEmitter.record(null);

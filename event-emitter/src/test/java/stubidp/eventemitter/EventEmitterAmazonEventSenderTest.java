@@ -2,18 +2,17 @@ package stubidp.eventemitter;
 
 import com.amazonaws.auth.BasicAWSCredentials;
 import com.amazonaws.regions.Regions;
+import org.assertj.core.api.Fail;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.RegisterExtension;
 import stubidp.eventemitter.utils.HttpResponse;
 import stubidp.test.utils.httpstub.ExpectedRequest;
 import stubidp.test.utils.httpstub.HttpStubRule;
 import stubidp.test.utils.httpstub.RegisteredResponse;
-import org.assertj.core.api.Fail;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.ClassRule;
-import org.junit.Ignore;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.mockito.junit.MockitoJUnitRunner;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URI;
@@ -22,8 +21,7 @@ import java.util.regex.Pattern;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static stubidp.eventemitter.EventMessageBuilder.anEventMessage;
 
-@Ignore("takes 60s to run")
-@RunWith(MockitoJUnitRunner.class)
+@Disabled("takes 60s to run")
 public class EventEmitterAmazonEventSenderTest {
 
     private static final String DUMMY_AWS_ACCESS_KEY = "ABCD1234EFGH5678IJKL";
@@ -31,15 +29,15 @@ public class EventEmitterAmazonEventSenderTest {
 
     private static final ExpectedRequest expectedRequest = new ExpectedRequest(EventEmitterTestHelper.AUDIT_EVENTS_API_RESOURCE, "POST", null, null);
 
-    @ClassRule
+    @RegisterExtension
     public static HttpStubRule apiGatewayStub = new HttpStubRule();
 
-    @Before
+    @BeforeEach
     public void setup() {
         apiGatewayStub.reset();
     }
 
-    @After
+    @AfterEach
     public void tearDown() {
         apiGatewayStub.reset();
     }
@@ -125,7 +123,7 @@ public class EventEmitterAmazonEventSenderTest {
         }
     }
 
-    @Test(expected = AwsResponseException.class)
+    @Test
     public void shouldThrowAwsResponseExceptioWhenNotFound() throws UnsupportedEncodingException {
 
         apiGatewayStub.register(EventEmitterTestHelper.AUDIT_EVENTS_API_RESOURCE, HttpResponse.HTTP_403.getStatusCode());
@@ -134,8 +132,7 @@ public class EventEmitterAmazonEventSenderTest {
                         new BasicAWSCredentials(DUMMY_AWS_ACCESS_KEY, DUMMY_AWS_SECRET_ACCESS_KEY),
                         Regions.EU_WEST_2);
 
-        amazonEventSender.sendAuthenticated(anEventMessage().build(), "");
-
+        Assertions.assertThrows(AwsResponseException.class, () -> amazonEventSender.sendAuthenticated(anEventMessage().build(), ""));
     }
 
 }

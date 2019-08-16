@@ -1,11 +1,11 @@
 package stubidp.eventemitter;
 
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentMatchers;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Map;
 
@@ -15,7 +15,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static stubidp.eventemitter.EventMessageBuilder.anEventMessage;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class EventHasherTest {
 
     private static final String PID_VALUE = "pid value";
@@ -27,7 +27,7 @@ public class EventHasherTest {
 
     private static EventHasher eventHasher;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         eventHasher = new EventHasher(sha256Util);
     }

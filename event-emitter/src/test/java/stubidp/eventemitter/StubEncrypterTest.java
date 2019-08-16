@@ -1,8 +1,6 @@
 package stubidp.eventemitter;
 
-import org.junit.Test;
-import stubidp.eventemitter.Event;
-import stubidp.eventemitter.StubEncrypter;
+import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static stubidp.eventemitter.EventMessageBuilder.anEventMessage;

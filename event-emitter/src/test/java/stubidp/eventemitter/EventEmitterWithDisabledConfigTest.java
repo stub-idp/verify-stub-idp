@@ -1,8 +1,8 @@
 package stubidp.eventemitter;
 
 import com.google.inject.Injector;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -10,13 +10,12 @@ import java.util.Map;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static stubidp.eventemitter.EventMessageBuilder.anEventMessage;
 
-
 public class EventEmitterWithDisabledConfigTest {
     private static final boolean CONFIGURATION_ENABLED = false;
 
     private static Injector injector;
 
-    @BeforeClass
+    @BeforeAll
     public static void setUp() {
 
         injector = EventEmitterTestHelper.createTestConfiguration(CONFIGURATION_ENABLED,

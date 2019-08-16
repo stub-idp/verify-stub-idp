@@ -3,8 +3,8 @@ package stubidp.eventemitter;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.joda.JodaModule;
 import org.json.JSONObject;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import stubidp.eventemitter.utils.TestDecrypter;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -19,7 +19,7 @@ public class EventEncrypterTest {
     private TestDecrypter<Event> decrypter;
     private ObjectMapper mapper;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         event = anEventMessage().build();
 

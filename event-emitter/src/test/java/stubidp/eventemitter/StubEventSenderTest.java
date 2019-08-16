@@ -1,10 +1,7 @@
 package stubidp.eventemitter;
 
-import org.junit.Before;
-import org.junit.Test;
-import stubidp.eventemitter.Event;
-import stubidp.eventemitter.EventMessage;
-import stubidp.eventemitter.StubEventSender;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -20,7 +17,7 @@ public class StubEventSenderTest {
     private StubEventSender stubEventSender;
     private Event event;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         stubEventSender = new StubEventSender();
     }
