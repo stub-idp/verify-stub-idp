@@ -9,10 +9,9 @@ import net.minidev.json.JSONObject;
 import org.apache.commons.codec.binary.Base64;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import stubidp.eidas.trustanchor.Generator;
+import stubidp.test.devpki.TestCertificateStrings;
 import stubidp.utils.security.security.PrivateKeyFactory;
 import stubidp.utils.security.security.X509CertificateFactory;
-import stubidp.test.devpki.TestCertificateStrings;
 
 import java.security.PrivateKey;
 import java.security.cert.CertificateEncodingException;
@@ -29,7 +28,9 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import static java.util.Arrays.asList;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
+import static org.assertj.core.api.Assertions.catchThrowable;
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
@@ -112,7 +113,8 @@ public class GeneratorTest {
         for (String attribute : valueList) {
             JSONObject invalid = createJsonObject();
             invalid.remove(attribute);
-            assertThrows(ParseException.class, () -> generator.generate(Collections.singletonList(invalid.toJSONString())));
+            final Throwable throwable = catchThrowable(() -> generator.generate(Collections.singletonList(invalid.toJSONString())));
+            assertThat(throwable).isInstanceOfAny(IllegalArgumentException.class, ParseException.class);
         }
     }
 
@@ -125,7 +127,8 @@ public class GeneratorTest {
         for (String attribute: incorrectValues.keySet()) {
             JSONObject jsonObject = createJsonObject();
             jsonObject.replace(attribute, incorrectValues.get(attribute));
-            assertThrows(ParseException.class, () -> generator.generate(Collections.singletonList(jsonObject.toJSONString())));
+            final Throwable throwable = catchThrowable(() -> generator.generate(Collections.singletonList(jsonObject.toJSONString())));
+            assertThat(throwable).isInstanceOfAny(IllegalArgumentException.class, ParseException.class);
         }
     }
 
@@ -213,7 +216,7 @@ public class GeneratorTest {
     private JSONObject createJsonObject(String kid) {
         String countryPublicCert = CACertificates.TEST_ROOT_CA;
         countryPublicCert = countryPublicCert.replace("-----BEGIN CERTIFICATE-----\n", "").replace("\n-----END CERTIFICATE-----", ""
-        ).trim();
+        ).replace("\n", "").trim();
         X509Certificate x509Certificate = new X509CertificateFactory().createCertificate(countryPublicCert);
         RSAPublicKey rsaPublicKey = (RSAPublicKey) x509Certificate.getPublicKey();
         JSONObject jsonObject = new JSONObject();

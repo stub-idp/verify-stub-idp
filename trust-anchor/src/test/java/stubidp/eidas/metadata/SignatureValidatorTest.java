@@ -1,9 +1,8 @@
 package stubidp.eidas.metadata;
 
 import net.shibboleth.utilities.java.support.resolver.Criterion;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.opensaml.core.xml.io.MarshallingException;
 import org.opensaml.saml.saml2.core.Response;
 import org.opensaml.saml.saml2.metadata.SPSSODescriptor;
@@ -26,7 +25,7 @@ import org.opensaml.xmlsec.signature.Signature;
 import org.opensaml.xmlsec.signature.support.SignatureException;
 import org.opensaml.xmlsec.signature.support.impl.ExplicitKeySignatureTrustEngine;
 import stubidp.eidas.metadata.support.HardCodedKeyStore;
-import stubidp.eidas.metadata.support.OpenSAMLMockitoRunner;
+import stubidp.eidas.metadata.support.OpenSAMLRunner;
 import stubidp.eidas.metadata.support.SigningCredentialFactory;
 import stubidp.eidas.metadata.support.builders.ResponseBuilder;
 import stubidp.test.devpki.TestEntityIds;
@@ -37,8 +36,7 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@RunWith(OpenSAMLMockitoRunner.class)
-public class SignatureValidatorTest {
+public class SignatureValidatorTest extends OpenSAMLRunner {
 
     private final String issuerId = TestEntityIds.HUB_ENTITY_ID;
 
@@ -46,7 +44,7 @@ public class SignatureValidatorTest {
 
     private SignatureValidator signatureValidator;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         this.signatureValidator = new SignatureValidator() {
             @Override

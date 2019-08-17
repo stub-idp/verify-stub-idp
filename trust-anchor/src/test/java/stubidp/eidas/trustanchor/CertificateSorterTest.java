@@ -2,7 +2,6 @@ package stubidp.eidas.trustanchor;
 
 import com.google.common.collect.ImmutableList;
 import org.junit.jupiter.api.Test;
-import stubidp.eidas.trustanchor.CertificateSorter;
 
 import javax.security.auth.x500.X500Principal;
 import java.security.cert.X509Certificate;

@@ -3,9 +3,8 @@ package stubidp.eidas.trustanchor;
 import certificates.values.CACertificates;
 import com.nimbusds.jose.jwk.JWK;
 import org.junit.jupiter.api.Test;
-import stubidp.eidas.trustanchor.CountryTrustAnchor;
-import stubidp.utils.security.security.X509CertificateFactory;
 import stubidp.test.devpki.TestCertificateStrings;
+import stubidp.utils.security.security.X509CertificateFactory;
 
 import java.security.cert.X509Certificate;
 import java.util.List;

@@ -2,7 +2,6 @@ package stubidp.eidas.trustanchor;
 
 import com.google.common.collect.ImmutableList;
 import org.junit.jupiter.api.Test;
-import stubidp.eidas.trustanchor.SignedTrustAnchorGenerator;
 
 import java.io.File;
 import java.io.FileNotFoundException;
