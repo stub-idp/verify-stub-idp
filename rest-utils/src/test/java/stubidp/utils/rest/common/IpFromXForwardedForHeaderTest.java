@@ -1,18 +1,16 @@
 package stubidp.utils.rest.common;
 
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
-import stubidp.utils.rest.common.HttpHeaders;
-import stubidp.utils.rest.common.IpFromXForwardedForHeader;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import javax.servlet.http.HttpServletRequest;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class IpFromXForwardedForHeaderTest {
     @Mock
     HttpServletRequest httpServletRequest;

@@ -1,10 +1,9 @@
 package stubidp.utils.rest.tasks;
 
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import stubidp.utils.rest.configuration.ServiceStatus;
-import stubidp.utils.rest.tasks.SetServiceUnavailableTask;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -13,7 +12,7 @@ public class SetServiceUnavailableTaskTest {
     ServiceStatus instance;
     SetServiceUnavailableTask setServiceUnavailableTask;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         instance = ServiceStatus.getInstance();
         setServiceUnavailableTask = new SetServiceUnavailableTask(instance);
@@ -27,7 +26,7 @@ public class SetServiceUnavailableTaskTest {
         assertThat(instance.isServerStatusOK()).isEqualTo(false);
     }
 
-    @After
+    @AfterEach
     public void tearDown(){
         instance.setServiceStatus(true);
     }

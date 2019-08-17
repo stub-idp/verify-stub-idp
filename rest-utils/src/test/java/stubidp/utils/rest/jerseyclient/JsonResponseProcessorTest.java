@@ -2,12 +2,12 @@ package stubidp.utils.rest.jerseyclient;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import stubidp.utils.rest.common.ErrorStatusDto;
 import stubidp.utils.rest.common.ExceptionType;
 import stubidp.utils.rest.exceptions.ApplicationException;
-import stubidp.utils.rest.jerseyclient.JsonResponseProcessor;
 
 import javax.ws.rs.ProcessingException;
 import javax.ws.rs.core.GenericType;
@@ -16,7 +16,6 @@ import java.net.URI;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.fail;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
@@ -32,24 +31,21 @@ public class JsonResponseProcessorTest {
 
     private JsonResponseProcessor responseProcessor;
 
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
         responseProcessor = new JsonResponseProcessor(new ObjectMapper());
-
     }
 
     @Test
     public void getJsonEntity_shouldThrowExceptionBasedOnErrorStatusDtoIfOneIsReturned() throws Exception {
         Response response = createMockResponse(400, ErrorStatusDto.createAuditedErrorStatus(errorId, exceptionType));
-        try {
-            responseProcessor.getJsonEntity(uri, null, Object.class, response);
-            fail("fail");
-        } catch(ApplicationException e) {
-            verify(response, times(1)).readEntity(String.class);
-            assertThat(e.getExceptionType()).isEqualTo(exceptionType);
-            assertThat(e.getErrorId()).isEqualTo(errorId);
-            assertThat(e.isAudited()).isEqualTo(true);
-        }
+
+        final ApplicationException e = Assertions.assertThrows(ApplicationException.class, () -> responseProcessor.getJsonEntity(uri, null, Object.class, response));
+
+        verify(response, times(1)).readEntity(String.class);
+        assertThat(e.getExceptionType()).isEqualTo(exceptionType);
+        assertThat(e.getErrorId()).isEqualTo(errorId);
+        assertThat(e.isAudited()).isEqualTo(true);
     }
 
     @Test
@@ -59,17 +55,15 @@ public class JsonResponseProcessorTest {
                 ErrorStatusDto.createUnauditedErrorStatus(UUID.randomUUID(),
                         ExceptionType.CLIENT_ERROR,
                         response.readEntity(String.class)), uri);
-        try {
-            responseProcessor.getJsonEntity(uri, null, Object.class, response);
-            fail("fail");
-        } catch(ApplicationException e) {
-            verify(response, times(2)).readEntity(String.class);
-            assertThat(e.getExceptionType()).isEqualTo(applicationException.getExceptionType());
-            assertThat(e.getMessage()).isEqualTo(applicationException.getMessage());
-            assertThat(e.getUri()).isEqualTo(applicationException.getUri());
-            assertThat(e.isAudited()).isEqualTo(applicationException.isAudited());
-            assertThat(e.requiresAuditing()).isEqualTo(applicationException.requiresAuditing());
-        }
+
+        final ApplicationException e = Assertions.assertThrows(ApplicationException.class, () -> responseProcessor.getJsonEntity(uri, null, Object.class, response));
+
+        verify(response, times(2)).readEntity(String.class);
+        assertThat(e.getExceptionType()).isEqualTo(applicationException.getExceptionType());
+        assertThat(e.getMessage()).isEqualTo(applicationException.getMessage());
+        assertThat(e.getUri()).isEqualTo(applicationException.getUri());
+        assertThat(e.isAudited()).isEqualTo(applicationException.isAudited());
+        assertThat(e.requiresAuditing()).isEqualTo(applicationException.requiresAuditing());
     }
 
     @Test
@@ -79,54 +73,44 @@ public class JsonResponseProcessorTest {
                 ErrorStatusDto.createUnauditedErrorStatus(UUID.randomUUID(),
                         ExceptionType.CLIENT_ERROR,
                         clientResponse.readEntity(String.class)), uri);
-        try {
-            responseProcessor.getJsonEntity(uri, null, Object.class, clientResponse);
-            fail("fail");
-        } catch(ApplicationException e) {
-            verify(clientResponse, times(2)).readEntity(String.class);
-            assertThat(e.getExceptionType()).isEqualTo(applicationException.getExceptionType());
-            assertThat(e.getMessage()).isEqualTo(applicationException.getMessage());
-            assertThat(e.getUri()).isEqualTo(applicationException.getUri());
-            assertThat(e.isAudited()).isEqualTo(applicationException.isAudited());
-            assertThat(e.requiresAuditing()).isEqualTo(applicationException.requiresAuditing());
-        }
+
+        final ApplicationException e = Assertions.assertThrows(ApplicationException.class, () -> responseProcessor.getJsonEntity(uri, null, Object.class, clientResponse));
+
+        verify(clientResponse, times(2)).readEntity(String.class);
+        assertThat(e.getExceptionType()).isEqualTo(applicationException.getExceptionType());
+        assertThat(e.getMessage()).isEqualTo(applicationException.getMessage());
+        assertThat(e.getUri()).isEqualTo(applicationException.getUri());
+        assertThat(e.isAudited()).isEqualTo(applicationException.isAudited());
+        assertThat(e.requiresAuditing()).isEqualTo(applicationException.requiresAuditing());
     }
 
     @Test
     public void getJson_shouldThrowUnauditedErrorExceptionIfServerErrorResponseAsStringIsReturned() throws Exception {
         Response clientResponse = createMockResponse(500, "There has been some internal server error");
-        try {
-            responseProcessor.getJsonEntity(uri, null, Object.class, clientResponse);
-            fail("fail");
-        } catch(ApplicationException e) {
-            verify(clientResponse, times(1)).readEntity(String.class);
-            assertThat(e.getExceptionType()).isEqualTo(ExceptionType.REMOTE_SERVER_ERROR);
-            assertThat(e.isAudited()).isEqualTo(false);
-        }
+
+        final ApplicationException e = Assertions.assertThrows(ApplicationException.class, () -> responseProcessor.getJsonEntity(uri, null, Object.class, clientResponse));
+
+        verify(clientResponse, times(1)).readEntity(String.class);
+        assertThat(e.getExceptionType()).isEqualTo(ExceptionType.REMOTE_SERVER_ERROR);
+        assertThat(e.isAudited()).isEqualTo(false);
     }
 
     @Test
     public void getJson_shouldThrowWhenResponseIsRequested() throws Exception {
         Response clientResponse = createMockResponse(200, "some entity");
 
-        try {
-            responseProcessor.getJsonEntity(uri, null, Response.class, clientResponse);
-            fail("fail");
-        } catch (ApplicationException e) {
-            assertThat(e.getExceptionType()).isEqualTo(ExceptionType.INVALID_CLIENTRESPONSE_PARAM);
-        }
+        final ApplicationException e = Assertions.assertThrows(ApplicationException.class, () -> responseProcessor.getJsonEntity(uri, null, Response.class, clientResponse));
+
+        assertThat(e.getExceptionType()).isEqualTo(ExceptionType.INVALID_CLIENTRESPONSE_PARAM);
     }
 
     @Test
     public void getJson_shouldThrowWhenResponseGenericTypeIsRequested() throws Exception {
         Response clientResponse = createMockResponse(200, "some entity");
 
-        try {
-            responseProcessor.getJsonEntity(uri, new GenericType<Response>(){}, null, clientResponse);
-            fail("fail");
-        } catch (ApplicationException e) {
-            assertThat(e.getExceptionType()).isEqualTo(ExceptionType.INVALID_CLIENTRESPONSE_PARAM);
-        }
+        final ApplicationException e = Assertions.assertThrows(ApplicationException.class, () -> responseProcessor.getJsonEntity(uri, new GenericType<Response>(){}, null, clientResponse));
+
+        assertThat(e.getExceptionType()).isEqualTo(ExceptionType.INVALID_CLIENTRESPONSE_PARAM);
     }
 
     @Test
@@ -143,20 +127,17 @@ public class JsonResponseProcessorTest {
         responseProcessor.getJsonEntity(uri, null, null, createMockResponse(200, "some entity"));
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void getJsonEntity_shouldThrowWhenNoEntityPresent() throws Exception {
-        responseProcessor.getJsonEntity(uri, null, String.class, createMock204Response());
+        Assertions.assertThrows(IllegalArgumentException.class, () -> responseProcessor.getJsonEntity(uri, null, String.class, createMock204Response()));
     }
 
     @Test
     public void getJsonEntity_shouldThrowWhenGettingEntityFails() throws Exception {
-        try {
-            responseProcessor.getJsonEntity(uri, null, String.class, createResponseWithBadEntity());
-            fail("fail");
-        } catch (ApplicationException e) {
-            assertThat(e.getExceptionType()).isEqualTo(ExceptionType.NETWORK_ERROR);
-            assertThat(e.isAudited()).isEqualTo(false);
-        }
+        final ApplicationException e = Assertions.assertThrows(ApplicationException.class, () -> responseProcessor.getJsonEntity(uri, null, String.class, createResponseWithBadEntity()));
+
+        assertThat(e.getExceptionType()).isEqualTo(ExceptionType.NETWORK_ERROR);
+        assertThat(e.isAudited()).isEqualTo(false);
     }
 
     @SuppressWarnings("unchecked")

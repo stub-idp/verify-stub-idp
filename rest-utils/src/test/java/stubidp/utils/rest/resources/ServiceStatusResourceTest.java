@@ -1,9 +1,8 @@
 package stubidp.utils.rest.resources;
 
-import org.junit.After;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Test;
 import stubidp.utils.rest.configuration.ServiceStatus;
-import stubidp.utils.rest.resources.ServiceStatusResource;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -24,7 +23,7 @@ public class ServiceStatusResourceTest {
         assertThat(serviceStatusResource.isOnline().getStatus()).isEqualTo(503);
     }
 
-    @After
+    @AfterEach
     public void tearDown(){
         instance.setServiceStatus(true);
     }

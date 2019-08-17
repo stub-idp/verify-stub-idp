@@ -1,10 +1,11 @@
 package stubidp.utils.rest.jerseyclient;
 
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 import stubidp.utils.rest.jerseyclient.ErrorHandlingClient;
 import stubidp.utils.rest.jerseyclient.JsonClient;
 import stubidp.utils.rest.jerseyclient.JsonResponseProcessor;
@@ -15,7 +16,7 @@ import java.net.URI;
 
 import static org.mockito.Mockito.*;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class JsonClientTest {
 
     @Mock
@@ -27,7 +28,7 @@ public class JsonClientTest {
     private URI testUri = URI.create("/some-uri");
     private String requestBody = "some-request-body";
 
-    @Before
+    @BeforeEach
     public void setup() {
         jsonClient = new JsonClient(errorHandlingClient, jsonResponseProcessor);
     }

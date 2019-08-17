@@ -1,6 +1,6 @@
 package stubidp.utils.rest.resources;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import stubidp.utils.rest.common.VersionInfoDto;
 import stubidp.utils.rest.resources.VersionInfoResource;
 

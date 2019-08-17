@@ -7,9 +7,8 @@ import org.apache.http.conn.ConnectTimeoutException;
 import org.apache.http.message.BasicHttpRequest;
 import org.apache.http.protocol.BasicHttpContext;
 import org.apache.http.protocol.HttpContext;
-import org.junit.Before;
-import org.junit.Test;
-import stubidp.utils.rest.restclient.TimeoutRequestRetryWithBackoffHandler;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 import java.net.SocketTimeoutException;
@@ -23,7 +22,7 @@ public class TimeoutRequestRetryWithBackoffHandlerTest {
 
     private HttpContext httpContext = new BasicHttpContext();
 
-    @Before
+    @BeforeEach
     public void setup() {
         httpContext.setAttribute(HttpClientContext.HTTP_REQUEST, new BasicHttpRequest("GET", "http://localhost"));
     }

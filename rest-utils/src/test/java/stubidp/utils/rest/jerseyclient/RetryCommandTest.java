@@ -1,15 +1,19 @@
 package stubidp.utils.rest.jerseyclient;
 
 import com.codahale.metrics.Meter;
-import org.junit.Test;
-import stubidp.utils.rest.jerseyclient.RetryCommand;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 import javax.ws.rs.NotAllowedException;
 import javax.ws.rs.NotAuthorizedException;
 import javax.ws.rs.ProcessingException;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 @SuppressWarnings({"all", "rawtypes"})
 public class RetryCommandTest {
@@ -29,14 +33,14 @@ public class RetryCommandTest {
         verify(dummy, times(2)).function();
     }
 
-    @Test(expected = ProcessingException.class)
+    @Test
     public void shouldNotRetryIfRetryCountIs0() {
         RetryCommand<String> retryCommand = new RetryCommand<>(0);
 
         DummyClass dummy = mock(DummyClass.class);
         when(dummy.function()).thenThrow(RuntimeException.class).thenReturn("SUCCESS");
 
-        retryCommand.execute(dummy::function);
+        Assertions.assertThrows(ProcessingException.class, () -> retryCommand.execute(dummy::function));
     }
 
     @Test
@@ -52,7 +56,7 @@ public class RetryCommandTest {
         verify(dummy, times(1)).function();
     }
 
-    @Test(expected = ProcessingException.class)
+    @Test
     public void shouldThrowProcessingExceptionIfMaxRetriesExceeded(){
         RetryCommand<String> retryCommand = new RetryCommand<>(2);
 
@@ -63,7 +67,7 @@ public class RetryCommandTest {
                 .thenThrow(RuntimeException.class)
                 .thenReturn("SUCCESS");
 
-        retryCommand.execute(dummy::function);
+        Assertions.assertThrows(ProcessingException.class, () -> retryCommand.execute(dummy::function));
     }
 
     @Test
@@ -81,7 +85,7 @@ public class RetryCommandTest {
         verify(dummy, times(2)).function();
     }
 
-    @Test(expected = NotAllowedException.class)
+    @Test
     public void shouldThrowExceptionIfDoesNotMatchSpecifiedException() {
         RetryCommand<String> retryCommand = new RetryCommand<>(2, NotAuthorizedException.class);
 
@@ -90,7 +94,7 @@ public class RetryCommandTest {
                 .thenThrow(NotAllowedException.class)
                 .thenReturn("SUCCESS");
 
-        retryCommand.execute(dummy::function);
+        Assertions.assertThrows(NotAllowedException.class, () -> retryCommand.execute(dummy::function));
     }
 
     @Test

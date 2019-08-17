@@ -2,12 +2,13 @@ package stubidp.utils.rest.jerseyclient;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentMatchers;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 import stubidp.utils.rest.exceptions.ApplicationException;
 
 import javax.ws.rs.ProcessingException;
@@ -28,7 +29,7 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class ErrorHandlingClientTest {
 
     @Mock
@@ -42,19 +43,11 @@ public class ErrorHandlingClientTest {
 
     private ErrorHandlingClient errorHandlingClient;
 
-    private URI testUri;
+    private URI testUri = URI.create("/some-uri");
 
-    @Before
+    @BeforeEach
     public void setup() {
         errorHandlingClient = new ErrorHandlingClient(client);
-        when(client.target(any(URI.class))).thenReturn(webTarget);
-        when(webTarget.request()).thenReturn(webTargetBuilder);
-        when(webTarget.request(MediaType.APPLICATION_JSON_TYPE)).thenReturn(webTargetBuilder);
-        when(webTargetBuilder.accept(ArgumentMatchers.<MediaType>any())).thenReturn(webTargetBuilder);
-        when(webTargetBuilder.cookie(ArgumentMatchers.<Cookie>any())).thenReturn(webTargetBuilder);
-        when(webTargetBuilder.header(anyString(), any())).thenReturn(webTargetBuilder);
-
-        testUri = URI.create("/some-uri");
     }
 
     @Test
@@ -65,6 +58,12 @@ public class ErrorHandlingClientTest {
         final String headerValue = "GNU Terry Pratchett";
         final Map<String, String> headers = ImmutableMap.of(headerName, headerValue);
 
+        when(client.target(any(URI.class))).thenReturn(webTarget);
+        when(webTarget.request()).thenReturn(webTargetBuilder);
+        when(webTargetBuilder.accept(ArgumentMatchers.<MediaType>any())).thenReturn(webTargetBuilder);
+        when(webTargetBuilder.cookie(ArgumentMatchers.<Cookie>any())).thenReturn(webTargetBuilder);
+        when(webTargetBuilder.header(anyString(), any())).thenReturn(webTargetBuilder);
+
         errorHandlingClient.get(testUri, cookies, headers);
 
         verify(webTargetBuilder, times(1)).cookie(cookie);
@@ -72,11 +71,11 @@ public class ErrorHandlingClientTest {
         verify(webTargetBuilder, times(1)).get();
     }
 
-    @Test(expected = ApplicationException.class)
+    @Test
     public void get_shouldThrowApplicationExceptionWhenAWireProblemOccurs() throws Exception {
         when(client.target(testUri)).thenThrow(new ProcessingException(""));
 
-        errorHandlingClient.get(testUri);
+        Assertions.assertThrows(ApplicationException.class, () -> errorHandlingClient.get(testUri));
     }
 
     @Test
@@ -84,38 +83,47 @@ public class ErrorHandlingClientTest {
         final String headerName = "X-Clacks-Overhead";
         final String headerValue = "GNU Terry Pratchett";
         final Map<String, String> headers = ImmutableMap.of(headerName, headerValue);
-
         final String postBody = "";
+
+        when(client.target(any(URI.class))).thenReturn(webTarget);
+        when(webTarget.request(MediaType.APPLICATION_JSON_TYPE)).thenReturn(webTargetBuilder);
+        when(webTargetBuilder.header(anyString(), any())).thenReturn(webTargetBuilder);
+
         errorHandlingClient.post(testUri, headers, postBody);
 
         verify(webTargetBuilder, times(1)).header(headerName, headerValue);
         verify(webTargetBuilder, times(1)).post(Entity.json(postBody));
     }
 
-    @Test(expected = ApplicationException.class)
+    @Test
     public void shouldRetryPostRequestIfConfigured() throws Exception {
+        when(client.target(any(URI.class))).thenReturn(webTarget);
+        when(webTarget.request(MediaType.APPLICATION_JSON_TYPE)).thenReturn(webTargetBuilder);
         when(webTargetBuilder.post(Entity.json(""))).thenThrow(RuntimeException.class);
 
         ErrorHandlingClient retryEnabledErrorHandlingClient = new ErrorHandlingClient(client, 2);
-        retryEnabledErrorHandlingClient.post(testUri, Collections.emptyMap(), "");
+        Assertions.assertThrows(ApplicationException.class, () -> retryEnabledErrorHandlingClient.post(testUri, Collections.emptyMap(), ""));
 
-        verify(webTargetBuilder, times(2)).post(Entity.json(""));
+        verify(webTargetBuilder, times(3)).post(Entity.json(""));
     }
 
-    @Test(expected = ApplicationException.class)
+    @Test
     public void shouldRetryGetRequestIfConfigured() throws Exception {
+        when(client.target(any(URI.class))).thenReturn(webTarget);
+        when(webTarget.request()).thenReturn(webTargetBuilder);
+        when(webTargetBuilder.accept(ArgumentMatchers.<MediaType>any())).thenReturn(webTargetBuilder);
         when(webTargetBuilder.get()).thenThrow(RuntimeException.class);
 
         ErrorHandlingClient retryEnabledErrorHandlingClient = new ErrorHandlingClient(client, 2);
-        retryEnabledErrorHandlingClient.get(testUri);
+        Assertions.assertThrows(ApplicationException.class, () -> retryEnabledErrorHandlingClient.get(testUri));
 
-        verify(webTargetBuilder, times(2)).get();
+        verify(webTargetBuilder, times(3)).get();
     }
 
-    @Test(expected = ApplicationException.class)
+    @Test
     public void post_shouldThrowApplicationExceptionWhenAWireProblemOccurs() throws Exception {
         when(client.target(testUri)).thenThrow(new ProcessingException(""));
 
-        errorHandlingClient.post(testUri, "");
+        Assertions.assertThrows(ApplicationException.class, () -> errorHandlingClient.post(testUri, ""));
     }
 }

@@ -1,9 +1,7 @@
 package stubidp.utils.rest.cache;
 
-import org.junit.Before;
-import org.junit.Test;
-import stubidp.utils.rest.cache.AssetCacheConfiguration;
-import stubidp.utils.rest.cache.CacheControlFilter;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
@@ -21,7 +19,7 @@ import static org.mockito.Mockito.when;
 public class CacheControlFilterTest {
     private CacheControlFilter filter;
 
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
         AssetCacheConfiguration assetCacheConfiguration = new AssetCacheConfiguration() {
             @Override

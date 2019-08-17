@@ -1,9 +1,8 @@
 package stubidp.utils.rest.analytics;
 
-import org.junit.Test;
-import stubidp.utils.rest.analytics.CustomVariable;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 public class CustomVariableTest {
 

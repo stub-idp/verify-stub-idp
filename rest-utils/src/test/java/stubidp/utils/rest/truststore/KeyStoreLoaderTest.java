@@ -1,7 +1,6 @@
 package stubidp.utils.rest.truststore;
 
-import org.junit.Test;
-import stubidp.utils.rest.truststore.KeyStoreLoader;
+import org.junit.jupiter.api.Test;
 
 import java.net.URL;
 import java.security.KeyStore;

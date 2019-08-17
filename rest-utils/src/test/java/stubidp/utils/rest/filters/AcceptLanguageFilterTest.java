@@ -1,12 +1,10 @@
 package stubidp.utils.rest.filters;
 
-import org.junit.Before;
-import org.junit.Test;
-import stubidp.utils.rest.filters.AcceptLanguageFilter;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.core.HttpHeaders;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Enumeration;
@@ -21,7 +19,8 @@ public class AcceptLanguageFilterTest{
 
     private HttpServletRequest request = mock(HttpServletRequest.class);
     private String encodingHeader = "someheader";
-    @Before
+
+    @BeforeEach
     public void setUp(){
         ArrayList<String> headers = new ArrayList<>();
         headers.add(HttpHeaders.ACCEPT_LANGUAGE);
@@ -31,6 +30,7 @@ public class AcceptLanguageFilterTest{
         when(request.getHeaderNames()).thenReturn(Collections.enumeration(headers));
 
     }
+
     @Test
     public void getHeaderNames_removesAcceptLanguageHeader(){
         AcceptLanguageFilter f = new AcceptLanguageFilter();
