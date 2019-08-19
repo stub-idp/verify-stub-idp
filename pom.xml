@@ -37,7 +37,7 @@
         <logstash_logback_encoder.version>6.1</logstash_logback_encoder.version>
         <logback.version>1.2.3</logback.version>
         <javax_activation.version>1.2.0</javax_activation.version>
-        <freemarker.version>2.3.28</freemarker.version>
+        <freemarker.version>2.3.29</freemarker.version>
 
         <!-- test dependencies -->
         <assertj.version>3.13.2</assertj.version>
