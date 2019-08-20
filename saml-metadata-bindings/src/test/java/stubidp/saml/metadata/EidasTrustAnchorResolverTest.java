@@ -4,16 +4,16 @@ import certificates.values.CACertificates;
 import com.nimbusds.jose.JOSEException;
 import com.nimbusds.jose.jwk.JWK;
 import org.apache.commons.codec.binary.Base64;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
-import stubidp.utils.security.security.PrivateKeyFactory;
-import stubidp.utils.security.security.X509CertificateFactory;
+import org.mockito.junit.jupiter.MockitoExtension;
 import stubidp.eidas.trustanchor.CountryTrustAnchor;
 import stubidp.eidas.trustanchor.Generator;
 import stubidp.test.devpki.TestCertificateStrings;
+import stubidp.utils.security.security.PrivateKeyFactory;
+import stubidp.utils.security.security.X509CertificateFactory;
 
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.Invocation;
@@ -40,7 +40,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.when;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class EidasTrustAnchorResolverTest {
 
     @Mock
@@ -63,7 +63,7 @@ public class EidasTrustAnchorResolverTest {
 
     private X509CertificateFactory certificateFactory = new X509CertificateFactory();
 
-    @Before
+    @BeforeEach
     public void setUp() throws URISyntaxException, KeyStoreException, CertificateException, NoSuchAlgorithmException, IOException {
         URI uri = new URI("https://govukverify-trust-anchor-dev.s3.amazonaws.com/devTrustAnchor");
         privateSigningKey = new PrivateKeyFactory().createPrivateKey(Base64.decodeBase64(TestCertificateStrings.METADATA_SIGNING_A_PRIVATE_KEY));

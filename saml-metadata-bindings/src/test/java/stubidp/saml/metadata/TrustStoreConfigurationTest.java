@@ -2,13 +2,11 @@ package stubidp.saml.metadata;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.exc.UnrecognizedPropertyException;
-import stubidp.saml.metadata.TrustStoreConfiguration;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.RegisterExtension;
 import stubidp.test.utils.keystore.KeyStoreRule;
 import stubidp.test.utils.keystore.builders.KeyStoreRuleBuilder;
-import org.junit.ClassRule;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.ExpectedException;
 
 import java.io.File;
 import java.io.IOException;
@@ -19,12 +17,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static stubidp.test.devpki.TestCertificateStrings.HUB_TEST_PUBLIC_SIGNING_CERT;
 
 public class TrustStoreConfigurationTest {
-    @Rule
-    public ExpectedException thrown = ExpectedException.none();
 
     private ObjectMapper objectMapper = new ObjectMapper();
 
-    @ClassRule
+    @RegisterExtension
     public static KeyStoreRule keyStoreRule = KeyStoreRuleBuilder.aKeyStoreRule().withCertificate("hub", HUB_TEST_PUBLIC_SIGNING_CERT).build();
 
     @Test
@@ -61,9 +57,9 @@ public class TrustStoreConfigurationTest {
         assertThat(config.getTrustStore()).isNotNull();
     }
 
-    @Test(expected = UnrecognizedPropertyException.class)
+    @Test
     public void shouldThrowExceptionWhenIncorrectKeySpecified() throws IOException {
         String jsonConfig = "{\"type\": \"file\", \"trustStorePathhhh\": \"path\", \"trustStorePassword\": \"puppet\"}";
-        objectMapper.readValue(jsonConfig, TrustStoreConfiguration.class);
+        Assertions.assertThrows(UnrecognizedPropertyException.class, () -> objectMapper.readValue(jsonConfig, TrustStoreConfiguration.class));
     }
 }

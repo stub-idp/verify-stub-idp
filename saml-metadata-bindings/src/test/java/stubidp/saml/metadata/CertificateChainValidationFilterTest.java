@@ -1,25 +1,24 @@
 package stubidp.saml.metadata;
 
 import certificates.values.CACertificates;
-import stubidp.saml.metadata.test.factories.metadata.EntityDescriptorFactory;
-import stubidp.saml.metadata.test.factories.metadata.MetadataFactory;
-import stubidp.test.utils.keystore.KeyStoreRule;
-import stubidp.test.utils.keystore.builders.KeyStoreRuleBuilder;
 import net.shibboleth.utilities.java.support.xml.BasicParserPool;
 import org.apache.commons.io.IOUtils;
-import org.junit.ClassRule;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.RegisterExtension;
 import org.opensaml.core.xml.XMLObject;
 import org.opensaml.core.xml.util.XMLObjectSupport;
 import org.opensaml.saml.saml2.metadata.EntitiesDescriptor;
 import org.opensaml.saml.saml2.metadata.IDPSSODescriptor;
 import org.opensaml.saml.saml2.metadata.SPSSODescriptor;
+import stubidp.saml.metadata.test.factories.metadata.EntityDescriptorFactory;
+import stubidp.saml.metadata.test.factories.metadata.MetadataFactory;
+import stubidp.saml.utils.OpenSAMLRunner;
+import stubidp.test.devpki.TestEntityIds;
+import stubidp.test.utils.keystore.KeyStoreRule;
+import stubidp.test.utils.keystore.builders.KeyStoreRuleBuilder;
 import stubidp.utils.security.security.X509CertificateFactory;
 import stubidp.utils.security.security.verification.CertificateChainValidator;
 import stubidp.utils.security.security.verification.PKIXParametersProvider;
-import stubidp.saml.utils.core.test.OpenSAMLMockitoRunner;
-import stubidp.test.devpki.TestEntityIds;
 
 import javax.xml.namespace.QName;
 import java.util.ArrayList;
@@ -30,22 +29,21 @@ import static java.nio.charset.StandardCharsets.UTF_8;
 import static java.util.Arrays.asList;
 import static org.assertj.core.api.Assertions.assertThat;
 
-@RunWith(OpenSAMLMockitoRunner.class)
-public class CertificateChainValidationFilterTest {
+public class CertificateChainValidationFilterTest extends OpenSAMLRunner {
 
     private static final List<String> IDP_ENTITY_IDS = asList(TestEntityIds.STUB_IDP_ONE, TestEntityIds.STUB_IDP_TWO, TestEntityIds.STUB_IDP_THREE, TestEntityIds.STUB_IDP_FOUR);
     private static final List<String> HUB_ENTITY_IDS = Collections.singletonList(TestEntityIds.HUB_ENTITY_ID);
     private static final List<String> HUB_KEY_NAMES = asList(EntityDescriptorFactory.SIGNING_ONE, EntityDescriptorFactory.SIGNING_TWO, EntityDescriptorFactory.ENCRYPTION);
 
-    @ClassRule
+    @RegisterExtension
     public static KeyStoreRule idpKeyStoreRule = KeyStoreRuleBuilder.aKeyStoreRule().withCertificate("idp", CACertificates.TEST_IDP_CA)
                                                                     .withCertificate("root", CACertificates.TEST_ROOT_CA).build();
 
-    @ClassRule
+    @RegisterExtension
     public static KeyStoreRule hubKeyStoreRule = KeyStoreRuleBuilder.aKeyStoreRule().withCertificate("hub", CACertificates.TEST_CORE_CA)
                                                                     .withCertificate("root", CACertificates.TEST_ROOT_CA).build();
 
-    @ClassRule
+    @RegisterExtension
     public static KeyStoreRule rpKeyStoreRule = KeyStoreRuleBuilder.aKeyStoreRule().withCertificate("rp", CACertificates.TEST_RP_CA)
                                                                    .withCertificate("root", CACertificates.TEST_ROOT_CA).build();
 

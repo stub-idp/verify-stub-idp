@@ -1,13 +1,12 @@
 package stubidp.saml.metadata;
 
-
 import certificates.values.CACertificates;
 import net.shibboleth.utilities.java.support.component.ComponentInitializationException;
 import net.shibboleth.utilities.java.support.xml.BasicParserPool;
 import net.shibboleth.utilities.java.support.xml.XMLParserException;
 import org.apache.commons.io.IOUtils;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.opensaml.core.xml.XMLObject;
 import org.opensaml.core.xml.io.UnmarshallingException;
 import org.opensaml.core.xml.util.XMLObjectSupport;
@@ -58,7 +57,7 @@ public class PKIXSignatureValidationFilterProviderTest {
         return keyStoreLoader.load(certificateList);
     }
 
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
         IdaSamlBootstrap.bootstrap();
         trustStore = loadKeyStore(Collections.singletonList(CACertificates.TEST_METADATA_CA));

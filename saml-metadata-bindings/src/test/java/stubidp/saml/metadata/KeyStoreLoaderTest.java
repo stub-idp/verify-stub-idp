@@ -1,8 +1,7 @@
 package stubidp.saml.metadata;
 
-import stubidp.saml.metadata.KeyStoreLoader;
+import org.junit.jupiter.api.Test;
 import stubidp.test.utils.helpers.ResourceHelpers;
-import org.junit.Test;
 
 import java.security.KeyStore;
 

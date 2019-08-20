@@ -1,7 +1,7 @@
 package stubidp.saml.metadata;
 
 import com.nimbusds.jose.jwk.JWK;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import stubidp.saml.metadata.EidasMetadataConfiguration;
 import stubidp.saml.metadata.MetadataResolverConfigBuilder;
 import stubidp.saml.metadata.MetadataResolverConfiguration;

@@ -1,8 +1,8 @@
 package stubidp.saml.metadata.factories;
 
 import net.shibboleth.utilities.java.support.resolver.CriteriaSet;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 import org.opensaml.core.config.InitializationService;
 import org.opensaml.core.criterion.EntityIdCriterion;
 import org.opensaml.core.xml.io.MarshallingException;
@@ -23,9 +23,9 @@ import org.opensaml.xmlsec.signature.support.SignatureException;
 import org.opensaml.xmlsec.signature.support.SignatureTrustEngine;
 import org.opensaml.xmlsec.signature.support.Signer;
 import org.w3c.dom.Element;
+import stubidp.saml.metadata.test.factories.metadata.EntityDescriptorFactory;
 import stubidp.test.devpki.TestCertificateStrings;
 import stubidp.test.devpki.TestEntityIds;
-import stubidp.saml.metadata.test.factories.metadata.EntityDescriptorFactory;
 
 import javax.xml.crypto.dsig.CanonicalizationMethod;
 import javax.xml.crypto.dsig.SignatureMethod;
@@ -35,12 +35,11 @@ import java.security.interfaces.RSAPrivateKey;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-
 public class MetadataSignatureTrustEngineFactoryTest {
 
     private static DOMMetadataResolver metadataResolver;
 
-    @BeforeClass
+    @BeforeAll
     public static void beforeAll() throws Exception {
         InitializationService.initialize();
 

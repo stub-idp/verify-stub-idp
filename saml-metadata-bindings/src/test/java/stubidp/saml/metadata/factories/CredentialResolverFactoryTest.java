@@ -2,8 +2,8 @@ package stubidp.saml.metadata.factories;
 
 import net.shibboleth.utilities.java.support.resolver.CriteriaSet;
 import org.assertj.core.api.Assertions;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 import org.opensaml.core.config.InitializationService;
 import org.opensaml.core.criterion.EntityIdCriterion;
 import org.opensaml.core.xml.util.XMLObjectSupport;
@@ -15,10 +15,10 @@ import org.opensaml.saml.security.impl.MetadataCredentialResolver;
 import org.opensaml.security.credential.UsageType;
 import org.opensaml.security.criteria.UsageCriterion;
 import org.w3c.dom.Element;
-import stubidp.test.devpki.TestCertificateStrings;
-import stubidp.test.devpki.TestEntityIds;
 import stubidp.saml.metadata.test.factories.metadata.EntityDescriptorFactory;
 import stubidp.saml.metadata.test.factories.metadata.TestCredentialFactory;
+import stubidp.test.devpki.TestCertificateStrings;
+import stubidp.test.devpki.TestEntityIds;
 
 import java.security.PublicKey;
 
@@ -26,7 +26,7 @@ public class CredentialResolverFactoryTest {
 
     private static DOMMetadataResolver metadataResolver;
 
-    @BeforeClass
+    @BeforeAll
     public static void beforeAll() throws Exception {
         InitializationService.initialize();
 

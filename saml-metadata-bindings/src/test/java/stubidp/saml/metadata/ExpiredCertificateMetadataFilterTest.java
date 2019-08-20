@@ -1,19 +1,18 @@
 package stubidp.saml.metadata;
 
-
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeUtils;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.opensaml.core.config.InitializationService;
 import org.opensaml.core.xml.XMLObject;
 import org.opensaml.saml.metadata.resolver.filter.FilterException;
 import org.opensaml.saml.metadata.resolver.filter.MetadataFilter;
 import stubidp.saml.metadata.test.factories.metadata.MetadataFactory;
-import stubidp.test.devpki.TestCertificateStrings;
 import stubidp.saml.serializers.deserializers.OpenSamlXMLObjectUnmarshaller;
 import stubidp.saml.serializers.deserializers.parser.SamlObjectParser;
+import stubidp.test.devpki.TestCertificateStrings;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.fail;
@@ -24,7 +23,7 @@ public class ExpiredCertificateMetadataFilterTest {
     private MetadataFilter metadataFilter;
     private OpenSamlXMLObjectUnmarshaller<XMLObject> unmarshaller = new OpenSamlXMLObjectUnmarshaller<>(new SamlObjectParser());
 
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
         metadataFilter = new ExpiredCertificateMetadataFilter();
         InitializationService.initialize();
@@ -65,6 +64,6 @@ public class ExpiredCertificateMetadataFilterTest {
         String signedMetadata = metadataFactory.signedMetadata(TestCertificateStrings.METADATA_SIGNING_A_PUBLIC_CERT, TestCertificateStrings.METADATA_SIGNING_A_PRIVATE_KEY);
         XMLObject metadata = unmarshaller.fromString(signedMetadata);
         metadata = metadataFilter.filter(metadata);
-        Assert.assertNotNull("metadata should not have been filtered out", metadata);
+        Assertions.assertNotNull(metadata, "metadata should not have been filtered out");
     }
 }

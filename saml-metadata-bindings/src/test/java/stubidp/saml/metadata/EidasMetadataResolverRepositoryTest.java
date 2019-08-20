@@ -8,23 +8,23 @@ import ch.qos.logback.core.Appender;
 import com.nimbusds.jose.JOSEException;
 import com.nimbusds.jose.jwk.JWK;
 import net.shibboleth.utilities.java.support.component.ComponentInitializationException;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.opensaml.saml.metadata.resolver.MetadataResolver;
 import org.opensaml.xmlsec.signature.support.impl.ExplicitKeySignatureTrustEngine;
 import org.slf4j.LoggerFactory;
-import stubidp.utils.security.security.X509CertificateFactory;
 import stubidp.eidas.trustanchor.CountryTrustAnchor;
-import stubidp.test.devpki.TestCertificateStrings;
 import stubidp.saml.metadata.factories.DropwizardMetadataResolverFactory;
 import stubidp.saml.metadata.factories.MetadataSignatureTrustEngineFactory;
+import stubidp.test.devpki.TestCertificateStrings;
 import stubidp.utils.common.datetime.DateTimeFreezer;
+import stubidp.utils.security.security.X509CertificateFactory;
 
 import javax.ws.rs.client.Client;
 import javax.ws.rs.core.UriBuilder;
@@ -49,13 +49,12 @@ import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.fail;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.reset;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyZeroInteractions;
 import static org.mockito.Mockito.when;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class EidasMetadataResolverRepositoryTest {
 
     @Mock
@@ -95,21 +94,22 @@ public class EidasMetadataResolverRepositoryTest {
 
     private List<JWK> trustAnchors;
 
-    @Before
+    @BeforeEach
     public void setUp() throws CertificateException, SignatureException, ParseException, JOSEException, ComponentInitializationException {
         trustAnchors = new ArrayList<>();
         when(trustAnchorResolver.getTrustAnchors()).thenReturn(trustAnchors);
-        when(dropwizardMetadataResolverFactory.createMetadataResolverWithClient(any(), eq(true), eq(metadataClient))).thenReturn(metadataResolver);
-        when(metadataSignatureTrustEngineFactory.createSignatureTrustEngine(metadataResolver)).thenReturn(explicitKeySignatureTrustEngine);
     }
 
-    @After
+    @AfterEach
     public void tearDown() {
         DateTimeFreezer.unfreezeTime();
     }
 
     @Test
-    public void shouldCreateMetadataResolverWhenTrustAnchorIsValid() throws KeyStoreException, CertificateEncodingException {
+    public void shouldCreateMetadataResolverWhenTrustAnchorIsValid() throws KeyStoreException, CertificateEncodingException, ComponentInitializationException {
+        when(dropwizardMetadataResolverFactory.createMetadataResolverWithClient(any(), eq(true), eq(metadataClient))).thenReturn(metadataResolver);
+        when(metadataSignatureTrustEngineFactory.createSignatureTrustEngine(metadataResolver)).thenReturn(explicitKeySignatureTrustEngine);
+
         List<String> stringCertChain = Arrays.asList(
                 CACertificates.TEST_ROOT_CA,
                 CACertificates.TEST_IDP_CA,
@@ -146,7 +146,10 @@ public class EidasMetadataResolverRepositoryTest {
     }
 
     @Test
-    public void shouldUseEarliestExpiryDateOfX509Cert() {
+    public void shouldUseEarliestExpiryDateOfX509Cert() throws ComponentInitializationException {
+        when(dropwizardMetadataResolverFactory.createMetadataResolverWithClient(any(), eq(true), eq(metadataClient))).thenReturn(metadataResolver);
+        when(metadataSignatureTrustEngineFactory.createSignatureTrustEngine(metadataResolver)).thenReturn(explicitKeySignatureTrustEngine);
+
         String entityId = "http://signin.gov.uk/entity-id";
 
         List<String> stringCertsChain = asList(
@@ -242,7 +245,10 @@ public class EidasMetadataResolverRepositoryTest {
     }
 
     @Test
-    public void shouldAddNewMetadataResolverWhenRefreshing() throws CertificateException, SignatureException, ParseException, JOSEException {
+    public void shouldAddNewMetadataResolverWhenRefreshing() throws CertificateException, SignatureException, ParseException, JOSEException, ComponentInitializationException {
+        when(dropwizardMetadataResolverFactory.createMetadataResolverWithClient(any(), eq(true), eq(metadataClient))).thenReturn(metadataResolver);
+        when(metadataSignatureTrustEngineFactory.createSignatureTrustEngine(metadataResolver)).thenReturn(explicitKeySignatureTrustEngine);
+
         EidasMetadataResolverRepository metadataResolverRepository = createMetadataResolverRepositoryWithTrustAnchors();
 
         assertThat(metadataResolverRepository.getTrustAnchorsEntityIds()).hasSize(0);
@@ -260,7 +266,10 @@ public class EidasMetadataResolverRepositoryTest {
     }
 
     @Test
-    public void shouldRemoveOldMetadataResolverWhenRefreshing() throws CertificateException, SignatureException, ParseException, JOSEException {
+    public void shouldRemoveOldMetadataResolverWhenRefreshing() throws CertificateException, SignatureException, ParseException, JOSEException, ComponentInitializationException {
+        when(dropwizardMetadataResolverFactory.createMetadataResolverWithClient(any(), eq(true), eq(metadataClient))).thenReturn(metadataResolver);
+        when(metadataSignatureTrustEngineFactory.createSignatureTrustEngine(metadataResolver)).thenReturn(explicitKeySignatureTrustEngine);
+
         List<String> certificateChain = asList(
                 CACertificates.TEST_ROOT_CA,
                 CACertificates.TEST_METADATA_CA,
@@ -281,7 +290,10 @@ public class EidasMetadataResolverRepositoryTest {
     }
 
     @Test
-    public void shouldNotRecreateExistingMetadataResolversWhenRefreshing() throws ParseException, CertificateException, JOSEException, SignatureException {
+    public void shouldNotRecreateExistingMetadataResolversWhenRefreshing() throws ParseException, CertificateException, JOSEException, SignatureException, ComponentInitializationException {
+        when(dropwizardMetadataResolverFactory.createMetadataResolverWithClient(any(), eq(true), eq(metadataClient))).thenReturn(metadataResolver);
+        when(metadataSignatureTrustEngineFactory.createSignatureTrustEngine(metadataResolver)).thenReturn(explicitKeySignatureTrustEngine);
+
         List<String> certificateChain = asList(
                 CACertificates.TEST_ROOT_CA,
                 CACertificates.TEST_METADATA_CA,

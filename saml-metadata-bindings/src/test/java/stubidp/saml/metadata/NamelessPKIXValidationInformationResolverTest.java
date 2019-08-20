@@ -1,7 +1,6 @@
 package stubidp.saml.metadata;
 
-import org.junit.Test;
-import stubidp.saml.metadata.NamelessPKIXValidationInformationResolver;
+import org.junit.jupiter.api.Test;
 
 import java.util.Collections;
 

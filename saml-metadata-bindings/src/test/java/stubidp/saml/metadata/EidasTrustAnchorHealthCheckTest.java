@@ -4,17 +4,15 @@ import com.codahale.metrics.health.HealthCheck.Result;
 import com.google.common.collect.ImmutableMap;
 import net.shibboleth.utilities.java.support.resolver.CriteriaSet;
 import net.shibboleth.utilities.java.support.resolver.ResolverException;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.opensaml.core.criterion.EntityIdCriterion;
 import org.opensaml.core.xml.io.MarshallingException;
 import org.opensaml.saml.metadata.resolver.MetadataResolver;
 import org.opensaml.xmlsec.signature.support.SignatureException;
-import stubidp.saml.metadata.EidasTrustAnchorHealthCheck;
-import stubidp.saml.metadata.MetadataResolverRepository;
 import stubidp.saml.utils.core.test.builders.metadata.EntityDescriptorBuilder;
 
 import java.util.Collections;
@@ -26,7 +24,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class EidasTrustAnchorHealthCheckTest {
 
     @Mock
@@ -35,7 +33,7 @@ public class EidasTrustAnchorHealthCheckTest {
     private EidasTrustAnchorHealthCheck eidasTrustAnchorHealthCheck;
 
 
-    @Before
+    @BeforeEach
     public void setUp(){
         eidasTrustAnchorHealthCheck = new EidasTrustAnchorHealthCheck(metadataResolverRepository);
     }

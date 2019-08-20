@@ -3,8 +3,8 @@ package stubidp.saml.metadata;
 import com.codahale.metrics.health.HealthCheck;
 import net.shibboleth.utilities.java.support.component.ComponentInitializationException;
 import net.shibboleth.utilities.java.support.xml.BasicParserPool;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 import org.opensaml.core.config.InitializationException;
 import org.opensaml.core.config.InitializationService;
 import stubidp.saml.metadata.test.factories.metadata.MetadataFactory;
@@ -15,7 +15,7 @@ public class MetadataHealthCheckTest {
 
     public static final String EXPECTED_ENTITY_ID = "https://signin.service.gov.uk";
 
-    @BeforeClass
+    @BeforeAll
     public static void bootStrapOpenSAML() throws InitializationException {
         InitializationService.initialize();
     }

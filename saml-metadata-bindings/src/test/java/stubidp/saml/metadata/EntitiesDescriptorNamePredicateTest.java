@@ -1,7 +1,7 @@
 package stubidp.saml.metadata;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.opensaml.core.config.InitializationException;
 import org.opensaml.core.config.InitializationService;
 import org.opensaml.core.xml.io.MarshallingException;
@@ -17,7 +17,7 @@ import static stubidp.saml.utils.core.test.builders.metadata.EntitiesDescriptorB
 
 public class EntitiesDescriptorNamePredicateTest {
 
-    @Before
+    @BeforeEach
     public void setUp() throws InitializationException {
         InitializationService.initialize();
     }
