@@ -7,7 +7,7 @@ module event.emitter {
     requires org.apache.commons.codec;
     requires org.slf4j;
 
-    requires transitive javax.inject;
+    requires transitive jakarta.inject;
     requires transitive org.joda.time;
     requires transitive jsr305; // https://github.com/google/guava/issues/2960
     requires transitive aws.java.sdk.osgi; // https://github.com/aws/aws-sdk-java/issues/1658

@@ -30,5 +30,5 @@ module saml.utils {
     requires transitive java.validation;
     requires transitive org.joda.time;
     requires transitive org.opensaml.saml;
-    requires transitive javax.inject;
+    requires transitive jakarta.inject;
 }

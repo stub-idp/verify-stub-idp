@@ -4,7 +4,7 @@ module stub.idp.saml {
     exports stubidp.saml.stubidp.stub.transformers.outbound;
     exports stubidp.saml.stubidp.stub.transformers.inbound;
     
-    requires transitive javax.inject;
+    requires transitive jakarta.inject;
     requires transitive org.opensaml.saml;
     requires transitive saml.utils;
     requires transitive saml.security;

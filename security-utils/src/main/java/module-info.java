@@ -13,7 +13,7 @@ module security.utils {
     requires org.apache.commons.codec;
 
     requires transitive java.validation;
-    requires transitive javax.inject;
+    requires transitive jakarta.inject;
     requires transitive com.google.common;
     requires transitive com.fasterxml.jackson.core;
     requires transitive com.fasterxml.jackson.databind;
