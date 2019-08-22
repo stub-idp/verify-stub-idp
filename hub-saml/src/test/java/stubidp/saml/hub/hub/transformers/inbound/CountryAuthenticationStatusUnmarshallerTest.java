@@ -1,18 +1,17 @@
 package stubidp.saml.hub.hub.transformers.inbound;
 
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.opensaml.saml.saml2.core.Response;
 import org.opensaml.saml.saml2.core.Status;
 import org.opensaml.saml.saml2.core.StatusCode;
 import org.opensaml.saml.saml2.core.StatusMessage;
 import stubidp.saml.hub.core.test.builders.StatusMessageBuilder;
+import stubidp.saml.hub.hub.domain.CountryAuthenticationStatus;
+import stubidp.saml.hub.test.OpenSAMLRunner;
+import stubidp.saml.serializers.deserializers.StringToOpenSamlObjectTransformer;
 import stubidp.saml.utils.core.OpenSamlXmlObjectFactory;
 import stubidp.saml.utils.core.api.CoreTransformersFactory;
-import stubidp.saml.utils.core.test.OpenSAMLRunner;
-import stubidp.saml.serializers.deserializers.StringToOpenSamlObjectTransformer;
-import stubidp.saml.hub.hub.domain.CountryAuthenticationStatus;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -25,14 +24,13 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static stubidp.saml.utils.core.test.builders.StatusBuilder.aStatus;
 import static stubidp.saml.utils.core.test.builders.StatusCodeBuilder.aStatusCode;
 
-@RunWith(OpenSAMLRunner.class)
-public class CountryAuthenticationStatusUnmarshallerTest {
+public class CountryAuthenticationStatusUnmarshallerTest extends OpenSAMLRunner {
 
     private OpenSamlXmlObjectFactory samlObjectFactory;
     private StringToOpenSamlObjectTransformer<Response> stringToOpenSamlObjectTransformer;
     private CountryAuthenticationStatusUnmarshaller countryAuthenticationStatusUnmarshaller;
 
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
         samlObjectFactory = new OpenSamlXmlObjectFactory();
         stringToOpenSamlObjectTransformer = new CoreTransformersFactory().getStringtoOpenSamlObjectTransformer(input -> {});

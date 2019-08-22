@@ -1,17 +1,17 @@
 package stubidp.saml.hub.hub.transformers.outbound;
 
 import org.joda.time.DateTime;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.opensaml.saml.saml2.core.Assertion;
 import org.opensaml.saml.saml2.core.Attribute;
 import org.opensaml.saml.saml2.core.AttributeStatement;
-import stubidp.saml.hub.hub.transformers.outbound.HubAssertionMarshaller;
+import stubidp.saml.hub.test.OpenSAMLRunner;
 import stubidp.saml.utils.core.OpenSamlXmlObjectFactory;
 import stubidp.saml.utils.core.domain.HubAssertion;
-import stubidp.saml.utils.core.test.OpenSAMLMockitoRunner;
 import stubidp.saml.utils.core.transformers.outbound.OutboundAssertionToSubjectTransformer;
 import stubidp.saml.utils.hub.factories.AttributeFactory_1_1;
 
@@ -24,8 +24,8 @@ import static stubidp.saml.utils.core.test.builders.Cycle3DatasetBuilder.aCycle3
 import static stubidp.saml.utils.core.test.builders.HubAssertionBuilder.aHubAssertion;
 import static stubidp.saml.utils.core.test.builders.SimpleStringAttributeBuilder.aSimpleStringAttribute;
 
-@RunWith(OpenSAMLMockitoRunner.class)
-public class HubAssertionMarshallerTest {
+@ExtendWith(MockitoExtension.class)
+public class HubAssertionMarshallerTest extends OpenSAMLRunner {
 
     private HubAssertionMarshaller marshaller;
     @Mock
@@ -33,7 +33,7 @@ public class HubAssertionMarshallerTest {
     @Mock
     private OutboundAssertionToSubjectTransformer outboundAssertionToSubjectTransformer;
 
-    @Before
+    @BeforeEach
     public void setup() {
         OpenSamlXmlObjectFactory openSamlXmlObjectFactory = new OpenSamlXmlObjectFactory();
         marshaller = new HubAssertionMarshaller(openSamlXmlObjectFactory, attributeFactory, outboundAssertionToSubjectTransformer);

@@ -1,25 +1,23 @@
 package stubidp.saml.hub.core.validators.assertion;
 
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.opensaml.saml.saml2.core.Assertion;
-import stubidp.saml.hub.core.validators.assertion.IPAddressValidator;
-import stubidp.saml.utils.core.test.OpenSAMLMockitoRunner;
-import stubidp.saml.utils.core.test.SamlTransformationErrorManagerTestHelper;
-import stubidp.saml.utils.core.test.builders.IPAddressAttributeBuilder;
 import stubidp.saml.extensions.validation.SamlValidationSpecificationFailure;
 import stubidp.saml.hub.core.errors.SamlTransformationErrorFactory;
+import stubidp.saml.hub.test.OpenSAMLRunner;
+import stubidp.saml.utils.core.test.SamlTransformationErrorManagerTestHelper;
+import stubidp.saml.utils.core.test.builders.IPAddressAttributeBuilder;
+
 import static stubidp.saml.utils.core.test.builders.AssertionBuilder.anAssertion;
 import static stubidp.saml.utils.core.test.builders.AttributeStatementBuilder.anAttributeStatement;
 import static stubidp.saml.utils.core.test.builders.PersonNameAttributeBuilder_1_1.aPersonName_1_1;
 
-@RunWith(OpenSAMLMockitoRunner.class)
-public class IPAddressValidatorTest {
+public class IPAddressValidatorTest extends OpenSAMLRunner {
 
     private IPAddressValidator validator;
 
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
         validator = new IPAddressValidator();
     }

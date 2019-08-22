@@ -1,9 +1,8 @@
 package stubidp.saml.hub.hub.transformers.outbound;
 
 import org.joda.time.DateTime;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.opensaml.saml.common.xml.SAMLConstants;
 import org.opensaml.saml.saml2.core.AuthnContextClassRef;
 import org.opensaml.saml.saml2.core.AuthnContextComparisonTypeEnumeration;
@@ -11,10 +10,10 @@ import org.opensaml.saml.saml2.core.AuthnRequest;
 import org.opensaml.saml.saml2.core.NameIDPolicy;
 import org.opensaml.saml.saml2.core.NameIDType;
 import org.opensaml.saml.saml2.core.RequestedAuthnContext;
+import stubidp.saml.extensions.extensions.IdaAuthnContext;
+import stubidp.saml.hub.test.OpenSAMLRunner;
 import stubidp.saml.utils.core.OpenSamlXmlObjectFactory;
 import stubidp.saml.utils.core.domain.AuthnContext;
-import stubidp.saml.extensions.extensions.IdaAuthnContext;
-import stubidp.saml.utils.core.test.OpenSAMLMockitoRunner;
 import stubidp.saml.utils.hub.domain.IdaAuthnRequestFromHub;
 
 import java.util.Arrays;
@@ -27,11 +26,11 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.jodatime.api.Assertions.assertThat;
 import static stubidp.saml.hub.hub.test.builders.IdaAuthnRequestBuilder.anIdaAuthnRequest;
 
-@RunWith(OpenSAMLMockitoRunner.class)
-public class IdaAuthnRequestFromHubToAuthnRequestTransformerTest {
+public class IdaAuthnRequestFromHubToAuthnRequestTransformerTest extends OpenSAMLRunner {
+
     private IdaAuthnRequestFromHubToAuthnRequestTransformer transformer;
 
-    @Before
+    @BeforeEach
     public void setup() {
         transformer = new IdaAuthnRequestFromHubToAuthnRequestTransformer(new OpenSamlXmlObjectFactory());
     }

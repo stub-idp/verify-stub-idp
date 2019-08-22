@@ -1,24 +1,20 @@
 package stubidp.saml.hub.hub.transformers.inbound;
 
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.opensaml.saml.saml2.core.Status;
 import org.opensaml.saml.saml2.core.StatusCode;
-import stubidp.saml.hub.hub.transformers.inbound.MatchingServiceIdaStatus;
-import stubidp.saml.hub.hub.transformers.inbound.MatchingServiceIdaStatusUnmarshaller;
-import stubidp.saml.utils.core.OpenSamlXmlObjectFactory;
 import stubidp.saml.extensions.domain.SamlStatusCode;
-import stubidp.saml.utils.core.test.OpenSAMLRunner;
+import stubidp.saml.hub.test.OpenSAMLRunner;
+import stubidp.saml.utils.core.OpenSamlXmlObjectFactory;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@RunWith(OpenSAMLRunner.class)
-public class MatchingServiceIdaStatusUnmarshallerTest {
+public class MatchingServiceIdaStatusUnmarshallerTest extends OpenSAMLRunner {
 
     private MatchingServiceIdaStatusUnmarshaller unmarshaller;
 
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
         unmarshaller = new MatchingServiceIdaStatusUnmarshaller();
     }

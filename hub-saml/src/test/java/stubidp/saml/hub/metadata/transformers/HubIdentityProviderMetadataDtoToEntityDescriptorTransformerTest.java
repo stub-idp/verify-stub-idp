@@ -1,9 +1,8 @@
 package stubidp.saml.hub.metadata.transformers;
 
 import org.assertj.core.api.Assertions;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.opensaml.saml.common.xml.SAMLConstants;
 import org.opensaml.saml.saml2.metadata.EntityDescriptor;
 import org.opensaml.saml.saml2.metadata.KeyDescriptor;
@@ -12,24 +11,23 @@ import org.opensaml.xmlsec.signature.KeyInfo;
 import org.opensaml.xmlsec.signature.KeyName;
 import org.opensaml.xmlsec.signature.X509Certificate;
 import org.opensaml.xmlsec.signature.X509Data;
+import stubidp.saml.hub.core.test.builders.metadata.IdentityProviderMetadataDtoBuilder;
+import stubidp.saml.hub.test.OpenSAMLRunner;
+import stubidp.saml.utils.core.OpenSamlXmlObjectFactory;
 import stubidp.saml.utils.metadata.transformers.KeyDescriptorsUnmarshaller;
 import stubidp.utils.security.security.Certificate;
 import stubidp.utils.security.security.IdGenerator;
-import stubidp.saml.utils.core.OpenSamlXmlObjectFactory;
-import stubidp.saml.utils.core.test.OpenSAMLRunner;
-import stubidp.saml.hub.core.test.builders.metadata.IdentityProviderMetadataDtoBuilder;
 
 import java.util.List;
 import java.util.UUID;
 
 import static stubidp.saml.utils.core.test.builders.CertificateBuilder.aCertificate;
 
-@RunWith(OpenSAMLRunner.class)
-public class HubIdentityProviderMetadataDtoToEntityDescriptorTransformerTest {
+public class HubIdentityProviderMetadataDtoToEntityDescriptorTransformerTest extends OpenSAMLRunner {
 
     private HubIdentityProviderMetadataDtoToEntityDescriptorTransformer transformer;
 
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
         OpenSamlXmlObjectFactory openSamlXmlObjectFactory = new OpenSamlXmlObjectFactory();
         transformer = new HubIdentityProviderMetadataDtoToEntityDescriptorTransformer(openSamlXmlObjectFactory, new KeyDescriptorsUnmarshaller(openSamlXmlObjectFactory), new IdGenerator());

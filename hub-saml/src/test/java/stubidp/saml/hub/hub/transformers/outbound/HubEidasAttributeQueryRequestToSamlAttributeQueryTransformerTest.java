@@ -1,9 +1,10 @@
 package stubidp.saml.hub.hub.transformers.outbound;
 
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.opensaml.core.xml.XMLObject;
 import org.opensaml.saml.common.SAMLVersion;
 import org.opensaml.saml.saml2.core.Assertion;
@@ -12,10 +13,10 @@ import org.opensaml.saml.saml2.core.AttributeQuery;
 import org.opensaml.saml.saml2.core.EncryptedAssertion;
 import org.opensaml.saml.saml2.core.NameID;
 import org.opensaml.saml.saml2.core.impl.EncryptedAssertionBuilder;
+import stubidp.saml.hub.test.OpenSAMLRunner;
 import stubidp.saml.utils.core.OpenSamlXmlObjectFactory;
 import stubidp.saml.utils.core.domain.HubAssertion;
 import stubidp.saml.utils.core.domain.PersistentId;
-import stubidp.saml.utils.core.test.OpenSAMLMockitoRunner;
 import stubidp.saml.utils.core.transformers.outbound.OutboundAssertionToSubjectTransformer;
 import stubidp.saml.serializers.deserializers.StringToOpenSamlObjectTransformer;
 import stubidp.saml.hub.hub.domain.HubEidasAttributeQueryRequest;
@@ -32,8 +33,8 @@ import static stubidp.saml.hub.hub.domain.UserAccountCreationAttribute.CURRENT_A
 import static stubidp.saml.hub.hub.domain.UserAccountCreationAttribute.DATE_OF_BIRTH;
 import static stubidp.saml.hub.hub.builders.HubEidasAttributeQueryRequestBuilder.aHubEidasAttributeQueryRequest;
 
-@RunWith(OpenSAMLMockitoRunner.class)
-public class HubEidasAttributeQueryRequestToSamlAttributeQueryTransformerTest {
+@ExtendWith(MockitoExtension.class)
+public class HubEidasAttributeQueryRequestToSamlAttributeQueryTransformerTest extends OpenSAMLRunner {
 
     public static final String ENCRYPTED_IDENTITY_ASSERTION = "encrypted-identity-assertion!";
 
@@ -56,7 +57,7 @@ public class HubEidasAttributeQueryRequestToSamlAttributeQueryTransformerTest {
     @Mock
     private EncryptedAssertionUnmarshaller encryptedAssertionUnmarshaller;
 
-    @Before
+    @BeforeEach
     public void setup() {
         openSamlXmlObjectFactory = new OpenSamlXmlObjectFactory();
         HubAssertionMarshaller assertionTransformer = new HubAssertionMarshaller(openSamlXmlObjectFactory, attributeFactory, outboundAssertionToSubjectTransformer);

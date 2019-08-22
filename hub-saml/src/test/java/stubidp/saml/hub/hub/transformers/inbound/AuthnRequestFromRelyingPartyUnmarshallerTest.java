@@ -3,8 +3,8 @@ package stubidp.saml.hub.hub.transformers.inbound;
 import com.google.common.collect.ImmutableList;
 import org.apache.commons.codec.binary.Base64;
 import org.joda.time.DateTime;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.opensaml.saml.saml2.core.Attribute;
 import org.opensaml.saml.saml2.core.AuthnRequest;
 import org.opensaml.saml.saml2.core.Extensions;
@@ -17,18 +17,17 @@ import org.opensaml.saml.saml2.encryption.Encrypter;
 import org.opensaml.security.credential.BasicCredential;
 import org.opensaml.xmlsec.signature.impl.SignatureBuilder;
 import org.opensaml.xmlsec.signature.impl.SignatureImpl;
-import stubidp.saml.hub.hub.transformers.inbound.AuthnRequestFromRelyingPartyUnmarshaller;
-import stubidp.utils.security.security.PrivateKeyFactory;
-import stubidp.utils.security.security.PublicKeyFactory;
-import stubidp.utils.security.security.X509CertificateFactory;
-import stubidp.saml.extensions.IdaSamlBootstrap;
 import stubidp.saml.extensions.extensions.versioning.Version;
 import stubidp.saml.extensions.extensions.versioning.VersionImpl;
 import stubidp.saml.extensions.extensions.versioning.application.ApplicationVersion;
 import stubidp.saml.extensions.extensions.versioning.application.ApplicationVersionImpl;
 import stubidp.saml.hub.hub.domain.AuthnRequestFromRelyingParty;
+import stubidp.saml.hub.test.OpenSAMLRunner;
 import stubidp.saml.security.DecrypterFactory;
 import stubidp.saml.security.EncrypterFactory;
+import stubidp.utils.security.security.PrivateKeyFactory;
+import stubidp.utils.security.security.PublicKeyFactory;
+import stubidp.utils.security.security.X509CertificateFactory;
 
 import java.net.URI;
 import java.security.PrivateKey;
@@ -39,16 +38,14 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static stubidp.test.devpki.TestCertificateStrings.HUB_TEST_PRIVATE_ENCRYPTION_KEY;
 import static stubidp.test.devpki.TestCertificateStrings.HUB_TEST_PUBLIC_ENCRYPTION_CERT;
 
-public class AuthnRequestFromRelyingPartyUnmarshallerTest {
+public class AuthnRequestFromRelyingPartyUnmarshallerTest extends OpenSAMLRunner {
 
     private static Encrypter encrypter;
 
     private AuthnRequestFromRelyingPartyUnmarshaller unmarshaller;
 
-    @Before
+    @BeforeEach
     public void setUp() {
-        IdaSamlBootstrap.bootstrap();
-
         final BasicCredential basicCredential = createBasicCredential();
         encrypter = new EncrypterFactory().createEncrypter(basicCredential);
 

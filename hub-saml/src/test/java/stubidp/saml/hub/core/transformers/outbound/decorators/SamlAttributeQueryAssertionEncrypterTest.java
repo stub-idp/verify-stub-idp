@@ -1,10 +1,11 @@
 package stubidp.saml.hub.core.transformers.outbound.decorators;
 
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Answers;
 import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.opensaml.core.xml.XMLObject;
 import org.opensaml.saml.saml2.core.Assertion;
 import org.opensaml.saml.saml2.core.AttributeQuery;
@@ -13,10 +14,9 @@ import org.opensaml.saml.saml2.core.SubjectConfirmationData;
 import org.opensaml.saml.saml2.encryption.Encrypter;
 import org.opensaml.security.credential.Credential;
 import org.opensaml.xmlsec.encryption.support.EncryptionException;
-import stubidp.saml.hub.core.transformers.outbound.decorators.SamlAttributeQueryAssertionEncrypter;
+import stubidp.saml.hub.test.OpenSAMLRunner;
 import stubidp.saml.security.EncrypterFactory;
 import stubidp.saml.security.EntityToEncryptForLocator;
-import stubidp.saml.utils.core.test.OpenSAMLMockitoRunner;
 import stubidp.saml.security.KeyStoreBackedEncryptionCredentialResolver;
 
 import java.util.List;
@@ -32,8 +32,8 @@ import static stubidp.saml.utils.core.test.builders.SubjectBuilder.aSubject;
 import static stubidp.saml.utils.core.test.builders.SubjectConfirmationBuilder.aSubjectConfirmation;
 import static stubidp.saml.utils.core.test.builders.SubjectConfirmationDataBuilder.aSubjectConfirmationData;
 
-@RunWith(OpenSAMLMockitoRunner.class)
-public class SamlAttributeQueryAssertionEncrypterTest {
+@ExtendWith(MockitoExtension.class)
+public class SamlAttributeQueryAssertionEncrypterTest extends OpenSAMLRunner {
 
     @Mock(answer = Answers.RETURNS_SMART_NULLS)
     public Credential credential;
@@ -48,7 +48,7 @@ public class SamlAttributeQueryAssertionEncrypterTest {
     public SamlAttributeQueryAssertionEncrypter samlAttributeQueryAssertionEncrypter;
     public Assertion assertion;
 
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
         assertion = anAssertion().buildUnencrypted();
         attributeQuery = anAttributeQueryWithAssertion(assertion);

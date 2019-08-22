@@ -1,20 +1,19 @@
 package stubidp.saml.hub.hub.validators.response.idp.components;
 
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.opensaml.saml.saml2.core.EncryptedAssertion;
 import org.opensaml.saml.saml2.core.Issuer;
 import org.opensaml.saml.saml2.core.NameIDType;
 import org.opensaml.saml.saml2.core.Response;
 import org.opensaml.saml.saml2.core.Status;
 import org.opensaml.saml.saml2.core.StatusCode;
-import stubidp.saml.hub.core.errors.SamlTransformationErrorFactory;
-import stubidp.saml.hub.hub.validators.response.helpers.ResponseValidatorTestHelper;
-import stubidp.saml.utils.core.test.OpenSAMLMockitoRunner;
 import stubidp.saml.extensions.validation.SamlValidationSpecificationFailure;
+import stubidp.saml.hub.core.errors.SamlTransformationErrorFactory;
 import stubidp.saml.hub.hub.domain.IdpIdaStatus;
 import stubidp.saml.hub.hub.transformers.inbound.SamlStatusToIdaStatusCodeMapper;
+import stubidp.saml.hub.hub.validators.response.helpers.ResponseValidatorTestHelper;
+import stubidp.saml.hub.test.OpenSAMLRunner;
 
 import static stubidp.saml.hub.core.errors.SamlTransformationErrorFactory.emptyIssuer;
 import static stubidp.saml.hub.core.errors.SamlTransformationErrorFactory.illegalIssuerFormat;
@@ -33,15 +32,12 @@ import static stubidp.saml.utils.core.test.builders.AssertionBuilder.anAssertion
 import static stubidp.saml.utils.core.test.builders.IssuerBuilder.anIssuer;
 import static stubidp.saml.utils.core.test.builders.ResponseBuilder.aResponse;
 import static stubidp.saml.utils.core.test.builders.StatusCodeBuilder.aStatusCode;
-import static stubidp.saml.hub.hub.validators.response.helpers.ResponseValidatorTestHelper.createStatus;
-import static stubidp.saml.hub.hub.validators.response.helpers.ResponseValidatorTestHelper.createSubStatusCode;
 
-@RunWith(OpenSAMLMockitoRunner.class)
-public class EncryptedResponseFromIdpValidatorTest {
+public class EncryptedResponseFromIdpValidatorTest extends OpenSAMLRunner {
 
     private EncryptedResponseFromIdpValidator<IdpIdaStatus.Status> validator;
 
-    @Before
+    @BeforeEach
     public void setup() {
         validator = new EncryptedResponseFromIdpValidator<>(new SamlStatusToIdaStatusCodeMapper());
     }

@@ -1,20 +1,18 @@
 package stubidp.saml.hub.core.security;
 
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.mockito.junit.MockitoJUnitRunner;
-import stubidp.saml.hub.core.security.RelayStateValidator;
-import stubidp.saml.utils.core.test.SamlTransformationErrorManagerTestHelper;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import stubidp.saml.hub.core.errors.SamlTransformationErrorFactory;
+import stubidp.saml.hub.test.OpenSAMLRunner;
+import stubidp.saml.utils.core.test.SamlTransformationErrorManagerTestHelper;
+
 import static java.util.Arrays.asList;
 
-@RunWith(MockitoJUnitRunner.class)
-public class RelayStateValidatorTest {
+public class RelayStateValidatorTest extends OpenSAMLRunner {
 
     private RelayStateValidator relayStateValidator;
 
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
         relayStateValidator = new RelayStateValidator();
     }

@@ -3,25 +3,25 @@ package stubidp.saml.hub.hub.validators.authnrequest;
 import io.dropwizard.util.Duration;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.opensaml.saml.common.xml.SAMLConstants;
 import org.opensaml.saml.saml2.core.AuthnRequest;
 import org.opensaml.saml.saml2.core.NameIDType;
-import stubidp.saml.hub.core.DateTimeFreezer;
-import stubidp.saml.hub.core.test.builders.NameIdPolicyBuilder;
-import stubidp.saml.hub.core.test.builders.ScopingBuilder;
-import stubidp.saml.hub.core.errors.SamlTransformationErrorFactory;
-import stubidp.saml.utils.core.test.OpenSAMLRunner;
 import stubidp.saml.extensions.validation.SamlTransformationErrorException;
 import stubidp.saml.extensions.validation.SamlValidationSpecificationFailure;
+import stubidp.saml.hub.core.DateTimeFreezer;
+import stubidp.saml.hub.core.errors.SamlTransformationErrorFactory;
+import stubidp.saml.hub.core.test.builders.NameIdPolicyBuilder;
+import stubidp.saml.hub.core.test.builders.ScopingBuilder;
 import stubidp.saml.hub.hub.configuration.SamlAuthnRequestValidityDurationConfiguration;
 import stubidp.saml.hub.hub.configuration.SamlDuplicateRequestValidationConfiguration;
 import stubidp.saml.hub.hub.exception.SamlDuplicateRequestIdException;
 import stubidp.saml.hub.hub.exception.SamlRequestTooOldException;
 import stubidp.saml.security.validators.issuer.IssuerValidator;
+import stubidp.saml.hub.test.OpenSAMLRunner;
 
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -31,12 +31,11 @@ import static stubidp.saml.utils.core.test.AuthnRequestIdGenerator.generateReque
 import static stubidp.saml.utils.core.test.builders.AuthnRequestBuilder.anAuthnRequest;
 import static stubidp.saml.utils.core.test.builders.IssuerBuilder.anIssuer;
 
-@RunWith(OpenSAMLRunner.class)
-public class AuthnRequestFromTransactionValidatorTest {
+public class AuthnRequestFromTransactionValidatorTest extends OpenSAMLRunner {
 
     private AuthnRequestFromTransactionValidator validator;
 
-    @Before
+    @BeforeEach
     public void setup() {
         SamlDuplicateRequestValidationConfiguration samlDuplicateRequestValidationConfiguration = new SamlDuplicateRequestValidationConfiguration() {
             @Override
@@ -58,12 +57,12 @@ public class AuthnRequestFromTransactionValidatorTest {
         );
     }
 
-    @After
+    @AfterEach
     public void unfreezeTime() {
         DateTimeFreezer.unfreezeTime();
     }
 
-    @Test(expected = SamlTransformationErrorException.class)
+    @Test
     public void validate_shouldThrowExceptionIfIdIsInvalid() throws Exception {
         validateThrows(
                 anAuthnRequest().withId("6135ce2c-fe0d-413a-9d12-2ae1063153bd").build(),
@@ -85,7 +84,7 @@ public class AuthnRequestFromTransactionValidatorTest {
         validator.validate(anAuthnRequest().build());
     }
 
-    @Test(expected = SamlTransformationErrorException.class)
+    @Test
     public void validateRequest_shouldThrowExceptionIfRequestDoesNotContainASignature() throws Exception {
 
         validateThrows(
@@ -94,7 +93,7 @@ public class AuthnRequestFromTransactionValidatorTest {
         );
     }
 
-    @Test(expected = SamlTransformationErrorException.class)
+    @Test
     public void validateRequest_shouldThrowExceptionIfRequestIsNotSigned() throws Exception {
         validateThrows(
                 anAuthnRequest().withoutSigning().build(),
@@ -102,7 +101,7 @@ public class AuthnRequestFromTransactionValidatorTest {
         );
     }
 
-    @Test(expected = SamlTransformationErrorException.class)
+    @Test
     public void validateIssuer_shouldThrowExceptionIfFormatAttributeHasInvalidValue() throws Exception {
         String invalidFormat = "goo";
 
@@ -136,7 +135,7 @@ public class AuthnRequestFromTransactionValidatorTest {
 
     }
 
-    @Test(expected = SamlTransformationErrorException.class)
+    @Test
     public void validateRequest_shouldThrowExceptionIfScopingIsPresent() throws Exception {
         validateThrows(
                 anAuthnRequest().withScoping(ScopingBuilder.aScoping().build()).build(),
@@ -150,7 +149,7 @@ public class AuthnRequestFromTransactionValidatorTest {
 
     }
 
-    @Test(expected = SamlTransformationErrorException.class)
+    @Test
     public void validateProtocolBinding_shouldThrowExceptionIfProtocolBindingHasInvalidValue() throws Exception {
         String invalidValue = "goo";
         validateThrows(
@@ -159,7 +158,7 @@ public class AuthnRequestFromTransactionValidatorTest {
         );
     }
 
-    @Test(expected = SamlTransformationErrorException.class)
+    @Test
     public void validateRequest_shouldThrowExceptionIfIsPassiveIsPresent() throws Exception {
         validateThrows(
                 anAuthnRequest().withIsPassive(true).build(),
@@ -167,7 +166,7 @@ public class AuthnRequestFromTransactionValidatorTest {
         );
     }
 
-    @Test(expected = SamlDuplicateRequestIdException.class)
+    @Test
     public void validateRequest_shouldThrowExceptionIfIsDuplicateRequestIdIsPresent() throws Exception {
         final String requestId = generateRequestId();
         final String oneIssuerId = "some-issuer-id";
@@ -177,13 +176,15 @@ public class AuthnRequestFromTransactionValidatorTest {
         validator.validate(authnRequest);
 
         final AuthnRequest duplicateIdAuthnRequest = anAuthnRequest().withId(requestId).withIssuer(anIssuer().withIssuerId(anotherIssuerId).build()).build();
-        validateThrows(
-                duplicateIdAuthnRequest,
-                SamlTransformationErrorFactory.duplicateRequestId(requestId, duplicateIdAuthnRequest.getIssuer().getValue())
-        );
+
+        final SamlValidationSpecificationFailure failure = SamlTransformationErrorFactory.duplicateRequestId(requestId, duplicateIdAuthnRequest.getIssuer().getValue());
+
+        final SamlDuplicateRequestIdException e = Assertions.assertThrows(SamlDuplicateRequestIdException.class, () -> validator.validate(duplicateIdAuthnRequest));
+        assertThat(e.getMessage()).isEqualTo(failure.getErrorMessage());
+        assertThat(e.getLogLevel()).isEqualTo(failure.getLogLevel());
     }
 
-    @Test(expected = SamlRequestTooOldException.class)
+    @Test
     public void validateRequest_shouldThrowExceptionIfRequestIsTooOld() throws Exception {
         DateTimeFreezer.freezeTime();
 
@@ -194,13 +195,12 @@ public class AuthnRequestFromTransactionValidatorTest {
 
         SamlValidationSpecificationFailure failure = SamlTransformationErrorFactory.requestTooOld(requestId, issueInstant.withZone(DateTimeZone.UTC), DateTime.now());
 
-        validateThrows(
-                authnRequest,
-                failure
-        );
+        final SamlRequestTooOldException e = Assertions.assertThrows(SamlRequestTooOldException.class, () -> validator.validate(authnRequest));
+        assertThat(e.getMessage()).isEqualTo(failure.getErrorMessage());
+        assertThat(e.getLogLevel()).isEqualTo(failure.getLogLevel());
     }
 
-    @Test(expected = SamlTransformationErrorException.class)
+    @Test
     public void validate_shouldThrowExceptionIfIdIsMissing() throws Exception {
         validateThrows(
                 anAuthnRequest().withId(null).build(),
@@ -208,7 +208,7 @@ public class AuthnRequestFromTransactionValidatorTest {
         );
     }
 
-    @Test(expected = SamlTransformationErrorException.class)
+    @Test
     public void validate_shouldThrowExceptionIfIssuerElementIsMissing() throws Exception {
         validateThrows(
                 anAuthnRequest().withIssuer(null).build(),
@@ -216,7 +216,7 @@ public class AuthnRequestFromTransactionValidatorTest {
         );
     }
 
-    @Test(expected = SamlTransformationErrorException.class)
+    @Test
     public void validate_shouldThrowExceptionIfIssuerIdIsMissing() throws Exception {
         validateThrows(
                 anAuthnRequest().withIssuer(anIssuer().withIssuerId(null).build()).build(),
@@ -224,7 +224,7 @@ public class AuthnRequestFromTransactionValidatorTest {
         );
     }
 
-    @Test(expected = SamlTransformationErrorException.class)
+    @Test
     public void validate_shouldThrowExceptionIfIssueInstantIsMissing() throws Exception {
         AuthnRequest authnRequest = anAuthnRequest().withIssueInstant(null).build();
         validateThrows(
@@ -233,7 +233,7 @@ public class AuthnRequestFromTransactionValidatorTest {
         );
     }
 
-    @Test(expected = SamlTransformationErrorException.class)
+    @Test
     public void validate_shouldThrowExceptionIfVersionNumberIsMissing() throws Exception {
         AuthnRequest authnRequest = anAuthnRequest().withVersionNumber(null).build();
 
@@ -243,7 +243,7 @@ public class AuthnRequestFromTransactionValidatorTest {
         );
     }
 
-    @Test(expected = SamlTransformationErrorException.class)
+    @Test
     public void validate_shouldThrowExceptionIfVersionNumberIsNotTwoPointZero() throws Exception {
         validateThrows(
                 anAuthnRequest().withVersionNumber("1.0").build(),
@@ -257,12 +257,8 @@ public class AuthnRequestFromTransactionValidatorTest {
     }
 
     private void validateThrows(AuthnRequest authnRequest, SamlValidationSpecificationFailure samlValidationSpecificationFailure) {
-        try {
-            validator.validate(authnRequest);
-        } catch (SamlTransformationErrorException e) {
-            assertThat(e.getMessage()).isEqualTo(samlValidationSpecificationFailure.getErrorMessage());
-            assertThat(e.getLogLevel()).isEqualTo(samlValidationSpecificationFailure.getLogLevel());
-            throw e;
-        }
+        final SamlTransformationErrorException e = Assertions.assertThrows(SamlTransformationErrorException.class, () -> validator.validate(authnRequest));
+        assertThat(e.getMessage()).isEqualTo(samlValidationSpecificationFailure.getErrorMessage());
+        assertThat(e.getLogLevel()).isEqualTo(samlValidationSpecificationFailure.getLogLevel());
     }
 }

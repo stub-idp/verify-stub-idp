@@ -5,9 +5,9 @@ import net.shibboleth.utilities.java.support.xml.BasicParserPool;
 import org.apache.xml.security.exceptions.Base64DecodingException;
 import org.apache.xml.security.utils.Base64;
 import org.joda.time.DateTime;
-import org.junit.BeforeClass;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 import org.opensaml.core.config.InitializationException;
 import org.opensaml.core.config.InitializationService;
 import org.opensaml.core.xml.io.MarshallingException;
@@ -23,7 +23,7 @@ import stubidp.saml.hub.metadata.exceptions.NoKeyConfiguredForEntityException;
 import stubidp.saml.metadata.StringBackedMetadataResolver;
 import stubidp.saml.metadata.test.factories.metadata.EntityDescriptorFactory;
 import stubidp.saml.metadata.test.factories.metadata.MetadataFactory;
-import stubidp.saml.utils.core.test.OpenSAMLMockitoRunner;
+import stubidp.saml.hub.test.OpenSAMLRunner;
 import stubidp.saml.utils.core.test.builders.metadata.EntityDescriptorBuilder;
 import stubidp.saml.utils.core.test.builders.metadata.IdpSsoDescriptorBuilder;
 import stubidp.saml.utils.core.test.builders.metadata.KeyDescriptorBuilder;
@@ -43,12 +43,11 @@ import java.security.cert.CertificateFactory;
 import static java.util.Arrays.asList;
 import static org.assertj.core.api.Assertions.assertThat;
 
-@RunWith(OpenSAMLMockitoRunner.class)
-public class IdpMetadataPublicKeyStoreTest {
+public class IdpMetadataPublicKeyStoreTest extends OpenSAMLRunner {
 
     private static MetadataResolver metadataResolver;
 
-    @BeforeClass
+    @BeforeAll
     public static void setUp() throws Exception {
         metadataResolver = initializeMetadata();
     }
@@ -114,15 +113,15 @@ public class IdpMetadataPublicKeyStoreTest {
         assertThat(idpMetadataPublicKeyStore.getVerifyingKeysForEntity(TestEntityIds.STUB_IDP_ONE)).containsExactly(expectedPublicKey);
     }
 
-    @Test(expected = NoKeyConfiguredForEntityException.class)
+    @Test
     public void shouldRaiseAnExceptionWhenThereIsNoEntityDescriptor() throws Exception {
         IdpMetadataPublicKeyStore idpMetadataPublicKeyStore = new IdpMetadataPublicKeyStore(metadataResolver);
-        idpMetadataPublicKeyStore.getVerifyingKeysForEntity("my-invented-entity-id");
+        Assertions.assertThrows(NoKeyConfiguredForEntityException.class, () -> idpMetadataPublicKeyStore.getVerifyingKeysForEntity("my-invented-entity-id"));
     }
 
-    @Test(expected = NoKeyConfiguredForEntityException.class)
+    @Test
     public void shouldRaiseAnExceptionWhenAttemptingToRetrieveAnSPSSOFromMetadata() throws Exception {
         IdpMetadataPublicKeyStore idpMetadataPublicKeyStore = new IdpMetadataPublicKeyStore(metadataResolver);
-        idpMetadataPublicKeyStore.getVerifyingKeysForEntity("https://signin.service.gov.uk");
+        Assertions.assertThrows(NoKeyConfiguredForEntityException.class, () -> idpMetadataPublicKeyStore.getVerifyingKeysForEntity("https://signin.service.gov.uk"));
     }
 }

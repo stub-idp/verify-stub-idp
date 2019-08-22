@@ -1,9 +1,8 @@
 package stubidp.saml.hub.core.validators.assertion;
 
 import org.joda.time.DateTime;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.opensaml.saml.saml2.core.Assertion;
 import org.opensaml.saml.saml2.core.Subject;
 import org.opensaml.saml.saml2.core.SubjectConfirmation;
@@ -11,7 +10,7 @@ import org.opensaml.saml.saml2.core.SubjectConfirmationData;
 import stubidp.saml.hub.core.DateTimeFreezer;
 import stubidp.saml.hub.hub.validators.authnrequest.ConcurrentMapIdExpirationCache;
 import stubidp.saml.hub.hub.validators.authnrequest.IdExpirationCache;
-import stubidp.saml.utils.core.test.OpenSAMLRunner;
+import stubidp.saml.hub.test.OpenSAMLRunner;
 
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
@@ -26,13 +25,12 @@ import static stubidp.saml.utils.core.test.builders.SubjectBuilder.aSubject;
 import static stubidp.saml.utils.core.test.builders.SubjectConfirmationBuilder.aSubjectConfirmation;
 import static stubidp.saml.utils.core.test.builders.SubjectConfirmationDataBuilder.aSubjectConfirmationData;
 
-@RunWith(OpenSAMLRunner.class)
-public class DuplicateAssertionValidatorTest {
+public class DuplicateAssertionValidatorTest extends OpenSAMLRunner {
 
     private ConcurrentMap<String, DateTime> duplicateIds;
     private DuplicateAssertionValidator duplicateAssertionValidator;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         DateTimeFreezer.freezeTime();
 

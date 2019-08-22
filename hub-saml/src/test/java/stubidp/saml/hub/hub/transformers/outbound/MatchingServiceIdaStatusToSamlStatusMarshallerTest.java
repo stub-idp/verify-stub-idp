@@ -1,24 +1,22 @@
 package stubidp.saml.hub.hub.transformers.outbound;
 
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.opensaml.saml.saml2.core.Status;
 import org.opensaml.saml.saml2.core.StatusCode;
+import stubidp.saml.extensions.domain.SamlStatusCode;
+import stubidp.saml.hub.test.OpenSAMLRunner;
 import stubidp.saml.utils.core.OpenSamlXmlObjectFactory;
 import stubidp.saml.utils.core.domain.MatchingServiceIdaStatus;
-import stubidp.saml.extensions.domain.SamlStatusCode;
 import stubidp.saml.utils.hub.transformers.outbound.MatchingServiceIdaStatusMarshaller;
-import stubidp.saml.utils.core.test.OpenSAMLRunner;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@RunWith(OpenSAMLRunner.class)
-public class MatchingServiceIdaStatusToSamlStatusMarshallerTest {
+public class MatchingServiceIdaStatusToSamlStatusMarshallerTest extends OpenSAMLRunner {
 
     private stubidp.saml.utils.hub.transformers.outbound.MatchingServiceIdaStatusMarshaller marshaller;
 
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
         marshaller = new MatchingServiceIdaStatusMarshaller(new OpenSamlXmlObjectFactory());
     }

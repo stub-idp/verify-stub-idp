@@ -1,27 +1,28 @@
 package stubidp.saml.hub.hub.transformers.outbound.decorators;
 
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.opensaml.saml.saml2.core.AttributeQuery;
 import org.opensaml.xmlsec.signature.Signature;
-import stubidp.saml.hub.hub.transformers.outbound.decorators.SigningRequestAbstractTypeSignatureCreator;
 import stubidp.saml.security.SignatureFactory;
 
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class SigningRequestAbstractTypeSignatureCreatorTest {
 
     private SigningRequestAbstractTypeSignatureCreator<AttributeQuery> signatureCreator;
     @Mock
     private SignatureFactory signatureFactory;
+
     private static final String id = "response-id";
-    @Before
+
+    @BeforeEach
     public void setup() {
         signatureCreator = new SigningRequestAbstractTypeSignatureCreator<>(signatureFactory);
     }

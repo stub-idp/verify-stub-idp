@@ -1,28 +1,26 @@
 package stubidp.saml.hub.metadata.transformers.decorators;
 
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.opensaml.saml.saml2.metadata.EntityDescriptor;
-import stubidp.saml.hub.metadata.transformers.decorators.SamlEntityDescriptorValidator;
-import stubidp.saml.utils.core.test.OpenSAMLMockitoRunner;
+import stubidp.saml.extensions.validation.SamlValidationSpecificationFailure;
+import stubidp.saml.hub.core.errors.SamlTransformationErrorFactory;
+import stubidp.saml.hub.test.OpenSAMLRunner;
 import stubidp.saml.utils.core.test.SamlTransformationErrorManagerTestHelper;
 import stubidp.saml.utils.core.test.builders.metadata.IdpSsoDescriptorBuilder;
 import stubidp.saml.utils.core.test.builders.metadata.KeyDescriptorBuilder;
 import stubidp.saml.utils.core.test.builders.metadata.KeyInfoBuilder;
 import stubidp.saml.utils.core.test.builders.metadata.X509CertificateBuilder;
-import stubidp.saml.extensions.validation.SamlValidationSpecificationFailure;
-import stubidp.saml.hub.core.errors.SamlTransformationErrorFactory;
+
 import static stubidp.saml.utils.core.test.builders.metadata.EndpointBuilder.anEndpoint;
 import static stubidp.saml.utils.core.test.builders.metadata.EntityDescriptorBuilder.anEntityDescriptor;
 import static stubidp.saml.utils.core.test.builders.metadata.X509DataBuilder.aX509Data;
 
-@RunWith(OpenSAMLMockitoRunner.class)
-public class SamlEntityDescriptorValidatorTest {
+public class SamlEntityDescriptorValidatorTest extends OpenSAMLRunner {
 
     private SamlEntityDescriptorValidator validator;
 
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
         validator = new SamlEntityDescriptorValidator();
     }

@@ -1,22 +1,19 @@
 package stubidp.saml.hub.hub.factories;
 
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.opensaml.saml.saml2.core.Attribute;
-import stubidp.saml.hub.hub.factories.AttributeQueryAttributeFactory;
-import stubidp.saml.utils.core.OpenSamlXmlObjectFactory;
-import stubidp.saml.utils.core.test.OpenSAMLRunner;
 import stubidp.saml.hub.hub.domain.UserAccountCreationAttribute;
+import stubidp.saml.hub.test.OpenSAMLRunner;
+import stubidp.saml.utils.core.OpenSamlXmlObjectFactory;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@RunWith(OpenSAMLRunner.class)
-public class AttributeQueryAttributeFactoryTest {
+public class AttributeQueryAttributeFactoryTest extends OpenSAMLRunner {
 
     private AttributeQueryAttributeFactory attributeQueryAttributeFactory;
 
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
         attributeQueryAttributeFactory = new AttributeQueryAttributeFactory(new OpenSamlXmlObjectFactory());
     }

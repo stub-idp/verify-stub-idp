@@ -1,9 +1,10 @@
 package stubidp.saml.hub.hub.transformers.outbound;
 
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.opensaml.core.xml.XMLObject;
 import org.opensaml.saml.common.SAMLVersion;
 import org.opensaml.saml.saml2.core.Assertion;
@@ -13,27 +14,27 @@ import org.opensaml.saml.saml2.core.EncryptedAssertion;
 import org.opensaml.saml.saml2.core.NameID;
 import org.opensaml.saml.saml2.core.impl.EncryptedAssertionBuilder;
 import stubidp.saml.hub.core.test.builders.PassthroughAssertionBuilder;
+import stubidp.saml.hub.hub.domain.HubAttributeQueryRequest;
+import stubidp.saml.hub.hub.factories.AttributeQueryAttributeFactory;
+import stubidp.saml.hub.test.OpenSAMLRunner;
 import stubidp.saml.utils.core.OpenSamlXmlObjectFactory;
 import stubidp.saml.utils.core.domain.HubAssertion;
 import stubidp.saml.utils.core.domain.PersistentId;
-import stubidp.saml.utils.core.test.OpenSAMLMockitoRunner;
 import stubidp.saml.utils.core.transformers.outbound.OutboundAssertionToSubjectTransformer;
-import stubidp.saml.hub.hub.domain.HubAttributeQueryRequest;
 import stubidp.saml.utils.hub.factories.AttributeFactory_1_1;
-import stubidp.saml.hub.hub.factories.AttributeQueryAttributeFactory;
 
 import java.net.URI;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
-import static stubidp.saml.utils.core.test.builders.HubAssertionBuilder.aHubAssertion;
 import static stubidp.saml.hub.hub.domain.UserAccountCreationAttribute.CURRENT_ADDRESS;
 import static stubidp.saml.hub.hub.domain.UserAccountCreationAttribute.DATE_OF_BIRTH;
 import static stubidp.saml.hub.hub.test.builders.HubAttributeQueryRequestBuilder.aHubAttributeQueryRequest;
+import static stubidp.saml.utils.core.test.builders.HubAssertionBuilder.aHubAssertion;
 
-@RunWith(OpenSAMLMockitoRunner.class)
-public class HubAttributeQueryRequestToSamlAttributeQueryTransformerTest {
+@ExtendWith(MockitoExtension.class)
+public class HubAttributeQueryRequestToSamlAttributeQueryTransformerTest extends OpenSAMLRunner {
 
     public static final String ENCRYPTED_MDS_ASSERTION = "encrypted-mds-assertion!";
     public static final String ENCRYPTED_AUTHN_ASSERTION = "encrypted-authn-statement-assertion!";
@@ -52,7 +53,7 @@ public class HubAttributeQueryRequestToSamlAttributeQueryTransformerTest {
     @Mock
     private EncryptedAssertionUnmarshaller encryptedAssertionUnmarshaller;
 
-    @Before
+    @BeforeEach
     public void setup() throws Exception {
         openSamlXmlObjectFactory = new OpenSamlXmlObjectFactory();
         HubAssertionMarshaller assertionTransformer = new HubAssertionMarshaller(openSamlXmlObjectFactory, attributeFactory, outboundAssertionToSubjectTransformer);

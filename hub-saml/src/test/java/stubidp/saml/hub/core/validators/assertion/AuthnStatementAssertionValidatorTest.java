@@ -1,16 +1,15 @@
 package stubidp.saml.hub.core.validators.assertion;
 
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.opensaml.saml.saml2.core.Assertion;
 import org.opensaml.saml.saml2.core.AuthnContext;
 import org.opensaml.saml.saml2.core.AuthnContextClassRef;
 import org.opensaml.saml.saml2.core.AuthnStatement;
-import stubidp.saml.hub.core.validators.assertion.AuthnStatementAssertionValidator;
-import stubidp.saml.hub.core.validators.assertion.DuplicateAssertionValidator;
-import stubidp.saml.utils.core.test.OpenSAMLMockitoRunner;
+import stubidp.saml.hub.test.OpenSAMLRunner;
 import stubidp.saml.utils.core.test.builders.AssertionBuilder;
 import stubidp.saml.utils.core.test.builders.AuthnContextBuilder;
 import stubidp.saml.utils.core.test.builders.AuthnContextClassRefBuilder;
@@ -24,15 +23,15 @@ import static stubidp.saml.hub.core.errors.SamlTransformationErrorFactory.authnC
 import static stubidp.saml.hub.core.errors.SamlTransformationErrorFactory.authnInstantMissing;
 import static stubidp.saml.utils.core.test.SamlTransformationErrorManagerTestHelper.validateFail;
 
-@RunWith(OpenSAMLMockitoRunner.class)
-public class AuthnStatementAssertionValidatorTest {
+@ExtendWith(MockitoExtension.class)
+public class AuthnStatementAssertionValidatorTest extends OpenSAMLRunner {
 
     @Mock
     private DuplicateAssertionValidator duplicateAssertionValidator;
 
     private AuthnStatementAssertionValidator validator;
 
-    @Before
+    @BeforeEach
     public void setup() {
         validator = new AuthnStatementAssertionValidator(duplicateAssertionValidator);
     }

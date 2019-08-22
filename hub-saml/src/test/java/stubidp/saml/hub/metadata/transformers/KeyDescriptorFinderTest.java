@@ -1,16 +1,14 @@
 package stubidp.saml.hub.metadata.transformers;
 
 import org.assertj.core.api.Assertions;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.opensaml.saml.saml2.metadata.KeyDescriptor;
 import org.opensaml.security.credential.UsageType;
-import stubidp.saml.hub.metadata.transformers.KeyDescriptorFinder;
-import stubidp.saml.utils.core.test.OpenSAMLMockitoRunner;
+import stubidp.saml.hub.core.errors.SamlTransformationErrorFactory;
+import stubidp.saml.hub.test.OpenSAMLRunner;
 import stubidp.saml.utils.core.test.SamlTransformationErrorManagerTestHelper;
 import stubidp.saml.utils.core.test.builders.metadata.KeyDescriptorBuilder;
-import stubidp.saml.hub.core.errors.SamlTransformationErrorFactory;
 
 import java.util.UUID;
 
@@ -18,12 +16,11 @@ import static java.util.Arrays.asList;
 import static java.util.Collections.singletonList;
 import static stubidp.saml.utils.core.test.builders.metadata.KeyInfoBuilder.aKeyInfo;
 
-@RunWith(OpenSAMLMockitoRunner.class)
-public class KeyDescriptorFinderTest {
+public class KeyDescriptorFinderTest extends OpenSAMLRunner {
 
     private KeyDescriptorFinder finder;
 
-    @Before
+    @BeforeEach
     public void setup() {
         finder = new KeyDescriptorFinder();
     }

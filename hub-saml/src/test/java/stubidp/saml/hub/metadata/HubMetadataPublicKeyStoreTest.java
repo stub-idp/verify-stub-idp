@@ -4,19 +4,18 @@ import net.shibboleth.utilities.java.support.component.ComponentInitializationEx
 import net.shibboleth.utilities.java.support.xml.BasicParserPool;
 import org.apache.xml.security.exceptions.Base64DecodingException;
 import org.apache.xml.security.utils.Base64;
-import org.junit.BeforeClass;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 import org.opensaml.saml.metadata.resolver.MetadataResolver;
 import org.opensaml.saml.metadata.resolver.impl.AbstractReloadingMetadataResolver;
-import stubidp.saml.hub.metadata.HubMetadataPublicKeyStore;
-import stubidp.saml.metadata.StringBackedMetadataResolver;
-import stubidp.saml.utils.core.test.OpenSAMLMockitoRunner;
-import stubidp.test.devpki.TestCertificateStrings;
-import stubidp.test.devpki.TestEntityIds;
 import stubidp.saml.hub.metadata.exceptions.HubEntityMissingException;
+import stubidp.saml.metadata.StringBackedMetadataResolver;
 import stubidp.saml.metadata.test.factories.metadata.MetadataFactory;
 import stubidp.saml.security.PublicKeyFactory;
+import stubidp.saml.hub.test.OpenSAMLRunner;
+import stubidp.test.devpki.TestCertificateStrings;
+import stubidp.test.devpki.TestEntityIds;
 
 import java.io.ByteArrayInputStream;
 import java.net.URISyntaxException;
@@ -27,15 +26,13 @@ import java.security.cert.CertificateFactory;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.Assert.fail;
 
-@RunWith(OpenSAMLMockitoRunner.class)
-public class HubMetadataPublicKeyStoreTest {
+public class HubMetadataPublicKeyStoreTest extends OpenSAMLRunner {
     private static MetadataResolver metadataResolver;
     private static MetadataResolver invalidMetadataResolver;
     private static MetadataResolver emptyMetadataResolver;
 
-    @BeforeClass
+    @BeforeAll
     public static void setUp() throws Exception {
         MetadataFactory metadataFactory = new MetadataFactory();
         metadataResolver = initializeMetadata(metadataFactory.defaultMetadata());
@@ -71,23 +68,15 @@ public class HubMetadataPublicKeyStoreTest {
     @Test
     public void shouldErrorWhenMetadataIsInvalid() throws Exception {
         HubMetadataPublicKeyStore hubMetadataPublicKeyStore = new HubMetadataPublicKeyStore(invalidMetadataResolver, new PublicKeyFactory(), TestEntityIds.HUB_ENTITY_ID);
-        try {
-            hubMetadataPublicKeyStore.getVerifyingKeysForEntity();
-            fail("we expected the HubEntityMissingException");
-        } catch(HubEntityMissingException e) {
-            assertThat(e).hasMessage("The HUB entity-id: \"https://signin.service.gov.uk\" could not be found in the metadata. Metadata could be expired, invalid, or missing entities");
-        }
+        final HubEntityMissingException e = Assertions.assertThrows(HubEntityMissingException.class, () -> hubMetadataPublicKeyStore.getVerifyingKeysForEntity());
+        assertThat(e).hasMessage("The HUB entity-id: \"https://signin.service.gov.uk\" could not be found in the metadata. Metadata could be expired, invalid, or missing entities");
     }
 
     @Test
     public void shouldErrorWhenMetadataIsEmpty() throws Exception {
         HubMetadataPublicKeyStore hubMetadataPublicKeyStore = new HubMetadataPublicKeyStore(emptyMetadataResolver, new PublicKeyFactory(), TestEntityIds.HUB_ENTITY_ID);
-        try {
-            hubMetadataPublicKeyStore.getVerifyingKeysForEntity();
-            fail("we expected the HubEntityMissingException");
-        } catch(HubEntityMissingException e) {
-            assertThat(e).hasMessage("The HUB entity-id: \"https://signin.service.gov.uk\" could not be found in the metadata. Metadata could be expired, invalid, or missing entities");
-        }
+        final HubEntityMissingException e = Assertions.assertThrows(HubEntityMissingException.class, () -> hubMetadataPublicKeyStore.getVerifyingKeysForEntity());
+        assertThat(e).hasMessage("The HUB entity-id: \"https://signin.service.gov.uk\" could not be found in the metadata. Metadata could be expired, invalid, or missing entities");
     }
 
 }

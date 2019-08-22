@@ -1,10 +1,8 @@
 package stubidp.saml.hub.hub.transformers.outbound;
 
 import org.joda.time.DateTime;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.opensaml.core.xml.XMLObject;
 import org.opensaml.saml.common.SAMLVersion;
 import org.opensaml.saml.common.xml.SAMLConstants;
@@ -18,17 +16,17 @@ import org.opensaml.saml.saml2.core.NameIDType;
 import org.opensaml.saml.saml2.core.RequestedAuthnContext;
 import org.opensaml.saml.saml2.core.StatusResponseType;
 import org.opensaml.saml.saml2.core.impl.AttributeImpl;
-import stubidp.saml.utils.core.OpenSamlXmlObjectFactory;
-import stubidp.saml.utils.core.domain.AuthnContext;
 import stubidp.saml.extensions.extensions.RequestedAttribute;
 import stubidp.saml.extensions.extensions.RequestedAttributes;
 import stubidp.saml.extensions.extensions.SPType;
 import stubidp.saml.extensions.extensions.impl.RequestedAttributeImpl;
 import stubidp.saml.extensions.extensions.impl.SPTypeImpl;
-import stubidp.saml.utils.core.test.OpenSAMLMockitoRunner;
+import stubidp.saml.hub.hub.domain.LevelOfAssurance;
+import stubidp.saml.hub.test.OpenSAMLRunner;
+import stubidp.saml.utils.core.OpenSamlXmlObjectFactory;
+import stubidp.saml.utils.core.domain.AuthnContext;
 import stubidp.saml.utils.core.transformers.AuthnContextFactory;
 import stubidp.saml.utils.hub.domain.EidasAuthnRequestFromHub;
-import stubidp.saml.hub.hub.domain.LevelOfAssurance;
 
 import javax.xml.namespace.QName;
 import java.net.URI;
@@ -42,8 +40,8 @@ import java.util.stream.Collectors;
 import static org.assertj.core.api.Assertions.assertThat;
 import static stubidp.saml.hub.hub.test.builders.EidasAuthnRequestBuilder.anEidasAuthnRequest;
 
-@RunWith(OpenSAMLMockitoRunner.class)
-public class EidasAuthnRequestFromHubToAuthnRequestTransformerTest {
+public class EidasAuthnRequestFromHubToAuthnRequestTransformerTest extends OpenSAMLRunner {
+
     private static final String A_PROVIDER = "A_PROVIDER";
     private static final String HTTP_ISSUER_ENTITY_ID_COM = "http://issuer-entity-id.com";
     private static final String AUTHN_REQUEST_ID = "aTestId";
@@ -51,7 +49,7 @@ public class EidasAuthnRequestFromHubToAuthnRequestTransformerTest {
 
     private EidasAuthnRequestFromHubToAuthnRequestTransformer transformer;
 
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
         transformer = new EidasAuthnRequestFromHubToAuthnRequestTransformer(new OpenSamlXmlObjectFactory(), new AuthnContextFactory());
     }
@@ -82,28 +80,28 @@ public class EidasAuthnRequestFromHubToAuthnRequestTransformerTest {
         AuthnRequest transformedRequest = transformer.apply(originalRequestFromTransaction);
 
         assertThat(transformedRequest.getProtocolBinding()).isEqualTo(SAMLConstants.SAML2_POST_BINDING_URI);
-        Assert.assertNotNull(transformedRequest);
-        Assert.assertNotNull(transformedRequest.getIssueInstant());
-        Assert.assertEquals(EIDAS_SSO_LOCATION, transformedRequest.getDestination());
-        Assert.assertEquals(AUTHN_REQUEST_ID, transformedRequest.getID());
+        assertThat(transformedRequest).isNotNull();
+        assertThat(transformedRequest.getIssueInstant()).isNotNull();
+        assertThat(transformedRequest.getDestination()).isEqualTo(EIDAS_SSO_LOCATION);
+        assertThat(transformedRequest.getID()).isEqualTo(AUTHN_REQUEST_ID);
 
-        Assert.assertEquals(StatusResponseType.UNSPECIFIED_CONSENT, transformedRequest.getConsent());
-        Assert.assertEquals(true, transformedRequest.isForceAuthn());
-        Assert.assertEquals(false, transformedRequest.isPassive());
-        Assert.assertEquals(SAMLVersion.VERSION_20, transformedRequest.getVersion());
+        assertThat(transformedRequest.getConsent()).isEqualTo(StatusResponseType.UNSPECIFIED_CONSENT);
+        assertThat(transformedRequest.isForceAuthn()).isTrue();
+        assertThat(transformedRequest.isPassive()).isFalse();
+        assertThat(transformedRequest.getVersion()).isEqualTo(SAMLVersion.VERSION_20);
 
-        Assert.assertEquals(A_PROVIDER, transformedRequest.getProviderName());
+        assertThat(transformedRequest.getProviderName()).isEqualTo(A_PROVIDER);
 
-        Assert.assertEquals(HTTP_ISSUER_ENTITY_ID_COM, transformedRequest.getIssuer().getValue());
+        assertThat(transformedRequest.getIssuer().getValue()).isEqualTo(HTTP_ISSUER_ENTITY_ID_COM);
 
         NameIDPolicy nameIDPolicy = transformedRequest.getNameIDPolicy();
-        Assert.assertEquals(true, nameIDPolicy.getAllowCreate());
-        Assert.assertEquals(NameIDType.PERSISTENT, nameIDPolicy.getFormat());
+        assertThat(nameIDPolicy.getAllowCreate()).isTrue();
+        assertThat(nameIDPolicy.getFormat()).isEqualTo(NameIDType.PERSISTENT);
 
         RequestedAuthnContext requestedAuthnContext = transformedRequest.getRequestedAuthnContext();
-        Assert.assertEquals(AuthnContextComparisonTypeEnumeration.MINIMUM, requestedAuthnContext.getComparison());
+        assertThat(requestedAuthnContext.getComparison()).isEqualTo(AuthnContextComparisonTypeEnumeration.MINIMUM);
         AuthnContextClassRef authnContextClassRef = requestedAuthnContext.getAuthnContextClassRefs().get(0);
-        Assert.assertEquals(LevelOfAssurance.SUBSTANTIAL.toString(), authnContextClassRef.getAuthnContextClassRef());
+        assertThat(authnContextClassRef.getAuthnContextClassRef()).isEqualTo(LevelOfAssurance.SUBSTANTIAL.toString());
     }
 
     @Test
@@ -114,41 +112,41 @@ public class EidasAuthnRequestFromHubToAuthnRequestTransformerTest {
         AuthnRequest transformedRequest = transformer.apply(originalRequestFromTransaction);
         Extensions extensions = transformedRequest.getExtensions();
 
-        Assert.assertNotNull(extensions);
+        assertThat(extensions).isNotNull();
         Optional<XMLObject> spType = extensions
                 .getUnknownXMLObjects(SPType.DEFAULT_ELEMENT_NAME)
                 .stream().findFirst();
-        Assert.assertTrue("There should be at least one eidas:SPType element", spType.isPresent());
+        assertThat(spType.isPresent()).isTrue().withFailMessage("There should be at least one eidas:SPType element");
         XMLObject xmlObject = spType.get();
-        Assert.assertTrue("Should be an instance of SPType", xmlObject.getClass().equals(SPTypeImpl.class));
-        Assert.assertEquals("public", ((SPTypeImpl) xmlObject).getValue());
+        assertThat(xmlObject).isInstanceOf(SPTypeImpl.class).withFailMessage("Should be an instance of SPType");
+        assertThat(((SPTypeImpl) xmlObject).getValue()).isEqualTo("public");
 
         Optional<XMLObject> requestedAttributes = extensions
                 .getUnknownXMLObjects(RequestedAttributes.DEFAULT_ELEMENT_NAME)
                 .stream().findFirst();
 
-        Assert.assertTrue("There should be at least one eidas:RequestedAttributes", requestedAttributes.isPresent());
+        assertThat(requestedAttributes.isPresent()).isTrue().withFailMessage("There should be at least one eidas:RequestedAttributes");
 
         List<XMLObject> requestedAttributeList = requestedAttributes.get().getOrderedChildren();
-        Assert.assertTrue("There should be at least one eidas:RequestedAttribute", requestedAttributeList.size() > 0);
+        assertThat(requestedAttributeList.size() > 0).isTrue().withFailMessage("There should be at least one eidas:RequestedAttribute");
 
         Map<String, RequestedAttributeImpl> reqAttrMap = getRequestedAttributesByFriendlyName(requestedAttributeList);
 
         RequestedAttributeImpl firstNameRequestedAttribute = reqAttrMap.get("FirstName");
         QName elementQName = firstNameRequestedAttribute.getElementQName();
-        Assert.assertEquals(RequestedAttribute.DEFAULT_ELEMENT_LOCAL_NAME, elementQName.getLocalPart());
-        Assert.assertEquals("http://eidas.europa.eu/saml-extensions", elementQName.getNamespaceURI());
-        Assert.assertEquals("eidas", elementQName.getPrefix());
+        assertThat(elementQName.getLocalPart()).isEqualTo(RequestedAttribute.DEFAULT_ELEMENT_LOCAL_NAME);
+        assertThat(elementQName.getNamespaceURI()).isEqualTo("http://eidas.europa.eu/saml-extensions");
+        assertThat(elementQName.getPrefix()).isEqualTo("eidas");
 
-        Assert.assertNotNull(firstNameRequestedAttribute);
-        Assert.assertEquals(EidasAuthnRequestFromHubToAuthnRequestTransformer.NATURAL_PERSON_NAME_PREFIX + "CurrentGivenName", firstNameRequestedAttribute.getName());
-        Assert.assertEquals(Attribute.URI_REFERENCE, firstNameRequestedAttribute.getNameFormat());
-        Assert.assertEquals(true, firstNameRequestedAttribute.isRequired());
+        assertThat(firstNameRequestedAttribute).isNotNull();
+        assertThat(EidasAuthnRequestFromHubToAuthnRequestTransformer.NATURAL_PERSON_NAME_PREFIX + "CurrentGivenName").isEqualTo(firstNameRequestedAttribute.getName());
+        assertThat(firstNameRequestedAttribute.getNameFormat()).isEqualTo(Attribute.URI_REFERENCE);
+        assertThat(firstNameRequestedAttribute.isRequired()).isTrue();
 
-        Assert.assertNotNull(reqAttrMap.get("FirstName"));
-        Assert.assertNotNull(reqAttrMap.get("FamilyName"));
-        Assert.assertNotNull(reqAttrMap.get("DateOfBirth"));
-        Assert.assertNotNull(reqAttrMap.get("PersonIdentifier"));
+        assertThat(reqAttrMap.get("FirstName")).isNotNull();
+        assertThat(reqAttrMap.get("FamilyName")).isNotNull();
+        assertThat(reqAttrMap.get("DateOfBirth")).isNotNull();
+        assertThat(reqAttrMap.get("PersonIdentifier")).isNotNull();
     }
 
     private EidasAuthnRequestFromHub anEidasAuthnRequestFromHub(String A_PROVIDER, String HTTP_ISSUER_ENTITY_ID_COM, List<AuthnContext> authnContexts) {

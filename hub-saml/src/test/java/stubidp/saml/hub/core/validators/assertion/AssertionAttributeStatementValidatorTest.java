@@ -1,14 +1,15 @@
 package stubidp.saml.hub.core.validators.assertion;
 
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.opensaml.saml.saml2.core.Assertion;
 import org.opensaml.saml.saml2.core.Attribute;
-import stubidp.saml.hub.core.test.builders.IdpFraudEventIdAttributeBuilder;
-import stubidp.saml.utils.core.OpenSamlXmlObjectFactory;
 import stubidp.saml.extensions.extensions.PersonName;
-import stubidp.saml.utils.core.test.OpenSAMLMockitoRunner;
+import stubidp.saml.hub.core.test.builders.IdpFraudEventIdAttributeBuilder;
+import stubidp.saml.hub.test.OpenSAMLRunner;
+import stubidp.saml.utils.core.OpenSamlXmlObjectFactory;
 import stubidp.saml.utils.core.test.SamlTransformationErrorManagerTestHelper;
 import stubidp.saml.utils.core.test.builders.AssertionBuilder;
 
@@ -18,14 +19,14 @@ import static stubidp.saml.hub.core.errors.SamlTransformationErrorFactory.invali
 import static stubidp.saml.utils.core.test.builders.AttributeStatementBuilder.anAttributeStatement;
 import static stubidp.saml.utils.core.test.builders.SimpleStringAttributeBuilder.aSimpleStringAttribute;
 
-@RunWith(OpenSAMLMockitoRunner.class)
-public class AssertionAttributeStatementValidatorTest {
+@ExtendWith(MockitoExtension.class)
+public class AssertionAttributeStatementValidatorTest extends OpenSAMLRunner {
 
     private AssertionAttributeStatementValidator validator;
 
     private OpenSamlXmlObjectFactory openSamlXmlObjectFactory = new OpenSamlXmlObjectFactory();
 
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
         validator = new AssertionAttributeStatementValidator();
     }

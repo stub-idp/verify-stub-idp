@@ -1,10 +1,10 @@
 package stubidp.saml.hub.core.test;
 
+import org.junit.jupiter.api.Assertions;
 import stubidp.saml.extensions.validation.SamlTransformationErrorException;
 import stubidp.saml.extensions.validation.SamlValidationSpecificationFailure;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.Assert.fail;
 
 public final class SamlTransformationErrorManagerTestHelper {
 
@@ -12,13 +12,9 @@ public final class SamlTransformationErrorManagerTestHelper {
     }
 
     public static void validateFail(Action action, SamlValidationSpecificationFailure failure) {
-        try {
-            action.execute();
-            fail("Expected action to throw");
-        } catch (SamlTransformationErrorException e) {
-            assertThat(e.getMessage()).isEqualTo(failure.getErrorMessage());
-            assertThat(e.getLogLevel()).isEqualTo(failure.getLogLevel());
-        }
+        final SamlTransformationErrorException e = Assertions.assertThrows(SamlTransformationErrorException.class, () -> action.execute());
+        assertThat(e.getMessage()).isEqualTo(failure.getErrorMessage());
+        assertThat(e.getLogLevel()).isEqualTo(failure.getLogLevel());
     }
 
     public interface Action {

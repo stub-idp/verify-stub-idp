@@ -1,17 +1,18 @@
 package stubidp.saml.hub.hub.transformers.inbound;
 
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.opensaml.saml.saml2.core.Response;
 import org.opensaml.saml.saml2.core.Status;
 import org.opensaml.saml.saml2.core.StatusCode;
 import stubidp.saml.hub.core.test.builders.StatusMessageBuilder;
+import stubidp.saml.hub.hub.domain.IdpIdaStatus;
+import stubidp.saml.hub.test.OpenSAMLRunner;
+import stubidp.saml.serializers.deserializers.StringToOpenSamlObjectTransformer;
 import stubidp.saml.utils.core.OpenSamlXmlObjectFactory;
 import stubidp.saml.utils.core.api.CoreTransformersFactory;
-import stubidp.saml.utils.core.test.OpenSAMLRunner;
-import stubidp.saml.serializers.deserializers.StringToOpenSamlObjectTransformer;
-import stubidp.saml.hub.hub.domain.IdpIdaStatus;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -24,13 +25,13 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static stubidp.saml.utils.core.test.builders.StatusBuilder.aStatus;
 import static stubidp.saml.utils.core.test.builders.StatusCodeBuilder.aStatusCode;
 
-@RunWith(OpenSAMLRunner.class)
-public class IdpIdaStatusUnmarshallerTest {
+@ExtendWith(MockitoExtension.class)
+public class IdpIdaStatusUnmarshallerTest extends OpenSAMLRunner {
 
     private IdpIdaStatusUnmarshaller unmarshaller;
     private StringToOpenSamlObjectTransformer<Response> stringToOpenSamlObjectTransformer;
 
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
         unmarshaller = new IdpIdaStatusUnmarshaller();
         stringToOpenSamlObjectTransformer = new CoreTransformersFactory().getStringtoOpenSamlObjectTransformer(input -> {});

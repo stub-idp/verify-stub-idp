@@ -1,26 +1,24 @@
 package stubidp.saml.hub.core.validators.subjectconfirmation;
 
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.opensaml.saml.saml2.core.SubjectConfirmation;
-import stubidp.saml.hub.core.validators.subjectconfirmation.AssertionSubjectConfirmationValidator;
-import stubidp.saml.utils.core.test.OpenSAMLMockitoRunner;
-import stubidp.saml.utils.core.test.SamlTransformationErrorManagerTestHelper;
-import stubidp.test.devpki.TestEntityIds;
-import stubidp.saml.utils.core.test.builders.SubjectConfirmationDataBuilder;
 import stubidp.saml.extensions.validation.SamlValidationSpecificationFailure;
 import stubidp.saml.hub.core.errors.SamlTransformationErrorFactory;
+import stubidp.saml.hub.test.OpenSAMLRunner;
+import stubidp.saml.utils.core.test.SamlTransformationErrorManagerTestHelper;
+import stubidp.saml.utils.core.test.builders.SubjectConfirmationDataBuilder;
+import stubidp.test.devpki.TestEntityIds;
+
 import static stubidp.saml.utils.core.test.builders.SubjectConfirmationBuilder.aSubjectConfirmation;
 
-@RunWith(OpenSAMLMockitoRunner.class)
-public class AssertionSubjectConfirmationValidatorTest {
+public class AssertionSubjectConfirmationValidatorTest extends OpenSAMLRunner {
 
     private static final String REQUEST_ID = "some-request-id";
 
     private AssertionSubjectConfirmationValidator validator;
 
-    @Before
+    @BeforeEach
     public void setup() {
         validator = new AssertionSubjectConfirmationValidator();
     }

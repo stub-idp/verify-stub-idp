@@ -1,15 +1,16 @@
 package stubidp.saml.hub.hub.transformers.outbound;
 
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.opensaml.saml.saml2.core.EncryptedAssertion;
 import org.opensaml.saml.saml2.core.Response;
 import stubidp.saml.hub.core.test.builders.PassthroughAssertionBuilder;
+import stubidp.saml.hub.test.OpenSAMLRunner;
 import stubidp.saml.utils.core.OpenSamlXmlObjectFactory;
 import stubidp.saml.utils.core.domain.PassthroughAssertion;
-import stubidp.saml.utils.core.test.OpenSAMLMockitoRunner;
 
 import java.util.Arrays;
 
@@ -19,15 +20,17 @@ import static stubidp.saml.utils.core.test.builders.AssertionBuilder.anAssertion
 import static stubidp.saml.utils.core.test.builders.ResponseBuilder.aResponse;
 import static stubidp.saml.utils.core.test.builders.ResponseForHubBuilder.anAuthnResponse;
 
-@RunWith(OpenSAMLMockitoRunner.class)
-public class OutboundResponseFromHubToSamlResponseTransformerTest {
+@ExtendWith(MockitoExtension.class)
+public class OutboundResponseFromHubToSamlResponseTransformerTest extends OpenSAMLRunner {
+
     @Mock
     private TransactionIdaStatusMarshaller statusMarshaller = null;
     @Mock
     private EncryptedAssertionUnmarshaller encryptedAssertionUnmarshaller;
+
     private OutboundResponseFromHubToSamlResponseTransformer transformer;
 
-    @Before
+    @BeforeEach
     public void setup() {
         OpenSamlXmlObjectFactory openSamlXmlObjectFactory = new OpenSamlXmlObjectFactory();
         transformer = new OutboundResponseFromHubToSamlResponseTransformer(statusMarshaller, openSamlXmlObjectFactory, encryptedAssertionUnmarshaller);

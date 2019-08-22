@@ -1,27 +1,25 @@
 package stubidp.saml.hub.core.validators.subject;
 
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.opensaml.saml.saml2.core.NameIDType;
 import org.opensaml.saml.saml2.core.Subject;
-import stubidp.saml.hub.core.validators.subject.AssertionSubjectValidator;
-import stubidp.saml.utils.core.test.OpenSAMLMockitoRunner;
-import stubidp.saml.utils.core.test.SamlTransformationErrorManagerTestHelper;
-import stubidp.saml.utils.core.test.builders.NameIdBuilder;
 import stubidp.saml.extensions.validation.SamlValidationSpecificationFailure;
 import stubidp.saml.extensions.validation.errors.ResponseProcessingValidationSpecification;
 import stubidp.saml.hub.core.errors.SamlTransformationErrorFactory;
+import stubidp.saml.hub.test.OpenSAMLRunner;
+import stubidp.saml.utils.core.test.SamlTransformationErrorManagerTestHelper;
+import stubidp.saml.utils.core.test.builders.NameIdBuilder;
+
 import static stubidp.saml.utils.core.test.builders.SubjectBuilder.aSubject;
 
-@RunWith(OpenSAMLMockitoRunner.class)
-public class AssertionSubjectValidatorTest {
+public class AssertionSubjectValidatorTest extends OpenSAMLRunner {
 
     private static final String ASSERTION_ID = "some-assertion-id";
 
     private static AssertionSubjectValidator validator;
 
-    @Before
+    @BeforeEach
     public void setup() {
         validator = new AssertionSubjectValidator();
     }

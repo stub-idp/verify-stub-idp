@@ -2,33 +2,32 @@ package stubidp.saml.hub.core.validators.subjectconfirmation;
 
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.opensaml.saml.saml2.core.SubjectConfirmation;
 import org.opensaml.saml.saml2.core.SubjectConfirmationData;
+import stubidp.saml.extensions.validation.SamlValidationSpecificationFailure;
 import stubidp.saml.hub.core.DateTimeFreezer;
-import stubidp.saml.utils.core.test.OpenSAMLMockitoRunner;
+import stubidp.saml.hub.core.errors.SamlTransformationErrorFactory;
+import stubidp.saml.hub.test.OpenSAMLRunner;
 import stubidp.saml.utils.core.test.SamlTransformationErrorManagerTestHelper;
 import stubidp.saml.utils.core.test.builders.SubjectConfirmationDataBuilder;
-import stubidp.saml.extensions.validation.SamlValidationSpecificationFailure;
-import stubidp.saml.hub.core.errors.SamlTransformationErrorFactory;
+
 import static stubidp.saml.utils.core.test.builders.SubjectConfirmationBuilder.aSubjectConfirmation;
 
-@RunWith(OpenSAMLMockitoRunner.class)
-public class BasicAssertionSubjectConfirmationValidatorTest {
+public class BasicAssertionSubjectConfirmationValidatorTest extends OpenSAMLRunner {
 
     private static final String REQUEST_ID = "some-request-id";
 
     private BasicAssertionSubjectConfirmationValidator validator;
 
-    @Before
+    @BeforeEach
     public void setup() {
         validator = new BasicAssertionSubjectConfirmationValidator();
     }
 
-    @After
+    @AfterEach
     public void teardown() {
         DateTimeFreezer.unfreezeTime();
     }

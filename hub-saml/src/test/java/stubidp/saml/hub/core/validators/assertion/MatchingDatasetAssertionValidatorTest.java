@@ -1,9 +1,10 @@
 package stubidp.saml.hub.core.validators.assertion;
 
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.opensaml.saml.saml2.core.Assertion;
 import org.opensaml.saml.saml2.core.Attribute;
 import org.opensaml.saml.saml2.core.AttributeStatement;
@@ -11,9 +12,7 @@ import stubidp.saml.extensions.IdaConstants;
 import stubidp.saml.extensions.extensions.Date;
 import stubidp.saml.extensions.extensions.PersonName;
 import stubidp.saml.extensions.extensions.StringBasedMdsAttributeValue;
-import stubidp.saml.hub.core.validators.assertion.DuplicateAssertionValidator;
-import stubidp.saml.hub.core.validators.assertion.MatchingDatasetAssertionValidator;
-import stubidp.saml.utils.core.test.OpenSAMLMockitoRunner;
+import stubidp.saml.hub.test.OpenSAMLRunner;
 
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -31,8 +30,8 @@ import static stubidp.saml.utils.core.test.builders.PersonNameAttributeBuilder_1
 import static stubidp.saml.utils.core.test.builders.PersonNameAttributeValueBuilder.aPersonNameValue;
 import static stubidp.saml.utils.core.test.builders.SimpleStringAttributeBuilder.aSimpleStringAttribute;
 
-@RunWith(OpenSAMLMockitoRunner.class)
-public class MatchingDatasetAssertionValidatorTest {
+@ExtendWith(MockitoExtension.class)
+public class MatchingDatasetAssertionValidatorTest extends OpenSAMLRunner {
 
     private static final String RESPONSE_ISSUER_ID = "issuer ID";
 
@@ -41,7 +40,7 @@ public class MatchingDatasetAssertionValidatorTest {
 
     private MatchingDatasetAssertionValidator validator;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         validator = new MatchingDatasetAssertionValidator(duplicateAssertionValidator);
     }

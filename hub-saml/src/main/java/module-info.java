@@ -2,7 +2,7 @@
 module hub.saml {
     requires org.joda.time;
     requires saml.utils;
-    requires javax.inject;
+    requires jakarta.inject;
     requires saml.security;
     requires saml.extensions;
     requires dropwizard.util;

@@ -1,15 +1,14 @@
 package stubidp.saml.hub.hub.validators.response.matchingservice;
 
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.opensaml.saml.saml2.core.NameIDType;
 import org.opensaml.saml.saml2.core.Response;
 import org.opensaml.saml.saml2.core.StatusCode;
 import stubidp.saml.extensions.domain.SamlStatusCode;
 import stubidp.saml.hub.core.errors.SamlTransformationErrorFactory;
 import stubidp.saml.hub.hub.validators.response.matchingservice.HealthCheckResponseFromMatchingServiceValidator;
-import stubidp.saml.utils.core.test.OpenSAMLMockitoRunner;
+import stubidp.saml.hub.test.OpenSAMLRunner;
 import stubidp.saml.utils.core.test.SamlTransformationErrorManagerTestHelper;
 import stubidp.saml.extensions.validation.SamlValidationSpecificationFailure;
 
@@ -18,12 +17,11 @@ import static stubidp.saml.utils.core.test.builders.ResponseBuilder.aResponse;
 import static stubidp.saml.utils.core.test.builders.StatusBuilder.aStatus;
 import static stubidp.saml.utils.core.test.builders.StatusCodeBuilder.aStatusCode;
 
-@RunWith(OpenSAMLMockitoRunner.class)
-public class HealthCheckResponseFromMatchingServiceValidatorTest {
+public class HealthCheckResponseFromMatchingServiceValidatorTest extends OpenSAMLRunner {
 
     private HealthCheckResponseFromMatchingServiceValidator validator;
 
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
         validator = new HealthCheckResponseFromMatchingServiceValidator();
     }

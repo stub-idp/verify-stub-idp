@@ -1,20 +1,22 @@
 package stubidp.saml.hub.hub.transformers.inbound;
 
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.opensaml.saml.saml2.core.Assertion;
 import org.opensaml.saml.saml2.core.AuthnContextClassRef;
+import stubidp.saml.extensions.extensions.EidasAuthnContext;
+import stubidp.saml.extensions.extensions.IdaAuthnContext;
 import stubidp.saml.hub.core.test.builders.IdpFraudEventIdAttributeBuilder;
+import stubidp.saml.hub.test.OpenSAMLRunner;
+import stubidp.saml.serializers.serializers.XmlObjectToBase64EncodedStringTransformer;
 import stubidp.saml.utils.core.domain.AuthnContext;
 import stubidp.saml.utils.core.domain.FraudDetectedDetails;
 import stubidp.saml.utils.core.domain.PassthroughAssertion;
-import stubidp.saml.extensions.extensions.EidasAuthnContext;
-import stubidp.saml.extensions.extensions.IdaAuthnContext;
-import stubidp.saml.utils.core.test.OpenSAMLMockitoRunner;
 import stubidp.saml.utils.core.transformers.AuthnContextFactory;
-import stubidp.saml.serializers.serializers.XmlObjectToBase64EncodedStringTransformer;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
@@ -22,12 +24,12 @@ import static stubidp.saml.utils.core.test.builders.AssertionBuilder.anAssertion
 import static stubidp.saml.utils.core.test.builders.AttributeStatementBuilder.anAttributeStatement;
 import static stubidp.saml.utils.core.test.builders.AuthnContextBuilder.anAuthnContext;
 import static stubidp.saml.utils.core.test.builders.AuthnContextClassRefBuilder.anAuthnContextClassRef;
-import static stubidp.saml.utils.core.test.builders.IPAddressAttributeBuilder.anIPAddress;
 import static stubidp.saml.utils.core.test.builders.AuthnStatementBuilder.anAuthnStatement;
 import static stubidp.saml.utils.core.test.builders.Gpg45StatusAttributeBuilder.aGpg45StatusAttribute;
+import static stubidp.saml.utils.core.test.builders.IPAddressAttributeBuilder.anIPAddress;
 
-@RunWith(OpenSAMLMockitoRunner.class)
-public class PassthroughAssertionUnmarshallerTest {
+@ExtendWith(MockitoExtension.class)
+public class PassthroughAssertionUnmarshallerTest extends OpenSAMLRunner {
 
     @Mock
     private XmlObjectToBase64EncodedStringTransformer<Assertion> assertionStringTransformer;
@@ -36,7 +38,7 @@ public class PassthroughAssertionUnmarshallerTest {
 
     private PassthroughAssertionUnmarshaller unmarshaller;
 
-    @Before
+    @BeforeEach
     public void setup() {
         unmarshaller = new PassthroughAssertionUnmarshaller(assertionStringTransformer, authnContextFactory);
     }
@@ -71,7 +73,7 @@ public class PassthroughAssertionUnmarshallerTest {
         assertThat(authnStatementAssertion.getFraudDetectedDetails().isPresent()).isEqualTo(true);
     }
 
-    @Test(expected = IllegalStateException.class)
+    @Test
     public void transform_shouldThrowExceptionWhenFraudIndicatorAuthnStatementDoesNotContainUniqueId() throws Exception {
         Assertion theAssertion = anAssertion()
                 .addAuthnStatement(anAuthnStatement()
@@ -88,7 +90,7 @@ public class PassthroughAssertionUnmarshallerTest {
 
         when(assertionStringTransformer.apply(theAssertion)).thenReturn("AUTHN_ASSERTION");
 
-        unmarshaller.fromAssertion(theAssertion);
+        Assertions.assertThrows(IllegalStateException.class, () -> unmarshaller.fromAssertion(theAssertion));
     }
 
     @Test
@@ -151,12 +153,12 @@ public class PassthroughAssertionUnmarshallerTest {
         assertThat(fraudDetectedDetails.getFraudIndicator()).isEqualTo(gpg45Status);
     }
 
-    @Test(expected = IllegalStateException.class)
+    @Test
     public void transform_shouldThrowExceptionIfGpg45StatusIsNotRecognised() throws Exception {
         String gpg45Status = "status not known";
         Assertion theAssertion = givenAFraudEventAssertion(gpg45Status);
 
-        unmarshaller.fromAssertion(theAssertion);
+        Assertions.assertThrows(IllegalStateException.class, () -> unmarshaller.fromAssertion(theAssertion));
     }
 
     @Test

@@ -1,17 +1,16 @@
 package stubidp.saml.hub.hub.validators.response.idp;
 
 import com.google.common.collect.ImmutableList;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.opensaml.saml.saml2.core.Assertion;
 import org.opensaml.saml.saml2.core.Response;
 import org.opensaml.saml.saml2.metadata.IDPSSODescriptor;
 import stubidp.saml.hub.core.validators.DestinationValidator;
 import stubidp.saml.hub.hub.domain.CountryAuthenticationStatus;
-import stubidp.saml.hub.hub.validators.response.idp.IdpResponseValidator;
 import stubidp.saml.hub.hub.validators.response.idp.components.EncryptedResponseFromIdpValidator;
 import stubidp.saml.hub.hub.validators.response.idp.components.ResponseAssertionsFromIdpValidator;
 import stubidp.saml.security.AssertionDecrypter;
@@ -25,7 +24,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class IdpResponseValidatorTest {
 
     @Mock
@@ -45,7 +44,7 @@ public class IdpResponseValidatorTest {
 
     private IdpResponseValidator validator;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         validator = new IdpResponseValidator(
             samlResponseSignatureValidator,

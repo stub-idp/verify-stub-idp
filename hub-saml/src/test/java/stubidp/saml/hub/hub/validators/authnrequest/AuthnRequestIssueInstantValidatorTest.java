@@ -2,11 +2,10 @@ package stubidp.saml.hub.hub.validators.authnrequest;
 
 import io.dropwizard.util.Duration;
 import org.joda.time.DateTime;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import stubidp.saml.hub.hub.configuration.SamlAuthnRequestValidityDurationConfiguration;
-import stubidp.saml.hub.hub.validators.authnrequest.AuthnRequestIssueInstantValidator;
 import stubidp.utils.common.datetime.DateTimeFreezer;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -16,7 +15,7 @@ public class AuthnRequestIssueInstantValidatorTest {
     AuthnRequestIssueInstantValidator authnRequestIssueInstantValidator = null;
     private final int AUTHN_REQUEST_VALIDITY_MINS = 5;
 
-    @Before
+    @BeforeEach
     public void setup() {
         SamlAuthnRequestValidityDurationConfiguration samlAuthnRequestValidityDurationConfiguration = new SamlAuthnRequestValidityDurationConfiguration() {
             @Override
@@ -27,7 +26,8 @@ public class AuthnRequestIssueInstantValidatorTest {
 
         authnRequestIssueInstantValidator = new AuthnRequestIssueInstantValidator(samlAuthnRequestValidityDurationConfiguration);
     }
-    @After
+
+    @AfterEach
     public void unfreezeTime() {
         DateTimeFreezer.unfreezeTime();
     }

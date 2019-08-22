@@ -1,8 +1,7 @@
 package stubidp.saml.hub.hub.validators.response.matchingservice;
 
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.opensaml.saml.saml2.core.Assertion;
 import org.opensaml.saml.saml2.core.Issuer;
 import org.opensaml.saml.saml2.core.NameIDType;
@@ -10,9 +9,9 @@ import org.opensaml.saml.saml2.core.Response;
 import org.opensaml.saml.saml2.core.Status;
 import org.opensaml.saml.saml2.core.StatusCode;
 import stubidp.saml.extensions.domain.SamlStatusCode;
-import stubidp.saml.hub.core.errors.SamlTransformationErrorFactory;
-import stubidp.saml.utils.core.test.OpenSAMLMockitoRunner;
 import stubidp.saml.extensions.validation.SamlValidationSpecificationFailure;
+import stubidp.saml.hub.core.errors.SamlTransformationErrorFactory;
+import stubidp.saml.hub.test.OpenSAMLRunner;
 
 import static stubidp.saml.hub.core.errors.SamlTransformationErrorFactory.emptyIssuer;
 import static stubidp.saml.hub.core.errors.SamlTransformationErrorFactory.illegalIssuerFormat;
@@ -26,21 +25,20 @@ import static stubidp.saml.hub.core.errors.SamlTransformationErrorFactory.signat
 import static stubidp.saml.hub.core.errors.SamlTransformationErrorFactory.subStatusMustBeOneOf;
 import static stubidp.saml.hub.core.errors.SamlTransformationErrorFactory.unencryptedAssertion;
 import static stubidp.saml.hub.core.errors.SamlTransformationErrorFactory.unexpectedNumberOfAssertions;
+import static stubidp.saml.hub.hub.validators.response.helpers.ResponseValidatorTestHelper.createStatus;
+import static stubidp.saml.hub.hub.validators.response.helpers.ResponseValidatorTestHelper.createSubStatusCode;
 import static stubidp.saml.utils.core.test.SamlTransformationErrorManagerTestHelper.validateFail;
 import static stubidp.saml.utils.core.test.builders.AssertionBuilder.anAssertion;
 import static stubidp.saml.utils.core.test.builders.IssuerBuilder.anIssuer;
 import static stubidp.saml.utils.core.test.builders.ResponseBuilder.aResponse;
-import static stubidp.saml.hub.hub.validators.response.helpers.ResponseValidatorTestHelper.createStatus;
-import static stubidp.saml.hub.hub.validators.response.helpers.ResponseValidatorTestHelper.createSubStatusCode;
 
-@RunWith(OpenSAMLMockitoRunner.class)
-public class EncryptedResponseFromMatchingServiceValidatorTest {
+public class EncryptedResponseFromMatchingServiceValidatorTest extends OpenSAMLRunner {
 
     private Status happyStatus;
 
     private EncryptedResponseFromMatchingServiceValidator validator;
 
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
         happyStatus = createStatus(StatusCode.SUCCESS, createSubStatusCode(SamlStatusCode.MATCH));
         validator = new EncryptedResponseFromMatchingServiceValidator();

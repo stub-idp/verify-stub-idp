@@ -1,20 +1,20 @@
 package stubidp.saml.hub.core.validators.assertion;
 
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.opensaml.saml.common.SAMLVersion;
 import org.opensaml.saml.saml2.core.Assertion;
 import org.opensaml.saml.saml2.core.SubjectConfirmation;
-import stubidp.saml.hub.core.validators.assertion.AssertionAttributeStatementValidator;
-import stubidp.saml.hub.core.validators.assertion.AssertionValidator;
-import stubidp.saml.utils.core.test.OpenSAMLMockitoRunner;
-import stubidp.saml.utils.core.test.SamlTransformationErrorManagerTestHelper;
 import stubidp.saml.extensions.validation.SamlValidationSpecificationFailure;
-import stubidp.saml.hub.core.errors.SamlTransformationErrorFactory;import stubidp.saml.hub.core.validators.subject.AssertionSubjectValidator;
+import stubidp.saml.hub.core.errors.SamlTransformationErrorFactory;
+import stubidp.saml.hub.core.validators.subject.AssertionSubjectValidator;
 import stubidp.saml.hub.core.validators.subjectconfirmation.BasicAssertionSubjectConfirmationValidator;
+import stubidp.saml.hub.test.OpenSAMLRunner;
 import stubidp.saml.security.validators.issuer.IssuerValidator;
+import stubidp.saml.utils.core.test.SamlTransformationErrorManagerTestHelper;
 
 import java.util.UUID;
 
@@ -23,8 +23,8 @@ import static stubidp.saml.utils.core.test.builders.AssertionBuilder.anAssertion
 import static stubidp.saml.utils.core.test.builders.SubjectBuilder.aSubject;
 import static stubidp.saml.utils.core.test.builders.SubjectConfirmationBuilder.aSubjectConfirmation;
 
-@RunWith(OpenSAMLMockitoRunner.class)
-public class AssertionValidatorTest {
+@ExtendWith(MockitoExtension.class)
+public class AssertionValidatorTest extends OpenSAMLRunner {
 
     @Mock
     private AssertionSubjectValidator subjectValidator;
@@ -37,7 +37,7 @@ public class AssertionValidatorTest {
 
     private AssertionValidator validator;
 
-    @Before
+    @BeforeEach
     public void setup() {
         validator = new AssertionValidator(issuerValidator, subjectValidator, assertionAttributeStatementValidator, basicAssertionSubjectConfirmationValidator);
     }
