@@ -1,33 +1,33 @@
 package stubidp.test.integration;
 
+import io.dropwizard.testing.junit5.DropwizardExtensionsSupport;
 import org.glassfish.jersey.client.ClientProperties;
 import org.glassfish.jersey.client.JerseyClientBuilder;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
-import org.junit.Before;
-import org.junit.ClassRule;
-import org.junit.Test;
-import stubidp.test.integration.steps.AuthnRequestSteps;
-import stubidp.test.integration.support.IntegrationTestHelper;
-import stubidp.test.integration.support.StubIdpAppRule;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import stubidp.stubidp.Urls;
 import stubidp.stubidp.cookies.CookieNames;
 import stubidp.stubidp.filters.SecurityHeadersFilterTest;
+import stubidp.test.integration.steps.AuthnRequestSteps;
+import stubidp.test.integration.support.IntegrationTestHelper;
+import stubidp.test.integration.support.StubIdpAppExtension;
 
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.Form;
-import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriBuilder;
-
 import java.util.Objects;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static stubidp.stubidp.builders.StubIdpBuilder.aStubIdp;
 import static stubidp.stubidp.csrf.CSRFCheckProtectionFilter.CSRF_PROTECT_FORM_KEY;
 
+@ExtendWith(DropwizardExtensionsSupport.class)
 public class SecurityIntegrationTests extends IntegrationTestHelper {
 
     private static final String IDP_NAME = "stub-idp-one";
@@ -38,11 +38,10 @@ public class SecurityIntegrationTests extends IntegrationTestHelper {
             IDP_NAME,
             applicationRule.getLocalPort());
 
-    @ClassRule
-    public static final StubIdpAppRule applicationRule = new StubIdpAppRule()
+    public static final StubIdpAppExtension applicationRule = new StubIdpAppExtension()
             .withStubIdp(aStubIdp().withId(IDP_NAME).withDisplayName(DISPLAY_NAME).build());
 
-    @Before
+    @BeforeEach
     public void refreshMetadata() {
         client.target("http://localhost:"+applicationRule.getAdminPort()+"/tasks/connector-metadata-refresh").request().post(Entity.text(""));
     }
@@ -82,7 +81,7 @@ public class SecurityIntegrationTests extends IntegrationTestHelper {
                 .request()
                 .cookie(CookieNames.SESSION_COOKIE_NAME, cookies.getSessionId())
                 .cookie(CookieNames.SECURE_COOKIE_NAME, cookies.getSecure())
-                .post(Entity.entity(form, MediaType.APPLICATION_FORM_URLENCODED_TYPE));
+                .post(Entity.form(form));
 
         assertThat(response.getStatus()).isEqualTo(500);
     }
@@ -99,7 +98,7 @@ public class SecurityIntegrationTests extends IntegrationTestHelper {
         final Document entity = Jsoup.parse(response.readEntity(String.class));
         final Element csrfElement = entity.getElementById(CSRF_PROTECT_FORM_KEY);
         if(!Objects.isNull(csrfElement)) {
-            return entity.getElementById(CSRF_PROTECT_FORM_KEY).val();
+            return csrfElement.val();
         }
         return null;
     }

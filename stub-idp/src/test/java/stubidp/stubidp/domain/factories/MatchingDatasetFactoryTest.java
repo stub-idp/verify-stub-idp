@@ -1,9 +1,8 @@
 package stubidp.stubidp.domain.factories;
 
-
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import stubidp.saml.utils.core.domain.Address;
 import stubidp.saml.utils.core.domain.AddressFactory;
 import stubidp.saml.utils.core.domain.AuthnContext;
@@ -11,7 +10,6 @@ import stubidp.saml.utils.core.domain.Gender;
 import stubidp.saml.utils.core.domain.MatchingDataset;
 import stubidp.stubidp.domain.DatabaseIdpUser;
 import stubidp.stubidp.domain.MatchingDatasetValue;
-import stubidp.stubidp.domain.factories.MatchingDatasetFactory;
 
 import java.util.Collections;
 import java.util.Optional;

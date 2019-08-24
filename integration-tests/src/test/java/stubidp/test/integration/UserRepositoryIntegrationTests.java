@@ -1,22 +1,24 @@
 package stubidp.test.integration;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import io.dropwizard.testing.junit5.DropwizardExtensionsSupport;
 import org.glassfish.jersey.client.ClientProperties;
 import org.glassfish.jersey.client.JerseyClientBuilder;
 import org.glassfish.jersey.client.authentication.HttpAuthenticationFeature;
 import org.joda.time.LocalDate;
-import org.junit.Before;
-import org.junit.ClassRule;
-import org.junit.Test;
-import stubidp.test.integration.support.IntegrationTestHelper;
-import stubidp.test.integration.support.StubIdpAppRule;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import stubidp.saml.utils.core.domain.Address;
 import stubidp.saml.utils.core.domain.AuthnContext;
 import stubidp.saml.utils.core.domain.Gender;
-import stubidp.stubidp.builders.SimpleMdsValueBuilder;
 import stubidp.stubidp.Urls;
+import stubidp.stubidp.builders.SimpleMdsValueBuilder;
 import stubidp.stubidp.domain.MatchingDatasetValue;
 import stubidp.stubidp.dtos.IdpUserDto;
+import stubidp.stubidp.utils.TestUserCredentials;
+import stubidp.test.integration.support.IntegrationTestHelper;
+import stubidp.test.integration.support.StubIdpAppExtension;
 
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.Invocation;
@@ -29,20 +31,19 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
-import stubidp.stubidp.utils.TestUserCredentials;
-
 import static java.util.Arrays.asList;
 import static javax.ws.rs.client.Entity.entity;
 import static javax.ws.rs.core.MediaType.APPLICATION_JSON_TYPE;
 import static org.assertj.core.api.Assertions.assertThat;
+import static stubidp.stubidp.builders.AddressBuilder.anAddress;
+import static stubidp.stubidp.builders.StubIdpBuilder.aStubIdp;
 import static stubidp.test.integration.UserRepositoryIntegrationTests.UserBuilder.aUser;
 import static stubidp.utils.rest.common.HttpHeaders.CACHE_CONTROL_KEY;
 import static stubidp.utils.rest.common.HttpHeaders.CACHE_CONTROL_NO_CACHE_VALUE;
 import static stubidp.utils.rest.common.HttpHeaders.PRAGMA_KEY;
 import static stubidp.utils.rest.common.HttpHeaders.PRAGMA_NO_CACHE_VALUE;
-import static stubidp.stubidp.builders.AddressBuilder.anAddress;
-import static stubidp.stubidp.builders.StubIdpBuilder.aStubIdp;
 
+@ExtendWith(DropwizardExtensionsSupport.class)
 public class UserRepositoryIntegrationTests extends IntegrationTestHelper {
 
     public static final String IDP_NAME = "user-repository-idp";
@@ -50,8 +51,7 @@ public class UserRepositoryIntegrationTests extends IntegrationTestHelper {
     private static final String USERNAME = "integrationTestUser";
     private static final String PASSWORD = "integrationTestUserPassword";
 
-    @ClassRule
-    public static final StubIdpAppRule applicationRule = new StubIdpAppRule()
+    public static final StubIdpAppExtension applicationRule = new StubIdpAppExtension()
             .withStubIdp(aStubIdp()
                     .withId(IDP_NAME)
                     .withDisplayName(DISPLAY_NAME)
@@ -60,7 +60,7 @@ public class UserRepositoryIntegrationTests extends IntegrationTestHelper {
 
     protected Client client = JerseyClientBuilder.createClient().property(ClientProperties.FOLLOW_REDIRECTS, false);
 
-    @Before
+    @BeforeEach
     public void setUp() {
         HttpAuthenticationFeature httpAuthenticationFeature = HttpAuthenticationFeature.basic(USERNAME, PASSWORD);
         client.register(httpAuthenticationFeature);

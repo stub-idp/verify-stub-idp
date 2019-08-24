@@ -2,10 +2,10 @@ package stubidp.stubidp.builders;
 
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeUtils;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.opensaml.saml.saml2.core.Assertion;
 import org.opensaml.saml.saml2.core.Attribute;
 import org.opensaml.saml.saml2.core.AuthnStatement;
@@ -13,7 +13,6 @@ import org.opensaml.saml.saml2.core.NameIDType;
 import org.opensaml.saml.saml2.core.Response;
 import org.opensaml.saml.saml2.core.SubjectConfirmation;
 import stubidp.saml.extensions.IdaSamlBootstrap;
-import stubidp.stubidp.builders.EidasResponseBuilder;
 
 import java.util.Collections;
 import java.util.List;
@@ -22,17 +21,17 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class EidasResponseBuilderTest {
 
-    @BeforeClass
+    @BeforeAll
     public static void setUpClass() {
         IdaSamlBootstrap.bootstrap();
     }
 
-    @Before
+    @BeforeEach
     public void setUp() {
         DateTimeUtils.setCurrentMillisFixed(DateTime.now().getMillis());
     }
 
-    @After
+    @AfterEach
     public void teardown() {
         DateTimeUtils.setCurrentMillisSystem();
     }

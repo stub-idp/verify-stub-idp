@@ -1,13 +1,13 @@
 package stubidp.stubidp.csrf;
 
-import com.google.common.collect.ImmutableMap;
 import org.apache.commons.io.IOUtils;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 import stubidp.stubidp.cookies.HmacValidator;
 import stubidp.stubidp.csrf.exceptions.CSRFBodyNotFoundException;
 import stubidp.stubidp.csrf.exceptions.CSRFCouldNotValidateSessionException;
@@ -35,7 +35,7 @@ import static stubidp.stubidp.cookies.CookieNames.SECURE_COOKIE_NAME;
 import static stubidp.stubidp.cookies.CookieNames.SESSION_COOKIE_NAME;
 import static stubidp.stubidp.csrf.CSRFCheckProtectionFilter.CSRF_PROTECT_FORM_KEY;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class CSRFCheckProtectionFilterTest {
 
     private boolean isSecureCookieEnabled = true;
@@ -52,40 +52,44 @@ public class CSRFCheckProtectionFilterTest {
 
     private SessionId sessionId;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         sessionId = SessionId.createNewSessionId();
-        Map<String, Cookie> cookies = ImmutableMap.of(
+        Map<String, Cookie> cookies = Map.of(
                 SESSION_COOKIE_NAME, new NewCookie(SESSION_COOKIE_NAME, sessionId.toString()),
                 SECURE_COOKIE_NAME, new NewCookie(SECURE_COOKIE_NAME, "secure-cookie")
         );
         when(containerRequestContext.getCookies()).thenReturn(cookies);
         when(hmacValidator.validateHMACSHA256("secure-cookie", sessionId.getSessionId())).thenReturn(true);
-        when(idpSessionRepository.containsSession(sessionId)).thenReturn(true);
-        when(idpSessionRepository.get(sessionId)).thenReturn(Optional.ofNullable(session));
-        when(containerRequestContext.hasEntity()).thenReturn(true);
     }
 
-    @Test(expected = CSRFCouldNotValidateSessionException.class)
+    @Test
     public void shouldValidateSession() throws Exception {
         final String csrfToken = "foo";
 
         when(hmacValidator.validateHMACSHA256("secure-cookie", sessionId.getSessionId())).thenReturn(false);
 
-        new CSRFCheckProtectionFilter(idpSessionRepository, eidasSessionRepository, hmacValidator, isSecureCookieEnabled).filter(containerRequestContext);
+        Assertions.assertThrows(CSRFCouldNotValidateSessionException.class, () -> new CSRFCheckProtectionFilter(idpSessionRepository, eidasSessionRepository, hmacValidator, isSecureCookieEnabled).filter(containerRequestContext));
     }
 
-    @Test(expected = CSRFBodyNotFoundException.class)
+    @Test
     public void shouldValidateEntityExists() throws Exception {
+        when(idpSessionRepository.containsSession(sessionId)).thenReturn(true);
+        when(containerRequestContext.hasEntity()).thenReturn(true);
+
         final String csrfToken = "foo";
 
         when(containerRequestContext.hasEntity()).thenReturn(false);
 
-        new CSRFCheckProtectionFilter(idpSessionRepository, eidasSessionRepository, hmacValidator, isSecureCookieEnabled).filter(containerRequestContext);
+        Assertions.assertThrows(CSRFBodyNotFoundException.class, () -> new CSRFCheckProtectionFilter(idpSessionRepository, eidasSessionRepository, hmacValidator, isSecureCookieEnabled).filter(containerRequestContext));
     }
 
-    @Test(expected = CSRFNoTokenInSessionException.class)
+    @Test
     public void shouldCheckTokenExistsInTheSession() throws Exception {
+        when(idpSessionRepository.containsSession(sessionId)).thenReturn(true);
+        when(idpSessionRepository.get(sessionId)).thenReturn(Optional.ofNullable(session));
+        when(containerRequestContext.hasEntity()).thenReturn(true);
+
         final String csrfToken = "foo";
         final String entity = "a=1&b=2&c=3&"+CSRF_PROTECT_FORM_KEY+"="+csrfToken;
         when(containerRequestContext.getEntityStream()).thenReturn(new ByteArrayInputStream(entity.getBytes()));
@@ -93,29 +97,40 @@ public class CSRFCheckProtectionFilterTest {
 
         when(containerRequestContext.hasEntity()).thenReturn(true);
 
-        new CSRFCheckProtectionFilter(idpSessionRepository, eidasSessionRepository, hmacValidator, isSecureCookieEnabled).filter(containerRequestContext);
+        Assertions.assertThrows(CSRFNoTokenInSessionException.class, () -> new CSRFCheckProtectionFilter(idpSessionRepository, eidasSessionRepository, hmacValidator, isSecureCookieEnabled).filter(containerRequestContext));
     }
 
-    @Test(expected = CSRFTokenWasInvalidException.class)
+    @Test
     public void shouldCheckTokenWithTheOneInTheSession() throws Exception {
+        when(idpSessionRepository.containsSession(sessionId)).thenReturn(true);
+        when(idpSessionRepository.get(sessionId)).thenReturn(Optional.ofNullable(session));
+        when(containerRequestContext.hasEntity()).thenReturn(true);
+
         final String csrfToken = "foo";
         final String entity = "a=1&b=2&c=3&"+CSRF_PROTECT_FORM_KEY+"=not_this_token";
         when(containerRequestContext.getEntityStream()).thenReturn(new ByteArrayInputStream(entity.getBytes()));
         when(session.getCsrfToken()).thenReturn(csrfToken);
 
-        new CSRFCheckProtectionFilter(idpSessionRepository, eidasSessionRepository, hmacValidator, isSecureCookieEnabled).filter(containerRequestContext);
+        Assertions.assertThrows(CSRFTokenWasInvalidException.class, () -> new CSRFCheckProtectionFilter(idpSessionRepository, eidasSessionRepository, hmacValidator, isSecureCookieEnabled).filter(containerRequestContext));
     }
 
-    @Test(expected = CSRFTokenNotFoundException.class)
+    @Test
     public void shouldErrorIfTokenNotFound() throws Exception {
+        when(idpSessionRepository.containsSession(sessionId)).thenReturn(true);
+        when(containerRequestContext.hasEntity()).thenReturn(true);
+
         final String entity = "a=1&b=2&c=3&";
         when(containerRequestContext.getEntityStream()).thenReturn(new ByteArrayInputStream(entity.getBytes()));
 
-        new CSRFCheckProtectionFilter(idpSessionRepository, eidasSessionRepository, hmacValidator, isSecureCookieEnabled).filter(containerRequestContext);
+        Assertions.assertThrows(CSRFTokenNotFoundException.class, () -> new CSRFCheckProtectionFilter(idpSessionRepository, eidasSessionRepository, hmacValidator, isSecureCookieEnabled).filter(containerRequestContext));
     }
 
     @Test
     public void shouldAddCSRFProtectionToAllForms() throws Exception {
+        when(idpSessionRepository.containsSession(sessionId)).thenReturn(true);
+        when(idpSessionRepository.get(sessionId)).thenReturn(Optional.ofNullable(session));
+        when(containerRequestContext.hasEntity()).thenReturn(true);
+
         final String csrfToken = "foo";
         final String entity = "a=1&b=2&c=3&"+CSRF_PROTECT_FORM_KEY+"="+csrfToken;
         when(containerRequestContext.getEntityStream()).thenReturn(new ByteArrayInputStream(entity.getBytes()));

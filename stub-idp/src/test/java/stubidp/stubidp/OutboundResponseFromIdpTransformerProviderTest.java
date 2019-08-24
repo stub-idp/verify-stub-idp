@@ -1,23 +1,25 @@
 package stubidp.stubidp;
 
 import org.apache.commons.codec.binary.Base64;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.opensaml.xmlsec.algorithm.DigestAlgorithm;
 import org.opensaml.xmlsec.algorithm.SignatureAlgorithm;
 import org.opensaml.xmlsec.algorithm.descriptors.DigestSHA256;
 import org.opensaml.xmlsec.algorithm.descriptors.SignatureRSASHA256;
-import stubidp.utils.security.security.PrivateKeyFactory;
-import stubidp.utils.security.security.PublicKeyFactory;
-import stubidp.utils.security.security.X509CertificateFactory;
-import stubidp.test.devpki.TestCertificateStrings;
-import stubidp.test.devpki.TestEntityIds;
 import stubidp.saml.security.IdaKeyStore;
-import stubidp.stubidp.security.HardCodedKeyStore;
 import stubidp.stubidp.domain.factories.StubTransformersFactory;
 import stubidp.stubidp.repositories.Idp;
 import stubidp.stubidp.saml.locators.AssignableEntityToEncryptForLocator;
 import stubidp.stubidp.saml.transformers.OutboundResponseFromIdpTransformerProvider;
+import stubidp.stubidp.security.HardCodedKeyStore;
+import stubidp.test.devpki.TestCertificateStrings;
+import stubidp.test.devpki.TestEntityIds;
+import stubidp.utils.security.security.PrivateKeyFactory;
+import stubidp.utils.security.security.PublicKeyFactory;
+import stubidp.utils.security.security.X509CertificateFactory;
 
 import java.security.KeyPair;
 import java.security.PrivateKey;
@@ -28,6 +30,7 @@ import java.util.Optional;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 
+@ExtendWith(MockitoExtension.class)
 public class OutboundResponseFromIdpTransformerProviderTest {
 
     private static final HardCodedKeyStore ENC_KEYSTORE_DUMMY = new HardCodedKeyStore(TestEntityIds.STUB_IDP_ONE);
@@ -49,7 +52,7 @@ public class OutboundResponseFromIdpTransformerProviderTest {
     private static StubTransformersFactory mockStubTransformersFactory;
     private OutboundResponseFromIdpTransformerProvider testTransformerProvider;
 
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
         mockStubTransformersFactory = mock(StubTransformersFactory.class);
 

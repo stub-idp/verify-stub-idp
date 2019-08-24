@@ -2,10 +2,8 @@ package stubidp.stubidp.configuration;
 
 import io.dropwizard.configuration.ConfigurationSourceProvider;
 import io.dropwizard.configuration.YamlConfigurationFactory;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.ExpectedException;
-import stubidp.stubidp.configuration.StubIdpConfiguration;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -13,28 +11,26 @@ import java.io.InputStream;
 
 import static io.dropwizard.jackson.Jackson.newObjectMapper;
 import static io.dropwizard.jersey.validation.Validators.newValidator;
-import static org.hamcrest.core.StringContains.containsString;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class StubIdpConfigurationTest {
 
-    @Rule
-    public final ExpectedException expectedException = ExpectedException.none();
     private final YamlConfigurationFactory<StubIdpConfiguration> factory = new YamlConfigurationFactory<>(
         StubIdpConfiguration.class, newValidator(), newObjectMapper(), "dw.");
 
     @Test
     public void shouldNotAllowNullValues() throws Exception {
-        expectedException.expectMessage(containsString("assertionLifetime may not be null"));
-        expectedException.expectMessage(containsString("databaseConfiguration may not be null"));
-        expectedException.expectMessage(containsString("europeanIdentity may not be null"));
-        expectedException.expectMessage(containsString("metadata may not be null"));
-        expectedException.expectMessage(containsString("saml may not be null"));
-        expectedException.expectMessage(containsString("serviceInfo may not be null"));
-        expectedException.expectMessage(containsString("signingKeyPairConfiguration may not be null"));
-        expectedException.expectMessage(containsString("stubIdpYmlFileRefresh may not be null"));
-        expectedException.expectMessage(containsString("stubIdpsYmlFileLocation may not be null"));
+        final Exception e = Assertions.assertThrows(Exception.class, () -> factory.build(new StringConfigurationSourceProvider("url: "), ""));
 
-        factory.build(new StringConfigurationSourceProvider("url: "), "");
+        assertThat(e.getMessage()).contains("assertionLifetime must not be null");
+        assertThat(e.getMessage()).contains("databaseConfiguration must not be null");
+        assertThat(e.getMessage()).contains("europeanIdentity must not be null");
+        assertThat(e.getMessage()).contains("metadata must not be null");
+        assertThat(e.getMessage()).contains("saml must not be null");
+        assertThat(e.getMessage()).contains("serviceInfo must not be null");
+        assertThat(e.getMessage()).contains("signingKeyPairConfiguration must not be null");
+        assertThat(e.getMessage()).contains("stubIdpYmlFileRefresh must not be null");
+        assertThat(e.getMessage()).contains("stubIdpsYmlFileLocation must not be null");
     }
 
     class StringConfigurationSourceProvider implements ConfigurationSourceProvider {

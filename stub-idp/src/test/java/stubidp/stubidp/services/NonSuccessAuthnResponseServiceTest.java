@@ -1,14 +1,13 @@
 package stubidp.stubidp.services;
 
-import com.google.common.collect.ImmutableList;
 import org.joda.time.DateTime;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.opensaml.saml.saml2.core.AuthnContextComparisonTypeEnumeration;
 import stubidp.saml.utils.hub.domain.IdaAuthnRequestFromHub;
 import stubidp.stubidp.domain.FraudIndicator;
@@ -23,6 +22,7 @@ import stubidp.stubidp.saml.transformers.OutboundResponseFromIdpTransformerProvi
 import stubidp.utils.rest.common.SessionId;
 
 import java.net.URI;
+import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
 
@@ -31,7 +31,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static stubidp.saml.utils.core.domain.AuthnContext.LEVEL_2;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class NonSuccessAuthnResponseServiceTest {
 
     private final String IDP_NAME = "an idp name";
@@ -58,7 +58,7 @@ public class NonSuccessAuthnResponseServiceTest {
     @Captor
     private ArgumentCaptor<OutboundResponseFromIdp> captor;
 
-    @Before
+    @BeforeEach
     public void createResource() {
         nonSuccessAuthnResponseService = new NonSuccessAuthnResponseService(
                 idpStubsRepository,
@@ -122,7 +122,7 @@ public class NonSuccessAuthnResponseServiceTest {
     @Test
     public void shouldBuildFraudResponse(){
         IdpSession session = new IdpSession(SessionId.createNewSessionId(),
-                IdaAuthnRequestFromHub.createRequestReceivedFromHub(REQUEST_ID, HUB_URI.toString(), ImmutableList.of(LEVEL_2), false, DateTime.now(), AuthnContextComparisonTypeEnumeration.EXACT),
+                IdaAuthnRequestFromHub.createRequestReceivedFromHub(REQUEST_ID, HUB_URI.toString(), List.of(LEVEL_2), false, DateTime.now(), AuthnContextComparisonTypeEnumeration.EXACT),
                 RELAY_STATE, null, null, null, null, null, null);
         nonSuccessAuthnResponseService.generateFraudResponse(IDP_NAME, REQUEST_ID, FraudIndicator.FI01, "ipAddress", session).getResponseString();
 

@@ -3,22 +3,20 @@ package stubidp.stubidp.listeners;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
-import com.google.common.collect.Lists;
 import io.dropwizard.configuration.ConfigurationFactory;
 import io.dropwizard.configuration.ConfigurationSourceProvider;
 import io.dropwizard.configuration.DefaultConfigurationFactoryFactory;
 import io.dropwizard.jackson.Jackson;
 import io.dropwizard.util.Duration;
 import org.apache.commons.io.FileUtils;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Ignore;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
 import stubidp.stubidp.configuration.IdpStubsConfiguration;
 import stubidp.stubidp.configuration.SamlConfigurationImpl;
 import stubidp.stubidp.configuration.StubIdp;
 import stubidp.stubidp.configuration.StubIdpConfiguration;
-import stubidp.stubidp.configuration.UserCredentials;
 import stubidp.stubidp.repositories.AllIdpsUserRepository;
 import stubidp.stubidp.repositories.Idp;
 import stubidp.stubidp.repositories.IdpStubsRepository;
@@ -32,10 +30,10 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.net.URI;
+import java.util.List;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
-import static com.google.common.collect.Lists.newArrayList;
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.apache.commons.io.FileUtils.writeStringToFile;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -57,9 +55,9 @@ public class StubIdpsFileListenerTest {
         }
     }
 
-    @Before
+    @BeforeEach
     public void setup() throws Exception {
-        StubIdp testStubIdp = new TestStubIdp("a", "b", "c", Lists.<UserCredentials>newArrayList());
+        StubIdp testStubIdp = new TestStubIdp("a", "b", "c", List.of());
         createYamlFile(testStubIdp);
         final StubIdpConfiguration stubIdpConfiguration = mock(StubIdpConfiguration.class);
         when(stubIdpConfiguration.getStubIdpsYmlFileLocation()).thenReturn(YML_FILE.getAbsolutePath());
@@ -80,11 +78,11 @@ public class StubIdpsFileListenerTest {
         stubIdpsFileListener.start();
     }
 
-    @Ignore("a race condition is preventing this test from running successfully, consistently")
+    @Disabled("a race condition is preventing this test from running successfully, consistently")
     @Test
     public void verifyIdaStubsRepositoryIsUpdatedOnFileChange() throws Exception {
         initializeSynchronizationWithFileMonitor();
-        StubIdp changedTestStubIdp = new TestStubIdp("e", "f", "g", Lists.<UserCredentials>newArrayList());
+        StubIdp changedTestStubIdp = new TestStubIdp("e", "f", "g", List.of());
         createYamlFile(changedTestStubIdp);
 
         waitForFileToBeReadByMonitor();
@@ -103,14 +101,14 @@ public class StubIdpsFileListenerTest {
     public void verifyIdaStubsRepositoryIsUpdatedEvenIfPreviousFileChangeWasInvalid() throws Exception {
         ensureInvalidStubIdpsConfigWasProcessed();
         initializeSynchronizationWithFileMonitor();
-        StubIdp changedTestStubIdp = new TestStubIdp("m", "n", "o", Lists.<UserCredentials>newArrayList());
+        StubIdp changedTestStubIdp = new TestStubIdp("m", "n", "o", List.of());
         createYamlFile(changedTestStubIdp);
 
         waitForFileToBeReadByMonitor();
         checkIdpDataLoaded(changedTestStubIdp);
     }
 
-    @After
+    @AfterEach
     public void teardown() throws Exception {
         stubIdpsFileListener.stop();
     }
@@ -130,7 +128,7 @@ public class StubIdpsFileListenerTest {
     }
 
     private void createYamlFile(StubIdp testStubIdp) throws IOException, InterruptedException {
-        TestIdpStubsConfiguration testIdpStubsConfiguration = new TestIdpStubsConfiguration(newArrayList(testStubIdp));
+        TestIdpStubsConfiguration testIdpStubsConfiguration = new TestIdpStubsConfiguration(List.of(testStubIdp));
 
         final String yaml = getYamlAsString(testIdpStubsConfiguration);
         writeStringToFile(YML_FILE, yaml, UTF_8);

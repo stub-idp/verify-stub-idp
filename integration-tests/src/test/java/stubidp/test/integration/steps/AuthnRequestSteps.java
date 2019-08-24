@@ -1,15 +1,13 @@
 package stubidp.test.integration.steps;
 
-import com.google.common.base.Optional;
-import com.google.common.collect.ImmutableList;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
-import stubidp.test.integration.support.TestSamlRequestFactory;
-import stubidp.test.integration.support.eidas.EidasAuthnRequestBuilder;
 import stubidp.saml.extensions.IdaConstants;
 import stubidp.stubidp.Urls;
 import stubidp.stubidp.cookies.CookieNames;
+import stubidp.test.integration.support.TestSamlRequestFactory;
+import stubidp.test.integration.support.eidas.EidasAuthnRequestBuilder;
 
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.Entity;
@@ -21,6 +19,7 @@ import javax.ws.rs.core.UriBuilder;
 import java.net.URI;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static stubidp.stubidp.csrf.CSRFCheckProtectionFilter.CSRF_PROTECT_FORM_KEY;
@@ -56,11 +55,11 @@ public class AuthnRequestSteps {
     }
 
     public Cookies userPostsAuthnRequestToStubIdp() {
-        return userPostsAuthnRequestToStubIdp(ImmutableList.of(), Optional.absent(), Optional.absent());
+        return userPostsAuthnRequestToStubIdp(List.of(), Optional.empty(), Optional.empty());
     }
 
     public Cookies userPostsAuthnRequestToStubIdp(String hint) {
-        return userPostsAuthnRequestToStubIdp(ImmutableList.of(hint), Optional.absent(), Optional.absent());
+        return userPostsAuthnRequestToStubIdp(List.of(hint), Optional.empty(), Optional.empty());
     }
 
     public Cookies userPostsAuthnRequestToStubIdp(List<String> hints, Optional<String> language, Optional<Boolean> registration) {
@@ -90,7 +89,7 @@ public class AuthnRequestSteps {
             eidasAuthnRequestBuilder.withRequestedAttribute(IdaConstants.Eidas_Attributes.Gender.NAME);
         }
         String authnRequest = eidasAuthnRequestBuilder.build();
-        Response response = postAuthnRequest(ImmutableList.of(), Optional.absent(), Optional.absent(), authnRequest, Urls.EIDAS_SAML2_SSO_RESOURCE);
+        Response response = postAuthnRequest(List.of(), Optional.empty(), Optional.empty(), authnRequest, Urls.EIDAS_SAML2_SSO_RESOURCE);
 
         assertThat(response.getStatus()).isEqualTo(303);
         assertThat(response.getLocation().getPath()).startsWith(getStubIdpUri(Urls.EIDAS_LOGIN_RESOURCE).getPath());

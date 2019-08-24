@@ -1,22 +1,21 @@
 package stubidp.test.integration.support.eidas;
 
 import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.ImmutableSet;
 import org.opensaml.saml.saml2.core.Assertion;
 import org.opensaml.saml.saml2.core.Attribute;
 import org.opensaml.saml.saml2.core.AttributeStatement;
 import org.slf4j.event.Level;
 import stubidp.saml.extensions.IdaConstants.Eidas_Attributes;
-import stubidp.saml.extensions.extensions.eidas.EidasGender;
-import stubidp.saml.hub.core.errors.SamlTransformationErrorFactory;
 import stubidp.saml.extensions.extensions.eidas.CurrentAddress;
 import stubidp.saml.extensions.extensions.eidas.CurrentFamilyName;
 import stubidp.saml.extensions.extensions.eidas.CurrentGivenName;
 import stubidp.saml.extensions.extensions.eidas.DateOfBirth;
+import stubidp.saml.extensions.extensions.eidas.EidasGender;
 import stubidp.saml.extensions.extensions.eidas.PersonIdentifier;
 import stubidp.saml.extensions.validation.SamlTransformationErrorException;
 import stubidp.saml.extensions.validation.SamlTransformationErrorManager;
 import stubidp.saml.extensions.validation.SamlValidationSpecificationFailure;
+import stubidp.saml.hub.core.errors.SamlTransformationErrorFactory;
 
 import javax.xml.namespace.QName;
 import java.util.List;
@@ -32,7 +31,7 @@ public class EidasAttributeStatementAssertionValidator {
     public EidasAttributeStatementAssertionValidator() {
     }
 
-    private static final Set<String> VALID_EIDAS_ATTRIBUTE_NAMES = ImmutableSet.of(
+    private static final Set<String> VALID_EIDAS_ATTRIBUTE_NAMES = Set.of(
             Eidas_Attributes.FirstName.NAME,
             Eidas_Attributes.FamilyName.NAME,
             Eidas_Attributes.DateOfBirth.NAME,
@@ -41,7 +40,7 @@ public class EidasAttributeStatementAssertionValidator {
             Eidas_Attributes.Gender.NAME
     );
 
-    private static final Set<String> VALID_ATTRIBUTE_NAME_FORMATS = ImmutableSet.of(
+    private static final Set<String> VALID_ATTRIBUTE_NAME_FORMATS = Set.of(
             Attribute.URI_REFERENCE
     );
 
@@ -54,7 +53,7 @@ public class EidasAttributeStatementAssertionValidator {
             .put(Eidas_Attributes.Gender.NAME, EidasGender.TYPE_NAME)
             .build();
 
-    private static final Map<String, String> MANDATORY_ATTRIBUTES = ImmutableMap.of(
+    private static final Map<String, String> MANDATORY_ATTRIBUTES = Map.of(
             Eidas_Attributes.FirstName.NAME, Eidas_Attributes.FirstName.FRIENDLY_NAME,
             Eidas_Attributes.FamilyName.NAME, Eidas_Attributes.FamilyName.FRIENDLY_NAME,
             Eidas_Attributes.DateOfBirth.NAME, Eidas_Attributes.DateOfBirth.FRIENDLY_NAME,

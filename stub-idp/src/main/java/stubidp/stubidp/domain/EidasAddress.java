@@ -2,10 +2,12 @@ package stubidp.stubidp.domain;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import org.glassfish.jersey.internal.util.Base64;
 
 import java.text.MessageFormat;
+import java.util.Base64;
 import java.util.Objects;
+
+import static java.nio.charset.StandardCharsets.UTF_8;
 
 public class EidasAddress {
     private final String poBox;
@@ -78,7 +80,7 @@ public class EidasAddress {
                 getFieldAsSaml(adminunitSecondLine, "AdminunitSecondline") +
                 getFieldAsSaml(postCode, "PostCode");
 
-        return Base64.encodeAsString(addressAsSamlString);
+        return Base64.getEncoder().encodeToString(addressAsSamlString.getBytes(UTF_8));
     }
 
     private String getFieldAsSaml(String value, String samlTag) {

@@ -1,11 +1,12 @@
 package stubidp.stubidp.resources;
 
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.opensaml.core.xml.config.XMLObjectProviderRegistrySupport;
 import org.opensaml.core.xml.io.MarshallingException;
 import org.opensaml.saml.saml2.metadata.EntityDescriptor;
@@ -32,7 +33,7 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class EidasProxyNodeServiceMetadataResourceTest {
 
     private EidasProxyNodeServiceMetadataResource resource;
@@ -52,28 +53,29 @@ public class EidasProxyNodeServiceMetadataResourceTest {
     @Mock
     private CountryMetadataBuilder countryMetadataBuilder;
 
-    @BeforeClass
+    @BeforeAll
     public static void classSetUp() {
         IdaSamlBootstrap.bootstrap();
     }
 
-    @Before
+    @BeforeEach
     public void setUp() throws CertificateEncodingException, MarshallingException, SecurityException, SignatureException, URISyntaxException {
         validCountryUri = new URI(MessageFormat.format(METADATA_URL_PATTERN, VALID_COUNTRY));
         resource = new EidasProxyNodeServiceMetadataResource(idaKeyStore, METADATA_URL_PATTERN, SSO_URL_PATTERN, countryMetadataBuilder);
         entityDescriptor = (EntityDescriptor) XMLObjectProviderRegistrySupport.getBuilderFactory()
           .getBuilder(EntityDescriptor.DEFAULT_ELEMENT_NAME).buildObject(EntityDescriptor.DEFAULT_ELEMENT_NAME, EntityDescriptor.TYPE_NAME);
-        when(idaKeyStore.getSigningCertificate()).thenReturn(signingCertificate);
-        when(countryMetadataBuilder.createEntityDescriptorForProxyNodeService(any(), any(), any(), any())).thenReturn(entityDescriptor);;
     }
 
-    @Test(expected = InvalidEidasSchemeException.class)
+    @Test
     public void getShouldReturnAnErrorWhenIdpIsUnknown() {
-        resource.getMetadata(INVALID_COUNTRY);
+        Assertions.assertThrows(InvalidEidasSchemeException.class, () -> resource.getMetadata(INVALID_COUNTRY));
     }
 
     @Test
     public void getShouldReturnADocumentWhenIdpIsKnown() throws URISyntaxException, SecurityException, CertificateEncodingException, SignatureException, MarshallingException {
+        when(idaKeyStore.getSigningCertificate()).thenReturn(signingCertificate);
+        when(countryMetadataBuilder.createEntityDescriptorForProxyNodeService(any(), any(), any(), any())).thenReturn(entityDescriptor);;
+
         final Response response = resource.getMetadata(VALID_COUNTRY);
 
         URI validCountrySsoUri = new URI(String.format("https://stub.test/eidas/%s/SAML2/SSO", VALID_COUNTRY));

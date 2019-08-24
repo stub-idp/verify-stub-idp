@@ -5,14 +5,13 @@ import org.glassfish.jersey.client.JerseyClientBuilder;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
-import org.junit.Before;
-import org.junit.ClassRule;
-import org.junit.Test;
-import stubidp.test.integration.steps.AuthnRequestSteps;
-import stubidp.test.integration.support.IntegrationTestHelper;
-import stubidp.test.integration.support.StubIdpAppRule;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import stubidp.stubidp.Urls;
 import stubidp.stubidp.cookies.CookieNames;
+import stubidp.test.integration.steps.AuthnRequestSteps;
+import stubidp.test.integration.support.IntegrationTestHelper;
+import stubidp.test.integration.support.StubIdpAppExtension;
 
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.Entity;
@@ -30,16 +29,16 @@ public class LevelOfAssuranceIntegrationTests extends IntegrationTestHelper {
     public static final String DISPLAY_NAME = "Level Of Assurance Identity Service";
 
     private final Client client = JerseyClientBuilder.createClient().property(ClientProperties.FOLLOW_REDIRECTS, false);
+
+    public static final StubIdpAppExtension applicationRule = new StubIdpAppExtension()
+            .withStubIdp(aStubIdp().withId(IDP_NAME).withDisplayName(DISPLAY_NAME).build());
+
     private final AuthnRequestSteps authnRequestSteps = new AuthnRequestSteps(
             client,
             IDP_NAME,
             applicationRule.getLocalPort());
 
-    @ClassRule
-    public static final StubIdpAppRule applicationRule = new StubIdpAppRule()
-            .withStubIdp(aStubIdp().withId(IDP_NAME).withDisplayName(DISPLAY_NAME).build());
-
-    @Before
+    @BeforeEach
     public void refreshMetadata() {
         client.target("http://localhost:"+applicationRule.getAdminPort()+"/tasks/metadata-refresh").request().post(Entity.text(""));
     }

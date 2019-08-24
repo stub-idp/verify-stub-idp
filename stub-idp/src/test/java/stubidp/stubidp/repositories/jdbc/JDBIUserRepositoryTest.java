@@ -6,8 +6,8 @@ import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
 import com.fasterxml.jackson.datatype.joda.JodaModule;
 import org.jdbi.v3.core.Jdbi;
 import org.joda.time.LocalDate;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import stubidp.saml.utils.core.domain.AuthnContext;
 import stubidp.stubidp.builders.IdpUserBuilder;
 import stubidp.stubidp.domain.DatabaseEidasUser;
@@ -28,7 +28,7 @@ public class JDBIUserRepositoryTest {
     private JDBIUserRepository repository;
     private UserMapper userMapper;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         String url = "jdbc:h2:mem:test;MODE=PostgreSQL;DB_CLOSE_DELAY=-1";
         jdbi = Jdbi.create(url);

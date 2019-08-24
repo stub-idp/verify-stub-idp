@@ -1,6 +1,7 @@
 package stubidp.stubidp.locators;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import stubidp.stubidp.saml.locators.AssignableEntityToEncryptForLocator;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -18,7 +19,7 @@ public class AssignableEntityToEncryptForLocatorTest {
         assertThat(assignableEntityToEncryptForLocator.fromRequestId(requestId)).isEqualTo(entityId);
     }
 
-    @Test(expected = IllegalStateException.class)
+    @Test
     public void shouldRemoveEntityIdInMapAgainstRequestId() throws Exception {
         AssignableEntityToEncryptForLocator assignableEntityToEncryptForLocator = new AssignableEntityToEncryptForLocator();
         String requestId = "requestId";
@@ -30,6 +31,6 @@ public class AssignableEntityToEncryptForLocatorTest {
 
         assignableEntityToEncryptForLocator.removeEntityIdForRequestId(requestId);
 
-        assignableEntityToEncryptForLocator.fromRequestId(requestId);
+        Assertions.assertThrows(IllegalStateException.class, () -> assignableEntityToEncryptForLocator.fromRequestId(requestId));
     }
 }

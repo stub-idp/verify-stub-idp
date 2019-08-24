@@ -1,30 +1,34 @@
 package stubidp.test.integration;
 
+import io.dropwizard.testing.junit5.DropwizardExtensionsSupport;
 import net.shibboleth.utilities.java.support.resolver.ResolverException;
 import org.glassfish.jersey.client.ClientProperties;
 import org.glassfish.jersey.client.JerseyClientBuilder;
-import org.junit.Before;
-import org.junit.ClassRule;
-import org.junit.Ignore;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import stubidp.saml.hub.hub.domain.InboundResponseFromIdp;
+import stubidp.stubidp.Urls;
 import stubidp.test.integration.steps.AuthnRequestSteps;
 import stubidp.test.integration.support.IntegrationTestHelper;
 import stubidp.test.integration.support.SamlDecrypter;
-import stubidp.test.integration.support.StubIdpAppRule;
-import stubidp.saml.hub.hub.domain.InboundResponseFromIdp;
+import stubidp.test.integration.support.StubIdpAppExtension;
 
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.UriBuilder;
 import java.io.IOException;
 import java.security.cert.CertificateException;
 
 import static java.util.Optional.empty;
 import static org.assertj.core.api.Assertions.assertThat;
+import static stubidp.stubidp.builders.StubIdpBuilder.aStubIdp;
 import static stubidp.utils.rest.common.HttpHeaders.CACHE_CONTROL_KEY;
 import static stubidp.utils.rest.common.HttpHeaders.PRAGMA_KEY;
-import static stubidp.stubidp.builders.StubIdpBuilder.aStubIdp;
 
+@ExtendWith(DropwizardExtensionsSupport.class)
 public class UserLogsInIntegrationTests extends IntegrationTestHelper {
 
     // Use stub-idp-one as it allows us to use the defaultMetadata in MetadataFactory
@@ -38,11 +42,10 @@ public class UserLogsInIntegrationTests extends IntegrationTestHelper {
             applicationRule.getLocalPort());
     private final SamlDecrypter samlDecrypter = new SamlDecrypter(client, applicationRule.getMetadataPath(), applicationRule.getConfiguration().getHubEntityId(), applicationRule.getLocalPort(), empty());
 
-    @ClassRule
-    public static final StubIdpAppRule applicationRule = new StubIdpAppRule()
+    public static final StubIdpAppExtension applicationRule = new StubIdpAppExtension()
             .withStubIdp(aStubIdp().withId(IDP_NAME).withDisplayName(DISPLAY_NAME).build());
 
-    @Before
+    @BeforeEach
     public void refreshMetadata() {
         client.target("http://localhost:"+applicationRule.getAdminPort()+"/tasks/metadata-refresh").request().post(Entity.text(""));
     }
@@ -55,7 +58,7 @@ public class UserLogsInIntegrationTests extends IntegrationTestHelper {
     }
 
     @Test
-    @Ignore
+    @Disabled
     public void testStaleSessionReaper() throws InterruptedException {
         // set times in StaleSessionReaperConfiguration to 1s, run this test and check the log lines
         for(int i=0;i<10;i++) {
@@ -83,8 +86,8 @@ public class UserLogsInIntegrationTests extends IntegrationTestHelper {
     }
 
     @Test
-    public void fileNotFoundTest() {
-        Response response = client.target(authnRequestSteps.getStubIdpUri("/pathThatDoesNotExist"))
+    public void idpNotFoundTest() {
+        Response response = client.target(authnRequestSteps.getStubIdpUri(UriBuilder.fromPath(Urls.IDP_LOGIN_RESOURCE).build("idp_does_not_exist").toString()))
                 .request()
                 .get();
         assertThat(response.getStatus()).isEqualTo(404);

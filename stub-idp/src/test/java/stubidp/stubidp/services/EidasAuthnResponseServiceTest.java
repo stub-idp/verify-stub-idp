@@ -1,18 +1,16 @@
 package stubidp.stubidp.services;
 
 import org.joda.time.LocalDate;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.opensaml.core.xml.io.MarshallingException;
 import org.opensaml.saml.saml2.core.Attribute;
 import org.opensaml.saml.saml2.core.Response;
 import org.opensaml.saml.saml2.core.StatusCode;
 import org.opensaml.xmlsec.signature.support.SignatureException;
-import stubidp.stubidp.services.EidasAuthnResponseService;
-import stubidp.utils.rest.common.SessionId;
 import stubidp.saml.extensions.IdaConstants;
 import stubidp.saml.extensions.IdaSamlBootstrap;
 import stubidp.saml.extensions.extensions.eidas.CurrentFamilyName;
@@ -25,6 +23,7 @@ import stubidp.stubidp.domain.SamlResponseFromValue;
 import stubidp.stubidp.repositories.EidasSession;
 import stubidp.stubidp.repositories.MetadataRepository;
 import stubidp.stubidp.saml.transformers.EidasResponseTransformerProvider;
+import stubidp.utils.rest.common.SessionId;
 
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -35,7 +34,7 @@ import java.util.Optional;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class EidasAuthnResponseServiceTest {
     private final String SCHEME_ID = "stub-country";
     private final String SAML_RESPONSE_AS_STRING = "some response";
@@ -50,7 +49,7 @@ public class EidasAuthnResponseServiceTest {
 
     private final LocalDate dateOfBirth = new LocalDate(1980, 1, 1);
 
-    @Before
+    @BeforeEach
     public void setUp() {
         IdaSamlBootstrap.bootstrap();
         service = new EidasAuthnResponseService(

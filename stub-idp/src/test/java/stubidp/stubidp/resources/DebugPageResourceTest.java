@@ -1,10 +1,10 @@
 package stubidp.stubidp.resources;
 
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 import stubidp.saml.utils.hub.domain.IdaAuthnRequestFromHub;
 import stubidp.stubidp.repositories.Idp;
 import stubidp.stubidp.repositories.IdpSession;
@@ -21,7 +21,7 @@ import java.util.UUID;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class DebugPageResourceTest {
 
     private final String IDP_NAME = "an idp name";
@@ -38,8 +38,7 @@ public class DebugPageResourceTest {
     @Mock
     private IdaAuthnRequestFromHub idaAuthnRequestFromHub;
 
-
-    @Before
+    @BeforeEach
     public void createResource() {
         resource = new DebugPageResource(
                 idpStubsRepository,

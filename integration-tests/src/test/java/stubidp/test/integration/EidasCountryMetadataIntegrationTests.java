@@ -1,15 +1,16 @@
 package stubidp.test.integration;
 
+import io.dropwizard.testing.junit5.DropwizardExtensionsSupport;
 import org.glassfish.jersey.client.ClientProperties;
 import org.glassfish.jersey.client.JerseyClientBuilder;
-import org.junit.Before;
-import org.junit.ClassRule;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import stubidp.test.integration.support.IntegrationTestHelper;
-import stubidp.test.integration.support.StubIdpAppRule;
+import stubidp.test.integration.support.StubIdpAppExtension;
 
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.Entity;
@@ -18,20 +19,20 @@ import javax.ws.rs.core.Response;
 import static org.assertj.core.api.Assertions.assertThat;
 import static stubidp.stubidp.builders.StubIdpBuilder.aStubIdp;
 
+@ExtendWith(DropwizardExtensionsSupport.class)
 public class EidasCountryMetadataIntegrationTests extends IntegrationTestHelper {
 
     private static final String COUNTRY_NAME = "country1";
     public static final String DISPLAY_NAME = "User Repository Identity Service";
     private final Client client = JerseyClientBuilder.createClient().property(ClientProperties.FOLLOW_REDIRECTS, false);
 
-    @ClassRule
-    public static final StubIdpAppRule applicationRule = new StubIdpAppRule()
+    public static final StubIdpAppExtension applicationRule = new StubIdpAppExtension()
             .withStubIdp(aStubIdp()
                     .withId(COUNTRY_NAME)
                     .withDisplayName(DISPLAY_NAME)
                     .build());
 
-    @Before
+    @BeforeEach
     public void refreshMetadata() {
         client.target("http://localhost:"+applicationRule.getAdminPort()+"/tasks/connector-metadata-refresh").request().post(Entity.text(""));
     }

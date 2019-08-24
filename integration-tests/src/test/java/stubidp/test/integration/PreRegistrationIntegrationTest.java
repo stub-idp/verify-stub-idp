@@ -1,19 +1,20 @@
 package stubidp.test.integration;
 
 import io.dropwizard.testing.ConfigOverride;
+import io.dropwizard.testing.junit5.DropwizardExtensionsSupport;
 import org.glassfish.jersey.client.ClientProperties;
 import org.glassfish.jersey.client.JerseyClientBuilder;
-import org.junit.Before;
-import org.junit.ClassRule;
-import org.junit.Test;
-import stubidp.test.integration.steps.FormBuilder;
-import stubidp.test.integration.steps.PreRegistrationSteps;
-import stubidp.test.integration.support.IntegrationTestHelper;
-import stubidp.test.integration.support.StubIdpAppRule;
-import stubidp.test.integration.support.TestSamlRequestFactory;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import stubidp.saml.utils.core.domain.AuthnContext;
 import stubidp.stubidp.Urls;
 import stubidp.stubidp.domain.SubmitButtonValue;
+import stubidp.test.integration.steps.FormBuilder;
+import stubidp.test.integration.steps.PreRegistrationSteps;
+import stubidp.test.integration.support.IntegrationTestHelper;
+import stubidp.test.integration.support.StubIdpAppExtension;
+import stubidp.test.integration.support.TestSamlRequestFactory;
 
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.Entity;
@@ -22,7 +23,9 @@ import javax.ws.rs.core.Response;
 import static stubidp.stubidp.builders.StubIdpBuilder.aStubIdp;
 import static stubidp.stubidp.csrf.CSRFCheckProtectionFilter.CSRF_PROTECT_FORM_KEY;
 
+@ExtendWith(DropwizardExtensionsSupport.class)
 public class PreRegistrationIntegrationTest extends IntegrationTestHelper {
+
     private static final String IDP_NAME = "stub-idp-demo-one";
     private static final String DISPLAY_NAME = "Stub Idp One Pre-Register";
     private static final String FIRSTNAME_PARAM = "Jack";
@@ -36,13 +39,12 @@ public class PreRegistrationIntegrationTest extends IntegrationTestHelper {
     private static final String PASSWORD_PARAM = "bar";
     private static final String LEVEL_OF_ASSURANCE_PARAM = AuthnContext.LEVEL_2.name();
 
-    @ClassRule
-    public static final StubIdpAppRule applicationRule = new StubIdpAppRule(ConfigOverride.config("singleIdpJourneyEnabled", "true"))
+    public static final StubIdpAppExtension applicationRule = new StubIdpAppExtension(ConfigOverride.config("singleIdpJourneyEnabled", "true"))
             .withStubIdp(aStubIdp().withId(IDP_NAME).withDisplayName(DISPLAY_NAME).build());
 
     public static Client client = JerseyClientBuilder.createClient().property(ClientProperties.FOLLOW_REDIRECTS, false);
 
-    @Before
+    @BeforeEach
     public void setUp() {
         client.target("http://localhost:" + applicationRule.getAdminPort() + "/tasks/metadata-refresh").request().post(Entity.text(""));
     }

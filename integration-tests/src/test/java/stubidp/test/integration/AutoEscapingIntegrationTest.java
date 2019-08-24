@@ -1,15 +1,16 @@
 package stubidp.test.integration;
 
+import io.dropwizard.testing.junit5.DropwizardExtensionsSupport;
 import org.glassfish.jersey.client.ClientProperties;
 import org.glassfish.jersey.client.JerseyClientBuilder;
-import org.junit.Before;
-import org.junit.ClassRule;
-import org.junit.Test;
-import stubidp.test.integration.steps.AuthnRequestSteps;
-import stubidp.test.integration.support.IntegrationTestHelper;
-import stubidp.test.integration.support.StubIdpAppRule;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import stubidp.stubidp.Urls;
 import stubidp.stubidp.cookies.CookieNames;
+import stubidp.test.integration.steps.AuthnRequestSteps;
+import stubidp.test.integration.support.IntegrationTestHelper;
+import stubidp.test.integration.support.StubIdpAppExtension;
 
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.Entity;
@@ -20,6 +21,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static stubidp.stubidp.Urls.UNKNOWN_HINTS_PARAM;
 import static stubidp.stubidp.builders.StubIdpBuilder.aStubIdp;
 
+@ExtendWith(DropwizardExtensionsSupport.class)
 public class AutoEscapingIntegrationTest extends IntegrationTestHelper {
 
     private static final String IDP_NAME = "auto-escaping-idp";
@@ -31,11 +33,10 @@ public class AutoEscapingIntegrationTest extends IntegrationTestHelper {
             IDP_NAME,
             applicationRule.getLocalPort());
 
-    @ClassRule
-    public static final StubIdpAppRule applicationRule = new StubIdpAppRule()
+    public static final StubIdpAppExtension applicationRule = new StubIdpAppExtension()
             .withStubIdp(aStubIdp().withId(IDP_NAME).withDisplayName(DISPLAY_NAME).build());
 
-    @Before
+    @BeforeEach
     public void before() {
         client.target("http://localhost:" + applicationRule.getAdminPort() + "/tasks/metadata-refresh").request().post(Entity.text(""));
     }

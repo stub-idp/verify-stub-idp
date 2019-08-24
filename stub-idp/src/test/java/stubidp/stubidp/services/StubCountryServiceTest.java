@@ -1,13 +1,12 @@
 package stubidp.stubidp.services;
 
 import org.joda.time.LocalDate;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
-import stubidp.stubidp.services.StubCountryService;
-import stubidp.utils.rest.common.SessionId;
+import org.mockito.junit.jupiter.MockitoExtension;
 import stubidp.saml.utils.core.domain.AuthnContext;
 import stubidp.stubidp.domain.DatabaseEidasUser;
 import stubidp.stubidp.domain.EidasAuthnRequest;
@@ -22,6 +21,7 @@ import stubidp.stubidp.repositories.EidasSession;
 import stubidp.stubidp.repositories.EidasSessionRepository;
 import stubidp.stubidp.repositories.StubCountry;
 import stubidp.stubidp.repositories.StubCountryRepository;
+import stubidp.utils.rest.common.SessionId;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -35,7 +35,7 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class StubCountryServiceTest {
 
     private final String RELAY_STATE = "relayState";
@@ -61,7 +61,7 @@ public class StubCountryServiceTest {
     @Mock
     private StubCountry stubCountry;
 
-    @Before
+    @BeforeEach
     public void setUp(){
         when(stubCountryRepository.getStubCountryWithFriendlyId(EIDAS_SCHEME)).thenReturn(stubCountry);
         stubCountryService = new StubCountryService(stubCountryRepository, sessionRepository);
@@ -79,12 +79,12 @@ public class StubCountryServiceTest {
         assertThat(session.getEidasUser().isPresent()).isTrue();
     }
 
-    @Test(expected = InvalidUsernameOrPasswordException.class)
+    @Test
     public void shouldThrowExceptionWhenUserIsNotPresent() throws InvalidUsernameOrPasswordException, InvalidSessionIdException {
         user = Optional.empty();
         when(stubCountry.getUser(USERNAME, PASSWORD)).thenReturn(user);
 
-        stubCountryService.attachStubCountryToSession(EIDAS_SCHEME, USERNAME, PASSWORD, session);
+        Assertions.assertThrows(InvalidUsernameOrPasswordException.class, () -> stubCountryService.attachStubCountryToSession(EIDAS_SCHEME, USERNAME, PASSWORD, session));
     }
 
     @Test

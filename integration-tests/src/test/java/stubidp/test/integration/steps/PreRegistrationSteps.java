@@ -4,7 +4,7 @@ import com.google.common.collect.ImmutableMap;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
-import stubidp.test.integration.support.StubIdpAppRule;
+import stubidp.test.integration.support.StubIdpAppExtension;
 import stubidp.stubidp.Urls;
 
 import javax.ws.rs.client.Client;
@@ -28,13 +28,13 @@ public class PreRegistrationSteps {
     private Cookies cookies;
     private String csrfToken;
     private Client client;
-    private StubIdpAppRule applicationRule;
+    private StubIdpAppExtension applicationRule;
     private String responseEntity;
 
     private static final String IDP_NAME = "stub-idp-demo-one";
     private static final String DISPLAY_NAME = "Stub Idp One Pre-Register";
 
-    public PreRegistrationSteps(Client client, StubIdpAppRule applicationRule) {
+    public PreRegistrationSteps(Client client, StubIdpAppExtension applicationRule) {
         this.client = client;
         this.applicationRule = applicationRule;
         this.cookies = new Cookies();

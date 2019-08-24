@@ -1,22 +1,12 @@
 package stubidp.stubidp.builders;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-
-import java.net.URI;
-import java.security.cert.CertificateEncodingException;
-import java.util.Optional;
-
 import org.joda.time.DateTime;
 import org.joda.time.Period;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.opensaml.core.xml.io.MarshallingException;
 import org.opensaml.saml.common.xml.SAMLConstants;
 import org.opensaml.saml.saml2.metadata.ArtifactResolutionService;
@@ -30,18 +20,26 @@ import org.opensaml.security.credential.UsageType;
 import org.opensaml.xmlsec.signature.X509Certificate;
 import org.opensaml.xmlsec.signature.support.SignatureException;
 import org.w3c.dom.Document;
-
-import stubidp.stubidp.builders.CountryMetadataBuilder;
-import stubidp.stubidp.builders.CountryMetadataSigningHelper;
-import stubidp.utils.security.security.X509CertificateFactory;
 import stubidp.saml.extensions.IdaSamlBootstrap;
-import stubidp.test.devpki.TestCertificateStrings;
 import stubidp.saml.serializers.serializers.XmlObjectToElementTransformer;
+import stubidp.stubidp.OpenSAMLRunner;
+import stubidp.test.devpki.TestCertificateStrings;
+import stubidp.utils.security.security.X509CertificateFactory;
 
-@RunWith(MockitoJUnitRunner.class)
-public class CountryMetadataBuilderTest {
+import java.net.URI;
+import java.security.cert.CertificateEncodingException;
+import java.util.Optional;
 
-    @Before
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
+@ExtendWith(MockitoExtension.class)
+public class CountryMetadataBuilderTest extends OpenSAMLRunner {
+
+    @BeforeEach
     public void setup() {
         IdaSamlBootstrap.bootstrap();
     }

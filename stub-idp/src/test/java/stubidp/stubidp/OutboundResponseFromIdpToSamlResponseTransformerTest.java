@@ -1,16 +1,15 @@
 package stubidp.stubidp;
 
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.opensaml.saml.saml2.core.Response;
+import stubidp.saml.stubidp.stub.transformers.outbound.IdentityProviderAssertionToAssertionTransformer;
+import stubidp.saml.stubidp.stub.transformers.outbound.IdentityProviderAuthnStatementToAuthnStatementTransformer;
 import stubidp.saml.utils.core.OpenSamlXmlObjectFactory;
 import stubidp.saml.utils.core.domain.IdentityProviderAssertion;
 import stubidp.saml.utils.core.test.builders.MatchingDatasetBuilder;
 import stubidp.saml.utils.core.transformers.outbound.OutboundAssertionToSubjectTransformer;
 import stubidp.saml.utils.hub.factories.AttributeFactory_1_1;
-import stubidp.saml.stubidp.stub.transformers.outbound.IdentityProviderAssertionToAssertionTransformer;
-import stubidp.saml.stubidp.stub.transformers.outbound.IdentityProviderAuthnStatementToAuthnStatementTransformer;
 import stubidp.stubidp.domain.IdpIdaStatusMarshaller;
 import stubidp.stubidp.domain.OutboundResponseFromIdp;
 import stubidp.stubidp.saml.transformers.OutboundResponseFromIdpToSamlResponseTransformer;
@@ -18,13 +17,12 @@ import stubidp.stubidp.saml.transformers.OutboundResponseFromIdpToSamlResponseTr
 import static org.assertj.core.api.Assertions.assertThat;
 import static stubidp.saml.stubidp.test.builders.IdentityProviderAssertionBuilder.anIdentityProviderAssertion;
 
-@RunWith(OpenSAMLRunner.class)
-public class OutboundResponseFromIdpToSamlResponseTransformerTest {
+public class OutboundResponseFromIdpToSamlResponseTransformerTest extends OpenSAMLRunner {
 
     private OpenSamlXmlObjectFactory openSamlXmlObjectFactory = new OpenSamlXmlObjectFactory();
     private OutboundResponseFromIdpToSamlResponseTransformer transformer;
 
-    @Before
+    @BeforeEach
     public void setup() {
         IdpIdaStatusMarshaller statusTransformer = new IdpIdaStatusMarshaller(openSamlXmlObjectFactory);
         OutboundAssertionToSubjectTransformer outboundAssertionToSubjectTransformer = new OutboundAssertionToSubjectTransformer(openSamlXmlObjectFactory);

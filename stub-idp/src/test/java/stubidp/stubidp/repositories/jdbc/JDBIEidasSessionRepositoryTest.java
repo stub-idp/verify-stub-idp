@@ -3,10 +3,8 @@ package stubidp.stubidp.repositories.jdbc;
 import org.jdbi.v3.core.Jdbi;
 import org.joda.time.DateTimeZone;
 import org.joda.time.LocalDate;
-import org.junit.Before;
-import org.junit.Test;
-import stubidp.stubidp.repositories.jdbc.JDBIEidasSessionRepository;
-import stubidp.utils.rest.common.SessionId;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import stubidp.saml.utils.core.domain.Gender;
 import stubidp.stubidp.domain.EidasAddress;
 import stubidp.stubidp.domain.EidasAuthnRequest;
@@ -15,6 +13,7 @@ import stubidp.stubidp.domain.IdpHint;
 import stubidp.stubidp.domain.IdpLanguageHint;
 import stubidp.stubidp.repositories.EidasSession;
 import stubidp.stubidp.repositories.jdbc.migrations.DatabaseMigrationRunner;
+import stubidp.utils.rest.common.SessionId;
 
 import java.util.Arrays;
 import java.util.Optional;
@@ -22,11 +21,12 @@ import java.util.Optional;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class JDBIEidasSessionRepositoryTest {
+
 	private Jdbi jdbi;
 	private JDBIEidasSessionRepository repository;
 	private final String DATABASE_URL = "jdbc:h2:mem:test;MODE=PostgreSQL;DB_CLOSE_DELAY=-1";
 
-	@Before
+	@BeforeEach
 	public void setUp() {
 		new DatabaseMigrationRunner().runMigration(DATABASE_URL);
 

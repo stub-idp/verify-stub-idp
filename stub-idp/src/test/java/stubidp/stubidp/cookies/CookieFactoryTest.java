@@ -1,10 +1,10 @@
 package stubidp.stubidp.cookies;
 
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 import stubidp.utils.rest.common.SessionId;
 import stubidp.utils.security.configuration.SecureCookieConfiguration;
 import stubidp.utils.security.security.HmacDigest;
@@ -15,7 +15,7 @@ import java.util.UUID;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class CookieFactoryTest {
 
     private final int SESSION_COOKIE_MAX_AGE = -1;
@@ -29,7 +29,7 @@ public class CookieFactoryTest {
 
     CookieFactory cookieFactory;
 
-    @Before
+    @BeforeEach
     public void setup() {
         cookieFactory = new CookieFactory(hmacDigest, secureCookieConfiguration);
         when(secureCookieConfiguration.isSecure()).thenReturn(IS_SECURE);

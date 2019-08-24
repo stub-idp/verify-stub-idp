@@ -1,8 +1,7 @@
 package stubidp.stubidp.services;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.mindrot.jbcrypt.BCrypt;
-import stubidp.stubidp.services.GeneratePasswordService;
 
 import static org.assertj.core.api.Assertions.assertThat;
 

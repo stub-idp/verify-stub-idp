@@ -1,12 +1,11 @@
 package stubidp.stubidp.resources;
 
-import com.google.common.collect.ImmutableList;
 import org.joda.time.LocalDate;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 import stubidp.saml.utils.core.domain.AddressFactory;
 import stubidp.saml.utils.core.domain.AuthnContext;
 import stubidp.saml.utils.core.domain.Gender;
@@ -27,13 +26,14 @@ import stubidp.utils.rest.common.SessionId;
 
 import javax.ws.rs.core.Response;
 import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class ConsentResourceTest {
 
     private static final String RELAY_STATE = "relay";
@@ -51,7 +51,7 @@ public class ConsentResourceTest {
 
     private ConsentResource consentResource;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         consentResource = new ConsentResource(idpStubsRepository, sessionRepository, successAuthnResponseService, nonSuccessAuthnResponseService, new SamlResponseRedirectViewFactory());
     }
@@ -84,7 +84,7 @@ public class ConsentResourceTest {
         session.setIdpUser(newUser(AuthnContext.LEVEL_1));
         when(sessionRepository.get(idpSessionId)).thenReturn(Optional.ofNullable(session));
 
-        when(idaAuthnRequestFromHub.getLevelsOfAssurance()).thenReturn(ImmutableList.of(AuthnContext.LEVEL_1, AuthnContext.LEVEL_2));
+        when(idaAuthnRequestFromHub.getLevelsOfAssurance()).thenReturn(List.of(AuthnContext.LEVEL_1, AuthnContext.LEVEL_2));
         when(idpStubsRepository.getIdpWithFriendlyId(idpName)).thenReturn(idp);
 
         final Response response = consentResource.get(idpName, idpSessionId);

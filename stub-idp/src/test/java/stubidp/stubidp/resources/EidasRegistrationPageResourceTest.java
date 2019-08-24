@@ -1,10 +1,10 @@
 package stubidp.stubidp.resources;
 
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 import stubidp.stubidp.domain.EidasAuthnRequest;
 import stubidp.stubidp.domain.EidasScheme;
 import stubidp.stubidp.domain.SamlResponseFromValue;
@@ -36,7 +36,7 @@ import static stubidp.saml.utils.core.domain.AuthnContext.LEVEL_2;
 import static stubidp.stubidp.domain.SubmitButtonValue.Cancel;
 import static stubidp.stubidp.domain.SubmitButtonValue.Register;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class EidasRegistrationPageResourceTest {
 
     private final String STUB_COUNTRY = "stub-country";
@@ -58,7 +58,7 @@ public class EidasRegistrationPageResourceTest {
     @Mock
     private EidasAuthnRequest eidasAuthnRequest;
 
-    @Before
+    @BeforeEach
     public void createResource() {
         resource = new EidasRegistrationPageResource(
                 stubCountryRepository,
@@ -70,12 +70,12 @@ public class EidasRegistrationPageResourceTest {
 
         eidasSession = new EidasSession(SESSION_ID, eidasAuthnRequest, RELAY_STATE, null, null, null, null);
         when(sessionRepository.get(SESSION_ID)).thenReturn(Optional.ofNullable(eidasSession));
-        when(sessionRepository.deleteAndGet(SESSION_ID)).thenReturn(Optional.ofNullable(new EidasSession(SESSION_ID, eidasAuthnRequest, RELAY_STATE, null, null, null, null)));
         when(eidasAuthnRequest.getRequestId()).thenReturn(SAML_REQUEST_ID);
     }
 
     @Test
     public void shouldHaveStatusAuthnCancelledResponseWhenUserCancels(){
+        when(sessionRepository.deleteAndGet(SESSION_ID)).thenReturn(Optional.ofNullable(new EidasSession(SESSION_ID, eidasAuthnRequest, RELAY_STATE, null, null, null, null)));
         when(nonSuccessAuthnResponseService.generateAuthnCancel(anyString(), anyString(), eq(RELAY_STATE))).thenReturn(new SamlResponseFromValue<String>("saml", Function.identity(), RELAY_STATE, URI.create("uri")));
 
         resource.post(STUB_COUNTRY, null, null, null, null, null, null, null, null, Cancel, SESSION_ID);

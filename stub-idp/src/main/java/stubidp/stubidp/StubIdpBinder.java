@@ -1,14 +1,12 @@
 package stubidp.stubidp;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.common.collect.ImmutableMultimap;
 import io.dropwizard.configuration.ConfigurationFactory;
 import io.dropwizard.configuration.DefaultConfigurationFactoryFactory;
 import io.dropwizard.jackson.Jackson;
 import io.dropwizard.servlets.tasks.Task;
 import io.dropwizard.setup.Environment;
-import org.glassfish.hk2.api.TypeLiteral;
-import org.glassfish.hk2.utilities.binding.AbstractBinder;
+import org.glassfish.jersey.internal.inject.AbstractBinder;
 import org.jdbi.v3.core.Jdbi;
 import org.joda.time.Period;
 import org.joda.time.ReadablePeriod;
@@ -89,6 +87,7 @@ import stubidp.utils.security.security.X509CertificateFactory;
 
 import javax.inject.Singleton;
 import javax.ws.rs.client.Client;
+import javax.ws.rs.core.GenericType;
 import java.io.PrintWriter;
 import java.security.KeyPair;
 import java.security.KeyStore;
@@ -96,6 +95,8 @@ import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.security.cert.X509Certificate;
 import java.util.Collections;
+import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Function;
@@ -175,8 +176,8 @@ public class StubIdpBinder extends AbstractBinder {
         final DigestSHA256 digestAlgorithm = new DigestSHA256();
         bind(digestAlgorithm).to(DigestAlgorithm.class);
         final StubTransformersFactory stubTransformersFactory = new StubTransformersFactory();
-        bind(stubTransformersFactory.getStringToAuthnRequest()).to(new TypeLiteral<Function<String, AuthnRequest>>() {});
-        bind(stubTransformersFactory.getStringToIdaAuthnRequestFromHub(signingKeyStore)).to(new TypeLiteral<Function<String, IdaAuthnRequestFromHub>>() {});
+        bind(stubTransformersFactory.getStringToAuthnRequest()).to(new GenericType<Function<String, AuthnRequest>>() {});
+        bind(stubTransformersFactory.getStringToIdaAuthnRequestFromHub(signingKeyStore)).to(new GenericType<Function<String, IdaAuthnRequestFromHub>>() {});
         bind(new OutboundResponseFromIdpTransformerProvider(hubEncryptionKeyStore,
                     idpSigningKeyStore, entityToEncryptForLocator,
                     Optional.ofNullable(stubIdpConfiguration.getSigningKeyPairConfiguration().getCert()),
@@ -231,17 +232,17 @@ public class StubIdpBinder extends AbstractBinder {
         if (stubIdpConfiguration.getEuropeanIdentityConfiguration().isEnabled()) {
             final MetadataResolver metadataResolver = new DropwizardMetadataResolverFactory().createMetadataResolver(environment, stubIdpConfiguration.getEuropeanIdentityConfiguration().getMetadata());
             registerMetadataHealthcheckAndRefresh(environment, metadataResolver, stubIdpConfiguration.getEuropeanIdentityConfiguration().getMetadata(), "connector-metadata");
-            bind(Optional.of(metadataResolver)).named(HUB_CONNECTOR_METADATA_RESOLVER).to(new TypeLiteral<Optional<MetadataResolver>>() {});
+            bind(Optional.of(metadataResolver)).named(HUB_CONNECTOR_METADATA_RESOLVER).to(new GenericType<Optional<MetadataResolver>>() {});
             eidasMetadataRepository = Optional.of(new MetadataRepository(metadataResolver, hubConnectorEntityId));
-            bind(eidasMetadataRepository).named(HUB_CONNECTOR_METADATA_REPOSITORY).to(new TypeLiteral<Optional<MetadataRepository>>() {});
+            bind(eidasMetadataRepository).named(HUB_CONNECTOR_METADATA_REPOSITORY).to(new GenericType<Optional<MetadataRepository>>() {});
             eidasHubEncryptionKeyStore = Optional.of(new HubEncryptionKeyStore(eidasMetadataRepository.get(), publicKeyFactory));
-            bind(eidasHubEncryptionKeyStore).named(HUB_CONNECTOR_ENCRYPTION_KEY_STORE).to(new TypeLiteral<Optional<EncryptionKeyStore>>() {});
+            bind(eidasHubEncryptionKeyStore).named(HUB_CONNECTOR_ENCRYPTION_KEY_STORE).to(new GenericType<Optional<EncryptionKeyStore>>() {});
         } else {
-            bind(Optional.empty()).named(HUB_CONNECTOR_METADATA_RESOLVER).to(new TypeLiteral<Optional<MetadataResolver>>() {});
+            bind(Optional.empty()).named(HUB_CONNECTOR_METADATA_RESOLVER).to(new GenericType<Optional<MetadataResolver>>() {});
             eidasMetadataRepository = Optional.empty();
-            bind(eidasMetadataRepository).named(HUB_CONNECTOR_METADATA_REPOSITORY).to(new TypeLiteral<Optional<MetadataRepository>>() {});
+            bind(eidasMetadataRepository).named(HUB_CONNECTOR_METADATA_REPOSITORY).to(new GenericType<Optional<MetadataRepository>>() {});
             eidasHubEncryptionKeyStore = Optional.empty();
-            bind(eidasHubEncryptionKeyStore).named(HUB_CONNECTOR_ENCRYPTION_KEY_STORE).to(new TypeLiteral<Optional<EncryptionKeyStore>>() {});
+            bind(eidasHubEncryptionKeyStore).named(HUB_CONNECTOR_ENCRYPTION_KEY_STORE).to(new GenericType<Optional<EncryptionKeyStore>>() {});
         }
 
         final CoreTransformersFactory coreTransformersFactory = new CoreTransformersFactory();
@@ -303,7 +304,7 @@ public class StubIdpBinder extends AbstractBinder {
 
         bind(new DefaultConfigurationFactoryFactory<IdpStubsConfiguration>()
                 .create(IdpStubsConfiguration.class, environment.getValidator(), environment.getObjectMapper(), ""))
-                .to(new TypeLiteral<ConfigurationFactory<IdpStubsConfiguration>>() {});
+                .to(new GenericType<ConfigurationFactory<IdpStubsConfiguration>>() {});
 
     }
 
@@ -314,7 +315,7 @@ public class StubIdpBinder extends AbstractBinder {
 
         environment.admin().addTask(new Task(name + "-refresh") {
             @Override
-            public void execute(ImmutableMultimap<String, String> parameters, PrintWriter output) throws Exception {
+            public void execute(Map<String, List<String>> parameters, PrintWriter output) throws Exception {
                 ((AbstractReloadingMetadataResolver) metadataResolver).refresh();
             }
         });

@@ -1,20 +1,21 @@
 package stubidp.test.integration;
 
+import io.dropwizard.testing.junit5.DropwizardExtensionsSupport;
 import org.glassfish.jersey.client.ClientProperties;
 import org.glassfish.jersey.client.JerseyClientBuilder;
-import org.junit.Before;
-import org.junit.ClassRule;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.opensaml.saml.saml2.core.Attribute;
 import org.opensaml.saml.saml2.core.StatusCode;
-import stubidp.test.integration.steps.AuthnRequestSteps;
-import stubidp.test.integration.support.IntegrationTestHelper;
-import stubidp.test.integration.support.SamlDecrypter;
-import stubidp.test.integration.support.StubIdpAppRule;
-import stubidp.test.integration.support.eidas.InboundResponseFromCountry;
 import stubidp.saml.extensions.IdaConstants;
 import stubidp.saml.hub.hub.domain.LevelOfAssurance;
 import stubidp.stubidp.domain.EidasScheme;
+import stubidp.test.integration.steps.AuthnRequestSteps;
+import stubidp.test.integration.support.IntegrationTestHelper;
+import stubidp.test.integration.support.SamlDecrypter;
+import stubidp.test.integration.support.StubIdpAppExtension;
+import stubidp.test.integration.support.eidas.InboundResponseFromCountry;
 
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.Entity;
@@ -24,6 +25,7 @@ import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+@ExtendWith(DropwizardExtensionsSupport.class)
 public class EidasUserLogsInIntegrationTests extends IntegrationTestHelper {
 
     private final Client client = JerseyClientBuilder.createClient().property(ClientProperties.FOLLOW_REDIRECTS, false);
@@ -34,10 +36,9 @@ public class EidasUserLogsInIntegrationTests extends IntegrationTestHelper {
             applicationRule.getLocalPort());
     private final SamlDecrypter samlDecrypter = new SamlDecrypter(client, applicationRule.getMetadataPath(), applicationRule.getConfiguration().getHubEntityId(), applicationRule.getLocalPort(), Optional.ofNullable(EIDAS_SCHEME_NAME));
 
-    @ClassRule
-    public static final StubIdpAppRule applicationRule = new StubIdpAppRule();
+    public static final StubIdpAppExtension applicationRule = new StubIdpAppExtension();
 
-    @Before
+    @BeforeEach
     public void refreshMetadata() {
         client.target("http://localhost:"+applicationRule.getAdminPort()+"/tasks/connector-metadata-refresh").request().post(Entity.text(""));
     }

@@ -1,10 +1,10 @@
 package stubidp.stubidp.resources;
 
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 import stubidp.stubidp.configuration.SingleIdpConfiguration;
 import stubidp.stubidp.domain.Service;
 import stubidp.stubidp.exceptions.FeatureNotEnabledException;
@@ -27,7 +27,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 import static org.mockito.Mockito.when;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class SingleIdpPromptResourceTest {
 
     private final URI verifySubmissionUri = URI.create("http://localhost/initiate-single-idp-journey");
@@ -55,12 +55,9 @@ public class SingleIdpPromptResourceTest {
     private final String idpName = "idpName";
     private final Idp idp = new Idp(idpName, "Test Idp", "test-idp-asset-id", true, TestEntityIds.STUB_IDP_ONE, null);
 
-    @Before
+    @BeforeEach
     public void setUp() {
         singleIdpStartPromptPageResource = new SingleIdpStartPromptPageResource(idpStubsRepository, serviceListService, singleIdpConfiguration, idpSessionRepository);
-        when(singleIdpConfiguration.isEnabled()).thenReturn(true);
-        when(singleIdpConfiguration.getVerifySubmissionUri()).thenReturn(verifySubmissionUri);
-        when(idpStubsRepository.getIdpWithFriendlyId(idpName)).thenReturn(idp);
     }
 
     @Test
@@ -71,10 +68,11 @@ public class SingleIdpPromptResourceTest {
             .isThrownBy(()-> singleIdpStartPromptPageResource.get(idpName, Optional.empty(),Optional.empty(), null));
     }
 
-
     @Test
     public void shouldReturnPageViewWithEmptyListIfHubReturnsNoServices() throws FeatureNotEnabledException {
-
+        when(singleIdpConfiguration.isEnabled()).thenReturn(true);
+        when(singleIdpConfiguration.getVerifySubmissionUri()).thenReturn(verifySubmissionUri);
+        when(idpStubsRepository.getIdpWithFriendlyId(idpName)).thenReturn(idp);
         when(serviceListService.getServices()).thenReturn(new ArrayList<>());
 
         Response response = singleIdpStartPromptPageResource.get(idpName, Optional.empty(), Optional.empty(), null);
@@ -88,7 +86,9 @@ public class SingleIdpPromptResourceTest {
 
     @Test
     public void shouldReturnPageViewWithSortedListIfHubReturnsPopulatedListOfServices() throws FeatureNotEnabledException {
-
+        when(singleIdpConfiguration.isEnabled()).thenReturn(true);
+        when(singleIdpConfiguration.getVerifySubmissionUri()).thenReturn(verifySubmissionUri);
+        when(idpStubsRepository.getIdpWithFriendlyId(idpName)).thenReturn(idp);
         when(serviceListService.getServices()).thenReturn(Arrays.asList(service1, service2, service3));
 
         Response response = singleIdpStartPromptPageResource.get(idpName, Optional.empty(), Optional.empty(),null);

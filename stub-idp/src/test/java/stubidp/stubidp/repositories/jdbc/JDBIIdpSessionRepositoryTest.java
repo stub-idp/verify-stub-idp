@@ -5,11 +5,9 @@ import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
 import org.joda.time.Duration;
 import org.joda.time.LocalDate;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.opensaml.saml.saml2.core.AuthnContextComparisonTypeEnumeration;
-import stubidp.stubidp.repositories.jdbc.JDBIIdpSessionRepository;
-import stubidp.utils.rest.common.SessionId;
 import stubidp.saml.utils.core.domain.AuthnContext;
 import stubidp.saml.utils.core.domain.Gender;
 import stubidp.saml.utils.hub.domain.IdaAuthnRequestFromHub;
@@ -17,6 +15,7 @@ import stubidp.stubidp.domain.DatabaseIdpUser;
 import stubidp.stubidp.domain.MatchingDatasetValue;
 import stubidp.stubidp.repositories.IdpSession;
 import stubidp.stubidp.repositories.jdbc.migrations.DatabaseMigrationRunner;
+import stubidp.utils.rest.common.SessionId;
 
 import java.util.Arrays;
 import java.util.Optional;
@@ -24,11 +23,12 @@ import java.util.Optional;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class JDBIIdpSessionRepositoryTest {
+
 	private Jdbi jdbi;
 	private JDBIIdpSessionRepository repository;
 	private final String DATABASE_URL = "jdbc:h2:mem:test;MODE=PostgreSQL;DB_CLOSE_DELAY=-1";
 	
-	@Before
+	@BeforeEach
 	public void setUp() {
 		new DatabaseMigrationRunner().runMigration(DATABASE_URL);
 

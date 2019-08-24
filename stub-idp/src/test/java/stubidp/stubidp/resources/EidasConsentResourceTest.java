@@ -1,11 +1,12 @@
 package stubidp.stubidp.resources;
 
 import org.joda.time.LocalDate;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 import stubidp.stubidp.domain.EidasAuthnRequest;
 import stubidp.stubidp.domain.EidasScheme;
 import stubidp.stubidp.domain.EidasUser;
@@ -28,7 +29,7 @@ import java.util.Optional;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class EidasConsentResourceTest {
 
     private EidasConsentResource resource;
@@ -52,7 +53,7 @@ public class EidasConsentResourceTest {
     @Mock
     private StubCountry stubCountry;
 
-    @Before
+    @BeforeEach
     public void setUp(){
         resource = new EidasConsentResource(sessionRepository, successAuthnResponseService, successAuthnResponseService, samlResponseRedirectViewFactory, stubCountryRepository);
 
@@ -60,12 +61,11 @@ public class EidasConsentResourceTest {
         session = new EidasSession(SESSION_ID, eidasAuthnRequest, null, null, null, null, null);
         EidasUser user = new EidasUser("Jane", Optional.empty(), "Doe", Optional.empty(), "pid", new LocalDate(1990, 1, 2), null, null);
         session.setEidasUser(user);
-        when(sessionRepository.get(SESSION_ID)).thenReturn(Optional.of(session));
-        when(sessionRepository.deleteAndGet(SESSION_ID)).thenReturn(Optional.of(session));
     }
 
     @Test
-    public void getShouldReturnASuccessfulResponseWhenSessionIsValid(){
+    public void getShouldReturnASuccessfulResponseWhenSessionIsValid() {
+        when(sessionRepository.get(SESSION_ID)).thenReturn(Optional.of(session));
         when(stubCountryRepository.getStubCountryWithFriendlyId(EidasScheme.fromString(SCHEME_NAME).get())).thenReturn(stubCountry);
 
         final Response response = resource.get(SCHEME_NAME, SESSION_ID);
@@ -75,6 +75,7 @@ public class EidasConsentResourceTest {
 
     @Test
     public void postShouldReturnASuccessfulResponseWithRsaSha256SigningAlgorithmWhenSessionIsValid() {
+        when(sessionRepository.deleteAndGet(SESSION_ID)).thenReturn(Optional.of(session));
         SamlResponseFromValue<org.opensaml.saml.saml2.core.Response> samlResponse = new SamlResponseFromValue<org.opensaml.saml.saml2.core.Response>(null, (r) -> null, null, null);
         when(successAuthnResponseService.getSuccessResponse(session, SCHEME_NAME)).thenReturn(samlResponse);
         when(samlResponseRedirectViewFactory.sendSamlMessage(samlResponse)).thenReturn(Response.ok().build());
@@ -86,6 +87,7 @@ public class EidasConsentResourceTest {
 
     @Test
     public void postShouldReturnASuccessfulResponseWithRsaSsaPsaSigningAlgorithmWhenSessionIsValid() {
+        when(sessionRepository.deleteAndGet(SESSION_ID)).thenReturn(Optional.of(session));
         SamlResponseFromValue<org.opensaml.saml.saml2.core.Response> samlResponse = new SamlResponseFromValue<org.opensaml.saml.saml2.core.Response>(null, (r) -> null, null, null);
         when(successAuthnResponseService.getSuccessResponse(session, SCHEME_NAME)).thenReturn(samlResponse);
         when(samlResponseRedirectViewFactory.sendSamlMessage(samlResponse)).thenReturn(Response.ok().build());
@@ -95,15 +97,14 @@ public class EidasConsentResourceTest {
         assertThat(response.getStatus()).isEqualTo(Response.Status.OK.getStatusCode());
     }
 
-    @Test(expected = InvalidSigningAlgorithmException.class)
+    @Test
     public void postShouldThrowAnExceptionWhenAnInvalidSigningAlgorithmIsUsed() {
-        resource.consent(SCHEME_NAME, "rsa-sha384","submit", SESSION_ID);
+        Assertions.assertThrows(InvalidSigningAlgorithmException.class, () -> resource.consent(SCHEME_NAME, "rsa-sha384","submit", SESSION_ID));
     }
 
-
-    @Test(expected = GenericStubIdpException.class)
-    public void shouldThrowAGenericStubIdpExceptionWhenSessionIsEmpty(){
-        resource.get(SCHEME_NAME, null);
+    @Test
+    public void shouldThrowAGenericStubIdpExceptionWhenSessionIsEmpty() {
+        Assertions.assertThrows(GenericStubIdpException.class, () -> resource.get(SCHEME_NAME, null));
     }
 
 }

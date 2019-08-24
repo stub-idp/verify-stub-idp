@@ -4,19 +4,19 @@ import certificates.values.CACertificates;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.ImmutableList;
-import stubidp.test.utils.httpstub.HttpStubRule;
 import io.dropwizard.testing.ConfigOverride;
-import io.dropwizard.testing.junit.DropwizardAppRule;
-import stubidp.test.utils.keystore.KeyStoreResource;
-import stubidp.test.utils.keystore.builders.KeyStoreResourceBuilder;
+import io.dropwizard.testing.junit5.DropwizardAppExtension;
 import org.apache.commons.io.FileUtils;
 import org.opensaml.core.config.InitializationService;
-import stubidp.saml.utils.Constants;
 import stubidp.saml.metadata.test.factories.metadata.MetadataFactory;
+import stubidp.saml.utils.Constants;
 import stubidp.stubidp.StubIdpApplication;
 import stubidp.stubidp.configuration.IdpStubsConfiguration;
 import stubidp.stubidp.configuration.StubIdp;
 import stubidp.stubidp.configuration.StubIdpConfiguration;
+import stubidp.test.utils.httpstub.HttpStubRule;
+import stubidp.test.utils.keystore.KeyStoreResource;
+import stubidp.test.utils.keystore.builders.KeyStoreResourceBuilder;
 
 import java.io.File;
 import java.net.URI;
@@ -28,7 +28,7 @@ import static stubidp.test.devpki.TestCertificateStrings.STUB_IDP_PUBLIC_PRIMARY
 import static stubidp.test.devpki.TestCertificateStrings.STUB_IDP_PUBLIC_PRIMARY_PRIVATE_KEY;
 import static stubidp.test.devpki.TestEntityIds.HUB_ENTITY_ID;
 
-public class StubIdpAppRule extends DropwizardAppRule<StubIdpConfiguration> {
+public class StubIdpAppExtension extends DropwizardAppExtension<StubIdpConfiguration> {
 
     private static final String METADATA_PATH = "/uk/gov/ida/saml/metadata/sp";
 
@@ -40,8 +40,8 @@ public class StubIdpAppRule extends DropwizardAppRule<StubIdpConfiguration> {
 
     private static final HttpStubRule fakeFrontend = new HttpStubRule();
 
-    public StubIdpAppRule(ConfigOverride... configOverrides) {
-        super(StubIdpApplication.class, "../configuration/stub-idp.yml", withDefaultOverrides(configOverrides));
+    public StubIdpAppExtension(ConfigOverride... configOverrides) {
+        super(StubIdpApplication.class, "./configuration/stub-idp.yml", withDefaultOverrides(configOverrides));
         try {
             fakeFrontend.register("/get-available-services", 200, "application/json", "[]");
         } catch (JsonProcessingException e) {
@@ -77,7 +77,7 @@ public class StubIdpAppRule extends DropwizardAppRule<StubIdpConfiguration> {
                 .add(ConfigOverride.config("europeanIdentity.signingKeyPairConfiguration.publicKeyConfiguration.type", "x509"))
                 .add(ConfigOverride.config("europeanIdentity.signingKeyPairConfiguration.publicKeyConfiguration.cert", STUB_IDP_PUBLIC_PRIMARY_CERT))
                 .add(ConfigOverride.config("database.url", "jdbc:h2:mem:test;MODE=PostgreSQL;DB_CLOSE_DELAY=-1"))
-                .add(ConfigOverride.config("singleIdpJourney.enabled", "true"))
+                .add(ConfigOverride.config("singleIdpJourney.enabled", "false"))
                 .add(ConfigOverride.config("singleIdpJourney.serviceListUri", "http://localhost:"+fakeFrontend.getPort()+"/get-available-services"))
                 .add(configOverrides)
                 .build();
@@ -85,7 +85,7 @@ public class StubIdpAppRule extends DropwizardAppRule<StubIdpConfiguration> {
     }
 
     @Override
-    public void before() {
+    public void before() throws Exception {
         trustStore.create();
 
         IdpStubsConfiguration idpStubsConfiguration = new TestIdpStubsConfiguration(stubIdps);
@@ -105,14 +105,14 @@ public class StubIdpAppRule extends DropwizardAppRule<StubIdpConfiguration> {
     }
 
     @Override
-    protected void after() {
+    public void after() {
         trustStore.delete();
         STUB_IDPS_FILE.delete();
 
         super.after();
     }
 
-    public StubIdpAppRule withStubIdp(StubIdp stubIdp) {
+    public StubIdpAppExtension withStubIdp(StubIdp stubIdp) {
         this.stubIdps.add(stubIdp);
         return this;
     }
@@ -121,7 +121,7 @@ public class StubIdpAppRule extends DropwizardAppRule<StubIdpConfiguration> {
         return URI.create("http://localhost:" + metadataServer.getPort() + METADATA_PATH);
     }
 
-    private class TestIdpStubsConfiguration extends IdpStubsConfiguration {
+    private static class TestIdpStubsConfiguration extends IdpStubsConfiguration {
         public TestIdpStubsConfiguration(List<StubIdp> idps) {
             this.stubIdps = idps;
         }

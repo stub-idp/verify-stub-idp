@@ -1,10 +1,12 @@
 package stubidp.stubidp.domain;
 
 import org.apache.commons.codec.binary.Base64;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.opensaml.saml.saml2.core.Attribute;
 import org.opensaml.saml.saml2.core.AuthnContextClassRef;
 import org.opensaml.saml.saml2.core.AuthnRequest;
@@ -27,11 +29,11 @@ import stubidp.saml.hub.hub.domain.LevelOfAssurance;
 import stubidp.saml.security.IdaKeyStore;
 import stubidp.saml.security.IdaKeyStoreCredentialRetriever;
 import stubidp.saml.security.SignatureWithKeyInfoFactory;
-import stubidp.saml.utils.core.test.OpenSAMLMockitoRunner;
 import stubidp.saml.utils.core.test.builders.AuthnContextClassRefBuilder;
 import stubidp.saml.utils.core.test.builders.AuthnRequestBuilder;
 import stubidp.saml.utils.core.test.builders.IssuerBuilder;
 import stubidp.saml.utils.hub.domain.IdaAuthnRequestFromHub;
+import stubidp.stubidp.OpenSAMLRunner;
 import stubidp.stubidp.exceptions.InvalidEidasAuthnRequestException;
 import stubidp.stubidp.repositories.EidasSessionRepository;
 import stubidp.stubidp.repositories.IdpSessionRepository;
@@ -53,8 +55,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
-@RunWith(OpenSAMLMockitoRunner.class)
-public class EidasAuthnRequestTest {
+@ExtendWith(MockitoExtension.class)
+public class EidasAuthnRequestTest extends OpenSAMLRunner {
 
     private static final String SCHEME_ID = "schemeId";
 
@@ -78,7 +80,7 @@ public class EidasAuthnRequestTest {
     @Mock
     private Function<String, AuthnRequest> stringAuthnRequestTransformer;
 
-    @Before
+    @BeforeEach
     public void setUp(){
         IdaSamlBootstrap.bootstrap();
         authnRequestReceiverService = new AuthnRequestReceiverService(
@@ -120,30 +122,30 @@ public class EidasAuthnRequestTest {
         assertThat(requestedAttribute.isRequired()).isEqualTo(true);
     }
 
-    @Test(expected = InvalidEidasAuthnRequestException.class)
+    @Test
     public void shouldThrowWhenAuthnRequestDoesntContainKeyInfo() {
         when(stringAuthnRequestTransformer.apply(any())).thenReturn(authnRequest);
-        authnRequestReceiverService.handleEidasAuthnRequest(SCHEME_ID, SAML_REQUEST, RELAY_STATE, Optional.empty());
+        Assertions.assertThrows(InvalidEidasAuthnRequestException.class, () -> authnRequestReceiverService.handleEidasAuthnRequest(SCHEME_ID, SAML_REQUEST, RELAY_STATE, Optional.empty()));
     }
 
-    @Test(expected = InvalidEidasAuthnRequestException.class)
+    @Test
     public void shouldThrowWhenAuthnRequestDoesntContainX509Data() {
         authnRequest.setSignature(createSignatureWithKeyInfo());
         authnRequest.getSignature().getKeyInfo().getX509Datas().clear();
 
         when(stringAuthnRequestTransformer.apply(any())).thenReturn(authnRequest);
 
-        authnRequestReceiverService.handleEidasAuthnRequest(SCHEME_ID, SAML_REQUEST, RELAY_STATE, Optional.empty());
+        Assertions.assertThrows(InvalidEidasAuthnRequestException.class, () -> authnRequestReceiverService.handleEidasAuthnRequest(SCHEME_ID, SAML_REQUEST, RELAY_STATE, Optional.empty()));
     }
 
-    @Test(expected = InvalidEidasAuthnRequestException.class)
+    @Test
     public void shouldThrowWhenAuthnRequestDoesntContainAnyX509Certs() {
         authnRequest.setSignature(createSignatureWithKeyInfo());
         authnRequest.getSignature().getKeyInfo().getX509Datas().get(0).getX509Certificates().clear();
 
         when(stringAuthnRequestTransformer.apply(any())).thenReturn(authnRequest);
 
-        authnRequestReceiverService.handleEidasAuthnRequest(SCHEME_ID, SAML_REQUEST, RELAY_STATE, Optional.empty());
+        Assertions.assertThrows(InvalidEidasAuthnRequestException.class, () -> authnRequestReceiverService.handleEidasAuthnRequest(SCHEME_ID, SAML_REQUEST, RELAY_STATE, Optional.empty()));
     }
 
     private Signature createSignatureWithKeyInfo() {

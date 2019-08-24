@@ -1,11 +1,11 @@
 package stubidp.stubidp.resources;
 
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 import stubidp.saml.utils.hub.domain.IdaAuthnRequestFromHub;
 import stubidp.stubidp.cookies.CookieFactory;
 import stubidp.stubidp.domain.DatabaseIdpUser;
@@ -36,7 +36,7 @@ import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class LoginPageResourceTest {
 
     private final String SAML_REQUEST_ID = "samlRequestId";
@@ -67,7 +67,7 @@ public class LoginPageResourceTest {
     @Mock
     private CookieFactory cookieFactory;
 
-    @Before
+    @BeforeEach
     public void createResource() {
         resource = new LoginPageResource(
                 idpStubsRepository,
@@ -76,14 +76,12 @@ public class LoginPageResourceTest {
                 idpUserService,
                 sessionRepository,
                 cookieFactory);
-
-        when(sessionRepository.get(SESSION_ID)).thenReturn(Optional.ofNullable(new IdpSession(SESSION_ID, idaAuthnRequestFromHub, RELAY_STATE, null, null, null, null, null, null)));
-        when(sessionRepository.deleteAndGet(SESSION_ID)).thenReturn(Optional.ofNullable(new IdpSession(SESSION_ID, idaAuthnRequestFromHub, RELAY_STATE, null, null, null, null, null, null)));
-        when(idaAuthnRequestFromHub.getId()).thenReturn(SAML_REQUEST_ID);
     }
 
     @Test
     public void shouldBuildNoAuthnContext(){
+        when(sessionRepository.deleteAndGet(SESSION_ID)).thenReturn(Optional.ofNullable(new IdpSession(SESSION_ID, idaAuthnRequestFromHub, RELAY_STATE, null, null, null, null, null, null)));
+        when(idaAuthnRequestFromHub.getId()).thenReturn(SAML_REQUEST_ID);
         when(nonSuccessAuthnResponseService.generateNoAuthnContext(anyString(), anyString(), eq(RELAY_STATE))).thenReturn(new SamlResponseFromValue<String>("saml", Function.identity(), RELAY_STATE, URI.create("uri")));
 
         resource.postNoAuthnContext(IDP_NAME, SESSION_ID);
@@ -92,7 +90,9 @@ public class LoginPageResourceTest {
     }
 
     @Test
-    public void shouldBuildUpliftFailed(){
+    public void shouldBuildUpliftFailed() {
+        when(sessionRepository.deleteAndGet(SESSION_ID)).thenReturn(Optional.ofNullable(new IdpSession(SESSION_ID, idaAuthnRequestFromHub, RELAY_STATE, null, null, null, null, null, null)));
+        when(idaAuthnRequestFromHub.getId()).thenReturn(SAML_REQUEST_ID);
         when(nonSuccessAuthnResponseService.generateUpliftFailed(anyString(), anyString(), eq(RELAY_STATE))).thenReturn(new SamlResponseFromValue<String>("saml", Function.identity(), RELAY_STATE, URI.create("uri")));
 
         resource.postUpliftFailed(IDP_NAME, SESSION_ID);
@@ -101,7 +101,9 @@ public class LoginPageResourceTest {
     }
 
     @Test
-    public void shouldBuildNoAuthnCancel(){
+    public void shouldBuildNoAuthnCancel() {
+        when(sessionRepository.deleteAndGet(SESSION_ID)).thenReturn(Optional.ofNullable(new IdpSession(SESSION_ID, idaAuthnRequestFromHub, RELAY_STATE, null, null, null, null, null, null)));
+        when(idaAuthnRequestFromHub.getId()).thenReturn(SAML_REQUEST_ID);
         when(nonSuccessAuthnResponseService.generateAuthnCancel(anyString(), anyString(), eq(RELAY_STATE))).thenReturn(new SamlResponseFromValue<String>("saml", Function.identity(), RELAY_STATE, URI.create("uri")));
 
         resource.post(IDP_NAME, USERNAME, PASSWORD, SubmitButtonValue.Cancel, SESSION_ID);
@@ -111,7 +113,7 @@ public class LoginPageResourceTest {
 
     @Test
     public void shouldBuildSuccessResponse() throws InvalidUsernameOrPasswordException, InvalidSessionIdException {
-
+        when(sessionRepository.get(SESSION_ID)).thenReturn(Optional.ofNullable(new IdpSession(SESSION_ID, idaAuthnRequestFromHub, RELAY_STATE, null, null, null, null, null, null)));
         final Response response = resource.post(IDP_NAME, USERNAME, PASSWORD, SubmitButtonValue.SignIn, SESSION_ID);
 
         verify(idpUserService).attachIdpUserToSession(IDP_NAME, USERNAME, PASSWORD, SESSION_ID);
@@ -120,6 +122,8 @@ public class LoginPageResourceTest {
 
     @Test
     public void shouldBuildAuthnPending(){
+        when(sessionRepository.deleteAndGet(SESSION_ID)).thenReturn(Optional.ofNullable(new IdpSession(SESSION_ID, idaAuthnRequestFromHub, RELAY_STATE, null, null, null, null, null, null)));
+        when(idaAuthnRequestFromHub.getId()).thenReturn(SAML_REQUEST_ID);
         when(nonSuccessAuthnResponseService.generateAuthnPending(anyString(), anyString(), eq(RELAY_STATE))).thenReturn(new SamlResponseFromValue<String>("saml", Function.identity(), RELAY_STATE, URI.create("uri")));
 
         resource.postAuthnPending(IDP_NAME, SESSION_ID);
@@ -129,6 +133,7 @@ public class LoginPageResourceTest {
 
     @Test
     public void shouldRedirectToConsentWhenNewlyRegisteredUserReturnsFromHub() {
+        when(sessionRepository.get(SESSION_ID)).thenReturn(Optional.ofNullable(new IdpSession(SESSION_ID, idaAuthnRequestFromHub, RELAY_STATE, null, null, null, null, null, null)));
         Optional<IdpSession> idpSession = Optional.of(Mockito.mock(IdpSession.class));
         when(idpStubsRepository.getIdpWithFriendlyId(IDP_NAME)).thenReturn(idp);
         when(sessionRepository.get(SESSION_ID)).thenReturn(idpSession);
@@ -141,6 +146,7 @@ public class LoginPageResourceTest {
 
     @Test
     public void shouldRedirectLoggedInUserToHomePageIfNoIdaAuthReqFromHub() {
+        when(sessionRepository.get(SESSION_ID)).thenReturn(Optional.ofNullable(new IdpSession(SESSION_ID, idaAuthnRequestFromHub, RELAY_STATE, null, null, null, null, null, null)));
         Optional<IdpSession> idpSession = Optional.of(Mockito.mock(IdpSession.class));
         when(idpStubsRepository.getIdpWithFriendlyId(IDP_NAME)).thenReturn(idp);
         when(sessionRepository.get(SESSION_ID)).thenReturn(idpSession);
@@ -160,6 +166,7 @@ public class LoginPageResourceTest {
 
     @Test
     public void shouldPresentLoginScreenInWhenThereIsNoActivePreRegSession() {
+        when(sessionRepository.get(SESSION_ID)).thenReturn(Optional.ofNullable(new IdpSession(SESSION_ID, idaAuthnRequestFromHub, RELAY_STATE, null, null, null, null, null, null)));
         Optional<IdpSession> preRegSession = Optional.of(Mockito.mock(IdpSession.class));
         when(sessionRepository.get(SESSION_ID)).thenReturn(preRegSession);
         when(preRegSession.get().getIdpUser()).thenReturn(Optional.empty());
@@ -180,6 +187,7 @@ public class LoginPageResourceTest {
 
     @Test
     public void shouldLogUserInAndTakeToConsentPageWhenIdaReqPresent() {
+        when(sessionRepository.get(SESSION_ID)).thenReturn(Optional.ofNullable(new IdpSession(SESSION_ID, idaAuthnRequestFromHub, RELAY_STATE, null, null, null, null, null, null)));
         final Response response = resource.post(IDP_NAME,USERNAME,PASSWORD, SubmitButtonValue.SignIn, SESSION_ID);
         assertThat(response.getStatus()).isEqualTo(Response.Status.SEE_OTHER.getStatusCode());
         assertThat(response.getLocation().toString()).contains("consent");

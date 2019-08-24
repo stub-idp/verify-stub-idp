@@ -1,10 +1,10 @@
 package stubidp.stubidp.resources;
 
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 import stubidp.saml.utils.hub.domain.IdaAuthnRequestFromHub;
 import stubidp.stubidp.cookies.CookieFactory;
 import stubidp.stubidp.domain.SamlResponseFromValue;
@@ -36,7 +36,7 @@ import static stubidp.saml.utils.core.domain.AuthnContext.LEVEL_2;
 import static stubidp.stubidp.domain.SubmitButtonValue.Cancel;
 import static stubidp.stubidp.domain.SubmitButtonValue.Register;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class RegistrationPageResourceTest {
 
     private final String IDP_NAME = "an idp name";
@@ -61,7 +61,7 @@ public class RegistrationPageResourceTest {
     @Mock
     private IdpSession idpSession;
 
-    @Before
+    @BeforeEach
     public void createResource() {
         resource = new RegistrationPageResource(
                 idpStubsRepository,
@@ -72,12 +72,12 @@ public class RegistrationPageResourceTest {
         );
 
         when(idpSessionRepository.get(SESSION_ID)).thenReturn(Optional.ofNullable(new IdpSession(SESSION_ID, idaAuthnRequestFromHub, RELAY_STATE, null, null, null, null, null, null)));
-        when(idpSessionRepository.deleteAndGet(SESSION_ID)).thenReturn(Optional.ofNullable(new IdpSession(SESSION_ID, idaAuthnRequestFromHub, RELAY_STATE, null, null, null, null, null, null)));
-        when(idaAuthnRequestFromHub.getId()).thenReturn(SAML_REQUEST_ID);
     }
 
     @Test
     public void shouldHaveStatusAuthnCancelledResponseWhenUserCancels(){
+        when(idpSessionRepository.deleteAndGet(SESSION_ID)).thenReturn(Optional.ofNullable(new IdpSession(SESSION_ID, idaAuthnRequestFromHub, RELAY_STATE, null, null, null, null, null, null)));
+        when(idaAuthnRequestFromHub.getId()).thenReturn(SAML_REQUEST_ID);
         when(nonSuccessAuthnResponseService.generateAuthnCancel(anyString(), anyString(), eq(RELAY_STATE))).thenReturn(new SamlResponseFromValue<String>("saml", Function.identity(), RELAY_STATE, URI.create("uri")));
 
         resource.post(IDP_NAME, null, null, null, null, null, null, null, null, null, null, Cancel, SESSION_ID);
@@ -87,7 +87,7 @@ public class RegistrationPageResourceTest {
 
     @Test
     public void shouldHaveResponseStatusRedirectWhenUserRegisters() throws InvalidSessionIdException, IncompleteRegistrationException, InvalidDateException, UsernameAlreadyTakenException, InvalidUsernameOrPasswordException {
-
+        when(idaAuthnRequestFromHub.getId()).thenReturn(SAML_REQUEST_ID);
         when(idpSessionRepository.get(SESSION_ID)).thenReturn(Optional.of(idpSession));
         when(idpSession.getIdaAuthnRequestFromHub()).thenReturn(idaAuthnRequestFromHub);
         final Response response = resource.post(IDP_NAME, "bob", "jones", "address line 1", "address line 2", "address town", "address postcode", "2000-01-01", "username", "password", LEVEL_2, Register, SESSION_ID);

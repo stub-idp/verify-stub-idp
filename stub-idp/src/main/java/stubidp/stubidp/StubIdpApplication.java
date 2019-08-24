@@ -93,9 +93,9 @@ public class StubIdpApplication extends Application<StubIdpConfiguration> {
 
         bootstrap.addBundle(new DatabaseMigrationBundle());
 
-        bootstrap.addBundle(new ServiceStatusBundle());
+        bootstrap.addBundle(new ServiceStatusBundle<StubIdpConfiguration>());
         bootstrap.addBundle(new ViewBundle<StubIdpConfiguration>(singletonList(new CSRFViewRenderer())));
-        bootstrap.addBundle(new LoggingBundle());
+        bootstrap.addBundle(new LoggingBundle<StubIdpConfiguration>());
         bootstrap.addBundle(new MonitoringBundle());
 
         bootstrap.addBundle(new AssetsBundle("/assets/", "/assets/"));

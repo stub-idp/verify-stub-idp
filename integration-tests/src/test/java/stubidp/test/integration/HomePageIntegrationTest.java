@@ -1,17 +1,18 @@
 package stubidp.test.integration;
 
 import io.dropwizard.testing.ConfigOverride;
+import io.dropwizard.testing.junit5.DropwizardExtensionsSupport;
 import org.glassfish.jersey.client.ClientProperties;
 import org.glassfish.jersey.client.JerseyClientBuilder;
-import org.junit.Before;
-import org.junit.ClassRule;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import stubidp.stubidp.Urls;
+import stubidp.stubidp.domain.SubmitButtonValue;
 import stubidp.test.integration.steps.FormBuilder;
 import stubidp.test.integration.steps.PreRegistrationSteps;
 import stubidp.test.integration.support.IntegrationTestHelper;
-import stubidp.test.integration.support.StubIdpAppRule;
-import stubidp.stubidp.Urls;
-import stubidp.stubidp.domain.SubmitButtonValue;
+import stubidp.test.integration.support.StubIdpAppExtension;
 
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.Entity;
@@ -20,26 +21,24 @@ import javax.ws.rs.core.Response;
 import static stubidp.stubidp.builders.StubIdpBuilder.aStubIdp;
 import static stubidp.stubidp.csrf.CSRFCheckProtectionFilter.CSRF_PROTECT_FORM_KEY;
 
+@ExtendWith(DropwizardExtensionsSupport.class)
 public class HomePageIntegrationTest extends IntegrationTestHelper {
 
     private static final String IDP_NAME = "stub-idp-demo-one";
     private static final String DISPLAY_NAME = "Stub Idp One Pre-Register";
 
-    @ClassRule
-    public static final StubIdpAppRule applicationRule = new StubIdpAppRule(ConfigOverride.config("singleIdpJourneyEnabled", "true"))
+    public static final StubIdpAppExtension applicationRule = new StubIdpAppExtension(ConfigOverride.config("singleIdpJourneyEnabled", "true"))
             .withStubIdp(aStubIdp().withId(IDP_NAME).withDisplayName(DISPLAY_NAME).build());
 
     public static Client client = JerseyClientBuilder.createClient().property(ClientProperties.FOLLOW_REDIRECTS, false);
 
-    @Before
+    @BeforeEach
     public void setUp() {
         client.target("http://localhost:" + applicationRule.getAdminPort() + "/tasks/metadata-refresh").request().post(Entity.text(""));
     }
 
-
     @Test
     public void shouldShowLinkToLogInWhenNotLoggedIn() {
-
         PreRegistrationSteps loggedOutUserVisitsHomePage = new PreRegistrationSteps(client, applicationRule);
 
         loggedOutUserVisitsHomePage.userSuccessfullyNavigatesTo(Urls.SINGLE_IDP_HOMEPAGE_RESOURCE)
@@ -49,7 +48,6 @@ public class HomePageIntegrationTest extends IntegrationTestHelper {
 
     @Test
     public void shouldWelcomeUserWhenLoggedIn() {
-
        PreRegistrationSteps steps = new PreRegistrationSteps(client, applicationRule);
 
         steps.userSuccessfullyNavigatesTo(Urls.IDP_LOGIN_RESOURCE)
@@ -65,6 +63,5 @@ public class HomePageIntegrationTest extends IntegrationTestHelper {
                 .theRedirectIsFollowed()
                 .theResponseStatusIs(Response.Status.OK)
                 .responseContains("Welcome Jack Bauer", "Logout");
-
     }
 }

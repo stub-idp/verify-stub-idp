@@ -3,10 +3,10 @@ package stubidp.stubidp.views;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import stubidp.stubidp.csrf.CSRFViewRenderer;
 import stubidp.stubidp.csrf.exceptions.CSRFConflictingFormAttributeException;
-import stubidp.stubidp.views.IdpPageView;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -59,10 +59,10 @@ public class CSRFViewRendererTest {
                 .isEqualTo(1));
     }
 
-    @Test(expected = CSRFConflictingFormAttributeException.class)
+    @Test
     public void shouldNotOverwriteExistingValues() throws IOException {
         final ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-        csrfViewRenderer.render(new TestView("testview_withconflictingform.ftl"), Locale.ENGLISH, byteArrayOutputStream);
+        Assertions.assertThrows(CSRFConflictingFormAttributeException.class, () -> csrfViewRenderer.render(new TestView("testview_withconflictingform.ftl"), Locale.ENGLISH, byteArrayOutputStream));
     }
 
     @Test

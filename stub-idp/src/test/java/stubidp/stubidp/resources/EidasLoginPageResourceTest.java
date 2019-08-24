@@ -1,10 +1,11 @@
 package stubidp.stubidp.resources;
 
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 import stubidp.stubidp.Urls;
 import stubidp.stubidp.domain.DatabaseIdpUser;
 import stubidp.stubidp.domain.EidasAuthnRequest;
@@ -33,7 +34,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class EidasLoginPageResourceTest {
 
     private EidasLoginPageResource resource;
@@ -65,21 +66,17 @@ public class EidasLoginPageResourceTest {
     @Mock
     private StubCountryService stubCountryService;
 
-    @Before
+    @BeforeEach
     public void setUp() throws URISyntaxException {
         SamlResponseRedirectViewFactory samlResponseRedirectViewFactory = new SamlResponseRedirectViewFactory();
         resource = new EidasLoginPageResource(sessionRepository, eidasSuccessAuthnResponseService, samlResponseRedirectViewFactory, stubCountryRepository, stubCountryService);
         EidasAuthnRequest eidasAuthnRequest = new EidasAuthnRequest("request-id", "issuer", "destination", "loa", Collections.emptyList());
         session = new EidasSession(SESSION_ID, eidasAuthnRequest, null, null, null, Optional.empty(), Optional.empty());
-        when(sessionRepository.get(SESSION_ID)).thenReturn(Optional.ofNullable(session));
-        when(sessionRepository.deleteAndGet(SESSION_ID)).thenReturn(Optional.ofNullable(session));
-        when(eidasSuccessAuthnResponseService.generateAuthnFailed(session, SCHEME_NAME)).thenReturn(samlResponse);
-        when(samlResponse.getResponseString()).thenReturn("<saml2p:Response/>");
-        when(samlResponse.getHubUrl()).thenReturn(new URI("http://hub.url/"));
     }
 
     @Test
     public void loginShouldRedirectToEidasConsentResource() {
+        when(sessionRepository.get(SESSION_ID)).thenReturn(Optional.ofNullable(session));
         final Response response = resource.post(SCHEME_NAME, USERNAME, PASSWORD, SESSION_ID);
 
         assertThat(response.getLocation()).isEqualTo(UriBuilder.fromPath(Urls.EIDAS_CONSENT_RESOURCE)
@@ -88,7 +85,8 @@ public class EidasLoginPageResourceTest {
     }
 
     @Test
-    public void loginShouldReturnASuccessfulResponse(){
+    public void loginShouldReturnASuccessfulResponse() {
+        when(sessionRepository.get(SESSION_ID)).thenReturn(Optional.ofNullable(session));
         when(stubCountryRepository.getStubCountryWithFriendlyId(EidasScheme.fromString(SCHEME_NAME).get())).thenReturn(stubCountry);
 
         final Response response = resource.get(SCHEME_NAME, Optional.empty(), SESSION_ID);
@@ -97,7 +95,11 @@ public class EidasLoginPageResourceTest {
     }
 
     @Test
-    public void authnFailShouldReturnAnUnsuccessfulResponse(){
+    public void authnFailShouldReturnAnUnsuccessfulResponse() throws URISyntaxException {
+        when(sessionRepository.deleteAndGet(SESSION_ID)).thenReturn(Optional.ofNullable(session));
+        when(eidasSuccessAuthnResponseService.generateAuthnFailed(session, SCHEME_NAME)).thenReturn(samlResponse);
+        when(samlResponse.getResponseString()).thenReturn("<saml2p:Response/>");
+        when(samlResponse.getHubUrl()).thenReturn(new URI("http://hub.url/"));
         final Response response = resource.postAuthnFailure(SCHEME_NAME, SESSION_ID);
 
         verify(eidasSuccessAuthnResponseService).generateAuthnFailed(session, SCHEME_NAME);
@@ -107,8 +109,9 @@ public class EidasLoginPageResourceTest {
         assertThat(returnedPage.getTargetUri().toString()).isEqualTo("http://hub.url/");
     }
 
-    @Test(expected = GenericStubIdpException.class)
-    public void loginShouldThrowAGenericStubIdpExceptionWhenSessionIsEmpty(){
-        resource.get(SCHEME_NAME, Optional.empty(), null);
+    @Test
+    public void loginShouldThrowAGenericStubIdpExceptionWhenSessionIsEmpty() {
+        Assertions.assertThrows(GenericStubIdpException.class,
+                () -> resource.get(SCHEME_NAME, Optional.empty(), null));
     }
 }

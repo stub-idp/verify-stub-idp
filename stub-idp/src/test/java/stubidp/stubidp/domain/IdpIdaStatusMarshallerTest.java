@@ -1,28 +1,23 @@
 package stubidp.stubidp.domain;
 
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.opensaml.saml.saml2.core.Status;
 import org.opensaml.saml.saml2.core.StatusCode;
 import stubidp.saml.extensions.IdaSamlBootstrap;
-import stubidp.saml.utils.core.OpenSamlXmlObjectFactory;
 import stubidp.saml.extensions.extensions.StatusValue;
-import stubidp.stubidp.domain.IdpIdaStatus;
-import stubidp.stubidp.domain.IdpIdaStatusMarshaller;
+import stubidp.saml.utils.core.OpenSamlXmlObjectFactory;
 import stubidp.stubidp.OpenSAMLRunner;
 
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@RunWith(OpenSAMLRunner.class)
-public class IdpIdaStatusMarshallerTest {
+public class IdpIdaStatusMarshallerTest extends OpenSAMLRunner {
 
     private final IdpIdaStatusMarshaller marshaller = new IdpIdaStatusMarshaller(new OpenSamlXmlObjectFactory());
 
-
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
         IdaSamlBootstrap.bootstrap();
     }

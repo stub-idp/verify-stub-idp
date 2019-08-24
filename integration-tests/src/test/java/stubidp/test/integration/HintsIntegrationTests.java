@@ -1,32 +1,33 @@
 package stubidp.test.integration;
 
-import com.google.common.base.Optional;
-import com.google.common.collect.ImmutableList;
+import io.dropwizard.testing.junit5.DropwizardExtensionsSupport;
 import org.glassfish.jersey.client.ClientProperties;
 import org.glassfish.jersey.client.JerseyClientBuilder;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
-import org.junit.Before;
-import org.junit.ClassRule;
-import org.junit.Test;
-import stubidp.test.integration.steps.AuthnRequestSteps;
-import stubidp.test.integration.support.IntegrationTestHelper;
-import stubidp.test.integration.support.StubIdpAppRule;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import stubidp.stubidp.Urls;
 import stubidp.stubidp.cookies.CookieNames;
 import stubidp.stubidp.domain.IdpHint;
+import stubidp.test.integration.steps.AuthnRequestSteps;
+import stubidp.test.integration.support.IntegrationTestHelper;
+import stubidp.test.integration.support.StubIdpAppExtension;
 
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriBuilder;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static stubidp.stubidp.builders.StubIdpBuilder.aStubIdp;
 
+@ExtendWith(DropwizardExtensionsSupport.class)
 public class HintsIntegrationTests extends IntegrationTestHelper {
 
     private static final String IDP_NAME = "stub-idp-one";
@@ -34,13 +35,12 @@ public class HintsIntegrationTests extends IntegrationTestHelper {
 
     private AuthnRequestSteps authnRequestSteps;
 
-    @ClassRule
-    public static final StubIdpAppRule applicationRule = new StubIdpAppRule()
+    public static final StubIdpAppExtension applicationRule = new StubIdpAppExtension()
             .withStubIdp(aStubIdp().withId(IDP_NAME).withDisplayName(DISPLAY_NAME).build());
 
     public Client client = JerseyClientBuilder.createClient().property(ClientProperties.FOLLOW_REDIRECTS, false);
 
-    @Before
+    @BeforeEach
     public void setUp() {
         client.target("http://localhost:" + applicationRule.getAdminPort() + "/tasks/metadata-refresh").request().post(Entity.text(""));
         authnRequestSteps = new AuthnRequestSteps(
@@ -51,9 +51,9 @@ public class HintsIntegrationTests extends IntegrationTestHelper {
 
     @Test
     public void debugPageShowsHints() throws Exception {
-        List<String> hints = ImmutableList.of(IdpHint.has_apps.name(), "snakes", "plane");
+        List<String> hints = List.of(IdpHint.has_apps.name(), "snakes", "plane");
         final Optional<Boolean> registration = Optional.of(true);
-        final Optional<String> language = Optional.absent();
+        final Optional<String> language = Optional.empty();
         final AuthnRequestSteps.Cookies cookies = authnRequestSteps.userPostsAuthnRequestToStubIdp(hints, language, registration);
         Response response = aUserVisitsTheDebugPage(IDP_NAME, cookies);
 
@@ -70,9 +70,9 @@ public class HintsIntegrationTests extends IntegrationTestHelper {
 
     @Test
     public void debugPageShowsLanguageHint() throws Exception {
-        List<String> hints = ImmutableList.of();
-        final Optional<Boolean> registration = Optional.absent();
-        final Optional<String> language = Optional.fromNullable("cy");
+        List<String> hints = List.of();
+        final Optional<Boolean> registration = Optional.empty();
+        final Optional<String> language = Optional.of("cy");
         final AuthnRequestSteps.Cookies cookies = authnRequestSteps.userPostsAuthnRequestToStubIdp(hints, language, registration);
         Response response = aUserVisitsTheDebugPage(IDP_NAME, cookies);
 
