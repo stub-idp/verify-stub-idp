@@ -5,7 +5,7 @@ import stubidp.test.utils.helpers.ResourceHelpers;
 
 import java.security.KeyStore;
 
-import static org.junit.Assert.assertNotNull;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class KeyStoreLoaderTest {
     private KeyStoreLoader keyStoreLoader = new KeyStoreLoader();
@@ -13,12 +13,12 @@ public class KeyStoreLoaderTest {
     @Test
     public void testLoadFromString() throws Exception {
         KeyStore keyStore = keyStoreLoader.load(ResourceHelpers.resourceFilePath("test-truststore.ts"), "puppet");
-        assertNotNull(keyStore);
+        assertThat(keyStore).isNotNull();
     }
 
     @Test
     public void testLoadFromStream() throws Exception {
         KeyStore keyStore = keyStoreLoader.load(this.getClass().getResourceAsStream("/test-truststore.ts"), "puppet");
-        assertNotNull(keyStore);
+        assertThat(keyStore).isNotNull();
     }
 }

@@ -14,9 +14,6 @@ import stubidp.saml.serializers.deserializers.OpenSamlXMLObjectUnmarshaller;
 import stubidp.saml.serializers.deserializers.parser.SamlObjectParser;
 import stubidp.test.devpki.TestCertificateStrings;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.Assert.fail;
-
 public class ExpiredCertificateMetadataFilterTest {
 
     private MetadataFactory metadataFactory = new MetadataFactory();
@@ -31,32 +28,20 @@ public class ExpiredCertificateMetadataFilterTest {
 
     @Test
     public void shouldFailToFilterLoadingValidMetadataWhenSignedWithExpiredCertificate() {
-        try {
-            DateTimeUtils.setCurrentMillisFixed(DateTime.now().plusYears(1000).getMillis());
-            String signedMetadata = metadataFactory.signedMetadata(TestCertificateStrings.METADATA_SIGNING_A_PUBLIC_CERT, TestCertificateStrings.METADATA_SIGNING_A_PRIVATE_KEY);
-            XMLObject metadata = unmarshaller.fromString(signedMetadata);
-            metadataFilter.filter(metadata);
-            fail("Expected exception not thrown");
-        } catch (FilterException e){
-            assertThat(true).isTrue();
-        } finally {
-            DateTimeUtils.setCurrentMillisSystem();
-        }
+        DateTimeUtils.setCurrentMillisFixed(DateTime.now().plusYears(1000).getMillis());
+        String signedMetadata = metadataFactory.signedMetadata(TestCertificateStrings.METADATA_SIGNING_A_PUBLIC_CERT, TestCertificateStrings.METADATA_SIGNING_A_PRIVATE_KEY);
+        XMLObject metadata = unmarshaller.fromString(signedMetadata);
+        Assertions.assertThrows(FilterException.class, () -> metadataFilter.filter(metadata));
+        DateTimeUtils.setCurrentMillisSystem();
     }
 
     @Test
     public void shouldFailToFilterLoadingValidMetadataWhenSignedWithNotYetValidCertificate() {
-        try {
-            DateTimeUtils.setCurrentMillisFixed(DateTime.now().minusYears(1000).getMillis());
-            String signedMetadata = metadataFactory.signedMetadata(TestCertificateStrings.METADATA_SIGNING_A_PUBLIC_CERT, TestCertificateStrings.METADATA_SIGNING_A_PRIVATE_KEY);
-            XMLObject metadata = unmarshaller.fromString(signedMetadata);
-            metadataFilter.filter(metadata);
-            fail("Expected exception not thrown");
-        } catch (FilterException e){
-            assertThat(true).isTrue();
-        } finally {
-            DateTimeUtils.setCurrentMillisSystem();
-        }
+        DateTimeUtils.setCurrentMillisFixed(DateTime.now().minusYears(1000).getMillis());
+        String signedMetadata = metadataFactory.signedMetadata(TestCertificateStrings.METADATA_SIGNING_A_PUBLIC_CERT, TestCertificateStrings.METADATA_SIGNING_A_PRIVATE_KEY);
+        XMLObject metadata = unmarshaller.fromString(signedMetadata);
+        Assertions.assertThrows(FilterException.class, () -> metadataFilter.filter(metadata));
+        DateTimeUtils.setCurrentMillisSystem();
     }
 
     @Test

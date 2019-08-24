@@ -10,7 +10,6 @@ import java.util.Collections;
 import java.util.Enumeration;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.Assert.assertNull;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -43,6 +42,6 @@ public class AcceptLanguageFilterTest{
     public void getHeader_returnsValueOfAcceptLanguageHeaderNullForOthers(){
         AcceptLanguageFilter f = new AcceptLanguageFilter();
         assertThat(f.new HideAcceptLanguage(request).getHeader(HttpHeaders.ACCEPT_ENCODING)).isEqualTo(encodingHeader);
-        assertNull(f.new HideAcceptLanguage(request).getHeader(HttpHeaders.ACCEPT_LANGUAGE));
+        assertThat(f.new HideAcceptLanguage(request).getHeader(HttpHeaders.ACCEPT_LANGUAGE)).isNull();
     }
 }

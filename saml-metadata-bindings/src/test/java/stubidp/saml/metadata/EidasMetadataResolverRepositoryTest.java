@@ -9,6 +9,7 @@ import com.nimbusds.jose.JOSEException;
 import com.nimbusds.jose.jwk.JWK;
 import net.shibboleth.utilities.java.support.component.ComponentInitializationException;
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -45,8 +46,6 @@ import java.util.stream.Collectors;
 import static java.util.Arrays.asList;
 import static java.util.Collections.singletonList;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.Assert.assertArrayEquals;
-import static org.junit.Assert.fail;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.reset;
@@ -139,8 +138,8 @@ public class EidasMetadataResolverRepositoryTest {
         byte[] actualTrustStoreCACertificate = metadataResolverConfiguration.getTrustStore().getCertificate("certificate-1").getEncoded();
 
         assertThat(createdMetadataResolver).isEqualTo(metadataResolver);
-        assertArrayEquals(expectedTrustStoreCertificate, actualTrustStoreCertificate);
-        assertArrayEquals(expectedTrustStoreCACertificate, actualTrustStoreCACertificate);
+        assertThat(expectedTrustStoreCertificate).containsExactly(actualTrustStoreCertificate);
+        assertThat(expectedTrustStoreCACertificate).containsExactly(actualTrustStoreCACertificate);
         assertThat(metadataResolverConfiguration.getUri().toString()).isEqualTo("https://source.com/" + ResourceEncoder.entityIdAsResource(entityId));
         assertThat(metadataResolverRepository.getSignatureTrustEngine(trustAnchor.getKeyID())).isEqualTo(Optional.of(explicitKeySignatureTrustEngine));
     }
@@ -226,22 +225,15 @@ public class EidasMetadataResolverRepositoryTest {
         );
         trustAnchors.add(createJWK(entityId, invalidCertChain, false));
 
-        EidasMetadataResolverRepository metadataResolverRepository = null;
-        try {
-            metadataResolverRepository = new EidasMetadataResolverRepository(
+        final Error e = Assertions.assertThrows(Error.class, () -> new EidasMetadataResolverRepository(
                 trustAnchorResolver,
                 metadataConfiguration,
                 dropwizardMetadataResolverFactory,
                 timer,
                 metadataSignatureTrustEngineFactory,
                 new MetadataResolverConfigBuilder(),
-                metadataClient);
-            fail("EidasMetadataResolverRepository should throw an error with an invalid cert in the trust anchor");
-        } catch (Error e) {
-            assertThat(e.getMessage()).startsWith("Managed to generate an invalid anchor: Certificate CN=IDA Stub Country Signing Dev");
-        }
-
-        assertThat(metadataResolverRepository).isNull();
+                metadataClient));
+        assertThat(e.getMessage()).startsWith("Managed to generate an invalid anchor: Certificate CN=IDA Stub Country Signing Dev");
     }
 
     @Test

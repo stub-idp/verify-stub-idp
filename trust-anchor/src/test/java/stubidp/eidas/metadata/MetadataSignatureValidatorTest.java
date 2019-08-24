@@ -8,10 +8,6 @@ import org.junit.jupiter.api.Test;
 import org.opensaml.core.config.InitializationService;
 import org.opensaml.saml.common.SignableSAMLObject;
 import org.slf4j.LoggerFactory;
-
-import stubidp.eidas.metadata.AlgorithmType;
-import stubidp.eidas.metadata.ConnectorMetadataSigner;
-import stubidp.eidas.metadata.MetadataSignatureValidator;
 import stubidp.eidas.utils.FileReader;
 import stubidp.eidas.utils.keyloader.FileKeyLoader;
 
@@ -20,8 +16,7 @@ import java.security.PrivateKey;
 import java.security.Security;
 import java.security.cert.X509Certificate;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class MetadataSignatureValidatorTest {
 
@@ -48,7 +43,7 @@ public class MetadataSignatureValidatorTest {
         MetadataSignatureValidator signatureValidator = new MetadataSignatureValidator(certificateForSigning.getPublicKey(), privateKeyForSigning);
         boolean result = signatureValidator.validate(signedMetadataSaml);
 
-        assertTrue(result);
+        assertThat(result).isTrue();
     }
 
     @Test
@@ -58,7 +53,7 @@ public class MetadataSignatureValidatorTest {
         MetadataSignatureValidator signatureValidator = new MetadataSignatureValidator(wrongCertificate.getPublicKey(), privateKeyForSigning);
         boolean result = signatureValidator.validate(signedMetadataSaml);
 
-        assertFalse(result);
+        assertThat(result).isFalse();
     }
 
     private SignableSAMLObject loadMetadataAndSign(String resourceFilePath, X509Certificate certificateForSigning) throws Exception {

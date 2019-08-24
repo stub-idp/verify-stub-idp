@@ -10,8 +10,7 @@ import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class TimeoutRequestRetryHandlerTest {
 
@@ -29,7 +28,7 @@ public class TimeoutRequestRetryHandlerTest {
         TimeoutRequestRetryHandler timeoutRequestRetryHandler = new TimeoutRequestRetryHandler(numRetries);
         final boolean expected = timeoutRequestRetryHandler.retryRequest(new ConnectTimeoutException(), 1, httpContext);
 
-        assertTrue(expected);
+        assertThat(expected).isTrue();
     }
 
     @Test
@@ -40,11 +39,11 @@ public class TimeoutRequestRetryHandlerTest {
         TimeoutRequestRetryHandler timeoutRequestRetryHandler = new TimeoutRequestRetryHandler(numRetries);
         boolean expected = timeoutRequestRetryHandler.retryRequest(new ConnectTimeoutException(), numRetries, httpContext);
 
-        assertTrue(expected);
+        assertThat(expected).isTrue();
 
         expected = timeoutRequestRetryHandler.retryRequest(new ConnectTimeoutException(), executionCount, httpContext);
 
-        assertFalse(expected);
+        assertThat(expected).isFalse();
     }
 
     @Test
@@ -54,7 +53,7 @@ public class TimeoutRequestRetryHandlerTest {
         TimeoutRequestRetryHandler timeoutRequestRetryHandler = new TimeoutRequestRetryHandler(numRetries);
         final boolean expected = timeoutRequestRetryHandler.retryRequest(new IOException(), 1, httpContext);
 
-        assertFalse(expected);
+        assertThat(expected).isFalse();
     }
 
 }

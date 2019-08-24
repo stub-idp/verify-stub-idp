@@ -15,8 +15,7 @@ import java.net.SocketTimeoutException;
 import java.util.Arrays;
 import java.util.List;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class TimeoutRequestRetryWithBackoffHandlerTest {
 
@@ -34,7 +33,7 @@ public class TimeoutRequestRetryWithBackoffHandlerTest {
         TimeoutRequestRetryWithBackoffHandler timeoutRequestRetryHandler = new TimeoutRequestRetryWithBackoffHandler(numRetries,Duration.milliseconds(1000));
         final boolean expected = timeoutRequestRetryHandler.retryRequest(new ConnectTimeoutException(), 1, httpContext);
 
-        assertTrue(expected);
+        assertThat(expected).isTrue();
     }
 
     @Test
@@ -44,7 +43,7 @@ public class TimeoutRequestRetryWithBackoffHandlerTest {
         TimeoutRequestRetryWithBackoffHandler timeoutRequestRetryHandler = new TimeoutRequestRetryWithBackoffHandler(numRetries,Duration.milliseconds(1000));
         final boolean expected = timeoutRequestRetryHandler.retryRequest(new SocketTimeoutException(), 1, httpContext);
 
-        assertTrue(expected);
+        assertThat(expected).isTrue();
     }
 
     @Test
@@ -54,16 +53,16 @@ public class TimeoutRequestRetryWithBackoffHandlerTest {
 
         TimeoutRequestRetryWithBackoffHandler timeoutRequestRetryHandler = new TimeoutRequestRetryWithBackoffHandler(numRetries,Duration.milliseconds(1000),retryExceptionNames);
         boolean expected = timeoutRequestRetryHandler.retryRequest(new SocketTimeoutException(), 1, httpContext);
-        assertTrue(expected);
+        assertThat(expected).isTrue();
 
         expected = timeoutRequestRetryHandler.retryRequest(new ConnectTimeoutException(), 1, httpContext);
-        assertTrue(expected);
+        assertThat(expected).isTrue();
 
         expected = timeoutRequestRetryHandler.retryRequest(new NoHttpResponseException("Response is empty"), 1, httpContext);
-        assertTrue(expected);
+        assertThat(expected).isTrue();
 
         expected = timeoutRequestRetryHandler.retryRequest(new IOException(), 1, httpContext);
-        assertFalse(expected);
+        assertThat(expected).isFalse();
     }
 
     @Test
@@ -74,13 +73,12 @@ public class TimeoutRequestRetryWithBackoffHandlerTest {
         TimeoutRequestRetryWithBackoffHandler timeoutRequestRetryHandler = new TimeoutRequestRetryWithBackoffHandler(numRetries,Duration.milliseconds(1000));
         boolean expected = timeoutRequestRetryHandler.retryRequest(new ConnectTimeoutException(), numRetries, httpContext);
 
-        assertTrue(expected);
-
+        assertThat(expected).isTrue();
 
         timeoutRequestRetryHandler = new TimeoutRequestRetryWithBackoffHandler(numRetries,Duration.milliseconds(1000));
         expected = timeoutRequestRetryHandler.retryRequest(new ConnectTimeoutException(), executionCount, httpContext);
 
-        assertFalse(expected);
+        assertThat(expected).isFalse();
     }
 
     @Test
@@ -90,7 +88,7 @@ public class TimeoutRequestRetryWithBackoffHandlerTest {
         TimeoutRequestRetryWithBackoffHandler timeoutRequestRetryHandler = new TimeoutRequestRetryWithBackoffHandler(numRetries,Duration.milliseconds(1000));
         final boolean expected = timeoutRequestRetryHandler.retryRequest(new IOException(), 1, httpContext);
 
-        assertFalse(expected);
+        assertThat(expected).isFalse();
     }
 
     @Test
@@ -105,8 +103,8 @@ public class TimeoutRequestRetryWithBackoffHandlerTest {
         final boolean expected = timeoutRequestRetryHandler.retryRequest(new SocketTimeoutException(), retryAttempt, httpContext);
         long end = System.currentTimeMillis();
 
-        assertTrue(expected);
-        assertTrue((end-start) > retryAttempt * backOffPeriod.toMilliseconds());
+        assertThat(expected).isTrue();
+        assertThat((end-start) > retryAttempt * backOffPeriod.toMilliseconds()).isTrue();
     }
 
     @Test
@@ -121,8 +119,8 @@ public class TimeoutRequestRetryWithBackoffHandlerTest {
         final boolean expected = timeoutRequestRetryHandler.retryRequest(new SocketTimeoutException(), retryAttempt, httpContext);
         long end = System.currentTimeMillis();
 
-        assertTrue(expected);
-        assertTrue((end-start) > retryAttempt * backOffPeriod.toMilliseconds());
+        assertThat(expected).isTrue();
+        assertThat((end-start) > retryAttempt * backOffPeriod.toMilliseconds()).isTrue();
     }
 
     @Test
@@ -137,7 +135,7 @@ public class TimeoutRequestRetryWithBackoffHandlerTest {
         final boolean expected = timeoutRequestRetryHandler.retryRequest(new SocketTimeoutException(), retryAttempt, httpContext);
         long end = System.currentTimeMillis();
 
-        assertTrue(expected);
-        assertTrue((end-start) > retryAttempt * backOffPeriod.toMilliseconds());
+        assertThat(expected).isTrue();
+        assertThat((end-start) > retryAttempt * backOffPeriod.toMilliseconds()).isTrue();
     }
 }

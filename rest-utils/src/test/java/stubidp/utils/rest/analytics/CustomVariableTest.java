@@ -2,7 +2,7 @@ package stubidp.utils.rest.analytics;
 
 import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class CustomVariableTest {
 
@@ -12,6 +12,6 @@ public class CustomVariableTest {
 
         String customVariableAsJson = customVariable.getJson();
 
-        assertEquals(customVariableAsJson, "{\"1\":[\"foo\",\"bar\"]}");
+        assertThat(customVariableAsJson).isEqualTo("{\"1\":[\"foo\",\"bar\"]}");
     }
 }
