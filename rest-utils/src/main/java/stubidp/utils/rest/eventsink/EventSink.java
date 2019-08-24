@@ -1,7 +1,6 @@
 package stubidp.utils.rest.eventsink;
 
 import javax.inject.Qualifier;
-
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 
