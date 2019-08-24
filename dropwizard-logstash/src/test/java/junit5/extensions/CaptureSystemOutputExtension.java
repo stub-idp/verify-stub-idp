@@ -16,9 +16,7 @@
 
 package junit5.extensions;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.allOf;
-
+import junit5.extensions.CaptureSystemOutput.OutputCapture;
 import org.junit.jupiter.api.extension.AfterEachCallback;
 import org.junit.jupiter.api.extension.BeforeEachCallback;
 import org.junit.jupiter.api.extension.ExtensionContext;
@@ -26,8 +24,6 @@ import org.junit.jupiter.api.extension.ExtensionContext.Namespace;
 import org.junit.jupiter.api.extension.ExtensionContext.Store;
 import org.junit.jupiter.api.extension.ParameterContext;
 import org.junit.jupiter.api.extension.ParameterResolver;
-
-import junit5.extensions.CaptureSystemOutput.OutputCapture;
 
 /**
  * JUnit JUpiter extension for capturing output to {@code System.out} and
@@ -51,15 +47,7 @@ class CaptureSystemOutputExtension implements BeforeEachCallback, AfterEachCallb
     @Override
     public void afterEach(ExtensionContext context) throws Exception {
         OutputCapture outputCapture = getOutputCapture(context);
-        try {
-            if (!outputCapture.matchers.isEmpty()) {
-                String output = outputCapture.toString();
-                assertThat(output, allOf(outputCapture.matchers));
-            }
-        }
-        finally {
-            outputCapture.releaseOutput();
-        }
+        outputCapture.releaseOutput();
     }
 
     @Override

@@ -44,7 +44,6 @@
         <assertj_jodatime.version>2.2.0</assertj_jodatime.version>
         <junit.version>5.5.1</junit.version>
         <mockito.version>3.0.0</mockito.version>
-        <hamcrest.version>2.1</hamcrest.version><!-- only in dropwizard-logstash -->
     </properties>
 
     <modules>

@@ -13,9 +13,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import static org.hamcrest.CoreMatchers.containsString;
-import static org.hamcrest.core.StringStartsWith.startsWith;
-import static org.junit.Assert.assertThat;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -39,7 +37,7 @@ public class SyslogEventFormatterTest {
 
         final String formattedEvent = formatter.format(loggingEvent);
 
-        assertThat(formattedEvent, startsWith("<141>"));
+        assertThat(formattedEvent).startsWith("<141>");
     }
 
     @Test
@@ -49,7 +47,7 @@ public class SyslogEventFormatterTest {
 
         final String formattedEvent = formatter.format(event);
 
-        assertThat(formattedEvent, containsString("2009-06-15T13:45:30.000Z"));
+        assertThat(formattedEvent).contains("2009-06-15T13:45:30.000Z");
         DateTimeUtils.setCurrentMillisSystem();
     }
 
@@ -57,14 +55,14 @@ public class SyslogEventFormatterTest {
     public void format_shouldIncludeHostname() throws Exception {
         final String formattedEvent = formatter.format(createLoggingEvent());
 
-        assertThat(formattedEvent, containsString(hostname));
+        assertThat(formattedEvent).contains(hostname);
     }
 
     @Test
     public void format_shouldIncludeTag() throws Exception {
         final String formattedEvent = formatter.format(createLoggingEvent());
 
-        assertThat(formattedEvent, containsString(tag));
+        assertThat(formattedEvent).contains(tag);
     }
 
     @Test
@@ -74,7 +72,7 @@ public class SyslogEventFormatterTest {
 
         final String formattedEvent = formatter.format(event);
 
-        assertThat(formattedEvent, containsString("formatted event"));
+        assertThat(formattedEvent).contains("formatted event");
     }
 
     private ILoggingEvent createLoggingEvent() {

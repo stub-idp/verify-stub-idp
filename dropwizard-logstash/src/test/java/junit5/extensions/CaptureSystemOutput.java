@@ -30,7 +30,6 @@ import java.lang.annotation.Target;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.hamcrest.Matcher;
 import org.junit.jupiter.api.extension.ExtendWith;
 
 /**
@@ -90,8 +89,6 @@ public @interface CaptureSystemOutput {
      */
     static class OutputCapture {
 
-        final List<Matcher<? super String>> matchers = new ArrayList<>();
-
         private CaptureOutputStream captureOut;
 
         private CaptureOutputStream captureErr;
@@ -120,17 +117,6 @@ public @interface CaptureSystemOutput {
             catch (IOException ex) {
                 // ignore
             }
-        }
-
-        /**
-         * Verify that the captured output is matched by the supplied {@code matcher}.
-         *
-         * <p>Verification is performed after the test method has executed.
-         *
-         * @param matcher the matcher
-         */
-        public void expect(Matcher<? super String> matcher) {
-            this.matchers.add(matcher);
         }
 
         /**

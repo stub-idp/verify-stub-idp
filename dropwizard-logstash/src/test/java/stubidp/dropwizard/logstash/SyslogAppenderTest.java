@@ -4,7 +4,6 @@ import ch.qos.logback.classic.spi.ILoggingEvent;
 import ch.qos.logback.core.ContextBase;
 import ch.qos.logback.core.net.SyslogOutputStream;
 import ch.qos.logback.core.status.Status;
-import org.hamcrest.core.Is;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -15,8 +14,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.UUID;
 
-import static org.hamcrest.core.Is.is;
-import static org.junit.Assert.assertThat;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
@@ -38,7 +36,6 @@ public class SyslogAppenderTest {
     public void setUp() throws Exception {
         appender = new SyslogAppender(syslogEventFormatter, outputStream);
         appender.start();
-//        when(syslogEventFormatter.format(any(ILoggingEvent.class))).thenReturn("");
     }
 
     @Test
@@ -71,8 +68,8 @@ public class SyslogAppenderTest {
         appender.append(mock(ILoggingEvent.class));
 
         final List<Status> statusList = appender.getStatusManager().getCopyOfStatusList();
-        assertThat(statusList.size(), is(1));
-        assertThat(statusList.get(0).getLevel(), is(Status.ERROR));
-        assertThat(statusList.get(0).getThrowable(), Is.is(ioError));
+        assertThat(statusList.size()).isEqualTo(1);
+        assertThat(statusList.get(0).getLevel()).isEqualTo(Status.ERROR);
+        assertThat(statusList.get(0).getThrowable()).isEqualTo(ioError);
     }
 }
