@@ -10,6 +10,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import stubidp.saml.hub.hub.domain.InboundResponseFromIdp;
 import stubidp.stubidp.Urls;
+import stubidp.stubidp.cookies.CookieNames;
 import stubidp.test.integration.steps.AuthnRequestSteps;
 import stubidp.test.integration.support.IntegrationTestHelper;
 import stubidp.test.integration.support.SamlDecrypter;
@@ -87,12 +88,15 @@ public class UserLogsInIntegrationTests extends IntegrationTestHelper {
 
     @Test
     public void idpNotFoundTest() {
-        Response response = client.target(authnRequestSteps.getStubIdpUri(UriBuilder.fromPath(Urls.IDP_LOGIN_RESOURCE).build("idp_does_not_exist").toString()))
+        final AuthnRequestSteps.Cookies cookies = authnRequestSteps.userPostsAuthnRequestToStubIdp();
+        Response response = client.target(authnRequestSteps.getStubIdpUri(UriBuilder.fromPath(Urls.IDP_LOGIN_RESOURCE).build("idp_that_does_not_exist").toString()))
                 .request()
+                .cookie(CookieNames.SESSION_COOKIE_NAME, cookies.getSessionId())
+                .cookie(CookieNames.SECURE_COOKIE_NAME, cookies.getSecure())
                 .get();
         assertThat(response.getStatus()).isEqualTo(404);
         final String body = response.readEntity(String.class);
-        assertThat(body).contains("No idp found with friendlyId: pathThatDoesNotExist");
+        assertThat(body).contains("No idp found with friendlyId: idp_that_does_not_exist");
     }
 
     @Test

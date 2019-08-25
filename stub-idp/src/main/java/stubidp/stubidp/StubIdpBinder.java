@@ -176,6 +176,7 @@ public class StubIdpBinder extends AbstractBinder {
         final DigestSHA256 digestAlgorithm = new DigestSHA256();
         bind(digestAlgorithm).to(DigestAlgorithm.class);
         final StubTransformersFactory stubTransformersFactory = new StubTransformersFactory();
+        // FIXME
         bind(stubTransformersFactory.getStringToAuthnRequest()).to(new GenericType<Function<String, AuthnRequest>>() {});
         bind(stubTransformersFactory.getStringToIdaAuthnRequestFromHub(signingKeyStore)).to(new GenericType<Function<String, IdaAuthnRequestFromHub>>() {});
         bind(new OutboundResponseFromIdpTransformerProvider(hubEncryptionKeyStore,

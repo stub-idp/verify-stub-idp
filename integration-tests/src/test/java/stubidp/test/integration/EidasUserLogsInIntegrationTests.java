@@ -50,6 +50,8 @@ public class EidasUserLogsInIntegrationTests extends IntegrationTestHelper {
         authnRequestSteps.eidasUserConsentsReturnSamlResponse(cookies, false);
     }
 
+    // FIXME: add a test using RSASSA_PSS signed authnrequest
+
     @Test
     public void debugPageLoadsAndValuesForOptionalAttribuesAreReturnedTest() {
         // this test requests these attributes and checks that they are displayed on the debug page as requested

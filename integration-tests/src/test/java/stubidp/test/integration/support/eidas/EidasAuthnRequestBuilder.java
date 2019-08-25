@@ -16,6 +16,11 @@ import org.opensaml.saml.saml2.core.impl.ExtensionsBuilder;
 import org.opensaml.saml.saml2.core.impl.IssuerBuilder;
 import org.opensaml.saml.saml2.core.impl.NameIDPolicyBuilder;
 import org.opensaml.saml.saml2.core.impl.RequestedAuthnContextBuilder;
+import org.opensaml.xmlsec.algorithm.descriptors.DigestSHA256;
+import org.opensaml.xmlsec.algorithm.descriptors.SignatureRSASHA256;
+import org.opensaml.xmlsec.signature.Signature;
+import org.opensaml.xmlsec.signature.support.SignatureException;
+import org.opensaml.xmlsec.signature.support.Signer;
 import stubidp.saml.extensions.IdaConstants;
 import stubidp.saml.extensions.extensions.RequestedAttribute;
 import stubidp.saml.extensions.extensions.SPType;
@@ -24,10 +29,23 @@ import stubidp.saml.extensions.extensions.impl.RequestedAttributesBuilder;
 import stubidp.saml.extensions.extensions.impl.RequestedAttributesImpl;
 import stubidp.saml.extensions.extensions.impl.SPTypeBuilder;
 import stubidp.saml.hub.hub.domain.LevelOfAssurance;
+import stubidp.saml.security.IdaKeyStore;
+import stubidp.saml.security.IdaKeyStoreCredentialRetriever;
+import stubidp.saml.security.SignatureWithKeyInfoFactory;
 import stubidp.saml.serializers.serializers.XmlObjectToBase64EncodedStringTransformer;
 import stubidp.saml.utils.core.test.builders.AuthnRequestBuilder;
+import stubidp.test.devpki.TestCertificateStrings;
+import stubidp.test.devpki.TestEntityIds;
+import stubidp.utils.security.security.PrivateKeyFactory;
+import stubidp.utils.security.security.PublicKeyFactory;
+import stubidp.utils.security.security.X509CertificateFactory;
 
+import java.security.KeyPair;
+import java.security.PrivateKey;
+import java.security.PublicKey;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Base64;
 import java.util.List;
 
 public class EidasAuthnRequestBuilder {
@@ -74,7 +92,33 @@ public class EidasAuthnRequestBuilder {
                 AuthnContextComparisonTypeEnumeration.MINIMUM,
                 LevelOfAssurance.SUBSTANTIAL.toString()));
 
+        authnRequest.setSignature(createSignatureWithKeyInfo());
+
         return new XmlObjectToBase64EncodedStringTransformer<>().apply(authnRequest);
+    }
+
+    private Signature createSignatureWithKeyInfo() {
+        IdaKeyStoreCredentialRetriever keyStoreCredentialRetriever = new IdaKeyStoreCredentialRetriever(createIdaKeyStore());
+
+        SignatureWithKeyInfoFactory keyInfoFactory = new SignatureWithKeyInfoFactory(keyStoreCredentialRetriever,new SignatureRSASHA256(), new DigestSHA256(), "issue-id","signing-cert");
+
+        return keyInfoFactory.createSignature();
+    }
+
+    private IdaKeyStore createIdaKeyStore() {
+        PublicKeyFactory publicKeyFactory = new PublicKeyFactory(new X509CertificateFactory());
+
+        PrivateKey privateSigningKey = new PrivateKeyFactory().createPrivateKey(Base64.getDecoder().decode(TestCertificateStrings.PRIVATE_SIGNING_KEYS.get(
+                TestEntityIds.HUB_ENTITY_ID)));
+        PublicKey publicSigningKey = publicKeyFactory.createPublicKey(TestCertificateStrings.getPrimaryPublicEncryptionCert(TestEntityIds.HUB_ENTITY_ID));
+
+        PrivateKey publicEncryptionKey = new PrivateKeyFactory().createPrivateKey(Base64.getDecoder().decode(TestCertificateStrings.HUB_TEST_PRIVATE_ENCRYPTION_KEY));;
+        PublicKey privateEncryptionKey = publicKeyFactory.createPublicKey(TestCertificateStrings.HUB_TEST_PUBLIC_ENCRYPTION_CERT);
+
+        KeyPair signingKeyPair = new KeyPair(publicSigningKey, privateSigningKey);
+        KeyPair encryptionKeyPair = new KeyPair(privateEncryptionKey, publicEncryptionKey);
+
+        return new IdaKeyStore(signingKeyPair, Arrays.asList(encryptionKeyPair));
     }
 
     private RequestedAuthnContext createRequestedAuthnContext(AuthnContextComparisonTypeEnumeration comparisonType, String loa) {

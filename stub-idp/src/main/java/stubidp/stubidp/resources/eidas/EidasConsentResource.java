@@ -49,7 +49,7 @@ public class EidasConsentResource {
     private final EidasAuthnResponseService rsaSsaPssAuthnResponseService;
     private final SamlResponseRedirectViewFactory samlResponseRedirectViewFactory;
 
-    private static final String RSASHA_256 = "rsasha256";
+    public static final String RSASHA_256 = "rsasha256";
     private static final String RSASSA_PSS = "rsassa-pss";
 
     @Inject

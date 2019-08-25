@@ -24,6 +24,7 @@ import java.util.Optional;
 import static org.assertj.core.api.Assertions.assertThat;
 import static stubidp.stubidp.csrf.CSRFCheckProtectionFilter.CSRF_PROTECT_FORM_KEY;
 import static stubidp.stubidp.repositories.StubCountryRepository.STUB_COUNTRY_FRIENDLY_ID;
+import static stubidp.stubidp.resources.eidas.EidasConsentResource.RSASHA_256;
 
 public class AuthnRequestSteps {
     private final Client client;
@@ -200,6 +201,7 @@ public class AuthnRequestSteps {
         if(!Objects.isNull(csrfElement)) {
             form.param(CSRF_PROTECT_FORM_KEY, entity.getElementById(CSRF_PROTECT_FORM_KEY).val());
         }
+        form.param(Urls.SIGNING_ALGORITHM_PARAM, RSASHA_256); // only for eidas consent POST
 
         response = client.target(getStubIdpUri(consentUrl))
                 .request()
