@@ -27,6 +27,8 @@ import java.util.Collections;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -42,7 +44,10 @@ public class EidasConsentResourceTest {
     private EidasSessionRepository sessionRepository;
 
     @Mock
-    private EidasAuthnResponseService successAuthnResponseService;
+    private EidasAuthnResponseService rsaSha256AuthnResponseService;
+
+    @Mock
+    private EidasAuthnResponseService rsaSsaPssAuthnResponseService;
 
     @Mock
     private SamlResponseRedirectViewFactory samlResponseRedirectViewFactory;
@@ -55,7 +60,7 @@ public class EidasConsentResourceTest {
 
     @BeforeEach
     public void setUp(){
-        resource = new EidasConsentResource(sessionRepository, successAuthnResponseService, successAuthnResponseService, samlResponseRedirectViewFactory, stubCountryRepository);
+        resource = new EidasConsentResource(sessionRepository, rsaSha256AuthnResponseService, rsaSsaPssAuthnResponseService, samlResponseRedirectViewFactory, stubCountryRepository);
 
         EidasAuthnRequest eidasAuthnRequest = new EidasAuthnRequest("request-id", "issuer", "destination", "loa", Collections.emptyList());
         session = new EidasSession(SESSION_ID, eidasAuthnRequest, null, null, null, null, null);
@@ -77,11 +82,12 @@ public class EidasConsentResourceTest {
     public void postShouldReturnASuccessfulResponseWithRsaSha256SigningAlgorithmWhenSessionIsValid() {
         when(sessionRepository.deleteAndGet(SESSION_ID)).thenReturn(Optional.of(session));
         SamlResponseFromValue<org.opensaml.saml.saml2.core.Response> samlResponse = new SamlResponseFromValue<org.opensaml.saml.saml2.core.Response>(null, (r) -> null, null, null);
-        when(successAuthnResponseService.getSuccessResponse(session, SCHEME_NAME)).thenReturn(samlResponse);
+        when(rsaSha256AuthnResponseService.getSuccessResponse(session, SCHEME_NAME)).thenReturn(samlResponse);
         when(samlResponseRedirectViewFactory.sendSamlMessage(samlResponse)).thenReturn(Response.ok().build());
 
         final Response response = resource.consent(SCHEME_NAME, "rsasha256","submit", SESSION_ID);
 
+        verify(rsaSsaPssAuthnResponseService, never()).getSuccessResponse(session, SCHEME_NAME);
         assertThat(response.getStatus()).isEqualTo(Response.Status.OK.getStatusCode());
     }
 
@@ -89,11 +95,12 @@ public class EidasConsentResourceTest {
     public void postShouldReturnASuccessfulResponseWithRsaSsaPsaSigningAlgorithmWhenSessionIsValid() {
         when(sessionRepository.deleteAndGet(SESSION_ID)).thenReturn(Optional.of(session));
         SamlResponseFromValue<org.opensaml.saml.saml2.core.Response> samlResponse = new SamlResponseFromValue<org.opensaml.saml.saml2.core.Response>(null, (r) -> null, null, null);
-        when(successAuthnResponseService.getSuccessResponse(session, SCHEME_NAME)).thenReturn(samlResponse);
+        when(rsaSsaPssAuthnResponseService.getSuccessResponse(session, SCHEME_NAME)).thenReturn(samlResponse);
         when(samlResponseRedirectViewFactory.sendSamlMessage(samlResponse)).thenReturn(Response.ok().build());
 
         final Response response = resource.consent(SCHEME_NAME, "rsassa-pss","submit", SESSION_ID);
 
+        verify(rsaSha256AuthnResponseService, never()).getSuccessResponse(session, SCHEME_NAME);
         assertThat(response.getStatus()).isEqualTo(Response.Status.OK.getStatusCode());
     }
 
