@@ -17,7 +17,6 @@
 //    requires jersey.server;
 //    requires org.apache.httpcomponents.httpclient;
 //    requires java.validation;
-//    requires org.apache.commons.lang3;
 //    requires dropwizard.client;
 //    requires jackson.annotations;
 //    requires event.emitter;

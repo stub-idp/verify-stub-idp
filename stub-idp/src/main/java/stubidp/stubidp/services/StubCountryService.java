@@ -1,6 +1,6 @@
 package stubidp.stubidp.services;
 
-import org.apache.commons.lang3.StringUtils;
+import com.google.common.base.Strings;
 import org.joda.time.LocalDate;
 import org.joda.time.format.DateTimeFormat;
 import stubidp.saml.utils.core.domain.AuthnContext;
@@ -130,7 +130,7 @@ public class StubCountryService {
     }
 
     private Optional<MatchingDatasetValue<String>> createOptionalMdsValue(String value) {
-        if (StringUtils.isBlank(value)) {
+        if (Strings.isNullOrEmpty(value)) {
             return Optional.empty();
         }
         return Optional.of(new MatchingDatasetValue<>(value, null, null, true));

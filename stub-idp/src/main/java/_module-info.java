@@ -27,7 +27,6 @@
 //    requires jboss.logging;
 //    requires dropwizard.views.freemarker;
 //    requires org.jsoup;
-//    requires org.apache.commons.lang3;
 //    requires jbcrypt;
 //    requires common.utils;
 //    requires com.fasterxml.jackson.annotation;

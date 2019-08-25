@@ -1,7 +1,6 @@
 package stubidp.utils.rest.analytics;
 
-import org.apache.commons.lang3.builder.EqualsBuilder;
-import org.apache.commons.lang3.builder.HashCodeBuilder;
+import java.util.Objects;
 
 import static java.lang.String.format;
 
@@ -36,21 +35,14 @@ public class CustomVariable {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-
         CustomVariable that = (CustomVariable) o;
-        return new EqualsBuilder()
-                .append(index, that.index)
-                .append(name, that.name)
-                .append(value, that.value)
-                .isEquals();
+        return index == that.index &&
+                Objects.equals(name, that.name) &&
+                Objects.equals(value, that.value);
     }
 
     @Override
     public int hashCode() {
-        return new HashCodeBuilder(59, 71)
-                .append(index)
-                .append(name)
-                .append(value)
-                .toHashCode();
+        return Objects.hash(index, name, value);
     }
 }
