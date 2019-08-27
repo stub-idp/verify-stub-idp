@@ -1,5 +1,6 @@
 package stubidp.stubidp;
 
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.util.StdDateFormat;
 import io.dropwizard.Application;
 import io.dropwizard.assets.AssetsBundle;
@@ -99,6 +100,8 @@ public class StubIdpApplication extends Application<StubIdpConfiguration> {
         bootstrap.addBundle(new MonitoringBundle());
 
         bootstrap.addBundle(new AssetsBundle("/assets/", "/assets/"));
+
+        bootstrap.getObjectMapper().enable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
     }
 
     @Override
@@ -120,7 +123,7 @@ public class StubIdpApplication extends Application<StubIdpConfiguration> {
         environment.jersey().register(ConsentResource.class);
 
         // single idp resources
-        if(configuration.isSingleIdpJourneyEnabled()) {
+        if(configuration.getSingleIdpJourneyConfiguration().isEnabled()) {
             environment.jersey().register(SingleIdpStartPromptPageResource.class);
             environment.jersey().register(SingleIdpLogoutPageResource.class);
             environment.jersey().register(SingleIdpHomePageResource.class);

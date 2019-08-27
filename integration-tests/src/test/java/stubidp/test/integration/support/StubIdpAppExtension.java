@@ -3,7 +3,6 @@ package stubidp.test.integration.support;
 import certificates.values.CACertificates;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.common.collect.ImmutableList;
 import io.dropwizard.testing.ConfigOverride;
 import io.dropwizard.testing.junit5.DropwizardAppExtension;
 import org.apache.commons.io.FileUtils;
@@ -20,8 +19,12 @@ import stubidp.test.utils.keystore.builders.KeyStoreResourceBuilder;
 
 import java.io.File;
 import java.net.URI;
+import java.util.AbstractMap;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static stubidp.test.devpki.TestCertificateStrings.STUB_IDP_PUBLIC_PRIMARY_CERT;
@@ -40,7 +43,11 @@ public class StubIdpAppExtension extends DropwizardAppExtension<StubIdpConfigura
 
     private static final HttpStubRule fakeFrontend = new HttpStubRule();
 
-    public StubIdpAppExtension(ConfigOverride... configOverrides) {
+    public StubIdpAppExtension() {
+        this(Map.of());
+    }
+
+    public StubIdpAppExtension(Map<String, String> configOverrides) {
         super(StubIdpApplication.class, "./configuration/stub-idp.yml", withDefaultOverrides(configOverrides));
         try {
             fakeFrontend.register("/get-available-services", 200, "application/json", "[]");
@@ -49,39 +56,42 @@ public class StubIdpAppExtension extends DropwizardAppExtension<StubIdpConfigura
         }
     }
 
-    public static ConfigOverride[] withDefaultOverrides(ConfigOverride ... configOverrides) {
-        ImmutableList<ConfigOverride> overrides = ImmutableList.<ConfigOverride>builder()
-                .add(ConfigOverride.config("metadata.uri", "http://localhost:" + metadataServer.getPort() + METADATA_PATH))
-                .add(ConfigOverride.config("hubEntityId", HUB_ENTITY_ID))
-                .add(ConfigOverride.config("basicAuthEnabledForUserResource", "true"))
-                .add(ConfigOverride.config("server.requestLog.appenders[0].type", "console"))
-                .add(ConfigOverride.config("server.applicationConnectors[0].port", "0"))
-                .add(ConfigOverride.config("server.adminConnectors[0].port", "0"))
-                .add(ConfigOverride.config("logging.appenders[0].type", "console"))
-                .add(ConfigOverride.config("stubIdpsYmlFileLocation", STUB_IDPS_FILE.getAbsolutePath()))
-                .add(ConfigOverride.config("metadata.trustStore.store", trustStore.getAbsolutePath()))
-                .add(ConfigOverride.config("metadata.trustStore.password", trustStore.getPassword()))
-                .add(ConfigOverride.config("europeanIdentity.enabled", "true"))
-                .add(ConfigOverride.config("europeanIdentity.hubConnectorEntityId", HUB_ENTITY_ID))
-                .add(ConfigOverride.config("europeanIdentity.stubCountryBaseUrl", "http://localhost:0"))
-                .add(ConfigOverride.config("europeanIdentity.metadata.uri", "http://localhost:" + metadataServer.getPort() + METADATA_PATH))
-                .add(ConfigOverride.config("europeanIdentity.metadata.expectedEntityId", HUB_ENTITY_ID))
-                .add(ConfigOverride.config("europeanIdentity.metadata.trustStore.store", trustStore.getAbsolutePath()))
-                .add(ConfigOverride.config("europeanIdentity.metadata.trustStore.password", trustStore.getPassword()))
-                .add(ConfigOverride.config("signingKeyPairConfiguration.privateKeyConfiguration.type", "encoded"))
-                .add(ConfigOverride.config("signingKeyPairConfiguration.privateKeyConfiguration.key", STUB_IDP_PUBLIC_PRIMARY_PRIVATE_KEY))
-                .add(ConfigOverride.config("signingKeyPairConfiguration.publicKeyConfiguration.type", "x509"))
-                .add(ConfigOverride.config("signingKeyPairConfiguration.publicKeyConfiguration.cert", STUB_IDP_PUBLIC_PRIMARY_CERT))
-                .add(ConfigOverride.config("europeanIdentity.signingKeyPairConfiguration.privateKeyConfiguration.type", "encoded"))
-                .add(ConfigOverride.config("europeanIdentity.signingKeyPairConfiguration.privateKeyConfiguration.key", STUB_IDP_PUBLIC_PRIMARY_PRIVATE_KEY))
-                .add(ConfigOverride.config("europeanIdentity.signingKeyPairConfiguration.publicKeyConfiguration.type", "x509"))
-                .add(ConfigOverride.config("europeanIdentity.signingKeyPairConfiguration.publicKeyConfiguration.cert", STUB_IDP_PUBLIC_PRIMARY_CERT))
-                .add(ConfigOverride.config("database.url", "jdbc:h2:mem:test;MODE=PostgreSQL;DB_CLOSE_DELAY=-1"))
-                .add(ConfigOverride.config("singleIdpJourney.enabled", "false"))
-                .add(ConfigOverride.config("singleIdpJourney.serviceListUri", "http://localhost:"+fakeFrontend.getPort()+"/get-available-services"))
-                .add(configOverrides)
-                .build();
-        return overrides.toArray(new ConfigOverride[overrides.size()]);
+    public static ConfigOverride[] withDefaultOverrides(Map<String, String> configOverrides) {
+        Map<String, String> config = Map.<String, String>ofEntries(
+                new AbstractMap.SimpleImmutableEntry<>("metadata.uri", "http://localhost:" + metadataServer.getPort() + METADATA_PATH),
+                new AbstractMap.SimpleImmutableEntry<>("hubEntityId", HUB_ENTITY_ID),
+                new AbstractMap.SimpleImmutableEntry<>("basicAuthEnabledForUserResource", "true"),
+                new AbstractMap.SimpleImmutableEntry<>("server.requestLog.appenders[0].type", "console"),
+                new AbstractMap.SimpleImmutableEntry<>("server.applicationConnectors[0].port", "0"),
+                new AbstractMap.SimpleImmutableEntry<>("server.adminConnectors[0].port", "0"),
+                new AbstractMap.SimpleImmutableEntry<>("logging.appenders[0].type", "console"),
+                new AbstractMap.SimpleImmutableEntry<>("stubIdpsYmlFileLocation", STUB_IDPS_FILE.getAbsolutePath()),
+                new AbstractMap.SimpleImmutableEntry<>("metadata.trustStore.store", trustStore.getAbsolutePath()),
+                new AbstractMap.SimpleImmutableEntry<>("metadata.trustStore.password", trustStore.getPassword()),
+                new AbstractMap.SimpleImmutableEntry<>("europeanIdentity.enabled", "true"),
+                new AbstractMap.SimpleImmutableEntry<>("europeanIdentity.hubConnectorEntityId", HUB_ENTITY_ID),
+                new AbstractMap.SimpleImmutableEntry<>("europeanIdentity.stubCountryBaseUrl", "http://localhost:0"),
+                new AbstractMap.SimpleImmutableEntry<>("europeanIdentity.metadata.uri", "http://localhost:" + metadataServer.getPort() + METADATA_PATH),
+                new AbstractMap.SimpleImmutableEntry<>("europeanIdentity.metadata.expectedEntityId", HUB_ENTITY_ID),
+                new AbstractMap.SimpleImmutableEntry<>("europeanIdentity.metadata.trustStore.store", trustStore.getAbsolutePath()),
+                new AbstractMap.SimpleImmutableEntry<>("europeanIdentity.metadata.trustStore.password", trustStore.getPassword()),
+                new AbstractMap.SimpleImmutableEntry<>("signingKeyPairConfiguration.privateKeyConfiguration.type", "encoded"),
+                new AbstractMap.SimpleImmutableEntry<>("signingKeyPairConfiguration.privateKeyConfiguration.key", STUB_IDP_PUBLIC_PRIMARY_PRIVATE_KEY),
+                new AbstractMap.SimpleImmutableEntry<>("signingKeyPairConfiguration.publicKeyConfiguration.type", "x509"),
+                new AbstractMap.SimpleImmutableEntry<>("signingKeyPairConfiguration.publicKeyConfiguration.cert", STUB_IDP_PUBLIC_PRIMARY_CERT),
+                new AbstractMap.SimpleImmutableEntry<>("europeanIdentity.signingKeyPairConfiguration.privateKeyConfiguration.type", "encoded"),
+                new AbstractMap.SimpleImmutableEntry<>("europeanIdentity.signingKeyPairConfiguration.privateKeyConfiguration.key", STUB_IDP_PUBLIC_PRIMARY_PRIVATE_KEY),
+                new AbstractMap.SimpleImmutableEntry<>("europeanIdentity.signingKeyPairConfiguration.publicKeyConfiguration.type", "x509"),
+                new AbstractMap.SimpleImmutableEntry<>("europeanIdentity.signingKeyPairConfiguration.publicKeyConfiguration.cert", STUB_IDP_PUBLIC_PRIMARY_CERT),
+                new AbstractMap.SimpleImmutableEntry<>("database.url", "jdbc:h2:mem:test;MODE=PostgreSQL;DB_CLOSE_DELAY=-1"),
+                new AbstractMap.SimpleImmutableEntry<>("singleIdpJourney.enabled", "false"),
+                new AbstractMap.SimpleImmutableEntry<>("singleIdpJourney.serviceListUri", "http://localhost:"+fakeFrontend.getPort()+"/get-available-services"));
+        config = new HashMap<>(config);
+        config.putAll(configOverrides);
+        final List<ConfigOverride> overrides = config.entrySet().stream()
+                .map(o -> ConfigOverride.config(o.getKey(), o.getValue()))
+                .collect(Collectors.toUnmodifiableList());
+        return overrides.toArray(new ConfigOverride[config.size()]);
     }
 
     @Override

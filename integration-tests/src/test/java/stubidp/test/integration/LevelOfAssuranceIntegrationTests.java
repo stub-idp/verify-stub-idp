@@ -1,5 +1,6 @@
 package stubidp.test.integration;
 
+import io.dropwizard.testing.junit5.DropwizardExtensionsSupport;
 import org.glassfish.jersey.client.ClientProperties;
 import org.glassfish.jersey.client.JerseyClientBuilder;
 import org.jsoup.Jsoup;
@@ -7,6 +8,7 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import stubidp.stubidp.Urls;
 import stubidp.stubidp.cookies.CookieNames;
 import stubidp.test.integration.steps.AuthnRequestSteps;
@@ -23,6 +25,7 @@ import java.util.stream.Collectors;
 import static org.assertj.core.api.Assertions.assertThat;
 import static stubidp.stubidp.builders.StubIdpBuilder.aStubIdp;
 
+@ExtendWith(DropwizardExtensionsSupport.class)
 public class LevelOfAssuranceIntegrationTests extends IntegrationTestHelper {
 
     public static final String IDP_NAME = "loa-idp";
