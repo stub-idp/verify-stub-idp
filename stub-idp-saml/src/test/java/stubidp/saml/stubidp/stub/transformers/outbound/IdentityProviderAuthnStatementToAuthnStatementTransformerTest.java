@@ -1,4 +1,4 @@
-package stubidp.saml.stubidp.stub.tranformers.outbound;
+package stubidp.saml.stubidp.stub.transformers.outbound;
 
 import org.joda.time.DateTime;
 import org.junit.jupiter.api.AfterEach;
@@ -6,8 +6,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.opensaml.saml.saml2.core.AuthnStatement;
 import stubidp.saml.extensions.extensions.IdaAuthnContext;
-import stubidp.saml.stubidp.stub.transformers.outbound.IdentityProviderAuthnStatementToAuthnStatementTransformer;
-import stubidp.saml.utils.test.OpenSAMLRunner;
+import stubidp.saml.stubidp.OpenSAMLRunner;
 import stubidp.saml.utils.core.OpenSamlXmlObjectFactory;
 import stubidp.saml.utils.core.domain.AuthnContext;
 import stubidp.saml.utils.core.domain.IdentityProviderAuthnStatement;

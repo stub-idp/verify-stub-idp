@@ -1,6 +1,8 @@
 @SuppressWarnings({"requires-automatic", "requires-transitive-automatic"})
-module trust.anchor {
+module stubidp.trust.anchor {
     exports stubidp.eidas.trustanchor;
+
+    opens stubidp.eidas.trustanchor;
 
     requires transitive nimbus.jose.jwt;
 
@@ -11,7 +13,8 @@ module trust.anchor {
     requires java.xml;
     requires xmlsec;
     requires net.shibboleth.utilities.java.support;
-    requires saml.serializers;
+    requires stubidp.saml.extensions;
+    requires stubidp.saml.serializers;
     requires org.opensaml.security.impl;
     requires org.opensaml.xmlsec.impl;
     requires org.opensaml.saml.impl;

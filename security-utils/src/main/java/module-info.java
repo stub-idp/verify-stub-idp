@@ -1,5 +1,5 @@
 @SuppressWarnings({"requires-automatic", "requires-transitive-automatic"})
-module security.utils {
+module stubidp.security.utils {
     exports stubidp.utils.security.configuration;
     exports stubidp.utils.security.security;
     exports stubidp.utils.security.security.verification;

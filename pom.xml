@@ -17,7 +17,6 @@
         <!-- runtime dependencies -->
         <opensaml.version>3.4.3</opensaml.version>
         <dropwizard.version>2.0.0-rc5</dropwizard.version>
-        <guice.version>4.2.2</guice.version>
         <guava.version>28.0-jre</guava.version>
         <joda_time.version>2.10.3</joda_time.version>
         <shibboleth_utils.version>7.5.0</shibboleth_utils.version>
@@ -97,9 +96,9 @@
             <plugin>
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>3.0.0-M3</version>
-                <configuration>
-                    <forkCount>0</forkCount>
-                </configuration>
+<!--                <configuration>-->
+<!--                    <forkCount>0</forkCount>-->
+<!--                </configuration>-->
             </plugin>
             <plugin>
                 <artifactId>maven-failsafe-plugin</artifactId>

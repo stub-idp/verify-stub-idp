@@ -1,4 +1,4 @@
-package stubidp.saml.utils.test;
+package stubidp.saml.stubidp;
 
 import stubidp.saml.extensions.IdaSamlBootstrap;
 

@@ -1,5 +1,5 @@
 @SuppressWarnings("requires-automatic")
-module common.utils {
+module stubidp.common.utils {
     exports stubidp.utils.common.string;
 
     opens stubidp.utils.common.logging; // for LevelLoggerTest

@@ -48,7 +48,7 @@ public class StubIdpAppExtension extends DropwizardAppExtension<StubIdpConfigura
     }
 
     public StubIdpAppExtension(Map<String, String> configOverrides) {
-        super(StubIdpApplication.class, "./configuration/stub-idp.yml", withDefaultOverrides(configOverrides));
+        super(StubIdpApplication.class, "../configuration/stub-idp.yml", withDefaultOverrides(configOverrides));
         try {
             fakeFrontend.register("/get-available-services", 200, "application/json", "[]");
         } catch (JsonProcessingException e) {

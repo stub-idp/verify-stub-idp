@@ -1,5 +1,5 @@
 @SuppressWarnings({"requires-automatic", "requires-transitive-automatic"})
-module saml.extensions {
+module stubidp.saml.extensions {
     exports stubidp.saml.extensions;
     exports stubidp.saml.extensions.domain;
     exports stubidp.saml.extensions.extensions;

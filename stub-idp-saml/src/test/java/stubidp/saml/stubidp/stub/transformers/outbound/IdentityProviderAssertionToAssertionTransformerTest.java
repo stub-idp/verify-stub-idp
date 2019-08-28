@@ -1,4 +1,4 @@
-package stubidp.saml.stubidp.stub.tranformers.outbound;
+package stubidp.saml.stubidp.stub.transformers.outbound;
 
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
@@ -13,9 +13,7 @@ import org.opensaml.saml.saml2.core.Attribute;
 import stubidp.saml.stubidp.builders.MatchingDatasetBuilder;
 import stubidp.saml.stubidp.builders.SimpleMdsValueBuilder;
 import stubidp.saml.stubidp.builders.TransliterableMdsValueBuilder;
-import stubidp.saml.stubidp.stub.transformers.outbound.IdentityProviderAssertionToAssertionTransformer;
-import stubidp.saml.stubidp.stub.transformers.outbound.IdentityProviderAuthnStatementToAuthnStatementTransformer;
-import stubidp.saml.utils.test.OpenSAMLRunner;
+import stubidp.saml.stubidp.OpenSAMLRunner;
 import stubidp.saml.utils.core.OpenSamlXmlObjectFactory;
 import stubidp.saml.utils.core.domain.Address;
 import stubidp.saml.utils.core.domain.AddressFactory;

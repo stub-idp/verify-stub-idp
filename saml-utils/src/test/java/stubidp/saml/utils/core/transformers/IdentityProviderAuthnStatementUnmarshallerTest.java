@@ -1,4 +1,4 @@
-package stubidp.saml.utils.idp.transformers;
+package stubidp.saml.utils.core.transformers;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
