@@ -12,7 +12,7 @@ import stubidp.saml.extensions.validation.SamlValidationSpecificationFailure;
 import stubidp.saml.hub.core.errors.SamlTransformationErrorFactory;
 import stubidp.saml.hub.core.validators.subject.AssertionSubjectValidator;
 import stubidp.saml.hub.core.validators.subjectconfirmation.BasicAssertionSubjectConfirmationValidator;
-import stubidp.saml.hub.test.OpenSAMLRunner;
+import stubidp.saml.hub.core.OpenSAMLRunner;
 import stubidp.saml.security.validators.issuer.IssuerValidator;
 import stubidp.saml.utils.core.test.SamlTransformationErrorManagerTestHelper;
 

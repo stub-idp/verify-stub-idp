@@ -11,7 +11,7 @@ import org.opensaml.saml.saml2.core.AuthnContextClassRef;
 import stubidp.saml.extensions.extensions.EidasAuthnContext;
 import stubidp.saml.extensions.extensions.IdaAuthnContext;
 import stubidp.saml.hub.core.test.builders.IdpFraudEventIdAttributeBuilder;
-import stubidp.saml.hub.test.OpenSAMLRunner;
+import stubidp.saml.hub.core.OpenSAMLRunner;
 import stubidp.saml.serializers.serializers.XmlObjectToBase64EncodedStringTransformer;
 import stubidp.saml.utils.core.domain.AuthnContext;
 import stubidp.saml.utils.core.domain.FraudDetectedDetails;

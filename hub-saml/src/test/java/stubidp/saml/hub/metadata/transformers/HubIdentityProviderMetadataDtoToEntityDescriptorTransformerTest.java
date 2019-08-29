@@ -12,7 +12,7 @@ import org.opensaml.xmlsec.signature.KeyName;
 import org.opensaml.xmlsec.signature.X509Certificate;
 import org.opensaml.xmlsec.signature.X509Data;
 import stubidp.saml.hub.core.test.builders.metadata.IdentityProviderMetadataDtoBuilder;
-import stubidp.saml.hub.test.OpenSAMLRunner;
+import stubidp.saml.hub.core.OpenSAMLRunner;
 import stubidp.saml.utils.core.OpenSamlXmlObjectFactory;
 import stubidp.saml.utils.metadata.transformers.KeyDescriptorsUnmarshaller;
 import stubidp.utils.security.security.Certificate;

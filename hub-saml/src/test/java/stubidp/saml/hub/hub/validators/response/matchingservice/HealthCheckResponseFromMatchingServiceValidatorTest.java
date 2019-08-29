@@ -7,8 +7,7 @@ import org.opensaml.saml.saml2.core.Response;
 import org.opensaml.saml.saml2.core.StatusCode;
 import stubidp.saml.extensions.domain.SamlStatusCode;
 import stubidp.saml.hub.core.errors.SamlTransformationErrorFactory;
-import stubidp.saml.hub.hub.validators.response.matchingservice.HealthCheckResponseFromMatchingServiceValidator;
-import stubidp.saml.hub.test.OpenSAMLRunner;
+import stubidp.saml.hub.core.OpenSAMLRunner;
 import stubidp.saml.utils.core.test.SamlTransformationErrorManagerTestHelper;
 import stubidp.saml.extensions.validation.SamlValidationSpecificationFailure;
 

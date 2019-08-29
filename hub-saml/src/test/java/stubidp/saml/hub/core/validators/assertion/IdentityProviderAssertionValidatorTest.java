@@ -11,7 +11,7 @@ import stubidp.saml.hub.core.errors.SamlTransformationErrorFactory;
 import stubidp.saml.hub.core.test.builders.IdpFraudEventIdAttributeBuilder;
 import stubidp.saml.hub.core.validators.subject.AssertionSubjectValidator;
 import stubidp.saml.hub.core.validators.subjectconfirmation.AssertionSubjectConfirmationValidator;
-import stubidp.saml.hub.test.OpenSAMLRunner;
+import stubidp.saml.hub.core.OpenSAMLRunner;
 import stubidp.saml.security.validators.issuer.IssuerValidator;
 import stubidp.saml.utils.core.domain.AuthnContext;
 import stubidp.saml.utils.core.test.SamlTransformationErrorManagerTestHelper;

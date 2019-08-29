@@ -3,7 +3,7 @@ package stubidp.saml.hub.core.validators;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import stubidp.saml.extensions.validation.SamlValidationSpecificationFailure;
-import stubidp.saml.hub.test.OpenSAMLRunner;
+import stubidp.saml.hub.core.OpenSAMLRunner;
 
 import java.net.URI;
 import java.net.URISyntaxException;

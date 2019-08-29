@@ -5,7 +5,7 @@ import org.junit.jupiter.api.Test;
 import org.opensaml.saml.saml2.metadata.EntityDescriptor;
 import stubidp.saml.extensions.validation.SamlValidationSpecificationFailure;
 import stubidp.saml.hub.core.errors.SamlTransformationErrorFactory;
-import stubidp.saml.hub.test.OpenSAMLRunner;
+import stubidp.saml.hub.core.OpenSAMLRunner;
 import stubidp.saml.utils.core.test.SamlTransformationErrorManagerTestHelper;
 import stubidp.saml.utils.core.test.builders.metadata.IdpSsoDescriptorBuilder;
 import stubidp.saml.utils.core.test.builders.metadata.KeyDescriptorBuilder;

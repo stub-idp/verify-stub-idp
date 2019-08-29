@@ -22,7 +22,7 @@ import stubidp.saml.extensions.extensions.versioning.VersionImpl;
 import stubidp.saml.extensions.extensions.versioning.application.ApplicationVersion;
 import stubidp.saml.extensions.extensions.versioning.application.ApplicationVersionImpl;
 import stubidp.saml.hub.hub.domain.AuthnRequestFromRelyingParty;
-import stubidp.saml.hub.test.OpenSAMLRunner;
+import stubidp.saml.hub.core.OpenSAMLRunner;
 import stubidp.saml.security.DecrypterFactory;
 import stubidp.saml.security.EncrypterFactory;
 import stubidp.utils.security.security.PrivateKeyFactory;

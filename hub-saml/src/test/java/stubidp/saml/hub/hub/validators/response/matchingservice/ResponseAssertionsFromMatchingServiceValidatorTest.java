@@ -15,7 +15,7 @@ import stubidp.saml.hub.core.errors.SamlTransformationErrorFactory;
 import stubidp.saml.hub.core.validators.assertion.IdentityProviderAssertionValidator;
 import stubidp.saml.security.validators.ValidatedAssertions;
 import stubidp.saml.security.validators.ValidatedResponse;
-import stubidp.saml.hub.test.OpenSAMLRunner;
+import stubidp.saml.hub.core.OpenSAMLRunner;
 import stubidp.test.devpki.TestEntityIds;
 
 import static java.util.Collections.singletonList;

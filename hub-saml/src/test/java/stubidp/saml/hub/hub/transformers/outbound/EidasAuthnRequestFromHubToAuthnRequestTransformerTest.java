@@ -22,7 +22,7 @@ import stubidp.saml.extensions.extensions.SPType;
 import stubidp.saml.extensions.extensions.impl.RequestedAttributeImpl;
 import stubidp.saml.extensions.extensions.impl.SPTypeImpl;
 import stubidp.saml.hub.hub.domain.LevelOfAssurance;
-import stubidp.saml.hub.test.OpenSAMLRunner;
+import stubidp.saml.hub.core.OpenSAMLRunner;
 import stubidp.saml.utils.core.OpenSamlXmlObjectFactory;
 import stubidp.saml.utils.core.domain.AuthnContext;
 import stubidp.saml.utils.core.transformers.AuthnContextFactory;

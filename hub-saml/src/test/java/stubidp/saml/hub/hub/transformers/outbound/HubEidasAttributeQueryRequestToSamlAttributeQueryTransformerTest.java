@@ -13,7 +13,7 @@ import org.opensaml.saml.saml2.core.AttributeQuery;
 import org.opensaml.saml.saml2.core.EncryptedAssertion;
 import org.opensaml.saml.saml2.core.NameID;
 import org.opensaml.saml.saml2.core.impl.EncryptedAssertionBuilder;
-import stubidp.saml.hub.test.OpenSAMLRunner;
+import stubidp.saml.hub.core.OpenSAMLRunner;
 import stubidp.saml.utils.core.OpenSamlXmlObjectFactory;
 import stubidp.saml.utils.core.domain.HubAssertion;
 import stubidp.saml.utils.core.domain.PersistentId;

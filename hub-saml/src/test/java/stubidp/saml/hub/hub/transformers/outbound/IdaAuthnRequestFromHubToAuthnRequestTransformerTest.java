@@ -11,7 +11,7 @@ import org.opensaml.saml.saml2.core.NameIDPolicy;
 import org.opensaml.saml.saml2.core.NameIDType;
 import org.opensaml.saml.saml2.core.RequestedAuthnContext;
 import stubidp.saml.extensions.extensions.IdaAuthnContext;
-import stubidp.saml.hub.test.OpenSAMLRunner;
+import stubidp.saml.hub.core.OpenSAMLRunner;
 import stubidp.saml.utils.core.OpenSamlXmlObjectFactory;
 import stubidp.saml.utils.core.domain.AuthnContext;
 import stubidp.saml.utils.hub.domain.IdaAuthnRequestFromHub;

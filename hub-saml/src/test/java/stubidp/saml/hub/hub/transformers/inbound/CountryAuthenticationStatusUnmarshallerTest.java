@@ -8,7 +8,7 @@ import org.opensaml.saml.saml2.core.StatusCode;
 import org.opensaml.saml.saml2.core.StatusMessage;
 import stubidp.saml.hub.core.test.builders.StatusMessageBuilder;
 import stubidp.saml.hub.hub.domain.CountryAuthenticationStatus;
-import stubidp.saml.hub.test.OpenSAMLRunner;
+import stubidp.saml.hub.core.OpenSAMLRunner;
 import stubidp.saml.serializers.deserializers.StringToOpenSamlObjectTransformer;
 import stubidp.saml.utils.core.OpenSamlXmlObjectFactory;
 import stubidp.saml.utils.core.api.CoreTransformersFactory;

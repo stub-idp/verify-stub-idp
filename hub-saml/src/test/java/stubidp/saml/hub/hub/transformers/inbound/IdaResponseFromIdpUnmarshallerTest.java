@@ -11,7 +11,7 @@ import org.opensaml.saml.saml2.core.Response;
 import org.opensaml.xmlsec.signature.Signature;
 import stubidp.saml.hub.core.test.builders.PassthroughAssertionBuilder;
 import stubidp.saml.hub.hub.domain.InboundResponseFromIdp;
-import stubidp.saml.hub.test.OpenSAMLRunner;
+import stubidp.saml.hub.core.OpenSAMLRunner;
 import stubidp.saml.security.validators.ValidatedAssertions;
 import stubidp.saml.security.validators.ValidatedResponse;
 import stubidp.saml.utils.core.domain.PassthroughAssertion;

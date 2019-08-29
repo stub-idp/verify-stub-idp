@@ -5,7 +5,7 @@ import org.junit.jupiter.api.Test;
 import org.opensaml.saml.saml2.core.Status;
 import org.opensaml.saml.saml2.core.StatusCode;
 import stubidp.saml.extensions.domain.SamlStatusCode;
-import stubidp.saml.hub.test.OpenSAMLRunner;
+import stubidp.saml.hub.core.OpenSAMLRunner;
 import stubidp.saml.utils.core.OpenSamlXmlObjectFactory;
 import stubidp.saml.utils.core.domain.MatchingServiceIdaStatus;
 import stubidp.saml.utils.hub.transformers.outbound.MatchingServiceIdaStatusMarshaller;

@@ -1,13 +1,14 @@
 //@SuppressWarnings({"requires-automatic", "requires-transitive-automatic"})
-//module saml.metadata.bindings {
+//module stubidp.saml.metadata.bindings {
 //    exports stubidp.saml.metadata;
 //    exports stubidp.saml.metadata.factories;
 //
+//    requires stubidp.security.utils;
+//    requires stubidp.trust.anchor;
 //    requires org.opensaml.core;
 //    requires org.opensaml.saml;
 //    requires org.opensaml.xmlsec;
-//    requires slf4j.api;
-//    requires security.utils;
+//    requires org.slf4j;
 //    requires jsr305; // https://github.com/google/guava/issues/2960
 //    requires java.xml;
 //    requires dropwizard.core;
@@ -15,17 +16,16 @@
 //    requires org.opensaml.saml.impl;
 //    requires org.opensaml.xmlsec.impl;
 //    requires dropwizard.client;
-//    requires httpclient;
 //    requires com.fasterxml.jackson.annotation;
 //    requires nimbus.jose.jwt;
 //    requires commons.collections;
 //    requires xmlsec;
 //    requires org.joda.time;
-//    requires trust.anchor;
 //    requires dropwizard.servlets;
 //    requires java.xml.crypto; // only for MetadataSignatureTrustEngineFactoryTest
 //    requires java.ws.rs;
 //    requires com.codahale.metrics.health;
 //    requires jakarta.inject;
-////    requires jakarta.activation;
+//    requires org.apache.httpcomponents.httpclient;
+//    requires commons.codec;
 //}

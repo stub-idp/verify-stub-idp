@@ -8,7 +8,7 @@ import org.opensaml.saml.saml2.core.Assertion;
 import org.opensaml.saml.saml2.core.Attribute;
 import stubidp.saml.extensions.extensions.PersonName;
 import stubidp.saml.hub.core.test.builders.IdpFraudEventIdAttributeBuilder;
-import stubidp.saml.hub.test.OpenSAMLRunner;
+import stubidp.saml.hub.core.OpenSAMLRunner;
 import stubidp.saml.utils.core.OpenSamlXmlObjectFactory;
 import stubidp.saml.utils.core.test.SamlTransformationErrorManagerTestHelper;
 import stubidp.saml.utils.core.test.builders.AssertionBuilder;

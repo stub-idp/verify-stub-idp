@@ -16,7 +16,7 @@ import org.opensaml.saml.saml2.core.impl.EncryptedAssertionBuilder;
 import stubidp.saml.hub.core.test.builders.PassthroughAssertionBuilder;
 import stubidp.saml.hub.hub.domain.HubAttributeQueryRequest;
 import stubidp.saml.hub.hub.factories.AttributeQueryAttributeFactory;
-import stubidp.saml.hub.test.OpenSAMLRunner;
+import stubidp.saml.hub.core.OpenSAMLRunner;
 import stubidp.saml.utils.core.OpenSamlXmlObjectFactory;
 import stubidp.saml.utils.core.domain.HubAssertion;
 import stubidp.saml.utils.core.domain.PersistentId;

@@ -10,7 +10,7 @@ import org.opensaml.saml.saml2.core.SubjectConfirmationData;
 import stubidp.saml.hub.core.DateTimeFreezer;
 import stubidp.saml.hub.hub.validators.authnrequest.ConcurrentMapIdExpirationCache;
 import stubidp.saml.hub.hub.validators.authnrequest.IdExpirationCache;
-import stubidp.saml.hub.test.OpenSAMLRunner;
+import stubidp.saml.hub.core.OpenSAMLRunner;
 
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;

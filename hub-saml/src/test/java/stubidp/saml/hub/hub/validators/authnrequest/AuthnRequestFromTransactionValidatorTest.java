@@ -21,7 +21,7 @@ import stubidp.saml.hub.hub.configuration.SamlDuplicateRequestValidationConfigur
 import stubidp.saml.hub.hub.exception.SamlDuplicateRequestIdException;
 import stubidp.saml.hub.hub.exception.SamlRequestTooOldException;
 import stubidp.saml.security.validators.issuer.IssuerValidator;
-import stubidp.saml.hub.test.OpenSAMLRunner;
+import stubidp.saml.hub.core.OpenSAMLRunner;
 
 import java.util.concurrent.ConcurrentHashMap;
 

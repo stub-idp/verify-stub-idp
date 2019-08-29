@@ -23,7 +23,7 @@ import stubidp.saml.hub.metadata.exceptions.NoKeyConfiguredForEntityException;
 import stubidp.saml.metadata.StringBackedMetadataResolver;
 import stubidp.saml.metadata.test.factories.metadata.EntityDescriptorFactory;
 import stubidp.saml.metadata.test.factories.metadata.MetadataFactory;
-import stubidp.saml.hub.test.OpenSAMLRunner;
+import stubidp.saml.hub.core.OpenSAMLRunner;
 import stubidp.saml.utils.core.test.builders.metadata.EntityDescriptorBuilder;
 import stubidp.saml.utils.core.test.builders.metadata.IdpSsoDescriptorBuilder;
 import stubidp.saml.utils.core.test.builders.metadata.KeyDescriptorBuilder;

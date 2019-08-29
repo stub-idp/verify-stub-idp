@@ -9,7 +9,7 @@ import org.opensaml.saml.saml2.core.Assertion;
 import org.opensaml.saml.saml2.core.AuthnContext;
 import org.opensaml.saml.saml2.core.AuthnContextClassRef;
 import org.opensaml.saml.saml2.core.AuthnStatement;
-import stubidp.saml.hub.test.OpenSAMLRunner;
+import stubidp.saml.hub.core.OpenSAMLRunner;
 import stubidp.saml.utils.core.test.builders.AssertionBuilder;
 import stubidp.saml.utils.core.test.builders.AuthnContextBuilder;
 import stubidp.saml.utils.core.test.builders.AuthnContextClassRefBuilder;

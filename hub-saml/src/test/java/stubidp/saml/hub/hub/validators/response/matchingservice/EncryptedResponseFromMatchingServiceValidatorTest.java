@@ -11,7 +11,7 @@ import org.opensaml.saml.saml2.core.StatusCode;
 import stubidp.saml.extensions.domain.SamlStatusCode;
 import stubidp.saml.extensions.validation.SamlValidationSpecificationFailure;
 import stubidp.saml.hub.core.errors.SamlTransformationErrorFactory;
-import stubidp.saml.hub.test.OpenSAMLRunner;
+import stubidp.saml.hub.core.OpenSAMLRunner;
 
 import static stubidp.saml.hub.core.errors.SamlTransformationErrorFactory.emptyIssuer;
 import static stubidp.saml.hub.core.errors.SamlTransformationErrorFactory.illegalIssuerFormat;

@@ -10,7 +10,7 @@ import org.opensaml.saml.saml2.core.SubjectConfirmationData;
 import stubidp.saml.extensions.validation.SamlValidationSpecificationFailure;
 import stubidp.saml.hub.core.DateTimeFreezer;
 import stubidp.saml.hub.core.errors.SamlTransformationErrorFactory;
-import stubidp.saml.hub.test.OpenSAMLRunner;
+import stubidp.saml.hub.core.OpenSAMLRunner;
 import stubidp.saml.utils.core.test.SamlTransformationErrorManagerTestHelper;
 import stubidp.saml.utils.core.test.builders.SubjectConfirmationDataBuilder;
 

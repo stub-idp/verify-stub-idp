@@ -12,7 +12,7 @@ import stubidp.saml.extensions.IdaConstants;
 import stubidp.saml.extensions.extensions.Date;
 import stubidp.saml.extensions.extensions.PersonName;
 import stubidp.saml.extensions.extensions.StringBasedMdsAttributeValue;
-import stubidp.saml.hub.test.OpenSAMLRunner;
+import stubidp.saml.hub.core.OpenSAMLRunner;
 
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;

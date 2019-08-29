@@ -13,7 +13,7 @@ import stubidp.saml.hub.metadata.exceptions.HubEntityMissingException;
 import stubidp.saml.metadata.StringBackedMetadataResolver;
 import stubidp.saml.metadata.test.factories.metadata.MetadataFactory;
 import stubidp.saml.security.PublicKeyFactory;
-import stubidp.saml.hub.test.OpenSAMLRunner;
+import stubidp.saml.hub.core.OpenSAMLRunner;
 import stubidp.test.devpki.TestCertificateStrings;
 import stubidp.test.devpki.TestEntityIds;
 

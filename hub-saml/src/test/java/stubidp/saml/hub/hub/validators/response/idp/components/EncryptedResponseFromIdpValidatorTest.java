@@ -13,7 +13,7 @@ import stubidp.saml.hub.core.errors.SamlTransformationErrorFactory;
 import stubidp.saml.hub.hub.domain.IdpIdaStatus;
 import stubidp.saml.hub.hub.transformers.inbound.SamlStatusToIdaStatusCodeMapper;
 import stubidp.saml.hub.hub.validators.response.helpers.ResponseValidatorTestHelper;
-import stubidp.saml.hub.test.OpenSAMLRunner;
+import stubidp.saml.hub.core.OpenSAMLRunner;
 
 import static stubidp.saml.hub.core.errors.SamlTransformationErrorFactory.emptyIssuer;
 import static stubidp.saml.hub.core.errors.SamlTransformationErrorFactory.illegalIssuerFormat;

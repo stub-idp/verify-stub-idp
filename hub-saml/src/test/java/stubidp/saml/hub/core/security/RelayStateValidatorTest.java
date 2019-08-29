@@ -3,7 +3,7 @@ package stubidp.saml.hub.core.security;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import stubidp.saml.hub.core.errors.SamlTransformationErrorFactory;
-import stubidp.saml.hub.test.OpenSAMLRunner;
+import stubidp.saml.hub.core.OpenSAMLRunner;
 import stubidp.saml.utils.core.test.SamlTransformationErrorManagerTestHelper;
 
 import static java.util.Arrays.asList;

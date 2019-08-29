@@ -14,7 +14,7 @@ import org.opensaml.saml.saml2.core.SubjectConfirmationData;
 import org.opensaml.saml.saml2.encryption.Encrypter;
 import org.opensaml.security.credential.Credential;
 import org.opensaml.xmlsec.encryption.support.EncryptionException;
-import stubidp.saml.hub.test.OpenSAMLRunner;
+import stubidp.saml.hub.core.OpenSAMLRunner;
 import stubidp.saml.security.EncrypterFactory;
 import stubidp.saml.security.EntityToEncryptForLocator;
 import stubidp.saml.security.KeyStoreBackedEncryptionCredentialResolver;
