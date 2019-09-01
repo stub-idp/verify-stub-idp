@@ -10,7 +10,6 @@ import org.opensaml.xmlsec.signature.Signature;
 import stubidp.saml.security.SignatureFactory;
 import stubidp.saml.utils.OpenSAMLRunner;
 
-import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -26,6 +25,9 @@ public class ResponseSignatureCreatorTest extends OpenSAMLRunner {
     @Mock
     private SignatureFactory signatureFactory;
 
+    @Mock
+    private Signature signature;
+
     @BeforeEach
     public void setup() {
         responseSignatureCreator = new ResponseSignatureCreator(signatureFactory);
@@ -33,7 +35,6 @@ public class ResponseSignatureCreatorTest extends OpenSAMLRunner {
 
     @Test
     public void decorate_shouldGetSignatureAndAssignIt() {
-        Response response = mock(Response.class);
         String id = "response-id";
         when(response.getSignatureReferenceID()).thenReturn(id);
 
@@ -44,7 +45,6 @@ public class ResponseSignatureCreatorTest extends OpenSAMLRunner {
 
     @Test
     public void shouldAssignSignatureToResponse() {
-        Signature signature = mock(Signature.class);
         String id = "response-id";
         when(response.getSignatureReferenceID()).thenReturn(id);
         when(signatureFactory.createSignature(id)).thenReturn(signature);

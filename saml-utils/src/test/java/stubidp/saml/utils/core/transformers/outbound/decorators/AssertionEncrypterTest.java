@@ -1,36 +1,44 @@
 package stubidp.saml.utils.core.transformers.outbound.decorators;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.opensaml.saml.saml2.core.Assertion;
 import org.opensaml.saml.saml2.core.EncryptedAssertion;
 import org.opensaml.saml.saml2.encryption.Encrypter;
 import org.opensaml.security.credential.Credential;
 import stubidp.saml.security.EncrypterFactory;
 import stubidp.saml.security.KeyStoreBackedEncryptionCredentialResolver;
-import stubidp.saml.utils.core.transformers.outbound.decorators.AssertionEncrypter;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+@ExtendWith(MockitoExtension.class)
 public class AssertionEncrypterTest {
+
+    @Mock
+    private KeyStoreBackedEncryptionCredentialResolver credentialFactory;
+    @Mock
+    private Credential credential;
+    @Mock
+    private EncrypterFactory encrypterFactory;
+    @Mock
+    private Encrypter encrypter;
+    @Mock
+    private Assertion assertion;
+    @Mock
+    private EncryptedAssertion expectedEncryptedAssertion;
 
     @Test
     public void shouldEncryptAssertion() throws Exception {
-        KeyStoreBackedEncryptionCredentialResolver credentialFactory = mock(KeyStoreBackedEncryptionCredentialResolver.class);
-        final Credential credential = mock(Credential.class);
         String entityId = "my-entity-id";
         when(credentialFactory.getEncryptingCredential(entityId)).thenReturn(credential);
-
-        EncrypterFactory encrypterFactory = mock(EncrypterFactory.class);
-        Encrypter encrypter = mock(Encrypter.class);
         when(encrypterFactory.createEncrypter(credential)).thenReturn(encrypter);
-
-        Assertion assertion = mock(Assertion.class);
-        EncryptedAssertion expectedEncryptedAssertion = mock(EncryptedAssertion.class);
         when(encrypter.encrypt(assertion)).thenReturn(expectedEncryptedAssertion);
 
         AssertionEncrypter assertionEncrypter = new AssertionEncrypter(encrypterFactory, credentialFactory);
+
         assertThat(assertionEncrypter.encrypt(assertion, entityId)).isEqualTo(expectedEncryptedAssertion);
     }
 
