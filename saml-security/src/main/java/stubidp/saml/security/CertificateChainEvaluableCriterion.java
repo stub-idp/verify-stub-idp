@@ -19,7 +19,6 @@
 
 package stubidp.saml.security;
 
-import com.google.common.base.Optional;
 import org.opensaml.security.credential.Credential;
 import org.opensaml.security.credential.criteria.impl.EvaluableCredentialCriterion;
 import org.opensaml.security.x509.X509Credential;
@@ -32,6 +31,7 @@ import stubidp.utils.security.security.verification.exceptions.CertificateChainV
 import java.security.KeyStore;
 import java.security.cert.CertPathValidatorException;
 import java.security.cert.X509Certificate;
+import java.util.Optional;
 
 /**
  * Instance of evaluable credential criteria for evaluating whether a credential's certificate has a valid

@@ -1,6 +1,5 @@
 package stubidp.utils.security.security;
 
-import com.google.common.base.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -13,6 +12,7 @@ import java.security.GeneralSecurityException;
 import java.security.InvalidKeyException;
 import java.security.SecureRandom;
 import java.util.Base64;
+import java.util.Optional;
 
 import static java.text.MessageFormat.format;
 
@@ -73,7 +73,7 @@ public class CryptoHelper {
             idpEntityIdAsByteArray = bytes(idpEntityId);
         } catch (UnsupportedEncodingException e) {
             LOG.warn(format("UnsupportedEncoding (not UTF8) for entityId: {0}", idpEntityId));
-            return Optional.absent();
+            return Optional.empty();
         }
         byte[] decryptedIdpNameWithNonce = addNonceAndPadding(idpEntityIdAsByteArray);
         byte[] encryptedIdpNameWithNonce;
@@ -81,7 +81,7 @@ public class CryptoHelper {
             encryptedIdpNameWithNonce = encrypt(decryptedIdpNameWithNonce);
         } catch (GeneralSecurityException e) {
             LOG.warn(format("Unable to encode: {0}, exception message: {1}", decryptedIdpNameWithNonce, e.getMessage()));
-            return Optional.absent();
+            return Optional.empty();
         }
         return Optional.of(base64(encryptedIdpNameWithNonce));
     }
@@ -89,7 +89,7 @@ public class CryptoHelper {
     public Optional<String> decrypt_yesIKnowThisCryptoCodeHasNotBeenAudited(String base64EncodedEncryptedIdpNameWithNonce) {
         if (base64EncodedEncryptedIdpNameWithNonce.isEmpty()) {
             LOG.warn("entityId is empty");
-            return Optional.absent();
+            return Optional.empty();
         }
         byte[] encryptedIdpNameWithNonce = unBase64(base64EncodedEncryptedIdpNameWithNonce);
         byte[] decryptedIdpNameWithNonce;
@@ -97,20 +97,20 @@ public class CryptoHelper {
             decryptedIdpNameWithNonce = decrypt(encryptedIdpNameWithNonce);
         } catch (BadPaddingException e) {
             LOG.warn(format("BadPadding (possibly incorrect key) trying to decrypt message: {0}", encryptedIdpNameWithNonce));
-            return Optional.absent();
+            return Optional.empty();
         } catch (InvalidKeyException e) {
             LOG.warn(format("Key is invalid for message: {0}", encryptedIdpNameWithNonce));
-            return Optional.absent();
+            return Optional.empty();
         } catch (GeneralSecurityException e) {
             LOG.warn(format("Failed to decrypt message: {0}", encryptedIdpNameWithNonce));
-            return Optional.absent();
+            return Optional.empty();
         }
         byte[] idpEntityIdAsByteArray = removeNonceAndPadding(decryptedIdpNameWithNonce);
         try {
             return Optional.of(string(idpEntityIdAsByteArray));
         } catch (UnsupportedEncodingException e) {
             LOG.warn(format("UnsupportedEncoding (UTF8) could not encode entityId as utf8: {0}", idpEntityIdAsByteArray));
-            return Optional.absent();
+            return Optional.empty();
         }
     }
 

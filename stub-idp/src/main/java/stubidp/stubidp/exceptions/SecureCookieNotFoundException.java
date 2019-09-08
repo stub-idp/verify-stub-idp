@@ -1,7 +1,8 @@
 package stubidp.stubidp.exceptions;
 
-import com.google.common.base.Optional;
 import stubidp.utils.rest.common.SessionId;
+
+import java.util.Optional;
 
 public class SecureCookieNotFoundException extends RuntimeException {
 
@@ -11,7 +12,7 @@ public class SecureCookieNotFoundException extends RuntimeException {
     public SecureCookieNotFoundException(String message, SessionId sessionId) {
         super(message);
         this.message = message;
-        this.sessionId = Optional.fromNullable(sessionId);
+        this.sessionId = Optional.ofNullable(sessionId);
     }
 
     public Optional<SessionId> getSessionId() {

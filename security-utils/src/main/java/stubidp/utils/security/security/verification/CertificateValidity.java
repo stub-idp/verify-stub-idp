@@ -1,18 +1,17 @@
 package stubidp.utils.security.security.verification;
 
-import com.google.common.base.Optional;
-
 import java.security.cert.CertPathValidatorException;
+import java.util.Optional;
 
 public class CertificateValidity {
     private final Optional<CertPathValidatorException> exception;
 
     public static CertificateValidity valid() {
-        return new CertificateValidity(Optional.<CertPathValidatorException>absent());
+        return new CertificateValidity(Optional.<CertPathValidatorException>empty());
     }
 
     public static CertificateValidity invalid(CertPathValidatorException e) {
-        return new CertificateValidity(Optional.of(e));
+        return new CertificateValidity(Optional.ofNullable(e));
     }
 
     private CertificateValidity(Optional<CertPathValidatorException> exception) {
