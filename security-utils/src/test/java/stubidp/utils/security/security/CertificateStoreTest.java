@@ -1,6 +1,5 @@
 package stubidp.utils.security.security;
 
-import com.google.common.collect.ImmutableList;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -12,7 +11,6 @@ import java.io.UnsupportedEncodingException;
 import java.net.URISyntaxException;
 import java.util.List;
 
-import static com.google.common.collect.Lists.newArrayList;
 import static org.assertj.core.api.Assertions.assertThat;
 import static stubidp.utils.security.security.Certificate.BEGIN_CERT;
 import static stubidp.utils.security.security.Certificate.END_CERT;
@@ -35,7 +33,7 @@ public class CertificateStoreTest {
 
     @Test
     public void getEncryptionCertificateValue_shouldStripOutHeadersIfPresent() throws UnsupportedEncodingException {
-        CertificateStore certificateStore = new CertificateStore(ImmutableList.of(publicKeyConfiguration), ImmutableList.of(publicKeyConfiguration));
+        CertificateStore certificateStore = new CertificateStore(List.of(publicKeyConfiguration), List.of(publicKeyConfiguration));
         String encryptionCertificateValue = certificateStore.getEncryptionCertificates().get(0).getCertificate();
 
         assertThat(encryptionCertificateValue.contains("BEGIN")).isEqualTo(false);
@@ -45,11 +43,11 @@ public class CertificateStoreTest {
 
     @Test
     public void getEncryptionCertificateValue_shouldHandleMultipleCertificateValues() throws UnsupportedEncodingException {
-        CertificateStore certificateStore = new CertificateStore(ImmutableList.of(publicKeyConfiguration, publicKeyConfiguration2), ImmutableList.of(publicKeyConfiguration));
+        CertificateStore certificateStore = new CertificateStore(List.of(publicKeyConfiguration, publicKeyConfiguration2), List.of(publicKeyConfiguration));
         final List<Certificate> encryptionCertificates = certificateStore.getEncryptionCertificates();
 
         encryptionCertificates.forEach(cert -> {
-            assertThat(newArrayList(
+            assertThat(List.of(
                     stripHeaders(publicKeyConfiguration.getCert()),
                     stripHeaders(publicKeyConfiguration2.getCert()))).contains(cert.getCertificate());
         });
@@ -61,7 +59,7 @@ public class CertificateStoreTest {
 
     @Test
     public void getSigningCertificateValue_shouldStripOutHeadersIfPresent() throws UnsupportedEncodingException {
-        CertificateStore certificateStore = new CertificateStore(ImmutableList.of(publicKeyConfiguration), ImmutableList.of(publicKeyConfiguration2));
+        CertificateStore certificateStore = new CertificateStore(List.of(publicKeyConfiguration), List.of(publicKeyConfiguration2));
         List<Certificate> signingCertificateValues = certificateStore.getSigningCertificates();
 
         assertThat(signingCertificateValues).hasSize(1);

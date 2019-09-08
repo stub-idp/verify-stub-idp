@@ -1,6 +1,5 @@
 package stubidp.saml.hub.hub.validators.response.idp;
 
-import com.google.common.collect.ImmutableList;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -76,7 +75,7 @@ public class IdpResponseValidatorTest {
     @Test
     public void shouldValidateSamlAssertionSignature() {
         Assertion assertion = mock(Assertion.class);
-        List<Assertion> assertions = ImmutableList.of(assertion);
+        List<Assertion> assertions = List.of(assertion);
         ValidatedResponse validatedResponse = mock(ValidatedResponse.class);
 
         when(samlResponseSignatureValidator.validate(response, IDPSSODescriptor.DEFAULT_ELEMENT_NAME)).thenReturn(validatedResponse);

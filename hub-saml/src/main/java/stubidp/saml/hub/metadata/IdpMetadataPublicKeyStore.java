@@ -1,6 +1,5 @@
 package stubidp.saml.hub.metadata;
 
-import com.google.common.collect.ImmutableList;
 import net.shibboleth.utilities.java.support.resolver.CriteriaSet;
 import net.shibboleth.utilities.java.support.resolver.ResolverException;
 import org.apache.xml.security.exceptions.Base64DecodingException;
@@ -64,7 +63,7 @@ public class IdpMetadataPublicKeyStore implements SigningKeyStore {
         return descriptor.getKeyDescriptors().stream()
                 .filter(keyDescriptor -> keyDescriptor.getUse().equals(keyType))
                 .flatMap(this::getPublicKeys)
-                .collect(Collectors.collectingAndThen(Collectors.toList(), ImmutableList::copyOf));
+                .collect(Collectors.collectingAndThen(Collectors.toList(), List::copyOf));
     }
 
     private Stream<PublicKey> getPublicKeys(KeyDescriptor keyDescriptor) {

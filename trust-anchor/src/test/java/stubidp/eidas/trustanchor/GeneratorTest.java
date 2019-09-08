@@ -1,7 +1,6 @@
 package stubidp.eidas.trustanchor;
 
 import certificates.values.CACertificates;
-import com.google.common.collect.ImmutableList;
 import com.nimbusds.jose.JOSEException;
 import com.nimbusds.jose.JWSObject;
 import com.nimbusds.jose.crypto.RSASSAVerifier;
@@ -72,7 +71,7 @@ public class GeneratorTest {
         String countryPublicCert = CACertificates.TEST_ROOT_CA;
         X509Certificate countryCertificate = new X509CertificateFactory().createCertificate(countryPublicCert);
         HashMap<String, List<X509Certificate>> trustAnchorMap = new HashMap<>();
-        trustAnchorMap.put("https://generator.test", ImmutableList.of(countryCertificate));
+        trustAnchorMap.put("https://generator.test", List.of(countryCertificate));
         JWSObject output = generator.generateFromMap(trustAnchorMap);
 
         assertSigned(output, publicKeyForSigning);

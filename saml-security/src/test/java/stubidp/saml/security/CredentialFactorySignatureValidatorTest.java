@@ -1,7 +1,6 @@
 package stubidp.saml.security;
 
 import com.google.common.base.Charsets;
-import com.google.common.collect.ImmutableMap;
 import com.google.common.io.Resources;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -21,6 +20,7 @@ import stubidp.test.devpki.TestEntityIds;
 
 import java.net.URL;
 import java.util.List;
+import java.util.Map;
 
 import static java.util.Arrays.asList;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -53,7 +53,7 @@ public class CredentialFactorySignatureValidatorTest extends OpenSAMLRunner {
     @Test
     public void shouldSupportAnEntityWithMultipleSigningCertificates() throws Exception {
         List<String> certificates = asList(TestCertificateStrings.HUB_TEST_PUBLIC_SIGNING_CERT, TestCertificateStrings.HUB_TEST_SECONDARY_PUBLIC_SIGNING_CERT);
-        final ImmutableMap<String, List<String>> publicKeys = ImmutableMap.of(issuerId, certificates);
+        final Map<String, List<String>> publicKeys = Map.of(issuerId, certificates);
         final InjectableSigningKeyStore injectableSigningKeyStore = new InjectableSigningKeyStore(publicKeys);
         final CredentialFactorySignatureValidator credentialFactorySignatureValidator = new CredentialFactorySignatureValidator(new SigningCredentialFactory(injectableSigningKeyStore));
 

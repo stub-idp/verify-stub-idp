@@ -1,6 +1,5 @@
 package stubidp.eidas.trustanchor;
 
-import com.google.common.collect.ImmutableList;
 import org.junit.jupiter.api.Test;
 
 import java.io.File;
@@ -24,7 +23,7 @@ public class SignedTrustAnchorGeneratorTest {
         File inputFile = mock(File.class);
         when(inputFile.getPath()).thenReturn("test");
         when(inputFile.canRead()).thenReturn(false);
-        List<File> inputFiles = ImmutableList.of(inputFile);
+        List<File> inputFiles = List.of(inputFile);
 
         File outputFile = mock(File.class);
 

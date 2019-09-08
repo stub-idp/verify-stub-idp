@@ -1,6 +1,5 @@
 package stubidp.saml.security.validators.encryptedelementtype;
 
-import com.google.common.collect.ImmutableSet;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.opensaml.core.xml.config.XMLObjectProviderRegistrySupport;
@@ -8,8 +7,8 @@ import org.opensaml.saml.saml2.core.EncryptedAssertion;
 import org.opensaml.xmlsec.encryption.support.EncryptionConstants;
 import org.w3c.dom.Element;
 import stubidp.saml.extensions.validation.SamlValidationSpecificationFailure;
-import stubidp.saml.security.errors.SamlTransformationErrorFactory;
 import stubidp.saml.security.OpenSAMLRunner;
+import stubidp.saml.security.errors.SamlTransformationErrorFactory;
 import stubidp.saml.security.saml.SamlTransformationErrorManagerTestHelper;
 import stubidp.saml.security.saml.deserializers.XmlUtils;
 
@@ -36,8 +35,8 @@ public class EncryptionAlgorithmValidatorTest extends OpenSAMLRunner {
     @Test
     public void validateShouldNotThrowSamlExceptionIfEncryptionAlgorithmIsWhitelisted() {
         final String algoIdBlockcipherAes256 = EncryptionConstants.ALGO_ID_BLOCKCIPHER_AES256;
-        final Set<String> whitelistedAlgos = ImmutableSet.of(EncryptionConstants.ALGO_ID_BLOCKCIPHER_AES128, algoIdBlockcipherAes256);
-        final Set<String> whitelistedKeyTransportAlgos = ImmutableSet.of(EncryptionConstants.ALGO_ID_KEYTRANSPORT_RSAOAEP, EncryptionConstants.ALGO_ID_KEYTRANSPORT_RSAOAEP11);
+        final Set<String> whitelistedAlgos = Set.of(EncryptionConstants.ALGO_ID_BLOCKCIPHER_AES128, algoIdBlockcipherAes256);
+        final Set<String> whitelistedKeyTransportAlgos = Set.of(EncryptionConstants.ALGO_ID_KEYTRANSPORT_RSAOAEP, EncryptionConstants.ALGO_ID_KEYTRANSPORT_RSAOAEP11);
 
         validator = new EncryptionAlgorithmValidator(whitelistedAlgos, whitelistedKeyTransportAlgos);
         assertThatCode(() -> validator.validate(createStandardEncryptedAssertion(algoIdBlockcipherAes256, EncryptionConstants.ALGO_ID_KEYTRANSPORT_RSAOAEP, true))).doesNotThrowAnyException();
@@ -56,8 +55,8 @@ public class EncryptionAlgorithmValidatorTest extends OpenSAMLRunner {
 
     @Test
     public void validateShouldNotThrowIfKeyTransportAlgorithmIsInWhitelist() throws Exception {
-        final Set<String> whitelistedAlgos = ImmutableSet.of(EncryptionConstants.ALGO_ID_BLOCKCIPHER_AES128);
-        final Set<String> whiteListedKeyTransportAlgos = ImmutableSet.of(EncryptionConstants.ALGO_ID_KEYTRANSPORT_RSA15, EncryptionConstants.ALGO_ID_KEYTRANSPORT_RSAOAEP);
+        final Set<String> whitelistedAlgos = Set.of(EncryptionConstants.ALGO_ID_BLOCKCIPHER_AES128);
+        final Set<String> whiteListedKeyTransportAlgos = Set.of(EncryptionConstants.ALGO_ID_KEYTRANSPORT_RSA15, EncryptionConstants.ALGO_ID_KEYTRANSPORT_RSAOAEP);
 
         validator = new EncryptionAlgorithmValidator(whitelistedAlgos, whiteListedKeyTransportAlgos);
         assertThatCode(() -> validator.validate(createStandardEncryptedAssertion(EncryptionConstants.ALGO_ID_BLOCKCIPHER_AES128, EncryptionConstants.ALGO_ID_KEYTRANSPORT_RSA15, true))).doesNotThrowAnyException();

@@ -1,6 +1,5 @@
 package stubidp.saml.metadata;
 
-import com.google.common.collect.ImmutableMap;
 import com.nimbusds.jose.jwk.JWK;
 import com.nimbusds.jose.util.X509CertUtils;
 import net.shibboleth.utilities.java.support.component.AbstractInitializableComponent;
@@ -13,9 +12,9 @@ import org.opensaml.saml.metadata.resolver.MetadataResolver;
 import org.opensaml.xmlsec.signature.support.impl.ExplicitKeySignatureTrustEngine;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import stubidp.eidas.trustanchor.CountryTrustAnchor;
 import stubidp.saml.metadata.factories.DropwizardMetadataResolverFactory;
 import stubidp.saml.metadata.factories.MetadataSignatureTrustEngineFactory;
-import stubidp.eidas.trustanchor.CountryTrustAnchor;
 
 import javax.inject.Inject;
 import javax.ws.rs.client.Client;
@@ -26,6 +25,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -41,7 +41,7 @@ public class EidasMetadataResolverRepository implements MetadataResolverReposito
     private final EidasTrustAnchorResolver trustAnchorResolver;
     private final DropwizardMetadataResolverFactory dropwizardMetadataResolverFactory;
     private final MetadataResolverConfigBuilder metadataResolverConfigBuilder;
-    private ImmutableMap<String, MetadataResolverContainer> metadataResolvers = ImmutableMap.of();
+    private Map<String, MetadataResolverContainer> metadataResolvers = Map.of();
     private List<JWK> trustAnchors = new ArrayList<>();
     private final EidasMetadataConfiguration eidasMetadataConfiguration;
     private final Timer timer;
@@ -75,7 +75,7 @@ public class EidasMetadataResolverRepository implements MetadataResolverReposito
 
     @Override
     public List<String> getResolverEntityIds() {
-        return metadataResolvers.keySet().asList();
+        return List.<String>copyOf(metadataResolvers.keySet());
     }
 
     @Override
@@ -128,7 +128,7 @@ public class EidasMetadataResolverRepository implements MetadataResolverReposito
 
         // the subtract is unchecked
         List<String> resolversToRemove = ListUtils.subtract(currentResolverEntityIds, trustAnchorsEntityIds);
-        ImmutableMap.Builder<String, MetadataResolverContainer> newMetadataResolvers = new ImmutableMap.Builder<>();
+        Map<String, MetadataResolverContainer> newMetadataResolvers = new HashMap<>();
 
         trustAnchorsEntityIds.forEach(trustAnchorsEntityId -> {
             try {
@@ -144,7 +144,7 @@ public class EidasMetadataResolverRepository implements MetadataResolverReposito
                 .map(resolverToRemove -> metadataResolvers.get(resolverToRemove).getMetadataResolver())
                 .collect(toList());
 
-        this.metadataResolvers = newMetadataResolvers.build();
+        this.metadataResolvers = Map.copyOf(newMetadataResolvers);
 
         metadataResolversToRemove.forEach(AbstractInitializableComponent::destroy);
     }
@@ -192,7 +192,7 @@ public class EidasMetadataResolverRepository implements MetadataResolverReposito
         delayBeforeNextRefresh = eidasMetadataConfiguration.getTrustAnchorMinRefreshDelay();
     }
 
-    private class MetadataResolverContainer {
+    private static class MetadataResolverContainer {
         private final JerseyClientMetadataResolver metadataResolver;
         private final ExplicitKeySignatureTrustEngine explicitKeySignatureTrustEngine;
 

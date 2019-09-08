@@ -1,6 +1,5 @@
 package stubidp.eidas.trustanchor;
 
-import com.google.common.collect.ImmutableList;
 import org.junit.jupiter.api.Test;
 
 import javax.security.auth.x500.X500Principal;
@@ -16,13 +15,13 @@ public class CertificateSorterTest {
 
     @Test
     public void shouldReturnEmptyListWhenGivenEmptyList() {
-        List<X509Certificate> sortedCerts = CertificateSorter.sort(ImmutableList.of());
+        List<X509Certificate> sortedCerts = CertificateSorter.sort(List.of());
         assertThat(sortedCerts).isEmpty();
     }
 
     @Test
     public void shouldReturnListWhenGivenSingleCert() {
-        ImmutableList<X509Certificate> testCertificates = ImmutableList.of(mock(X509Certificate.class));
+        List<X509Certificate> testCertificates = List.of(mock(X509Certificate.class));
         List<X509Certificate> sortedCerts = CertificateSorter.sort(testCertificates);
 
         assertThat(sortedCerts).isEqualTo(testCertificates);
@@ -39,7 +38,7 @@ public class CertificateSorterTest {
         when(leafCert.getSubjectX500Principal()).thenReturn(x500Leaf);
         when(parentCert.getSubjectX500Principal()).thenReturn(x500Parent);
 
-        ImmutableList<X509Certificate> testCertificates = ImmutableList.of(leafCert, parentCert);
+        List<X509Certificate> testCertificates = List.of(leafCert, parentCert);
         List<X509Certificate> sortedCerts = CertificateSorter.sort(testCertificates);
 
         assertThat(sortedCerts).isEqualTo(testCertificates);
@@ -56,10 +55,10 @@ public class CertificateSorterTest {
         when(leafCert.getSubjectX500Principal()).thenReturn(x500Leaf);
         when(parentCert.getSubjectX500Principal()).thenReturn(x500Parent);
 
-        ImmutableList<X509Certificate> testCertificates = ImmutableList.of(parentCert, leafCert);
+        List<X509Certificate> testCertificates = List.of(parentCert, leafCert);
         List<X509Certificate> sortedCerts = CertificateSorter.sort(testCertificates);
 
-        ImmutableList<X509Certificate> controlCertificates = ImmutableList.of(leafCert, parentCert);
+        List<X509Certificate> controlCertificates = List.of(leafCert, parentCert);
         assertThat(sortedCerts).isEqualTo(controlCertificates);
     }
 
@@ -78,7 +77,7 @@ public class CertificateSorterTest {
         when(intermediaryCert.getSubjectX500Principal()).thenReturn(x500Intermediary);
         when(parentCert.getSubjectX500Principal()).thenReturn(x500Parent);
 
-        ImmutableList<X509Certificate> testCertificates = ImmutableList.of(leafCert, intermediaryCert, parentCert);
+        List<X509Certificate> testCertificates = List.of(leafCert, intermediaryCert, parentCert);
         List<X509Certificate> sortedCerts = CertificateSorter.sort(testCertificates);
 
         assertThat(sortedCerts).isEqualTo(testCertificates);
@@ -99,10 +98,10 @@ public class CertificateSorterTest {
         when(intermediaryCert.getSubjectX500Principal()).thenReturn(x500Intermediary);
         when(parentCert.getSubjectX500Principal()).thenReturn(x500Parent);
 
-        ImmutableList<X509Certificate> testCertificates = ImmutableList.of(leafCert, parentCert, intermediaryCert);
+        List<X509Certificate> testCertificates = List.of(leafCert, parentCert, intermediaryCert);
         List<X509Certificate> sortedCerts = CertificateSorter.sort(testCertificates);
 
-        ImmutableList<X509Certificate> controlCertificates = ImmutableList.of(leafCert, intermediaryCert, parentCert);
+        List<X509Certificate> controlCertificates = List.of(leafCert, intermediaryCert, parentCert);
         assertThat(sortedCerts).isEqualTo(controlCertificates);
     }
 
@@ -121,10 +120,10 @@ public class CertificateSorterTest {
         when(intermediaryCert.getSubjectX500Principal()).thenReturn(x500Intermediary);
         when(parentCert.getSubjectX500Principal()).thenReturn(x500Parent);
 
-        ImmutableList<X509Certificate> testCertificates = ImmutableList.of(parentCert, intermediaryCert, leafCert);
+        List<X509Certificate> testCertificates = List.of(parentCert, intermediaryCert, leafCert);
         List<X509Certificate> sortedCerts = CertificateSorter.sort(testCertificates);
 
-        ImmutableList<X509Certificate> controlCertificates = ImmutableList.of(leafCert, intermediaryCert, parentCert);
+        List<X509Certificate> controlCertificates = List.of(leafCert, intermediaryCert, parentCert);
         assertThat(sortedCerts).isEqualTo(controlCertificates);
     }
 
@@ -143,10 +142,10 @@ public class CertificateSorterTest {
         when(intermediaryCert.getSubjectX500Principal()).thenReturn(x500Intermediary);
         when(parentCert.getSubjectX500Principal()).thenReturn(x500Parent);
 
-        ImmutableList<X509Certificate> testCertificates = ImmutableList.of(intermediaryCert, leafCert, parentCert);
+        List<X509Certificate> testCertificates = List.of(intermediaryCert, leafCert, parentCert);
         List<X509Certificate> sortedCerts = CertificateSorter.sort(testCertificates);
 
-        ImmutableList<X509Certificate> controlCertificates = ImmutableList.of(leafCert, intermediaryCert, parentCert);
+        List<X509Certificate> controlCertificates = List.of(leafCert, intermediaryCert, parentCert);
         assertThat(sortedCerts).isEqualTo(controlCertificates);
     }
 
@@ -165,7 +164,7 @@ public class CertificateSorterTest {
         when(surplusLeafCert.getSubjectX500Principal()).thenReturn(x500Surplus);
         when(parentCert.getSubjectX500Principal()).thenReturn(x500Parent);
 
-        ImmutableList<X509Certificate> testCertificates = ImmutableList.of(surplusLeafCert, leafCert, parentCert);
+        List<X509Certificate> testCertificates = List.of(surplusLeafCert, leafCert, parentCert);
         assertThatExceptionOfType(IllegalArgumentException.class)
                 .isThrownBy(() -> CertificateSorter.sort(testCertificates));
     }
@@ -183,7 +182,7 @@ public class CertificateSorterTest {
         when(parentCert.getSubjectX500Principal()).thenReturn(x500Parent);
         when(duplicateParentCert.getSubjectX500Principal()).thenReturn(x500Parent);
 
-        ImmutableList<X509Certificate> testCertificates = ImmutableList.of(duplicateParentCert, leafCert, parentCert);
+        List<X509Certificate> testCertificates = List.of(duplicateParentCert, leafCert, parentCert);
         assertThatExceptionOfType(IllegalArgumentException.class)
                 .isThrownBy(() -> CertificateSorter.sort(testCertificates));
     }

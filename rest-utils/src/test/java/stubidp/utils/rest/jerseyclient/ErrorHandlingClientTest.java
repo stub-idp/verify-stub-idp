@@ -1,7 +1,5 @@
 package stubidp.utils.rest.jerseyclient;
 
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableMap;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -53,10 +51,10 @@ public class ErrorHandlingClientTest {
     @Test
     public void getWithCookiesAndHeaders_shouldAddCookiesAndHeadersToRequest() throws Exception {
         final Cookie cookie = new Cookie("cookie", "monster");
-        final List<Cookie> cookies = ImmutableList.of(cookie);
+        final List<Cookie> cookies = List.of(cookie);
         final String headerName = "X-Clacks-Overhead";
         final String headerValue = "GNU Terry Pratchett";
-        final Map<String, String> headers = ImmutableMap.of(headerName, headerValue);
+        final Map<String, String> headers = Map.of(headerName, headerValue);
 
         when(client.target(any(URI.class))).thenReturn(webTarget);
         when(webTarget.request()).thenReturn(webTargetBuilder);
@@ -82,7 +80,7 @@ public class ErrorHandlingClientTest {
     public void postWithHeaders_shouldAddHeadersToRequest() throws Exception {
         final String headerName = "X-Clacks-Overhead";
         final String headerValue = "GNU Terry Pratchett";
-        final Map<String, String> headers = ImmutableMap.of(headerName, headerValue);
+        final Map<String, String> headers = Map.of(headerName, headerValue);
         final String postBody = "";
 
         when(client.target(any(URI.class))).thenReturn(webTarget);

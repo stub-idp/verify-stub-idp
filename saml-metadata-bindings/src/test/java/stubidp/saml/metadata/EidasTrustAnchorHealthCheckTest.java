@@ -1,7 +1,6 @@
 package stubidp.saml.metadata;
 
 import com.codahale.metrics.health.HealthCheck.Result;
-import com.google.common.collect.ImmutableMap;
 import net.shibboleth.utilities.java.support.resolver.CriteriaSet;
 import net.shibboleth.utilities.java.support.resolver.ResolverException;
 import org.junit.jupiter.api.BeforeEach;
@@ -58,7 +57,7 @@ public class EidasTrustAnchorHealthCheckTest {
         MetadataResolver secondMetadataResolver = mock(MetadataResolver.class);
         MetadataResolver thirdMetadataResolver = mock(MetadataResolver.class);
 
-        ImmutableMap<String, MetadataResolver> metadataResolverMap = ImmutableMap.of(
+        Map<String, MetadataResolver> metadataResolverMap = Map.of(
                 entityId1, validMetadataResolver,
                 entityId2, secondMetadataResolver,
                 entityId3, thirdMetadataResolver
@@ -85,7 +84,7 @@ public class EidasTrustAnchorHealthCheckTest {
 
         MetadataResolver validMetadataResolver = getValidMetadataResolver(entityId1);
 
-        ImmutableMap<String, MetadataResolver> metadataResolverMap = ImmutableMap.of(entityId1, validMetadataResolver);
+        Map<String, MetadataResolver> metadataResolverMap = Map.of(entityId1, validMetadataResolver);
 
         when(metadataResolverRepository.getResolverEntityIds()).thenReturn(Collections.singletonList(entityId1));
         when(metadataResolverRepository.getMetadataResolvers()).thenReturn(metadataResolverMap);
@@ -106,7 +105,7 @@ public class EidasTrustAnchorHealthCheckTest {
 
         MetadataResolver validMetadataResolver1 = getValidMetadataResolver(entityId1);
         MetadataResolver validMetadataResolver2 = getValidMetadataResolver(entityId2);
-        ImmutableMap<String, MetadataResolver> metadataResolverMap = ImmutableMap.of(entityId1, validMetadataResolver1, entityId2, validMetadataResolver2);
+        Map<String, MetadataResolver> metadataResolverMap = Map.of(entityId1, validMetadataResolver1, entityId2, validMetadataResolver2);
 
         when(metadataResolverRepository.getResolverEntityIds()).thenReturn(entityIds);
         when(metadataResolverRepository.getMetadataResolvers()).thenReturn(metadataResolverMap);

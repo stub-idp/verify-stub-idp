@@ -1,20 +1,19 @@
 package stubidp.saml.hub.hub.transformers.inbound;
 
-import com.google.common.collect.ImmutableList;
 import org.opensaml.core.xml.XMLObject;
 import org.opensaml.saml.saml2.core.Assertion;
 import org.opensaml.saml.saml2.core.Attribute;
 import org.opensaml.saml.saml2.core.AttributeStatement;
 import stubidp.saml.extensions.IdaConstants;
+import stubidp.saml.extensions.extensions.Gpg45Status;
+import stubidp.saml.extensions.extensions.IPAddress;
+import stubidp.saml.extensions.extensions.IdpFraudEventId;
+import stubidp.saml.serializers.serializers.XmlObjectToBase64EncodedStringTransformer;
 import stubidp.saml.utils.core.domain.AuthnContext;
 import stubidp.saml.utils.core.domain.FraudDetectedDetails;
 import stubidp.saml.utils.core.domain.PassthroughAssertion;
 import stubidp.saml.utils.core.domain.PersistentId;
-import stubidp.saml.extensions.extensions.Gpg45Status;
-import stubidp.saml.extensions.extensions.IPAddress;
-import stubidp.saml.extensions.extensions.IdpFraudEventId;
 import stubidp.saml.utils.core.transformers.AuthnContextFactory;
-import stubidp.saml.serializers.serializers.XmlObjectToBase64EncodedStringTransformer;
 
 import java.text.MessageFormat;
 import java.util.List;
@@ -22,7 +21,7 @@ import java.util.Optional;
 
 public class PassthroughAssertionUnmarshaller {
 
-    private static final List<String> VALID_GPG45_STATUSES = ImmutableList.of("DF01", "FI01", "IT01");
+    private static final List<String> VALID_GPG45_STATUSES = List.of("DF01", "FI01", "IT01");
     private final XmlObjectToBase64EncodedStringTransformer<Assertion> assertionStringTransformer;
 
     private final AuthnContextFactory authnContextFactory;

@@ -1,6 +1,5 @@
 package stubidp.stubidp.views;
 
-import com.google.common.collect.ImmutableList;
 import io.dropwizard.views.View;
 
 import java.nio.charset.Charset;
@@ -19,7 +18,7 @@ public class ErrorPageView extends View {
     }
 
     public String getReaction() {
-        final List<String> reactions = ImmutableList.of("😧","😮","😢","😭","👎","😶","🙃");
+        final List<String> reactions = List.of("😧","😮","😢","😭","👎","😶","🙃");
         final int reaction = new Random().nextInt(reactions.size());
         return reactions.get(reaction);
     }

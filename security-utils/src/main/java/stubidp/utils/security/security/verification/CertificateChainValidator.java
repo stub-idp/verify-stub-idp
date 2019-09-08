@@ -14,9 +14,7 @@ import java.security.cert.CertificateException;
 import java.security.cert.CertificateFactory;
 import java.security.cert.X509Certificate;
 import java.text.MessageFormat;
-
-import static com.google.common.collect.ImmutableList.of;
-
+import java.util.List;
 
 public class CertificateChainValidator {
     private static final String PKIX_ALGORITHM = "PKIX";
@@ -51,7 +49,7 @@ public class CertificateChainValidator {
         CertPath certificatePath;
 
         try {
-            certificatePath = certificateFactory.generateCertPath(of(certificate));
+            certificatePath = certificateFactory.generateCertPath(List.of(certificate));
         } catch (CertificateException e) {
             throw new CertificateChainValidationException("Error generating certificate path for certificate: " + getDnForCertificate(certificate), e);
         }

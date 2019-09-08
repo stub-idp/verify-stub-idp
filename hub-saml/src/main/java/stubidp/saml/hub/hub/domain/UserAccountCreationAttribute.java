@@ -1,10 +1,7 @@
 package stubidp.saml.hub.hub.domain;
 
-import com.google.common.base.Predicate;
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.Iterables;
-
 import java.io.Serializable;
+import java.util.List;
 
 public enum UserAccountCreationAttribute implements Serializable {
     FIRST_NAME("firstname"),
@@ -30,13 +27,11 @@ public enum UserAccountCreationAttribute implements Serializable {
         return attributeName;
     }
 
-    public static UserAccountCreationAttribute getUserAccountCreationAttribute(final String name){
-        return Iterables.find(ImmutableList.copyOf(values()), new Predicate<UserAccountCreationAttribute>() {
-            @Override
-            public boolean apply(final UserAccountCreationAttribute input) {
-                return input.getAttributeName().equals(name);
-            }
-        });
+    public static UserAccountCreationAttribute getUserAccountCreationAttribute(final String name) {
+        return List.of(values()).stream()
+                .filter(x -> x.getAttributeName().equals(name))
+                .findFirst()
+                .get();
     }
 }
 

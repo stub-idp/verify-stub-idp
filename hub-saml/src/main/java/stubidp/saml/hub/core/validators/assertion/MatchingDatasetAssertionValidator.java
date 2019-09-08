@@ -1,7 +1,6 @@
 package stubidp.saml.hub.core.validators.assertion;
 
 import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.ImmutableSet;
 import org.opensaml.core.xml.XMLObject;
 import org.opensaml.saml.saml2.core.Assertion;
 import org.opensaml.saml.saml2.core.Attribute;
@@ -18,6 +17,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import static stubidp.saml.extensions.validation.SamlTransformationErrorManager.warn;
 import static stubidp.saml.hub.core.errors.SamlTransformationErrorFactory.attributeStatementEmpty;
 import static stubidp.saml.hub.core.errors.SamlTransformationErrorFactory.attributeWithIncorrectType;
 import static stubidp.saml.hub.core.errors.SamlTransformationErrorFactory.emptyAttribute;
@@ -25,7 +25,6 @@ import static stubidp.saml.hub.core.errors.SamlTransformationErrorFactory.invali
 import static stubidp.saml.hub.core.errors.SamlTransformationErrorFactory.mdsAttributeNotRecognised;
 import static stubidp.saml.hub.core.errors.SamlTransformationErrorFactory.mdsMultipleStatements;
 import static stubidp.saml.hub.core.errors.SamlTransformationErrorFactory.mdsStatementMissing;
-import static stubidp.saml.extensions.validation.SamlTransformationErrorManager.warn;
 
 public class MatchingDatasetAssertionValidator {
 
@@ -35,7 +34,7 @@ public class MatchingDatasetAssertionValidator {
         this.duplicateAssertionValidator = duplicateAssertionValidator;
     }
 
-    private static final Set<String> VALID_ATTRIBUTE_NAMES_1_1 = ImmutableSet.of(
+    private static final Set<String> VALID_ATTRIBUTE_NAMES_1_1 = Set.of(
         IdaConstants.Attributes_1_1.Firstname.NAME,
         IdaConstants.Attributes_1_1.Middlename.NAME,
         IdaConstants.Attributes_1_1.Surname.NAME,
@@ -45,7 +44,7 @@ public class MatchingDatasetAssertionValidator {
         IdaConstants.Attributes_1_1.PreviousAddress.NAME
     );
 
-    private static final Set<String> VALID_ATTRIBUTE_NAME_FORMATS = ImmutableSet.of(
+    private static final Set<String> VALID_ATTRIBUTE_NAME_FORMATS = Set.of(
         Attribute.UNSPECIFIED
     );
 

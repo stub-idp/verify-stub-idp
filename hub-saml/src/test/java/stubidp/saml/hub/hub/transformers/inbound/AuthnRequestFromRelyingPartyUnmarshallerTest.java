@@ -1,6 +1,5 @@
 package stubidp.saml.hub.hub.transformers.inbound;
 
-import com.google.common.collect.ImmutableList;
 import org.apache.commons.codec.binary.Base64;
 import org.joda.time.DateTime;
 import org.junit.jupiter.api.BeforeEach;
@@ -21,8 +20,8 @@ import stubidp.saml.extensions.extensions.versioning.Version;
 import stubidp.saml.extensions.extensions.versioning.VersionImpl;
 import stubidp.saml.extensions.extensions.versioning.application.ApplicationVersion;
 import stubidp.saml.extensions.extensions.versioning.application.ApplicationVersionImpl;
-import stubidp.saml.hub.hub.domain.AuthnRequestFromRelyingParty;
 import stubidp.saml.hub.core.OpenSAMLRunner;
+import stubidp.saml.hub.hub.domain.AuthnRequestFromRelyingParty;
 import stubidp.saml.security.DecrypterFactory;
 import stubidp.saml.security.EncrypterFactory;
 import stubidp.utils.security.security.PrivateKeyFactory;
@@ -32,6 +31,7 @@ import stubidp.utils.security.security.X509CertificateFactory;
 import java.net.URI;
 import java.security.PrivateKey;
 import java.security.PublicKey;
+import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -49,7 +49,7 @@ public class AuthnRequestFromRelyingPartyUnmarshallerTest extends OpenSAMLRunner
         final BasicCredential basicCredential = createBasicCredential();
         encrypter = new EncrypterFactory().createEncrypter(basicCredential);
 
-        unmarshaller = new AuthnRequestFromRelyingPartyUnmarshaller(new DecrypterFactory().createDecrypter(ImmutableList.of(basicCredential)));
+        unmarshaller = new AuthnRequestFromRelyingPartyUnmarshaller(new DecrypterFactory().createDecrypter(List.of(basicCredential)));
     }
 
     @Test

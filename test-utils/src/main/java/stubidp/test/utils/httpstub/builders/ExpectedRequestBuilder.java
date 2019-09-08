@@ -2,14 +2,16 @@ package stubidp.test.utils.httpstub.builders;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.common.collect.ImmutableMultimap;
-import stubidp.test.utils.httpstub.ExpectedRequest;
 import io.dropwizard.jackson.Jackson;
+import stubidp.test.utils.httpstub.ExpectedRequest;
+
+import java.util.List;
+import java.util.Map;
 
 public class ExpectedRequestBuilder {
     private String path;
     private String method;
-    private ImmutableMultimap<String, String> headers;
+    private Map<String, List<String>> headers;
     private String body;
 
     private ObjectMapper objectMapper = Jackson.newObjectMapper();
@@ -39,7 +41,7 @@ public class ExpectedRequestBuilder {
         return this;
     }
 
-    public ExpectedRequestBuilder withHeaders(ImmutableMultimap<String, String> headers) {
+    public ExpectedRequestBuilder withHeaders(Map<String, List<String>> headers) {
         this.headers = headers;
         return this;
     }

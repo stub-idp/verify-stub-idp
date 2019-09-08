@@ -1,7 +1,6 @@
 package stubidp.eidas.trustanchor;
 
 import certificates.values.CACertificates;
-import com.google.common.collect.ImmutableSet;
 import com.nimbusds.jose.jwk.Curve;
 import com.nimbusds.jose.jwk.ECKey;
 import com.nimbusds.jose.jwk.RSAKey;
@@ -18,6 +17,7 @@ import java.security.interfaces.ECPublicKey;
 import java.security.interfaces.RSAPublicKey;
 import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 
 import static com.nimbusds.jose.JWSAlgorithm.RS256;
 import static com.nimbusds.jose.jwk.KeyOperation.VERIFY;
@@ -83,7 +83,7 @@ public class CountryTrustAnchorValidatorTest {
                 .keyID("TestId")
                 .x509CertChain(List.of(new Base64(countryPublicCert)))
                 .algorithm(RS256)
-                .keyOperations(ImmutableSet.of(VERIFY))
+                .keyOperations(Set.of(VERIFY))
                 .build();
     }
 
@@ -96,7 +96,7 @@ public class CountryTrustAnchorValidatorTest {
                 .keyID("TestId")
                 .x509CertChain(null)
                 .algorithm(ECKeyHelper.getJWSAlgorithm(curve))
-                .keyOperations(ImmutableSet.of(VERIFY))
+                .keyOperations(Set.of(VERIFY))
                 .build();
     }
 }

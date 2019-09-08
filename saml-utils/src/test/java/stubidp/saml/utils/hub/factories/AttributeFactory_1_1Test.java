@@ -1,6 +1,5 @@
 package stubidp.saml.utils.hub.factories;
 
-import com.google.common.collect.ImmutableList;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
 import org.joda.time.LocalDate;
@@ -167,7 +166,7 @@ public class AttributeFactory_1_1Test extends OpenSAMLRunner {
                 .withVerified(verified)
                 .build();
 
-        Attribute createdAttribute = attributeFactory.createCurrentAddressesAttribute(ImmutableList.of(currentAddress));
+        Attribute createdAttribute = attributeFactory.createCurrentAddressesAttribute(List.of(currentAddress));
 
         assertThat(createdAttribute.getName()).isEqualTo("MDS_currentaddress");
         assertThat(createdAttribute.getFriendlyName()).isEqualTo("Current Address");
@@ -188,14 +187,14 @@ public class AttributeFactory_1_1Test extends OpenSAMLRunner {
     public void createCurrentAddressAttribute_shouldHandleMissingToDate() throws Exception {
         Address currentAddress = AddressBuilder.anAddress().withLines(asList("Flat 15", "Dalton Tower")).withToDate(null).build();
 
-        attributeFactory.createCurrentAddressesAttribute(ImmutableList.of(currentAddress));
+        attributeFactory.createCurrentAddressesAttribute(List.of(currentAddress));
     }
 
     @Test
     public void createCurrentAddressAttribute_shouldHandleMissingPostCode() throws Exception {
         Address currentAddress = AddressBuilder.anAddress().withPostCode(null).build();
 
-        final Attribute createdAttribute = attributeFactory.createCurrentAddressesAttribute(ImmutableList.of(currentAddress));
+        final Attribute createdAttribute = attributeFactory.createCurrentAddressesAttribute(List.of(currentAddress));
 
         stubidp.saml.extensions.extensions.Address addressAttributeValue = getAddress(createdAttribute);
         assertThat(addressAttributeValue.getPostCode()).isNull();
@@ -205,7 +204,7 @@ public class AttributeFactory_1_1Test extends OpenSAMLRunner {
     public void createCurrentAddressAttribute_shouldHandleMissingInternationalPostCode() throws Exception {
         Address currentAddress = AddressBuilder.anAddress().withInternationalPostCode(null).build();
 
-        final Attribute createdAttribute = attributeFactory.createCurrentAddressesAttribute(ImmutableList.of(currentAddress));
+        final Attribute createdAttribute = attributeFactory.createCurrentAddressesAttribute(List.of(currentAddress));
 
         stubidp.saml.extensions.extensions.Address addressAttributeValue = getAddress(createdAttribute);
         assertThat(addressAttributeValue.getInternationalPostCode()).isNull();
@@ -215,7 +214,7 @@ public class AttributeFactory_1_1Test extends OpenSAMLRunner {
     public void createCurrentAddressAttribute_shouldHandleMissingUPRN() throws Exception {
         Address currentAddress = AddressBuilder.anAddress().withUPRN(null).build();
 
-        final Attribute createdAttribute = attributeFactory.createCurrentAddressesAttribute(ImmutableList.of(currentAddress));
+        final Attribute createdAttribute = attributeFactory.createCurrentAddressesAttribute(List.of(currentAddress));
 
         stubidp.saml.extensions.extensions.Address addressAttributeValue = getAddress(createdAttribute);
         assertThat(addressAttributeValue.getUPRN()).isNull();

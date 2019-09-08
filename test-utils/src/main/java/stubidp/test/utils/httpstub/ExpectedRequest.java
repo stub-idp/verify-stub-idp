@@ -1,17 +1,16 @@
 package stubidp.test.utils.httpstub;
 
-import com.google.common.collect.ImmutableMultimap;
-
 import javax.annotation.Nullable;
+import java.util.List;
 import java.util.Map;
 
 public class ExpectedRequest {
     private final String path;
     private final String method;
-    private ImmutableMultimap<String, String> headers;
+    private Map<String, List<String>> headers;
     private String body;
 
-    public ExpectedRequest(@Nullable String path, @Nullable String method, @Nullable ImmutableMultimap<String, String> headers, @Nullable String body) {
+    public ExpectedRequest(@Nullable String path, @Nullable String method, @Nullable Map<String, List<String>> headers, @Nullable String body) {
         this.path = path;
         this.method = method;
         this.headers = headers;
@@ -34,11 +33,9 @@ public class ExpectedRequest {
         return true;
     }
 
-    private boolean notAllHeadersFound(ImmutableMultimap<String, String> headers) {
-        return !this.headers.entries().stream().allMatch(headerEntry -> isHeaderInRequest(headers, headerEntry));
-    }
-
-    private boolean isHeaderInRequest(ImmutableMultimap<String, String> receivedHeaders, Map.Entry<String, String> expectedEntry) {
-        return receivedHeaders.containsEntry(expectedEntry.getKey(), expectedEntry.getValue());
+    private boolean notAllHeadersFound(Map<String, List<String>> _headers) {
+        return !this.headers.keySet().stream()
+                .allMatch(k -> _headers.keySet().contains(k) &&
+                        _headers.get(k).containsAll(this.headers.get(k)));
     }
 }

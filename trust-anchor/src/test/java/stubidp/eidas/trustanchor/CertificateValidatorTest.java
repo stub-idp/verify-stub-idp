@@ -1,11 +1,8 @@
 package stubidp.eidas.trustanchor;
 
-import com.google.common.collect.ImmutableList;
 import com.nimbusds.jose.util.Base64;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import stubidp.eidas.trustanchor.Base64X509CertificateDecoder;
-import stubidp.eidas.trustanchor.CertificateValidator;
 
 import java.security.PublicKey;
 import java.security.cert.CertificateException;
@@ -28,7 +25,7 @@ public class CertificateValidatorTest {
     @BeforeEach
     public void setup() throws CertificateException {
         Base64 testCert = mock(Base64.class);
-        x509CertChain = ImmutableList.of(testCert);
+        x509CertChain = List.of(testCert);
 
         X509Certificate mockDecodedCert = mock(X509Certificate.class);
         when(decoder.decodeX509(testCert)).thenReturn(mockDecodedCert);

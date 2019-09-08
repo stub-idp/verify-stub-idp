@@ -1,6 +1,5 @@
 package stubidp.stubidp.repositories;
 
-import com.google.common.collect.ImmutableList;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 import stubidp.saml.utils.core.domain.AddressFactory;
@@ -34,7 +33,7 @@ public final class HardCodedTestUserList {
                 Collections.singletonList(createMdsValue("Bauer")),
                 Optional.ofNullable(createMdsValue(Gender.MALE)),
                 Collections.singletonList(createMdsValue(LocalDate.parse("1984-02-29"))),
-                ImmutableList.of(new AddressFactory().create(Collections.singletonList("1 Two St"), "1A 2BC", null, null, null, null, true),
+                List.of(new AddressFactory().create(Collections.singletonList("1 Two St"), "1A 2BC", null, null, null, null, true),
                         new AddressFactory().create(Collections.singletonList("221b Baker St."), "W4 1SH", null, null, DateTime.parse("2007-09-27"), DateTime.parse("2007-09-28"), true),
                         new AddressFactory().create(Collections.singletonList("1 Goose Lane"), "M1 2FG", null, null, DateTime.parse("2006-09-29"), DateTime.parse("2006-09-8"), false)
                 ),
@@ -62,7 +61,7 @@ public final class HardCodedTestUserList {
                 Collections.singletonList(createMdsValue("Griffin")),
                 Optional.of(createMdsValue(Gender.NOT_SPECIFIED)),
                 Collections.singletonList(createMdsValue(LocalDate.parse("1983-06-21"))),
-                ImmutableList.of(new AddressFactory().create(Collections.singletonList("Lion's Head Inn"), "1A 2BC", null, null, DateTime.now().minusYears(1), null, true),
+                List.of(new AddressFactory().create(Collections.singletonList("Lion's Head Inn"), "1A 2BC", null, null, DateTime.now().minusYears(1), null, true),
                         new AddressFactory().create(Collections.singletonList("Ye Olde Inn"), "1A 2BB", null, null, DateTime.now().minusYears(3), DateTime.now().minusYears(1), false)),
                 AuthnContext.LEVEL_2));
 
@@ -72,7 +71,7 @@ public final class HardCodedTestUserList {
                 "bar",
                 Collections.singletonList(createMdsValue("J")),
                 Collections.emptyList(),   //No middle names that we could find. :)
-                ImmutableList.of(createMdsValue("Moriarti"), new MatchingDatasetValue<>("Barnes", DateTime.parse("2006-09-29"), DateTime.parse("2006-09-8"), true)),
+                List.of(createMdsValue("Moriarti"), new MatchingDatasetValue<>("Barnes", DateTime.parse("2006-09-29"), DateTime.parse("2006-09-8"), true)),
                 Optional.of(createMdsValue(Gender.NOT_SPECIFIED)),
                 Collections.singletonList(createMdsValue(LocalDate.parse("1822-11-27"))),
                 Collections.singletonList(new AddressFactory().create(Collections.singletonList("10 Two St"), "1A 2BC", null, null, null, null, true)),
@@ -94,16 +93,16 @@ public final class HardCodedTestUserList {
                 idpFriendlyId + "-complete",
                 UUID.randomUUID().toString(),
                 "bar",
-                ImmutableList.of(new MatchingDatasetValue<>("Jack", DateTime.now(), DateTime.now(), true),
+                List.of(new MatchingDatasetValue<>("Jack", DateTime.now(), DateTime.now(), true),
                         new MatchingDatasetValue<>("Spud", DateTime.now(), DateTime.now(), true)),
-                ImmutableList.of(new MatchingDatasetValue<>("Cornelius", DateTime.now(), DateTime.now(), true),
+                List.of(new MatchingDatasetValue<>("Cornelius", DateTime.now(), DateTime.now(), true),
                         new MatchingDatasetValue<>("Aurelius", DateTime.now(), DateTime.now(), true)),
-                ImmutableList.of(new MatchingDatasetValue<>("Bauer", DateTime.now(), DateTime.now(), true),
+                List.of(new MatchingDatasetValue<>("Bauer", DateTime.now(), DateTime.now(), true),
                         new MatchingDatasetValue<>("Superman", DateTime.now().minusDays(5), DateTime.now().minusDays(3), true)),
                 Optional.of(new MatchingDatasetValue<>(Gender.MALE, DateTime.now(), DateTime.now(), true)),
-                ImmutableList.of(new MatchingDatasetValue<>(LocalDate.parse("1984-02-29"), DateTime.now(), DateTime.now(), true),
+                List.of(new MatchingDatasetValue<>(LocalDate.parse("1984-02-29"), DateTime.now(), DateTime.now(), true),
                         new MatchingDatasetValue<>(LocalDate.parse("1984-03-01"), DateTime.now(), DateTime.now(), true)),
-                ImmutableList.of(new AddressFactory().create(Collections.singletonList("1 Two St"), "1A 2BC", "Something", "dummy uprn", DateTime.now(), DateTime.now(), true),
+                List.of(new AddressFactory().create(Collections.singletonList("1 Two St"), "1A 2BC", "Something", "dummy uprn", DateTime.now(), DateTime.now(), true),
                         new AddressFactory().create(Collections.singletonList("2 Three St"), "1B 2CD", "Something else", "dummy second uprn", DateTime.now(), DateTime.now(), true)),
                 AuthnContext.LEVEL_2));
 
@@ -117,7 +116,7 @@ public final class HardCodedTestUserList {
                 Optional.of(new MatchingDatasetValue<>(Gender.FEMALE, DateTime.now(), null, false)),
                 Collections.singletonList(new MatchingDatasetValue<>(LocalDate.parse("1960-03-23"), DateTime.now(), null, false)),
 
-                ImmutableList.of(new AddressFactory().create(Collections.singletonList("1 Two St"), "1A 2BC", "Something", "dummy uprn", DateTime.now(), null, false),
+                List.of(new AddressFactory().create(Collections.singletonList("1 Two St"), "1A 2BC", "Something", "dummy uprn", DateTime.now(), null, false),
                         new AddressFactory().create(Collections.singletonList("2 Three St"), "1B 2CD", "Something else", "dummy second uprn", DateTime.now(), DateTime.now(), false)),
                 AuthnContext.LEVEL_1));
 
@@ -131,7 +130,7 @@ public final class HardCodedTestUserList {
                 Optional.of(new MatchingDatasetValue<>(Gender.MALE, DateTime.now(), DateTime.now(), true)),
                 Collections.singletonList(new MatchingDatasetValue<>(LocalDate.parse("1958-04-09"), DateTime.now(), DateTime.now(), true)),
 
-                ImmutableList.of(new AddressFactory().create(Collections.singletonList("1 Two St"), "1A 2BC", "Something", "dummy uprn", DateTime.now(), DateTime.now(), true),
+                List.of(new AddressFactory().create(Collections.singletonList("1 Two St"), "1A 2BC", "Something", "dummy uprn", DateTime.now(), DateTime.now(), true),
                         new AddressFactory().create(Collections.singletonList("2 Three St"), "1B 2CD", "Something else", "dummy second uprn", DateTime.now(), DateTime.now(), true)),
                 AuthnContext.LEVEL_2));
 
@@ -145,7 +144,7 @@ public final class HardCodedTestUserList {
                 Optional.of(new MatchingDatasetValue<>(Gender.FEMALE, DateTime.now(), null, true)),
                 Collections.singletonList(new MatchingDatasetValue<>(LocalDate.parse("1969-07-20"), DateTime.now(), null, true)),
 
-                ImmutableList.of(new AddressFactory().create(Collections.singletonList("1 Four St"), "1A 2BD", "Something", "dummy uprn", DateTime.now(), null, true),
+                List.of(new AddressFactory().create(Collections.singletonList("1 Four St"), "1A 2BD", "Something", "dummy uprn", DateTime.now(), null, true),
                         new AddressFactory().create(Collections.singletonList("2 Five St"), "1B 2RD", "Something else", "dummy second uprn", DateTime.now(), DateTime.now(), true)),
                 AuthnContext.LEVEL_3));
 
@@ -159,7 +158,7 @@ public final class HardCodedTestUserList {
                 Optional.of(new MatchingDatasetValue<>(Gender.MALE, DateTime.now(), DateTime.now(), true)),
                 Collections.singletonList(new MatchingDatasetValue<>(LocalDate.parse("1958-04-09"), DateTime.now(), DateTime.now(), true)),
 
-                ImmutableList.of(new AddressFactory().create(Collections.singletonList("1 Two St"), "1A 2BC", "Something", "dummy uprn", DateTime.now(), DateTime.now(), true),
+                List.of(new AddressFactory().create(Collections.singletonList("1 Two St"), "1A 2BC", "Something", "dummy uprn", DateTime.now(), DateTime.now(), true),
                         new AddressFactory().create(Collections.singletonList("2 Three St"), "1B 2CD", "Something else", "dummy second uprn", DateTime.now(), DateTime.now(), true)),
                 AuthnContext.LEVEL_X));
 
@@ -172,7 +171,7 @@ public final class HardCodedTestUserList {
                 Collections.singletonList(createMdsValue("🙃")),
                 Optional.of(createMdsValue(Gender.FEMALE)),
                 Collections.singletonList(createMdsValue(LocalDate.parse("1968-06-12"))),
-                Collections.singletonList(new AddressFactory().create(ImmutableList.of("🏠"), "🏘", null, null, null, null, true)),
+                Collections.singletonList(new AddressFactory().create(List.of("🏠"), "🏘", null, null, null, null, true)),
                 AuthnContext.LEVEL_2));
 
         // this user matches one user in the example local matching service
@@ -186,7 +185,7 @@ public final class HardCodedTestUserList {
                 Collections.singletonList(createMdsValue("Bloggs")),
                 Optional.of(createMdsValue(Gender.NOT_SPECIFIED)),
                 Collections.singletonList(createMdsValue(LocalDate.parse("1970-01-01"))),
-                ImmutableList.of(new AddressFactory().create(ImmutableList.of("The White Chapel Building, 10 Whitechapel High St", "London", "United Kingdom"), "E1 8DX",
+                List.of(new AddressFactory().create(List.of("The White Chapel Building, 10 Whitechapel High St", "London", "United Kingdom"), "E1 8DX",
                         null, null, DateTime.now().minusYears(1), null, true)),
                 AuthnContext.LEVEL_2));
 

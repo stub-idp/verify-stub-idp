@@ -16,4 +16,5 @@ module stubidp.saml.hub {
     requires jakarta.inject;
     requires dropwizard.util;
     requires commons.lang;
+    requires xmlsec;
 }

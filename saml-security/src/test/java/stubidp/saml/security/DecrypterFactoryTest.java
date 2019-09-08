@@ -1,6 +1,5 @@
 package stubidp.saml.security;
 
-import com.google.common.collect.ImmutableList;
 import com.google.common.io.CharStreams;
 import net.shibboleth.utilities.java.support.xml.XMLParserException;
 import org.apache.commons.codec.binary.Base64;
@@ -75,7 +74,7 @@ public class DecrypterFactoryTest extends OpenSAMLRunner {
     }
 
     private void tryToDecrypt(final Credential primaryPrivateEncryptionKey, final Credential secondaryPrivateEncryptionKey, final EncryptedAssertion encryptedAssertion) {
-        Decrypter decrypter = new DecrypterFactory().createDecrypter(ImmutableList.of(primaryPrivateEncryptionKey, secondaryPrivateEncryptionKey));
+        Decrypter decrypter = new DecrypterFactory().createDecrypter(List.of(primaryPrivateEncryptionKey, secondaryPrivateEncryptionKey));
         try {
             decrypter.decrypt(encryptedAssertion);
         } catch (DecryptionException e) {

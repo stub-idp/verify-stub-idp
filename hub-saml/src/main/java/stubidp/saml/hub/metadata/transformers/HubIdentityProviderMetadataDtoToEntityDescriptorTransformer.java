@@ -4,16 +4,14 @@ import org.opensaml.saml.common.xml.SAMLConstants;
 import org.opensaml.saml.saml2.metadata.EntityDescriptor;
 import org.opensaml.saml.saml2.metadata.IDPSSODescriptor;
 import org.opensaml.saml.saml2.metadata.KeyDescriptor;
-import stubidp.saml.utils.metadata.transformers.KeyDescriptorsUnmarshaller;
-import stubidp.utils.security.security.IdGenerator;
-import stubidp.saml.utils.core.OpenSamlXmlObjectFactory;
 import stubidp.saml.hub.metadata.domain.HubIdentityProviderMetadataDto;
 import stubidp.saml.hub.metadata.domain.SamlEndpointDto;
+import stubidp.saml.utils.core.OpenSamlXmlObjectFactory;
+import stubidp.saml.utils.metadata.transformers.KeyDescriptorsUnmarshaller;
+import stubidp.utils.security.security.IdGenerator;
 
 import java.util.List;
 import java.util.function.Function;
-
-import static com.google.common.collect.Lists.newArrayList;
 
 public class HubIdentityProviderMetadataDtoToEntityDescriptorTransformer implements Function<HubIdentityProviderMetadataDto,EntityDescriptor> {
 
@@ -55,7 +53,7 @@ public class HubIdentityProviderMetadataDtoToEntityDescriptorTransformer impleme
 
         transformSingleSignOnServiceEndpoints(idpSsoDescriptor, dto);
 
-        List <KeyDescriptor> signingKeyDescriptors = keyDescriptorsUnmarshaller.fromCertificates(newArrayList(dto.getSigningCertificates()));
+        List <KeyDescriptor> signingKeyDescriptors = keyDescriptorsUnmarshaller.fromCertificates(List.copyOf(dto.getSigningCertificates()));
         idpSsoDescriptor.getKeyDescriptors().addAll(signingKeyDescriptors);
 
         entityDescriptor.getRoleDescriptors().add(idpSsoDescriptor);

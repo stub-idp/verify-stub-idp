@@ -1,7 +1,5 @@
 package stubidp.utils.rest.analytics;
 
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Maps;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.utils.URIBuilder;
@@ -25,6 +23,7 @@ import javax.ws.rs.core.Cookie;
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -63,7 +62,7 @@ public class AnalyticsReporterTest {
 
     @Test
     public void shouldCallGenerateUrlAndSendToPiwikAsynchronouslyWhenReportingCustomVariable() throws Exception {
-        doReturn(ImmutableMap.of(PIWIK_VISITOR_ID, new Cookie(PIWIK_VISITOR_ID, visitorId))).when(requestContext).getCookies();
+        doReturn(Map.of(PIWIK_VISITOR_ID, new Cookie(PIWIK_VISITOR_ID, visitorId))).when(requestContext).getCookies();
         when(requestContext.getRequestUri()).thenReturn(URI.create("http://localhost"));
 
         AnalyticsReporter analyticsReporter = spy(new AnalyticsReporter(piwikClient, new AnalyticsConfigurationBuilder().build()));
@@ -77,7 +76,7 @@ public class AnalyticsReporterTest {
 
     @Test
     public void shouldCallGenerateUrlAndSendToPiwkAsynchronously() throws MalformedURLException, URISyntaxException {
-        doReturn(ImmutableMap.of(PIWIK_VISITOR_ID, new Cookie(PIWIK_VISITOR_ID, visitorId))).when(requestContext).getCookies();
+        doReturn(Map.of(PIWIK_VISITOR_ID, new Cookie(PIWIK_VISITOR_ID, visitorId))).when(requestContext).getCookies();
 
         String friendlyDescription = "friendly description of URL";
         URI piwikUri = URI.create("piwik");
@@ -93,7 +92,7 @@ public class AnalyticsReporterTest {
 
     @Test
     public void shouldHandleAnyExceptions() throws MalformedURLException, URISyntaxException {
-        doReturn(ImmutableMap.of(PIWIK_VISITOR_ID, new Cookie(PIWIK_VISITOR_ID, visitorId))).when(requestContext).getCookies();
+        doReturn(Map.of(PIWIK_VISITOR_ID, new Cookie(PIWIK_VISITOR_ID, visitorId))).when(requestContext).getCookies();
 
         String friendlyDescription = "friendly description of URL";
 
@@ -134,7 +133,7 @@ public class AnalyticsReporterTest {
 
     @Test
     public void shouldGeneratePiwikCustomVariableUrl() throws URISyntaxException {
-        doReturn(ImmutableMap.of(PIWIK_VISITOR_ID, new Cookie(PIWIK_VISITOR_ID, visitorId))).when(requestContext).getCookies();
+        doReturn(Map.of(PIWIK_VISITOR_ID, new Cookie(PIWIK_VISITOR_ID, visitorId))).when(requestContext).getCookies();
         when(requestContext.getRequestUri()).thenReturn(URI.create("http://localhost"));
 
         DateTime now = DateTime.now();
@@ -163,7 +162,7 @@ public class AnalyticsReporterTest {
 
     @Test
     public void simulatePageView_generatesExpectedParameters() {
-        doReturn(ImmutableMap.of(PIWIK_VISITOR_ID, new Cookie(PIWIK_VISITOR_ID, visitorId))).when(requestContext).getCookies();
+        doReturn(Map.of(PIWIK_VISITOR_ID, new Cookie(PIWIK_VISITOR_ID, visitorId))).when(requestContext).getCookies();
 
         AnalyticsConfiguration config = new AnalyticsConfigurationBuilder().build();
         AnalyticsReporter reporter = new AnalyticsReporter(piwikClient, config);
@@ -181,7 +180,7 @@ public class AnalyticsReporterTest {
 
     @Test
     public void simulatePageView_includesVisitorIdIfPresent() {
-        doReturn(ImmutableMap.of(PIWIK_VISITOR_ID, new Cookie(PIWIK_VISITOR_ID, visitorId))).when(requestContext).getCookies();
+        doReturn(Map.of(PIWIK_VISITOR_ID, new Cookie(PIWIK_VISITOR_ID, visitorId))).when(requestContext).getCookies();
 
         AnalyticsReporter reporter = new AnalyticsReporter(piwikClient, new AnalyticsConfigurationBuilder().build());
         ArgumentCaptor<URI> captor = ArgumentCaptor.forClass(URI.class);
@@ -194,9 +193,9 @@ public class AnalyticsReporterTest {
 
     @Test
     public void simulatePageView_handlesMissingVisitorId() {
-        doReturn(ImmutableMap.of(PIWIK_VISITOR_ID, new Cookie(PIWIK_VISITOR_ID, visitorId))).when(requestContext).getCookies();
+        doReturn(Map.of(PIWIK_VISITOR_ID, new Cookie(PIWIK_VISITOR_ID, visitorId))).when(requestContext).getCookies();
 
-        when(requestContext.getCookies()).thenReturn(ImmutableMap.of());
+        when(requestContext.getCookies()).thenReturn(Map.of());
         AnalyticsConfiguration config = new AnalyticsConfigurationBuilder().build();
         AnalyticsReporter reporter = new AnalyticsReporter(piwikClient, config);
         ArgumentCaptor<URI> captor = ArgumentCaptor.forClass(URI.class);
@@ -251,7 +250,7 @@ public class AnalyticsReporterTest {
 
     private boolean queryContains(String query, String name, String expectedValue) {
         String match = name + "=" + expectedValue;
-        return ImmutableList.copyOf(query.split("&")).stream().anyMatch(match::equals);
+        return List.<String>of(query.split("&")).stream().anyMatch(match::equals);
     }
 
     private void checkQueryParamMissing(String query, String name) {

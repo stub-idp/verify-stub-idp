@@ -1,6 +1,5 @@
 package stubidp.test.devpki;
 
-import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import org.apache.commons.io.IOUtils;
 
@@ -197,26 +196,26 @@ public final class TestCertificateStrings {
 
     static {
         PUBLIC_ENCRYPTION_CERTS = ImmutableMap.<String, List<String>>builder()
-            .put(TEST_ENTITY_ID, ImmutableList.of(TEST_PUBLIC_CERT))
-            .put(TestEntityIds.HUB_ENTITY_ID, ImmutableList.of(HUB_TEST_PUBLIC_ENCRYPTION_CERT, TEST_PUBLIC_CERT))
-            .put(TestEntityIds.HUB_CONNECTOR_ENTITY_ID, ImmutableList.of(HUB_CONNECTOR_TEST_PUBLIC_ENCRYPTION_CERT))
-            .put(TestEntityIds.TEST_RP, ImmutableList.of(TEST_RP_PUBLIC_ENCRYPTION_CERT))
-            .put(TestEntityIds.TEST_RP_MS, ImmutableList.of(TEST_RP_MS_PUBLIC_ENCRYPTION_CERT))
-            .put(TestEntityIds.HEADLESS_RP, ImmutableList.of(HEADLESS_RP_PUBLIC_ENCRYPTION_CERT))
-            .put(TestEntityIds.HEADLESS_RP_MS, ImmutableList.of(HEADLESS_RP_MS_PUBLIC_ENCRYPTION_CERT))
+            .put(TEST_ENTITY_ID, List.of(TEST_PUBLIC_CERT))
+            .put(TestEntityIds.HUB_ENTITY_ID, List.of(HUB_TEST_PUBLIC_ENCRYPTION_CERT, TEST_PUBLIC_CERT))
+            .put(TestEntityIds.HUB_CONNECTOR_ENTITY_ID, List.of(HUB_CONNECTOR_TEST_PUBLIC_ENCRYPTION_CERT))
+            .put(TestEntityIds.TEST_RP, List.of(TEST_RP_PUBLIC_ENCRYPTION_CERT))
+            .put(TestEntityIds.TEST_RP_MS, List.of(TEST_RP_MS_PUBLIC_ENCRYPTION_CERT))
+            .put(TestEntityIds.HEADLESS_RP, List.of(HEADLESS_RP_PUBLIC_ENCRYPTION_CERT))
+            .put(TestEntityIds.HEADLESS_RP_MS, List.of(HEADLESS_RP_MS_PUBLIC_ENCRYPTION_CERT))
             .build();
     }
 
     static {
         PRIVATE_ENCRYPTION_KEYS = ImmutableMap.<String, List<String>>builder()
-            .put(TEST_ENTITY_ID, ImmutableList.of(TEST_PRIVATE_KEY))
-            .put(TestEntityIds.HUB_ENTITY_ID, ImmutableList.of(HUB_TEST_PRIVATE_ENCRYPTION_KEY, TEST_PRIVATE_KEY))
-            .put(TestEntityIds.HUB_SECONDARY_ENTITY_ID, ImmutableList.of(HUB_TEST_PRIVATE_ENCRYPTION_KEY, TEST_PRIVATE_KEY))
-            .put(TestEntityIds.HUB_CONNECTOR_ENTITY_ID, ImmutableList.of(HUB_CONNECTOR_TEST_PRIVATE_ENCRYPTION_KEY))
-            .put(TestEntityIds.TEST_RP, ImmutableList.of(TEST_RP_PRIVATE_ENCRYPTION_KEY))
-            .put(TestEntityIds.TEST_RP_MS, ImmutableList.of(TEST_RP_MS_PRIVATE_ENCRYPTION_KEY))
-            .put(TestEntityIds.HEADLESS_RP, ImmutableList.of(HEADLESS_RP_MS_PRIVATE_ENCRYPTION_KEY))
-            .put(TestEntityIds.HEADLESS_RP_MS, ImmutableList.of(HEADLESS_RP_MS_PRIVATE_ENCRYPTION_KEY))
+            .put(TEST_ENTITY_ID, List.of(TEST_PRIVATE_KEY))
+            .put(TestEntityIds.HUB_ENTITY_ID, List.of(HUB_TEST_PRIVATE_ENCRYPTION_KEY, TEST_PRIVATE_KEY))
+            .put(TestEntityIds.HUB_SECONDARY_ENTITY_ID, List.of(HUB_TEST_PRIVATE_ENCRYPTION_KEY, TEST_PRIVATE_KEY))
+            .put(TestEntityIds.HUB_CONNECTOR_ENTITY_ID, List.of(HUB_CONNECTOR_TEST_PRIVATE_ENCRYPTION_KEY))
+            .put(TestEntityIds.TEST_RP, List.of(TEST_RP_PRIVATE_ENCRYPTION_KEY))
+            .put(TestEntityIds.TEST_RP_MS, List.of(TEST_RP_MS_PRIVATE_ENCRYPTION_KEY))
+            .put(TestEntityIds.HEADLESS_RP, List.of(HEADLESS_RP_MS_PRIVATE_ENCRYPTION_KEY))
+            .put(TestEntityIds.HEADLESS_RP_MS, List.of(HEADLESS_RP_MS_PRIVATE_ENCRYPTION_KEY))
             .build();
     }
 

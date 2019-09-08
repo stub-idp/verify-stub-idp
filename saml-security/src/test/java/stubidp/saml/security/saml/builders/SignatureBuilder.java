@@ -1,6 +1,5 @@
 package stubidp.saml.security.saml.builders;
 
-import com.google.common.collect.ImmutableList;
 import org.opensaml.core.xml.XMLObjectBuilder;
 import org.opensaml.core.xml.XMLObjectBuilderFactory;
 import org.opensaml.core.xml.config.XMLObjectProviderRegistrySupport;
@@ -88,7 +87,7 @@ public class SignatureBuilder {
     }
 
     public SignatureBuilder withX509Data(String cert) {
-        x509Data = ImmutableList.of(cert);
+        x509Data = List.of(cert);
         return this;
     }
 }

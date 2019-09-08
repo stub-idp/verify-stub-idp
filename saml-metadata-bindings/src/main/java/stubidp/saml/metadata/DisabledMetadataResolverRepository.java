@@ -1,7 +1,5 @@
 package stubidp.saml.metadata;
 
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableMap;
 import com.nimbusds.jose.jwk.JWK;
 import org.opensaml.saml.metadata.resolver.MetadataResolver;
 import org.opensaml.xmlsec.signature.support.impl.ExplicitKeySignatureTrustEngine;
@@ -19,7 +17,7 @@ public class DisabledMetadataResolverRepository implements MetadataResolverRepos
 
     @Override
     public List<String> getResolverEntityIds() {
-        return ImmutableList.of();
+        return List.of();
     }
 
     @Override
@@ -29,12 +27,12 @@ public class DisabledMetadataResolverRepository implements MetadataResolverRepos
 
     @Override
     public Map<String, MetadataResolver> getMetadataResolvers() {
-        return ImmutableMap.of();
+        return Map.of();
     }
 
     @Override
     public List<String> getTrustAnchorsEntityIds() {
-        return ImmutableList.of();
+        return List.of();
     }
 
     @Override
@@ -42,6 +40,6 @@ public class DisabledMetadataResolverRepository implements MetadataResolverRepos
 
     @Override
     public List<X509Certificate> sortCertsByDate(JWK trustAnchor) {
-        return ImmutableList.of();
+        return List.of();
     }
 }

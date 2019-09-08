@@ -1,7 +1,5 @@
 package stubidp.test.integration.support;
 
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableSet;
 import net.shibboleth.utilities.java.support.component.ComponentInitializationException;
 import net.shibboleth.utilities.java.support.resolver.ResolverException;
 import net.shibboleth.utilities.java.support.xml.BasicParserPool;
@@ -73,6 +71,7 @@ import java.security.PublicKey;
 import java.util.Base64;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -159,8 +158,8 @@ public class SamlDecrypter {
         Decrypter decrypter = new DecrypterFactory().createDecrypter(idaKeyStoreCredentialRetriever.getDecryptingCredentials());
         return new AssertionDecrypter(
                 new EncryptionAlgorithmValidator(
-                    ImmutableSet.of(EncryptionConstants.ALGO_ID_BLOCKCIPHER_AES256, EncryptionConstants.ALGO_ID_BLOCKCIPHER_AES256_GCM),
-                    ImmutableSet.of(EncryptionConstants.ALGO_ID_KEYTRANSPORT_RSAOAEP)),
+                    Set.of(EncryptionConstants.ALGO_ID_BLOCKCIPHER_AES256, EncryptionConstants.ALGO_ID_BLOCKCIPHER_AES256_GCM),
+                    Set.of(EncryptionConstants.ALGO_ID_KEYTRANSPORT_RSAOAEP)),
                 decrypter
         );
     }
@@ -228,7 +227,7 @@ public class SamlDecrypter {
 
         PublicKey publicKey = new PublicKeyFactory(new X509CertificateFactory()).createPublicKey(HUB_TEST_PUBLIC_ENCRYPTION_CERT);
 
-        List<KeyPair> encryptionKeys = ImmutableList.of(new KeyPair(publicKey, privateKey));
+        List<KeyPair> encryptionKeys = List.of(new KeyPair(publicKey, privateKey));
         return new IdaKeyStore(null, encryptionKeys);
     }
 

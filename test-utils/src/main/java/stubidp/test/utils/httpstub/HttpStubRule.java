@@ -71,7 +71,7 @@ public class HttpStubRule implements AfterAllCallback {
         httpStub.reset();
     }
 
-    public int getCountOfRequestsTo(final String path) {
+    public long getCountOfRequestsTo(final String path) {
         return httpStub.getCountOfRequestsTo(path);
     }
 

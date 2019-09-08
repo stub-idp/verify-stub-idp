@@ -1,6 +1,5 @@
 package stubidp.eidas.trustanchor;
 
-import com.google.common.collect.ImmutableList;
 import com.nimbusds.jose.JOSEException;
 import com.nimbusds.jose.JWSAlgorithm;
 import com.nimbusds.jose.jwk.ECKey;
@@ -14,6 +13,7 @@ import java.security.cert.CertificateException;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Optional;
 
 public class CountryTrustAnchorValidator {
@@ -73,7 +73,7 @@ public class CountryTrustAnchorValidator {
                 publicKey = ecKey.toPublicKey();
             }
         } catch (JOSEException e) {
-            return ImmutableList.of(String.format("Error getting public key from trust anchor: %s", e.getMessage()));
+            return List.of(String.format("Error getting public key from trust anchor: %s", e.getMessage()));
         }
 
         return certificateValidator.checkCertificateValidity(anchor.getX509CertChain(), publicKey);

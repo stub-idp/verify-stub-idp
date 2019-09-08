@@ -1,7 +1,5 @@
 package stubidp.test.utils.httpstub;
 
-import com.google.common.base.Predicate;
-import com.google.common.collect.Iterables;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.ServerConnector;
 
@@ -47,13 +45,10 @@ public abstract class AbstractHttpStub {
         requestsAndResponses.add(requestAndResponse);
     }
 
-    public final int getCountOfRequestsTo(final String path) {
-        return Iterables.size(Iterables.filter(recordedRequests, new Predicate<RecordedRequest>() {
-            @Override
-            public boolean apply(RecordedRequest input) {
-                return input.getPath().equals(path);
-            }
-        }));
+    public final long getCountOfRequestsTo(final String path) {
+        return recordedRequests.stream()
+                .filter(r -> r.getPath().equals(path))
+                .count();
     }
 
     public final List<RecordedRequest> getRecordedRequests() { return recordedRequests; }

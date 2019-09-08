@@ -1,17 +1,16 @@
 package stubidp.saml.hub.core.test.builders.metadata;
 
-import com.google.common.collect.ImmutableList;
 import org.joda.time.DateTime;
 import org.joda.time.Duration;
 import stubidp.saml.hub.core.test.builders.ContactPersonDtoBuilder;
 import stubidp.saml.hub.core.test.builders.OrganisationDtoBuilder;
-import stubidp.utils.security.security.Certificate;
-import stubidp.test.devpki.TestEntityIds;
-import stubidp.saml.utils.core.test.builders.CertificateBuilder;
 import stubidp.saml.hub.metadata.domain.ContactPersonDto;
 import stubidp.saml.hub.metadata.domain.HubIdentityProviderMetadataDto;
 import stubidp.saml.hub.metadata.domain.OrganisationDto;
 import stubidp.saml.hub.metadata.domain.SamlEndpointDto;
+import stubidp.saml.utils.core.test.builders.CertificateBuilder;
+import stubidp.test.devpki.TestEntityIds;
+import stubidp.utils.security.security.Certificate;
 
 import java.net.URI;
 import java.util.ArrayList;
@@ -85,7 +84,7 @@ public class IdentityProviderMetadataDtoBuilder {
     }
 
     public IdentityProviderMetadataDtoBuilder withSigningCertificate(Certificate certificate) {
-        this.signingCertificates = ImmutableList.of(certificate);
+        this.signingCertificates = List.of(certificate);
         return this;
     }
 

@@ -1,6 +1,5 @@
 package stubidp.saml.security.validators.encryptedelementtype;
 
-import com.google.common.collect.ImmutableSet;
 import org.opensaml.saml.saml2.core.EncryptedElementType;
 import org.opensaml.xmlsec.encryption.EncryptionMethod;
 import org.opensaml.xmlsec.encryption.support.EncryptionConstants;
@@ -15,8 +14,8 @@ public class EncryptionAlgorithmValidator {
     private final Set<String> keyTransportAlgorithmWhitelist;
 
     public EncryptionAlgorithmValidator() {
-        this.algorithmWhitelist = ImmutableSet.of(EncryptionConstants.ALGO_ID_BLOCKCIPHER_AES128);
-        this.keyTransportAlgorithmWhitelist = ImmutableSet.of(EncryptionConstants.ALGO_ID_KEYTRANSPORT_RSAOAEP);
+        this.algorithmWhitelist = Set.of(EncryptionConstants.ALGO_ID_BLOCKCIPHER_AES128);
+        this.keyTransportAlgorithmWhitelist = Set.of(EncryptionConstants.ALGO_ID_KEYTRANSPORT_RSAOAEP);
     }
 
     public EncryptionAlgorithmValidator(Set<String> algorithmWhitelist, Set<String> keyTransportAlgorithmWhitelist) {
