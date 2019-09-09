@@ -1,7 +1,5 @@
 package stubidp.saml.hub.core.validators.assertion;
 
-import com.google.common.base.Predicate;
-import com.google.common.collect.Iterables;
 import org.opensaml.core.xml.XMLObject;
 import org.opensaml.saml.saml2.core.Assertion;
 import org.opensaml.saml.saml2.core.Attribute;
@@ -11,6 +9,8 @@ import stubidp.saml.extensions.extensions.IdpFraudEventId;
 import stubidp.saml.extensions.extensions.PersonName;
 import stubidp.saml.extensions.validation.SamlTransformationErrorException;
 import stubidp.saml.extensions.validation.SamlValidationSpecificationFailure;
+
+import java.util.Optional;
 
 import static stubidp.saml.hub.core.errors.SamlTransformationErrorFactory.invalidAttributeLanguageInAssertion;
 import static stubidp.saml.hub.core.errors.SamlTransformationErrorFactory.invalidFraudAttribute;
@@ -50,23 +50,19 @@ public class AssertionAttributeStatementValidator {
     }
 
     private void validateFraudEvent(AttributeStatement attributeStatement) {
-        Attribute fraudEventAttribute = Iterables.find(attributeStatement.getAttributes(), new Predicate<Attribute>() {
-            @Override
-            public boolean apply(Attribute input) {
-                return input.getName().equals(IdaConstants.Attributes_1_1.IdpFraudEventId.NAME);
-            }
-        }, null);
-        if(fraudEventAttribute == null){
-            SamlValidationSpecificationFailure failure = invalidFraudAttribute(INVALID_FRAUD_EVENT_NAME);
-            throw new SamlTransformationErrorException(failure.getErrorMessage(), failure.getLogLevel());
-        } else {
-            boolean didNotDeserializeCorrectlyIntoFraudEventType = !(fraudEventAttribute.getAttributeValues().get(0) instanceof IdpFraudEventId);
+        Optional<Attribute> fraudEventAttribute = attributeStatement.getAttributes().stream()
+                .filter(attribute -> IdaConstants.Attributes_1_1.IdpFraudEventId.NAME.equals(attribute.getName()))
+                .findFirst();
+        if(fraudEventAttribute.isPresent()) {
+            boolean didNotDeserializeCorrectlyIntoFraudEventType = !(fraudEventAttribute.get().getAttributeValues().get(0) instanceof IdpFraudEventId);
             if (didNotDeserializeCorrectlyIntoFraudEventType) {
                 SamlValidationSpecificationFailure failure = invalidFraudAttribute(INVALID_FRAUD_EVENT_TYPE);
                 throw new SamlTransformationErrorException(failure.getErrorMessage(), failure.getLogLevel());
             }
+        } else {
+            SamlValidationSpecificationFailure failure = invalidFraudAttribute(INVALID_FRAUD_EVENT_NAME);
+            throw new SamlTransformationErrorException(failure.getErrorMessage(), failure.getLogLevel());
         }
     }
-
 
 }

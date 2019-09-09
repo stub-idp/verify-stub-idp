@@ -1,16 +1,15 @@
 package stubidp.stubidp.security;
 
-import stubidp.stubidp.repositories.MetadataRepository;
-import stubidp.utils.security.security.PublicKeyFactory;
 import stubidp.saml.security.SigningKeyStore;
 import stubidp.stubidp.StubIdpBinder;
+import stubidp.stubidp.repositories.MetadataRepository;
+import stubidp.utils.security.security.PublicKeyFactory;
 
 import javax.inject.Inject;
 import javax.inject.Named;
 import java.security.PublicKey;
+import java.util.ArrayList;
 import java.util.List;
-
-import static com.google.common.collect.Lists.newArrayList;
 
 public class IdaAuthnRequestKeyStore implements SigningKeyStore {
     private final MetadataRepository metadataRepository;
@@ -24,10 +23,10 @@ public class IdaAuthnRequestKeyStore implements SigningKeyStore {
 
     @Override
     public List<PublicKey> getVerifyingKeysForEntity(String entityId) {
-        List<PublicKey> keys = newArrayList();
+        List<PublicKey> keys = new ArrayList<>();
         for (String encodedCertificate : metadataRepository.getSigningCertificates()) {
             keys.add(publicKeyFactory.createPublicKey(encodedCertificate));
         }
-        return keys;
+        return List.copyOf(keys);
     }
 }

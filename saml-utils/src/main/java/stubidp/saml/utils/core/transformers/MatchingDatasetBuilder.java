@@ -11,16 +11,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import static com.google.common.collect.Lists.newArrayList;
-
 public class MatchingDatasetBuilder {
     private List<TransliterableMdsValue> firstnames = new ArrayList<>();
     private List<SimpleMdsValue<String>> middlenames = new ArrayList<>();
     private List<TransliterableMdsValue> surnames = new ArrayList<>();
     private Optional<SimpleMdsValue<Gender>> gender = Optional.empty();
     private List<SimpleMdsValue<LocalDate>> dateOfBirths = new ArrayList<>();
-    private List<Address> currentAddresses = newArrayList();
-    private List<Address> previousAddresses = newArrayList();
+    private List<Address> currentAddresses = new ArrayList<>();
+    private List<Address> previousAddresses = new ArrayList<>();
     private String personalId;
 
     public void addFirstNames(List<TransliterableMdsValue> firstnames) {

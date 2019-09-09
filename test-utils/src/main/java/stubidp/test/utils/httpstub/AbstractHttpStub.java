@@ -6,8 +6,6 @@ import org.eclipse.jetty.server.ServerConnector;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-import static com.google.common.collect.Iterables.getLast;
-
 public abstract class AbstractHttpStub {
     protected static final int RANDOM_PORT = 0;
     protected Server server;
@@ -54,7 +52,7 @@ public abstract class AbstractHttpStub {
     public final List<RecordedRequest> getRecordedRequests() { return recordedRequests; }
 
     public final RecordedRequest getLastRequest() {
-        return getLast(recordedRequests);
+        return recordedRequests.stream().reduce((a, b) -> b).get();
     }
 
     public final int getCountOfRequests() {

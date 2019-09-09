@@ -1,6 +1,5 @@
 package stubidp.saml.security;
 
-import com.google.common.collect.ImmutableList;
 import org.opensaml.saml.saml2.core.Assertion;
 import org.opensaml.saml.saml2.core.EncryptedAssertion;
 import org.opensaml.saml.saml2.encryption.Decrypter;
@@ -10,6 +9,7 @@ import stubidp.saml.security.exception.SamlFailedToDecryptException;
 import stubidp.saml.security.validators.ValidatedEncryptedAssertionContainer;
 import stubidp.saml.security.validators.encryptedelementtype.EncryptionAlgorithmValidator;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class AssertionDecrypter {
@@ -24,9 +24,9 @@ public class AssertionDecrypter {
 
     public List<Assertion> decryptAssertions(ValidatedEncryptedAssertionContainer container) {
         final List<EncryptedAssertion> encryptedAssertions = container.getEncryptedAssertions();
-        final ImmutableList.Builder<Assertion> assertions = ImmutableList.builder();
+        final List<Assertion> assertions = new ArrayList<>();
 
-        if (encryptedAssertions.isEmpty()) return assertions.build();
+        if (encryptedAssertions.isEmpty()) return List.of();
 
         decrypter.setRootInNewDocument(true);
 
@@ -40,6 +40,6 @@ public class AssertionDecrypter {
             }
         }
 
-        return assertions.build();
+        return List.copyOf(assertions);
     }
 }

@@ -1,11 +1,11 @@
 package stubidp.saml.utils.core.domain;
 
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.Iterables;
 import org.joda.time.LocalDate;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class MatchingDataset {
 
@@ -66,7 +66,8 @@ public class MatchingDataset {
     }
 
     public List<Address> getAddresses() {
-        return ImmutableList.copyOf(Iterables.concat(currentAddresses, previousAddresses));
+        return Stream.<Address>concat(currentAddresses.stream(), previousAddresses.stream())
+                .collect(Collectors.toUnmodifiableList());
     }
 
     public String getPersonalId() {

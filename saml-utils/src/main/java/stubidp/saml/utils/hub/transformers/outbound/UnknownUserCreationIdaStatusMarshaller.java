@@ -1,19 +1,21 @@
 package stubidp.saml.utils.hub.transformers.outbound;
 
-import com.google.common.collect.ImmutableMap;
+import stubidp.saml.utils.core.OpenSamlXmlObjectFactory;
 import stubidp.saml.utils.core.domain.DetailedStatusCode;
 import stubidp.saml.utils.core.domain.UnknownUserCreationIdaStatus;
 import stubidp.saml.utils.core.transformers.outbound.IdaStatusMarshaller;
-import stubidp.saml.utils.core.OpenSamlXmlObjectFactory;
+
+import java.util.AbstractMap;
+import java.util.Map;
 
 public class UnknownUserCreationIdaStatusMarshaller extends IdaStatusMarshaller<UnknownUserCreationIdaStatus> {
 
-    private static final ImmutableMap<UnknownUserCreationIdaStatus, DetailedStatusCode> REST_TO_SAML_CODES =
-            ImmutableMap.<UnknownUserCreationIdaStatus, DetailedStatusCode>builder()
-                    .put(UnknownUserCreationIdaStatus.CreateFailure, DetailedStatusCode.UnknownUserCreateFailure)
-                    .put(UnknownUserCreationIdaStatus.Success, DetailedStatusCode.UnknownUserCreateSuccess)
-                    .put(UnknownUserCreationIdaStatus.NoAttributeFailure, DetailedStatusCode.UnknownUserNoAttributeFailure)
-                    .build();
+    private static final Map<UnknownUserCreationIdaStatus, DetailedStatusCode> REST_TO_SAML_CODES =
+            Map.<UnknownUserCreationIdaStatus, DetailedStatusCode>ofEntries(
+                    Map.entry(UnknownUserCreationIdaStatus.CreateFailure, DetailedStatusCode.UnknownUserCreateFailure),
+                    Map.entry(UnknownUserCreationIdaStatus.Success, DetailedStatusCode.UnknownUserCreateSuccess),
+                    Map.entry(UnknownUserCreationIdaStatus.NoAttributeFailure, DetailedStatusCode.UnknownUserNoAttributeFailure)
+            );
 
     public UnknownUserCreationIdaStatusMarshaller(OpenSamlXmlObjectFactory samlObjectFactory) {
         super(samlObjectFactory);

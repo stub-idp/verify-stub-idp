@@ -1,6 +1,5 @@
 package stubidp.test.integration.support.eidas;
 
-import com.google.common.collect.ImmutableMap;
 import org.opensaml.saml.saml2.core.Assertion;
 import org.opensaml.saml.saml2.core.Attribute;
 import org.opensaml.saml.saml2.core.AttributeStatement;
@@ -18,6 +17,7 @@ import stubidp.saml.extensions.validation.SamlValidationSpecificationFailure;
 import stubidp.saml.hub.core.errors.SamlTransformationErrorFactory;
 
 import javax.xml.namespace.QName;
+import java.util.AbstractMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -44,14 +44,14 @@ public class EidasAttributeStatementAssertionValidator {
             Attribute.URI_REFERENCE
     );
 
-    private static final Map<String, QName> VALID_TYPE_FOR_ATTRIBUTE = ImmutableMap.<String, QName>builder()
-            .put(Eidas_Attributes.FirstName.NAME, CurrentGivenName.TYPE_NAME)
-            .put(Eidas_Attributes.FamilyName.NAME, CurrentFamilyName.TYPE_NAME)
-            .put(Eidas_Attributes.DateOfBirth.NAME, DateOfBirth.TYPE_NAME)
-            .put(Eidas_Attributes.PersonIdentifier.NAME, PersonIdentifier.TYPE_NAME)
-            .put(Eidas_Attributes.CurrentAddress.NAME, CurrentAddress.TYPE_NAME)
-            .put(Eidas_Attributes.Gender.NAME, EidasGender.TYPE_NAME)
-            .build();
+    private static final Map<String, QName> VALID_TYPE_FOR_ATTRIBUTE = Map.<String, QName>ofEntries(
+            Map.entry(Eidas_Attributes.FirstName.NAME, CurrentGivenName.TYPE_NAME),
+            Map.entry(Eidas_Attributes.FamilyName.NAME, CurrentFamilyName.TYPE_NAME),
+            Map.entry(Eidas_Attributes.DateOfBirth.NAME, DateOfBirth.TYPE_NAME),
+            Map.entry(Eidas_Attributes.PersonIdentifier.NAME, PersonIdentifier.TYPE_NAME),
+            Map.entry(Eidas_Attributes.CurrentAddress.NAME, CurrentAddress.TYPE_NAME),
+            Map.entry(Eidas_Attributes.Gender.NAME, EidasGender.TYPE_NAME)
+    );
 
     private static final Map<String, String> MANDATORY_ATTRIBUTES = Map.of(
             Eidas_Attributes.FirstName.NAME, Eidas_Attributes.FirstName.FRIENDLY_NAME,

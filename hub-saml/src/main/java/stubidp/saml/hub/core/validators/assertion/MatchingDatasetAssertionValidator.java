@@ -1,6 +1,5 @@
 package stubidp.saml.hub.core.validators.assertion;
 
-import com.google.common.collect.ImmutableMap;
 import org.opensaml.core.xml.XMLObject;
 import org.opensaml.saml.saml2.core.Assertion;
 import org.opensaml.saml.saml2.core.Attribute;
@@ -13,6 +12,7 @@ import stubidp.saml.extensions.extensions.PersonName;
 import stubidp.saml.hub.hub.exception.SamlValidationException;
 
 import javax.xml.namespace.QName;
+import java.util.AbstractMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -48,15 +48,15 @@ public class MatchingDatasetAssertionValidator {
         Attribute.UNSPECIFIED
     );
 
-    private static final Map<String, QName> VALID_TYPE_FOR_ATTRIBUTE = ImmutableMap.<String, QName>builder()
-        .put(IdaConstants.Attributes_1_1.Firstname.NAME, PersonName.TYPE_NAME)
-        .put(IdaConstants.Attributes_1_1.Middlename.NAME, PersonName.TYPE_NAME)
-        .put(IdaConstants.Attributes_1_1.Surname.NAME, PersonName.TYPE_NAME)
-        .put(IdaConstants.Attributes_1_1.Gender.NAME, Gender.TYPE_NAME)
-        .put(IdaConstants.Attributes_1_1.DateOfBirth.NAME, Date.TYPE_NAME)
-        .put(IdaConstants.Attributes_1_1.CurrentAddress.NAME, Address.TYPE_NAME)
-        .put(IdaConstants.Attributes_1_1.PreviousAddress.NAME, Address.TYPE_NAME)
-        .build();
+    private static final Map<String, QName> VALID_TYPE_FOR_ATTRIBUTE = Map.<String, QName>ofEntries(
+        Map.entry(IdaConstants.Attributes_1_1.Firstname.NAME, PersonName.TYPE_NAME),
+        Map.entry(IdaConstants.Attributes_1_1.Middlename.NAME, PersonName.TYPE_NAME),
+        Map.entry(IdaConstants.Attributes_1_1.Surname.NAME, PersonName.TYPE_NAME),
+        Map.entry(IdaConstants.Attributes_1_1.Gender.NAME, Gender.TYPE_NAME),
+        Map.entry(IdaConstants.Attributes_1_1.DateOfBirth.NAME, Date.TYPE_NAME),
+        Map.entry(IdaConstants.Attributes_1_1.CurrentAddress.NAME, Address.TYPE_NAME),
+        Map.entry(IdaConstants.Attributes_1_1.PreviousAddress.NAME, Address.TYPE_NAME)
+    );
 
     public void validate(Assertion assertion, String responseIssuerId) {
         duplicateAssertionValidator.validateMatchingDataSetAssertion(assertion, responseIssuerId);

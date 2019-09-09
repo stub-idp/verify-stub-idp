@@ -1,15 +1,15 @@
 package stubidp.saml.hub.hub.transformers.inbound;
 
-import com.google.common.collect.ImmutableMap;
 import org.opensaml.saml.saml2.core.Status;
 import stubidp.saml.hub.hub.domain.CountryAuthenticationStatus;
 import stubidp.saml.hub.hub.transformers.inbound.SamlStatusToCountryAuthenticationStatusMappingsFactory.SamlStatusDefinitions;
 
+import java.util.Map;
 import java.util.Optional;
 
 public class SamlStatusToCountryAuthenticationStatusCodeMapper extends SamlStatusToAuthenticationStatusCodeMapper<CountryAuthenticationStatus.Status> {
 
-    private final ImmutableMap<SamlStatusDefinitions, CountryAuthenticationStatus.Status> statusMappings;
+    private final Map<SamlStatusDefinitions, CountryAuthenticationStatus.Status> statusMappings;
 
     public SamlStatusToCountryAuthenticationStatusCodeMapper() {
         this.statusMappings = SamlStatusToCountryAuthenticationStatusMappingsFactory.getSamlToCountryAuthenticationStatusMappings();

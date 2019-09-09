@@ -1,11 +1,10 @@
 package stubidp.test.integration.steps;
 
-import com.google.common.collect.ImmutableMap;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
-import stubidp.test.integration.support.StubIdpAppExtension;
 import stubidp.stubidp.Urls;
+import stubidp.test.integration.support.StubIdpAppExtension;
 
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.Entity;
@@ -17,6 +16,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.net.URLDecoder;
 import java.util.Arrays;
+import java.util.Map;
 import java.util.Objects;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -133,7 +133,7 @@ public class PreRegistrationSteps {
     private URI getUri(String path) {
         return UriBuilder.fromUri("http://localhost:" + applicationRule.getLocalPort())
                 .path(path)
-                .buildFromMap(ImmutableMap.of(Urls.IDP_ID_PARAM, IDP_NAME));
+                .buildFromMap(Map.of(Urls.IDP_ID_PARAM, IDP_NAME));
     }
 
     public String getCsrfToken() {

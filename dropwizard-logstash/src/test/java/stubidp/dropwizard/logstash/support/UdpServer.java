@@ -1,7 +1,5 @@
 package stubidp.dropwizard.logstash.support;
 
-import com.google.common.collect.Iterables;
-
 import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
@@ -65,6 +63,6 @@ public class UdpServer {
 
     public String getReceivedPacket() throws InterruptedException, BrokenBarrierException, TimeoutException {
         barrier.await(5, TimeUnit.SECONDS);
-        return Iterables.getLast(received, null);
+        return received.stream().reduce((a, b) -> b).orElse(null);
     }
 }

@@ -1,12 +1,13 @@
 package stubidp.saml.hub.metadata.domain;
 
-import com.google.common.collect.ImmutableList;
 import org.joda.time.DateTime;
 import stubidp.utils.security.security.Certificate;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public abstract class MetadataDto {
     protected List<Certificate> encryptionCertificates;
@@ -53,10 +54,8 @@ public abstract class MetadataDto {
     }
 
     public Collection<Certificate> getCertificates() {
-        return ImmutableList.<Certificate>builder()
-            .addAll(hubSigningCertificates)
-            .addAll(encryptionCertificates)
-            .build();
+        return Stream.<Certificate>concat(hubSigningCertificates.stream(), encryptionCertificates.stream())
+                .collect(Collectors.toUnmodifiableList());
     }
 
     public List<Certificate> getEncryptionCertificates() {

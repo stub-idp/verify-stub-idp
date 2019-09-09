@@ -1,14 +1,12 @@
 package stubidp.stubidp.views.helpers;
 
-import com.google.common.base.Function;
-import com.google.common.collect.Collections2;
 import org.apache.commons.lang.StringUtils;
 import stubidp.saml.utils.core.domain.Address;
 import stubidp.stubidp.domain.DatabaseIdpUser;
 import stubidp.stubidp.domain.MatchingDatasetValue;
 
-import javax.annotation.Nullable;
 import java.util.Collection;
+import java.util.stream.Collectors;
 
 public class IdpUserHelper {
 
@@ -37,13 +35,9 @@ public class IdpUserHelper {
     }
 
     public String getSurnames() {
-        Collection<String> surnameValues = Collections2.transform(this.idpUser.getSurnames(), new Function<MatchingDatasetValue<String>, String>() {
-            @Nullable
-            @Override
-            public String apply(@Nullable MatchingDatasetValue<String> input) {
-                return input != null ? input.getValue() : null;
-            }
-        });
+        Collection<String> surnameValues = this.idpUser.getSurnames().stream()
+                .map(s -> s != null ? s.getValue() : null)
+                .collect(Collectors.toList());
         return StringUtils.join(surnameValues, ",");
     }
 

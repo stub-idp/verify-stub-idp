@@ -1,10 +1,10 @@
 package stubidp.test.devpki;
 
-import com.google.common.collect.ImmutableMap;
 import org.apache.commons.io.IOUtils;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.AbstractMap;
 import java.util.Base64;
 import java.util.List;
 import java.util.Map;
@@ -157,66 +157,60 @@ public final class TestCertificateStrings {
     public static final String METADATA_SIGNING_B_PUBLIC_CERT = createInlineCertificate(PemCertificateStrings.METADATA_SIGNING_B_PUBLIC_CERT);
 
     static {
-        PUBLIC_SIGNING_CERTS = ImmutableMap.<String, String>builder()
-            .put(TEST_ENTITY_ID, TEST_PUBLIC_CERT)
-            .put(TestEntityIds.HUB_ENTITY_ID, HUB_TEST_PUBLIC_SIGNING_CERT)
-            .put(TestEntityIds.HUB_SECONDARY_ENTITY_ID, HUB_TEST_SECONDARY_PUBLIC_SIGNING_CERT)
-            .put(TestEntityIds.HUB_CONNECTOR_ENTITY_ID, HUB_CONNECTOR_TEST_PUBLIC_SIGNING_CERT)
-            .put(TestEntityIds.TEST_RP, TEST_RP_PUBLIC_SIGNING_CERT)
-            .put(TestEntityIds.TEST_RP_MS, TEST_RP_MS_PUBLIC_SIGNING_CERT)
-            .put(TestEntityIds.HEADLESS_RP, HEADLESS_RP_PUBLIC_SIGNING_CERT)
-            .put(TestEntityIds.HEADLESS_RP_MS, HEADLESS_RP_MS_PUBLIC_SIGNING_CERT)
-            .put(TestEntityIds.STUB_IDP_ONE, STUB_IDP_PUBLIC_PRIMARY_CERT)
-            .put(TestEntityIds.STUB_IDP_TWO, STUB_IDP_PUBLIC_PRIMARY_CERT)
-            .put(TestEntityIds.STUB_IDP_THREE, STUB_IDP_PUBLIC_PRIMARY_CERT)
-            .put(TestEntityIds.STUB_IDP_FOUR, STUB_IDP_PUBLIC_PRIMARY_CERT)
-            .put(TestEntityIds.STUB_COUNTRY_ONE, STUB_COUNTRY_PUBLIC_PRIMARY_CERT)
-            .put(TestEntityIds.STUB_COUNTRY_TWO, STUB_COUNTRY_PUBLIC_PRIMARY_CERT)
-            .build();
-    }
+        PUBLIC_SIGNING_CERTS = Map.<String, String>ofEntries(
+                Map.entry(TEST_ENTITY_ID, TEST_PUBLIC_CERT),
+                Map.entry(TestEntityIds.HUB_ENTITY_ID, HUB_TEST_PUBLIC_SIGNING_CERT),
+                Map.entry(TestEntityIds.HUB_SECONDARY_ENTITY_ID, HUB_TEST_SECONDARY_PUBLIC_SIGNING_CERT),
+                Map.entry(TestEntityIds.HUB_CONNECTOR_ENTITY_ID, HUB_CONNECTOR_TEST_PUBLIC_SIGNING_CERT),
+                Map.entry(TestEntityIds.TEST_RP, TEST_RP_PUBLIC_SIGNING_CERT),
+                Map.entry(TestEntityIds.TEST_RP_MS, TEST_RP_MS_PUBLIC_SIGNING_CERT),
+                Map.entry(TestEntityIds.HEADLESS_RP, HEADLESS_RP_PUBLIC_SIGNING_CERT),
+                Map.entry(TestEntityIds.HEADLESS_RP_MS, HEADLESS_RP_MS_PUBLIC_SIGNING_CERT),
+                Map.entry(TestEntityIds.STUB_IDP_ONE, STUB_IDP_PUBLIC_PRIMARY_CERT),
+                Map.entry(TestEntityIds.STUB_IDP_TWO, STUB_IDP_PUBLIC_PRIMARY_CERT),
+                Map.entry(TestEntityIds.STUB_IDP_THREE, STUB_IDP_PUBLIC_PRIMARY_CERT),
+                Map.entry(TestEntityIds.STUB_IDP_FOUR, STUB_IDP_PUBLIC_PRIMARY_CERT),
+                Map.entry(TestEntityIds.STUB_COUNTRY_ONE, STUB_COUNTRY_PUBLIC_PRIMARY_CERT),
+                Map.entry(TestEntityIds.STUB_COUNTRY_TWO, STUB_COUNTRY_PUBLIC_PRIMARY_CERT)
+        );
 
-    static {
-        PRIVATE_SIGNING_KEYS = ImmutableMap.<String, String>builder()
-            .put(TEST_ENTITY_ID, TEST_PRIVATE_KEY)
-            .put(TestEntityIds.HUB_ENTITY_ID, HUB_TEST_PRIVATE_SIGNING_KEY)
-            .put(TestEntityIds.HUB_SECONDARY_ENTITY_ID, HUB_TEST_PRIVATE_SECONDARY_SIGNING_KEY)
-            .put(TestEntityIds.HUB_CONNECTOR_ENTITY_ID, HUB_CONNECTOR_TEST_PRIVATE_SIGNING_KEY)
-            .put(TestEntityIds.TEST_RP, TEST_RP_PRIVATE_SIGNING_KEY)
-            .put(TestEntityIds.TEST_RP_MS, TEST_RP_MS_PRIVATE_SIGNING_KEY)
-            .put(TestEntityIds.HEADLESS_RP, HEADLESS_RP_PRIVATE_SIGNING_KEY)
-            .put(TestEntityIds.HEADLESS_RP_MS, HEADLESS_RP_MS_PRIVATE_SIGNING_KEY)
-            .put(TestEntityIds.STUB_IDP_ONE, STUB_IDP_PUBLIC_PRIMARY_PRIVATE_KEY)
-            .put(TestEntityIds.STUB_IDP_TWO, STUB_IDP_PUBLIC_PRIMARY_PRIVATE_KEY)
-            .put(TestEntityIds.STUB_IDP_THREE, STUB_IDP_PUBLIC_PRIMARY_PRIVATE_KEY)
-            .put(TestEntityIds.STUB_IDP_FOUR, STUB_IDP_PUBLIC_PRIMARY_PRIVATE_KEY)
-            .put(TestEntityIds.STUB_COUNTRY_ONE, STUB_COUNTRY_PUBLIC_PRIMARY_PRIVATE_KEY)
-            .put(TestEntityIds.STUB_COUNTRY_TWO, STUB_COUNTRY_PUBLIC_PRIMARY_PRIVATE_KEY)
-            .build();
-    }
+        PRIVATE_SIGNING_KEYS = Map.<String, String>ofEntries(
+                Map.entry(TEST_ENTITY_ID, TEST_PRIVATE_KEY),
+                Map.entry(TestEntityIds.HUB_ENTITY_ID, HUB_TEST_PRIVATE_SIGNING_KEY),
+                Map.entry(TestEntityIds.HUB_SECONDARY_ENTITY_ID, HUB_TEST_PRIVATE_SECONDARY_SIGNING_KEY),
+                Map.entry(TestEntityIds.HUB_CONNECTOR_ENTITY_ID, HUB_CONNECTOR_TEST_PRIVATE_SIGNING_KEY),
+                Map.entry(TestEntityIds.TEST_RP, TEST_RP_PRIVATE_SIGNING_KEY),
+                Map.entry(TestEntityIds.TEST_RP_MS, TEST_RP_MS_PRIVATE_SIGNING_KEY),
+                Map.entry(TestEntityIds.HEADLESS_RP, HEADLESS_RP_PRIVATE_SIGNING_KEY),
+                Map.entry(TestEntityIds.HEADLESS_RP_MS, HEADLESS_RP_MS_PRIVATE_SIGNING_KEY),
+                Map.entry(TestEntityIds.STUB_IDP_ONE, STUB_IDP_PUBLIC_PRIMARY_PRIVATE_KEY),
+                Map.entry(TestEntityIds.STUB_IDP_TWO, STUB_IDP_PUBLIC_PRIMARY_PRIVATE_KEY),
+                Map.entry(TestEntityIds.STUB_IDP_THREE, STUB_IDP_PUBLIC_PRIMARY_PRIVATE_KEY),
+                Map.entry(TestEntityIds.STUB_IDP_FOUR, STUB_IDP_PUBLIC_PRIMARY_PRIVATE_KEY),
+                Map.entry(TestEntityIds.STUB_COUNTRY_ONE, STUB_COUNTRY_PUBLIC_PRIMARY_PRIVATE_KEY),
+                Map.entry(TestEntityIds.STUB_COUNTRY_TWO, STUB_COUNTRY_PUBLIC_PRIMARY_PRIVATE_KEY)
+        );
 
-    static {
-        PUBLIC_ENCRYPTION_CERTS = ImmutableMap.<String, List<String>>builder()
-            .put(TEST_ENTITY_ID, List.of(TEST_PUBLIC_CERT))
-            .put(TestEntityIds.HUB_ENTITY_ID, List.of(HUB_TEST_PUBLIC_ENCRYPTION_CERT, TEST_PUBLIC_CERT))
-            .put(TestEntityIds.HUB_CONNECTOR_ENTITY_ID, List.of(HUB_CONNECTOR_TEST_PUBLIC_ENCRYPTION_CERT))
-            .put(TestEntityIds.TEST_RP, List.of(TEST_RP_PUBLIC_ENCRYPTION_CERT))
-            .put(TestEntityIds.TEST_RP_MS, List.of(TEST_RP_MS_PUBLIC_ENCRYPTION_CERT))
-            .put(TestEntityIds.HEADLESS_RP, List.of(HEADLESS_RP_PUBLIC_ENCRYPTION_CERT))
-            .put(TestEntityIds.HEADLESS_RP_MS, List.of(HEADLESS_RP_MS_PUBLIC_ENCRYPTION_CERT))
-            .build();
-    }
+        PUBLIC_ENCRYPTION_CERTS = Map.<String, List<String>>ofEntries(
+                Map.entry(TEST_ENTITY_ID, List.of(TEST_PUBLIC_CERT)),
+                Map.entry(TestEntityIds.HUB_ENTITY_ID, List.of(HUB_TEST_PUBLIC_ENCRYPTION_CERT, TEST_PUBLIC_CERT)),
+                Map.entry(TestEntityIds.HUB_CONNECTOR_ENTITY_ID, List.of(HUB_CONNECTOR_TEST_PUBLIC_ENCRYPTION_CERT)),
+                Map.entry(TestEntityIds.TEST_RP, List.of(TEST_RP_PUBLIC_ENCRYPTION_CERT)),
+                Map.entry(TestEntityIds.TEST_RP_MS, List.of(TEST_RP_MS_PUBLIC_ENCRYPTION_CERT)),
+                Map.entry(TestEntityIds.HEADLESS_RP, List.of(HEADLESS_RP_PUBLIC_ENCRYPTION_CERT)),
+                Map.entry(TestEntityIds.HEADLESS_RP_MS, List.of(HEADLESS_RP_MS_PUBLIC_ENCRYPTION_CERT))
+        );
 
-    static {
-        PRIVATE_ENCRYPTION_KEYS = ImmutableMap.<String, List<String>>builder()
-            .put(TEST_ENTITY_ID, List.of(TEST_PRIVATE_KEY))
-            .put(TestEntityIds.HUB_ENTITY_ID, List.of(HUB_TEST_PRIVATE_ENCRYPTION_KEY, TEST_PRIVATE_KEY))
-            .put(TestEntityIds.HUB_SECONDARY_ENTITY_ID, List.of(HUB_TEST_PRIVATE_ENCRYPTION_KEY, TEST_PRIVATE_KEY))
-            .put(TestEntityIds.HUB_CONNECTOR_ENTITY_ID, List.of(HUB_CONNECTOR_TEST_PRIVATE_ENCRYPTION_KEY))
-            .put(TestEntityIds.TEST_RP, List.of(TEST_RP_PRIVATE_ENCRYPTION_KEY))
-            .put(TestEntityIds.TEST_RP_MS, List.of(TEST_RP_MS_PRIVATE_ENCRYPTION_KEY))
-            .put(TestEntityIds.HEADLESS_RP, List.of(HEADLESS_RP_MS_PRIVATE_ENCRYPTION_KEY))
-            .put(TestEntityIds.HEADLESS_RP_MS, List.of(HEADLESS_RP_MS_PRIVATE_ENCRYPTION_KEY))
-            .build();
+        PRIVATE_ENCRYPTION_KEYS = Map.<String, List<String>>ofEntries(
+                Map.entry(TEST_ENTITY_ID, List.of(TEST_PRIVATE_KEY)),
+                Map.entry(TestEntityIds.HUB_ENTITY_ID, List.of(HUB_TEST_PRIVATE_ENCRYPTION_KEY, TEST_PRIVATE_KEY)),
+                Map.entry(TestEntityIds.HUB_SECONDARY_ENTITY_ID, List.of(HUB_TEST_PRIVATE_ENCRYPTION_KEY, TEST_PRIVATE_KEY)),
+                Map.entry(TestEntityIds.HUB_CONNECTOR_ENTITY_ID, List.of(HUB_CONNECTOR_TEST_PRIVATE_ENCRYPTION_KEY)),
+                Map.entry(TestEntityIds.TEST_RP, List.of(TEST_RP_PRIVATE_ENCRYPTION_KEY)),
+                Map.entry(TestEntityIds.TEST_RP_MS, List.of(TEST_RP_MS_PRIVATE_ENCRYPTION_KEY)),
+                Map.entry(TestEntityIds.HEADLESS_RP, List.of(HEADLESS_RP_MS_PRIVATE_ENCRYPTION_KEY)),
+                Map.entry(TestEntityIds.HEADLESS_RP_MS, List.of(HEADLESS_RP_MS_PRIVATE_ENCRYPTION_KEY))
+        );
     }
 
     public static String getPrimaryPublicEncryptionCert(final String issuerId) {

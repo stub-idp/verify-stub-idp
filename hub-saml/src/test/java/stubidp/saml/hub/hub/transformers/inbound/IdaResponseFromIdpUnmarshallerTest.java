@@ -17,7 +17,8 @@ import stubidp.saml.security.validators.ValidatedResponse;
 import stubidp.saml.utils.core.domain.PassthroughAssertion;
 import stubidp.saml.utils.core.test.builders.SignatureBuilder;
 
-import static com.google.common.collect.Lists.newArrayList;
+import java.util.List;
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 import static stubidp.saml.utils.core.test.builders.AssertionBuilder.anAssertion;
@@ -51,7 +52,7 @@ public class IdaResponseFromIdpUnmarshallerTest extends OpenSAMLRunner {
         Assertion mdsAssertion = anAssertion().addAttributeStatement(anAttributeStatement().build()).buildUnencrypted();
         Assertion authnStatementAssertion = anAssertion().addAuthnStatement(anAuthnStatement().build()).buildUnencrypted();
 
-        when(response.getAssertions()).thenReturn(newArrayList(mdsAssertion, authnStatementAssertion));
+        when(response.getAssertions()).thenReturn(List.of(mdsAssertion, authnStatementAssertion));
         PassthroughAssertion passthroughMdsAssertion = PassthroughAssertionBuilder.aPassthroughAssertion().buildMatchingDatasetAssertion();
         when(passthroughAssertionUnmarshaller.fromAssertion(mdsAssertion)).thenReturn(passthroughMdsAssertion);
         PassthroughAssertion passthroughAuthnAssertion = PassthroughAssertionBuilder.aPassthroughAssertion().buildAuthnStatementAssertion();

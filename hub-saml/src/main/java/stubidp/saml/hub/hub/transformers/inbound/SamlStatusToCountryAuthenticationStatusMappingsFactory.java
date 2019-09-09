@@ -1,8 +1,10 @@
 package stubidp.saml.hub.hub.transformers.inbound;
 
-import com.google.common.collect.ImmutableMap;
-import stubidp.saml.utils.core.domain.DetailedStatusCode;
 import stubidp.saml.hub.hub.domain.CountryAuthenticationStatus;
+import stubidp.saml.utils.core.domain.DetailedStatusCode;
+
+import java.util.AbstractMap;
+import java.util.Map;
 
 public class SamlStatusToCountryAuthenticationStatusMappingsFactory {
     enum SamlStatusDefinitions {
@@ -19,11 +21,11 @@ public class SamlStatusToCountryAuthenticationStatusMappingsFactory {
         }
     }
 
-    public static ImmutableMap<SamlStatusDefinitions, CountryAuthenticationStatus.Status> getSamlToCountryAuthenticationStatusMappings() {
+    public static Map<SamlStatusDefinitions, CountryAuthenticationStatus.Status> getSamlToCountryAuthenticationStatusMappings() {
         // Matching SAML statuses to their CountryAuthenticationStatus counterparts is dependent on the ordering of these put()
         // statements. There must be a better way of doing this.
-        return ImmutableMap.<SamlStatusDefinitions, CountryAuthenticationStatus.Status>builder()
-                .put(SamlStatusDefinitions.Success, CountryAuthenticationStatus.Status.Success)
-                .build();
+        return Map.<SamlStatusDefinitions, CountryAuthenticationStatus.Status>ofEntries(
+                Map.entry(SamlStatusDefinitions.Success, CountryAuthenticationStatus.Status.Success)
+        );
     }
 }

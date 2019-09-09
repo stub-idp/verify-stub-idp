@@ -1,13 +1,13 @@
 package stubidp.saml.hub.hub.transformers.inbound;
 
 import com.google.common.collect.ImmutableMap;
-import stubidp.saml.utils.core.domain.DetailedStatusCode;
 import stubidp.saml.extensions.extensions.StatusValue;
 import stubidp.saml.hub.hub.domain.IdpIdaStatus;
+import stubidp.saml.utils.core.domain.DetailedStatusCode;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
-
 
 public class SamlStatusToIdpIdaStatusMappingsFactory {
     enum SamlStatusDefinitions {
@@ -35,18 +35,18 @@ public class SamlStatusToIdpIdaStatusMappingsFactory {
         }
     }
 
-    public static ImmutableMap<SamlStatusDefinitions, IdpIdaStatus.Status> getSamlToIdpIdaStatusMappings() {
+    public static Map<SamlStatusDefinitions, IdpIdaStatus.Status> getSamlToIdpIdaStatusMappings() {
         // Matching SAML statuses to their IdpIdaStatus counterparts is dependent on the ordering of these put()
         // statements. There must be a better way of doing this.
         return ImmutableMap.<SamlStatusDefinitions, IdpIdaStatus.Status>builder()
-                .put(SamlStatusDefinitions.Success, IdpIdaStatus.Status.Success)
-                .put(SamlStatusDefinitions.AuthenticationCancelled, IdpIdaStatus.Status.AuthenticationCancelled)
-                .put(SamlStatusDefinitions.AuthenticationPending, IdpIdaStatus.Status.AuthenticationPending)
-                .put(SamlStatusDefinitions.UpliftFailed, IdpIdaStatus.Status.UpliftFailed)
-                .put(SamlStatusDefinitions.NoAuthenticationContext, IdpIdaStatus.Status.NoAuthenticationContext)
-                .put(SamlStatusDefinitions.AuthenticationFailed, IdpIdaStatus.Status.AuthenticationFailed)
-                .put(SamlStatusDefinitions.RequesterErrorFromIdp, IdpIdaStatus.Status.RequesterError)
-                .put(SamlStatusDefinitions.RequesterErrorRequestDeniedFromIdp, IdpIdaStatus.Status.RequesterError)
+                .put(Map.entry(SamlStatusDefinitions.Success, IdpIdaStatus.Status.Success))
+                .put(Map.entry(SamlStatusDefinitions.AuthenticationCancelled, IdpIdaStatus.Status.AuthenticationCancelled))
+                .put(Map.entry(SamlStatusDefinitions.AuthenticationPending, IdpIdaStatus.Status.AuthenticationPending))
+                .put(Map.entry(SamlStatusDefinitions.UpliftFailed, IdpIdaStatus.Status.UpliftFailed))
+                .put(Map.entry(SamlStatusDefinitions.NoAuthenticationContext, IdpIdaStatus.Status.NoAuthenticationContext))
+                .put(Map.entry(SamlStatusDefinitions.AuthenticationFailed, IdpIdaStatus.Status.AuthenticationFailed))
+                .put(Map.entry(SamlStatusDefinitions.RequesterErrorFromIdp, IdpIdaStatus.Status.RequesterError))
+                .put(Map.entry(SamlStatusDefinitions.RequesterErrorRequestDeniedFromIdp, IdpIdaStatus.Status.RequesterError))
                 .build();
     }
 }
