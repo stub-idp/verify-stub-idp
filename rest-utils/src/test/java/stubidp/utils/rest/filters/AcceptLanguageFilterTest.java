@@ -33,7 +33,7 @@ public class AcceptLanguageFilterTest{
     @Test
     public void getHeaderNames_removesAcceptLanguageHeader(){
         AcceptLanguageFilter f = new AcceptLanguageFilter();
-        Enumeration<String> headerNames = f.new HideAcceptLanguage(request).getHeaderNames();
+        Enumeration<String> headerNames = new AcceptLanguageFilter.HideAcceptLanguage(request).getHeaderNames();
         verify(request).getHeaderNames();
         assertThat(headerNames.nextElement()).contains(HttpHeaders.ACCEPT_ENCODING);
     }
@@ -41,7 +41,7 @@ public class AcceptLanguageFilterTest{
     @Test
     public void getHeader_returnsValueOfAcceptLanguageHeaderNullForOthers(){
         AcceptLanguageFilter f = new AcceptLanguageFilter();
-        assertThat(f.new HideAcceptLanguage(request).getHeader(HttpHeaders.ACCEPT_ENCODING)).isEqualTo(encodingHeader);
-        assertThat(f.new HideAcceptLanguage(request).getHeader(HttpHeaders.ACCEPT_LANGUAGE)).isNull();
+        assertThat(new AcceptLanguageFilter.HideAcceptLanguage(request).getHeader(HttpHeaders.ACCEPT_ENCODING)).isEqualTo(encodingHeader);
+        assertThat(new AcceptLanguageFilter.HideAcceptLanguage(request).getHeader(HttpHeaders.ACCEPT_LANGUAGE)).isNull();
     }
 }

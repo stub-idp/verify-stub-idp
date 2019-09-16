@@ -103,7 +103,7 @@ public class UserResourceBasicAuthFilter implements Filter {
         return userProvidedCredentials;
     }
 
-    private final class UsernamePassword {
+    private static final class UsernamePassword {
         private String password;
         private String username;
 

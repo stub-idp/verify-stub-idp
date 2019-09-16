@@ -21,13 +21,13 @@ public class CSRFViewRendererTest {
 
     private static final String CSRF_TOKEN = UUID.randomUUID().toString();
 
-    private class TestView extends IdpPageView {
+    private static class TestView extends IdpPageView {
         protected TestView(String templateName) {
             super(templateName, "name", "idpid", null, "assetid", Optional.ofNullable(CSRF_TOKEN));
         }
     }
 
-    private class TestNoCsrfView extends IdpPageView {
+    private static class TestNoCsrfView extends IdpPageView {
         protected TestNoCsrfView(String templateName) {
             super(templateName, "name", "idpid", null, "assetid", Optional.empty());
         }

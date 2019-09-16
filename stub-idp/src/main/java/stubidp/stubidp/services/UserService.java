@@ -20,7 +20,7 @@ import java.util.stream.Collectors;
 
 public class UserService {
 
-    public class ResponseMessage {
+    public static class ResponseMessage {
         private String message;
 
         private ResponseMessage(String message) {

@@ -33,7 +33,7 @@ public class StubIdpConfigurationTest {
         assertThat(e.getMessage()).contains("stubIdpsYmlFileLocation must not be null");
     }
 
-    class StringConfigurationSourceProvider implements ConfigurationSourceProvider {
+    static class StringConfigurationSourceProvider implements ConfigurationSourceProvider {
         private String configuration;
 
         public StringConfigurationSourceProvider(String configuration) {

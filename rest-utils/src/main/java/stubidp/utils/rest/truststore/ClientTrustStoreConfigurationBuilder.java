@@ -10,7 +10,7 @@ public class ClientTrustStoreConfigurationBuilder {
         return new TestClientTrustStoreConfiguration("trustStorePath", "password");
     }
 
-    private class TestClientTrustStoreConfiguration extends ClientTrustStoreConfiguration{
+    private static class TestClientTrustStoreConfiguration extends ClientTrustStoreConfiguration{
         private TestClientTrustStoreConfiguration(String trustStorePath, String password) {
             this.path = trustStorePath;
             this.password = password;
