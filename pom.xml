@@ -18,7 +18,7 @@
         <opensaml.version>3.4.4</opensaml.version>
         <dropwizard.version>2.0.0-rc10</dropwizard.version>
         <guava.version>28.1-jre</guava.version>
-        <joda_time.version>2.10.3</joda_time.version>
+        <joda_time.version>2.10.4</joda_time.version>
         <shibboleth_utils.version>7.5.1</shibboleth_utils.version>
         <javax_validation.version>2.0.2</javax_validation.version>
         <jackson_annotations.version>2.9.9</jackson_annotations.version>
