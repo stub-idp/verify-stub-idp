@@ -36,7 +36,7 @@ public class EidasUserLogsInIntegrationTests extends IntegrationTestHelper {
             client,
             EIDAS_SCHEME_NAME,
             applicationRule.getLocalPort());
-    private final SamlDecrypter samlDecrypter = new SamlDecrypter(client, applicationRule.getMetadataPath(), applicationRule.getConfiguration().getHubEntityId(), applicationRule.getLocalPort(), Optional.ofNullable(EIDAS_SCHEME_NAME));
+    private final SamlDecrypter samlDecrypter = new SamlDecrypter(client, applicationRule.getEidasMetadataPath(), applicationRule.getConfiguration().getHubEntityId(), applicationRule.getLocalPort(), Optional.ofNullable(EIDAS_SCHEME_NAME));
 
     public static final StubIdpAppExtension applicationRule = new StubIdpAppExtension();
 

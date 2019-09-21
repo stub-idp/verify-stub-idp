@@ -33,9 +33,11 @@ import static stubidp.test.devpki.TestEntityIds.HUB_ENTITY_ID;
 
 public class StubIdpAppExtension extends DropwizardAppExtension<StubIdpConfiguration> {
 
-    private static final String METADATA_PATH = "/uk/gov/ida/saml/metadata/sp";
+    private static final String VERIFY_METADATA_PATH = "/saml/metadata/sp";
+    private static final String EIDAS_METADATA_PATH = "/saml/metadata/eidas";
 
-    private static final HttpStubRule metadataServer = new HttpStubRule();
+    private static final HttpStubRule verifyMetadataServer = new HttpStubRule();
+    private static final HttpStubRule eidasMetadataServer = new HttpStubRule();
     private static final KeyStoreResource trustStore = KeyStoreResourceBuilder.aKeyStoreResource().withCertificate("metadataCA", CACertificates.TEST_METADATA_CA).withCertificate("rootCA", CACertificates.TEST_ROOT_CA).build();
     private static final File STUB_IDPS_FILE = new File(System.getProperty("java.io.tmpdir"), "stub-idps.yml");
 
@@ -58,7 +60,7 @@ public class StubIdpAppExtension extends DropwizardAppExtension<StubIdpConfigura
 
     public static ConfigOverride[] withDefaultOverrides(Map<String, String> configOverrides) {
         Map<String, String> config = Map.<String, String>ofEntries(
-                Map.entry("metadata.uri", "http://localhost:" + metadataServer.getPort() + METADATA_PATH),
+                Map.entry("metadata.uri", "http://localhost:" + verifyMetadataServer.getPort() + VERIFY_METADATA_PATH),
                 Map.entry("hubEntityId", HUB_ENTITY_ID),
                 Map.entry("basicAuthEnabledForUserResource", "true"),
                 Map.entry("server.requestLog.appenders[0].type", "console"),
@@ -71,7 +73,7 @@ public class StubIdpAppExtension extends DropwizardAppExtension<StubIdpConfigura
                 Map.entry("europeanIdentity.enabled", "true"),
                 Map.entry("europeanIdentity.hubConnectorEntityId", HUB_ENTITY_ID),
                 Map.entry("europeanIdentity.stubCountryBaseUrl", "http://localhost:0"),
-                Map.entry("europeanIdentity.metadata.uri", "http://localhost:" + metadataServer.getPort() + METADATA_PATH),
+                Map.entry("europeanIdentity.metadata.uri", "http://localhost:" + eidasMetadataServer.getPort() + EIDAS_METADATA_PATH),
                 Map.entry("europeanIdentity.metadata.expectedEntityId", HUB_ENTITY_ID),
                 Map.entry("europeanIdentity.metadata.trustStore.store", trustStore.getAbsolutePath()),
                 Map.entry("europeanIdentity.metadata.trustStore.password", trustStore.getPassword()),
@@ -105,8 +107,10 @@ public class StubIdpAppExtension extends DropwizardAppExtension<StubIdpConfigura
 
             InitializationService.initialize();
 
-            metadataServer.reset();
-            metadataServer.register(METADATA_PATH, 200, Constants.APPLICATION_SAMLMETADATA_XML, new MetadataFactory().defaultMetadata());
+            verifyMetadataServer.reset();
+            eidasMetadataServer.reset();
+            verifyMetadataServer.register(VERIFY_METADATA_PATH, 200, Constants.APPLICATION_SAMLMETADATA_XML, new MetadataFactory().defaultMetadata());
+            eidasMetadataServer.register(EIDAS_METADATA_PATH, 200, Constants.APPLICATION_SAMLMETADATA_XML, new MetadataFactory().defaultMetadata());
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -127,8 +131,12 @@ public class StubIdpAppExtension extends DropwizardAppExtension<StubIdpConfigura
         return this;
     }
 
-    public URI getMetadataPath() {
-        return URI.create("http://localhost:" + metadataServer.getPort() + METADATA_PATH);
+    public URI getVerifyMetadataPath() {
+        return URI.create("http://localhost:" + verifyMetadataServer.getPort() + VERIFY_METADATA_PATH);
+    }
+
+    public URI getEidasMetadataPath() {
+        return URI.create("http://localhost:" + eidasMetadataServer.getPort() + EIDAS_METADATA_PATH);
     }
 
     private static class TestIdpStubsConfiguration extends IdpStubsConfiguration {
