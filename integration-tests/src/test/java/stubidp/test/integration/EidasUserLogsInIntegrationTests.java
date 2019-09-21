@@ -24,6 +24,8 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static stubidp.stubidp.resources.eidas.EidasConsentResource.RSASHA_256;
+import static stubidp.stubidp.resources.eidas.EidasConsentResource.RSASSA_PSS;
 
 @ExtendWith(DropwizardExtensionsSupport.class)
 public class EidasUserLogsInIntegrationTests extends IntegrationTestHelper {
@@ -47,10 +49,15 @@ public class EidasUserLogsInIntegrationTests extends IntegrationTestHelper {
     public void loginBehaviourTest() {
         final AuthnRequestSteps.Cookies cookies = authnRequestSteps.userPostsEidasAuthnRequestToStubIdp();
         authnRequestSteps.eidasUserLogsIn(cookies);
-        authnRequestSteps.eidasUserConsentsReturnSamlResponse(cookies, false);
+        authnRequestSteps.eidasUserConsentsReturnSamlResponse(cookies, false, RSASHA_256);
     }
 
-    // FIXME: add a test using RSASSA_PSS signed authnrequest
+    @Test
+    public void loginBehaviourTestPSS() {
+        final AuthnRequestSteps.Cookies cookies = authnRequestSteps.userPostsEidasAuthnRequestToStubIdp();
+        authnRequestSteps.eidasUserLogsIn(cookies);
+        authnRequestSteps.eidasUserConsentsReturnSamlResponse(cookies, false, RSASSA_PSS);
+    }
 
     @Test
     public void debugPageLoadsAndValuesForOptionalAttribuesAreReturnedTest() {
@@ -64,7 +71,7 @@ public class EidasUserLogsInIntegrationTests extends IntegrationTestHelper {
         // these can be requested but stub-country currently has no users that contain current address or gender
         if (requestAddress) { assertThat(page).contains(IdaConstants.Eidas_Attributes.CurrentAddress.NAME); }
         if (requestGender) { assertThat(page).contains(IdaConstants.Eidas_Attributes.Gender.NAME); }
-        final String samlResponse = authnRequestSteps.eidasUserConsentsReturnSamlResponse(cookies, false);
+        final String samlResponse = authnRequestSteps.eidasUserConsentsReturnSamlResponse(cookies, false, RSASHA_256);
         final InboundResponseFromCountry inboundResponseFromCountry = samlDecrypter.decryptEidasSaml(samlResponse);
         assertThat(inboundResponseFromCountry.getIssuer()).isEqualTo("http://localhost:0/"+EIDAS_SCHEME_NAME+"/ServiceMetadata");
         assertThat(inboundResponseFromCountry.getStatus().getStatusCode().getValue()).isEqualTo(StatusCode.SUCCESS);
@@ -74,7 +81,7 @@ public class EidasUserLogsInIntegrationTests extends IntegrationTestHelper {
         final List<Attribute> attributes = inboundResponseFromCountry.getValidatedIdentityAssertion().getAttributeStatements().get(0).getAttributes();
         // stub-country can currently only return these 4 attributes
         assertThat(attributes.size()).isEqualTo(4);
-        assertThat(attributes.stream().map(a -> a.getName()).collect(Collectors.toList()))
+        assertThat(attributes.stream().map(Attribute::getName).collect(Collectors.toList()))
                 .containsExactlyInAnyOrder(
                         IdaConstants.Eidas_Attributes.FirstName.NAME,
                         IdaConstants.Eidas_Attributes.FamilyName.NAME,

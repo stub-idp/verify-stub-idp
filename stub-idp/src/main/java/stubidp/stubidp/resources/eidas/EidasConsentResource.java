@@ -50,7 +50,7 @@ public class EidasConsentResource {
     private final SamlResponseRedirectViewFactory samlResponseRedirectViewFactory;
 
     public static final String RSASHA_256 = "rsasha256";
-    private static final String RSASSA_PSS = "rsassa-pss";
+    public static final String RSASSA_PSS = "rsassa-pss";
 
     @Inject
     public EidasConsentResource(

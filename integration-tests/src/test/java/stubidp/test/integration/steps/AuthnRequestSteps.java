@@ -24,7 +24,6 @@ import java.util.Optional;
 import static org.assertj.core.api.Assertions.assertThat;
 import static stubidp.stubidp.csrf.CSRFCheckProtectionFilter.CSRF_PROTECT_FORM_KEY;
 import static stubidp.stubidp.repositories.StubCountryRepository.STUB_COUNTRY_FRIENDLY_ID;
-import static stubidp.stubidp.resources.eidas.EidasConsentResource.RSASHA_256;
 
 public class AuthnRequestSteps {
     private final Client client;
@@ -119,12 +118,8 @@ public class AuthnRequestSteps {
     private Response postAuthnRequest(List<String> hints, Optional<String> language, Optional<Boolean> registration, String authnRequest, String ssoEndpoint) {
         Form form = new Form();
         form.param(Urls.SAML_REQUEST_PARAM, authnRequest);
-        if(registration.isPresent()) {
-            form.param(Urls.REGISTRATION_PARAM, registration.get().toString());
-        }
-        if(language.isPresent()) {
-            form.param(Urls.LANGUAGE_HINT_PARAM, language.get());
-        }
+        registration.ifPresent(b -> form.param(Urls.REGISTRATION_PARAM, b.toString()));
+        language.ifPresent(s -> form.param(Urls.LANGUAGE_HINT_PARAM, s));
         for(String hint : hints) {
             form.param(Urls.HINTS_PARAM, hint);
         }
@@ -177,14 +172,14 @@ public class AuthnRequestSteps {
     }
 
     public String userConsentsReturnSamlResponse(Cookies cookies, boolean randomize) {
-        return userConsentsReturnSamlResponse(cookies, randomize, Urls.IDP_CONSENT_RESOURCE);
+        return userConsentsReturnSamlResponse(cookies, randomize, Urls.IDP_CONSENT_RESOURCE, Optional.empty());
     }
 
-    public String eidasUserConsentsReturnSamlResponse(Cookies cookies, boolean randomize) {
-        return userConsentsReturnSamlResponse(cookies, randomize, Urls.EIDAS_CONSENT_RESOURCE);
+    public String eidasUserConsentsReturnSamlResponse(Cookies cookies, boolean randomize, String signingAlgorithm) {
+        return userConsentsReturnSamlResponse(cookies, randomize, Urls.EIDAS_CONSENT_RESOURCE, Optional.of(signingAlgorithm));
     }
 
-    private String userConsentsReturnSamlResponse(Cookies cookies, boolean randomize, String consentUrl) {
+    private String userConsentsReturnSamlResponse(Cookies cookies, boolean randomize, String consentUrl, Optional<String> signingAlgorithm) {
         Response response = client.target(getStubIdpUri(consentUrl))
                 .request()
                 .cookie(CookieNames.SESSION_COOKIE_NAME, cookies.getSessionId())
@@ -201,7 +196,7 @@ public class AuthnRequestSteps {
         if(!Objects.isNull(csrfElement)) {
             form.param(CSRF_PROTECT_FORM_KEY, entity.getElementById(CSRF_PROTECT_FORM_KEY).val());
         }
-        form.param(Urls.SIGNING_ALGORITHM_PARAM, RSASHA_256); // only for eidas consent POST
+        signingAlgorithm.ifPresent(s -> form.param(Urls.SIGNING_ALGORITHM_PARAM, s)); // only for eidas consent POST
 
         response = client.target(getStubIdpUri(consentUrl))
                 .request()
