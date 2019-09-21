@@ -21,7 +21,6 @@ import stubidp.saml.hub.core.validators.assertion.IdentityProviderAssertionValid
 import stubidp.saml.hub.core.validators.assertion.MatchingDatasetAssertionValidator;
 import stubidp.saml.hub.core.validators.subject.AssertionSubjectValidator;
 import stubidp.saml.hub.core.validators.subjectconfirmation.AssertionSubjectConfirmationValidator;
-import stubidp.saml.hub.hub.domain.CountryAuthenticationStatus;
 import stubidp.saml.hub.hub.domain.InboundResponseFromIdp;
 import stubidp.saml.hub.hub.transformers.inbound.IdaResponseFromIdpUnmarshaller;
 import stubidp.saml.hub.hub.transformers.inbound.IdpIdaStatusUnmarshaller;
@@ -76,7 +75,6 @@ import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
 import static java.text.MessageFormat.format;
-import static java.util.Optional.ofNullable;
 import static stubidp.test.devpki.TestCertificateStrings.HUB_TEST_PRIVATE_ENCRYPTION_KEY;
 import static stubidp.test.devpki.TestCertificateStrings.HUB_TEST_PUBLIC_ENCRYPTION_CERT;
 
@@ -128,9 +126,7 @@ public class SamlDecrypter {
             jerseyClientMetadataResolver.setId("SamlDecrypter.MetadataResolver"+UUID.randomUUID());
             jerseyClientMetadataResolver.initialize();
             jerseyClientMetadataResolver.refresh();
-        } catch (ComponentInitializationException e) {
-            e.printStackTrace();
-        } catch (ResolverException e) {
+        } catch (ComponentInitializationException | ResolverException e) {
             e.printStackTrace();
         }
         return jerseyClientMetadataResolver;
@@ -176,7 +172,7 @@ public class SamlDecrypter {
         samlAssertionsSignatureValidator.validate(decryptedAssertions, IDPSSODescriptor.DEFAULT_ELEMENT_NAME);
     }
 
-    public void responseAssertionFromCountryValidatorValidate(ValidatedResponse validatedResponse, Assertion validatedIdentityAssertion) {
+    private void responseAssertionFromCountryValidatorValidate(ValidatedResponse validatedResponse, Assertion validatedIdentityAssertion) {
 
         new IdentityProviderAssertionValidator(
                 new IssuerValidator(),
@@ -201,7 +197,7 @@ public class SamlDecrypter {
     }
 
     private SamlMessageSignatureValidator getSamlMessageSignatureValidator(String entityId) {
-        return ofNullable(getMetadataResolver(URI.create("http://localhost:"+localPort+"/"+eidasSchemeName.get()+"/ServiceMetadata")))
+        return Optional.of(getMetadataResolver(URI.create("http://localhost:"+localPort+"/"+eidasSchemeName.get()+"/ServiceMetadata")))
                 .map(m -> {
                     try {
                         return new MetadataSignatureTrustEngineFactory().createSignatureTrustEngine(m);
@@ -222,7 +218,7 @@ public class SamlDecrypter {
     }
 
 
-    public IdaKeyStore createHubKeyStore() {
+    private IdaKeyStore createHubKeyStore() {
         PrivateKey privateKey = new PrivateKeyFactory().createPrivateKey(Base64.getDecoder().decode(HUB_TEST_PRIVATE_ENCRYPTION_KEY));
 
         PublicKey publicKey = new PublicKeyFactory(new X509CertificateFactory()).createPublicKey(HUB_TEST_PUBLIC_ENCRYPTION_CERT);
@@ -230,7 +226,6 @@ public class SamlDecrypter {
         List<KeyPair> encryptionKeys = List.of(new KeyPair(publicKey, privateKey));
         return new IdaKeyStore(null, encryptionKeys);
     }
-
 
     private DecoratedSamlResponseToIdaResponseIssuedByIdpTransformer buildDecoratedSamlResponseToIdaResponseIssuedByIdpTransformer(SigningCredentialFactory credentialFactory, IdaKeyStore keyStore) {
         IdaKeyStoreCredentialRetriever storeCredentialRetriever = new IdaKeyStoreCredentialRetriever(keyStore);
@@ -241,7 +236,7 @@ public class SamlDecrypter {
                 new SamlResponseSignatureValidator(new SamlMessageSignatureValidator(new CredentialFactorySignatureValidator(credentialFactory))),
                 new AssertionDecrypter(new EncryptionAlgorithmValidator(), new DecrypterFactory().createDecrypter(storeCredentialRetriever.getDecryptingCredentials())),
                 new SamlAssertionsSignatureValidator(new SamlMessageSignatureValidator(new CredentialFactorySignatureValidator(credentialFactory))),
-                new EncryptedResponseFromIdpValidator<CountryAuthenticationStatus.Status>(new SamlStatusToCountryAuthenticationStatusCodeMapper()),
+                new EncryptedResponseFromIdpValidator<>(new SamlStatusToCountryAuthenticationStatusCodeMapper()),
                 new DestinationValidator(URI.create("http://foo.com/bar"), "/bar"),
                 new ResponseAssertionsFromIdpValidator(
                         new IdentityProviderAssertionValidator(
