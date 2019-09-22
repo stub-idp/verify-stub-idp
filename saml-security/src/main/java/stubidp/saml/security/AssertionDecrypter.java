@@ -14,8 +14,8 @@ import java.util.List;
 
 public class AssertionDecrypter {
 
-    protected final EncryptionAlgorithmValidator encryptionAlgorithmValidator;
-    private Decrypter decrypter;
+    private final EncryptionAlgorithmValidator encryptionAlgorithmValidator;
+    private final Decrypter decrypter;
 
     public AssertionDecrypter(EncryptionAlgorithmValidator encryptionAlgorithmValidator, Decrypter decrypter) {
         this.encryptionAlgorithmValidator = encryptionAlgorithmValidator;

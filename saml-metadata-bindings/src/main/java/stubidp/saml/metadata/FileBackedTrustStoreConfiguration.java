@@ -13,7 +13,7 @@ public class FileBackedTrustStoreConfiguration extends TrustStoreConfiguration {
     @Valid
     @JsonProperty
     @JsonAlias({ "path", "trustStorePath", "store" })
-    private String store;
+    protected String store;
 
 
     @Override

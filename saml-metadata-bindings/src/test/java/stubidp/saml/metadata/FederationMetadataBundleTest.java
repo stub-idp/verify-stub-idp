@@ -77,8 +77,8 @@ public class FederationMetadataBundleTest extends OpenSAMLRunner {
         ConfigOverride.config("metadata.trustStore.path", () -> metadataKeyStoreRule.getAbsolutePath()),
         ConfigOverride.config("metadata.trustStore.password", () -> metadataKeyStoreRule.getPassword()),
         ConfigOverride.config("metadata.unknownProperty", () -> "unknownValue"),
-        ConfigOverride.config("metadata.hubTrustStore.path", () -> hubKeyStoreRule.getAbsolutePath()),
-        ConfigOverride.config("metadata.hubTrustStore.password", () -> hubKeyStoreRule.getPassword()),
+        ConfigOverride.config("metadata.spTrustStore.path", () -> hubKeyStoreRule.getAbsolutePath()),
+        ConfigOverride.config("metadata.spTrustStore.password", () -> hubKeyStoreRule.getPassword()),
         ConfigOverride.config("metadata.idpTrustStore.path", () -> idpKeyStoreRule.getAbsolutePath()),
         ConfigOverride.config("metadata.idpTrustStore.password", () -> idpKeyStoreRule.getPassword())
     );

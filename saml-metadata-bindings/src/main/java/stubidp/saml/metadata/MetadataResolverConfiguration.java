@@ -10,7 +10,7 @@ public interface MetadataResolverConfiguration {
 
     KeyStore getTrustStore();
 
-    default Optional<KeyStore> getHubTrustStore() {
+    default Optional<KeyStore> getSpTrustStore() {
         return Optional.empty();
     }
 

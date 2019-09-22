@@ -18,7 +18,6 @@ import stubidp.saml.extensions.extensions.eidas.CurrentGivenName;
 import stubidp.saml.extensions.extensions.eidas.DateOfBirth;
 import stubidp.saml.extensions.extensions.eidas.EidasGender;
 import stubidp.saml.extensions.extensions.eidas.PersonIdentifier;
-import stubidp.stubidp.StubIdpBinder;
 import stubidp.stubidp.builders.EidasResponseBuilder;
 import stubidp.stubidp.domain.EidasAddress;
 import stubidp.stubidp.domain.EidasUser;
@@ -39,8 +38,9 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-import static stubidp.stubidp.StubIdpBinder.HUB_CONNECTOR_ENTITY_ID;
-import static stubidp.stubidp.StubIdpBinder.STUB_COUNTRY_METADATA_URL;
+import static stubidp.stubidp.StubIdpEidasBinder.HUB_CONNECTOR_ENTITY_ID;
+import static stubidp.stubidp.StubIdpEidasBinder.HUB_CONNECTOR_METADATA_REPOSITORY;
+import static stubidp.stubidp.StubIdpEidasBinder.STUB_COUNTRY_METADATA_URL;
 
 public class EidasAuthnResponseService {
 
@@ -69,11 +69,11 @@ public class EidasAuthnResponseService {
     @Inject
     public EidasAuthnResponseService(@Named(HUB_CONNECTOR_ENTITY_ID) String hubConnectorEntityId,
                                      EidasResponseTransformerProvider eidasResponseTransformerProvider,
-                                     @Named(StubIdpBinder.HUB_CONNECTOR_METADATA_REPOSITORY) Optional<MetadataRepository> metadataProvider,
+                                     @Named(HUB_CONNECTOR_METADATA_REPOSITORY) MetadataRepository metadataProvider,
                                      @Named(STUB_COUNTRY_METADATA_URL) String stubCountryMetadataUrl) {
         this.hubConnectorEntityId = hubConnectorEntityId;
         this.eidasResponseTransformerProvider = eidasResponseTransformerProvider;
-        this.metadataProvider = metadataProvider.get();
+        this.metadataProvider = metadataProvider;
         this.stubCountryMetadataUrl = stubCountryMetadataUrl;
     }
 

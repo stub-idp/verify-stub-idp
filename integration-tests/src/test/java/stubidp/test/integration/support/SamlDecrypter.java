@@ -63,6 +63,7 @@ import stubidp.utils.security.security.PublicKeyFactory;
 import stubidp.utils.security.security.X509CertificateFactory;
 
 import javax.ws.rs.client.Client;
+import javax.ws.rs.core.UriBuilder;
 import java.net.URI;
 import java.security.KeyPair;
 import java.security.PrivateKey;
@@ -75,6 +76,8 @@ import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
 import static java.text.MessageFormat.format;
+import static stubidp.test.devpki.TestCertificateStrings.HUB_CONNECTOR_TEST_PRIVATE_ENCRYPTION_KEY;
+import static stubidp.test.devpki.TestCertificateStrings.HUB_CONNECTOR_TEST_PUBLIC_SIGNING_CERT;
 import static stubidp.test.devpki.TestCertificateStrings.HUB_TEST_PRIVATE_ENCRYPTION_KEY;
 import static stubidp.test.devpki.TestCertificateStrings.HUB_TEST_PUBLIC_ENCRYPTION_CERT;
 
@@ -94,13 +97,15 @@ public class SamlDecrypter {
             new ResponseSizeValidator(new StringSizeValidator()),
             new OpenSamlXMLObjectUnmarshaller<>(new SamlObjectParser()));
     private final Optional<String> eidasSchemeName;
+    private final URI assertionConsumerServices;
 
-    public SamlDecrypter(Client client, URI metadataUri, String hubEntityId, int localPort, Optional<String> eidasSchemeName) {
+    public SamlDecrypter(Client client, URI metadataUri, String hubEntityId, int localPort, Optional<String> eidasSchemeName, URI assertionConsumerServices) {
         this.client = client;
         this.metadataUri = metadataUri;
         this.hubEntityId = hubEntityId;
         this.localPort = localPort;
         this.eidasSchemeName = eidasSchemeName;
+        this.assertionConsumerServices = assertionConsumerServices;
     }
 
     /**
@@ -139,7 +144,7 @@ public class SamlDecrypter {
 
         Response response = stringToOpenSamlObjectTransformer.apply(samlResponse);
         ValidatedResponse validatedResponse = validateResponse(response);
-        AssertionDecrypter assertionDecrypter = getAES256WithGCMAssertionDecrypter(createHubKeyStore());
+        AssertionDecrypter assertionDecrypter = getAES256WithGCMAssertionDecrypter(createEidasKeyStore());
         List<Assertion> assertions = assertionDecrypter.decryptAssertions(validatedResponse);
         Optional<Assertion> validatedIdentityAssertion = validateAssertion(validatedResponse, assertions);
 
@@ -161,14 +166,14 @@ public class SamlDecrypter {
     }
 
     private ValidatedResponse validateResponse(Response response) {
-        SamlResponseSignatureValidator samlResponseSignatureValidator = new SamlResponseSignatureValidator(getSamlMessageSignatureValidator(response.getIssuer().getValue()));
+        SamlResponseSignatureValidator samlResponseSignatureValidator = new SamlResponseSignatureValidator(getSamlMessageSignatureValidator(hubEntityId));
         final ValidatedResponse validatedResponse = samlResponseSignatureValidator.validate(response, IDPSSODescriptor.DEFAULT_ELEMENT_NAME);
-        new DestinationValidator(URI.create("http://foo.com/bar"), "/bar").validate(response.getDestination());
+        new DestinationValidator(UriBuilder.fromUri(assertionConsumerServices).replacePath(null).build(), assertionConsumerServices.getPath()).validate(response.getDestination());
         return validatedResponse;
     }
 
     private void getValidatedAssertion(ValidatedResponse validatedResponse, List<Assertion> decryptedAssertions) {
-        SamlAssertionsSignatureValidator samlAssertionsSignatureValidator = new SamlAssertionsSignatureValidator(getSamlMessageSignatureValidator(validatedResponse.getIssuer().getValue()));
+        SamlAssertionsSignatureValidator samlAssertionsSignatureValidator = new SamlAssertionsSignatureValidator(getSamlMessageSignatureValidator(hubEntityId));
         samlAssertionsSignatureValidator.validate(decryptedAssertions, IDPSSODescriptor.DEFAULT_ELEMENT_NAME);
     }
 
@@ -179,7 +184,7 @@ public class SamlDecrypter {
                 new AssertionSubjectValidator(),
                 new AssertionAttributeStatementValidator(),
                 new AssertionSubjectConfirmationValidator()
-        ).validate(validatedIdentityAssertion, validatedResponse.getInResponseTo(), "http://foo.com/bar");
+        ).validate(validatedIdentityAssertion, validatedResponse.getInResponseTo(), assertionConsumerServices.toASCIIString());
 
         if (validatedResponse.isSuccess()) {
 
@@ -217,11 +222,21 @@ public class SamlDecrypter {
         return identityAssertion;
     }
 
-
+    //FIXME: allow this to be set by the test class
     private IdaKeyStore createHubKeyStore() {
         PrivateKey privateKey = new PrivateKeyFactory().createPrivateKey(Base64.getDecoder().decode(HUB_TEST_PRIVATE_ENCRYPTION_KEY));
 
         PublicKey publicKey = new PublicKeyFactory(new X509CertificateFactory()).createPublicKey(HUB_TEST_PUBLIC_ENCRYPTION_CERT);
+
+        List<KeyPair> encryptionKeys = List.of(new KeyPair(publicKey, privateKey));
+        return new IdaKeyStore(null, encryptionKeys);
+    }
+
+    //FIXME: allow this to be set by the test class
+    private IdaKeyStore createEidasKeyStore() {
+        PrivateKey privateKey = new PrivateKeyFactory().createPrivateKey(Base64.getDecoder().decode(HUB_CONNECTOR_TEST_PRIVATE_ENCRYPTION_KEY));
+
+        PublicKey publicKey = new PublicKeyFactory(new X509CertificateFactory()).createPublicKey(HUB_CONNECTOR_TEST_PUBLIC_SIGNING_CERT);
 
         List<KeyPair> encryptionKeys = List.of(new KeyPair(publicKey, privateKey));
         return new IdaKeyStore(null, encryptionKeys);
@@ -237,7 +252,7 @@ public class SamlDecrypter {
                 new AssertionDecrypter(new EncryptionAlgorithmValidator(), new DecrypterFactory().createDecrypter(storeCredentialRetriever.getDecryptingCredentials())),
                 new SamlAssertionsSignatureValidator(new SamlMessageSignatureValidator(new CredentialFactorySignatureValidator(credentialFactory))),
                 new EncryptedResponseFromIdpValidator<>(new SamlStatusToCountryAuthenticationStatusCodeMapper()),
-                new DestinationValidator(URI.create("http://foo.com/bar"), "/bar"),
+                new DestinationValidator(UriBuilder.fromUri(assertionConsumerServices).replacePath(null).build(), assertionConsumerServices.getPath()),
                 new ResponseAssertionsFromIdpValidator(
                         new IdentityProviderAssertionValidator(
                                 new IssuerValidator(),

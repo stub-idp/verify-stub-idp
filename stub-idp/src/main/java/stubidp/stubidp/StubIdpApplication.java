@@ -28,9 +28,9 @@ import stubidp.stubidp.filters.SessionCookieValueMustExistAsASessionFeature;
 import stubidp.stubidp.filters.StubIdpCacheControlFilter;
 import stubidp.stubidp.healthcheck.DatabaseHealthCheck;
 import stubidp.stubidp.healthcheck.StubIdpHealthCheck;
-import stubidp.stubidp.resources.AuthnRequestReceiverResource;
 import stubidp.stubidp.resources.GeneratePasswordResource;
 import stubidp.stubidp.resources.UserResource;
+import stubidp.stubidp.resources.eidas.EidasAuthnRequestReceiverResource;
 import stubidp.stubidp.resources.eidas.EidasConsentResource;
 import stubidp.stubidp.resources.eidas.EidasDebugPageResource;
 import stubidp.stubidp.resources.eidas.EidasLoginPageResource;
@@ -39,6 +39,7 @@ import stubidp.stubidp.resources.eidas.EidasRegistrationPageResource;
 import stubidp.stubidp.resources.idp.ConsentResource;
 import stubidp.stubidp.resources.idp.DebugPageResource;
 import stubidp.stubidp.resources.idp.HeadlessIdpResource;
+import stubidp.stubidp.resources.idp.IdpAuthnRequestReceiverResource;
 import stubidp.stubidp.resources.idp.LoginPageResource;
 import stubidp.stubidp.resources.idp.RegistrationPageResource;
 import stubidp.stubidp.resources.idp.SecureLoginPageResource;
@@ -119,9 +120,11 @@ public class StubIdpApplication extends Application<StubIdpConfiguration> {
         environment.getObjectMapper().setDateFormat(new StdDateFormat().withLocale(Locale.UK));
 
         environment.jersey().register(new StubIdpBinder(configuration, environment));
+        environment.jersey().register(new StubIdpEidasBinder(configuration, environment));
+        environment.jersey().register(new StubIdpSingleIdpBinder(configuration, environment));
 
         // idp resources
-        environment.jersey().register(AuthnRequestReceiverResource.class);
+        environment.jersey().register(IdpAuthnRequestReceiverResource.class);
         environment.jersey().register(DebugPageResource.class);
         environment.jersey().register(ConsentResource.class);
 
@@ -140,11 +143,14 @@ public class StubIdpApplication extends Application<StubIdpConfiguration> {
         }
 
         // proxy node resources
-        environment.jersey().register(EidasLoginPageResource.class);
-        environment.jersey().register(EidasConsentResource.class);
-        environment.jersey().register(EidasRegistrationPageResource.class);
-        environment.jersey().register(EidasProxyNodeServiceMetadataResource.class);
-        environment.jersey().register(EidasDebugPageResource.class);
+        if(configuration.getEuropeanIdentityConfiguration().isEnabled()) {
+            environment.jersey().register(EidasAuthnRequestReceiverResource.class);
+            environment.jersey().register(EidasLoginPageResource.class);
+            environment.jersey().register(EidasConsentResource.class);
+            environment.jersey().register(EidasRegistrationPageResource.class);
+            environment.jersey().register(EidasProxyNodeServiceMetadataResource.class);
+            environment.jersey().register(EidasDebugPageResource.class);
+        }
 
         // other idp resources
         environment.jersey().register(UserResource.class);

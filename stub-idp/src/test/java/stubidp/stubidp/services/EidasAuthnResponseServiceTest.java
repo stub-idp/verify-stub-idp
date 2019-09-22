@@ -55,7 +55,7 @@ public class EidasAuthnResponseServiceTest {
         service = new EidasAuthnResponseService(
             "hubEntityId",
             eidasResponseTransformerProvider,
-            Optional.of(metadataRepository),
+            metadataRepository,
             "http://stub/{0}/ServiceMetadata"
             );
     }

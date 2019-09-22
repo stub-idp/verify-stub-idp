@@ -2,6 +2,8 @@ package stubidp.test.integration.support.eidas;
 
 import net.shibboleth.utilities.java.support.security.SecureRandomIdentifierGenerationStrategy;
 import org.joda.time.DateTime;
+import org.opensaml.core.xml.config.XMLObjectProviderRegistrySupport;
+import org.opensaml.core.xml.io.MarshallingException;
 import org.opensaml.saml.saml2.core.Attribute;
 import org.opensaml.saml.saml2.core.AuthnContextClassRef;
 import org.opensaml.saml.saml2.core.AuthnContextComparisonTypeEnumeration;
@@ -31,11 +33,10 @@ import stubidp.saml.extensions.extensions.impl.SPTypeBuilder;
 import stubidp.saml.hub.hub.domain.LevelOfAssurance;
 import stubidp.saml.security.IdaKeyStore;
 import stubidp.saml.security.IdaKeyStoreCredentialRetriever;
-import stubidp.saml.security.SignatureWithKeyInfoFactory;
+import stubidp.saml.security.SignatureFactory;
 import stubidp.saml.serializers.serializers.XmlObjectToBase64EncodedStringTransformer;
 import stubidp.saml.utils.core.test.builders.AuthnRequestBuilder;
 import stubidp.test.devpki.TestCertificateStrings;
-import stubidp.test.devpki.TestEntityIds;
 import stubidp.utils.security.security.PrivateKeyFactory;
 import stubidp.utils.security.security.PublicKeyFactory;
 import stubidp.utils.security.security.X509CertificateFactory;
@@ -43,6 +44,7 @@ import stubidp.utils.security.security.X509CertificateFactory;
 import java.security.KeyPair;
 import java.security.PrivateKey;
 import java.security.PublicKey;
+import java.security.cert.X509Certificate;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Base64;
@@ -53,6 +55,10 @@ public class EidasAuthnRequestBuilder {
     private String destination = "destination";
     private DateTime issueInstant = DateTime.now();
     private List<RequestedAttribute> requestedAttributeList = new ArrayList<>();
+    private boolean withKeyInfo = true;
+    private boolean withInvalidKey = false;
+    private boolean removeAllX509Datas = false;
+    private boolean removeAllCertificates = false;
 
     public static EidasAuthnRequestBuilder anAuthnRequest() {
         return new EidasAuthnRequestBuilder();
@@ -78,7 +84,27 @@ public class EidasAuthnRequestBuilder {
         return this;
     }
 
-    public String build() {
+    public EidasAuthnRequestBuilder withKeyInfo(boolean withKeyInfo) {
+        this.withKeyInfo = withKeyInfo;
+        return this;
+    }
+
+    public EidasAuthnRequestBuilder withInvalidKey(boolean withInvalidKey) {
+        this.withInvalidKey = withInvalidKey;
+        return this;
+    }
+
+    public EidasAuthnRequestBuilder removeAllX509Datas(boolean removeAllX509Datas) {
+        this.removeAllX509Datas = removeAllX509Datas;
+        return this;
+    }
+
+    public EidasAuthnRequestBuilder removeAllCertificates(boolean removeAllCertificates) {
+        this.removeAllCertificates = removeAllCertificates;
+        return this;
+    }
+
+    public AuthnRequest buildAuthnRequest() {
         AuthnRequest authnRequest = AuthnRequestBuilder.anAuthnRequest()
                 .withId(new SecureRandomIdentifierGenerationStrategy().generateIdentifier())
                 .withDestination(destination)
@@ -92,33 +118,71 @@ public class EidasAuthnRequestBuilder {
                 AuthnContextComparisonTypeEnumeration.MINIMUM,
                 LevelOfAssurance.SUBSTANTIAL.toString()));
 
-        authnRequest.setSignature(createSignatureWithKeyInfo());
+        authnRequest.setSignature(createSignature());
 
+        try {
+            XMLObjectProviderRegistrySupport.getMarshallerFactory().getMarshaller(authnRequest).marshall(authnRequest);
+            Signer.signObject(authnRequest.getSignature());
+        } catch (SignatureException | MarshallingException e) {
+            throw new RuntimeException(e);
+        }
+
+        return authnRequest;
+    }
+
+    public String build() {
+        AuthnRequest authnRequest = buildAuthnRequest();
+        if(removeAllCertificates) {
+            authnRequest.getSignature().getKeyInfo().getX509Datas().get(0).getX509Certificates().clear();
+        }
+        if(removeAllX509Datas) {
+            authnRequest.getSignature().getKeyInfo().getX509Datas().clear();
+        }
         return new XmlObjectToBase64EncodedStringTransformer<>().apply(authnRequest);
     }
 
-    private Signature createSignatureWithKeyInfo() {
+    private Signature createSignature() {
         IdaKeyStoreCredentialRetriever keyStoreCredentialRetriever = new IdaKeyStoreCredentialRetriever(createIdaKeyStore());
 
-        SignatureWithKeyInfoFactory keyInfoFactory = new SignatureWithKeyInfoFactory(keyStoreCredentialRetriever,new SignatureRSASHA256(), new DigestSHA256(), "issue-id","signing-cert");
+        SignatureFactory signatureFactory = new SignatureFactory(withKeyInfo, keyStoreCredentialRetriever, new SignatureRSASHA256(), new DigestSHA256());
 
-        return keyInfoFactory.createSignature();
+        return signatureFactory.createSignature();
     }
 
     private IdaKeyStore createIdaKeyStore() {
+        return withInvalidKey?createInvalidIdaKeyStore():createValidIdaKeyStore();
+    }
+
+    private IdaKeyStore createValidIdaKeyStore() {
         PublicKeyFactory publicKeyFactory = new PublicKeyFactory(new X509CertificateFactory());
 
-        PrivateKey privateSigningKey = new PrivateKeyFactory().createPrivateKey(Base64.getDecoder().decode(TestCertificateStrings.PRIVATE_SIGNING_KEYS.get(
-                TestEntityIds.HUB_ENTITY_ID)));
-        PublicKey publicSigningKey = publicKeyFactory.createPublicKey(TestCertificateStrings.getPrimaryPublicEncryptionCert(TestEntityIds.HUB_ENTITY_ID));
+        PrivateKey privateSigningKey = new PrivateKeyFactory().createPrivateKey(Base64.getDecoder().decode(TestCertificateStrings.HUB_CONNECTOR_TEST_PRIVATE_SIGNING_KEY));
+        PublicKey publicSigningKey = publicKeyFactory.createPublicKey(TestCertificateStrings.HUB_CONNECTOR_TEST_PUBLIC_SIGNING_CERT);
 
-        PrivateKey publicEncryptionKey = new PrivateKeyFactory().createPrivateKey(Base64.getDecoder().decode(TestCertificateStrings.HUB_TEST_PRIVATE_ENCRYPTION_KEY));;
-        PublicKey privateEncryptionKey = publicKeyFactory.createPublicKey(TestCertificateStrings.HUB_TEST_PUBLIC_ENCRYPTION_CERT);
+        PrivateKey privateEncKey = new PrivateKeyFactory().createPrivateKey(Base64.getDecoder().decode(TestCertificateStrings.HUB_CONNECTOR_TEST_PRIVATE_ENCRYPTION_KEY));
+        PublicKey publicEncKey = publicKeyFactory.createPublicKey(TestCertificateStrings.HUB_CONNECTOR_TEST_PUBLIC_ENCRYPTION_CERT);
 
         KeyPair signingKeyPair = new KeyPair(publicSigningKey, privateSigningKey);
-        KeyPair encryptionKeyPair = new KeyPair(privateEncryptionKey, publicEncryptionKey);
+        KeyPair encryptionKeyPair = new KeyPair(publicEncKey, privateEncKey);
 
-        return new IdaKeyStore(signingKeyPair, Arrays.asList(encryptionKeyPair));
+        X509Certificate certificate = new X509CertificateFactory().createCertificate(TestCertificateStrings.HUB_CONNECTOR_TEST_PUBLIC_SIGNING_CERT);
+        return new IdaKeyStore(certificate, signingKeyPair, Arrays.asList(encryptionKeyPair));
+    }
+
+    private IdaKeyStore createInvalidIdaKeyStore() {
+        PublicKeyFactory publicKeyFactory = new PublicKeyFactory(new X509CertificateFactory());
+
+        PrivateKey privateSigningKey = new PrivateKeyFactory().createPrivateKey(Base64.getDecoder().decode(TestCertificateStrings.TEST_RP_MS_PRIVATE_SIGNING_KEY));
+        PublicKey publicSigningKey = publicKeyFactory.createPublicKey(TestCertificateStrings.TEST_RP_MS_PUBLIC_SIGNING_CERT);
+
+        PrivateKey privateEncKey = new PrivateKeyFactory().createPrivateKey(Base64.getDecoder().decode(TestCertificateStrings.TEST_RP_MS_PRIVATE_ENCRYPTION_KEY));
+        PublicKey publicEncKey = publicKeyFactory.createPublicKey(TestCertificateStrings.TEST_RP_MS_PUBLIC_ENCRYPTION_CERT);
+
+        KeyPair signingKeyPair = new KeyPair(publicSigningKey, privateSigningKey);
+        KeyPair encryptionKeyPair = new KeyPair(publicEncKey, privateEncKey);
+
+        X509Certificate certificate = new X509CertificateFactory().createCertificate(TestCertificateStrings.TEST_RP_MS_PUBLIC_SIGNING_CERT);
+        return new IdaKeyStore(certificate, signingKeyPair, Arrays.asList(encryptionKeyPair));
     }
 
     private RequestedAuthnContext createRequestedAuthnContext(AuthnContextComparisonTypeEnumeration comparisonType, String loa) {

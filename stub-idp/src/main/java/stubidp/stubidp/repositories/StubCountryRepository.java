@@ -7,7 +7,7 @@ import javax.inject.Named;
 import javax.ws.rs.core.UriBuilder;
 
 import static java.text.MessageFormat.format;
-import static stubidp.stubidp.StubIdpBinder.STUB_COUNTRY_METADATA_URL;
+import static stubidp.stubidp.StubIdpEidasBinder.STUB_COUNTRY_METADATA_URL;
 
 public class StubCountryRepository {
 

@@ -2,7 +2,7 @@ package stubidp.stubidp.builders;
 // Adapted from package uk.gov.ida.eidas.bridge.helpers;
 
 import static org.apache.commons.codec.binary.Base64.encodeBase64String;
-import static stubidp.stubidp.StubIdpBinder.COUNTRY_METADATA_VALIDITY_PERIOD;
+import static stubidp.stubidp.StubIdpEidasBinder.COUNTRY_METADATA_VALIDITY_PERIOD;
 
 import java.net.URI;
 import java.security.cert.CertificateEncodingException;

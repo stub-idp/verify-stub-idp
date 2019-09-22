@@ -13,11 +13,12 @@ import stubidp.test.integration.steps.FormBuilder;
 import stubidp.test.integration.steps.PreRegistrationSteps;
 import stubidp.test.integration.support.IntegrationTestHelper;
 import stubidp.test.integration.support.StubIdpAppExtension;
-import stubidp.test.integration.support.TestSamlRequestFactory;
+import stubidp.test.integration.support.IdpAuthnRequestBuilder;
 
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.UriBuilder;
 import java.util.Map;
 
 import static stubidp.stubidp.builders.StubIdpBuilder.aStubIdp;
@@ -88,7 +89,7 @@ public class PreRegistrationIntegrationTest extends IntegrationTestHelper {
 
         // Simulate Authn Request from hub
         .clientPostsFormData(FormBuilder.newForm()
-                                .withParam(Urls.SAML_REQUEST_PARAM, TestSamlRequestFactory.anAuthnRequest())
+                                .withParam(Urls.SAML_REQUEST_PARAM, IdpAuthnRequestBuilder.anAuthnRequest().withDestination(UriBuilder.fromUri("http://localhost:0"+Urls.IDP_SAML2_SSO_RESOURCE).build(IDP_NAME).toASCIIString()).build())
                                 .withParam(Urls.RELAY_STATE_PARAM, "relay-state")
                                 .build(),
                         Urls.IDP_SAML2_SSO_RESOURCE)

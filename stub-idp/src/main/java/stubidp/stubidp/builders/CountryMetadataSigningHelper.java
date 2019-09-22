@@ -13,7 +13,7 @@ import org.opensaml.xmlsec.signature.support.Signer;
 
 import stubidp.saml.security.SignatureFactory;
 
-import static stubidp.stubidp.StubIdpBinder.COUNTRY_METADATA_SIGNATURE_FACTORY;
+import static stubidp.stubidp.StubIdpEidasBinder.COUNTRY_METADATA_SIGNATURE_FACTORY;
 
 @Singleton
 public class CountryMetadataSigningHelper {

@@ -1,6 +1,5 @@
 package stubidp.saml.metadata.test.factories.metadata;
 
-import com.google.common.base.Throwables;
 import org.joda.time.DateTime;
 import org.opensaml.core.xml.io.MarshallingException;
 import org.opensaml.saml.saml2.metadata.EntitiesDescriptor;
@@ -15,9 +14,9 @@ import java.util.List;
 import java.util.Optional;
 
 import static java.util.Collections.emptyList;
+import static stubidp.saml.utils.core.test.builders.metadata.EntitiesDescriptorBuilder.anEntitiesDescriptor;
 import static stubidp.test.devpki.TestCertificateStrings.METADATA_SIGNING_A_PRIVATE_KEY;
 import static stubidp.test.devpki.TestCertificateStrings.METADATA_SIGNING_A_PUBLIC_CERT;
-import static stubidp.saml.utils.core.test.builders.metadata.EntitiesDescriptorBuilder.anEntitiesDescriptor;
 
 public class EntitiesDescriptorFactory {
     private final DateTime validUntil = DateTime.now().plusWeeks(2);
@@ -86,7 +85,11 @@ public class EntitiesDescriptorFactory {
     }
 
     public EntitiesDescriptor signedEntitiesDescriptor(String publicCertificate, String privateKey) {
-        return buildEntitiesDescriptor(defaultEntityDescriptors(), Optional.of(buildSignature(publicCertificate, privateKey)), validUntil);
+        return signedEntitiesDescriptor(defaultEntityDescriptors(), publicCertificate, privateKey);
+    }
+
+    public EntitiesDescriptor signedEntitiesDescriptor(List<EntityDescriptor> entityDescriptorList, String publicCertificate, String privateKey) {
+        return buildEntitiesDescriptor(entityDescriptorList, Optional.of(buildSignature(publicCertificate, privateKey)), validUntil);
     }
 
     public EntitiesDescriptor signedEntitiesDescriptor(Signature signature) {

@@ -53,7 +53,7 @@ public class StubTransformersFactory {
         return stringtoOpenSamlObjectTransformer;
     }
 
-    private AuthnRequestToIdaRequestFromHubTransformer getAuthnRequestToIdaRequestFromHubTransformer(SigningKeyStore signingKeyStore) {
+    public AuthnRequestToIdaRequestFromHubTransformer getAuthnRequestToIdaRequestFromHubTransformer(SigningKeyStore signingKeyStore) {
         return new AuthnRequestToIdaRequestFromHubTransformer(
                 new IdaAuthnRequestFromHubUnmarshaller(),
                 coreTransformersFactory.<AuthnRequest>getSamlRequestSignatureValidator(signingKeyStore)

@@ -8,8 +8,6 @@ import io.dropwizard.servlets.tasks.Task;
 import io.dropwizard.setup.Environment;
 import org.glassfish.jersey.internal.inject.AbstractBinder;
 import org.jdbi.v3.core.Jdbi;
-import org.joda.time.Period;
-import org.joda.time.ReadablePeriod;
 import org.opensaml.saml.metadata.resolver.MetadataResolver;
 import org.opensaml.saml.metadata.resolver.impl.AbstractReloadingMetadataResolver;
 import org.opensaml.saml.saml2.core.AuthnRequest;
@@ -17,26 +15,20 @@ import org.opensaml.xmlsec.algorithm.DigestAlgorithm;
 import org.opensaml.xmlsec.algorithm.SignatureAlgorithm;
 import org.opensaml.xmlsec.algorithm.descriptors.DigestSHA256;
 import org.opensaml.xmlsec.algorithm.descriptors.SignatureRSASHA256;
+import stubidp.saml.metadata.MetadataConfiguration;
 import stubidp.saml.metadata.MetadataHealthCheck;
 import stubidp.saml.metadata.MetadataResolverConfiguration;
 import stubidp.saml.metadata.factories.DropwizardMetadataResolverFactory;
 import stubidp.saml.security.EncryptionKeyStore;
 import stubidp.saml.security.EntityToEncryptForLocator;
 import stubidp.saml.security.IdaKeyStore;
-import stubidp.saml.security.IdaKeyStoreCredentialRetriever;
-import stubidp.saml.security.SignatureFactory;
 import stubidp.saml.security.SigningKeyStore;
-import stubidp.saml.security.signature.SignatureRSASSAPSS;
 import stubidp.saml.stubidp.configuration.SamlConfiguration;
-import stubidp.saml.utils.core.api.CoreTransformersFactory;
-import stubidp.saml.utils.hub.domain.IdaAuthnRequestFromHub;
+import stubidp.saml.stubidp.stub.transformers.inbound.AuthnRequestToIdaRequestFromHubTransformer;
 import stubidp.stubidp.auth.ManagedAuthFilterInstaller;
-import stubidp.stubidp.builders.CountryMetadataBuilder;
-import stubidp.stubidp.builders.CountryMetadataSigningHelper;
 import stubidp.stubidp.configuration.AssertionLifetimeConfiguration;
 import stubidp.stubidp.configuration.IdpStubsConfiguration;
 import stubidp.stubidp.configuration.SigningKeyPairConfiguration;
-import stubidp.stubidp.configuration.SingleIdpConfiguration;
 import stubidp.stubidp.configuration.StubIdpConfiguration;
 import stubidp.stubidp.cookies.CookieFactory;
 import stubidp.stubidp.cookies.HmacValidator;
@@ -46,36 +38,27 @@ import stubidp.stubidp.domain.factories.IdentityProviderAssertionFactory;
 import stubidp.stubidp.domain.factories.StubTransformersFactory;
 import stubidp.stubidp.listeners.StubIdpsFileListener;
 import stubidp.stubidp.repositories.AllIdpsUserRepository;
-import stubidp.stubidp.repositories.EidasSessionRepository;
 import stubidp.stubidp.repositories.IdpSessionRepository;
 import stubidp.stubidp.repositories.IdpStubsRepository;
 import stubidp.stubidp.repositories.MetadataRepository;
-import stubidp.stubidp.repositories.StubCountryRepository;
 import stubidp.stubidp.repositories.UserRepository;
-import stubidp.stubidp.repositories.jdbc.JDBIEidasSessionRepository;
 import stubidp.stubidp.repositories.jdbc.JDBIIdpSessionRepository;
 import stubidp.stubidp.repositories.jdbc.JDBIUserRepository;
 import stubidp.stubidp.repositories.jdbc.UserMapper;
 import stubidp.stubidp.repositories.reaper.ManagedStaleSessionReaper;
+import stubidp.stubidp.saml.IdpAuthnRequestValidator;
 import stubidp.stubidp.saml.locators.IdpHardCodedEntityToEncryptForLocator;
-import stubidp.stubidp.saml.transformers.EidasResponseTransformerProvider;
 import stubidp.stubidp.saml.transformers.OutboundResponseFromIdpTransformerProvider;
 import stubidp.stubidp.security.HubEncryptionKeyStore;
 import stubidp.stubidp.security.IdaAuthnRequestKeyStore;
 import stubidp.stubidp.services.AuthnRequestReceiverService;
-import stubidp.stubidp.services.EidasAuthnResponseService;
 import stubidp.stubidp.services.GeneratePasswordService;
 import stubidp.stubidp.services.IdpUserService;
 import stubidp.stubidp.services.NonSuccessAuthnResponseService;
-import stubidp.stubidp.services.ServiceListService;
-import stubidp.stubidp.services.StubCountryService;
 import stubidp.stubidp.services.SuccessAuthnResponseService;
 import stubidp.stubidp.services.UserService;
 import stubidp.stubidp.views.SamlResponseRedirectViewFactory;
-import stubidp.utils.rest.jerseyclient.ErrorHandlingClient;
-import stubidp.utils.rest.jerseyclient.JsonClient;
 import stubidp.utils.rest.jerseyclient.JsonResponseProcessor;
-import stubidp.utils.rest.restclient.ClientProvider;
 import stubidp.utils.rest.truststore.EmptyKeyStoreProvider;
 import stubidp.utils.security.configuration.SecureCookieConfiguration;
 import stubidp.utils.security.configuration.SecureCookieKeyStore;
@@ -86,7 +69,6 @@ import stubidp.utils.security.security.SecureCookieKeyConfigurationKeyStore;
 import stubidp.utils.security.security.X509CertificateFactory;
 
 import javax.inject.Singleton;
-import javax.ws.rs.client.Client;
 import javax.ws.rs.core.GenericType;
 import java.io.PrintWriter;
 import java.security.KeyPair;
@@ -108,23 +90,7 @@ public class StubIdpBinder extends AbstractBinder {
     public static final String HUB_ENCRYPTION_KEY_STORE = "HubEncryptionKeyStore";
     public static final String IDP_SIGNING_KEY_STORE = "IdpSigningKeyStore";
     public static final String HUB_ENTITY_ID = "HubEntityId";
-
-    public static final String HUB_CONNECTOR_METADATA_RESOLVER = "HubConnectorMetadataResolver";
-    public static final String HUB_CONNECTOR_METADATA_REPOSITORY = "HubConnectorMetadataRepository";
-    public static final String HUB_CONNECTOR_ENCRYPTION_KEY_STORE = "HubConnectorEncryptionKeyStore";
-    public static final String HUB_CONNECTOR_ENTITY_ID = "HubConnectorEntityId";
-    public static final String STUB_COUNTRY_METADATA_URL = "StubCountryMetadataUrl";
-    public static final String STUB_COUNTRY_SSO_URL = "StubCountrySsoUrl";
-    public static final String COUNTRY_SIGNING_KEY_STORE = "CountrySigningKeyStore";
-    public static final String COUNTRY_METADATA_SIGNATURE_FACTORY = "countryMetadataSignatureFactory";
-    public static final String COUNTRY_METADATA_VALIDITY_PERIOD = "metadataValidityPeriod";
-    public static final String RSASHA256_EIDAS_AUTHN_RESPONSE_SERVICE = "RSASHA256EidasAuthnResponseService";
-    public static final String RSASSAPSS_EIDAS_AUTHN_RESPONSE_SERVICE = "RSASSAPSSEidasAuthnResponseService";
-    private final String RSASHA256_EIDAS_RESPONSE_TRANSFORMER_PROVIDER = "RSASHA256EidasResponseTransfomerProvider";
-    private final String RSASSAPSS_EIDAS_RESPONSE_TRANSFORMER_PROVIDER = "RSASSAPSSEidasResponseTransformerProvider";
-
-    // unused?
-    private final String SESSION_CACHE_TIMEOUT_IN_MINUTES = "sessionCacheTimeoutInMinutes";
+    public static final String HUB_METADATA_CONFIGURATION = "HubMetadataConfiguration";
 
     public static final String IS_SECURE_COOKIE_ENABLED = "isSecureCookieEnabled";
 
@@ -139,13 +105,10 @@ public class StubIdpBinder extends AbstractBinder {
 
     @Override
     protected void configure() {
-
-        // idp configuration
         bind(stubIdpConfiguration).to(AssertionLifetimeConfiguration.class);
         bind(stubIdpConfiguration.getSamlConfiguration()).to(SamlConfiguration.class);
         final String hubEntityId = stubIdpConfiguration.getHubEntityId();
         bind(hubEntityId).named(HUB_ENTITY_ID).to(String.class);
-        bind(180).named(SESSION_CACHE_TIMEOUT_IN_MINUTES).to(Integer.class);
 
         final IdpHardCodedEntityToEncryptForLocator entityToEncryptForLocator = new IdpHardCodedEntityToEncryptForLocator(hubEntityId);
         bind(entityToEncryptForLocator).to(EntityToEncryptForLocator.class);
@@ -161,6 +124,7 @@ public class StubIdpBinder extends AbstractBinder {
         final PublicKeyFactory publicKeyFactory = new PublicKeyFactory(new X509CertificateFactory());
         final HubEncryptionKeyStore hubEncryptionKeyStore = new HubEncryptionKeyStore(idpMetadataRepository, publicKeyFactory);
         bind(hubEncryptionKeyStore).named(HUB_ENCRYPTION_KEY_STORE).to(EncryptionKeyStore.class);
+        bind(stubIdpConfiguration.getMetadataConfiguration()).named(HUB_METADATA_CONFIGURATION).to(MetadataConfiguration.class);
 
         final IdaAuthnRequestKeyStore signingKeyStore = new IdaAuthnRequestKeyStore(idpMetadataRepository, publicKeyFactory);
         bind(signingKeyStore).to(SigningKeyStore.class);
@@ -176,13 +140,14 @@ public class StubIdpBinder extends AbstractBinder {
         final DigestSHA256 digestAlgorithm = new DigestSHA256();
         bind(digestAlgorithm).to(DigestAlgorithm.class);
         final StubTransformersFactory stubTransformersFactory = new StubTransformersFactory();
-        // FIXME
         bind(stubTransformersFactory.getStringToAuthnRequest()).to(new GenericType<Function<String, AuthnRequest>>() {});
-        bind(stubTransformersFactory.getStringToIdaAuthnRequestFromHub(signingKeyStore)).to(new GenericType<Function<String, IdaAuthnRequestFromHub>>() {});
+        bind(stubTransformersFactory.getAuthnRequestToIdaRequestFromHubTransformer(signingKeyStore)).to(AuthnRequestToIdaRequestFromHubTransformer.class);
         bind(new OutboundResponseFromIdpTransformerProvider(hubEncryptionKeyStore,
-                    idpSigningKeyStore, entityToEncryptForLocator,
-                    Optional.ofNullable(stubIdpConfiguration.getSigningKeyPairConfiguration().getCert()),
-                    stubTransformersFactory, signatureAlgorithm, digestAlgorithm)).to(OutboundResponseFromIdpTransformerProvider.class);
+                idpSigningKeyStore, entityToEncryptForLocator,
+                Optional.ofNullable(stubIdpConfiguration.getSigningKeyPairConfiguration().getCert()),
+                stubTransformersFactory, signatureAlgorithm, digestAlgorithm)).to(OutboundResponseFromIdpTransformerProvider.class);
+
+        bind(IdpAuthnRequestValidator.class).to(IdpAuthnRequestValidator.class);
 
         bind(AllIdpsUserRepository.class).in(Singleton.class).to(AllIdpsUserRepository.class);
         bind(IdpStubsRepository.class).in(Singleton.class).to(IdpStubsRepository.class);
@@ -194,8 +159,6 @@ public class StubIdpBinder extends AbstractBinder {
         bind(jdbi).to(Jdbi.class);
         bind(JDBIUserRepository.class).in(Singleton.class).to(UserRepository.class);
         bind(JDBIIdpSessionRepository.class).in(Singleton.class).to(IdpSessionRepository.class);
-        bind(JDBIEidasSessionRepository.class).in(Singleton.class).to(EidasSessionRepository.class);
-        bind(StubCountryRepository.class).in(Singleton.class).to(StubCountryRepository.class);
 
 //        bind(KeyStore.class).toProvider(EmptyKeyStoreProvider.class).asEagerSingleton();
         bind(new EmptyKeyStoreProvider().get()).to(KeyStore.class);
@@ -214,76 +177,7 @@ public class StubIdpBinder extends AbstractBinder {
 
         bind(ManagedStaleSessionReaper.class).in(Singleton.class).to(ManagedStaleSessionReaper.class);
 
-        // eidas configuration
-        final String hubConnectorEntityId = stubIdpConfiguration.getEuropeanIdentityConfiguration().getHubConnectorEntityId();
-        bind(hubConnectorEntityId).named(HUB_CONNECTOR_ENTITY_ID).to(String.class);
-        final String stubCountryMetadataUrl = stubIdpConfiguration.getEuropeanIdentityConfiguration().getStubCountryBaseUrl() + Urls.METADATA_RESOURCE;
-        bind(stubCountryMetadataUrl).named(STUB_COUNTRY_METADATA_URL).to(String.class);
-        final String stubCountrySsoUrl = stubIdpConfiguration.getEuropeanIdentityConfiguration().getStubCountryBaseUrl() + Urls.EIDAS_SAML2_SSO_RESOURCE;
-        bind(stubCountrySsoUrl).named(STUB_COUNTRY_SSO_URL).to(String.class);
-        bind(new Period().withYears(100)).named(COUNTRY_METADATA_VALIDITY_PERIOD).to(ReadablePeriod.class);
-
-        final IdaKeyStore countryKeyStore = getKeystoreFromConfig(stubIdpConfiguration.getEuropeanIdentityConfiguration().getSigningKeyPairConfiguration());
-        bind(countryKeyStore).named(COUNTRY_SIGNING_KEY_STORE).to(IdaKeyStore.class);
-        final SignatureFactory signatureFactory = new SignatureFactory(true, new IdaKeyStoreCredentialRetriever(countryKeyStore), signatureAlgorithm, digestAlgorithm);
-        bind(signatureFactory).named(COUNTRY_METADATA_SIGNATURE_FACTORY).to(SignatureFactory.class);
-
-        final Optional<MetadataRepository> eidasMetadataRepository;
-        final Optional<HubEncryptionKeyStore> eidasHubEncryptionKeyStore;
-        if (stubIdpConfiguration.getEuropeanIdentityConfiguration().isEnabled()) {
-            final MetadataResolver metadataResolver = new DropwizardMetadataResolverFactory().createMetadataResolver(environment, stubIdpConfiguration.getEuropeanIdentityConfiguration().getMetadata());
-            registerMetadataHealthcheckAndRefresh(environment, metadataResolver, stubIdpConfiguration.getEuropeanIdentityConfiguration().getMetadata(), "connector-metadata");
-            bind(Optional.of(metadataResolver)).named(HUB_CONNECTOR_METADATA_RESOLVER).to(new GenericType<Optional<MetadataResolver>>() {});
-            eidasMetadataRepository = Optional.of(new MetadataRepository(metadataResolver, hubConnectorEntityId));
-            bind(eidasMetadataRepository).named(HUB_CONNECTOR_METADATA_REPOSITORY).to(new GenericType<Optional<MetadataRepository>>() {});
-            eidasHubEncryptionKeyStore = Optional.of(new HubEncryptionKeyStore(eidasMetadataRepository.get(), publicKeyFactory));
-            bind(eidasHubEncryptionKeyStore).named(HUB_CONNECTOR_ENCRYPTION_KEY_STORE).to(new GenericType<Optional<EncryptionKeyStore>>() {});
-        } else {
-            bind(Optional.empty()).named(HUB_CONNECTOR_METADATA_RESOLVER).to(new GenericType<Optional<MetadataResolver>>() {});
-            eidasMetadataRepository = Optional.empty();
-            bind(eidasMetadataRepository).named(HUB_CONNECTOR_METADATA_REPOSITORY).to(new GenericType<Optional<MetadataRepository>>() {});
-            eidasHubEncryptionKeyStore = Optional.empty();
-            bind(eidasHubEncryptionKeyStore).named(HUB_CONNECTOR_ENCRYPTION_KEY_STORE).to(new GenericType<Optional<EncryptionKeyStore>>() {});
-        }
-
-        final CoreTransformersFactory coreTransformersFactory = new CoreTransformersFactory();
-        final EidasResponseTransformerProvider sha256EidasResponseTransformerProvider = new EidasResponseTransformerProvider(
-                coreTransformersFactory,
-                eidasHubEncryptionKeyStore.orElse(null),
-                countryKeyStore,
-                entityToEncryptForLocator,
-                signatureAlgorithm,
-                digestAlgorithm);
-        bind(sha256EidasResponseTransformerProvider).named(RSASHA256_EIDAS_RESPONSE_TRANSFORMER_PROVIDER).to(EidasResponseTransformerProvider.class);
-        bind(new EidasAuthnResponseService(hubConnectorEntityId, sha256EidasResponseTransformerProvider, eidasMetadataRepository,
-                stubCountryMetadataUrl)).named(RSASHA256_EIDAS_AUTHN_RESPONSE_SERVICE).to(EidasAuthnResponseService.class);
-        final EidasResponseTransformerProvider rsassapaaEidasResponseTransformerProvider = new EidasResponseTransformerProvider(
-                coreTransformersFactory,
-                eidasHubEncryptionKeyStore.orElse(null),
-                countryKeyStore,
-                entityToEncryptForLocator,
-                new SignatureRSASSAPSS(),
-                digestAlgorithm);
-        bind(rsassapaaEidasResponseTransformerProvider).named(RSASSAPSS_EIDAS_RESPONSE_TRANSFORMER_PROVIDER).to(EidasResponseTransformerProvider.class);
-        bind(new EidasAuthnResponseService(hubConnectorEntityId, rsassapaaEidasResponseTransformerProvider, eidasMetadataRepository,
-                stubCountryMetadataUrl)).named(RSASSAPSS_EIDAS_AUTHN_RESPONSE_SERVICE).to(EidasAuthnResponseService.class);
-
-
-        bind(CountryMetadataSigningHelper.class).in(Singleton.class).to(CountryMetadataSigningHelper.class);
-        bind(CountryMetadataBuilder.class).to(CountryMetadataBuilder.class);
-
-        bind(StubCountryService.class).to(StubCountryService.class);
-
         bind(JsonResponseProcessor.class).to(JsonResponseProcessor.class);
-
-        // single idp stuff
-        bind(stubIdpConfiguration.getSingleIdpJourneyConfiguration()).to(SingleIdpConfiguration.class);
-
-        final Client client = new ClientProvider(environment,
-                stubIdpConfiguration.getSingleIdpJourneyConfiguration().getServiceListClient(),
-                true, "StubIdpJsonClient").get();
-        final JsonClient jsonClient = new JsonClient(new ErrorHandlingClient(client), new JsonResponseProcessor(objectMapper));
-        bind(new ServiceListService(stubIdpConfiguration.getSingleIdpJourneyConfiguration(), jsonClient)).to(ServiceListService.class);
 
         // secure cookie config
         final boolean isSecureCookieEnabled = Objects.nonNull(stubIdpConfiguration.getSecureCookieConfiguration());
@@ -302,11 +196,9 @@ public class StubIdpBinder extends AbstractBinder {
         bind(CookieFactory.class).to(CookieFactory.class);
 
         // other
-
         bind(new DefaultConfigurationFactoryFactory<IdpStubsConfiguration>()
                 .create(IdpStubsConfiguration.class, environment.getValidator(), environment.getObjectMapper(), ""))
                 .to(new GenericType<ConfigurationFactory<IdpStubsConfiguration>>() {});
-
     }
 
     private void registerMetadataHealthcheckAndRefresh(Environment environment, MetadataResolver metadataResolver, MetadataResolverConfiguration metadataResolverConfiguration, String name) {

@@ -7,7 +7,7 @@ import stubidp.saml.extensions.IdaConstants;
 import stubidp.stubidp.Urls;
 import stubidp.stubidp.cookies.CookieNames;
 import stubidp.stubidp.domain.FraudIndicator;
-import stubidp.test.integration.support.TestSamlRequestFactory;
+import stubidp.test.integration.support.IdpAuthnRequestBuilder;
 import stubidp.test.integration.support.eidas.EidasAuthnRequestBuilder;
 
 import javax.ws.rs.client.Client;
@@ -25,6 +25,7 @@ import java.util.Optional;
 import static org.assertj.core.api.Assertions.assertThat;
 import static stubidp.stubidp.csrf.CSRFCheckProtectionFilter.CSRF_PROTECT_FORM_KEY;
 import static stubidp.stubidp.repositories.StubCountryRepository.STUB_COUNTRY_FRIENDLY_ID;
+import static stubidp.test.devpki.TestEntityIds.HUB_CONNECTOR_ENTITY_ID;
 
 public class AuthnRequestSteps {
     private final Client client;
@@ -63,9 +64,16 @@ public class AuthnRequestSteps {
         return userPostsAuthnRequestToStubIdp(List.of(hint), Optional.empty(), Optional.empty());
     }
 
+    public Response userPostsAuthnRequestToStubIdpReturnResponse(List<String> hints, Optional<String> language, Optional<Boolean> registration, boolean withInvalidKey) {
+        String authnRequest = IdpAuthnRequestBuilder.anAuthnRequest()
+                .withDestination(UriBuilder.fromUri("http://localhost:"+port+Urls.IDP_SAML2_SSO_RESOURCE).build(idpName).toASCIIString())
+                .withInvalidKey(withInvalidKey)
+                .build();
+        return postAuthnRequest(hints, language, registration, authnRequest, Urls.IDP_SAML2_SSO_RESOURCE);
+    }
+
     public Cookies userPostsAuthnRequestToStubIdp(List<String> hints, Optional<String> language, Optional<Boolean> registration) {
-        String authnRequest = TestSamlRequestFactory.anAuthnRequest();
-        Response response = postAuthnRequest(hints, language, registration, authnRequest, Urls.IDP_SAML2_SSO_RESOURCE);
+        Response response = userPostsAuthnRequestToStubIdpReturnResponse(hints, language, registration, false);
 
         assertThat(response.getStatus()).isEqualTo(303);
         if(registration.isPresent() && registration.get()) {
@@ -78,10 +86,27 @@ public class AuthnRequestSteps {
     }
 
     public Cookies userPostsEidasAuthnRequestToStubIdp() {
-        return userPostsEidasAuthnRequestToStubIdpWithAttribute(false, false);
+        return userPostsEidasAuthnRequestToStubIdpWithAttribute(false, false, true);
     }
 
     public Cookies userPostsEidasAuthnRequestToStubIdpWithAttribute(boolean requestAddress, boolean requestGender) {
+        return userPostsEidasAuthnRequestToStubIdpWithAttribute(requestAddress, requestGender, true);
+    }
+
+    public Cookies userPostsEidasAuthnRequestToStubIdpWithAttribute(boolean requestAddress, boolean requestGender, boolean withKeyInfo) {
+        Response response = userPostsEidasAuthnRequestReturnResponse(requestAddress, requestGender, withKeyInfo);
+
+        assertThat(response.getStatus()).isEqualTo(303);
+        assertThat(response.getLocation().getPath()).startsWith(getStubIdpUri(Urls.EIDAS_LOGIN_RESOURCE).getPath());
+
+        return getCookiesAndFollowRedirect(response);
+    }
+
+    public Response userPostsEidasAuthnRequestReturnResponse(boolean requestAddress, boolean requestGender, boolean withKeyInfo) {
+        return userPostsEidasAuthnRequestReturnResponse(requestAddress, requestGender, withKeyInfo, false);
+    }
+
+    public Response userPostsEidasAuthnRequestReturnResponse(boolean requestAddress, boolean requestGender, boolean withKeyInfo, boolean withInvalidKey) {
         final EidasAuthnRequestBuilder eidasAuthnRequestBuilder = EidasAuthnRequestBuilder.anAuthnRequest();
         if(requestAddress) {
             eidasAuthnRequestBuilder.withRequestedAttribute(IdaConstants.Eidas_Attributes.CurrentAddress.NAME);
@@ -89,13 +114,12 @@ public class AuthnRequestSteps {
         if(requestGender) {
             eidasAuthnRequestBuilder.withRequestedAttribute(IdaConstants.Eidas_Attributes.Gender.NAME);
         }
+        eidasAuthnRequestBuilder.withIssuerEntityId(HUB_CONNECTOR_ENTITY_ID);
+        eidasAuthnRequestBuilder.withKeyInfo(withKeyInfo);
+        eidasAuthnRequestBuilder.withInvalidKey(withInvalidKey);
+        eidasAuthnRequestBuilder.withDestination(UriBuilder.fromUri("http://localhost:"+port+Urls.EIDAS_SAML2_SSO_RESOURCE).build(idpName).toASCIIString());
         String authnRequest = eidasAuthnRequestBuilder.build();
-        Response response = postAuthnRequest(List.of(), Optional.empty(), Optional.empty(), authnRequest, Urls.EIDAS_SAML2_SSO_RESOURCE);
-
-        assertThat(response.getStatus()).isEqualTo(303);
-        assertThat(response.getLocation().getPath()).startsWith(getStubIdpUri(Urls.EIDAS_LOGIN_RESOURCE).getPath());
-
-        return getCookiesAndFollowRedirect(response);
+        return postAuthnRequest(List.of(), Optional.empty(), Optional.empty(), authnRequest, Urls.EIDAS_SAML2_SSO_RESOURCE);
     }
 
     private Cookies getCookiesAndFollowRedirect(Response response) {
@@ -258,7 +282,7 @@ public class AuthnRequestSteps {
                 .get();
 
         assertThat(response.getStatus()).isEqualTo(200);
-        // we shoud probably test more things
+        // we should probably test more things
         final String page = response.readEntity(String.class);
         assertThat(page).contains(cookies.getSessionId());
         return page;

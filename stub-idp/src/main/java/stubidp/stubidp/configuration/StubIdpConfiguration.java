@@ -6,7 +6,7 @@ import io.dropwizard.Configuration;
 import io.dropwizard.util.Duration;
 import stubidp.metrics.prometheus.config.PrometheusConfiguration;
 import stubidp.saml.metadata.MetadataResolverConfiguration;
-import stubidp.saml.metadata.TrustStoreBackedMetadataConfiguration;
+import stubidp.saml.metadata.MultiTrustStoresBackedMetadataConfiguration;
 import stubidp.saml.stubidp.configuration.SamlConfiguration;
 import stubidp.stubidp.repositories.reaper.StaleSessionReaperConfiguration;
 import stubidp.utils.rest.cache.AssetCacheConfiguration;
@@ -72,7 +72,7 @@ public class StubIdpConfiguration extends Configuration implements
     @NotNull
     @Valid
     @JsonProperty
-    protected TrustStoreBackedMetadataConfiguration metadata;
+    protected MultiTrustStoresBackedMetadataConfiguration metadata;
 
     @NotNull
     @Valid

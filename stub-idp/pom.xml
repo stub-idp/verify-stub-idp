@@ -226,6 +226,12 @@
             <version>1.0-SNAPSHOT</version>
             <scope>compile</scope>
         </dependency>
+        <dependency>
+            <groupId>stub-idp</groupId>
+            <artifactId>hub-saml</artifactId>
+            <version>1.0-SNAPSHOT</version>
+            <scope>compile</scope>
+        </dependency>
 
         <!-- saml libs -->
         <dependency>
@@ -319,12 +325,6 @@
             <artifactId>saml-metadata-bindings</artifactId>
             <version>1.0-SNAPSHOT</version>
             <type>test-jar</type>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>stub-idp</groupId>
-            <artifactId>hub-saml</artifactId>
-            <version>1.0-SNAPSHOT</version>
             <scope>test</scope>
         </dependency>
         <dependency>

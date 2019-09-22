@@ -19,7 +19,9 @@ import stubidp.test.integration.support.eidas.InboundResponseFromCountry;
 
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.Entity;
+import javax.ws.rs.core.Response;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -36,13 +38,30 @@ public class EidasUserLogsInIntegrationTests extends IntegrationTestHelper {
             client,
             EIDAS_SCHEME_NAME,
             applicationRule.getLocalPort());
-    private final SamlDecrypter samlDecrypter = new SamlDecrypter(client, applicationRule.getEidasMetadataPath(), applicationRule.getConfiguration().getEuropeanIdentityConfiguration().getHubConnectorEntityId(), applicationRule.getLocalPort(), Optional.ofNullable(EIDAS_SCHEME_NAME));
+    private final SamlDecrypter samlDecrypter = new SamlDecrypter(client,
+            applicationRule.getVerifyMetadataPath(),
+            applicationRule.getConfiguration().getEuropeanIdentityConfiguration().getHubConnectorEntityId(),
+            applicationRule.getLocalPort(),
+            Optional.ofNullable(EIDAS_SCHEME_NAME),
+            applicationRule.getAssertionConsumerServices());
 
-    public static final StubIdpAppExtension applicationRule = new StubIdpAppExtension();
+    public static final StubIdpAppExtension applicationRule = new StubIdpAppExtension(Map.ofEntries(Map.entry("europeanIdentity.enabled", "true")));
 
     @BeforeEach
     public void refreshMetadata() {
         client.target("http://localhost:"+applicationRule.getAdminPort()+"/tasks/connector-metadata-refresh").request().post(Entity.text(""));
+    }
+
+    @Test
+    public void incorrectlySignedAuthnRequestFailsTest() {
+        Response response = authnRequestSteps.userPostsEidasAuthnRequestReturnResponse(true, true, true, true);
+        assertThat(response.getStatus()).isEqualTo(500);
+    }
+
+    @Test
+    public void correctlySignedButMissingKeyInfoAuthnRequestFailsTest() {
+        Response response = authnRequestSteps.userPostsEidasAuthnRequestReturnResponse(true, true, false);
+        assertThat(response.getStatus()).isEqualTo(500);
     }
 
     @Test

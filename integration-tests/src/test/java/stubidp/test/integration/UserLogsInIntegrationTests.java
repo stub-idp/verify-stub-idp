@@ -47,7 +47,12 @@ public class UserLogsInIntegrationTests extends IntegrationTestHelper {
             client,
             IDP_NAME,
             applicationRule.getLocalPort());
-    private final SamlDecrypter samlDecrypter = new SamlDecrypter(client, applicationRule.getVerifyMetadataPath(), applicationRule.getConfiguration().getHubEntityId(), applicationRule.getLocalPort(), empty());
+    private final SamlDecrypter samlDecrypter = new SamlDecrypter(client,
+            applicationRule.getVerifyMetadataPath(),
+            applicationRule.getConfiguration().getHubEntityId(),
+            applicationRule.getLocalPort(),
+            empty(),
+            applicationRule.getAssertionConsumerServices());
 
     public static final StubIdpAppExtension applicationRule = new StubIdpAppExtension(Map.ofEntries(Map.entry("isPrometheusEnabled", "true")))
             .withStubIdp(aStubIdp().withId(IDP_NAME).withDisplayName(DISPLAY_NAME).build());
@@ -79,6 +84,13 @@ public class UserLogsInIntegrationTests extends IntegrationTestHelper {
 
     private void metricsContains(List<String> metrics, String metric) {
         assertThat(metrics.stream().anyMatch(m -> m.startsWith(metric))).withFailMessage(format("{0} not in {1}", metric, metrics)).isTrue();
+    }
+
+    @Test
+    @Order(1)
+    public void incorrectlySignedAuthnRequestFailsTest() {
+        Response response = authnRequestSteps.userPostsAuthnRequestToStubIdpReturnResponse(List.of(), empty(), empty(), true);
+        assertThat(response.getStatus()).isEqualTo(500);
     }
 
     @Test

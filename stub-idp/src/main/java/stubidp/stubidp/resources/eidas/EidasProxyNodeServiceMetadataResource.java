@@ -1,6 +1,19 @@
 package stubidp.stubidp.resources.eidas;
-import java.net.URI;
-import java.security.cert.CertificateEncodingException;
+
+import org.opensaml.core.xml.io.MarshallingException;
+import org.opensaml.saml.saml2.metadata.EntityDescriptor;
+import org.opensaml.security.SecurityException;
+import org.opensaml.xmlsec.signature.support.SignatureException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.w3c.dom.Document;
+import stubidp.saml.security.IdaKeyStore;
+import stubidp.saml.serializers.serializers.XmlObjectToElementTransformer;
+import stubidp.saml.utils.Constants;
+import stubidp.stubidp.Urls;
+import stubidp.stubidp.builders.CountryMetadataBuilder;
+import stubidp.stubidp.domain.EidasScheme;
+import stubidp.stubidp.exceptions.InvalidEidasSchemeException;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -11,26 +24,12 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriBuilder;
+import java.net.URI;
+import java.security.cert.CertificateEncodingException;
 
-import org.opensaml.core.xml.io.MarshallingException;
-import org.opensaml.saml.saml2.metadata.EntityDescriptor;
-import org.opensaml.security.SecurityException;
-import org.opensaml.xmlsec.signature.support.SignatureException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.w3c.dom.Document;
-
-import stubidp.saml.utils.Constants;
-import stubidp.saml.security.IdaKeyStore;
-import stubidp.saml.serializers.serializers.XmlObjectToElementTransformer;
-import stubidp.stubidp.domain.EidasScheme;
-import stubidp.stubidp.exceptions.InvalidEidasSchemeException;
-import stubidp.stubidp.StubIdpBinder;
-import stubidp.stubidp.Urls;
-import stubidp.stubidp.builders.CountryMetadataBuilder;
-
-import static stubidp.stubidp.StubIdpBinder.STUB_COUNTRY_METADATA_URL;
-import static stubidp.stubidp.StubIdpBinder.STUB_COUNTRY_SSO_URL;
+import static stubidp.stubidp.StubIdpEidasBinder.COUNTRY_SIGNING_KEY_STORE;
+import static stubidp.stubidp.StubIdpEidasBinder.STUB_COUNTRY_METADATA_URL;
+import static stubidp.stubidp.StubIdpEidasBinder.STUB_COUNTRY_SSO_URL;
 
 @Path(Urls.METADATA_RESOURCE)
 @Produces(Constants.APPLICATION_SAMLMETADATA_XML)
@@ -43,7 +42,7 @@ public class EidasProxyNodeServiceMetadataResource {
 	private final String ssoUrlPattern;
 
 	@Inject
-    public EidasProxyNodeServiceMetadataResource(@Named(StubIdpBinder.COUNTRY_SIGNING_KEY_STORE) IdaKeyStore idaKeyStore,
+    public EidasProxyNodeServiceMetadataResource(@Named(COUNTRY_SIGNING_KEY_STORE) IdaKeyStore idaKeyStore,
                                                  @Named(STUB_COUNTRY_METADATA_URL) String metadataUrlPattern,
                                                  @Named(STUB_COUNTRY_SSO_URL) String ssoUrlPattern,
                                                  CountryMetadataBuilder countryMetadataBuilder) {

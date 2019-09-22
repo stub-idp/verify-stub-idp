@@ -36,7 +36,7 @@ public class EntityDescriptorBuilder {
     private DateTime validUntil = DateTime.now().plusDays(1);
     private List<ContactPerson> contactPersons = new ArrayList<>();
     private String id = UUID.randomUUID().toString();
-    private final SPSSODescriptor defaultSpServiceDescriptor = SPSSODescriptorBuilder.anSpServiceDescriptor().addKeyDescriptor(aKeyDescriptor().withX509ForSigning("").build()).addKeyDescriptor(aKeyDescriptor().withX509ForEncryption("").build()).build();
+    private SPSSODescriptor spssoDescriptor = SPSSODescriptorBuilder.anSpServiceDescriptor().addKeyDescriptor(aKeyDescriptor().withX509ForSigning("").build()).addKeyDescriptor(aKeyDescriptor().withX509ForEncryption("").build()).build();
     private final ContactPerson defaultContactPerson = aContactPerson().build();
     private Optional<IDPSSODescriptor> idpSsoDescriptor = ofNullable(IdpSsoDescriptorBuilder.anIdpSsoDescriptor().build());
     private Optional<Signature> signature = Optional.empty();
@@ -62,7 +62,7 @@ public class EntityDescriptorBuilder {
         }
 
         if (addDefaultSpServiceDescriptor) {
-            entityDescriptor.getRoleDescriptors().add(defaultSpServiceDescriptor);
+            entityDescriptor.getRoleDescriptors().add(spssoDescriptor);
         }
 
         entityDescriptor.getRoleDescriptors().addAll(spServiceDescriptors);
@@ -110,6 +110,11 @@ public class EntityDescriptorBuilder {
 
     public EntityDescriptorBuilder withIdpSsoDescriptor(IDPSSODescriptor descriptor) {
         this.idpSsoDescriptor = ofNullable(descriptor);
+        return this;
+    }
+
+    public EntityDescriptorBuilder withSpSsoDescriptor(SPSSODescriptor descriptor) {
+        this.spssoDescriptor = descriptor;
         return this;
     }
 

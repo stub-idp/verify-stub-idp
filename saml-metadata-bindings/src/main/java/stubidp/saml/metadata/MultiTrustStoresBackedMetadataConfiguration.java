@@ -7,19 +7,17 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import io.dropwizard.client.JerseyClientConfiguration;
 
 import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
 import java.net.URI;
 import java.security.KeyStore;
+import java.util.Objects;
 import java.util.Optional;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class MultiTrustStoresBackedMetadataConfiguration extends TrustStoreBackedMetadataConfiguration {
 
-    @NotNull
     @Valid
-    private TrustStoreConfiguration hubTrustStore;
+    private TrustStoreConfiguration spTrustStore;
 
-    @NotNull
     @Valid
     private TrustStoreConfiguration idpTrustStore;
 
@@ -33,21 +31,21 @@ public class MultiTrustStoresBackedMetadataConfiguration extends TrustStoreBacke
         @JsonProperty("jerseyClientName") String jerseyClientName,
         @JsonProperty("hubFederationId") String hubFederationId,
         @JsonProperty("trustStore") TrustStoreConfiguration trustStore,
-        @JsonProperty("hubTrustStore") TrustStoreConfiguration hubTrustStore,
+        @JsonProperty("spTrustStore") TrustStoreConfiguration spTrustStore,
         @JsonProperty("idpTrustStore") TrustStoreConfiguration idpTrustStore) {
 
         super(uri, minRefreshDelay, maxRefreshDelay, expectedEntityId, client, jerseyClientName, hubFederationId, trustStore);
-        this.hubTrustStore = hubTrustStore;
+        this.spTrustStore = spTrustStore;
         this.idpTrustStore = idpTrustStore;
     }
 
     @Override
-    public Optional<KeyStore> getHubTrustStore() {
-        return Optional.of(hubTrustStore.getTrustStore());
+    public Optional<KeyStore> getSpTrustStore() {
+        return Objects.isNull(spTrustStore)?Optional.empty():Optional.of(spTrustStore.getTrustStore());
     }
 
     @Override
     public Optional<KeyStore> getIdpTrustStore() {
-        return Optional.of(idpTrustStore.getTrustStore());
+        return Objects.isNull(idpTrustStore)?Optional.empty():Optional.of(idpTrustStore.getTrustStore());
     }
 }

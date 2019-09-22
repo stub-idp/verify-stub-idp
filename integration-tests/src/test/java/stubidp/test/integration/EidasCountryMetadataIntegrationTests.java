@@ -16,6 +16,8 @@ import javax.ws.rs.client.Client;
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.Response;
 
+import java.util.Map;
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static stubidp.stubidp.builders.StubIdpBuilder.aStubIdp;
 
@@ -26,7 +28,7 @@ public class EidasCountryMetadataIntegrationTests extends IntegrationTestHelper 
     public static final String DISPLAY_NAME = "User Repository Identity Service";
     private final Client client = JerseyClientBuilder.createClient().property(ClientProperties.FOLLOW_REDIRECTS, false);
 
-    public static final StubIdpAppExtension applicationRule = new StubIdpAppExtension()
+    public static final StubIdpAppExtension applicationRule = new StubIdpAppExtension(Map.ofEntries(Map.entry("europeanIdentity.enabled", "true")))
             .withStubIdp(aStubIdp()
                     .withId(COUNTRY_NAME)
                     .withDisplayName(DISPLAY_NAME)

@@ -2,7 +2,7 @@ package stubidp.stubidp.configuration;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import stubidp.saml.metadata.MetadataResolverConfiguration;
-import stubidp.saml.metadata.TrustStoreBackedMetadataConfiguration;
+import stubidp.saml.metadata.MultiTrustStoresBackedMetadataConfiguration;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
@@ -27,7 +27,7 @@ public class EuropeanIdentityConfiguration {
     @NotNull
     @Valid
     @JsonProperty
-    private TrustStoreBackedMetadataConfiguration metadata;
+    private MultiTrustStoresBackedMetadataConfiguration metadata;
 
     @NotNull
     @Valid

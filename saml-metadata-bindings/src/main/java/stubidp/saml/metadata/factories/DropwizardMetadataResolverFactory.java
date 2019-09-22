@@ -61,7 +61,7 @@ public class DropwizardMetadataResolverFactory {
             getMetadataFilters(
                 metadataConfiguration,
                 validateSignatures,
-                metadataConfiguration.getHubTrustStore(),
+                metadataConfiguration.getSpTrustStore(),
                 metadataConfiguration.getIdpTrustStore()),
             minRefreshDelay,
             maxRefreshDelay
@@ -71,7 +71,7 @@ public class DropwizardMetadataResolverFactory {
     private List<MetadataFilter> getMetadataFilters(
         final MetadataResolverConfiguration metadataConfiguration,
         final boolean validateSignatures,
-        final Optional<KeyStore> hubTrustStore,
+        final Optional<KeyStore> spTrustStore,
         final Optional<KeyStore> idpTrustStore) {
 
         if (!validateSignatures) { return emptyList(); }
@@ -83,7 +83,7 @@ public class DropwizardMetadataResolverFactory {
         metadataFilters.add(pkixSignatureValidationFilterProvider.get());
         metadataFilters.add(expiredCertificateMetadataFilter);
 
-        hubTrustStore.ifPresent(
+        spTrustStore.ifPresent(
             hubKeyStore ->
                 metadataFilters.add(new CertificateChainValidationFilter(
                     SPSSODescriptor.DEFAULT_ELEMENT_NAME,

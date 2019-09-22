@@ -47,6 +47,7 @@ public class AuthnRequestBuilder {
     private Optional<Credential> signingCredential = Optional.empty();
     private Optional<Boolean> forceAuthn = Optional.empty();
     private Optional<Integer> assertionConsumerServiceIndex = Optional.empty();
+    private Optional<String> x509Certificate = Optional.empty();
 
     public static AuthnRequestBuilder anAuthnRequest() {
         return new AuthnRequestBuilder();
@@ -93,6 +94,7 @@ public class AuthnRequestBuilder {
         //This must be the last thing done before returning; otherwise, the signature will be invalidated
         if (issuer.isPresent() && !Strings.isNullOrEmpty(issuer.get().getValue()) && shouldAddSignature) {
             final SignatureBuilder signatureBuilder = SignatureBuilder.aSignature();
+            x509Certificate.ifPresent(signatureBuilder::withX509Data);
             signingCredential.ifPresent(signatureBuilder::withSigningCredential);
             authnRequest.setSignature(signatureBuilder.build());
             try {
@@ -171,6 +173,11 @@ public class AuthnRequestBuilder {
     public AuthnRequestBuilder withSigningCredential(Credential credential) {
         this.signingCredential = Optional.ofNullable(credential);
         this.shouldAddSignature = true;
+        return this;
+    }
+
+    public AuthnRequestBuilder withX509Certificate(String x509Certificate) {
+        this.x509Certificate = Optional.ofNullable(x509Certificate);
         return this;
     }
 
