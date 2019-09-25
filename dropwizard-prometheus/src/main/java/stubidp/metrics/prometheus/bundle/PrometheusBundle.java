@@ -9,7 +9,6 @@ import com.codahale.metrics.MetricFilter;
 import com.codahale.metrics.MetricRegistry;
 import com.codahale.metrics.Timer;
 import io.dropwizard.ConfiguredBundle;
-import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
 import io.prometheus.client.CollectorRegistry;
 import io.prometheus.client.dropwizard.DropwizardExports;
@@ -33,10 +32,6 @@ import java.util.SortedMap;
 public class PrometheusBundle implements ConfiguredBundle<PrometheusConfiguration> {
 
     public static final String PROMETHEUS_METRICS_RESOURCE = "/prometheus/metrics";
-
-    @Override
-    public void initialize(Bootstrap<?> bootstrap) {
-    }
 
     @Override
     public void run(PrometheusConfiguration configuration, Environment environment) {

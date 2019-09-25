@@ -6,6 +6,7 @@ import org.glassfish.jersey.client.ClientProperties;
 import org.glassfish.jersey.client.JerseyClientBuilder;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import stubidp.saml.hub.hub.domain.InboundResponseFromIdp;
@@ -25,6 +26,7 @@ import java.security.cert.CertificateException;
 
 import static java.util.Optional.empty;
 import static org.assertj.core.api.Assertions.assertThat;
+import static stubidp.metrics.prometheus.bundle.PrometheusBundle.PROMETHEUS_METRICS_RESOURCE;
 import static stubidp.stubidp.builders.StubIdpBuilder.aStubIdp;
 import static stubidp.utils.rest.common.HttpHeaders.CACHE_CONTROL_KEY;
 import static stubidp.utils.rest.common.HttpHeaders.PRAGMA_KEY;
@@ -49,6 +51,16 @@ public class UserLogsInIntegrationTests extends IntegrationTestHelper {
     @BeforeEach
     public void refreshMetadata() {
         client.target("http://localhost:"+applicationRule.getAdminPort()+"/tasks/metadata-refresh").request().post(Entity.text(""));
+    }
+
+    @Test
+    @Order(Integer.MAX_VALUE)
+    public void checkMetrics() {
+        Response response = client.target(UriBuilder.fromUri("http://localhost:" + applicationRule.getAdminPort())
+                .path(PROMETHEUS_METRICS_RESOURCE)
+                .build()).request().get();
+        assertThat(response.getStatus()).isEqualTo(200);
+        assertThat(response.readEntity(String.class)).contains("io_dropwizard_jetty_MutableServletContextHandler_2xx_responses_total 14.0");
     }
 
     @Test

@@ -4,14 +4,15 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.dropwizard.Configuration;
 import io.dropwizard.util.Duration;
-import stubidp.utils.rest.cache.AssetCacheConfiguration;
-import stubidp.utils.rest.common.ServiceInfoConfiguration;
-import stubidp.utils.security.configuration.SecureCookieConfiguration;
-import stubidp.utils.rest.configuration.ServiceNameConfiguration;
-import stubidp.saml.stubidp.configuration.SamlConfiguration;
+import stubidp.metrics.prometheus.config.PrometheusConfiguration;
 import stubidp.saml.metadata.MetadataResolverConfiguration;
 import stubidp.saml.metadata.TrustStoreBackedMetadataConfiguration;
+import stubidp.saml.stubidp.configuration.SamlConfiguration;
 import stubidp.stubidp.repositories.reaper.StaleSessionReaperConfiguration;
+import stubidp.utils.rest.cache.AssetCacheConfiguration;
+import stubidp.utils.rest.common.ServiceInfoConfiguration;
+import stubidp.utils.rest.configuration.ServiceNameConfiguration;
+import stubidp.utils.security.configuration.SecureCookieConfiguration;
 
 import javax.inject.Singleton;
 import javax.validation.Valid;
@@ -22,7 +23,8 @@ import javax.validation.constraints.NotNull;
 public class StubIdpConfiguration extends Configuration implements
         AssertionLifetimeConfiguration,
         AssetCacheConfiguration,
-        ServiceNameConfiguration {
+        ServiceNameConfiguration,
+        PrometheusConfiguration {
 
     @Valid
     @JsonProperty
@@ -101,6 +103,11 @@ public class StubIdpConfiguration extends Configuration implements
     @JsonProperty
     private StaleSessionReaperConfiguration staleSessionReaperConfiguration = new StaleSessionReaperConfiguration();
 
+    @NotNull
+    @Valid
+    @JsonProperty
+    private boolean isPrometheusEnabled = true;
+
     protected StubIdpConfiguration() {
     }
 
@@ -168,4 +175,7 @@ public class StubIdpConfiguration extends Configuration implements
         return staleSessionReaperConfiguration;
     }
 
+    public boolean isPrometheusEnabled() {
+        return isPrometheusEnabled;
+    }
 }
