@@ -2,9 +2,7 @@ package stubidp.stubidp.repositories;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.PropertyAccessor;
-import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
 import com.fasterxml.jackson.datatype.joda.JodaModule;
@@ -12,14 +10,14 @@ import org.jdbi.v3.core.Jdbi;
 import org.joda.time.Duration;
 import org.opensaml.core.xml.XMLObject;
 import org.opensaml.saml.saml2.core.AuthnContextComparisonTypeEnumeration;
+import stubidp.saml.utils.core.domain.Gender;
+import stubidp.saml.utils.hub.domain.IdaAuthnRequestFromHub;
+import stubidp.stubidp.exceptions.SessionSerializationException;
 import stubidp.stubidp.repositories.jdbc.mixins.AuthnContextComparisonTypeMixin;
 import stubidp.stubidp.repositories.jdbc.mixins.GenderMixin;
 import stubidp.stubidp.repositories.jdbc.mixins.IdaAuthnRequestFromHubMixin;
 import stubidp.stubidp.repositories.jdbc.mixins.XmlObjectMixin;
 import stubidp.utils.rest.common.SessionId;
-import stubidp.saml.utils.core.domain.Gender;
-import stubidp.saml.utils.hub.domain.IdaAuthnRequestFromHub;
-import stubidp.stubidp.exceptions.SessionSerializationException;
 
 import java.io.IOException;
 import java.time.Instant;
@@ -52,7 +50,7 @@ public abstract class SessionRepositoryBase<T extends Session> implements Sessio
                 .mapTo(String.class)
                 .findFirst());
 
-        if (!sessionData.isPresent()) {
+        if (sessionData.isEmpty()) {
             return Optional.empty();
         }
 
@@ -61,10 +59,6 @@ public abstract class SessionRepositoryBase<T extends Session> implements Sessio
             T session = objectMapper.readValue(unescapeJson(serializedSession.substring(1, serializedSession.length() - 1)), sessionType);
 
             return Optional.of(session);
-        } catch (JsonParseException e) {
-            return cleanupSession(sessionToken);
-        } catch (JsonMappingException e) {
-            return cleanupSession(sessionToken);
         } catch (IOException e) {
             return cleanupSession(sessionToken);
         }

@@ -1,5 +1,6 @@
 package stubidp.stubidp.services;
 
+import io.prometheus.client.Counter;
 import org.apache.commons.lang.StringEscapeUtils;
 import org.opensaml.saml.saml2.core.AuthnRequest;
 import org.slf4j.Logger;
@@ -30,6 +31,15 @@ import java.util.function.Function;
 public class AuthnRequestReceiverService {
 
     private static final Logger LOG = LoggerFactory.getLogger(AuthnRequestReceiverService.class);
+
+    private static final Counter successfulVerifyAuthnRequests = Counter.build()
+            .name("stubidp_verify_successfulAuthnRequests_total")
+            .help("Number of successful verify authn requests.")
+            .register();
+    private static final Counter successfulEidasAuthnRequests = Counter.build()
+            .name("stubidp_eidas_successfulAuthnRequests_total")
+            .help("Number of successful eidas authn requests.")
+            .register();
 
     private final Function<String, IdaAuthnRequestFromHub> samlRequestTransformer;
     private final IdpSessionRepository idpSessionRepository;
@@ -75,6 +85,7 @@ public class AuthnRequestReceiverService {
         validateHints(idpHints, validHints, invalidHints);
 
         final IdaAuthnRequestFromHub idaRequestFromHub = samlRequestTransformer.apply(samlRequest);
+        successfulVerifyAuthnRequests.inc();
         IdpSession session = new IdpSession(SessionId.createNewSessionId(), idaRequestFromHub, relayState, validHints, invalidHints, languageHint, registration, singleIdpJourneyId, null);
         final SessionId idpSessionId = idpSessionRepository.createSession(session);
 
@@ -92,6 +103,7 @@ public class AuthnRequestReceiverService {
         AuthnRequest authnRequest = stringAuthnRequestTransformer.apply(samlRequest);
         validateEidasAuthnRequest(authnRequest);
         EidasAuthnRequest eidasAuthnRequest = EidasAuthnRequest.buildFromAuthnRequest(authnRequest);
+        successfulEidasAuthnRequests.inc();
         EidasSession session = new EidasSession(SessionId.createNewSessionId(), eidasAuthnRequest, relayState, Collections.emptyList(), Collections.emptyList(), languageHint, Optional.empty(), null);
         final SessionId idpSessionId = eidasSessionRepository.createSession(session);
 

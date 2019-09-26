@@ -60,7 +60,18 @@ public class UserLogsInIntegrationTests extends IntegrationTestHelper {
                 .path(PROMETHEUS_METRICS_RESOURCE)
                 .build()).request().get();
         assertThat(response.getStatus()).isEqualTo(200);
-        assertThat(response.readEntity(String.class)).contains("io_dropwizard_jetty_MutableServletContextHandler_2xx_responses_total 14.0");
+        final String entity = response.readEntity(String.class);
+        assertThat(entity).contains("io_dropwizard_jetty_MutableServletContextHandler_2xx_responses_total 14.0");
+        assertThat(entity).contains("stubidp_verify_receivedAuthnRequests_total 4.0");
+        assertThat(entity).contains("stubidp_eidas_receivedAuthnRequests_total 0.0");
+        assertThat(entity).contains("stubidp_verify_successfulAuthnRequests_total 4.0");
+        assertThat(entity).contains("stubidp_eidas_successfulAuthnRequests_total 0.0");
+        assertThat(entity).contains("stubidp_verify_sentAuthnResponses_success_total 3.0");
+        assertThat(entity).contains("stubidp_eidas_sentAuthnResponses_success_total 0.0");
+//        assertThat(entity).contains("stubidp_verify_sentAuthnResponses_failure_total 0.0");
+//        assertThat(entity).contains("stubidp_eidas_sentAuthnResponses_failure_total 0.0");
+        assertThat(entity).contains("stubidp_db_users_total 12.0");
+        assertThat(entity).contains("stubidp_db_sessions_total 1.0");
     }
 
     @Test

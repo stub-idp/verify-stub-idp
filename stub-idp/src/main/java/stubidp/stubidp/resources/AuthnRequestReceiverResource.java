@@ -1,7 +1,11 @@
 package stubidp.stubidp.resources;
 
+import io.prometheus.client.Counter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import stubidp.stubidp.Urls;
+import stubidp.stubidp.cookies.CookieFactory;
+import stubidp.stubidp.cookies.CookieNames;
 import stubidp.stubidp.domain.EidasScheme;
 import stubidp.stubidp.domain.IdpLanguageHint;
 import stubidp.stubidp.exceptions.InvalidEidasSchemeException;
@@ -9,13 +13,10 @@ import stubidp.stubidp.exceptions.InvalidSessionIdException;
 import stubidp.stubidp.exceptions.InvalidUsernameOrPasswordException;
 import stubidp.stubidp.repositories.IdpSession;
 import stubidp.stubidp.repositories.IdpSessionRepository;
-import stubidp.utils.rest.common.SessionId;
-import stubidp.stubidp.Urls;
-import stubidp.stubidp.cookies.CookieFactory;
-import stubidp.stubidp.cookies.CookieNames;
 import stubidp.stubidp.services.AuthnRequestReceiverService;
 import stubidp.stubidp.services.AuthnRequestReceiverService.SessionCreated;
 import stubidp.stubidp.services.IdpUserService;
+import stubidp.utils.rest.common.SessionId;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -44,6 +45,15 @@ import static stubidp.stubidp.StubIdpBinder.IS_SECURE_COOKIE_ENABLED;
 public class AuthnRequestReceiverResource {
 
     private static final Logger LOG = LoggerFactory.getLogger(AuthnRequestReceiverResource.class);
+
+    private static final Counter receivedVerifyAuthnRequests = Counter.build()
+            .name("stubidp_verify_receivedAuthnRequests_total")
+            .help("Number of received verify authn requests.")
+            .register();
+    private static final Counter receivedEidasAuthnRequests = Counter.build()
+            .name("stubidp_eidas_receivedAuthnRequests_total")
+            .help("Number of received eidas authn requests.")
+            .register();
 
     private final AuthnRequestReceiverService authnRequestReceiverService;
     private final CookieFactory cookieFactory;
@@ -77,6 +87,8 @@ public class AuthnRequestReceiverResource {
             @CookieParam(CookieNames.SESSION_COOKIE_NAME) SessionId sessionCookie) {
         LOG.debug("Received request for idp {} from HUB", idpName);
 
+        receivedVerifyAuthnRequests.inc();
+
         final SessionCreated sessionCreated = authnRequestReceiverService.handleAuthnRequest(idpName, samlRequest, idpHints, registration, relayState, languageHint, singleIdpJourneyId);
         if (sessionCookie != null) {
             Optional<IdpSession> preRegSession = idpSessionRepository.get(sessionCookie);
@@ -104,6 +116,8 @@ public class AuthnRequestReceiverResource {
             @FormParam(Urls.RELAY_STATE_PARAM) String relayState,
             @FormParam(Urls.LANGUAGE_HINT_PARAM) Optional<IdpLanguageHint> languageHint) {
         LOG.debug("Received request for country {} from HUB", schemeId);
+
+        receivedEidasAuthnRequests.inc();
 
         if(!EidasScheme.fromString(schemeId).isPresent()) {
             throw new InvalidEidasSchemeException();

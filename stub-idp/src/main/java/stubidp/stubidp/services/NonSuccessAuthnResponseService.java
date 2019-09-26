@@ -1,25 +1,42 @@
 package stubidp.stubidp.services;
 
+import io.prometheus.client.Counter;
 import stubidp.saml.utils.core.domain.IdentityProviderAssertion;
 import stubidp.saml.utils.core.domain.IpAddress;
+import stubidp.stubidp.StubIdpBinder;
 import stubidp.stubidp.domain.DatabaseIdpUser;
 import stubidp.stubidp.domain.FraudIndicator;
 import stubidp.stubidp.domain.OutboundResponseFromIdp;
 import stubidp.stubidp.domain.SamlResponse;
 import stubidp.stubidp.domain.SamlResponseFromValue;
+import stubidp.stubidp.domain.factories.AssertionFactory;
 import stubidp.stubidp.repositories.Idp;
 import stubidp.stubidp.repositories.IdpSession;
 import stubidp.stubidp.repositories.IdpStubsRepository;
 import stubidp.stubidp.repositories.MetadataRepository;
 import stubidp.stubidp.saml.transformers.OutboundResponseFromIdpTransformerProvider;
-import stubidp.stubidp.StubIdpBinder;
-import stubidp.stubidp.domain.factories.AssertionFactory;
 
 import javax.inject.Inject;
 import javax.inject.Named;
 import java.net.URI;
 
 public class NonSuccessAuthnResponseService {
+
+    private static final Counter sentVerifyAuthnFailureResponses = Counter.build()
+            .name("stubidp_verify_sentAuthnResponses_failure_total")
+            .help("Number of sent verify authn failure responses.")
+            .labelNames("failure_type")
+            .register();
+
+    private enum FailureType {
+        fraud,
+        authn_pending,
+        uplift_failed,
+        authn_cancel,
+        no_authn_context,
+        authn_failed,
+        requester_error
+    }
 
     private final IdpStubsRepository idpStubsRepository;
     private final MetadataRepository metadataRepository;
@@ -61,42 +78,42 @@ public class NonSuccessAuthnResponseService {
                 authnStatementAssertion,
                 hubUrl);
 
-        return generateResponse(idp, successResponseFromIdp, hubUrl, session.getRelayState());
+        return generateResponse(idp, successResponseFromIdp, hubUrl, session.getRelayState(), FailureType.fraud);
     }
 
     public SamlResponse generateAuthnPending(String idpName, String samlRequestId, String relayState) {
         URI hubUrl = metadataRepository.getAssertionConsumerServiceLocation();
         Idp idp = idpStubsRepository.getIdpWithFriendlyId(idpName);
         OutboundResponseFromIdp authnPendingResponseIssuedByIdp = OutboundResponseFromIdp.createAuthnPendingResponseIssuedByIdp(samlRequestId, idp.getIssuerId(), hubUrl);
-        return generateResponse(idp, authnPendingResponseIssuedByIdp, hubUrl, relayState);
+        return generateResponse(idp, authnPendingResponseIssuedByIdp, hubUrl, relayState, FailureType.authn_pending);
     }
 
     public SamlResponse generateUpliftFailed(String idpName, String samlRequestId, String relayState) {
         URI hubUrl = metadataRepository.getAssertionConsumerServiceLocation();
         Idp idp = idpStubsRepository.getIdpWithFriendlyId(idpName);
         OutboundResponseFromIdp upliftFailedResponseIssuedByIdp = OutboundResponseFromIdp.createUpliftFailedResponseIssuedByIdp(samlRequestId, idp.getIssuerId(), hubUrl);
-        return generateResponse(idp, upliftFailedResponseIssuedByIdp, hubUrl, relayState);
+        return generateResponse(idp, upliftFailedResponseIssuedByIdp, hubUrl, relayState, FailureType.uplift_failed);
     }
 
     public SamlResponse generateAuthnCancel(String idpName, String samlRequestId, String relayState) {
         URI hubUrl = metadataRepository.getAssertionConsumerServiceLocation();
         Idp idp = idpStubsRepository.getIdpWithFriendlyId(idpName);
         OutboundResponseFromIdp authnCancelResponseIssuedByIdp = OutboundResponseFromIdp.createAuthnCancelResponseIssuedByIdp(samlRequestId, idp.getIssuerId(), hubUrl);
-        return generateResponse(idp, authnCancelResponseIssuedByIdp, hubUrl, relayState);
+        return generateResponse(idp, authnCancelResponseIssuedByIdp, hubUrl, relayState, FailureType.authn_cancel);
     }
 
     public SamlResponse generateNoAuthnContext(String idpName, String samlRequestId, String relayState) {
         URI hubUrl = metadataRepository.getAssertionConsumerServiceLocation();
         Idp idp = idpStubsRepository.getIdpWithFriendlyId(idpName);
         OutboundResponseFromIdp noAuthnContextResponseIssuedByIdp = OutboundResponseFromIdp.createNoAuthnContextResponseIssuedByIdp(samlRequestId, idp.getIssuerId(), hubUrl);
-        return generateResponse(idp, noAuthnContextResponseIssuedByIdp, hubUrl, relayState);
+        return generateResponse(idp, noAuthnContextResponseIssuedByIdp, hubUrl, relayState, FailureType.no_authn_context);
     }
 
     public SamlResponse generateAuthnFailed(String idpName, String samlRequestId, String relayState) {
         URI hubUrl = metadataRepository.getAssertionConsumerServiceLocation();
         Idp idp = idpStubsRepository.getIdpWithFriendlyId(idpName);
         OutboundResponseFromIdp failureResponse = OutboundResponseFromIdp.createAuthnFailedResponseIssuedByIdp(samlRequestId, idp.getIssuerId(), hubUrl);
-        return generateResponse(idp, failureResponse, hubUrl, relayState);
+        return generateResponse(idp, failureResponse, hubUrl, relayState, FailureType.authn_failed);
     }
 
     public SamlResponse generateRequesterError(String samlRequestId, String requesterErrorMessage, String idpName, String relayState) {
@@ -107,11 +124,12 @@ public class NonSuccessAuthnResponseService {
                 idp.getIssuerId(),
                 hubUrl,
                 requesterErrorMessage);
-        return generateResponse(idp, requesterErrorResponse, hubUrl, relayState);
+        return generateResponse(idp, requesterErrorResponse, hubUrl, relayState, FailureType.requester_error);
     }
 
-    private SamlResponseFromValue<OutboundResponseFromIdp> generateResponse(Idp idp, OutboundResponseFromIdp outboundResponseFromIdp, URI hubUrl, String relayState) {
-        return new SamlResponseFromValue<OutboundResponseFromIdp>(outboundResponseFromIdp, outboundResponseFromIdpTransformerProvider.get(idp), relayState, hubUrl);
+    private SamlResponseFromValue<OutboundResponseFromIdp> generateResponse(Idp idp, OutboundResponseFromIdp outboundResponseFromIdp, URI hubUrl, String relayState, FailureType failureType) {
+        sentVerifyAuthnFailureResponses.labels(failureType.name()).inc();
+        return new SamlResponseFromValue<>(outboundResponseFromIdp, outboundResponseFromIdpTransformerProvider.get(idp), relayState, hubUrl);
     }
 
 }

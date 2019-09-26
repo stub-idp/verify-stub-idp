@@ -1,5 +1,6 @@
 package stubidp.stubidp.services;
 
+import io.prometheus.client.Counter;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 import org.opensaml.core.xml.XMLObject;
@@ -17,6 +18,8 @@ import stubidp.saml.extensions.extensions.eidas.CurrentGivenName;
 import stubidp.saml.extensions.extensions.eidas.DateOfBirth;
 import stubidp.saml.extensions.extensions.eidas.EidasGender;
 import stubidp.saml.extensions.extensions.eidas.PersonIdentifier;
+import stubidp.stubidp.StubIdpBinder;
+import stubidp.stubidp.builders.EidasResponseBuilder;
 import stubidp.stubidp.domain.EidasAddress;
 import stubidp.stubidp.domain.EidasUser;
 import stubidp.stubidp.domain.RequestedAttribute;
@@ -24,8 +27,6 @@ import stubidp.stubidp.domain.SamlResponseFromValue;
 import stubidp.stubidp.repositories.EidasSession;
 import stubidp.stubidp.repositories.MetadataRepository;
 import stubidp.stubidp.saml.transformers.EidasResponseTransformerProvider;
-import stubidp.stubidp.StubIdpBinder;
-import stubidp.stubidp.builders.EidasResponseBuilder;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -42,6 +43,20 @@ import static stubidp.stubidp.StubIdpBinder.HUB_CONNECTOR_ENTITY_ID;
 import static stubidp.stubidp.StubIdpBinder.STUB_COUNTRY_METADATA_URL;
 
 public class EidasAuthnResponseService {
+
+    private static final Counter sentEidasAuthnSuccessResponses = Counter.build()
+            .name("stubidp_eidas_sentAuthnResponses_success_total")
+            .help("Number of sent verify authn success responses.")
+            .register();
+    private static final Counter sentEidasAuthnFailureResponses = Counter.build()
+            .name("stubidp_eidas_sentAuthnResponses_failure_total")
+            .help("Number of sent eidas authn failure responses.")
+            .labelNames("failure_type")
+            .register();
+
+    private enum FailureType {
+        authn_failed
+    }
 
     private final String hubConnectorEntityId;
     private final EidasResponseTransformerProvider eidasResponseTransformerProvider;
@@ -80,7 +95,9 @@ public class EidasAuthnResponseService {
             hubConnectorEntityId
         );
 
-        return new SamlResponseFromValue<Response>(response, eidasResponseTransformerProvider.getTransformer(), session.getRelayState(), hubUrl);
+        sentEidasAuthnSuccessResponses.inc();
+
+        return new SamlResponseFromValue<>(response, eidasResponseTransformerProvider.getTransformer(), session.getRelayState(), hubUrl);
     }
 
     public SamlResponseFromValue<Response> generateAuthnFailed(EidasSession session, String schemeId) {
@@ -96,6 +113,8 @@ public class EidasAuthnResponseService {
                 .withIssueInstant(DateTime.now())
                 .withDestination(hubUrl.toString())
                 .build();
+
+        sentEidasAuthnFailureResponses.labels(FailureType.authn_failed.name()).inc();
 
         return new SamlResponseFromValue<>(eidasInvalidResponse, eidasResponseTransformerProvider.getTransformer(), session.getRelayState(), hubUrl);
     }

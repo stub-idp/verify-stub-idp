@@ -1,20 +1,21 @@
 package stubidp.stubidp.services;
 
+import io.prometheus.client.Counter;
 import stubidp.saml.utils.core.domain.IdentityProviderAssertion;
 import stubidp.saml.utils.core.domain.IpAddress;
 import stubidp.saml.utils.core.domain.PersistentId;
+import stubidp.stubidp.StubIdpBinder;
 import stubidp.stubidp.domain.DatabaseIdpUser;
 import stubidp.stubidp.domain.OutboundResponseFromIdp;
 import stubidp.stubidp.domain.SamlResponseFromValue;
+import stubidp.stubidp.domain.factories.AssertionRestrictionsFactory;
 import stubidp.stubidp.domain.factories.IdentityProviderAssertionFactory;
+import stubidp.stubidp.domain.factories.MatchingDatasetFactory;
 import stubidp.stubidp.repositories.Idp;
 import stubidp.stubidp.repositories.IdpSession;
 import stubidp.stubidp.repositories.IdpStubsRepository;
 import stubidp.stubidp.repositories.MetadataRepository;
 import stubidp.stubidp.saml.transformers.OutboundResponseFromIdpTransformerProvider;
-import stubidp.stubidp.StubIdpBinder;
-import stubidp.stubidp.domain.factories.AssertionRestrictionsFactory;
-import stubidp.stubidp.domain.factories.MatchingDatasetFactory;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -24,6 +25,11 @@ import java.util.UUID;
 import static stubidp.saml.utils.core.domain.IdentityProviderAuthnStatement.createIdentityProviderAuthnStatement;
 
 public class SuccessAuthnResponseService {
+
+    private static final Counter sentVerifyAuthnResponses = Counter.build()
+            .name("stubidp_verify_sentAuthnResponses_success_total")
+            .help("Number of sent verify authn responses.")
+            .register();
 
     private final IdentityProviderAssertionFactory identityProviderAssertionFactory;
     private final IdpStubsRepository idpStubsRepository;
@@ -77,7 +83,9 @@ public class SuccessAuthnResponseService {
                 authnStatementAssertion,
                 hubUrl);
 
-        return new SamlResponseFromValue<OutboundResponseFromIdp>(idaResponse, outboundResponseFromIdpTransformerProvider.get(idp), session.getRelayState(), hubUrl);
+        sentVerifyAuthnResponses.inc();
+
+        return new SamlResponseFromValue<>(idaResponse, outboundResponseFromIdpTransformerProvider.get(idp), session.getRelayState(), hubUrl);
     }
 
 }
