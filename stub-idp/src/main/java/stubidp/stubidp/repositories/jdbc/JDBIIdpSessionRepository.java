@@ -23,11 +23,6 @@ public class JDBIIdpSessionRepository extends SessionRepositoryBase<IdpSession> 
 		this.sessionDBCollector = new SessionDBCollector(this).register();
 	}
 
-	public JDBIIdpSessionRepository(Jdbi jdbi, boolean isTest) {
-		super(IdpSession.class, jdbi);
-		this.sessionDBCollector = null;
-	}
-
 	public SessionId createSession(IdpSession session) {
 		return insertSession(session.getSessionId(), session);
 	}

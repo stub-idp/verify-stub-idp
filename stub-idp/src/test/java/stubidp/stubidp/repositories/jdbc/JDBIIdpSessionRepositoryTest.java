@@ -1,10 +1,12 @@
 package stubidp.stubidp.repositories.jdbc;
 
+import io.prometheus.client.CollectorRegistry;
 import org.jdbi.v3.core.Jdbi;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
 import org.joda.time.Duration;
 import org.joda.time.LocalDate;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.opensaml.saml.saml2.core.AuthnContextComparisonTypeEnumeration;
@@ -33,7 +35,12 @@ public class JDBIIdpSessionRepositoryTest {
 		new DatabaseMigrationRunner().runMigration(DATABASE_URL);
 
 		jdbi = Jdbi.create(DATABASE_URL);
-		repository = new JDBIIdpSessionRepository(jdbi, true);
+		repository = new JDBIIdpSessionRepository(jdbi);
+	}
+
+	@AfterEach
+	public void afterEach() {
+		CollectorRegistry.defaultRegistry.clear();
 	}
 
 	@Test

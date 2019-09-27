@@ -1,8 +1,10 @@
 package stubidp.stubidp.repositories.jdbc;
 
 import io.dropwizard.jackson.Jackson;
+import io.prometheus.client.CollectorRegistry;
 import org.jdbi.v3.core.Jdbi;
 import org.joda.time.LocalDate;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import stubidp.saml.utils.core.domain.AuthnContext;
@@ -31,7 +33,12 @@ public class JDBIUserRepositoryTest {
         jdbi = Jdbi.create(url);
         new DatabaseMigrationRunner().runMigration(url);
         userMapper = new UserMapper(Jackson.newObjectMapper());
-        repository = new JDBIUserRepository(jdbi, userMapper, true);
+        repository = new JDBIUserRepository(jdbi, userMapper);
+    }
+
+    @AfterEach
+    public void afterEach() {
+        CollectorRegistry.defaultRegistry.clear();
     }
 
     @Test
