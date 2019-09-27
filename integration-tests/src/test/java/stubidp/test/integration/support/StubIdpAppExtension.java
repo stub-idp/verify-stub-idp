@@ -5,6 +5,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.dropwizard.testing.ConfigOverride;
 import io.dropwizard.testing.junit5.DropwizardAppExtension;
+import io.prometheus.client.CollectorRegistry;
 import org.apache.commons.io.FileUtils;
 import org.opensaml.core.config.InitializationService;
 import stubidp.saml.metadata.test.factories.metadata.MetadataFactory;
@@ -19,7 +20,6 @@ import stubidp.test.utils.keystore.builders.KeyStoreResourceBuilder;
 
 import java.io.File;
 import java.net.URI;
-import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -125,6 +125,8 @@ public class StubIdpAppExtension extends DropwizardAppExtension<StubIdpConfigura
         STUB_IDPS_FILE.delete();
 
         super.after();
+
+        CollectorRegistry.defaultRegistry.clear();
     }
 
     public StubIdpAppExtension withStubIdp(StubIdp stubIdp) {
