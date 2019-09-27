@@ -32,6 +32,16 @@ public class JDBIUserRepository implements UserRepository {
         this.userDBCollector = new UserDBCollector(this).register();
     }
 
+    public JDBIUserRepository(
+            Jdbi jdbi,
+            UserMapper userMapper,
+            boolean isTest
+    ) {
+        this.jdbi = jdbi;
+        this.userMapper = userMapper;
+        this.userDBCollector = null;
+    }
+
     @Override
     public Collection<DatabaseIdpUser> getUsersForIdp(String idpFriendlyName) {
         List<User> users = jdbi.withHandle(handle ->

@@ -1,9 +1,6 @@
 package stubidp.stubidp.repositories.jdbc;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.datatype.guava.GuavaModule;
-import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
-import com.fasterxml.jackson.datatype.joda.JodaModule;
+import io.dropwizard.jackson.Jackson;
 import org.jdbi.v3.core.Jdbi;
 import org.joda.time.LocalDate;
 import org.junit.jupiter.api.BeforeEach;
@@ -33,16 +30,8 @@ public class JDBIUserRepositoryTest {
         String url = "jdbc:h2:mem:test;MODE=PostgreSQL;DB_CLOSE_DELAY=-1";
         jdbi = Jdbi.create(url);
         new DatabaseMigrationRunner().runMigration(url);
-
-        ObjectMapper mapper = new ObjectMapper() {{
-            registerModule(new JodaModule());
-            registerModule(new GuavaModule());
-            registerModule(new Jdk8Module());
-        }};
-
-        userMapper = new UserMapper(mapper);
-
-        repository = new JDBIUserRepository(jdbi, userMapper);
+        userMapper = new UserMapper(Jackson.newObjectMapper());
+        repository = new JDBIUserRepository(jdbi, userMapper, true);
     }
 
     @Test

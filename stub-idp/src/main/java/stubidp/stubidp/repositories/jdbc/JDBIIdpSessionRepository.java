@@ -20,7 +20,12 @@ public class JDBIIdpSessionRepository extends SessionRepositoryBase<IdpSession> 
 	@Inject
 	public JDBIIdpSessionRepository(Jdbi jdbi) {
 		super(IdpSession.class, jdbi);
-		sessionDBCollector = new SessionDBCollector(this).register();
+		this.sessionDBCollector = new SessionDBCollector(this).register();
+	}
+
+	public JDBIIdpSessionRepository(Jdbi jdbi, boolean isTest) {
+		super(IdpSession.class, jdbi);
+		this.sessionDBCollector = null;
 	}
 
 	public SessionId createSession(IdpSession session) {

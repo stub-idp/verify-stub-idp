@@ -33,7 +33,7 @@ public class JDBIIdpSessionRepositoryTest {
 		new DatabaseMigrationRunner().runMigration(DATABASE_URL);
 
 		jdbi = Jdbi.create(DATABASE_URL);
-		repository = new JDBIIdpSessionRepository(jdbi);
+		repository = new JDBIIdpSessionRepository(jdbi, true);
 	}
 
 	@Test
