@@ -23,6 +23,7 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriBuilder;
 import java.io.IOException;
 import java.security.cert.CertificateException;
+import java.util.Map;
 
 import static java.util.Optional.empty;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -45,7 +46,7 @@ public class UserLogsInIntegrationTests extends IntegrationTestHelper {
             applicationRule.getLocalPort());
     private final SamlDecrypter samlDecrypter = new SamlDecrypter(client, applicationRule.getVerifyMetadataPath(), applicationRule.getConfiguration().getHubEntityId(), applicationRule.getLocalPort(), empty());
 
-    public static final StubIdpAppExtension applicationRule = new StubIdpAppExtension()
+    public static final StubIdpAppExtension applicationRule = new StubIdpAppExtension(Map.ofEntries(Map.entry("isPrometheusEnabled", "true")))
             .withStubIdp(aStubIdp().withId(IDP_NAME).withDisplayName(DISPLAY_NAME).build());
 
     @BeforeEach

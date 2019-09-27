@@ -63,6 +63,7 @@ public class StubIdpAppExtension extends DropwizardAppExtension<StubIdpConfigura
                 Map.entry("metadata.uri", "http://localhost:" + verifyMetadataServer.getPort() + VERIFY_METADATA_PATH),
                 Map.entry("hubEntityId", HUB_ENTITY_ID),
                 Map.entry("basicAuthEnabledForUserResource", "true"),
+                Map.entry("isPrometheusEnabled", "false"),
                 Map.entry("server.requestLog.appenders[0].type", "console"),
                 Map.entry("server.applicationConnectors[0].port", "0"),
                 Map.entry("server.adminConnectors[0].port", "0"),
