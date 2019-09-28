@@ -21,6 +21,8 @@ import stubidp.stubidp.exceptions.mappers.FileNotFoundExceptionMapper;
 import stubidp.stubidp.exceptions.mappers.GenericStubIdpExceptionExceptionMapper;
 import stubidp.stubidp.exceptions.mappers.IdpNotFoundExceptionMapper;
 import stubidp.stubidp.exceptions.mappers.IdpUserNotFoundExceptionMapper;
+import stubidp.stubidp.exceptions.mappers.InvalidAuthnRequestExceptionMapper;
+import stubidp.stubidp.exceptions.mappers.InvalidEidasAuthnRequestExceptionMapper;
 import stubidp.stubidp.exceptions.mappers.SessionSerializationExceptionMapper;
 import stubidp.stubidp.filters.NoCacheResponseFilter;
 import stubidp.stubidp.filters.SecurityHeadersFilter;
@@ -165,6 +167,8 @@ public class StubIdpApplication extends Application<StubIdpConfiguration> {
         environment.jersey().register(FeatureNotEnabledExceptionMapper.class);
         environment.jersey().register(GenericStubIdpExceptionExceptionMapper.class);
         environment.jersey().register(CatchAllExceptionMapper.class);
+        environment.jersey().register(InvalidAuthnRequestExceptionMapper.class);
+        environment.jersey().register(InvalidEidasAuthnRequestExceptionMapper.class);
 
         //filters
         environment.jersey().register(NoCacheResponseFilter.class);

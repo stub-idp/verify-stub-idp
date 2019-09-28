@@ -26,6 +26,8 @@ import stubidp.stubidp.StubIdpApplication;
 import stubidp.stubidp.configuration.IdpStubsConfiguration;
 import stubidp.stubidp.configuration.StubIdp;
 import stubidp.stubidp.configuration.StubIdpConfiguration;
+import stubidp.stubidp.exceptions.mappers.InvalidAuthnRequestExceptionMapper;
+import stubidp.stubidp.exceptions.mappers.InvalidEidasAuthnRequestExceptionMapper;
 import stubidp.stubidp.resources.eidas.EidasAuthnRequestReceiverResource;
 import stubidp.stubidp.resources.idp.IdpAuthnRequestReceiverResource;
 import stubidp.stubidp.services.AuthnRequestReceiverService;
@@ -216,7 +218,9 @@ public class StubIdpAppExtension extends DropwizardAppExtension<StubIdpConfigura
                 EidasAuthnResponseService.sentEidasAuthnSuccessResponses,
                 NonSuccessAuthnResponseService.sentVerifyAuthnFailureResponses,
                 EidasAuthnRequestReceiverResource.receivedEidasAuthnRequests,
-                IdpAuthnRequestReceiverResource.receivedVerifyAuthnRequests);
+                IdpAuthnRequestReceiverResource.receivedVerifyAuthnRequests,
+                InvalidAuthnRequestExceptionMapper.invalidVerifyAuthnRequests,
+                InvalidEidasAuthnRequestExceptionMapper.invalidEidasAuthnRequests);
         countersToReset.forEach(c -> {
             c.clear();
             CollectorRegistry.defaultRegistry.register(c);
