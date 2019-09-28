@@ -6,6 +6,7 @@ import org.jsoup.nodes.Element;
 import stubidp.saml.extensions.IdaConstants;
 import stubidp.stubidp.Urls;
 import stubidp.stubidp.cookies.CookieNames;
+import stubidp.stubidp.domain.FraudIndicator;
 import stubidp.test.integration.support.TestSamlRequestFactory;
 import stubidp.test.integration.support.eidas.EidasAuthnRequestBuilder;
 
@@ -132,6 +133,34 @@ public class AuthnRequestSteps {
 
     public void userLogsIn(Cookies cookies) {
         userLogsIn(cookies, idpName);
+    }
+
+    public String userFailureFraud(Cookies cookies) {
+        Response response = client.target(getStubIdpUri(Urls.IDP_LOGIN_RESOURCE))
+                .request()
+                .cookie(CookieNames.SESSION_COOKIE_NAME, cookies.getSessionId())
+                .cookie(CookieNames.SECURE_COOKIE_NAME, cookies.getSecure())
+                .get();
+
+        Form form = new Form();
+        form.param(Urls.LOGIN_FAILURE_STATUS_PARAM, FraudIndicator.DF01.name());
+        final Document entity = Jsoup.parse(response.readEntity(String.class));
+        final Element csrfElement = entity.getElementById(CSRF_PROTECT_FORM_KEY);
+        if(!Objects.isNull(csrfElement)) {
+            form.param(CSRF_PROTECT_FORM_KEY, entity.getElementById(CSRF_PROTECT_FORM_KEY).val());
+        }
+
+        response = client.target(getStubIdpUri(Urls.IDP_FRAUD_FAILURE_RESOURCE))
+                .request()
+                .cookie(CookieNames.SESSION_COOKIE_NAME, cookies.getSessionId())
+                .cookie(CookieNames.SECURE_COOKIE_NAME, cookies.getSecure())
+                .post(Entity.form(form));
+
+        assertThat(response.getStatus()).isEqualTo(200);
+        final Document page = Jsoup.parse(response.readEntity(String.class));
+        assertThat(page.getElementsByTag("title").text()).isEqualTo("Saml Processing...");
+
+        return page.getElementsByAttributeValue("name", "SAMLResponse").val();
     }
 
     public void eidasUserLogsIn(Cookies cookies) {

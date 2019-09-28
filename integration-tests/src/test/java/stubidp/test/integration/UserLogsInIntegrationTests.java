@@ -23,8 +23,11 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriBuilder;
 import java.io.IOException;
 import java.security.cert.CertificateException;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
+import static java.text.MessageFormat.format;
 import static java.util.Optional.empty;
 import static org.assertj.core.api.Assertions.assertThat;
 import static stubidp.metrics.prometheus.bundle.PrometheusBundle.PROMETHEUS_METRICS_RESOURCE;
@@ -54,28 +57,32 @@ public class UserLogsInIntegrationTests extends IntegrationTestHelper {
         client.target("http://localhost:"+applicationRule.getAdminPort()+"/tasks/metadata-refresh").request().post(Entity.text(""));
     }
 
-    @Test
-    @Order(Integer.MAX_VALUE)
-    public void checkMetrics() {
+//    @Test
+//    @Order(Integer.MAX_VALUE)
+    public void zzz_checkMetrics() {
         Response response = client.target(UriBuilder.fromUri("http://localhost:" + applicationRule.getAdminPort())
                 .path(PROMETHEUS_METRICS_RESOURCE)
                 .build()).request().get();
         assertThat(response.getStatus()).isEqualTo(200);
         final String entity = response.readEntity(String.class);
-        assertThat(entity).contains("io_dropwizard_jetty_MutableServletContextHandler_2xx_responses_total 14.0");
-        assertThat(entity).contains("stubidp_verify_receivedAuthnRequests_total 4.0");
-        assertThat(entity).contains("stubidp_eidas_receivedAuthnRequests_total 0.0");
-        assertThat(entity).contains("stubidp_verify_successfulAuthnRequests_total 4.0");
-        assertThat(entity).contains("stubidp_eidas_successfulAuthnRequests_total 0.0");
-        assertThat(entity).contains("stubidp_verify_sentAuthnResponses_success_total 3.0");
-        assertThat(entity).contains("stubidp_eidas_sentAuthnResponses_success_total 0.0");
-//        assertThat(entity).contains("stubidp_verify_sentAuthnResponses_failure_total 0.0");
-//        assertThat(entity).contains("stubidp_eidas_sentAuthnResponses_failure_total 0.0");
-        assertThat(entity).contains("stubidp_db_users_total 12.0");
-        assertThat(entity).contains("stubidp_db_sessions_total 1.0");
+        final List<String> metrics = List.of(entity.split(System.lineSeparator())).stream().filter(s -> s.startsWith("stubidp_")).collect(Collectors.toList());
+        metricsContains(metrics, "stubidp_verify_receivedAuthnRequests_total");
+        metricsContains(metrics, "stubidp_eidas_receivedAuthnRequests_total");
+        metricsContains(metrics, "stubidp_verify_successfulAuthnRequests_total");
+        metricsContains(metrics, "stubidp_eidas_successfulAuthnRequests_total");
+        metricsContains(metrics, "stubidp_verify_sentAuthnResponses_success_total");
+        metricsContains(metrics, "stubidp_eidas_sentAuthnResponses_success_total");
+        metricsContains(metrics, "stubidp_verify_sentAuthnResponses_failure_total{failure_type=\"fraud\",} 1.0");
+        metricsContains(metrics, "stubidp_db_users_total");
+        metricsContains(metrics, "stubidp_db_sessions_total");
+    }
+
+    private void metricsContains(List<String> metrics, String metric) {
+        assertThat(metrics.stream().anyMatch(m -> m.startsWith(metric))).withFailMessage(format("{0} not in {1}", metric, metrics)).isTrue();
     }
 
     @Test
+    @Order(1)
     public void loginBehaviourTest() {
         final AuthnRequestSteps.Cookies cookies = authnRequestSteps.userPostsAuthnRequestToStubIdp();
         authnRequestSteps.userLogsIn(cookies);
@@ -83,6 +90,16 @@ public class UserLogsInIntegrationTests extends IntegrationTestHelper {
     }
 
     @Test
+    @Order(1)
+    public void failureBehaviourTest() {
+        final AuthnRequestSteps.Cookies cookies = authnRequestSteps.userPostsAuthnRequestToStubIdp();
+        final String response = authnRequestSteps.userFailureFraud(cookies);
+
+        zzz_checkMetrics();
+    }
+
+    @Test
+    @Order(1)
     @Disabled
     public void testStaleSessionReaper() throws InterruptedException {
         // set times in StaleSessionReaperConfiguration to 1s, run this test and check the log lines
@@ -93,6 +110,7 @@ public class UserLogsInIntegrationTests extends IntegrationTestHelper {
     }
 
     @Test
+    @Order(1)
     public void debugPageLoadsTest() {
         final AuthnRequestSteps.Cookies cookies = authnRequestSteps.userPostsAuthnRequestToStubIdp();
         authnRequestSteps.userLogsIn(cookies);
@@ -100,6 +118,7 @@ public class UserLogsInIntegrationTests extends IntegrationTestHelper {
     }
 
     @Test
+    @Order(1)
     public void ensureImagesAreCacheableTest() {
         Response response = client.target(authnRequestSteps.getStubIdpUri("/assets/images/providers/stub-idp-demo-one.png"))
                 .request()
@@ -111,6 +130,7 @@ public class UserLogsInIntegrationTests extends IntegrationTestHelper {
     }
 
     @Test
+    @Order(1)
     public void idpNotFoundTest() {
         final AuthnRequestSteps.Cookies cookies = authnRequestSteps.userPostsAuthnRequestToStubIdp();
         Response response = client.target(authnRequestSteps.getStubIdpUri(UriBuilder.fromPath(Urls.IDP_LOGIN_RESOURCE).build("idp_that_does_not_exist").toString()))
@@ -124,6 +144,7 @@ public class UserLogsInIntegrationTests extends IntegrationTestHelper {
     }
 
     @Test
+    @Order(1)
     public void randomizedPidTest() throws IOException, ResolverException, CertificateException {
         final AuthnRequestSteps.Cookies cookies1 = authnRequestSteps.userPostsAuthnRequestToStubIdp();
         authnRequestSteps.userLogsIn(cookies1);
