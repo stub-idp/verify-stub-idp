@@ -22,8 +22,10 @@ import java.net.URI;
 
 public class NonSuccessAuthnResponseService {
 
-    private static final Counter sentVerifyAuthnFailureResponses = Counter.build()
-            .name("stubidp_verify_sentAuthnResponses_failure_total")
+    private static final String STUBIDP_VERIFY_SENT_AUTHN_RESPONSES_FAILURE_TOTAL = "stubidp_verify_sentAuthnResponses_failure_total";
+
+    public static final Counter sentVerifyAuthnFailureResponses = Counter.build()
+            .name(STUBIDP_VERIFY_SENT_AUTHN_RESPONSES_FAILURE_TOTAL)
             .help("Number of sent verify authn failure responses.")
             .labelNames("failure_type")
             .register();

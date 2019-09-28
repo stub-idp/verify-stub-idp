@@ -44,12 +44,15 @@ import static stubidp.stubidp.StubIdpBinder.STUB_COUNTRY_METADATA_URL;
 
 public class EidasAuthnResponseService {
 
-    private static final Counter sentEidasAuthnSuccessResponses = Counter.build()
-            .name("stubidp_eidas_sentAuthnResponses_success_total")
+    private static final String STUBIDP_EIDAS_SENT_AUTHN_RESPONSES_SUCCESS_TOTAL = "stubidp_eidas_sentAuthnResponses_success_total";
+    private static final String STUBIDP_EIDAS_SENT_AUTHN_RESPONSES_FAILURE_TOTAL = "stubidp_eidas_sentAuthnResponses_failure_total";
+
+    public static final Counter sentEidasAuthnSuccessResponses = Counter.build()
+            .name(STUBIDP_EIDAS_SENT_AUTHN_RESPONSES_SUCCESS_TOTAL)
             .help("Number of sent verify authn success responses.")
             .register();
-    private static final Counter sentEidasAuthnFailureResponses = Counter.build()
-            .name("stubidp_eidas_sentAuthnResponses_failure_total")
+    public static final Counter sentEidasAuthnFailureResponses = Counter.build()
+            .name(STUBIDP_EIDAS_SENT_AUTHN_RESPONSES_FAILURE_TOTAL)
             .help("Number of sent eidas authn failure responses.")
             .labelNames("failure_type")
             .register();

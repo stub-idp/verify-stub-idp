@@ -32,12 +32,15 @@ public class AuthnRequestReceiverService {
 
     private static final Logger LOG = LoggerFactory.getLogger(AuthnRequestReceiverService.class);
 
-    private static final Counter successfulVerifyAuthnRequests = Counter.build()
-            .name("stubidp_verify_successfulAuthnRequests_total")
+    private static final String STUBIDP_VERIFY_SUCCESSFUL_AUTHN_REQUESTS_TOTAL = "stubidp_verify_successfulAuthnRequests_total";
+    private static final String STUBIDP_EIDAS_SUCCESSFUL_AUTHN_REQUESTS_TOTAL = "stubidp_eidas_successfulAuthnRequests_total";
+
+    public static final Counter successfulVerifyAuthnRequests = Counter.build()
+            .name(STUBIDP_VERIFY_SUCCESSFUL_AUTHN_REQUESTS_TOTAL)
             .help("Number of successful verify authn requests.")
             .register();
-    private static final Counter successfulEidasAuthnRequests = Counter.build()
-            .name("stubidp_eidas_successfulAuthnRequests_total")
+    public static final Counter successfulEidasAuthnRequests = Counter.build()
+            .name(STUBIDP_EIDAS_SUCCESSFUL_AUTHN_REQUESTS_TOTAL)
             .help("Number of successful eidas authn requests.")
             .register();
 

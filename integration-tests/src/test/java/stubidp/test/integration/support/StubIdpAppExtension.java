@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import io.dropwizard.testing.ConfigOverride;
 import io.dropwizard.testing.junit5.DropwizardAppExtension;
 import io.prometheus.client.CollectorRegistry;
+import io.prometheus.client.Counter;
 import org.apache.commons.io.FileUtils;
 import org.opensaml.core.config.InitializationService;
 import stubidp.saml.metadata.test.factories.metadata.MetadataFactory;
@@ -14,6 +15,11 @@ import stubidp.stubidp.StubIdpApplication;
 import stubidp.stubidp.configuration.IdpStubsConfiguration;
 import stubidp.stubidp.configuration.StubIdp;
 import stubidp.stubidp.configuration.StubIdpConfiguration;
+import stubidp.stubidp.resources.AuthnRequestReceiverResource;
+import stubidp.stubidp.services.AuthnRequestReceiverService;
+import stubidp.stubidp.services.EidasAuthnResponseService;
+import stubidp.stubidp.services.NonSuccessAuthnResponseService;
+import stubidp.stubidp.services.SuccessAuthnResponseService;
 import stubidp.test.utils.httpstub.HttpStubRule;
 import stubidp.test.utils.keystore.KeyStoreResource;
 import stubidp.test.utils.keystore.builders.KeyStoreResourceBuilder;
@@ -24,6 +30,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
@@ -58,8 +65,8 @@ public class StubIdpAppExtension extends DropwizardAppExtension<StubIdpConfigura
         }
     }
 
-    public static ConfigOverride[] withDefaultOverrides(Map<String, String> configOverrides) {
-        Map<String, String> config = Map.<String, String>ofEntries(
+    private static ConfigOverride[] withDefaultOverrides(Map<String, String> configOverrides) {
+        Map<String, String> config = Map.ofEntries(
                 Map.entry("metadata.uri", "http://localhost:" + verifyMetadataServer.getPort() + VERIFY_METADATA_PATH),
                 Map.entry("hubEntityId", HUB_ENTITY_ID),
                 Map.entry("basicAuthEnabledForUserResource", "true"),
@@ -86,7 +93,7 @@ public class StubIdpAppExtension extends DropwizardAppExtension<StubIdpConfigura
                 Map.entry("europeanIdentity.signingKeyPairConfiguration.privateKeyConfiguration.key", STUB_IDP_PUBLIC_PRIMARY_PRIVATE_KEY),
                 Map.entry("europeanIdentity.signingKeyPairConfiguration.publicKeyConfiguration.type", "x509"),
                 Map.entry("europeanIdentity.signingKeyPairConfiguration.publicKeyConfiguration.cert", STUB_IDP_PUBLIC_PRIMARY_CERT),
-                Map.entry("database.url", "jdbc:h2:mem:test;MODE=PostgreSQL;DB_CLOSE_DELAY=-1"),
+                Map.entry("database.url", "jdbc:h2:mem:"+ UUID.randomUUID().toString()+";MODE=PostgreSQL;DB_CLOSE_DELAY=-1"),
                 Map.entry("singleIdpJourney.enabled", "false"),
                 Map.entry("singleIdpJourney.serviceListUri", "http://localhost:"+fakeFrontend.getPort()+"/get-available-services"));
         config = new HashMap<>(config);
@@ -126,7 +133,21 @@ public class StubIdpAppExtension extends DropwizardAppExtension<StubIdpConfigura
 
         super.after();
 
+        // this wipes _all_ metrics from the app, which unfortunately means that
+        // static metrics aren't re-initialised.
         CollectorRegistry.defaultRegistry.clear();
+        List<Counter> countersToReset = List.of(AuthnRequestReceiverService.successfulEidasAuthnRequests,
+                AuthnRequestReceiverService.successfulVerifyAuthnRequests,
+                SuccessAuthnResponseService.sentVerifyAuthnResponses,
+                EidasAuthnResponseService.sentEidasAuthnFailureResponses,
+                EidasAuthnResponseService.sentEidasAuthnSuccessResponses,
+                NonSuccessAuthnResponseService.sentVerifyAuthnFailureResponses,
+                AuthnRequestReceiverResource.receivedEidasAuthnRequests,
+                AuthnRequestReceiverResource.receivedVerifyAuthnRequests);
+        countersToReset.forEach(c -> {
+            c.clear();
+            CollectorRegistry.defaultRegistry.register(c);
+        });
     }
 
     public StubIdpAppExtension withStubIdp(StubIdp stubIdp) {
@@ -143,7 +164,7 @@ public class StubIdpAppExtension extends DropwizardAppExtension<StubIdpConfigura
     }
 
     private static class TestIdpStubsConfiguration extends IdpStubsConfiguration {
-        public TestIdpStubsConfiguration(List<StubIdp> idps) {
+        TestIdpStubsConfiguration(List<StubIdp> idps) {
             this.stubIdps = idps;
         }
     }

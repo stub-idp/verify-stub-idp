@@ -26,8 +26,9 @@ import static stubidp.saml.utils.core.domain.IdentityProviderAuthnStatement.crea
 
 public class SuccessAuthnResponseService {
 
-    private static final Counter sentVerifyAuthnResponses = Counter.build()
-            .name("stubidp_verify_sentAuthnResponses_success_total")
+    private static final String STUBIDP_VERIFY_SENT_AUTHN_RESPONSES_SUCCESS_TOTAL = "stubidp_verify_sentAuthnResponses_success_total";
+    public static final Counter sentVerifyAuthnResponses = Counter.build()
+            .name(STUBIDP_VERIFY_SENT_AUTHN_RESPONSES_SUCCESS_TOTAL)
             .help("Number of sent verify authn responses.")
             .register();
 

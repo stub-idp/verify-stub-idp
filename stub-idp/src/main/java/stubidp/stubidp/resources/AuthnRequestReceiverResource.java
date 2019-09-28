@@ -46,12 +46,15 @@ public class AuthnRequestReceiverResource {
 
     private static final Logger LOG = LoggerFactory.getLogger(AuthnRequestReceiverResource.class);
 
-    private static final Counter receivedVerifyAuthnRequests = Counter.build()
-            .name("stubidp_verify_receivedAuthnRequests_total")
+    private static final String STUBIDP_VERIFY_RECEIVED_AUTHN_REQUESTS_TOTAL = "stubidp_verify_receivedAuthnRequests_total";
+    private static final String STUBIDP_EIDAS_RECEIVED_AUTHN_REQUESTS_TOTAL = "stubidp_eidas_receivedAuthnRequests_total";
+
+    public static final Counter receivedVerifyAuthnRequests = Counter.build()
+            .name(STUBIDP_VERIFY_RECEIVED_AUTHN_REQUESTS_TOTAL)
             .help("Number of received verify authn requests.")
             .register();
-    private static final Counter receivedEidasAuthnRequests = Counter.build()
-            .name("stubidp_eidas_receivedAuthnRequests_total")
+    public static final Counter receivedEidasAuthnRequests = Counter.build()
+            .name(STUBIDP_EIDAS_RECEIVED_AUTHN_REQUESTS_TOTAL)
             .help("Number of received eidas authn requests.")
             .register();
 
