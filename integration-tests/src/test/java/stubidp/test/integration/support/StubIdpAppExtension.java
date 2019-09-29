@@ -132,7 +132,9 @@ public class StubIdpAppExtension extends DropwizardAppExtension<StubIdpConfigura
         STUB_IDPS_FILE.delete();
 
         super.after();
+    }
 
+    private void resetStaticMetrics() {
         // this wipes _all_ metrics from the app, which unfortunately means that
         // static metrics aren't re-initialised.
         CollectorRegistry.defaultRegistry.clear();

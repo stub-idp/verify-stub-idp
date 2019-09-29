@@ -17,6 +17,18 @@
     <properties>
     </properties>
 
+    <!-- stop conflicts because of static prometheus metrics -->
+    <build>
+        <plugins>
+            <plugin>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <configuration>
+                    <reuseForks>false</reuseForks>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
     <dependencies>
         <dependency>
             <groupId>stub-idp</groupId>
