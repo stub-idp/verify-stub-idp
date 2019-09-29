@@ -72,6 +72,26 @@ public class AuthnRequestSteps {
         return postAuthnRequest(hints, language, registration, authnRequest, Urls.IDP_SAML2_SSO_RESOURCE);
     }
 
+    public String userPostsAuthnRequestToHeadlessIdpReturnResponse(boolean isCycle3, String relayState) {
+        final String headlessResource = "http://localhost:" + port + Urls.HEADLESS_ROOT;
+        String authnRequest = IdpAuthnRequestBuilder.anAuthnRequest()
+                .withDestination(headlessResource)
+                .build();
+        Form form = new Form();
+        form.param(Urls.CYCLE3_PARAM, Boolean.toString(isCycle3));
+        form.param(Urls.RELAY_STATE_PARAM, relayState);
+        form.param(Urls.SAML_REQUEST_PARAM, authnRequest);
+
+        Response response = client.target(headlessResource)
+                .request()
+                .post(Entity.form(form));
+        assertThat(response.getStatus()).isEqualTo(200);
+        final Document page = Jsoup.parse(response.readEntity(String.class));
+        assertThat(page.getElementsByTag("title").text()).isEqualTo("Saml Processing...");
+
+        return page.getElementsByAttributeValue("name", "SAMLResponse").val();
+    }
+
     public Cookies userPostsAuthnRequestToStubIdp(List<String> hints, Optional<String> language, Optional<Boolean> registration) {
         Response response = userPostsAuthnRequestToStubIdpReturnResponse(hints, language, registration, false);
 

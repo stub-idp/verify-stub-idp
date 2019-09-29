@@ -12,6 +12,7 @@ import stubidp.saml.metadata.MetadataConfiguration;
 import stubidp.saml.stubidp.configuration.SamlConfiguration;
 import stubidp.stubidp.Urls;
 import stubidp.stubidp.exceptions.InvalidAuthnRequestException;
+import stubidp.stubidp.resources.idp.HeadlessIdpResource;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -38,7 +39,7 @@ public class IdpAuthnRequestValidator extends BaseAuthnRequestValidator {
     @Override
     protected DestinationValidator getDestinationValidator(String schemeId) {
         return new DestinationValidator(UriBuilder.fromUri(expectedDestinationBaseUri).build(),
-                UriBuilder.fromPath(Urls.IDP_SAML2_SSO_RESOURCE).build(schemeId).getPath());
+                UriBuilder.fromPath(HeadlessIdpResource.IDP_NAME.equals(schemeId)?Urls.HEADLESS_ROOT:Urls.IDP_SAML2_SSO_RESOURCE).build(schemeId).getPath());
     }
 
     @Override

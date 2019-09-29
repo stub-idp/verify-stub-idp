@@ -156,8 +156,10 @@ public class StubIdpApplication extends Application<StubIdpConfiguration> {
 
         // other idp resources
         environment.jersey().register(UserResource.class);
-        environment.jersey().register(HeadlessIdpResource.class);
         environment.jersey().register(GeneratePasswordResource.class);
+        if(configuration.isHeadlessIdpEnabled()) {
+            environment.jersey().register(HeadlessIdpResource.class);
+        }
 
         //exception mappers
         environment.jersey().register(IdpNotFoundExceptionMapper.class);

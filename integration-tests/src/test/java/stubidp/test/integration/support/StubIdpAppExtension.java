@@ -29,6 +29,7 @@ import stubidp.stubidp.configuration.StubIdpConfiguration;
 import stubidp.stubidp.exceptions.mappers.InvalidAuthnRequestExceptionMapper;
 import stubidp.stubidp.exceptions.mappers.InvalidEidasAuthnRequestExceptionMapper;
 import stubidp.stubidp.resources.eidas.EidasAuthnRequestReceiverResource;
+import stubidp.stubidp.resources.idp.HeadlessIdpResource;
 import stubidp.stubidp.resources.idp.IdpAuthnRequestReceiverResource;
 import stubidp.stubidp.services.AuthnRequestReceiverService;
 import stubidp.stubidp.services.EidasAuthnResponseService;
@@ -93,6 +94,7 @@ public class StubIdpAppExtension extends DropwizardAppExtension<StubIdpConfigura
                 Map.entry("hubEntityId", HUB_ENTITY_ID),
                 Map.entry("basicAuthEnabledForUserResource", "true"),
                 Map.entry("isPrometheusEnabled", "false"),
+                Map.entry("isHeadlessIdpEnabled", "false"),
                 Map.entry("server.requestLog.appenders[0].type", "console"),
                 Map.entry("server.applicationConnectors[0].port", "0"),
                 Map.entry("server.adminConnectors[0].port", "0"),
@@ -220,7 +222,9 @@ public class StubIdpAppExtension extends DropwizardAppExtension<StubIdpConfigura
                 EidasAuthnRequestReceiverResource.receivedEidasAuthnRequests,
                 IdpAuthnRequestReceiverResource.receivedVerifyAuthnRequests,
                 InvalidAuthnRequestExceptionMapper.invalidVerifyAuthnRequests,
-                InvalidEidasAuthnRequestExceptionMapper.invalidEidasAuthnRequests);
+                InvalidEidasAuthnRequestExceptionMapper.invalidEidasAuthnRequests,
+                HeadlessIdpResource.receivedHeadlessAuthnRequests,
+                HeadlessIdpResource.successfulHeadlessAuthnRequests);
         countersToReset.forEach(c -> {
             c.clear();
             CollectorRegistry.defaultRegistry.register(c);

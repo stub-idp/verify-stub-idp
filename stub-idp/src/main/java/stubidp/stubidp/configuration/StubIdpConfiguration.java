@@ -108,6 +108,11 @@ public class StubIdpConfiguration extends Configuration implements
     @JsonProperty
     private boolean isPrometheusEnabled = true;
 
+    @NotNull
+    @Valid
+    @JsonProperty
+    private boolean isHeadlessIdpEnabled = true;
+
     protected StubIdpConfiguration() {
     }
 
@@ -177,5 +182,9 @@ public class StubIdpConfiguration extends Configuration implements
 
     public boolean isPrometheusEnabled() {
         return isPrometheusEnabled;
+    }
+
+    public boolean isHeadlessIdpEnabled() {
+        return isHeadlessIdpEnabled;
     }
 }

@@ -15,6 +15,7 @@ import stubidp.stubidp.repositories.Idp;
 import stubidp.stubidp.repositories.IdpSession;
 import stubidp.stubidp.repositories.IdpStubsRepository;
 import stubidp.stubidp.repositories.MetadataRepository;
+import stubidp.stubidp.resources.idp.HeadlessIdpResource;
 import stubidp.stubidp.saml.transformers.OutboundResponseFromIdpTransformerProvider;
 
 import javax.inject.Inject;
@@ -84,7 +85,9 @@ public class SuccessAuthnResponseService {
                 authnStatementAssertion,
                 hubUrl);
 
-        sentVerifyAuthnResponses.inc();
+        if(!HeadlessIdpResource.IDP_NAME.equals(idpName)) {
+            sentVerifyAuthnResponses.inc();
+        }
 
         return new SamlResponseFromValue<>(idaResponse, outboundResponseFromIdpTransformerProvider.get(idp), session.getRelayState(), hubUrl);
     }
