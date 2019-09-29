@@ -71,17 +71,17 @@ public class UserLogsInIntegrationTests extends IntegrationTestHelper {
         assertThat(response.getStatus()).isEqualTo(200);
         final String entity = response.readEntity(String.class);
         final List<String> metrics = List.of(entity.split(System.lineSeparator())).stream().filter(s -> s.startsWith("stubidp_")).collect(Collectors.toList());
-        metricsContains(metrics, "stubidp_verify_receivedAuthnRequests_total");
-        metricsContains(metrics, "stubidp_eidas_receivedAuthnRequests_total");
-        metricsContains(metrics, "stubidp_verify_successfulAuthnRequests_total");
-        metricsContains(metrics, "stubidp_eidas_successfulAuthnRequests_total");
-        metricsContains(metrics, "stubidp_verify_sentAuthnResponses_success_total");
-        metricsContains(metrics, "stubidp_eidas_sentAuthnResponses_success_total");
-        metricsContains(metrics, "stubidp_verify_invalid_AuthnRequests_received_total");
-        metricsContains(metrics, "stubidp_eidas_invalid_AuthnRequests_received_total");
+        metricsContains(metrics, "stubidp_verify_receivedAuthnRequests_total 6.0");
+//        metricsContains(metrics, "stubidp_eidas_receivedAuthnRequests_total");
+        metricsContains(metrics, "stubidp_verify_successfulAuthnRequests_total 5.0");
+        metricsContains(metrics, "stubidp_eidas_successfulAuthnRequests_total 0.0");
+        metricsContains(metrics, "stubidp_verify_sentAuthnResponses_success_total 3.0");
+        metricsContains(metrics, "stubidp_eidas_sentAuthnResponses_success_total 0.0");
+        metricsContains(metrics, "stubidp_verify_invalid_AuthnRequests_received_total 1.0");
+        metricsContains(metrics, "stubidp_eidas_invalid_AuthnRequests_received_total 0.0");
         metricsContains(metrics, "stubidp_verify_sentAuthnResponses_failure_total{failure_type=\"fraud\",} 1.0");
-        metricsContains(metrics, "stubidp_db_users_total");
-        metricsContains(metrics, "stubidp_db_sessions_total");
+        metricsContains(metrics, "stubidp_db_users_total 12.0");
+        metricsContains(metrics, "stubidp_db_sessions_total 1.0");
     }
 
     private void metricsContains(List<String> metrics, String metric) {
