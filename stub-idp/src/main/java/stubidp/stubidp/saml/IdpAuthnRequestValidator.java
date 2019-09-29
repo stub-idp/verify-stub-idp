@@ -44,22 +44,22 @@ public class IdpAuthnRequestValidator extends BaseAuthnRequestValidator {
     @Override
     protected void validateSpecificQualities(AuthnRequest request) {
         validateKeyInfo(request);
-        validateIdpAuthRequestSigningCert(request);
     }
 
-    private void validateKeyInfo(AuthnRequest request) {
-        if (request.getSignature().getKeyInfo() != null) {
-            throw new InvalidAuthnRequestException("KeyInfo was not null");
-        }
-    }
-
-    private void validateIdpAuthRequestSigningCert(AuthnRequest request) {
+    @Override
+    public void validateSignature(AuthnRequest request) {
         try {
             if(!metadataBackedSignatureValidator.validate(request, request.getIssuer().getValue(), SPSSODescriptor.DEFAULT_ELEMENT_NAME)) {
                 throw new InvalidAuthnRequestException("signature verification failed");
             }
         } catch (SignatureException | SecurityException e) {
             throw new InvalidAuthnRequestException(e);
+        }
+    }
+
+    private void validateKeyInfo(AuthnRequest request) {
+        if (request.getSignature().getKeyInfo() != null) {
+            throw new InvalidAuthnRequestException("KeyInfo was not null");
         }
     }
 }

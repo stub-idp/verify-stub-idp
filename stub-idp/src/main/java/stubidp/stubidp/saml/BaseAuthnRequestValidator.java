@@ -54,6 +54,7 @@ public abstract class BaseAuthnRequestValidator {
         authnRequestSizeValidator.validate(samlRequest);
         AuthnRequest authnRequest = stringToAuthnRequestTransformer.apply(samlRequest);
         validateSpecificQualities(authnRequest);
+        validateSignature(authnRequest);
         authnRequestFromTransactionValidator.validate(authnRequest);
         getDestinationValidator(schemeId).validate(authnRequest.getDestination());
         return authnRequest;
@@ -62,6 +63,8 @@ public abstract class BaseAuthnRequestValidator {
     protected abstract DestinationValidator getDestinationValidator(String schemeId);
 
     protected abstract void validateSpecificQualities(AuthnRequest request);
+
+    protected abstract void validateSignature(AuthnRequest request);
 
     private MetadataBackedSignatureValidator getMetadataBackedSignatureValidator(MetadataResolver metadataResolver, KeyStore trustStore) {
         CertificateChainValidator certificateChainValidator = new CertificateChainValidator(new PKIXParametersProvider(), new X509CertificateFactory());

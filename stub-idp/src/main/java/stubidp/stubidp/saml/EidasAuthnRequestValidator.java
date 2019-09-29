@@ -41,7 +41,17 @@ public class EidasAuthnRequestValidator extends BaseAuthnRequestValidator {
     @Override
     protected void validateSpecificQualities(AuthnRequest request) {
         validateKeyInfo(request);
-        validateEidasAuthRequestSigningCert(request);
+    }
+
+    @Override
+    public void validateSignature(AuthnRequest request) {
+        try {
+            if(!metadataBackedSignatureValidator.validate(request, request.getIssuer().getValue(), SPSSODescriptor.DEFAULT_ELEMENT_NAME)) {
+                throw new InvalidEidasAuthnRequestException("signature verification failed");
+            }
+        } catch (SignatureException | SecurityException e) {
+            throw new InvalidEidasAuthnRequestException(e);
+        }
     }
 
     private void validateKeyInfo(AuthnRequest request) {
@@ -53,16 +63,6 @@ public class EidasAuthnRequestValidator extends BaseAuthnRequestValidator {
         }
         if (request.getSignature().getKeyInfo().getX509Datas().get(0).getX509Certificates().isEmpty()) {
             throw new InvalidEidasAuthnRequestException("no x509 certificates found in x509 data");
-        }
-    }
-
-    private void validateEidasAuthRequestSigningCert(AuthnRequest request) {
-        try {
-            if(!metadataBackedSignatureValidator.validate(request, request.getIssuer().getValue(), SPSSODescriptor.DEFAULT_ELEMENT_NAME)) {
-                throw new InvalidEidasAuthnRequestException("signature verification failed");
-            }
-        } catch (SignatureException | SecurityException e) {
-            throw new InvalidEidasAuthnRequestException(e);
         }
     }
 }
