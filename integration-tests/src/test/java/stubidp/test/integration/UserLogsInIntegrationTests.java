@@ -76,7 +76,7 @@ public class UserLogsInIntegrationTests extends IntegrationTestHelper {
         metricsContains(metrics, "stubidp_verify_successfulAuthnRequests_total 5.0");
         metricsContains(metrics, "stubidp_eidas_successfulAuthnRequests_total 0.0");
         metricsContains(metrics, "stubidp_verify_sentAuthnResponses_success_total 3.0");
-        metricsContains(metrics, "stubidp_eidas_sentAuthnResponses_success_total 0.0");
+//        metricsContains(metrics, "stubidp_eidas_sentAuthnResponses_success_total 0.0");
         metricsContains(metrics, "stubidp_verify_invalid_AuthnRequests_received_total 1.0");
         metricsContains(metrics, "stubidp_eidas_invalid_AuthnRequests_received_total 0.0");
         metricsContains(metrics, "stubidp_verify_sentAuthnResponses_failure_total{failure_type=\"fraud\",} 1.0");
