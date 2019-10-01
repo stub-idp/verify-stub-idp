@@ -1,26 +1,25 @@
 package stubidp.stubidp.views.helpers;
 
-import org.apache.commons.lang.StringUtils;
 import stubidp.saml.utils.core.domain.Address;
 import stubidp.stubidp.domain.DatabaseIdpUser;
 import stubidp.stubidp.domain.MatchingDatasetValue;
 
-import java.util.Collection;
-import java.util.stream.Collectors;
+import static java.util.stream.Collectors.joining;
 
 public class IdpUserHelper {
 
-    DatabaseIdpUser idpUser;
+    private DatabaseIdpUser idpUser;
 
     public IdpUserHelper(DatabaseIdpUser databaseIdpUser) { this.idpUser = databaseIdpUser; }
 
     public DatabaseIdpUser getIdpUser() { return idpUser; }
 
     public String getFirstName() {
-        if (!idpUser.getFirstnames().isEmpty()) {
-            return idpUser.getFirstnames().get(0).getValue();
-        }
-        return createEmptySimpleMdsStringValue().getValue();
+        return idpUser.getFirstnames()
+                .stream()
+                .findFirst()
+                .orElseGet(this::createEmptySimpleMdsStringValue)
+                .getValue();
     }
 
     private MatchingDatasetValue<String> createEmptySimpleMdsStringValue() {
@@ -28,31 +27,34 @@ public class IdpUserHelper {
     }
 
     public String getSurname() {
-        if (!idpUser.getSurnames().isEmpty()) {
-            return idpUser.getSurnames().get(0).getValue();
-        }
-        return createEmptySimpleMdsStringValue().getValue();
+        return idpUser.getSurnames()
+                .stream()
+                .findFirst()
+                .orElseGet(this::createEmptySimpleMdsStringValue)
+                .getValue();
     }
 
     public String getSurnames() {
-        Collection<String> surnameValues = this.idpUser.getSurnames().stream()
-                .map(s -> s != null ? s.getValue() : null)
-                .collect(Collectors.toList());
-        return StringUtils.join(surnameValues, ",");
+        return this.idpUser
+                .getSurnames()
+                .stream()
+                .map(MatchingDatasetValue::getValue)
+                .collect(joining(","));
     }
 
     public String getDateOfBirth() {
-        if (!idpUser.getDateOfBirths().isEmpty()) {
-            return idpUser.getDateOfBirths().get(0).getValue().toString("dd/MM/yyyy");
-        }
-        return "";
+        return idpUser.getDateOfBirths()
+                .stream()
+                .findFirst()
+                .map(MatchingDatasetValue::getValue)
+                .map(d -> d.toString("dd/MM/yyyy"))
+                .orElse("");
     }
 
     public String getGender() {
-        if (idpUser.getGender().isPresent()) {
-            return idpUser.getGender().get().getValue().getValue();
-        }
-        return "";
+        return idpUser.getGender()
+                .map(gender -> gender.getValue().getValue())
+                .orElse("");
     }
 
     public Address getAddress() {
