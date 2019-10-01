@@ -44,6 +44,7 @@ import javax.ws.rs.core.UriBuilder;
 import java.io.File;
 import java.net.URI;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -70,6 +71,7 @@ public class StubIdpAppExtension extends DropwizardAppExtension<StubIdpConfigura
     private static final KeyStoreResource metadataTrustStore = KeyStoreResourceBuilder.aKeyStoreResource().withCertificate("metadataCA", CACertificates.TEST_METADATA_CA).withCertificate("rootCA", CACertificates.TEST_ROOT_CA).build();
     private static final KeyStoreResource spTrustStore = KeyStoreResourceBuilder.aKeyStoreResource().withCertificate("coreCA", CACertificates.TEST_CORE_CA).withCertificate("rootCA", CACertificates.TEST_ROOT_CA).build();
     private static final File STUB_IDPS_FILE = new File(System.getProperty("java.io.tmpdir"), "stub-idps.yml");
+    private static final File SECURE_COOKIE_FILE = new File(System.getProperty("java.io.tmpdir"), "cookie.key");
 
     private final List<StubIdp> stubIdps = new ArrayList<>();
 
@@ -128,8 +130,8 @@ public class StubIdpAppExtension extends DropwizardAppExtension<StubIdpConfigura
                 Map.entry("database.url", "jdbc:h2:mem:"+ UUID.randomUUID().toString()+";MODE=PostgreSQL;DB_CLOSE_DELAY=-1"),
                 Map.entry("singleIdpJourney.enabled", "false"),
                 Map.entry("singleIdpJourney.serviceListUri", "http://localhost:"+fakeFrontend.getPort()+"/get-available-services"),
-                Map.entry("secureCookieConfiguration.secure", "false"),
-                Map.entry("secureCookieConfiguration.keyConfiguration.keyUri", "nothingtoseehere")
+                Map.entry("secureCookieConfiguration.secure", "true"),
+                Map.entry("secureCookieConfiguration.keyConfiguration.keyUri", SECURE_COOKIE_FILE.getAbsolutePath())
                 );
         config = new HashMap<>(config);
         config.putAll(configOverrides);
@@ -148,6 +150,9 @@ public class StubIdpAppExtension extends DropwizardAppExtension<StubIdpConfigura
         try {
             FileUtils.write(STUB_IDPS_FILE, new ObjectMapper().writeValueAsString(idpStubsConfiguration), UTF_8);
             STUB_IDPS_FILE.deleteOnExit();
+
+            FileUtils.write(SECURE_COOKIE_FILE, Base64.getEncoder().encodeToString(new byte[64]));
+            SECURE_COOKIE_FILE.deleteOnExit();
 
             InitializationService.initialize();
 
