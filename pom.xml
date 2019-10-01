@@ -42,7 +42,7 @@
         <assertj.version>3.13.2</assertj.version>
         <assertj_jodatime.version>2.2.0</assertj_jodatime.version>
         <junit.version>5.5.2</junit.version>
-        <mockito.version>3.0.0</mockito.version>
+        <mockito.version>3.1.0</mockito.version>
     </properties>
 
     <modules>
