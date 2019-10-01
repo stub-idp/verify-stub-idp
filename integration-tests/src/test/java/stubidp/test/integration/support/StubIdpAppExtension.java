@@ -95,6 +95,7 @@ public class StubIdpAppExtension extends DropwizardAppExtension<StubIdpConfigura
                 Map.entry("basicAuthEnabledForUserResource", "true"),
                 Map.entry("isPrometheusEnabled", "false"),
                 Map.entry("isHeadlessIdpEnabled", "false"),
+                Map.entry("isIdpEnabled", "true"),
                 Map.entry("server.requestLog.appenders[0].type", "console"),
                 Map.entry("server.applicationConnectors[0].port", "0"),
                 Map.entry("server.adminConnectors[0].port", "0"),
@@ -126,7 +127,10 @@ public class StubIdpAppExtension extends DropwizardAppExtension<StubIdpConfigura
                 Map.entry("europeanIdentity.signingKeyPairConfiguration.publicKeyConfiguration.cert", STUB_IDP_PUBLIC_PRIMARY_CERT),
                 Map.entry("database.url", "jdbc:h2:mem:"+ UUID.randomUUID().toString()+";MODE=PostgreSQL;DB_CLOSE_DELAY=-1"),
                 Map.entry("singleIdpJourney.enabled", "false"),
-                Map.entry("singleIdpJourney.serviceListUri", "http://localhost:"+fakeFrontend.getPort()+"/get-available-services"));
+                Map.entry("singleIdpJourney.serviceListUri", "http://localhost:"+fakeFrontend.getPort()+"/get-available-services"),
+                Map.entry("secureCookieConfiguration.secure", "false"),
+                Map.entry("secureCookieConfiguration.keyConfiguration.keyUri", "nothingtoseehere")
+                );
         config = new HashMap<>(config);
         config.putAll(configOverrides);
         final List<ConfigOverride> overrides = config.entrySet().stream()

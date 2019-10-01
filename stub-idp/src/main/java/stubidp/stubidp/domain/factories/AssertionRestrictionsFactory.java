@@ -8,7 +8,7 @@ import stubidp.stubidp.configuration.AssertionLifetimeConfiguration;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import static stubidp.stubidp.StubIdpBinder.HUB_ENTITY_ID;
+import static stubidp.stubidp.StubIdpIdpBinder.HUB_ENTITY_ID;
 
 public class AssertionRestrictionsFactory {
     private final Duration assertionLifetime;

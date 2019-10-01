@@ -10,13 +10,12 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 class DatabaseConfigurationTest {
 
-    private final YamlConfigurationFactory factory = new YamlConfigurationFactory<>(
+    private final YamlConfigurationFactory<DatabaseConfiguration> factory = new YamlConfigurationFactory<>(
             DatabaseConfiguration.class, newValidator(), newObjectMapper(), "dw.");
 
     @Test
     void shouldThrowRTEIfNoUrlorVcap() throws Exception {
-        DatabaseConfiguration dbCfg = (DatabaseConfiguration)
-                factory.build(new StringConfigurationSourceProvider("aField: {}"), "");
+        DatabaseConfiguration dbCfg = factory.build(new StringConfigurationSourceProvider("aField: {}"), "");
 
         final Exception exception = Assertions.assertThrows(Exception.class, dbCfg::getUrl);
         assertThat(exception.getMessage()).contains("Neither url nor vcapServices was workable");
@@ -26,8 +25,7 @@ class DatabaseConfigurationTest {
     void shouldReturnUrlIfOnlyUrlProvided() throws Exception {
         String url = "jdbc:postgresql://db.example.com:5432/broker?password=dbpassword&ssl=true&user=dbuser";
 
-        DatabaseConfiguration dbCfg = (DatabaseConfiguration)
-                factory.build(new StringConfigurationSourceProvider("url: " + url), "");
+        DatabaseConfiguration dbCfg = factory.build(new StringConfigurationSourceProvider("url: " + url), "");
 
         assertThat(dbCfg.getUrl()).isEqualTo(url);
     }
@@ -37,8 +35,7 @@ class DatabaseConfigurationTest {
         String url = "jdbc:postgresql://db.example.com:5432/broker?password=dbpassword&ssl=true&user=dbuser";
         String vcap = "{\"postgres\":[{ \"credentials\": { \"jdbcuri\": \"" + url + "\"}}]}";
 
-        DatabaseConfiguration dbCfg = (DatabaseConfiguration)
-                factory.build(new StringConfigurationSourceProvider("vcapServices: '" + vcap + "'"), "");
+        DatabaseConfiguration dbCfg = factory.build(new StringConfigurationSourceProvider("vcapServices: '" + vcap + "'"), "");
 
         assertThat(dbCfg.getUrl()).isEqualTo(url);
     }
@@ -48,16 +45,14 @@ class DatabaseConfigurationTest {
         String url = "jdbc:postgresql://db.example.com:5432/broker?password=dbpassword&ssl=true&user=dbuser";
         String vcap = "{\"postgres\":[{ \"credentials\": { \"jdbcuri\": \"" + url + "\"}}]}";
 
-        DatabaseConfiguration dbCfg = (DatabaseConfiguration)
-                factory.build(new StringConfigurationSourceProvider("url: idontcare\nvcapServices: '" + vcap + "'"), "");
+        DatabaseConfiguration dbCfg = factory.build(new StringConfigurationSourceProvider("url: idontcare\nvcapServices: '" + vcap + "'"), "");
 
         assertThat(dbCfg.getUrl()).isEqualTo(url);
     }
 
     @Test
     void shouldThrowExceptionIfUrlIsEmpty() throws Exception {
-        DatabaseConfiguration dbCfg = (DatabaseConfiguration)
-                factory.build(new StringConfigurationSourceProvider("url: ''"), "");
+        DatabaseConfiguration dbCfg = factory.build(new StringConfigurationSourceProvider("url: ''"), "");
 
         final Exception exception = Assertions.assertThrows(Exception.class, dbCfg::getUrl);
         assertThat(exception.getMessage()).contains("Neither url nor vcapServices was workable");
@@ -65,8 +60,7 @@ class DatabaseConfigurationTest {
 
     @Test
     void shouldThrowExceptionIfVcapIsEmpty() throws Exception {
-        DatabaseConfiguration dbCfg = (DatabaseConfiguration)
-                factory.build(new StringConfigurationSourceProvider("vcap: ''"), "");
+        DatabaseConfiguration dbCfg = factory.build(new StringConfigurationSourceProvider("vcap: ''"), "");
 
         final Exception exception = Assertions.assertThrows(Exception.class, dbCfg::getUrl);
         assertThat(exception.getMessage()).contains("Neither url nor vcapServices was workable");

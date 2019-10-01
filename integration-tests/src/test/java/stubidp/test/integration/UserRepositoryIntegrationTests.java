@@ -29,6 +29,7 @@ import java.io.IOException;
 import java.text.MessageFormat;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import static java.util.Arrays.asList;
@@ -51,7 +52,7 @@ public class UserRepositoryIntegrationTests extends IntegrationTestHelper {
     private static final String USERNAME = "integrationTestUser";
     private static final String PASSWORD = "integrationTestUserPassword";
 
-    public static final StubIdpAppExtension applicationRule = new StubIdpAppExtension()
+    public static final StubIdpAppExtension applicationRule = new StubIdpAppExtension(Map.ofEntries(Map.entry("isIdpEnabled", "false")))
             .withStubIdp(aStubIdp()
                     .withId(IDP_NAME)
                     .withDisplayName(DISPLAY_NAME)

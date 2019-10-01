@@ -44,7 +44,10 @@ public class HeadlessIntegrationTests extends IntegrationTestHelper {
             empty(),
             applicationRule.getAssertionConsumerServices());
 
-    public static final StubIdpAppExtension applicationRule = new StubIdpAppExtension(Map.ofEntries(Map.entry("isHeadlessIdpEnabled", "true"), Map.entry("isPrometheusEnabled", "true")))
+    public static final StubIdpAppExtension applicationRule = new StubIdpAppExtension(Map.ofEntries(
+            Map.entry("isHeadlessIdpEnabled", "true"),
+            Map.entry("isPrometheusEnabled", "true"),
+            Map.entry("isIdpEnabled", "false")))
             .withStubIdp(aStubIdp().withId(IDP_NAME).withDisplayName(DISPLAY_NAME).build());
 
     @BeforeEach

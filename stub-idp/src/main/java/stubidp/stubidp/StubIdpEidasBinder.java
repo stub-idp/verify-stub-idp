@@ -70,8 +70,8 @@ public class StubIdpEidasBinder extends AbstractBinder {
     private final StubIdpConfiguration stubIdpConfiguration;
     private final Environment environment;
 
-    public StubIdpEidasBinder(StubIdpConfiguration stubIdpConfiguration,
-                              Environment environment) {
+    StubIdpEidasBinder(StubIdpConfiguration stubIdpConfiguration,
+                       Environment environment) {
         this.stubIdpConfiguration = stubIdpConfiguration;
         this.environment = environment;
     }

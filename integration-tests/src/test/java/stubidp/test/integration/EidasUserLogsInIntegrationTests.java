@@ -45,7 +45,9 @@ public class EidasUserLogsInIntegrationTests extends IntegrationTestHelper {
             Optional.ofNullable(EIDAS_SCHEME_NAME),
             applicationRule.getAssertionConsumerServices());
 
-    public static final StubIdpAppExtension applicationRule = new StubIdpAppExtension(Map.ofEntries(Map.entry("europeanIdentity.enabled", "true")));
+    public static final StubIdpAppExtension applicationRule = new StubIdpAppExtension(Map.ofEntries(
+            Map.entry("europeanIdentity.enabled", "true"),
+            Map.entry("isIdpEnabled", "false")));
 
     @BeforeEach
     public void refreshMetadata() {

@@ -18,8 +18,8 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import javax.ws.rs.core.UriBuilder;
 
-import static stubidp.stubidp.StubIdpBinder.HUB_METADATA_CONFIGURATION;
-import static stubidp.stubidp.StubIdpBinder.HUB_METADATA_RESOLVER;
+import static stubidp.stubidp.StubIdpIdpBinder.HUB_METADATA_CONFIGURATION;
+import static stubidp.stubidp.StubIdpIdpBinder.HUB_METADATA_RESOLVER;
 
 public class IdpAuthnRequestValidator extends BaseAuthnRequestValidator {
 

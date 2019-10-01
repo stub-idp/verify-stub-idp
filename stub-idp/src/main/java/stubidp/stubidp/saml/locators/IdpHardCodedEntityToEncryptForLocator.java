@@ -6,7 +6,7 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import javax.inject.Singleton;
 
-import static stubidp.stubidp.StubIdpBinder.HUB_ENTITY_ID;
+import static stubidp.stubidp.StubIdpIdpBinder.HUB_ENTITY_ID;
 
 @Singleton
 public class IdpHardCodedEntityToEncryptForLocator implements EntityToEncryptForLocator {

@@ -5,6 +5,7 @@ import stubidp.saml.utils.core.domain.IdentityProviderAssertion;
 import stubidp.saml.utils.core.domain.IpAddress;
 import stubidp.saml.utils.core.domain.PersistentId;
 import stubidp.stubidp.StubIdpBinder;
+import stubidp.stubidp.StubIdpIdpBinder;
 import stubidp.stubidp.domain.DatabaseIdpUser;
 import stubidp.stubidp.domain.OutboundResponseFromIdp;
 import stubidp.stubidp.domain.SamlResponseFromValue;
@@ -43,7 +44,7 @@ public class SuccessAuthnResponseService {
     public SuccessAuthnResponseService(
             IdentityProviderAssertionFactory identityProviderAssertionFactory,
             IdpStubsRepository idpStubsRepository,
-            @Named(StubIdpBinder.HUB_METADATA_REPOSITORY) MetadataRepository metadataProvider,
+            @Named(StubIdpIdpBinder.HUB_METADATA_REPOSITORY) MetadataRepository metadataProvider,
             AssertionRestrictionsFactory assertionRestrictionsFactory,
             OutboundResponseFromIdpTransformerProvider outboundResponseFromIdpTransformerProvider) {
 

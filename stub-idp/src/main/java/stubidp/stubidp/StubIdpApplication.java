@@ -122,26 +122,29 @@ public class StubIdpApplication extends Application<StubIdpConfiguration> {
         environment.getObjectMapper().setDateFormat(new StdDateFormat().withLocale(Locale.UK));
 
         environment.jersey().register(new StubIdpBinder(configuration, environment));
+        environment.jersey().register(new StubIdpIdpBinder(configuration, environment));
         environment.jersey().register(new StubIdpEidasBinder(configuration, environment));
         environment.jersey().register(new StubIdpSingleIdpBinder(configuration, environment));
 
         // idp resources
-        environment.jersey().register(IdpAuthnRequestReceiverResource.class);
-        environment.jersey().register(DebugPageResource.class);
-        environment.jersey().register(ConsentResource.class);
+        if(configuration.isIdpEnabled()) {
+            environment.jersey().register(IdpAuthnRequestReceiverResource.class);
+            environment.jersey().register(DebugPageResource.class);
+            environment.jersey().register(ConsentResource.class);
 
-        // single idp resources
-        if(configuration.getSingleIdpJourneyConfiguration().isEnabled()) {
-            environment.jersey().register(SingleIdpStartPromptPageResource.class);
-            environment.jersey().register(SingleIdpLogoutPageResource.class);
-            environment.jersey().register(SingleIdpHomePageResource.class);
-            environment.jersey().register(SingleIdpPreRegistrationResource.class);
+            // single idp resources
+            if (configuration.getSingleIdpJourneyConfiguration().isEnabled()) {
+                environment.jersey().register(SingleIdpStartPromptPageResource.class);
+                environment.jersey().register(SingleIdpLogoutPageResource.class);
+                environment.jersey().register(SingleIdpHomePageResource.class);
+                environment.jersey().register(SingleIdpPreRegistrationResource.class);
 
-            environment.jersey().register(LoginPageResource.class);
-            environment.jersey().register(RegistrationPageResource.class);
-        } else {
-            environment.jersey().register(SecureLoginPageResource.class);
-            environment.jersey().register(SecureRegistrationPageResource.class);
+                environment.jersey().register(LoginPageResource.class);
+                environment.jersey().register(RegistrationPageResource.class);
+            } else {
+                environment.jersey().register(SecureLoginPageResource.class);
+                environment.jersey().register(SecureRegistrationPageResource.class);
+            }
         }
 
         // proxy node resources
@@ -157,6 +160,8 @@ public class StubIdpApplication extends Application<StubIdpConfiguration> {
         // other idp resources
         environment.jersey().register(UserResource.class);
         environment.jersey().register(GeneratePasswordResource.class);
+
+        // headless
         if(configuration.isHeadlessIdpEnabled()) {
             environment.jersey().register(HeadlessIdpResource.class);
         }

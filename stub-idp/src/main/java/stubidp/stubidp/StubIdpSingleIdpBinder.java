@@ -18,8 +18,8 @@ public class StubIdpSingleIdpBinder extends AbstractBinder {
     private final StubIdpConfiguration stubIdpConfiguration;
     private final Environment environment;
 
-    public StubIdpSingleIdpBinder(StubIdpConfiguration stubIdpConfiguration,
-                                  Environment environment) {
+    StubIdpSingleIdpBinder(StubIdpConfiguration stubIdpConfiguration,
+                           Environment environment) {
         this.stubIdpConfiguration = stubIdpConfiguration;
         this.environment = environment;
     }

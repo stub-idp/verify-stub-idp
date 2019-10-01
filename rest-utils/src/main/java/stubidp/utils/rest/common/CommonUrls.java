@@ -11,9 +11,10 @@ public interface CommonUrls {
     *
     * If the parameter you are referencing/adding doesn't fit this style, perhaps it needs a different place to live.
     */
-    String SERVICE_NAME_ROOT = "/service-name";
-    String SERVICE_STATUS = "/service-status";
-    String VERSION_INFO_ROOT = "/internal/version-info";
+    String INTERNAL_ROOT = "/internal";
+    String SERVICE_NAME_ROOT = INTERNAL_ROOT + "/service-name";
+    String SERVICE_STATUS = INTERNAL_ROOT + "/service-status";
+    String VERSION_INFO_ROOT = INTERNAL_ROOT + "/version-info";
     String SESSION_ID_PARAM = "sessionId";
     String SESSION_ID_PARAM_PATH = "/{"+SESSION_ID_PARAM+"}";
 

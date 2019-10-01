@@ -4,6 +4,7 @@ import io.prometheus.client.Counter;
 import stubidp.saml.utils.core.domain.IdentityProviderAssertion;
 import stubidp.saml.utils.core.domain.IpAddress;
 import stubidp.stubidp.StubIdpBinder;
+import stubidp.stubidp.StubIdpIdpBinder;
 import stubidp.stubidp.domain.DatabaseIdpUser;
 import stubidp.stubidp.domain.FraudIndicator;
 import stubidp.stubidp.domain.OutboundResponseFromIdp;
@@ -48,7 +49,7 @@ public class NonSuccessAuthnResponseService {
     @Inject
     public NonSuccessAuthnResponseService(
             IdpStubsRepository idpStubsRepository,
-            @Named(StubIdpBinder.HUB_METADATA_REPOSITORY) MetadataRepository metadataRepository,
+            @Named(StubIdpIdpBinder.HUB_METADATA_REPOSITORY) MetadataRepository metadataRepository,
             AssertionFactory assertionFactory,
             OutboundResponseFromIdpTransformerProvider outboundResponseFromIdpTransformerProvider) {
 

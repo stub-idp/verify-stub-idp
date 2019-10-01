@@ -80,9 +80,10 @@ public class StubIdpConfiguration extends Configuration implements
     protected String hubEntityId = "https://signin.service.gov.uk";
 
     // to generate a new cookie.key use the command `dd if=/dev/random count=1 bs=64 | base64`
+    @NotNull
     @Valid
     @JsonProperty
-    protected SecureCookieConfiguration secureCookieConfiguration = null;
+    protected SecureCookieConfiguration secureCookieConfiguration;
 
     @NotNull
     @Valid
@@ -111,7 +112,12 @@ public class StubIdpConfiguration extends Configuration implements
     @NotNull
     @Valid
     @JsonProperty
-    private boolean isHeadlessIdpEnabled = true;
+    private boolean isHeadlessIdpEnabled = false;
+
+    @NotNull
+    @Valid
+    @JsonProperty
+    private boolean isIdpEnabled = true;
 
     protected StubIdpConfiguration() {
     }
@@ -186,5 +192,9 @@ public class StubIdpConfiguration extends Configuration implements
 
     public boolean isHeadlessIdpEnabled() {
         return isHeadlessIdpEnabled;
+    }
+
+    public boolean isIdpEnabled() {
+        return isIdpEnabled;
     }
 }

@@ -1,7 +1,7 @@
 package stubidp.stubidp.security;
 
 import stubidp.saml.security.SigningKeyStore;
-import stubidp.stubidp.StubIdpBinder;
+import stubidp.stubidp.StubIdpIdpBinder;
 import stubidp.stubidp.repositories.MetadataRepository;
 import stubidp.utils.security.security.PublicKeyFactory;
 
@@ -16,7 +16,7 @@ public class IdaAuthnRequestKeyStore implements SigningKeyStore {
     private final PublicKeyFactory publicKeyFactory;
 
     @Inject
-    public IdaAuthnRequestKeyStore(@Named(StubIdpBinder.HUB_METADATA_REPOSITORY) MetadataRepository metadataRepository, PublicKeyFactory publicKeyFactory) {
+    public IdaAuthnRequestKeyStore(@Named(StubIdpIdpBinder.HUB_METADATA_REPOSITORY) MetadataRepository metadataRepository, PublicKeyFactory publicKeyFactory) {
         this.metadataRepository = metadataRepository;
         this.publicKeyFactory = publicKeyFactory;
     }

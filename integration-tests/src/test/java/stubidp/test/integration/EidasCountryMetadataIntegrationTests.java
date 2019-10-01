@@ -28,7 +28,9 @@ public class EidasCountryMetadataIntegrationTests extends IntegrationTestHelper 
     public static final String DISPLAY_NAME = "User Repository Identity Service";
     private final Client client = JerseyClientBuilder.createClient().property(ClientProperties.FOLLOW_REDIRECTS, false);
 
-    public static final StubIdpAppExtension applicationRule = new StubIdpAppExtension(Map.ofEntries(Map.entry("europeanIdentity.enabled", "true")))
+    public static final StubIdpAppExtension applicationRule = new StubIdpAppExtension(Map.ofEntries(
+            Map.entry("europeanIdentity.enabled", "true"),
+            Map.entry("isIdpEnabled", "false")))
             .withStubIdp(aStubIdp()
                     .withId(COUNTRY_NAME)
                     .withDisplayName(DISPLAY_NAME)
