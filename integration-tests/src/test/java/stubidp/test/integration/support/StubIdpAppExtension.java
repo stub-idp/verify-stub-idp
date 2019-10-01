@@ -151,7 +151,7 @@ public class StubIdpAppExtension extends DropwizardAppExtension<StubIdpConfigura
             FileUtils.write(STUB_IDPS_FILE, new ObjectMapper().writeValueAsString(idpStubsConfiguration), UTF_8);
             STUB_IDPS_FILE.deleteOnExit();
 
-            FileUtils.write(SECURE_COOKIE_FILE, Base64.getEncoder().encodeToString(new byte[64]));
+            FileUtils.write(SECURE_COOKIE_FILE, Base64.getEncoder().encodeToString(new byte[64]), UTF_8);
             SECURE_COOKIE_FILE.deleteOnExit();
 
             InitializationService.initialize();
