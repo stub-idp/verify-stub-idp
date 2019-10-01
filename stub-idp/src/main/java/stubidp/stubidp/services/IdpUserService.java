@@ -3,6 +3,9 @@ package stubidp.stubidp.services;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 import org.joda.time.format.DateTimeFormat;
+import stubidp.saml.utils.core.domain.Address;
+import stubidp.saml.utils.core.domain.AuthnContext;
+import stubidp.saml.utils.core.domain.Gender;
 import stubidp.stubidp.domain.DatabaseIdpUser;
 import stubidp.stubidp.domain.MatchingDatasetValue;
 import stubidp.stubidp.exceptions.IncompleteRegistrationException;
@@ -15,9 +18,6 @@ import stubidp.stubidp.repositories.IdpSession;
 import stubidp.stubidp.repositories.IdpSessionRepository;
 import stubidp.stubidp.repositories.IdpStubsRepository;
 import stubidp.utils.rest.common.SessionId;
-import stubidp.saml.utils.core.domain.Address;
-import stubidp.saml.utils.core.domain.AuthnContext;
-import stubidp.saml.utils.core.domain.Gender;
 
 import javax.inject.Inject;
 import java.util.Collections;
@@ -101,7 +101,7 @@ public class IdpUserService {
             throw new UsernameAlreadyTakenException();
         }
 
-        Address address = new Address(asList(addressLine1, addressLine2), addressPostCode, null, null, null, null, false);
+        Address address = new Address(asList(addressLine1, addressLine2, addressTown), addressPostCode, null, null, null, null, false);
 
         AuthnContext levelOfAssurance = _levelOfAssurance;
         if ("LevelZeroUser".equals(username)) {
