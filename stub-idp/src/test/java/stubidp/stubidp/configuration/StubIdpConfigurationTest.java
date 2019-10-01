@@ -1,13 +1,8 @@
 package stubidp.stubidp.configuration;
 
-import io.dropwizard.configuration.ConfigurationSourceProvider;
 import io.dropwizard.configuration.YamlConfigurationFactory;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.io.InputStream;
 
 import static io.dropwizard.jackson.Jackson.newObjectMapper;
 import static io.dropwizard.jersey.validation.Validators.newValidator;
@@ -32,18 +27,4 @@ public class StubIdpConfigurationTest {
         assertThat(e.getMessage()).contains("stubIdpYmlFileRefresh must not be null");
         assertThat(e.getMessage()).contains("stubIdpsYmlFileLocation must not be null");
     }
-
-    static class StringConfigurationSourceProvider implements ConfigurationSourceProvider {
-        private String configuration;
-
-        public StringConfigurationSourceProvider(String configuration) {
-            this.configuration = configuration;
-        }
-
-        @Override
-        public InputStream open(String path) throws IOException {
-            return new ByteArrayInputStream(this.configuration.getBytes());
-        }
-    }
-
 }

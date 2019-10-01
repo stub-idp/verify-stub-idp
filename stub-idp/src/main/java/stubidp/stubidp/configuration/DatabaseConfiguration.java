@@ -2,17 +2,50 @@ package stubidp.stubidp.configuration;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import io.dropwizard.jackson.Jackson;
+import io.dropwizard.util.Strings;
 
-import javax.validation.constraints.NotNull;
+import java.io.IOException;
+import java.util.Optional;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class DatabaseConfiguration {
 
-    @NotNull
     @JsonProperty("url")
     private String url;
 
+    @JsonProperty("vcapServices")
+    private String vcapServices;
+
     public String getUrl() {
-        return url;
+        if (!Strings.isNullOrEmpty(vcapServices)) {
+            return getUrlFromVcap(vcapServices);
+        } else if (!Strings.isNullOrEmpty(url)) {
+            return url;
+        }
+
+        throw new RuntimeException("Neither url nor vcapServices was workable in database configuration");
+    }
+
+    private String getUrlFromVcap(String vcapServices) {
+        return Optional
+                .ofNullable(vcapServices)
+                .map(val -> {
+                    try {
+                        ObjectMapper mapper = Jackson.newObjectMapper();
+                        return mapper.readTree(val);
+                    }
+                    catch (IOException e) {
+                        throw new RuntimeException("IOException when parsing VCAP_SERVICES environment variable");
+                    }
+                })
+                .map(vcap -> vcap.get("postgres"))
+                .map(postgresDatabases -> postgresDatabases.get(0))
+                .map(postgresDatabase -> postgresDatabase.get("credentials"))
+                .map(credentials -> credentials.get("jdbcuri"))
+                .map(JsonNode::textValue)
+                .orElseThrow(() -> new RuntimeException("Could not parse vcap services"));
     }
 }
