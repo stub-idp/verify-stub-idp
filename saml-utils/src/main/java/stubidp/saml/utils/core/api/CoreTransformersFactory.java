@@ -4,22 +4,6 @@ import org.opensaml.core.xml.XMLObject;
 import org.opensaml.saml.saml2.core.RequestAbstractType;
 import org.opensaml.xmlsec.algorithm.DigestAlgorithm;
 import org.opensaml.xmlsec.algorithm.SignatureAlgorithm;
-import stubidp.saml.utils.core.transformers.inbound.Cycle3DatasetFactory;
-import stubidp.saml.utils.core.transformers.inbound.HubAssertionUnmarshaller;
-import stubidp.saml.utils.core.transformers.outbound.ResponseToSignedStringTransformer;
-import stubidp.saml.utils.core.transformers.outbound.decorators.ResponseAssertionSigner;
-import stubidp.saml.utils.core.transformers.outbound.decorators.ResponseSignatureCreator;
-import stubidp.saml.utils.core.transformers.outbound.decorators.SamlResponseAssertionEncrypter;
-import stubidp.saml.utils.core.transformers.outbound.decorators.SamlSignatureSigner;
-import stubidp.saml.utils.core.OpenSamlXmlObjectFactory;
-import stubidp.saml.serializers.deserializers.ElementToOpenSamlXMLObjectTransformer;
-import stubidp.saml.serializers.deserializers.OpenSamlXMLObjectUnmarshaller;
-import stubidp.saml.serializers.deserializers.StringToOpenSamlObjectTransformer;
-import stubidp.saml.serializers.deserializers.parser.SamlObjectParser;
-import stubidp.saml.serializers.deserializers.validators.Base64StringDecoder;
-import stubidp.saml.serializers.deserializers.validators.NotNullSamlStringValidator;
-import stubidp.saml.serializers.deserializers.validators.SizeValidator;
-import stubidp.saml.utils.metadata.transformers.KeyDescriptorsUnmarshaller;
 import stubidp.saml.security.CredentialFactorySignatureValidator;
 import stubidp.saml.security.EncrypterFactory;
 import stubidp.saml.security.EncryptionKeyStore;
@@ -34,8 +18,25 @@ import stubidp.saml.security.SignatureWithKeyInfoFactory;
 import stubidp.saml.security.SigningCredentialFactory;
 import stubidp.saml.security.SigningKeyStore;
 import stubidp.saml.security.validators.signature.SamlRequestSignatureValidator;
+import stubidp.saml.serializers.deserializers.ElementToOpenSamlXMLObjectTransformer;
+import stubidp.saml.serializers.deserializers.OpenSamlXMLObjectUnmarshaller;
+import stubidp.saml.serializers.deserializers.StringToOpenSamlObjectTransformer;
+import stubidp.saml.serializers.deserializers.parser.SamlObjectParser;
+import stubidp.saml.serializers.deserializers.validators.Base64StringDecoder;
+import stubidp.saml.serializers.deserializers.validators.NotNullSamlStringValidator;
+import stubidp.saml.serializers.deserializers.validators.SizeValidator;
 import stubidp.saml.serializers.serializers.XmlObjectToBase64EncodedStringTransformer;
 import stubidp.saml.serializers.serializers.XmlObjectToElementTransformer;
+import stubidp.saml.utils.core.OpenSamlXmlObjectFactory;
+import stubidp.saml.utils.core.transformers.inbound.Cycle3DatasetFactory;
+import stubidp.saml.utils.core.transformers.inbound.HubAssertionUnmarshaller;
+import stubidp.saml.utils.core.transformers.outbound.ResponseToSignedStringTransformer;
+import stubidp.saml.utils.core.transformers.outbound.UnsignedAssertionResponseToSignedStringTransformer;
+import stubidp.saml.utils.core.transformers.outbound.decorators.ResponseAssertionSigner;
+import stubidp.saml.utils.core.transformers.outbound.decorators.ResponseSignatureCreator;
+import stubidp.saml.utils.core.transformers.outbound.decorators.SamlResponseAssertionEncrypter;
+import stubidp.saml.utils.core.transformers.outbound.decorators.SamlSignatureSigner;
+import stubidp.saml.utils.metadata.transformers.KeyDescriptorsUnmarshaller;
 
 public class CoreTransformersFactory {
     public KeyDescriptorsUnmarshaller getCertificatesToKeyDescriptorsTransformer() {
@@ -152,6 +153,33 @@ public class CoreTransformersFactory {
                 new SamlSignatureSigner<>(),
                 responseAssertionEncrypter,
                 responseAssertionSigner,
+                new ResponseSignatureCreator(signatureFactory)
+        );
+    }
+
+    public UnsignedAssertionResponseToSignedStringTransformer getUnsignedAssertionResponseStringTransformer(
+            final EncryptionKeyStore publicKeyStore,
+            final IdaKeyStore keyStore,
+            final EntityToEncryptForLocator entityToEncryptForLocator,
+            final SignatureAlgorithm signatureAlgorithm,
+            final DigestAlgorithm digestAlgorithm,
+            final EncrypterFactory encrypterFactory) {
+
+        SignatureFactory signatureFactory = new SignatureFactory(
+                new IdaKeyStoreCredentialRetriever(keyStore),
+                signatureAlgorithm,
+                digestAlgorithm);
+
+        SamlResponseAssertionEncrypter responseAssertionEncrypter =
+                new SamlResponseAssertionEncrypter(
+                        new KeyStoreBackedEncryptionCredentialResolver(publicKeyStore),
+                        encrypterFactory,
+                        entityToEncryptForLocator);
+
+        return new UnsignedAssertionResponseToSignedStringTransformer(
+                new XmlObjectToBase64EncodedStringTransformer<>(),
+                new SamlSignatureSigner<>(),
+                responseAssertionEncrypter,
                 new ResponseSignatureCreator(signatureFactory)
         );
     }

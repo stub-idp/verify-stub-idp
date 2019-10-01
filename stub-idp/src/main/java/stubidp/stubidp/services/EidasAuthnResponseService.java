@@ -20,6 +20,7 @@ import stubidp.saml.extensions.extensions.eidas.EidasGender;
 import stubidp.saml.extensions.extensions.eidas.PersonIdentifier;
 import stubidp.stubidp.builders.EidasResponseBuilder;
 import stubidp.stubidp.domain.EidasAddress;
+import stubidp.stubidp.domain.EidasScheme;
 import stubidp.stubidp.domain.EidasUser;
 import stubidp.stubidp.domain.RequestedAttribute;
 import stubidp.stubidp.domain.SamlResponseFromValue;
@@ -37,6 +38,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.function.Function;
 
 import static stubidp.stubidp.StubIdpEidasBinder.HUB_CONNECTOR_ENTITY_ID;
 import static stubidp.stubidp.StubIdpEidasBinder.HUB_CONNECTOR_METADATA_REPOSITORY;
@@ -79,6 +81,7 @@ public class EidasAuthnResponseService {
 
     public SamlResponseFromValue<Response> getSuccessResponse(EidasSession session, String schemeId) {
         String issuerId = UriBuilder.fromUri(stubCountryMetadataUrl).build(schemeId).toString();
+        boolean shouldSignAssertions = EidasScheme.fromString(schemeId).get().getShouldSignAssertions();
         URI hubUrl = metadataProvider.getAssertionConsumerServiceLocation();
         String requestId = session.getEidasAuthnRequest().getRequestId();
         List<Attribute> eidasAttributes = getEidasAttributes(session);
@@ -100,7 +103,10 @@ public class EidasAuthnResponseService {
 
         sentEidasAuthnSuccessResponses.inc();
 
-        return new SamlResponseFromValue<>(response, eidasResponseTransformerProvider.getTransformer(), session.getRelayState(), hubUrl);
+        Function<Response,String> transformer = shouldSignAssertions?
+                eidasResponseTransformerProvider.getTransformer():eidasResponseTransformerProvider.getUnsignedAssertionTransformer();
+
+        return new SamlResponseFromValue<>(response, transformer, session.getRelayState(), hubUrl);
     }
 
     public SamlResponseFromValue<Response> generateAuthnFailed(EidasSession session, String schemeId) {

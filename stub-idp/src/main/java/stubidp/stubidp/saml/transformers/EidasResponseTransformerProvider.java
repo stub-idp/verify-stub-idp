@@ -36,8 +36,18 @@ public class EidasResponseTransformerProvider {
         this.digestAlgorithm = digestAlgorithm;
     }
 
-    public Function<Response, String> getTransformer(){
+    public Function<Response, String> getTransformer() {
         return coreTransformersFactory.getResponseStringTransformer(
+                encryptionKeyStore,
+                keyStore,
+                entityToEncryptForLocator,
+                signatureAlgorithm,
+                digestAlgorithm,
+                new EncrypterFactory().withDataEncryptionAlgorithm(EncryptionConstants.ALGO_ID_BLOCKCIPHER_AES256_GCM));
+    }
+
+    public Function<Response, String> getUnsignedAssertionTransformer() {
+        return coreTransformersFactory.getUnsignedAssertionResponseStringTransformer(
                 encryptionKeyStore,
                 keyStore,
                 entityToEncryptForLocator,
