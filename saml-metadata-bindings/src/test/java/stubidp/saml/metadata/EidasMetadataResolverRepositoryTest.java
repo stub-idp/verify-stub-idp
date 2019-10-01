@@ -50,7 +50,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.reset;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyZeroInteractions;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -297,7 +297,7 @@ public class EidasMetadataResolverRepositoryTest {
         reset(dropwizardMetadataResolverFactory);
         metadataResolverRepository.refresh();
 
-        verifyZeroInteractions(dropwizardMetadataResolverFactory);
+        verifyNoMoreInteractions(dropwizardMetadataResolverFactory);
         Map<String, MetadataResolver> refreshedMetadataResolvers = metadataResolverRepository.getMetadataResolvers();
         refreshedMetadataResolvers.forEach((key, value) -> assertThat(value == originalMetadataResolvers.get(key)).isTrue());
     }
