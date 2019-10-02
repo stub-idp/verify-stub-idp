@@ -44,6 +44,7 @@ public class PreRegistrationSteps {
         this.response = client.target(getUri(path))
                 .request()
                 .cookie(cookies.getSessionCookie())
+                .cookie(cookies.getSecureCookie())
                 .get();
         cookies.extractCookies(response);
         return this;
@@ -53,6 +54,7 @@ public class PreRegistrationSteps {
         this.response = client.target(getUri(path))
                 .request()
                 .cookie(cookies.getSessionCookie())
+                .cookie(cookies.getSecureCookie())
                 .get();
         assertThat(response.getStatus()).isEqualTo(Response.Status.OK.getStatusCode());
         this.responseEntity = response.readEntity(String.class);
@@ -85,6 +87,7 @@ public class PreRegistrationSteps {
         response = client.target(response.getLocation())
                 .request()
                 .cookie(cookies.getSessionCookie())
+                .cookie(cookies.getSecureCookie())
                 .get();
         cookies.extractCookies(response);
         responseEntity = response.readEntity(String.class);
@@ -116,6 +119,7 @@ public class PreRegistrationSteps {
         response = client.target(uri)
                 .request()
                 .cookie(cookies.getSessionCookie())
+                .cookie(cookies.getSecureCookie())
                 .post(Entity.entity(form, MediaType.APPLICATION_FORM_URLENCODED_TYPE));
         cookies.extractCookies(response);
         return this;

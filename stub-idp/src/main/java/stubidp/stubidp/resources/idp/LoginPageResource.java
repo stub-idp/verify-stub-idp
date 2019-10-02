@@ -1,6 +1,9 @@
 package stubidp.stubidp.resources.idp;
 
 import com.google.common.base.Strings;
+import stubidp.stubidp.Urls;
+import stubidp.stubidp.cookies.CookieFactory;
+import stubidp.stubidp.cookies.CookieNames;
 import stubidp.stubidp.csrf.CSRFCheckProtection;
 import stubidp.stubidp.domain.FraudIndicator;
 import stubidp.stubidp.domain.SamlResponse;
@@ -8,20 +11,18 @@ import stubidp.stubidp.domain.SubmitButtonValue;
 import stubidp.stubidp.exceptions.GenericStubIdpException;
 import stubidp.stubidp.exceptions.InvalidSessionIdException;
 import stubidp.stubidp.exceptions.InvalidUsernameOrPasswordException;
+import stubidp.stubidp.filters.SessionCookieValueMustExistAsASession;
 import stubidp.stubidp.repositories.Idp;
 import stubidp.stubidp.repositories.IdpSession;
 import stubidp.stubidp.repositories.IdpSessionRepository;
 import stubidp.stubidp.repositories.IdpStubsRepository;
+import stubidp.stubidp.repositories.Session;
+import stubidp.stubidp.services.IdpUserService;
+import stubidp.stubidp.services.NonSuccessAuthnResponseService;
 import stubidp.stubidp.views.ErrorMessageType;
 import stubidp.stubidp.views.LoginPageView;
 import stubidp.stubidp.views.SamlResponseRedirectViewFactory;
 import stubidp.utils.rest.common.SessionId;
-import stubidp.stubidp.Urls;
-import stubidp.stubidp.cookies.CookieFactory;
-import stubidp.stubidp.cookies.CookieNames;
-import stubidp.stubidp.filters.SessionCookieValueMustExistAsASession;
-import stubidp.stubidp.services.IdpUserService;
-import stubidp.stubidp.services.NonSuccessAuthnResponseService;
 
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
@@ -272,20 +273,19 @@ public class LoginPageResource {
                         idp.getAssetId(),
                         session.getCsrfToken()))
                 .cookie(cookieFactory.createSessionIdCookie(sessionId))
+                .cookie(cookieFactory.createSecureCookieWithSecurelyHashedValue(sessionId))
                 .build();
     }
 
     private Response showLoginForm(Optional<IdpSession> session, Idp idp, Optional<ErrorMessageType> errorMessage) {
-        if(session.isPresent()) {
-            sessionRepository.updateSession(session.get().getSessionId(), session.get().setNewCsrfToken());
-        }
+        session.ifPresent(idpSession -> sessionRepository.updateSession(idpSession.getSessionId(), idpSession.setNewCsrfToken()));
         return Response.ok().entity(
                 new LoginPageView(
                         idp.getDisplayName(),
                         idp.getFriendlyId(),
                         errorMessage.orElse(ErrorMessageType.NO_ERROR).getMessage(),
                         idp.getAssetId(),
-                        session.map(s -> s.getCsrfToken()).orElse(null)))
+                        session.map(Session::getCsrfToken).orElse(null)))
                 .build();
     }
 
@@ -313,7 +313,7 @@ public class LoginPageResource {
 
         Optional<IdpSession> session = sessionRepository.get(sessionCookie);
 
-        if (!session.isPresent() || session.get().getIdaAuthnRequestFromHub() == null) {
+        if (session.isEmpty() || session.get().getIdaAuthnRequestFromHub() == null) {
             throw new GenericStubIdpException(format("Session is invalid for " + idpName), Response.Status.BAD_REQUEST);
         }
         return session.get();
@@ -326,7 +326,7 @@ public class LoginPageResource {
 
         Optional<IdpSession> session = sessionRepository.deleteAndGet(sessionCookie);
 
-        if (!session.isPresent() || session.get().getIdaAuthnRequestFromHub() == null) {
+        if (session.isEmpty() || session.get().getIdaAuthnRequestFromHub() == null) {
             throw new GenericStubIdpException(format("Session is invalid for " + idpName), Response.Status.BAD_REQUEST);
         }
         return session.get();

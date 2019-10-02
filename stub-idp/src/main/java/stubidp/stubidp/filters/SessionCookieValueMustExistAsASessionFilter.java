@@ -2,6 +2,7 @@ package stubidp.stubidp.filters;
 
 import org.apache.commons.lang.StringUtils;
 import org.jboss.logging.MDC;
+import stubidp.stubidp.cookies.HmacValidator;
 import stubidp.stubidp.exceptions.InvalidSecureCookieException;
 import stubidp.stubidp.exceptions.SecureCookieNotFoundException;
 import stubidp.stubidp.exceptions.SessionIdCookieNotFoundException;
@@ -9,7 +10,6 @@ import stubidp.stubidp.exceptions.SessionNotFoundException;
 import stubidp.stubidp.repositories.EidasSessionRepository;
 import stubidp.stubidp.repositories.IdpSessionRepository;
 import stubidp.utils.rest.common.SessionId;
-import stubidp.stubidp.cookies.HmacValidator;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -58,18 +58,23 @@ public class SessionCookieValueMustExistAsASessionFilter implements ContainerReq
             secureCookie = Optional.empty();
         }
 
-        if (!sessionCookie.isPresent()) {
+        if (sessionCookie.isEmpty()) {
             throw new SessionIdCookieNotFoundException("Unable to locate session from session cookie");
         } else {
             MDC.remove("SessionId");
             MDC.put("SessionId", sessionCookie.get());
         }
 
+        validateSessionCookies(sessionCookie, secureCookie);
+    }
+
+    public void validateSessionCookies(Optional<String> sessionCookie, Optional<String> secureCookie) {
+
         final Status status;
 
         if (StringUtils.isEmpty(sessionCookie.get())) {
             status = Status.ID_NOT_PRESENT;
-        } else if (isSecureCookieEnabled && (!secureCookie.isPresent() || StringUtils.isEmpty(secureCookie.get()))) {
+        } else if (isSecureCookieEnabled && (secureCookie.isEmpty() || StringUtils.isEmpty(secureCookie.get()))) {
             status = Status.HASH_NOT_PRESENT;
         } else if (isSecureCookieEnabled && NO_CURRENT_SESSION_COOKIE_VALUE.equals(secureCookie.get())) {
             status = Status.DELETED_SESSION;

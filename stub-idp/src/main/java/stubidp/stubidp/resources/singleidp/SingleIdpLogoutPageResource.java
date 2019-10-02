@@ -1,5 +1,6 @@
 package stubidp.stubidp.resources.singleidp;
 
+import stubidp.stubidp.filters.SessionCookieValueMustExistAsASession;
 import stubidp.stubidp.repositories.IdpSessionRepository;
 import stubidp.utils.rest.common.SessionId;
 import stubidp.stubidp.Urls;
@@ -19,6 +20,7 @@ import javax.ws.rs.core.UriBuilder;
 
 @Path(Urls.SINGLE_IDP_LOGOUT_RESOURCE)
 @Produces(MediaType.TEXT_HTML)
+@SessionCookieValueMustExistAsASession
 public class SingleIdpLogoutPageResource {
 
     private IdpSessionRepository idpSessionRepository;

@@ -1,12 +1,12 @@
 package stubidp.stubidp.resources.idp;
 
-import stubidp.stubidp.repositories.IdpSessionRepository;
-import stubidp.stubidp.repositories.IdpStubsRepository;
-import stubidp.stubidp.views.SamlResponseRedirectViewFactory;
 import stubidp.stubidp.cookies.CookieFactory;
 import stubidp.stubidp.filters.SessionCookieValueMustExistAsASession;
+import stubidp.stubidp.repositories.IdpSessionRepository;
+import stubidp.stubidp.repositories.IdpStubsRepository;
 import stubidp.stubidp.services.IdpUserService;
 import stubidp.stubidp.services.NonSuccessAuthnResponseService;
+import stubidp.stubidp.views.SamlResponseRedirectViewFactory;
 
 import javax.inject.Inject;
 

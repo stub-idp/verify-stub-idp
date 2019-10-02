@@ -3,18 +3,19 @@ package stubidp.stubidp.csrf;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
 import org.jboss.logging.MDC;
+import stubidp.stubidp.cookies.HmacValidator;
 import stubidp.stubidp.csrf.exceptions.CSRFBodyNotFoundException;
 import stubidp.stubidp.csrf.exceptions.CSRFCouldNotValidateSessionException;
 import stubidp.stubidp.csrf.exceptions.CSRFNoTokenInSessionException;
 import stubidp.stubidp.csrf.exceptions.CSRFTokenNotFoundException;
 import stubidp.stubidp.csrf.exceptions.CSRFTokenWasInvalidException;
-import stubidp.utils.rest.common.SessionId;
-import stubidp.stubidp.cookies.HmacValidator;
 import stubidp.stubidp.exceptions.SessionIdCookieNotFoundException;
 import stubidp.stubidp.repositories.EidasSession;
 import stubidp.stubidp.repositories.EidasSessionRepository;
 import stubidp.stubidp.repositories.IdpSession;
 import stubidp.stubidp.repositories.IdpSessionRepository;
+import stubidp.stubidp.repositories.Session;
+import stubidp.utils.rest.common.SessionId;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -43,7 +44,7 @@ public class CSRFCheckProtectionFilter implements ContainerRequestFilter {
 
     public static final String CSRF_PROTECT_FORM_KEY = "csrf_protect";
 
-    private enum Status {VERIFIED, ID_NOT_PRESENT, HASH_NOT_PRESENT, DELETED_SESSION, INVALID_HASH, NOT_FOUND };
+    public enum Status {VERIFIED, ID_NOT_PRESENT, HASH_NOT_PRESENT, DELETED_SESSION, INVALID_HASH, NOT_FOUND }
     private static final String NO_CURRENT_SESSION_COOKIE_VALUE = "no-current-session";
 
     @Inject
@@ -75,7 +76,7 @@ public class CSRFCheckProtectionFilter implements ContainerRequestFilter {
             if(split[0].equals(CSRF_PROTECT_FORM_KEY)) {
                 final Optional<String> tokenInSession = getTokenFromSession(sessionId);
 
-                if(!tokenInSession.isPresent()) {
+                if(tokenInSession.isEmpty()) {
                     throw new CSRFNoTokenInSessionException();
                 }
 
@@ -91,20 +92,13 @@ public class CSRFCheckProtectionFilter implements ContainerRequestFilter {
         throw new CSRFTokenNotFoundException();
     }
 
-
-    protected Optional<String> getTokenFromSession(SessionId sessionId) {
+    private Optional<String> getTokenFromSession(SessionId sessionId) {
         final Optional<IdpSession> idpSession = idpSessionRepository.get(sessionId);
         final Optional<EidasSession> eidasSession = eidasSessionRepository.get(sessionId);
-        if(idpSession.isPresent()) {
-            return Optional.ofNullable(idpSession.get().getCsrfToken());
-        }
-        if(eidasSession.isPresent()) {
-            return Optional.ofNullable(eidasSession.get().getCsrfToken());
-        }
-        return Optional.empty();
+        return idpSession.map(Session::getCsrfToken).or(() -> eidasSession.map(Session::getCsrfToken));
     }
 
-    protected SessionId getValidSessionId(ContainerRequestContext requestContext) {
+    private SessionId getValidSessionId(ContainerRequestContext requestContext) {
 
         // Get SessionId from cookie
         final Optional<String> sessionCookie = Optional.ofNullable(getValueOfPossiblyNullCookie(requestContext.getCookies(), SESSION_COOKIE_NAME));
@@ -116,7 +110,7 @@ public class CSRFCheckProtectionFilter implements ContainerRequestFilter {
             secureCookie = Optional.empty();
         }
 
-        if (!sessionCookie.isPresent()) {
+        if (sessionCookie.isEmpty()) {
             throw new SessionIdCookieNotFoundException("Unable to locate session from session cookie");
         } else {
             MDC.remove("SessionId");
@@ -127,7 +121,7 @@ public class CSRFCheckProtectionFilter implements ContainerRequestFilter {
 
         if (StringUtils.isEmpty(sessionCookie.get())) {
             status = Status.ID_NOT_PRESENT;
-        } else if (isSecureCookieEnabled && (!secureCookie.isPresent() || StringUtils.isEmpty(secureCookie.get()))) {
+        } else if (isSecureCookieEnabled && (secureCookie.isEmpty() || StringUtils.isEmpty(secureCookie.get()))) {
             status = Status.HASH_NOT_PRESENT;
         } else if (isSecureCookieEnabled && NO_CURRENT_SESSION_COOKIE_VALUE.equals(secureCookie.get())) {
             status = Status.DELETED_SESSION;
@@ -140,7 +134,7 @@ public class CSRFCheckProtectionFilter implements ContainerRequestFilter {
         }
 
         if(status != Status.VERIFIED) {
-            throw new CSRFCouldNotValidateSessionException();
+            throw new CSRFCouldNotValidateSessionException(status);
         }
 
         return new SessionId(sessionCookie.get());

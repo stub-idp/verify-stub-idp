@@ -1,5 +1,7 @@
 package stubidp.stubidp.resources.singleidp;
 
+import stubidp.stubidp.Urls;
+import stubidp.stubidp.cookies.CookieFactory;
 import stubidp.stubidp.repositories.Idp;
 import stubidp.stubidp.repositories.IdpSession;
 import stubidp.stubidp.repositories.IdpSessionRepository;
@@ -8,12 +10,9 @@ import stubidp.stubidp.views.CancelPreRegistrationPageView;
 import stubidp.stubidp.views.ErrorMessageType;
 import stubidp.stubidp.views.RegistrationPageView;
 import stubidp.utils.rest.common.SessionId;
-import stubidp.stubidp.Urls;
-import stubidp.stubidp.cookies.CookieFactory;
 
 import javax.inject.Inject;
 import javax.validation.constraints.NotNull;
-
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
@@ -57,12 +56,17 @@ public class SingleIdpPreRegistrationResource {
             @QueryParam(Urls.ERROR_MESSAGE_PARAM) Optional<ErrorMessageType> errorMessage) {
 
         Idp idp = idpStubsRepository.getIdpWithFriendlyId(idpName);
-        IdpSession session = new IdpSession(
-                new SessionId(UUID.randomUUID().toString()));
+        return createSessionAndShowRegistrationForm(idp, errorMessage);
+    }
+
+    private Response createSessionAndShowRegistrationForm(Idp idp, Optional<ErrorMessageType> errorMessage){
+        final IdpSession session = new IdpSession(new SessionId(UUID.randomUUID().toString()));
         final SessionId sessionId = idpSessionRepository.createSession(session);
         idpSessionRepository.updateSession(session.getSessionId(), session.setNewCsrfToken());
-        return Response.ok(new RegistrationPageView(idp.getDisplayName(), idp.getFriendlyId(), errorMessage.orElse(ErrorMessageType.NO_ERROR).getMessage(), idp.getAssetId(), true, session.getCsrfToken()))
+
+        return Response.ok().entity(new RegistrationPageView(idp.getDisplayName(), idp.getFriendlyId(), errorMessage.orElse(ErrorMessageType.NO_ERROR).getMessage(), idp.getAssetId(), true, session.getCsrfToken()))
                 .cookie(cookieFactory.createSessionIdCookie(sessionId))
+                .cookie(cookieFactory.createSecureCookieWithSecurelyHashedValue(sessionId))
                 .build();
     }
 }

@@ -14,6 +14,7 @@ import stubidp.stubidp.configuration.StubIdpConfiguration;
 import stubidp.stubidp.cookies.CookieFactory;
 import stubidp.stubidp.cookies.HmacValidator;
 import stubidp.stubidp.domain.factories.StubTransformersFactory;
+import stubidp.stubidp.filters.SessionCookieValueMustExistAsASessionFilter;
 import stubidp.stubidp.listeners.StubIdpsFileListener;
 import stubidp.stubidp.repositories.AllIdpsUserRepository;
 import stubidp.stubidp.repositories.IdpSessionRepository;
@@ -104,5 +105,7 @@ public class StubIdpBinder extends AbstractBinder {
         bind(new DefaultConfigurationFactoryFactory<IdpStubsConfiguration>()
                 .create(IdpStubsConfiguration.class, environment.getValidator(), environment.getObjectMapper(), ""))
                 .to(new GenericType<ConfigurationFactory<IdpStubsConfiguration>>() {});
+
+        bind(SessionCookieValueMustExistAsASessionFilter.class).to(SessionCookieValueMustExistAsASessionFilter.class);
     }
 }
