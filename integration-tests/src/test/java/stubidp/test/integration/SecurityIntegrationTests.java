@@ -86,6 +86,27 @@ public class SecurityIntegrationTests extends IntegrationTestHelper {
         assertThat(response.getStatus()).isEqualTo(500);
     }
 
+    @Test
+    public void whenSecureCookieIsModifiedThenRequestDoesNotWork() {
+        final AuthnRequestSteps.Cookies cookies = authnRequestSteps.userPostsAuthnRequestToStubIdp();
+
+        Response response = client.target(authnRequestSteps.getStubIdpUri(Urls.IDP_LOGIN_RESOURCE))
+                .request()
+                .cookie(CookieNames.SESSION_COOKIE_NAME, cookies.getSessionId())
+                .cookie(CookieNames.SECURE_COOKIE_NAME, cookies.getSecure())
+                .get();
+
+        assertThat(response.getStatus()).isEqualTo(200);
+
+        response = client.target(authnRequestSteps.getStubIdpUri(Urls.IDP_LOGIN_RESOURCE))
+                .request()
+                .cookie(CookieNames.SESSION_COOKIE_NAME, cookies.getSessionId())
+                .cookie(CookieNames.SECURE_COOKIE_NAME, "try this")
+                .get();
+
+        assertThat(response.getStatus()).isEqualTo(500);
+    }
+
     private String getLoginPageCsrfValue(AuthnRequestSteps.Cookies cookies) {
         Response response = client.target(authnRequestSteps.getStubIdpUri(Urls.IDP_LOGIN_RESOURCE))
                 .request()
