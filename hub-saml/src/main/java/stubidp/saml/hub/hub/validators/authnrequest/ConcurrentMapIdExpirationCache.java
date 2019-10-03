@@ -25,4 +25,8 @@ public class ConcurrentMapIdExpirationCache<T> implements IdExpirationCache<T> {
     public void setExpiration(T key, DateTime expirationTime) {
         infinispanMap.put(key, expirationTime);
     }
+
+    public long getKeyCount() {
+        return infinispanMap.keySet().size();
+    }
 }

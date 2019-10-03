@@ -1,7 +1,11 @@
 package stubidp.stubidp.saml;
 
+import com.google.common.cache.CacheBuilder;
 import io.dropwizard.util.Duration;
+import io.prometheus.client.Collector;
+import io.prometheus.client.GaugeMetricFamily;
 import net.shibboleth.utilities.java.support.component.ComponentInitializationException;
+import org.joda.time.DateTime;
 import org.opensaml.saml.metadata.resolver.MetadataResolver;
 import org.opensaml.saml.metadata.resolver.impl.PredicateRoleDescriptorResolver;
 import org.opensaml.saml.saml2.core.AuthnRequest;
@@ -29,19 +33,21 @@ import stubidp.utils.security.security.verification.CertificateChainValidator;
 import stubidp.utils.security.security.verification.PKIXParametersProvider;
 
 import java.security.KeyStore;
-import java.util.concurrent.ConcurrentHashMap;
+import java.util.List;
 import java.util.function.Function;
 
 public abstract class BaseAuthnRequestValidator {
 
     private static final Logger LOG = LoggerFactory.getLogger(BaseAuthnRequestValidator.class);
 
-    private static final ConcurrentMapIdExpirationCache<AuthnRequestIdKey> concurrentMapIdExpirationCache = new ConcurrentMapIdExpirationCache<>(new ConcurrentHashMap<>());
+    private static final ConcurrentMapIdExpirationCache<AuthnRequestIdKey> concurrentMapIdExpirationCache = new ConcurrentMapIdExpirationCache<>(CacheBuilder.newBuilder().expireAfterWrite(java.time.Duration.ofHours(3)).<AuthnRequestIdKey, DateTime>build().asMap());
     private static final Duration requestValidityDuration = Duration.minutes(5); // should be long enough...
     private static final AuthnRequestFromTransactionValidator authnRequestFromTransactionValidator = new AuthnRequestFromTransactionValidator(new IssuerValidator(), new DuplicateAuthnRequestValidator(concurrentMapIdExpirationCache, () -> requestValidityDuration), new AuthnRequestIssueInstantValidator(() -> requestValidityDuration));
     private static final AuthnRequestSizeValidator authnRequestSizeValidator = new AuthnRequestSizeValidator(new StringSizeValidator());
     private static final NotNullSamlStringValidator notNullSamlStringValidator = new NotNullSamlStringValidator();
     private static final Function<String, AuthnRequest> stringToAuthnRequestTransformer = new StubTransformersFactory().getStringToAuthnRequest();
+
+    private static final ReplayCacheCollector replayCacheCollector = new ReplayCacheCollector(concurrentMapIdExpirationCache).register();
 
     protected final MetadataBackedSignatureValidator metadataBackedSignatureValidator;
 
@@ -85,6 +91,20 @@ public abstract class BaseAuthnRequestValidator {
             return metadataCredentialResolver;
         } catch (ComponentInitializationException e) {
             throw new InvalidEidasAuthnRequestException(e);
+        }
+    }
+
+    private static class ReplayCacheCollector extends Collector {
+        private final ConcurrentMapIdExpirationCache<AuthnRequestIdKey> concurrentMapIdExpirationCache;
+
+        ReplayCacheCollector(ConcurrentMapIdExpirationCache<AuthnRequestIdKey> concurrentMapIdExpirationCache) {
+            this.concurrentMapIdExpirationCache = concurrentMapIdExpirationCache;
+        }
+
+        @Override
+        public List<MetricFamilySamples> collect() {
+            GaugeMetricFamily sessionsGauge = new GaugeMetricFamily("stubidp_replay_cache_total", "Total number of requests in the replay cache (idp + eidas).", concurrentMapIdExpirationCache.getKeyCount());
+            return List.of(sessionsGauge);
         }
     }
 }

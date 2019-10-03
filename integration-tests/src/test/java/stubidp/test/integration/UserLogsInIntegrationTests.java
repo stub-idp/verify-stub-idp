@@ -88,6 +88,7 @@ public class UserLogsInIntegrationTests extends IntegrationTestHelper {
         metricsContains(metrics, "stubidp_verify_sentAuthnResponses_failure_total{failure_type=\"fraud\",} 1.0");
         metricsContains(metrics, "stubidp_db_users_total 12.0");
         metricsContains(metrics, "stubidp_db_sessions_total 1.0");
+        metricsContains(metrics, "stubidp_replay_cache_total 5.0");
     }
 
     private void metricsContains(List<String> metrics, String metric) {
