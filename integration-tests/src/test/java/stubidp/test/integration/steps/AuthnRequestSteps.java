@@ -160,7 +160,7 @@ public class AuthnRequestSteps {
         return new Cookies(sessionCookieValue, secureCookieValue);
     }
 
-    private Response postAuthnRequest(List<String> hints, Optional<String> language, Optional<Boolean> registration, String authnRequest, String ssoEndpoint) {
+    public Response postAuthnRequest(List<String> hints, Optional<String> language, Optional<Boolean> registration, String authnRequest, String ssoEndpoint) {
         Form form = new Form();
         form.param(Urls.SAML_REQUEST_PARAM, authnRequest);
         registration.ifPresent(b -> form.param(Urls.REGISTRATION_PARAM, b.toString()));

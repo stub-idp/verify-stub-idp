@@ -13,6 +13,7 @@ import stubidp.stubidp.Urls;
 import stubidp.stubidp.cookies.CookieNames;
 import stubidp.stubidp.filters.SecurityHeadersFilterTest;
 import stubidp.test.integration.steps.AuthnRequestSteps;
+import stubidp.test.integration.support.IdpAuthnRequestBuilder;
 import stubidp.test.integration.support.IntegrationTestHelper;
 import stubidp.test.integration.support.StubIdpAppExtension;
 
@@ -21,7 +22,9 @@ import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.Form;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriBuilder;
+import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static stubidp.stubidp.builders.StubIdpBuilder.aStubIdp;
@@ -104,6 +107,19 @@ public class SecurityIntegrationTests extends IntegrationTestHelper {
                 .cookie(CookieNames.SECURE_COOKIE_NAME, "try this")
                 .get();
 
+        assertThat(response.getStatus()).isEqualTo(500);
+    }
+
+    @Test
+    public void whenSameAuthnRequestIsSentTwiceItFails() {
+        final String authnRequest = IdpAuthnRequestBuilder.anAuthnRequest()
+                .withDestination(UriBuilder.fromUri(authnRequestSteps.getStubIdpUri(Urls.IDP_SAML2_SSO_RESOURCE)).build().toASCIIString())
+                .build();
+
+        Response response = authnRequestSteps.postAuthnRequest(List.of(), Optional.empty(), Optional.empty(), authnRequest, Urls.IDP_SAML2_SSO_RESOURCE);
+        assertThat(response.getStatus()).isEqualTo(303);
+
+        response = authnRequestSteps.postAuthnRequest(List.of(), Optional.empty(), Optional.empty(), authnRequest, Urls.IDP_SAML2_SSO_RESOURCE);
         assertThat(response.getStatus()).isEqualTo(500);
     }
 
