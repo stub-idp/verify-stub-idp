@@ -1,5 +1,6 @@
 package stubidp.stubidp.saml;
 
+import org.opensaml.saml.common.SignableSAMLObject;
 import org.opensaml.saml.metadata.resolver.MetadataResolver;
 import org.opensaml.saml.saml2.core.AuthnRequest;
 import org.opensaml.saml.saml2.metadata.SPSSODescriptor;
@@ -17,6 +18,7 @@ import stubidp.stubidp.resources.idp.HeadlessIdpResource;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.ws.rs.core.UriBuilder;
+import java.util.Objects;
 
 import static stubidp.stubidp.StubIdpIdpBinder.HUB_METADATA_CONFIGURATION;
 import static stubidp.stubidp.StubIdpIdpBinder.HUB_METADATA_RESOLVER;
@@ -58,8 +60,8 @@ public class IdpAuthnRequestValidator extends BaseAuthnRequestValidator {
         }
     }
 
-    private void validateKeyInfo(AuthnRequest request) {
-        if (request.getSignature().getKeyInfo() != null) {
+    public static void validateKeyInfo(SignableSAMLObject signableSAMLObject) {
+        if (Objects.nonNull(signableSAMLObject.getSignature().getKeyInfo())) {
             throw new InvalidAuthnRequestException("KeyInfo was not null");
         }
     }

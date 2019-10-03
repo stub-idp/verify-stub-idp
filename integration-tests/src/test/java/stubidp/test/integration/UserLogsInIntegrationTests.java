@@ -47,15 +47,21 @@ public class UserLogsInIntegrationTests extends IntegrationTestHelper {
             client,
             IDP_NAME,
             applicationRule.getLocalPort());
+    private static final boolean checkKeyInfo = true;
     private final SamlDecrypter samlDecrypter = new SamlDecrypter(client,
             applicationRule.getVerifyMetadataPath(),
             applicationRule.getConfiguration().getHubEntityId(),
             applicationRule.getLocalPort(),
             empty(),
-            applicationRule.getAssertionConsumerServices());
+            applicationRule.getAssertionConsumerServices(),
+            checkKeyInfo);
 
     public static final StubIdpAppExtension applicationRule = new StubIdpAppExtension(Map.ofEntries(Map.entry("isPrometheusEnabled", "true")))
-            .withStubIdp(aStubIdp().withId(IDP_NAME).withDisplayName(DISPLAY_NAME).build());
+            .withStubIdp(aStubIdp()
+                    .withId(IDP_NAME)
+                    .withDisplayName(DISPLAY_NAME)
+                    .sendKeyInfo(checkKeyInfo)
+                    .build());
 
     @BeforeEach
     public void refreshMetadata() {

@@ -38,6 +38,9 @@ import stubidp.saml.utils.core.transformers.outbound.decorators.SamlResponseAsse
 import stubidp.saml.utils.core.transformers.outbound.decorators.SamlSignatureSigner;
 import stubidp.saml.utils.metadata.transformers.KeyDescriptorsUnmarshaller;
 
+import java.security.cert.CertificateEncodingException;
+import java.util.Base64;
+
 public class CoreTransformersFactory {
     public KeyDescriptorsUnmarshaller getCertificatesToKeyDescriptorsTransformer() {
         return new KeyDescriptorsUnmarshaller(
@@ -113,6 +116,29 @@ public class CoreTransformersFactory {
     }
 
     public ResponseToSignedStringTransformer getResponseStringTransformer(
+            final EncryptionKeyStore publicKeyStore,
+            final IdaKeyStore keyStore,
+            final EntityToEncryptForLocator entityToEncryptForLocator,
+            final SignatureAlgorithm signatureAlgorithm,
+            final DigestAlgorithm digestAlgorithm,
+            final EncrypterFactory encrypterFactory,
+            final String issuerId) {
+        SignatureFactory signatureFactory;
+        try {
+            signatureFactory = new SignatureWithKeyInfoFactory(
+                    new IdaKeyStoreCredentialRetriever(keyStore),
+                    signatureAlgorithm,
+                    digestAlgorithm,
+                    issuerId,
+                    Base64.getEncoder().encodeToString(keyStore.getSigningCertificate().getEncoded()));
+        } catch (CertificateEncodingException e) {
+            throw new RuntimeException(e);
+        }
+        ResponseAssertionSigner responseAssertionSigner = new ResponseAssertionSigner(signatureFactory);
+        return getResponseStringTransformer(publicKeyStore, entityToEncryptForLocator, encrypterFactory, signatureFactory, responseAssertionSigner);
+    }
+
+    public ResponseToSignedStringTransformer getResponseStringTransformer(
             final EncryptionKeyStore encryptionKeyStore,
             final IdaKeyStore keyStore,
             final EntityToEncryptForLocator entityToEncryptForLocator,
@@ -163,12 +189,20 @@ public class CoreTransformersFactory {
             final EntityToEncryptForLocator entityToEncryptForLocator,
             final SignatureAlgorithm signatureAlgorithm,
             final DigestAlgorithm digestAlgorithm,
-            final EncrypterFactory encrypterFactory) {
+            final EncrypterFactory encrypterFactory,
+            final String issuerId) {
 
-        SignatureFactory signatureFactory = new SignatureFactory(
-                new IdaKeyStoreCredentialRetriever(keyStore),
-                signatureAlgorithm,
-                digestAlgorithm);
+        SignatureFactory signatureFactory;
+        try {
+            signatureFactory = new SignatureWithKeyInfoFactory(
+                    new IdaKeyStoreCredentialRetriever(keyStore),
+                    signatureAlgorithm,
+                    digestAlgorithm,
+                    issuerId,
+                    Base64.getEncoder().encodeToString(keyStore.getSigningCertificate().getEncoded()));
+        } catch (CertificateEncodingException e) {
+            throw new RuntimeException(e);
+        }
 
         SamlResponseAssertionEncrypter responseAssertionEncrypter =
                 new SamlResponseAssertionEncrypter(

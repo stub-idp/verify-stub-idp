@@ -55,6 +55,8 @@ import stubidp.saml.serializers.deserializers.validators.NotNullSamlStringValida
 import stubidp.saml.serializers.serializers.XmlObjectToBase64EncodedStringTransformer;
 import stubidp.saml.utils.core.transformers.AuthnContextFactory;
 import stubidp.saml.utils.hub.validators.StringSizeValidator;
+import stubidp.stubidp.saml.EidasAuthnRequestValidator;
+import stubidp.stubidp.saml.IdpAuthnRequestValidator;
 import stubidp.test.integration.support.eidas.EidasAttributeStatementAssertionValidator;
 import stubidp.test.integration.support.eidas.EidasAuthnResponseIssuerValidator;
 import stubidp.test.integration.support.eidas.InboundResponseFromCountry;
@@ -98,6 +100,7 @@ public class SamlDecrypter {
             new OpenSamlXMLObjectUnmarshaller<>(new SamlObjectParser()));
     private final Optional<String> eidasSchemeName;
     private final URI assertionConsumerServices;
+    private final boolean checkKeyInfo;
 
     public SamlDecrypter(Client client, URI metadataUri, String hubEntityId, int localPort, Optional<String> eidasSchemeName, URI assertionConsumerServices) {
         this.client = client;
@@ -106,6 +109,17 @@ public class SamlDecrypter {
         this.localPort = localPort;
         this.eidasSchemeName = eidasSchemeName;
         this.assertionConsumerServices = assertionConsumerServices;
+        this.checkKeyInfo = false;
+    }
+
+    public SamlDecrypter(Client client, URI metadataUri, String hubEntityId, int localPort, Optional<String> eidasSchemeName, URI assertionConsumerServices, boolean checkKeyInfo) {
+        this.client = client;
+        this.metadataUri = metadataUri;
+        this.hubEntityId = hubEntityId;
+        this.localPort = localPort;
+        this.eidasSchemeName = eidasSchemeName;
+        this.assertionConsumerServices = assertionConsumerServices;
+        this.checkKeyInfo = checkKeyInfo;
     }
 
     /**
@@ -118,6 +132,11 @@ public class SamlDecrypter {
                 = buildDecoratedSamlResponseToIdaResponseIssuedByIdpTransformer(credentialFactory, createHubKeyStore());
 
         final org.opensaml.saml.saml2.core.Response response = stringToOpenSamlObjectTransformer.apply(samlResponse);
+        if(checkKeyInfo) {
+            EidasAuthnRequestValidator.validateKeyInfo(response);
+        } else {
+            IdpAuthnRequestValidator.validateKeyInfo(response);
+        }
         return decoratedSamlResponseToIdaResponseIssuedByIdpTransformer.apply(response);
     }
 
@@ -143,6 +162,7 @@ public class SamlDecrypter {
     public InboundResponseFromCountry decryptEidasSaml(String samlResponse) {
 
         Response response = stringToOpenSamlObjectTransformer.apply(samlResponse);
+        EidasAuthnRequestValidator.validateKeyInfo(response);
         ValidatedResponse validatedResponse = validateResponse(response);
         AssertionDecrypter assertionDecrypter = getAES256WithGCMAssertionDecrypter(createEidasKeyStore());
         List<Assertion> assertions = assertionDecrypter.decryptAssertions(validatedResponse);

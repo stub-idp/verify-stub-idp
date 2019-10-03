@@ -57,7 +57,7 @@ public class StubIdpsFileListenerTest {
 
     @BeforeEach
     public void setup() throws Exception {
-        StubIdp testStubIdp = new TestStubIdp("a", "b", "c", List.of());
+        StubIdp testStubIdp = new TestStubIdp("a", "b", "c", List.of(), false);
         createYamlFile(testStubIdp);
         final StubIdpConfiguration stubIdpConfiguration = mock(StubIdpConfiguration.class);
         when(stubIdpConfiguration.getStubIdpsYmlFileLocation()).thenReturn(YML_FILE.getAbsolutePath());
@@ -82,7 +82,7 @@ public class StubIdpsFileListenerTest {
     @Test
     public void verifyIdaStubsRepositoryIsUpdatedOnFileChange() throws Exception {
         initializeSynchronizationWithFileMonitor();
-        StubIdp changedTestStubIdp = new TestStubIdp("e", "f", "g", List.of());
+        StubIdp changedTestStubIdp = new TestStubIdp("e", "f", "g", List.of(), false);
         createYamlFile(changedTestStubIdp);
 
         waitForFileToBeReadByMonitor();
@@ -101,7 +101,7 @@ public class StubIdpsFileListenerTest {
     public void verifyIdaStubsRepositoryIsUpdatedEvenIfPreviousFileChangeWasInvalid() throws Exception {
         ensureInvalidStubIdpsConfigWasProcessed();
         initializeSynchronizationWithFileMonitor();
-        StubIdp changedTestStubIdp = new TestStubIdp("m", "n", "o", List.of());
+        StubIdp changedTestStubIdp = new TestStubIdp("m", "n", "o", List.of(), false);
         createYamlFile(changedTestStubIdp);
 
         waitForFileToBeReadByMonitor();

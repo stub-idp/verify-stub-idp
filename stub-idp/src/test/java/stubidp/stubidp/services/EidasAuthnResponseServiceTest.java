@@ -32,6 +32,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -70,7 +71,7 @@ public class EidasAuthnResponseServiceTest {
         EidasSession session = new EidasSession(new SessionId("session-id"), request, "relay-state", Collections.emptyList(), Collections.emptyList(), Optional.empty(), Optional.empty());
         session.setEidasUser(new EidasUser("Firstname", Optional.empty(), "Familyname", Optional.empty(), "pid", dateOfBirth, null, null));
         when(metadataRepository.getAssertionConsumerServiceLocation()).thenReturn(new URI("http://hub.url"));
-        when(eidasResponseTransformerProvider.getTransformer()).thenReturn(x -> SAML_RESPONSE_AS_STRING);
+        when(eidasResponseTransformerProvider.getTransformer(any())).thenReturn(x -> SAML_RESPONSE_AS_STRING);
 
         SamlResponseFromValue<Response> samlResponse = service.getSuccessResponse(session, SCHEME_ID);
         Response response = samlResponse.getResponseObject();
@@ -85,7 +86,7 @@ public class EidasAuthnResponseServiceTest {
 
         assertThat(samlResponse.getResponseString()).isEqualTo(SAML_RESPONSE_AS_STRING);
 
-        verify(eidasResponseTransformerProvider, times(0)).getUnsignedAssertionTransformer();
+        verify(eidasResponseTransformerProvider, times(0)).getUnsignedAssertionTransformer(any());
     }
 
     @Test
@@ -94,7 +95,7 @@ public class EidasAuthnResponseServiceTest {
         EidasSession session = new EidasSession(new SessionId("session-id"), request, "relay-state", Collections.emptyList(), Collections.emptyList(), Optional.empty(), Optional.empty());
         session.setEidasUser(new EidasUser("Firstname", Optional.of("nonLatinFirstname"), "Familyname", Optional.of("nonLatinFamilyname"), "pid", dateOfBirth, null, null));
         when(metadataRepository.getAssertionConsumerServiceLocation()).thenReturn(new URI("http://hub.url"));
-        when(eidasResponseTransformerProvider.getTransformer()).thenReturn(x -> SAML_RESPONSE_AS_STRING);
+        when(eidasResponseTransformerProvider.getTransformer(any())).thenReturn(x -> SAML_RESPONSE_AS_STRING);
 
         SamlResponseFromValue<Response> samlResponse = service.getSuccessResponse(session, SCHEME_ID);
         Response response = samlResponse.getResponseObject();
@@ -110,7 +111,7 @@ public class EidasAuthnResponseServiceTest {
 
         assertThat(samlResponse.getResponseString()).isEqualTo(SAML_RESPONSE_AS_STRING);
 
-        verify(eidasResponseTransformerProvider, times(0)).getUnsignedAssertionTransformer();
+        verify(eidasResponseTransformerProvider, times(0)).getUnsignedAssertionTransformer(any());
     }
 
     @Test
@@ -118,7 +119,7 @@ public class EidasAuthnResponseServiceTest {
         EidasAuthnRequest request = new EidasAuthnRequest("request-id", "issuer", "destination", "loa", Collections.emptyList());
         EidasSession session = new EidasSession(new SessionId("session-id"), request, "relay-state", Collections.emptyList(), Collections.emptyList(), Optional.empty(), Optional.empty());
         when(metadataRepository.getAssertionConsumerServiceLocation()).thenReturn(new URI("http://hub.url"));
-        when(eidasResponseTransformerProvider.getTransformer()).thenReturn(x -> SAML_RESPONSE_AS_STRING);
+        when(eidasResponseTransformerProvider.getTransformer(any())).thenReturn(x -> SAML_RESPONSE_AS_STRING);
 
         SamlResponseFromValue<Response> samlResponse = service.generateAuthnFailed(session, SCHEME_ID);
         Response response = samlResponse.getResponseObject();
@@ -130,7 +131,7 @@ public class EidasAuthnResponseServiceTest {
 
         assertThat(samlResponse.getResponseString()).isEqualTo(SAML_RESPONSE_AS_STRING);
 
-        verify(eidasResponseTransformerProvider, times(0)).getUnsignedAssertionTransformer();
+        verify(eidasResponseTransformerProvider, times(0)).getUnsignedAssertionTransformer(any());
     }
 
     @Test
@@ -139,7 +140,7 @@ public class EidasAuthnResponseServiceTest {
         EidasSession session = new EidasSession(new SessionId("session-id"), request, "relay-state", Collections.emptyList(), Collections.emptyList(), Optional.empty(), Optional.empty());
         session.setEidasUser(new EidasUser("Firstname", Optional.empty(), "Familyname", Optional.empty(), "pid", dateOfBirth, null, null));
         when(metadataRepository.getAssertionConsumerServiceLocation()).thenReturn(new URI("http://hub.url"));
-        when(eidasResponseTransformerProvider.getUnsignedAssertionTransformer()).thenReturn(x -> SAML_RESPONSE_AS_STRING);
+        when(eidasResponseTransformerProvider.getUnsignedAssertionTransformer(any())).thenReturn(x -> SAML_RESPONSE_AS_STRING);
 
         SamlResponseFromValue<Response> samlResponse = service.getSuccessResponse(session, SCHEME_ID_UNSIGNED_ASSERTIONS);
         Response response = samlResponse.getResponseObject();
@@ -154,7 +155,7 @@ public class EidasAuthnResponseServiceTest {
 
         assertThat(samlResponse.getResponseString()).isEqualTo(SAML_RESPONSE_AS_STRING);
 
-        verify(eidasResponseTransformerProvider, times(0)).getTransformer();
+        verify(eidasResponseTransformerProvider, times(0)).getTransformer(any());
     }
 
     private void assertThatRequiredAssertionsAreIncluded(List<Attribute> attributes) {

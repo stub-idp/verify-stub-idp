@@ -13,6 +13,7 @@ public class StubIdpBuilder {
     private String displayName = "Default Stub IDP";
     private String friendlyId = "default-stub-idp";
     private List<UserCredentials> idpUserCredentials = new ArrayList<>();
+    private boolean sendKeyInfo = false;
 
     public static StubIdpBuilder aStubIdp() {
         return new StubIdpBuilder();
@@ -23,7 +24,7 @@ public class StubIdpBuilder {
             idpUserCredentials.add(new TestUserCredentials("foo", "bar"));
         }
 
-        return new TestStubIdp(assetId, displayName, friendlyId, idpUserCredentials);
+        return new TestStubIdp(assetId, displayName, friendlyId, idpUserCredentials, sendKeyInfo);
     }
 
     public StubIdpBuilder withId(String id) {
@@ -39,6 +40,11 @@ public class StubIdpBuilder {
 
     public StubIdpBuilder addUserCredentials(UserCredentials credentials) {
         this.idpUserCredentials.add(credentials);
+        return this;
+    }
+
+    public StubIdpBuilder sendKeyInfo(boolean sendKeyInfo) {
+        this.sendKeyInfo = sendKeyInfo;
         return this;
     }
 }

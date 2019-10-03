@@ -104,7 +104,7 @@ public class EidasAuthnResponseService {
         sentEidasAuthnSuccessResponses.inc();
 
         Function<Response,String> transformer = shouldSignAssertions?
-                eidasResponseTransformerProvider.getTransformer():eidasResponseTransformerProvider.getUnsignedAssertionTransformer();
+                eidasResponseTransformerProvider.getTransformer(issuerId):eidasResponseTransformerProvider.getUnsignedAssertionTransformer(issuerId);
 
         return new SamlResponseFromValue<>(response, transformer, session.getRelayState(), hubUrl);
     }
@@ -125,7 +125,7 @@ public class EidasAuthnResponseService {
 
         sentEidasAuthnFailureResponses.labels(FailureType.authn_failed.name()).inc();
 
-        return new SamlResponseFromValue<>(eidasInvalidResponse, eidasResponseTransformerProvider.getTransformer(), session.getRelayState(), hubUrl);
+        return new SamlResponseFromValue<>(eidasInvalidResponse, eidasResponseTransformerProvider.getTransformer(issuerId), session.getRelayState(), hubUrl);
     }
 
     private List<Attribute> getEidasAttributes(EidasSession session) {
