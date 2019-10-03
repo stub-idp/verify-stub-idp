@@ -12,12 +12,20 @@ public class KeyConfiguration {
     }
 
     @Valid
-    @NotNull
     @Size(min = 1)
     @JsonProperty
     protected String keyUri;
 
+    @Valid
+    @Size(min = 1)
+    @JsonProperty
+    protected String base64EncodedKey;
+
     public String getKeyUri() {
         return keyUri;
+    }
+
+    public String getBase64EncodedKey() {
+        return base64EncodedKey;
     }
 }

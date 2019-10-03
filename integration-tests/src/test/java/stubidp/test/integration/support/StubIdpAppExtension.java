@@ -71,7 +71,6 @@ public class StubIdpAppExtension extends DropwizardAppExtension<StubIdpConfigura
     private static final KeyStoreResource metadataTrustStore = KeyStoreResourceBuilder.aKeyStoreResource().withCertificate("metadataCA", CACertificates.TEST_METADATA_CA).withCertificate("rootCA", CACertificates.TEST_ROOT_CA).build();
     private static final KeyStoreResource spTrustStore = KeyStoreResourceBuilder.aKeyStoreResource().withCertificate("coreCA", CACertificates.TEST_CORE_CA).withCertificate("rootCA", CACertificates.TEST_ROOT_CA).build();
     private static final File STUB_IDPS_FILE = new File(System.getProperty("java.io.tmpdir"), "stub-idps.yml");
-    private static final File SECURE_COOKIE_FILE = new File(System.getProperty("java.io.tmpdir"), "cookie.key");
 
     private final List<StubIdp> stubIdps = new ArrayList<>();
 
@@ -131,7 +130,7 @@ public class StubIdpAppExtension extends DropwizardAppExtension<StubIdpConfigura
                 Map.entry("singleIdpJourney.enabled", "false"),
                 Map.entry("singleIdpJourney.serviceListUri", "http://localhost:"+fakeFrontend.getPort()+"/get-available-services"),
                 Map.entry("secureCookieConfiguration.secure", "true"),
-                Map.entry("secureCookieConfiguration.keyConfiguration.keyUri", SECURE_COOKIE_FILE.getAbsolutePath())
+                Map.entry("secureCookieConfiguration.keyConfiguration.base64EncodedKey", Base64.getEncoder().encodeToString(new byte[64]))
                 );
         config = new HashMap<>(config);
         config.putAll(configOverrides);
@@ -150,9 +149,6 @@ public class StubIdpAppExtension extends DropwizardAppExtension<StubIdpConfigura
         try {
             FileUtils.write(STUB_IDPS_FILE, new ObjectMapper().writeValueAsString(idpStubsConfiguration), UTF_8);
             STUB_IDPS_FILE.deleteOnExit();
-
-            FileUtils.write(SECURE_COOKIE_FILE, Base64.getEncoder().encodeToString(new byte[64]), UTF_8);
-            SECURE_COOKIE_FILE.deleteOnExit();
 
             InitializationService.initialize();
 

@@ -1,5 +1,6 @@
 package stubidp.utils.security.security;
 
+import com.google.common.base.Strings;
 import stubidp.utils.security.configuration.KeyConfiguration;
 import stubidp.utils.security.configuration.SecureCookieConfiguration;
 import stubidp.utils.security.configuration.SecureCookieKeyStore;
@@ -11,8 +12,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.security.Key;
-import java.security.NoSuchAlgorithmException;
-import java.security.spec.InvalidKeySpecException;
+import java.util.Base64;
 
 public class SecureCookieKeyConfigurationKeyStore implements SecureCookieKeyStore {
 
@@ -25,15 +25,19 @@ public class SecureCookieKeyConfigurationKeyStore implements SecureCookieKeyStor
 
     @Override
     public Key getKey() {
-        String keyUri = keyConfiguration.getKeyUri();
         try {
-            return getSecureCookieKey(keyUri);
-        } catch (IOException | NoSuchAlgorithmException | InvalidKeySpecException e) {
+            if(Strings.isNullOrEmpty(keyConfiguration.getBase64EncodedKey())) {
+                String keyUri = keyConfiguration.getKeyUri();
+                return getSecureCookieKey(keyUri);
+            } else {
+                return new SecretKeySpec(Base64.getDecoder().decode(keyConfiguration.getBase64EncodedKey()), "HmacSHA1");
+            }
+        } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
 
-    private static Key getSecureCookieKey(String keyUri) throws IOException, NoSuchAlgorithmException, InvalidKeySpecException {
+    private static Key getSecureCookieKey(String keyUri) throws IOException {
         try(InputStream inputStream = new FileInputStream(new File(keyUri))) {
             byte[] ous = FileUtils.readStream(inputStream);
             return new SecretKeySpec(ous, "HmacSHA1");
