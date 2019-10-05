@@ -52,4 +52,6 @@ Basic auth for the `/{friendlyId}/users` endpoint is enabled by default and can 
 
 # Licence
 
-[MIT Licence](LICENCE)
+This project is covered by the [GPLv3 Licence](LICENCE)
+
+It contains portions of code previously licenced under MIT Licence.  Some files are individually licenced, see file headers.  More details in the LICENCE file. 

@@ -93,10 +93,6 @@ To release a new version:
  - travis will build and deploy the new version to bintray
  - bump the version in gradle.properties to the next SNAPSHOT (eg `0.1.3-SNAPSHOT`)
 
-## Licence
-
-This project is licensed under the [MIT License][].
-
 
 
 [Dropwizard]: http://www.dropwizard.io/
