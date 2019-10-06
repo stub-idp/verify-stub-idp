@@ -10,6 +10,7 @@ import org.opensaml.saml.saml2.core.Attribute;
 import org.opensaml.saml.saml2.core.StatusCode;
 import stubidp.saml.extensions.IdaConstants;
 import stubidp.saml.hub.hub.domain.LevelOfAssurance;
+import stubidp.stubidp.Urls;
 import stubidp.stubidp.domain.EidasScheme;
 import stubidp.test.integration.steps.AuthnRequestSteps;
 import stubidp.test.integration.support.IntegrationTestHelper;
@@ -20,6 +21,7 @@ import stubidp.test.integration.support.eidas.InboundResponseFromCountry;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.UriBuilder;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -94,7 +96,7 @@ public class EidasUserLogsInIntegrationTests extends IntegrationTestHelper {
         if (requestGender) { assertThat(page).contains(IdaConstants.Eidas_Attributes.Gender.NAME); }
         final String samlResponse = authnRequestSteps.eidasUserConsentsReturnSamlResponse(cookies, false, RSASHA_256);
         final InboundResponseFromCountry inboundResponseFromCountry = samlDecrypter.decryptEidasSaml(samlResponse);
-        assertThat(inboundResponseFromCountry.getIssuer()).isEqualTo("http://localhost:0/"+EIDAS_SCHEME_NAME+"/ServiceMetadata");
+        assertThat(inboundResponseFromCountry.getIssuer()).isEqualTo(UriBuilder.fromUri("http://localhost:0" + Urls.EIDAS_METADATA_RESOURCE).build(EIDAS_SCHEME_NAME).toASCIIString());
         assertThat(inboundResponseFromCountry.getStatus().getStatusCode().getValue()).isEqualTo(StatusCode.SUCCESS);
         assertThat(inboundResponseFromCountry.getValidatedIdentityAssertion().getAuthnStatements().size()).isEqualTo(1);
         assertThat(LevelOfAssurance.fromString(inboundResponseFromCountry.getValidatedIdentityAssertion().getAuthnStatements().get(0).getAuthnContext().getAuthnContextClassRef().getAuthnContextClassRef())).isEqualTo(LevelOfAssurance.SUBSTANTIAL);

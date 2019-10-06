@@ -88,7 +88,7 @@ public class StubIdpEidasBinder extends AbstractBinder {
 
             final String hubConnectorEntityId = stubIdpConfiguration.getEuropeanIdentityConfiguration().getHubConnectorEntityId();
             bind(hubConnectorEntityId).named(HUB_CONNECTOR_ENTITY_ID).to(String.class);
-            final String stubCountryMetadataUrl = stubIdpConfiguration.getEuropeanIdentityConfiguration().getStubCountryBaseUrl() + Urls.METADATA_RESOURCE;
+            final String stubCountryMetadataUrl = stubIdpConfiguration.getEuropeanIdentityConfiguration().getStubCountryBaseUrl() + Urls.EIDAS_METADATA_RESOURCE;
             bind(stubCountryMetadataUrl).named(STUB_COUNTRY_METADATA_URL).to(String.class);
             final String stubCountrySsoUrl = stubIdpConfiguration.getEuropeanIdentityConfiguration().getStubCountryBaseUrl() + Urls.EIDAS_SAML2_SSO_RESOURCE;
             bind(stubCountrySsoUrl).named(STUB_COUNTRY_SSO_URL).to(String.class);

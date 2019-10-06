@@ -55,6 +55,7 @@ import stubidp.saml.serializers.deserializers.validators.NotNullSamlStringValida
 import stubidp.saml.serializers.serializers.XmlObjectToBase64EncodedStringTransformer;
 import stubidp.saml.utils.core.transformers.AuthnContextFactory;
 import stubidp.saml.utils.hub.validators.StringSizeValidator;
+import stubidp.stubidp.Urls;
 import stubidp.stubidp.saml.EidasAuthnRequestValidator;
 import stubidp.stubidp.saml.IdpAuthnRequestValidator;
 import stubidp.test.integration.support.eidas.EidasAttributeStatementAssertionValidator;
@@ -222,7 +223,7 @@ public class SamlDecrypter {
     }
 
     private SamlMessageSignatureValidator getSamlMessageSignatureValidator(String entityId) {
-        return Optional.of(getMetadataResolver(URI.create("http://localhost:"+localPort+"/"+eidasSchemeName.get()+"/ServiceMetadata")))
+        return Optional.of(getMetadataResolver(UriBuilder.fromUri("http://localhost:"+localPort+ Urls.EIDAS_METADATA_RESOURCE).build(eidasSchemeName.get())))
                 .map(m -> {
                     try {
                         return new MetadataSignatureTrustEngineFactory().createSignatureTrustEngine(m);

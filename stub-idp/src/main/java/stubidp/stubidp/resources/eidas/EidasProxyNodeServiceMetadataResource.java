@@ -31,7 +31,7 @@ import static stubidp.stubidp.StubIdpEidasBinder.COUNTRY_SIGNING_KEY_STORE;
 import static stubidp.stubidp.StubIdpEidasBinder.STUB_COUNTRY_METADATA_URL;
 import static stubidp.stubidp.StubIdpEidasBinder.STUB_COUNTRY_SSO_URL;
 
-@Path(Urls.METADATA_RESOURCE)
+@Path(Urls.EIDAS_METADATA_RESOURCE)
 @Produces(Constants.APPLICATION_SAMLMETADATA_XML)
 public class EidasProxyNodeServiceMetadataResource {
 

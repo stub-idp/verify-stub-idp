@@ -37,16 +37,23 @@ public interface Urls {
     String SOURCE_PARAM = "source";
     String SOURCE_PARAM_PRE_REG_VALUE = "pre-reg";
 
-    // comedy routes
-    String ROOT_PREFIX = "/stub-idp"; //can be left blank, needs no trailing slash if not blank
+    String LOGIN_PATH = "/login";
+    String REGISTER_PATH = "/register";
+    String DEBUG_PATH = "/debug";
+    String CONSENT_PATH = "/consent";
+
+    // root routes
+    String ROOT_PREFIX = "/stub"; //can be left blank, needs no trailing slash if not blank
     String ROUTE_SUFFIX = ".idp"; // can be left blank
 
     // paths and resources
-    String IDP_SAML2_SSO_RESOURCE = "/{"+IDP_ID_PARAM+"}/SAML2/SSO";
-    String EIDAS_SAML2_SSO_RESOURCE = "/eidas/{"+SCHEME_ID_PARAM+"}/SAML2/SSO";
     String HEADLESS_ROOT = "/headless";
-    String IDP_ROOT_PATH = ROOT_PREFIX + "/{" + IDP_ID_PARAM + "}";
-    String EIDAS_ROOT_PATH = ROOT_PREFIX + "/eidas/{"+SCHEME_ID_PARAM+"}";
+    String IDP_ROOT_PATH = ROOT_PREFIX + "/idp" + "/{" + IDP_ID_PARAM + "}";
+    String EIDAS_ROOT_PATH = ROOT_PREFIX + "/country" + "/{" + SCHEME_ID_PARAM + "}";
+
+    String SAML_SSO_PATH = "/SAML2/SSO";
+    String IDP_SAML2_SSO_RESOURCE = IDP_ROOT_PATH + SAML_SSO_PATH;
+    String EIDAS_SAML2_SSO_RESOURCE = EIDAS_ROOT_PATH + SAML_SSO_PATH;
 
     // idp
     String LOGIN_AUTHN_FAILURE_PATH = "/authn-failure";
@@ -56,10 +63,10 @@ public interface Urls {
     String LOGIN_REQUESTER_ERROR_PATH = "/requester-error";
     String LOGIN_AUTHN_PENDING_PATH = "/authn-pending";
 
-    String IDP_LOGIN_RESOURCE = IDP_ROOT_PATH + "/login" + ROUTE_SUFFIX;
-    String IDP_REGISTER_RESOURCE = IDP_ROOT_PATH + "/register" + ROUTE_SUFFIX;
-    String IDP_DEBUG_RESOURCE = IDP_ROOT_PATH + "/debug" + ROUTE_SUFFIX;
-    String IDP_CONSENT_RESOURCE = IDP_ROOT_PATH + "/consent" + ROUTE_SUFFIX;
+    String IDP_LOGIN_RESOURCE = IDP_ROOT_PATH + LOGIN_PATH + ROUTE_SUFFIX;
+    String IDP_REGISTER_RESOURCE = IDP_ROOT_PATH + REGISTER_PATH + ROUTE_SUFFIX;
+    String IDP_DEBUG_RESOURCE = IDP_ROOT_PATH + DEBUG_PATH + ROUTE_SUFFIX;
+    String IDP_CONSENT_RESOURCE = IDP_ROOT_PATH + CONSENT_PATH + ROUTE_SUFFIX;
 
     String IDP_AUTHN_FAILURE_RESOURCE = IDP_LOGIN_RESOURCE + LOGIN_AUTHN_FAILURE_PATH;
     String IDP_NO_AUTHN_CONTEXT_RESOURCE = IDP_LOGIN_RESOURCE + LOGIN_NO_AUTHN_CONTEXT_PATH;
@@ -77,15 +84,15 @@ public interface Urls {
     String SINGLE_IDP_START_PROMPT_RESOURCE = IDP_ROOT_PATH + "/start-prompt" + ROUTE_SUFFIX;
 
     // stub country
-    String METADATA_RESOURCE = "/{"+SCHEME_ID_PARAM+"}/ServiceMetadata";
-    String EIDAS_LOGIN_RESOURCE = EIDAS_ROOT_PATH + "/login" + ROUTE_SUFFIX;
+    String EIDAS_METADATA_RESOURCE = EIDAS_ROOT_PATH + "/ServiceMetadata";
+    String EIDAS_LOGIN_RESOURCE = EIDAS_ROOT_PATH + LOGIN_PATH + ROUTE_SUFFIX;
     String EIDAS_AUTHN_FAILURE_RESOURCE = EIDAS_LOGIN_RESOURCE + LOGIN_AUTHN_FAILURE_PATH;
-    String EIDAS_REGISTER_RESOURCE = EIDAS_ROOT_PATH + "/register" + ROUTE_SUFFIX;
-    String EIDAS_CONSENT_RESOURCE = EIDAS_ROOT_PATH + "/consent" + ROUTE_SUFFIX;
-    String EIDAS_DEBUG_RESOURCE = EIDAS_ROOT_PATH + "/debug" + ROUTE_SUFFIX;
+    String EIDAS_REGISTER_RESOURCE = EIDAS_ROOT_PATH + REGISTER_PATH + ROUTE_SUFFIX;
+    String EIDAS_CONSENT_RESOURCE = EIDAS_ROOT_PATH + CONSENT_PATH + ROUTE_SUFFIX;
+    String EIDAS_DEBUG_RESOURCE = EIDAS_ROOT_PATH + DEBUG_PATH + ROUTE_SUFFIX;
 
     // test user management
-    String USERS_RESOURCE = "/{"+IDP_ID_PARAM+"}/users";
+    String USERS_RESOURCE = IDP_ROOT_PATH + "/users";
     String DELETE_USER_PATH = "/delete";
     String GET_USER_PATH = "/{" + USERNAME_PARAM + "}";
 

@@ -9,12 +9,14 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+import stubidp.stubidp.Urls;
 import stubidp.test.integration.support.IntegrationTestHelper;
 import stubidp.test.integration.support.StubIdpAppExtension;
 
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.UriBuilder;
 
 import java.util.Map;
 
@@ -24,7 +26,7 @@ import static stubidp.stubidp.builders.StubIdpBuilder.aStubIdp;
 @ExtendWith(DropwizardExtensionsSupport.class)
 public class EidasCountryMetadataIntegrationTests extends IntegrationTestHelper {
 
-    private static final String COUNTRY_NAME = "country1";
+    private static final String COUNTRY_NAME = "stub-country";
     public static final String DISPLAY_NAME = "User Repository Identity Service";
     private final Client client = JerseyClientBuilder.createClient().property(ClientProperties.FOLLOW_REDIRECTS, false);
 
@@ -44,10 +46,10 @@ public class EidasCountryMetadataIntegrationTests extends IntegrationTestHelper 
     @Test
     public void countryMetadataShouldContainCorrectEntityIdAndSsoUrl() {
         String baseUrl = applicationRule.getConfiguration().getEuropeanIdentityConfiguration().getStubCountryBaseUrl();
-        String metadataEndpoint = baseUrl + "/stub-country/ServiceMetadata";
-        String expectedSsoUrl = baseUrl + "/eidas/stub-country/SAML2/SSO";
+        String metadataEndpoint = UriBuilder.fromUri(baseUrl + Urls.EIDAS_METADATA_RESOURCE).build(COUNTRY_NAME).toASCIIString();
+        String expectedSsoUrl = UriBuilder.fromUri(baseUrl + Urls.EIDAS_SAML2_SSO_RESOURCE).build(COUNTRY_NAME).toASCIIString();
 
-        Response response = client.target("http://localhost:"+applicationRule.getPort(0) + "/stub-country/ServiceMetadata").request().get();
+        Response response = client.target("http://localhost:"+applicationRule.getPort(0) + UriBuilder.fromPath(Urls.EIDAS_METADATA_RESOURCE).build(COUNTRY_NAME).toASCIIString()).request().get();
         Document metadata = response.readEntity(Document.class);
 
         String entityId =  metadata.getDocumentElement().getAttributes().getNamedItem("entityID").getNodeValue();
