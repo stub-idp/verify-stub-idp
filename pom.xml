@@ -47,6 +47,7 @@
 
     <modules>
         <module>stub-idp</module>
+        <module>stub-sp</module>
         <module>hub-saml</module>
         <module>saml-extensions</module>
         <module>saml-metadata-bindings</module>
