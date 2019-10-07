@@ -170,7 +170,7 @@ class IdpAuthnRequestValidatorTest {
                 .withDestination(UriBuilder.fromUri(stubIdpBaseUri + Urls.IDP_SAML2_SSO_RESOURCE).build("foo").toASCIIString())
                 .build();
         SamlValidationException exception = assertThrows(SamlValidationException.class, () -> idpAuthnRequestValidator.transformAndValidate(IDP_NAME, _authnRequest));
-        assertThat(exception.getMessage()).contains("Destination is incorrect. Expected: https://dest/stub-idp-one/SAML2/SSO Received: https://dest:0/foo/SAML2/SSO");
+        assertThat(exception.getMessage()).contains("Destination is incorrect.");
     }
 
     @Test
