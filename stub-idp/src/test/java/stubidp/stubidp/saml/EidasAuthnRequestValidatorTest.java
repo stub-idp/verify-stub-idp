@@ -53,17 +53,17 @@ import static stubidp.test.devpki.TestCertificateStrings.METADATA_SIGNING_A_PUBL
 @ExtendWith(MockitoExtension.class)
 class EidasAuthnRequestValidatorTest {
 
+    private static final String CONNECTOR_METADATA_RESOURCE = "/saml/metadata/eidas/connector";
     private static final String SCHEME_ID = "cef-ref";
     private static final String hubConnectorEntityId = "https://not.a.real.entity.uk/connector";
     private static final String stubCountryBaseUri = "https://dest:0";
     private static final String stubCountryDestination = UriBuilder.fromUri(stubCountryBaseUri+Urls.EIDAS_SAML2_SSO_RESOURCE).build(SCHEME_ID).toASCIIString();
-    private static final String EIDAS_METADATA_PATH = "/saml/metadata/eidas/connector";
     private static final HttpStubRule eidasMetadataServer = new HttpStubRule();
     private static final KeyStoreResource metadataTrustStore = KeyStoreResourceBuilder.aKeyStoreResource().withCertificate("metadataCA", CACertificates.TEST_METADATA_CA).withCertificate("rootCA", CACertificates.TEST_ROOT_CA).build();
     private static final KeyStoreResource spTrustStore = KeyStoreResourceBuilder.aKeyStoreResource().withCertificate("coreCA", CACertificates.TEST_CORE_CA).withCertificate("rootCA", CACertificates.TEST_ROOT_CA).build();
 
-    public static MetadataResolver hubConnectorMetadataResolver;
-    public static MetadataConfiguration metadataConfiguration;
+    private static MetadataResolver hubConnectorMetadataResolver;
+    private static MetadataConfiguration metadataConfiguration;
 
     @Mock
     private EuropeanIdentityConfiguration europeanIdentityConfiguration;
@@ -76,9 +76,9 @@ class EidasAuthnRequestValidatorTest {
         spTrustStore.create();
         IdaSamlBootstrap.bootstrap();
         eidasMetadataServer.reset();
-        eidasMetadataServer.register(EIDAS_METADATA_PATH, 200, Constants.APPLICATION_SAMLMETADATA_XML, getEidasMetadata());
+        eidasMetadataServer.register(CONNECTOR_METADATA_RESOURCE, 200, Constants.APPLICATION_SAMLMETADATA_XML, getEidasConnectorMetadata());
 
-        metadataConfiguration = new MultiTrustStoresBackedMetadataConfiguration(UriBuilder.fromUri("http://localhost:" + eidasMetadataServer.getPort() + EIDAS_METADATA_PATH).build(),
+        metadataConfiguration = new MultiTrustStoresBackedMetadataConfiguration(UriBuilder.fromUri("http://localhost:" + eidasMetadataServer.getPort() + CONNECTOR_METADATA_RESOURCE).build(),
                 10L,
                 60L,
                 hubConnectorEntityId,
@@ -200,7 +200,7 @@ class EidasAuthnRequestValidatorTest {
                 .withDestination(UriBuilder.fromUri(stubCountryBaseUri + Urls.EIDAS_SAML2_SSO_RESOURCE).build("foo").toASCIIString())
                 .build();
         SamlValidationException exception = assertThrows(SamlValidationException.class, () -> eidasAuthnRequestValidator.transformAndValidate(SCHEME_ID, _authnRequest));
-        assertThat(exception.getMessage()).contains("Destination is incorrect. Expected: https://dest/eidas/cef-ref/SAML2/SSO Received: https://dest:0/eidas/foo/SAML2/SSO");
+        assertThat(exception.getMessage()).contains("Destination is incorrect.");
     }
 
     @Test
@@ -227,7 +227,7 @@ class EidasAuthnRequestValidatorTest {
         assertThat(exception.getMessage()).contains("too old");
     }
 
-    private static String getEidasMetadata() throws MarshallingException, SignatureException {
+    private static String getEidasConnectorMetadata() throws MarshallingException, SignatureException {
         List<EntityDescriptor> entityDescriptorList = List.of(EntityDescriptorBuilder.anEntityDescriptor()
                 .withEntityId(hubConnectorEntityId)
                 .withSpSsoDescriptor(SPSSODescriptorBuilder.anSpServiceDescriptor()
