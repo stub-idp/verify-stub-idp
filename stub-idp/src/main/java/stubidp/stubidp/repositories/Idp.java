@@ -1,6 +1,7 @@
 package stubidp.stubidp.repositories;
 
 import org.joda.time.LocalDate;
+import org.mindrot.jbcrypt.BCrypt;
 import stubidp.saml.utils.core.domain.Address;
 import stubidp.saml.utils.core.domain.AuthnContext;
 import stubidp.saml.utils.core.domain.Gender;
@@ -48,7 +49,7 @@ public class Idp {
 
     public Optional<DatabaseIdpUser> getUser(String username, String password) {
         Optional<DatabaseIdpUser> userForIdp = allIdpsUserRepository.getUserForIdp(friendlyId, username);
-        if (userForIdp.isPresent() && userForIdp.get().getPassword().equals(password)) {
+        if (userForIdp.isPresent() && BCrypt.checkpw(password, userForIdp.get().getPassword())) {
             return userForIdp;
         }
 
@@ -67,7 +68,7 @@ public class Idp {
             String password,
             AuthnContext levelOfAssurance) {
 
-        String pidValue = pid.isPresent() ? pid.get() : UUID.randomUUID().toString();
+        String pidValue = pid.orElseGet(() -> UUID.randomUUID().toString());
         return allIdpsUserRepository.createUserForIdp(friendlyId, pidValue, firstnames, middleNames, surnames, gender, dateOfBirths, addresses, username, password, levelOfAssurance);
     }
 

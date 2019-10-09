@@ -3,10 +3,13 @@ package stubidp.stubidp.dtos;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import org.joda.time.LocalDate;
+import org.mindrot.jbcrypt.BCrypt;
 import stubidp.saml.utils.core.domain.Address;
 import stubidp.saml.utils.core.domain.Gender;
 import stubidp.stubidp.domain.DatabaseIdpUser;
 import stubidp.stubidp.domain.MatchingDatasetValue;
+import stubidp.stubidp.exceptions.UnHashedPasswordException;
+import stubidp.stubidp.security.BCryptHelper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -65,7 +68,10 @@ public class IdpUserDto {
     }
 
     public String getPassword() {
-        return password;
+        if(BCryptHelper.alreadyCrypted(this.password)) {
+            return this.password;
+        }
+        throw new UnHashedPasswordException(this.getUsername());
     }
 
     public Optional<MatchingDatasetValue<String>> getFirstName() {
@@ -117,5 +123,11 @@ public class IdpUserDto {
         }
 
         return Optional.ofNullable(values.get(0));
+    }
+
+    public void hashPassword() {
+        if(!BCryptHelper.alreadyCrypted(this.password)) {
+            this.password = BCrypt.hashpw(this.password, BCrypt.gensalt());
+        }
     }
 }

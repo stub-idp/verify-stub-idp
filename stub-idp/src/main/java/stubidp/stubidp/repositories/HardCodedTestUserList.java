@@ -15,12 +15,12 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-public final class HardCodedTestUserList {
+final class HardCodedTestUserList {
 
     private HardCodedTestUserList() {
     }
 
-    public static List<DatabaseIdpUser> getHardCodedTestUsers(String idpFriendlyId) {
+    static List<DatabaseIdpUser> getHardCodedTestUsers(String idpFriendlyId) {
 
         List<DatabaseIdpUser> sacredUsers = new ArrayList<>();
 
@@ -31,7 +31,7 @@ public final class HardCodedTestUserList {
                 Collections.singletonList(createMdsValue("Jack")),
                 Collections.singletonList(createMdsValue("Cornelius")),
                 Collections.singletonList(createMdsValue("Bauer")),
-                Optional.ofNullable(createMdsValue(Gender.MALE)),
+                Optional.of(createMdsValue(Gender.MALE)),
                 Collections.singletonList(createMdsValue(LocalDate.parse("1984-02-29"))),
                 List.of(new AddressFactory().create(Collections.singletonList("1 Two St"), "1A 2BC", null, null, null, null, true),
                         new AddressFactory().create(Collections.singletonList("221b Baker St."), "W4 1SH", null, null, DateTime.parse("2007-09-27"), DateTime.parse("2007-09-28"), true),
@@ -189,10 +189,11 @@ public final class HardCodedTestUserList {
                         null, null, DateTime.now().minusYears(1), null, true)),
                 AuthnContext.LEVEL_2));
 
+        sacredUsers.forEach(DatabaseIdpUser::hashPassword);
         return sacredUsers;
     }
 
-    public static List<DatabaseEidasUser> getHardCodedCountryTestUsers(String idpFriendlyId) {
+    static List<DatabaseEidasUser> getHardCodedCountryTestUsers(String idpFriendlyId) {
 
         List<DatabaseEidasUser> sacredUsers = new ArrayList<>();
 
@@ -338,6 +339,7 @@ public final class HardCodedTestUserList {
                 createMdsValue(LocalDate.parse("1968-06-12")),
                 AuthnContext.LEVEL_2));
 
+        sacredUsers.forEach(DatabaseEidasUser::hashPassword);
         return sacredUsers;
     }
 

@@ -3,6 +3,7 @@ package stubidp.stubidp.services;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 import org.joda.time.format.DateTimeFormat;
+import org.mindrot.jbcrypt.BCrypt;
 import stubidp.saml.utils.core.domain.Address;
 import stubidp.saml.utils.core.domain.AuthnContext;
 import stubidp.saml.utils.core.domain.Gender;
@@ -117,7 +118,7 @@ public class IdpUserService {
                 Collections.singletonList(createMdsValue(Optional.ofNullable(parsedDateOfBirth))),
                 Collections.singletonList(address),
                 username,
-                password,
+                BCrypt.hashpw(password, BCrypt.gensalt()),
                 levelOfAssurance);
     }
 

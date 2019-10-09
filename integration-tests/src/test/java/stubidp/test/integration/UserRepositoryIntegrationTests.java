@@ -9,6 +9,7 @@ import org.joda.time.LocalDate;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mindrot.jbcrypt.BCrypt;
 import stubidp.saml.utils.core.domain.Address;
 import stubidp.saml.utils.core.domain.AuthnContext;
 import stubidp.saml.utils.core.domain.Gender;
@@ -101,7 +102,7 @@ public class UserRepositoryIntegrationTests extends IntegrationTestHelper {
         assertThat(returnedUser.getAddress().get().getLines().get(1)).isEqualTo(user.getAddress().get().getLines().get(1));
         assertThat(returnedUser.getAddress().get().getPostCode()).isEqualTo(user.getAddress().get().getPostCode());
         assertThat(returnedUser.getAddress().get().isVerified()).isEqualTo(user.getAddress().get().isVerified());
-        assertThat(returnedUser.getPassword()).isEqualTo(user.getPassword());
+        assertThat(BCrypt.checkpw(user.getPassword(), returnedUser.getPassword())).isTrue();
         assertThat(returnedUser.getLevelOfAssurance()).isEqualTo(user.getLevelOfAssurance());
     }
 

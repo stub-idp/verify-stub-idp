@@ -1,10 +1,10 @@
 package stubidp.stubidp.resources;
 
+import stubidp.stubidp.Urls;
 import stubidp.stubidp.dtos.IdpUserDto;
 import stubidp.stubidp.exceptions.IdpUserNotFoundException;
-import stubidp.stubidp.validation.ValidationResponse;
-import stubidp.stubidp.Urls;
 import stubidp.stubidp.services.UserService;
+import stubidp.stubidp.validation.ValidationResponse;
 
 import javax.inject.Inject;
 import javax.validation.constraints.NotNull;
@@ -62,7 +62,7 @@ public class UserResource {
 
         List<ValidationResponse> validationResponses = userService.validateUsers(asList(users));
 
-        if(validationResponses.stream().filter(validationResponse -> !validationResponse.isOk()).findAny().isPresent()) {
+        if(validationResponses.stream().anyMatch(validationResponse -> !validationResponse.isOk())) {
             final List<String> validationMessages = validationResponses.stream()
                     .filter(validationResponse -> !validationResponse.isOk())
                     .map(ValidationResponse::getMessages)

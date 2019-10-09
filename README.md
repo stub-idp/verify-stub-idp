@@ -24,6 +24,7 @@ This microservice is a stub IDP that can be white-labelled to simulate any IDP, 
 * CSRF enabled on all forms
 * No Gradle, only Maven
 * Adding in changes from alphagov
+* All user passwords are hashed before they go into the database (no plaintext passwords) 
 
 ## Running
 

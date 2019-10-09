@@ -5,14 +5,13 @@ import org.flywaydb.core.Flyway;
 public class DatabaseMigrationRunner {
 
     public void runMigration(String dbUrl) {
-        Flyway flyway = Flyway.configure()
+        Flyway.configure()
                 .dataSource(dbUrl, null, null)
                 .baselineVersion("0")
                 .baselineOnMigrate(true)
                 .locations("classpath:db.migrations.common", getDBSpecificMigration(dbUrl))
-                .load();
-
-        flyway.migrate();
+                .load()
+                .migrate();
     }
 
     private String getDBSpecificMigration(String dbUrl) {

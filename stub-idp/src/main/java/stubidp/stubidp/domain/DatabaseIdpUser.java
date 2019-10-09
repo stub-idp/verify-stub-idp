@@ -3,9 +3,12 @@ package stubidp.stubidp.domain;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.joda.time.LocalDate;
+import org.mindrot.jbcrypt.BCrypt;
 import stubidp.saml.utils.core.domain.Address;
 import stubidp.saml.utils.core.domain.AuthnContext;
 import stubidp.saml.utils.core.domain.Gender;
+import stubidp.stubidp.exceptions.UnHashedPasswordException;
+import stubidp.stubidp.security.BCryptHelper;
 
 import java.io.Serializable;
 import java.util.List;
@@ -15,7 +18,7 @@ import java.util.Optional;
 public class DatabaseIdpUser implements Serializable {
     private final String username;
     private final String persistentId;
-    private final String password;
+    private String password;
     private final List<MatchingDatasetValue<String>> firstnames;
     private final List<MatchingDatasetValue<String>> middleNames;
     private final List<MatchingDatasetValue<String>> surnames;
@@ -58,7 +61,10 @@ public class DatabaseIdpUser implements Serializable {
     }
 
     public String getPassword() {
-        return password;
+        if(BCryptHelper.alreadyCrypted(this.password)) {
+            return this.password;
+        }
+        throw new UnHashedPasswordException(this.getUsername());
     }
 
     public List<MatchingDatasetValue<String>> getFirstnames() {
@@ -133,5 +139,11 @@ public class DatabaseIdpUser implements Serializable {
             ", addresses=" + addresses +
             ", levelOfAssurance=" + levelOfAssurance +
             '}';
+    }
+
+    public void hashPassword() {
+        if(!BCryptHelper.alreadyCrypted(this.password)) {
+            this.password = BCrypt.hashpw(this.password, BCrypt.gensalt());
+        }
     }
 }
