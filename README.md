@@ -5,6 +5,26 @@ This microservice is a stub IDP that can be white-labelled to simulate any IDP, 
 
 [![Build Status](https://travis-ci.org/stub-idp/stub-idp.svg?branch=monorepo)](https://travis-ci.org/stub-idp/stub-idp)
 
+## Changes vs alphagov/verify-stub-idp
+
+* Monorepo containing all code apart from third party dependencies
+* Minimized use of third party dependencies
+* Guava -> stdlib wherever possible
+* Dependabot updates
+* Dropwizard 2
+* Junit 5 Jupiter
+* No guice, only hk2 for DI
+* No deprecated code and warnings-as-errors when compiling
+
+* More testing and security features
+* Prometheus metrics
+* Configurable features - idp/singleidp/eidas/headless can be toggled on & off
+* Secure cookie on by default
+* JPMS partially working (needs changes in Dropwizard to be fully enabled)
+* CSRF enabled on all forms
+* No Gradle, only Maven
+* Adding in changes from alphagov
+
 ## Running
 
 Does not yet run, because app needs a run config :D
