@@ -7,6 +7,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import stubidp.stubidp.Urls;
+import stubidp.stubidp.cookies.CookieNames;
 import stubidp.stubidp.domain.DatabaseIdpUser;
 import stubidp.stubidp.domain.EidasAuthnRequest;
 import stubidp.stubidp.domain.EidasScheme;
@@ -19,8 +20,8 @@ import stubidp.stubidp.repositories.StubCountryRepository;
 import stubidp.stubidp.resources.eidas.EidasLoginPageResource;
 import stubidp.stubidp.services.EidasAuthnResponseService;
 import stubidp.stubidp.services.StubCountryService;
+import stubidp.stubidp.views.SamlMessageRedirectViewFactory;
 import stubidp.stubidp.views.SamlRedirectView;
-import stubidp.stubidp.views.SamlResponseRedirectViewFactory;
 import stubidp.utils.rest.common.SessionId;
 
 import javax.ws.rs.core.Response;
@@ -65,10 +66,12 @@ public class EidasLoginPageResourceTest {
 
     @Mock
     private StubCountryService stubCountryService;
+    @Mock
+    private CookieNames cookieNames;
 
     @BeforeEach
     public void setUp() throws URISyntaxException {
-        SamlResponseRedirectViewFactory samlResponseRedirectViewFactory = new SamlResponseRedirectViewFactory();
+        SamlMessageRedirectViewFactory samlResponseRedirectViewFactory = new SamlMessageRedirectViewFactory(cookieNames);
         resource = new EidasLoginPageResource(sessionRepository, eidasSuccessAuthnResponseService, samlResponseRedirectViewFactory, stubCountryRepository, stubCountryService);
         EidasAuthnRequest eidasAuthnRequest = new EidasAuthnRequest("request-id", "issuer", "destination", "loa", Collections.emptyList());
         session = new EidasSession(SESSION_ID, eidasAuthnRequest, null, null, null, Optional.empty(), Optional.empty());
@@ -99,7 +102,7 @@ public class EidasLoginPageResourceTest {
         when(sessionRepository.deleteAndGet(SESSION_ID)).thenReturn(Optional.ofNullable(session));
         when(eidasSuccessAuthnResponseService.generateAuthnFailed(session, SCHEME_NAME)).thenReturn(samlResponse);
         when(samlResponse.getResponseString()).thenReturn("<saml2p:Response/>");
-        when(samlResponse.getHubUrl()).thenReturn(new URI("http://hub.url/"));
+        when(samlResponse.getSpSSOUrl()).thenReturn(new URI("http://hub.url/"));
         final Response response = resource.postAuthnFailure(SCHEME_NAME, SESSION_ID);
 
         verify(eidasSuccessAuthnResponseService).generateAuthnFailed(session, SCHEME_NAME);

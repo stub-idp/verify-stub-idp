@@ -1,11 +1,11 @@
 package stubidp.stubidp.resources.singleidp;
 
+import stubidp.stubidp.Urls;
+import stubidp.stubidp.cookies.HttpOnlyNewCookie;
+import stubidp.stubidp.cookies.StubIdpCookieNames;
 import stubidp.stubidp.filters.SessionCookieValueMustExistAsASession;
 import stubidp.stubidp.repositories.IdpSessionRepository;
 import stubidp.utils.rest.common.SessionId;
-import stubidp.stubidp.Urls;
-import stubidp.stubidp.cookies.CookieNames;
-import stubidp.stubidp.cookies.HttpOnlyNewCookie;
 
 import javax.inject.Inject;
 import javax.validation.constraints.NotNull;
@@ -32,12 +32,12 @@ public class SingleIdpLogoutPageResource {
 
     @GET
     public Response get(@PathParam(Urls.IDP_ID_PARAM) @NotNull String idpName,
-                        @CookieParam(CookieNames.SESSION_COOKIE_NAME) SessionId session) {
+                        @CookieParam(StubIdpCookieNames.SESSION_COOKIE_NAME) SessionId session) {
 
         idpSessionRepository.deleteSession(session);
         return Response.seeOther(UriBuilder.fromPath(Urls.SINGLE_IDP_HOMEPAGE_RESOURCE).build(idpName))
                 .cookie(new HttpOnlyNewCookie(
-                        CookieNames.SESSION_COOKIE_NAME,
+                        StubIdpCookieNames.SESSION_COOKIE_NAME,
                         "",
                         "/",
                         "",

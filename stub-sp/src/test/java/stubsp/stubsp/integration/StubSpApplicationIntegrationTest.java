@@ -36,6 +36,16 @@ class StubSpApplicationIntegrationTest {
     }
 
     @Test
+    void testSecureResourceNeedsLogin() {
+        Response response = get(Urls.SECURE_RESOURCE);
+        assertThat(response.getStatus()).isEqualTo(200);
+        assertThat(response.readEntity(String.class)).contains("Saml Processing...");
+        response = get("/assets/scripts/saml-redirect-auto-submit.js");
+        assertThat(response.getStatus()).isEqualTo(200);
+        assertThat(response.readEntity(String.class)).contains("submit()");
+    }
+
+    @Test
     void testAvailableServices() {
         final Response response = get(Urls.AVAILABLE_SERVICE_RESOURCE);
         assertThat(response.getStatus()).isEqualTo(200);

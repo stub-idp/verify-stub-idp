@@ -21,8 +21,8 @@ import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
-import static stubidp.stubidp.cookies.CookieNames.SECURE_COOKIE_NAME;
-import static stubidp.stubidp.cookies.CookieNames.SESSION_COOKIE_NAME;
+import static stubidp.stubidp.cookies.StubIdpCookieNames.SECURE_COOKIE_NAME;
+import static stubidp.stubidp.cookies.StubIdpCookieNames.SESSION_COOKIE_NAME;
 import static stubidp.stubidp.filters.SessionCookieValueMustExistAsASessionFilter.NO_CURRENT_SESSION_COOKIE_VALUE;
 
 @ExtendWith(MockitoExtension.class)

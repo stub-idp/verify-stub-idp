@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import stubidp.stubidp.cookies.CookieNames;
 import stubidp.stubidp.domain.EidasAuthnRequest;
 import stubidp.stubidp.domain.EidasScheme;
 import stubidp.stubidp.domain.SamlResponseFromValue;
@@ -19,7 +20,7 @@ import stubidp.stubidp.repositories.StubCountryRepository;
 import stubidp.stubidp.resources.eidas.EidasRegistrationPageResource;
 import stubidp.stubidp.services.NonSuccessAuthnResponseService;
 import stubidp.stubidp.services.StubCountryService;
-import stubidp.stubidp.views.SamlResponseRedirectViewFactory;
+import stubidp.stubidp.views.SamlMessageRedirectViewFactory;
 import stubidp.utils.rest.common.SessionId;
 
 import javax.ws.rs.core.Response;
@@ -57,13 +58,15 @@ public class EidasRegistrationPageResourceTest {
     private EidasSessionRepository sessionRepository;
     @Mock
     private EidasAuthnRequest eidasAuthnRequest;
+    @Mock
+    private CookieNames cookieNames;
 
     @BeforeEach
     public void createResource() {
         resource = new EidasRegistrationPageResource(
                 stubCountryRepository,
                 stubCountryService,
-                new SamlResponseRedirectViewFactory(),
+                new SamlMessageRedirectViewFactory(cookieNames),
                 nonSuccessAuthnResponseService,
                 sessionRepository
         );

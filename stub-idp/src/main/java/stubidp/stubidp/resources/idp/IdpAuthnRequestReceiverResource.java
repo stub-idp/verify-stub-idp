@@ -5,7 +5,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import stubidp.stubidp.Urls;
 import stubidp.stubidp.cookies.CookieFactory;
-import stubidp.stubidp.cookies.CookieNames;
+import stubidp.stubidp.cookies.StubIdpCookieNames;
 import stubidp.stubidp.domain.IdpLanguageHint;
 import stubidp.stubidp.exceptions.InvalidSessionIdException;
 import stubidp.stubidp.exceptions.InvalidUsernameOrPasswordException;
@@ -35,7 +35,7 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 
-import static stubidp.stubidp.StubIdpBinder.IS_SECURE_COOKIE_ENABLED;
+import static stubidp.stubidp.csrf.AbstractCSRFCheckProtectionFilter.IS_SECURE_COOKIE_ENABLED;
 
 @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
 @Produces(MediaType.TEXT_HTML)
@@ -79,7 +79,7 @@ public class IdpAuthnRequestReceiverResource {
             @FormParam(Urls.RELAY_STATE_PARAM) String relayState,
             @FormParam(Urls.LANGUAGE_HINT_PARAM) Optional<IdpLanguageHint> languageHint,
             @FormParam(Urls.SINGLE_IDP_JOURNEY_ID_PARAM) Optional<UUID> singleIdpJourneyId,
-            @CookieParam(CookieNames.SESSION_COOKIE_NAME) SessionId sessionCookie) {
+            @CookieParam(StubIdpCookieNames.SESSION_COOKIE_NAME) SessionId sessionCookie) {
         LOG.debug("Received request for idp {} from HUB", idpName);
 
         receivedVerifyAuthnRequests.inc();

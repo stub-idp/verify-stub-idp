@@ -1,18 +1,18 @@
 package stubidp.stubidp.resources.eidas;
 
 import com.google.common.base.Strings;
+import stubidp.stubidp.Urls;
+import stubidp.stubidp.cookies.StubIdpCookieNames;
 import stubidp.stubidp.domain.EidasScheme;
 import stubidp.stubidp.exceptions.GenericStubIdpException;
 import stubidp.stubidp.exceptions.InvalidEidasSchemeException;
+import stubidp.stubidp.filters.SessionCookieValueMustExistAsASession;
 import stubidp.stubidp.repositories.EidasSession;
 import stubidp.stubidp.repositories.EidasSessionRepository;
 import stubidp.stubidp.repositories.StubCountry;
 import stubidp.stubidp.repositories.StubCountryRepository;
 import stubidp.stubidp.views.EidasDebugPageView;
 import stubidp.utils.rest.common.SessionId;
-import stubidp.stubidp.Urls;
-import stubidp.stubidp.cookies.CookieNames;
-import stubidp.stubidp.filters.SessionCookieValueMustExistAsASession;
 
 import javax.inject.Inject;
 import javax.validation.constraints.NotNull;
@@ -46,7 +46,7 @@ public class EidasDebugPageResource {
     @GET
     public Response get(
             @PathParam(Urls.SCHEME_ID_PARAM) @NotNull String schemeId,
-            @CookieParam(CookieNames.SESSION_COOKIE_NAME) @NotNull SessionId sessionCookie) {
+            @CookieParam(StubIdpCookieNames.SESSION_COOKIE_NAME) @NotNull SessionId sessionCookie) {
 
         final Optional<EidasScheme> eidasScheme = EidasScheme.fromString(schemeId);
         if(!eidasScheme.isPresent()) {

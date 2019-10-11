@@ -91,6 +91,12 @@
     <dependencies>
         <dependency>
             <groupId>stub-idp</groupId>
+            <artifactId>shared-lib</artifactId>
+            <version>1.0-SNAPSHOT</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>stub-idp</groupId>
             <artifactId>stub-idp-saml</artifactId>
             <version>1.0-SNAPSHOT</version>
             <scope>compile</scope>
@@ -194,7 +200,7 @@
         <dependency>
             <groupId>org.jsoup</groupId>
             <artifactId>jsoup</artifactId>
-            <version>1.12.1</version>
+            <version>${jsoup.version}</version>
             <scope>compile</scope>
         </dependency>
         <dependency>

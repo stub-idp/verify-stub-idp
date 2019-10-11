@@ -11,7 +11,7 @@ import stubidp.stubidp.repositories.IdpSession;
 import stubidp.stubidp.repositories.IdpStubsRepository;
 import stubidp.stubidp.saml.IdpAuthnRequestValidator;
 import stubidp.stubidp.services.SuccessAuthnResponseService;
-import stubidp.stubidp.views.SamlResponseRedirectViewFactory;
+import stubidp.stubidp.views.SamlMessageRedirectViewFactory;
 import stubidp.utils.rest.common.SessionId;
 
 import javax.inject.Inject;
@@ -44,7 +44,7 @@ public class HeadlessIdpResource {
     private final AuthnRequestToIdaRequestFromHubTransformer authnRequestToIdaRequestFromHubTransformer;
     private final IdpStubsRepository idpStubsRepository;
     private final SuccessAuthnResponseService successAuthnResponseService;
-    private final SamlResponseRedirectViewFactory samlResponseRedirectViewFactory;
+    private final SamlMessageRedirectViewFactory samlMessageRedirectViewFactory;
 
     @Inject
     public HeadlessIdpResource(
@@ -52,13 +52,13 @@ public class HeadlessIdpResource {
             AuthnRequestToIdaRequestFromHubTransformer authnRequestToIdaRequestFromHubTransformer,
             IdpStubsRepository idpStubsRepository,
             SuccessAuthnResponseService successAuthnResponseService,
-            SamlResponseRedirectViewFactory samlResponseRedirectViewFactory) {
+            SamlMessageRedirectViewFactory samlMessageRedirectViewFactory) {
 
         this.idpAuthnRequestValidator = idpAuthnRequestValidator;
         this.authnRequestToIdaRequestFromHubTransformer = authnRequestToIdaRequestFromHubTransformer;
         this.idpStubsRepository = idpStubsRepository;
         this.successAuthnResponseService = successAuthnResponseService;
-        this.samlResponseRedirectViewFactory = samlResponseRedirectViewFactory;
+        this.samlMessageRedirectViewFactory = samlMessageRedirectViewFactory;
     }
 
     @POST
@@ -82,7 +82,7 @@ public class HeadlessIdpResource {
         session.setIdpUser(idpUser);
 
         final SamlResponse successResponse = successAuthnResponseService.getSuccessResponse(false, httpServletRequest.getRemoteAddr(), IDP_NAME, session);
-        return samlResponseRedirectViewFactory.sendSamlMessage(successResponse);
+        return samlMessageRedirectViewFactory.sendSamlResponse(successResponse);
     }
 
 }

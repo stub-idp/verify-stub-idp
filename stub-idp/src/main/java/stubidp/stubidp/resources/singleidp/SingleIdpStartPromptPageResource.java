@@ -2,7 +2,7 @@ package stubidp.stubidp.resources.singleidp;
 
 import stubidp.stubidp.Urls;
 import stubidp.stubidp.configuration.SingleIdpConfiguration;
-import stubidp.stubidp.cookies.CookieNames;
+import stubidp.stubidp.cookies.StubIdpCookieNames;
 import stubidp.stubidp.domain.DatabaseIdpUser;
 import stubidp.stubidp.domain.Service;
 import stubidp.stubidp.exceptions.FeatureNotEnabledException;
@@ -57,7 +57,7 @@ public class SingleIdpStartPromptPageResource {
             @PathParam(Urls.IDP_ID_PARAM) @NotNull String idpName,
             @QueryParam(Urls.ERROR_MESSAGE_PARAM) Optional<ErrorMessageType> errorMessage,
             @QueryParam(Urls.SOURCE_PARAM) Optional<String> source,
-            @CookieParam(CookieNames.SESSION_COOKIE_NAME) SessionId sessionCookie) throws FeatureNotEnabledException {
+            @CookieParam(StubIdpCookieNames.SESSION_COOKIE_NAME) SessionId sessionCookie) throws FeatureNotEnabledException {
         if (!singleIdpConfiguration.isEnabled()) throw new FeatureNotEnabledException();
         Idp idp = idpStubsRepository.getIdpWithFriendlyId(idpName);
         UUID uuid = UUID.randomUUID();

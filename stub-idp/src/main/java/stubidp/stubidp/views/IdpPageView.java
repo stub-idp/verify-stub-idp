@@ -2,11 +2,12 @@ package stubidp.stubidp.views;
 
 import io.dropwizard.views.View;
 import stubidp.stubidp.Urls;
+import stubidp.stubidp.csrf.CSRFView;
 
 import java.nio.charset.StandardCharsets;
 import java.util.Optional;
 
-public class IdpPageView extends View {
+public class IdpPageView extends View implements CSRFView {
     private final String subPageTemplateName;
     private final String name;
     private final String idpId;

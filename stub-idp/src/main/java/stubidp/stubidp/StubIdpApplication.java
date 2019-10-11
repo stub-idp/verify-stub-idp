@@ -15,6 +15,7 @@ import stubidp.stubidp.bundles.DatabaseMigrationBundle;
 import stubidp.stubidp.configuration.StubIdpConfiguration;
 import stubidp.stubidp.csrf.CSRFCheckProtectionFeature;
 import stubidp.stubidp.csrf.CSRFViewRenderer;
+import stubidp.stubidp.csrf.StubIDPCSRFCheckProtectionFilter;
 import stubidp.stubidp.exceptions.mappers.CatchAllExceptionMapper;
 import stubidp.stubidp.exceptions.mappers.FeatureNotEnabledExceptionMapper;
 import stubidp.stubidp.exceptions.mappers.FileNotFoundExceptionMapper;
@@ -117,7 +118,7 @@ public class StubIdpApplication extends Application<StubIdpConfiguration> {
         environment.servlets().addFilter("Remove Accept-Language headers", AcceptLanguageFilter.class).addMappingForUrlPatterns(EnumSet.allOf(DispatcherType.class), true, "/*");
 
         environment.jersey().register(SessionCookieValueMustExistAsASessionFeature.class);
-        environment.jersey().register(CSRFCheckProtectionFeature.class);
+        environment.jersey().register(new CSRFCheckProtectionFeature(StubIDPCSRFCheckProtectionFilter.class));
 
         environment.getObjectMapper().setDateFormat(new StdDateFormat().withLocale(Locale.UK));
 

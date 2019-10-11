@@ -22,7 +22,7 @@ import javax.ws.rs.core.UriBuilder;
 import java.util.Map;
 
 import static stubidp.stubidp.builders.StubIdpBuilder.aStubIdp;
-import static stubidp.stubidp.csrf.CSRFCheckProtectionFilter.CSRF_PROTECT_FORM_KEY;
+import static stubidp.stubidp.csrf.AbstractCSRFCheckProtectionFilter.CSRF_PROTECT_FORM_KEY;
 
 @ExtendWith(DropwizardExtensionsSupport.class)
 public class PreRegistrationIntegrationTest extends IntegrationTestHelper {

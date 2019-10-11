@@ -1,6 +1,9 @@
 package stubidp.stubidp.resources.idp;
 
 import com.google.common.base.Strings;
+import stubidp.saml.utils.core.domain.AuthnContext;
+import stubidp.stubidp.Urls;
+import stubidp.stubidp.cookies.StubIdpCookieNames;
 import stubidp.stubidp.csrf.CSRFCheckProtection;
 import stubidp.stubidp.domain.SamlResponse;
 import stubidp.stubidp.domain.SubmitButtonValue;
@@ -10,20 +13,17 @@ import stubidp.stubidp.exceptions.InvalidDateException;
 import stubidp.stubidp.exceptions.InvalidSessionIdException;
 import stubidp.stubidp.exceptions.InvalidUsernameOrPasswordException;
 import stubidp.stubidp.exceptions.UsernameAlreadyTakenException;
+import stubidp.stubidp.filters.SessionCookieValueMustExistAsASession;
 import stubidp.stubidp.repositories.Idp;
 import stubidp.stubidp.repositories.IdpSession;
 import stubidp.stubidp.repositories.IdpSessionRepository;
 import stubidp.stubidp.repositories.IdpStubsRepository;
-import stubidp.stubidp.views.ErrorMessageType;
-import stubidp.stubidp.views.RegistrationPageView;
-import stubidp.stubidp.views.SamlResponseRedirectViewFactory;
-import stubidp.utils.rest.common.SessionId;
-import stubidp.saml.utils.core.domain.AuthnContext;
-import stubidp.stubidp.Urls;
-import stubidp.stubidp.cookies.CookieNames;
-import stubidp.stubidp.filters.SessionCookieValueMustExistAsASession;
 import stubidp.stubidp.services.IdpUserService;
 import stubidp.stubidp.services.NonSuccessAuthnResponseService;
+import stubidp.stubidp.views.ErrorMessageType;
+import stubidp.stubidp.views.RegistrationPageView;
+import stubidp.stubidp.views.SamlMessageRedirectViewFactory;
+import stubidp.utils.rest.common.SessionId;
 
 import javax.inject.Inject;
 import javax.validation.constraints.NotNull;
@@ -51,7 +51,7 @@ public class RegistrationPageResource {
 
     private final IdpStubsRepository idpStubsRepository;
     private final IdpUserService idpUserService;
-    private final SamlResponseRedirectViewFactory samlResponseRedirectViewFactory;
+    private final SamlMessageRedirectViewFactory samlMessageRedirectViewFactory;
     private final NonSuccessAuthnResponseService nonSuccessAuthnResponseService;
     private final IdpSessionRepository idpSessionRepository;
 
@@ -59,12 +59,12 @@ public class RegistrationPageResource {
     public RegistrationPageResource(
             IdpStubsRepository idpStubsRepository,
             IdpUserService idpUserService,
-            SamlResponseRedirectViewFactory samlResponseRedirectViewFactory,
+            SamlMessageRedirectViewFactory samlMessageRedirectViewFactory,
             NonSuccessAuthnResponseService nonSuccessAuthnResponseService,
             IdpSessionRepository idpSessionRepository) {
         this.idpUserService = idpUserService;
         this.idpStubsRepository = idpStubsRepository;
-        this.samlResponseRedirectViewFactory = samlResponseRedirectViewFactory;
+        this.samlMessageRedirectViewFactory = samlMessageRedirectViewFactory;
         this.nonSuccessAuthnResponseService = nonSuccessAuthnResponseService;
         this.idpSessionRepository = idpSessionRepository;
     }
@@ -74,7 +74,7 @@ public class RegistrationPageResource {
     public Response get(
             @PathParam(Urls.IDP_ID_PARAM) @NotNull String idpName,
             @QueryParam(Urls.ERROR_MESSAGE_PARAM) Optional<ErrorMessageType> errorMessage,
-            @CookieParam(CookieNames.SESSION_COOKIE_NAME) @NotNull SessionId sessionCookie) {
+            @CookieParam(StubIdpCookieNames.SESSION_COOKIE_NAME) @NotNull SessionId sessionCookie) {
 
         final IdpSession session = checkAndGetSession(idpName, sessionCookie);
 
@@ -100,7 +100,7 @@ public class RegistrationPageResource {
             @FormParam(Urls.PASSWORD_PARAM) String password,
             @FormParam(Urls.LEVEL_OF_ASSURANCE_PARAM) AuthnContext levelOfAssurance,
             @FormParam(Urls.SUBMIT_PARAM) @NotNull SubmitButtonValue submitButtonValue,
-            @CookieParam(CookieNames.SESSION_COOKIE_NAME) SessionId sessionCookie) {
+            @CookieParam(StubIdpCookieNames.SESSION_COOKIE_NAME) SessionId sessionCookie) {
 
         if(sessionCookie == null) {
             return createErrorResponse(ErrorMessageType.INVALID_SESSION_ID, idpName);
@@ -192,7 +192,7 @@ public class RegistrationPageResource {
                 session = idpSessionRepository.deleteAndGet(sessionCookie);
 
                 final SamlResponse cancelResponse = nonSuccessAuthnResponseService.generateAuthnCancel(idpName, samlRequestId, session.get().getRelayState());
-                return samlResponseRedirectViewFactory.sendSamlMessage(cancelResponse);
+                return samlMessageRedirectViewFactory.sendSamlResponse(cancelResponse);
             }
             case Register: {
                 try {

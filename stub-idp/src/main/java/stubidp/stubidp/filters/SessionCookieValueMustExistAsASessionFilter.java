@@ -2,7 +2,9 @@ package stubidp.stubidp.filters;
 
 import org.apache.commons.lang.StringUtils;
 import org.jboss.logging.MDC;
+import stubidp.stubidp.cookies.CookieNames;
 import stubidp.stubidp.cookies.HmacValidator;
+import stubidp.stubidp.cookies.StubIdpCookieNames;
 import stubidp.stubidp.exceptions.InvalidSecureCookieException;
 import stubidp.stubidp.exceptions.SecureCookieNotFoundException;
 import stubidp.stubidp.exceptions.SessionIdCookieNotFoundException;
@@ -20,9 +22,7 @@ import java.io.IOException;
 import java.util.Map;
 import java.util.Optional;
 
-import static stubidp.stubidp.StubIdpBinder.IS_SECURE_COOKIE_ENABLED;
-import static stubidp.stubidp.cookies.CookieNames.SECURE_COOKIE_NAME;
-import static stubidp.stubidp.cookies.CookieNames.SESSION_COOKIE_NAME;
+import static stubidp.stubidp.csrf.AbstractCSRFCheckProtectionFilter.IS_SECURE_COOKIE_ENABLED;
 
 public class SessionCookieValueMustExistAsASessionFilter implements ContainerRequestFilter {
 
@@ -30,6 +30,7 @@ public class SessionCookieValueMustExistAsASessionFilter implements ContainerReq
     private final EidasSessionRepository eidasSessionRepository;
     private final HmacValidator hmacValidator;
     private final boolean isSecureCookieEnabled;
+    private final CookieNames cookieNames = new StubIdpCookieNames();
 
     public enum Status {VERIFIED, ID_NOT_PRESENT, HASH_NOT_PRESENT, DELETED_SESSION, INVALID_HASH, NOT_FOUND };
     public static final String NO_CURRENT_SESSION_COOKIE_VALUE = "no-current-session";
@@ -49,11 +50,11 @@ public class SessionCookieValueMustExistAsASessionFilter implements ContainerReq
     public void filter(ContainerRequestContext requestContext) throws IOException {
 
         // Get SessionId from cookie
-        final Optional<String> sessionCookie = Optional.ofNullable(getValueOfPossiblyNullCookie(requestContext.getCookies(), SESSION_COOKIE_NAME));
+        final Optional<String> sessionCookie = Optional.ofNullable(getValueOfPossiblyNullCookie(requestContext.getCookies(), cookieNames.getSessionCookieName()));
         // Get SessionId HMAC from cookie
         final Optional<String> secureCookie;
         if (isSecureCookieEnabled) {
-            secureCookie = Optional.ofNullable(getValueOfPossiblyNullCookie(requestContext.getCookies(), SECURE_COOKIE_NAME));
+            secureCookie = Optional.ofNullable(getValueOfPossiblyNullCookie(requestContext.getCookies(), cookieNames.getSecureCookieName()));
         } else {
             secureCookie = Optional.empty();
         }

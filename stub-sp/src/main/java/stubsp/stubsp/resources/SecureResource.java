@@ -1,9 +1,8 @@
 package stubsp.stubsp.resources;
 
-import io.dropwizard.auth.Auth;
 import stubsp.stubsp.Urls;
+import stubsp.stubsp.filters.RequireValidLogin;
 import stubsp.stubsp.services.SecureService;
-import stubsp.stubsp.session.SpSession;
 import stubsp.stubsp.views.SecureView;
 
 import javax.inject.Inject;
@@ -14,6 +13,7 @@ import javax.ws.rs.core.MediaType;
 
 @Path(Urls.SECURE_RESOURCE)
 @Produces(MediaType.TEXT_HTML)
+@RequireValidLogin
 public class SecureResource {
 
     private final SecureService secureService;
@@ -25,7 +25,7 @@ public class SecureResource {
     }
 
     @GET
-    public SecureView getSecureView(@Auth SpSession spSession) {
+    public SecureView getSecureView() {
         return null;
     }
 }

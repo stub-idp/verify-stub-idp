@@ -10,6 +10,7 @@ import stubidp.saml.utils.core.domain.AddressFactory;
 import stubidp.saml.utils.core.domain.AuthnContext;
 import stubidp.saml.utils.core.domain.Gender;
 import stubidp.saml.utils.hub.domain.IdaAuthnRequestFromHub;
+import stubidp.stubidp.cookies.CookieNames;
 import stubidp.stubidp.domain.DatabaseIdpUser;
 import stubidp.stubidp.domain.MatchingDatasetValue;
 import stubidp.stubidp.repositories.Idp;
@@ -20,7 +21,7 @@ import stubidp.stubidp.resources.idp.ConsentResource;
 import stubidp.stubidp.services.NonSuccessAuthnResponseService;
 import stubidp.stubidp.services.SuccessAuthnResponseService;
 import stubidp.stubidp.views.ConsentView;
-import stubidp.stubidp.views.SamlResponseRedirectViewFactory;
+import stubidp.stubidp.views.SamlMessageRedirectViewFactory;
 import stubidp.test.devpki.TestEntityIds;
 import stubidp.utils.rest.common.SessionId;
 
@@ -48,12 +49,14 @@ public class ConsentResourceTest {
     private SuccessAuthnResponseService successAuthnResponseService;
     @Mock
     private NonSuccessAuthnResponseService nonSuccessAuthnResponseService;
+    @Mock
+    private CookieNames cookieNames;
 
     private ConsentResource consentResource;
 
     @BeforeEach
     public void setUp() {
-        consentResource = new ConsentResource(idpStubsRepository, sessionRepository, successAuthnResponseService, nonSuccessAuthnResponseService, new SamlResponseRedirectViewFactory());
+        consentResource = new ConsentResource(idpStubsRepository, sessionRepository, successAuthnResponseService, nonSuccessAuthnResponseService, new SamlMessageRedirectViewFactory(cookieNames));
     }
 
     private final String idpName = "idpName";

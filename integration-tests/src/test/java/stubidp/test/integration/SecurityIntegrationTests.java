@@ -11,6 +11,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import stubidp.stubidp.Urls;
 import stubidp.stubidp.cookies.CookieNames;
+import stubidp.stubidp.cookies.StubIdpCookieNames;
 import stubidp.stubidp.filters.SecurityHeadersFilterTest;
 import stubidp.test.integration.steps.AuthnRequestSteps;
 import stubidp.test.integration.support.IdpAuthnRequestBuilder;
@@ -28,7 +29,7 @@ import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static stubidp.stubidp.builders.StubIdpBuilder.aStubIdp;
-import static stubidp.stubidp.csrf.CSRFCheckProtectionFilter.CSRF_PROTECT_FORM_KEY;
+import static stubidp.stubidp.csrf.AbstractCSRFCheckProtectionFilter.CSRF_PROTECT_FORM_KEY;
 
 @ExtendWith(DropwizardExtensionsSupport.class)
 public class SecurityIntegrationTests extends IntegrationTestHelper {
@@ -82,8 +83,8 @@ public class SecurityIntegrationTests extends IntegrationTestHelper {
 
         Response response = client.target(authnRequestSteps.getStubIdpUri(Urls.IDP_LOGIN_RESOURCE))
                 .request()
-                .cookie(CookieNames.SESSION_COOKIE_NAME, cookies.getSessionId())
-                .cookie(CookieNames.SECURE_COOKIE_NAME, cookies.getSecure())
+                .cookie(StubIdpCookieNames.SESSION_COOKIE_NAME, cookies.getSessionId())
+                .cookie(StubIdpCookieNames.SECURE_COOKIE_NAME, cookies.getSecure())
                 .post(Entity.form(form));
 
         assertThat(response.getStatus()).isEqualTo(500);
@@ -95,16 +96,16 @@ public class SecurityIntegrationTests extends IntegrationTestHelper {
 
         Response response = client.target(authnRequestSteps.getStubIdpUri(Urls.IDP_LOGIN_RESOURCE))
                 .request()
-                .cookie(CookieNames.SESSION_COOKIE_NAME, cookies.getSessionId())
-                .cookie(CookieNames.SECURE_COOKIE_NAME, cookies.getSecure())
+                .cookie(StubIdpCookieNames.SESSION_COOKIE_NAME, cookies.getSessionId())
+                .cookie(StubIdpCookieNames.SECURE_COOKIE_NAME, cookies.getSecure())
                 .get();
 
         assertThat(response.getStatus()).isEqualTo(200);
 
         response = client.target(authnRequestSteps.getStubIdpUri(Urls.IDP_LOGIN_RESOURCE))
                 .request()
-                .cookie(CookieNames.SESSION_COOKIE_NAME, cookies.getSessionId())
-                .cookie(CookieNames.SECURE_COOKIE_NAME, "try this")
+                .cookie(StubIdpCookieNames.SESSION_COOKIE_NAME, cookies.getSessionId())
+                .cookie(StubIdpCookieNames.SECURE_COOKIE_NAME, "try this")
                 .get();
 
         assertThat(response.getStatus()).isEqualTo(500);
@@ -126,8 +127,8 @@ public class SecurityIntegrationTests extends IntegrationTestHelper {
     private String getLoginPageCsrfValue(AuthnRequestSteps.Cookies cookies) {
         Response response = client.target(authnRequestSteps.getStubIdpUri(Urls.IDP_LOGIN_RESOURCE))
                 .request()
-                .cookie(CookieNames.SESSION_COOKIE_NAME, cookies.getSessionId())
-                .cookie(CookieNames.SECURE_COOKIE_NAME, cookies.getSecure())
+                .cookie(StubIdpCookieNames.SESSION_COOKIE_NAME, cookies.getSessionId())
+                .cookie(StubIdpCookieNames.SECURE_COOKIE_NAME, cookies.getSecure())
                 .get();
 
         assertThat(response.getStatus()).isEqualTo(200);

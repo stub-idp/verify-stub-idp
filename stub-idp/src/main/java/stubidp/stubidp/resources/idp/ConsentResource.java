@@ -1,22 +1,22 @@
 package stubidp.stubidp.resources.idp;
 
 import com.google.common.base.Strings;
+import stubidp.saml.utils.core.domain.AuthnContext;
+import stubidp.stubidp.Urls;
+import stubidp.stubidp.cookies.StubIdpCookieNames;
 import stubidp.stubidp.csrf.CSRFCheckProtection;
 import stubidp.stubidp.domain.DatabaseIdpUser;
 import stubidp.stubidp.exceptions.GenericStubIdpException;
+import stubidp.stubidp.filters.SessionCookieValueMustExistAsASession;
 import stubidp.stubidp.repositories.Idp;
 import stubidp.stubidp.repositories.IdpSession;
 import stubidp.stubidp.repositories.IdpSessionRepository;
 import stubidp.stubidp.repositories.IdpStubsRepository;
-import stubidp.stubidp.views.ConsentView;
-import stubidp.stubidp.views.SamlResponseRedirectViewFactory;
-import stubidp.utils.rest.common.SessionId;
-import stubidp.saml.utils.core.domain.AuthnContext;
-import stubidp.stubidp.Urls;
-import stubidp.stubidp.cookies.CookieNames;
-import stubidp.stubidp.filters.SessionCookieValueMustExistAsASession;
 import stubidp.stubidp.services.NonSuccessAuthnResponseService;
 import stubidp.stubidp.services.SuccessAuthnResponseService;
+import stubidp.stubidp.views.ConsentView;
+import stubidp.stubidp.views.SamlMessageRedirectViewFactory;
+import stubidp.utils.rest.common.SessionId;
 
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
@@ -43,7 +43,7 @@ public class ConsentResource {
     private final IdpSessionRepository sessionRepository;
     private final SuccessAuthnResponseService successAuthnResponseService;
     private final NonSuccessAuthnResponseService nonSuccessAuthnResponseService;
-    private final SamlResponseRedirectViewFactory samlResponseRedirectViewFactory;
+    private final SamlMessageRedirectViewFactory samlMessageRedirectViewFactory;
 
     public static final String I_AGREE_SUBMIT_VALUE = "I Agree";
     public static final String I_REFUSE_SUBMIT_VALUE = "I Refuse";
@@ -54,18 +54,18 @@ public class ConsentResource {
             IdpSessionRepository sessionRepository,
             SuccessAuthnResponseService successAuthnResponseService,
             NonSuccessAuthnResponseService nonSuccessAuthnResponseService,
-            SamlResponseRedirectViewFactory samlResponseRedirectViewFactory) {
+            SamlMessageRedirectViewFactory samlMessageRedirectViewFactory) {
         this.successAuthnResponseService = successAuthnResponseService;
         this.idpStubsRepository = idpStubsRepository;
         this.sessionRepository = sessionRepository;
         this.nonSuccessAuthnResponseService = nonSuccessAuthnResponseService;
-        this.samlResponseRedirectViewFactory = samlResponseRedirectViewFactory;
+        this.samlMessageRedirectViewFactory = samlMessageRedirectViewFactory;
     }
 
     @GET
     public Response get(
             @PathParam(Urls.IDP_ID_PARAM) @NotNull String idpName,
-            @CookieParam(CookieNames.SESSION_COOKIE_NAME) @NotNull SessionId sessionCookie) {
+            @CookieParam(StubIdpCookieNames.SESSION_COOKIE_NAME) @NotNull SessionId sessionCookie) {
 
         IdpSession session = getAndValidateSession(idpName, sessionCookie);
 
@@ -91,16 +91,16 @@ public class ConsentResource {
             @PathParam(Urls.IDP_ID_PARAM) @NotNull String idpName,
             @FormParam(Urls.SUBMIT_PARAM) @NotNull String submitButtonValue,
             @FormParam(Urls.RANDOMISE_PID_PARAM) boolean randomisePid,
-            @CookieParam(CookieNames.SESSION_COOKIE_NAME) @NotNull SessionId sessionCookie) {
+            @CookieParam(StubIdpCookieNames.SESSION_COOKIE_NAME) @NotNull SessionId sessionCookie) {
         
         IdpSession session = getAndValidateSession(idpName, sessionCookie);
         sessionRepository.deleteSession(sessionCookie);
 
         switch (submitButtonValue) {
             case I_AGREE_SUBMIT_VALUE:
-                return samlResponseRedirectViewFactory.sendSamlMessage(successAuthnResponseService.getSuccessResponse(randomisePid, httpServletRequest.getRemoteAddr(), idpName, session));
+                return samlMessageRedirectViewFactory.sendSamlResponse(successAuthnResponseService.getSuccessResponse(randomisePid, httpServletRequest.getRemoteAddr(), idpName, session));
             case I_REFUSE_SUBMIT_VALUE:
-                return samlResponseRedirectViewFactory.sendSamlMessage(nonSuccessAuthnResponseService.generateNoAuthnContext(idpName, session.getIdaAuthnRequestFromHub().getId(), session.getRelayState()));
+                return samlMessageRedirectViewFactory.sendSamlResponse(nonSuccessAuthnResponseService.generateNoAuthnContext(idpName, session.getIdaAuthnRequestFromHub().getId(), session.getRelayState()));
 
             default:
                 throw errorResponse("Invalid button value " + submitButtonValue);

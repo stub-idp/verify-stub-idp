@@ -7,6 +7,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import stubidp.saml.utils.hub.domain.IdaAuthnRequestFromHub;
 import stubidp.stubidp.cookies.CookieFactory;
+import stubidp.stubidp.cookies.CookieNames;
 import stubidp.stubidp.domain.SamlResponseFromValue;
 import stubidp.stubidp.exceptions.IncompleteRegistrationException;
 import stubidp.stubidp.exceptions.InvalidDateException;
@@ -19,7 +20,7 @@ import stubidp.stubidp.repositories.IdpStubsRepository;
 import stubidp.stubidp.resources.idp.RegistrationPageResource;
 import stubidp.stubidp.services.IdpUserService;
 import stubidp.stubidp.services.NonSuccessAuthnResponseService;
-import stubidp.stubidp.views.SamlResponseRedirectViewFactory;
+import stubidp.stubidp.views.SamlMessageRedirectViewFactory;
 import stubidp.utils.rest.common.SessionId;
 
 import javax.ws.rs.core.Response;
@@ -60,13 +61,15 @@ public class RegistrationPageResourceTest {
     private CookieFactory cookieFactory;
     @Mock
     private IdpSession idpSession;
+    @Mock
+    private CookieNames cookieNames;
 
     @BeforeEach
     public void createResource() {
         resource = new RegistrationPageResource(
                 idpStubsRepository,
                 idpUserService,
-                new SamlResponseRedirectViewFactory(),
+                new SamlMessageRedirectViewFactory(cookieNames),
                 nonSuccessAuthnResponseService,
                 idpSessionRepository
         );

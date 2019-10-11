@@ -19,7 +19,7 @@ import stubidp.stubidp.repositories.StubCountry;
 import stubidp.stubidp.repositories.StubCountryRepository;
 import stubidp.stubidp.resources.eidas.EidasConsentResource;
 import stubidp.stubidp.services.EidasAuthnResponseService;
-import stubidp.stubidp.views.SamlResponseRedirectViewFactory;
+import stubidp.stubidp.views.SamlMessageRedirectViewFactory;
 import stubidp.utils.rest.common.SessionId;
 
 import javax.ws.rs.core.Response;
@@ -50,7 +50,7 @@ public class EidasConsentResourceTest {
     private EidasAuthnResponseService rsaSsaPssAuthnResponseService;
 
     @Mock
-    private SamlResponseRedirectViewFactory samlResponseRedirectViewFactory;
+    private SamlMessageRedirectViewFactory samlResponseRedirectViewFactory;
 
     @Mock
     private StubCountryRepository stubCountryRepository;
@@ -83,7 +83,7 @@ public class EidasConsentResourceTest {
         when(sessionRepository.deleteAndGet(SESSION_ID)).thenReturn(Optional.of(session));
         SamlResponseFromValue<org.opensaml.saml.saml2.core.Response> samlResponse = new SamlResponseFromValue<org.opensaml.saml.saml2.core.Response>(null, (r) -> null, null, null);
         when(rsaSha256AuthnResponseService.getSuccessResponse(session, SCHEME_NAME)).thenReturn(samlResponse);
-        when(samlResponseRedirectViewFactory.sendSamlMessage(samlResponse)).thenReturn(Response.ok().build());
+        when(samlResponseRedirectViewFactory.sendSamlResponse(samlResponse)).thenReturn(Response.ok().build());
 
         final Response response = resource.consent(SCHEME_NAME, "rsasha256","submit", SESSION_ID);
 
@@ -96,7 +96,7 @@ public class EidasConsentResourceTest {
         when(sessionRepository.deleteAndGet(SESSION_ID)).thenReturn(Optional.of(session));
         SamlResponseFromValue<org.opensaml.saml.saml2.core.Response> samlResponse = new SamlResponseFromValue<org.opensaml.saml.saml2.core.Response>(null, (r) -> null, null, null);
         when(rsaSsaPssAuthnResponseService.getSuccessResponse(session, SCHEME_NAME)).thenReturn(samlResponse);
-        when(samlResponseRedirectViewFactory.sendSamlMessage(samlResponse)).thenReturn(Response.ok().build());
+        when(samlResponseRedirectViewFactory.sendSamlResponse(samlResponse)).thenReturn(Response.ok().build());
 
         final Response response = resource.consent(SCHEME_NAME, "rsassa-pss","submit", SESSION_ID);
 

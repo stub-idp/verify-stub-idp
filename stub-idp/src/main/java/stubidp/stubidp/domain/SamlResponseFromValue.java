@@ -28,7 +28,7 @@ public class SamlResponseFromValue<T> implements SamlResponse {
         return transformer.apply(response);
     }
 
-    public URI getHubUrl() {
+    public URI getSpSSOUrl() {
         return hubUrl;
     }
 }

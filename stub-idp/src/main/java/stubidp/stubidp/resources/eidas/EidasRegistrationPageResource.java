@@ -1,6 +1,9 @@
 package stubidp.stubidp.resources.eidas;
 
 import com.google.common.base.Strings;
+import stubidp.saml.utils.core.domain.AuthnContext;
+import stubidp.stubidp.Urls;
+import stubidp.stubidp.cookies.StubIdpCookieNames;
 import stubidp.stubidp.csrf.CSRFCheckProtection;
 import stubidp.stubidp.domain.EidasScheme;
 import stubidp.stubidp.domain.SamlResponse;
@@ -12,20 +15,17 @@ import stubidp.stubidp.exceptions.InvalidEidasSchemeException;
 import stubidp.stubidp.exceptions.InvalidSessionIdException;
 import stubidp.stubidp.exceptions.InvalidUsernameOrPasswordException;
 import stubidp.stubidp.exceptions.UsernameAlreadyTakenException;
+import stubidp.stubidp.filters.SessionCookieValueMustExistAsASession;
 import stubidp.stubidp.repositories.EidasSession;
 import stubidp.stubidp.repositories.EidasSessionRepository;
 import stubidp.stubidp.repositories.StubCountry;
 import stubidp.stubidp.repositories.StubCountryRepository;
-import stubidp.stubidp.views.EidasRegistrationPageView;
-import stubidp.stubidp.views.ErrorMessageType;
-import stubidp.stubidp.views.SamlResponseRedirectViewFactory;
-import stubidp.utils.rest.common.SessionId;
-import stubidp.saml.utils.core.domain.AuthnContext;
-import stubidp.stubidp.Urls;
-import stubidp.stubidp.cookies.CookieNames;
-import stubidp.stubidp.filters.SessionCookieValueMustExistAsASession;
 import stubidp.stubidp.services.NonSuccessAuthnResponseService;
 import stubidp.stubidp.services.StubCountryService;
+import stubidp.stubidp.views.EidasRegistrationPageView;
+import stubidp.stubidp.views.ErrorMessageType;
+import stubidp.stubidp.views.SamlMessageRedirectViewFactory;
+import stubidp.utils.rest.common.SessionId;
 
 import javax.inject.Inject;
 import javax.validation.constraints.NotNull;
@@ -54,7 +54,7 @@ public class EidasRegistrationPageResource {
 
     private final StubCountryRepository stubsCountryRepository;
     private final StubCountryService stubCountryService;
-    private final SamlResponseRedirectViewFactory samlResponseRedirectViewFactory;
+    private final SamlMessageRedirectViewFactory samlMessageRedirectViewFactory;
     private final NonSuccessAuthnResponseService nonSuccessAuthnResponseService;
     private final EidasSessionRepository sessionRepository;
 
@@ -62,12 +62,12 @@ public class EidasRegistrationPageResource {
     public EidasRegistrationPageResource(
             StubCountryRepository stubsCountryRepository,
             StubCountryService stubCountryService,
-            SamlResponseRedirectViewFactory samlResponseRedirectViewFactory,
+            SamlMessageRedirectViewFactory samlMessageRedirectViewFactory,
             NonSuccessAuthnResponseService nonSuccessAuthnResponseService,
             EidasSessionRepository sessionRepository) {
         this.stubCountryService = stubCountryService;
         this.stubsCountryRepository = stubsCountryRepository;
-        this.samlResponseRedirectViewFactory = samlResponseRedirectViewFactory;
+        this.samlMessageRedirectViewFactory = samlMessageRedirectViewFactory;
         this.nonSuccessAuthnResponseService = nonSuccessAuthnResponseService;
         this.sessionRepository = sessionRepository;
     }
@@ -76,7 +76,7 @@ public class EidasRegistrationPageResource {
     public Response get(
             @PathParam(Urls.SCHEME_ID_PARAM) @NotNull String schemeId,
             @QueryParam(Urls.ERROR_MESSAGE_PARAM) Optional<ErrorMessageType> errorMessage,
-            @CookieParam(CookieNames.SESSION_COOKIE_NAME) @NotNull SessionId sessionCookie) {
+            @CookieParam(StubIdpCookieNames.SESSION_COOKIE_NAME) @NotNull SessionId sessionCookie) {
 
         final Optional<EidasScheme> eidasScheme = EidasScheme.fromString(schemeId);
         if(!eidasScheme.isPresent()) {
@@ -112,7 +112,7 @@ public class EidasRegistrationPageResource {
             @FormParam(Urls.PASSWORD_PARAM) String password,
             @FormParam(Urls.LEVEL_OF_ASSURANCE_PARAM) AuthnContext levelOfAssurance,
             @FormParam(Urls.SUBMIT_PARAM) @NotNull SubmitButtonValue submitButtonValue,
-            @CookieParam(CookieNames.SESSION_COOKIE_NAME) @NotNull SessionId sessionCookie) {
+            @CookieParam(StubIdpCookieNames.SESSION_COOKIE_NAME) @NotNull SessionId sessionCookie) {
 
         final Optional<EidasScheme> eidasScheme = EidasScheme.fromString(schemeId);
         if(!eidasScheme.isPresent()) {
@@ -137,7 +137,7 @@ public class EidasRegistrationPageResource {
                 session = sessionRepository.deleteAndGet(sessionCookie);
 
                 final SamlResponse cancelResponse = nonSuccessAuthnResponseService.generateAuthnCancel(schemeId, samlRequestId, session.get().getRelayState());
-                return samlResponseRedirectViewFactory.sendSamlMessage(cancelResponse);
+                return samlMessageRedirectViewFactory.sendSamlResponse(cancelResponse);
             }
             case Register: {
                 try {

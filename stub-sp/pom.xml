@@ -57,6 +57,12 @@
     </build>
 
     <dependencies>
+        <dependency>
+            <groupId>stub-idp</groupId>
+            <artifactId>shared-lib</artifactId>
+            <version>1.0-SNAPSHOT</version>
+            <scope>compile</scope>
+        </dependency>
 <!--        <dependency>-->
 <!--            <groupId>stub-idp</groupId>-->
 <!--            <artifactId>stub-idp-saml</artifactId>-->

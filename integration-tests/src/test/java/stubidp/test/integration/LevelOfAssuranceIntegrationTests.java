@@ -10,7 +10,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import stubidp.stubidp.Urls;
-import stubidp.stubidp.cookies.CookieNames;
+import stubidp.stubidp.cookies.StubIdpCookieNames;
 import stubidp.test.integration.steps.AuthnRequestSteps;
 import stubidp.test.integration.support.IntegrationTestHelper;
 import stubidp.test.integration.support.StubIdpAppExtension;
@@ -68,8 +68,8 @@ public class LevelOfAssuranceIntegrationTests extends IntegrationTestHelper {
     public Response aUserVisitsTheDebugPage(String idp, AuthnRequestSteps.Cookies cookies) {
         return client.target(getDebugPath(idp))
                 .request()
-                .cookie(CookieNames.SESSION_COOKIE_NAME, cookies.getSessionId())
-                .cookie(CookieNames.SECURE_COOKIE_NAME, cookies.getSecure())
+                .cookie(StubIdpCookieNames.SESSION_COOKIE_NAME, cookies.getSessionId())
+                .cookie(StubIdpCookieNames.SECURE_COOKIE_NAME, cookies.getSecure())
                 .get();
     }
 

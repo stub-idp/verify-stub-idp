@@ -1,6 +1,8 @@
 package stubidp.stubidp.resources.eidas;
 
 import com.google.common.base.Strings;
+import stubidp.stubidp.Urls;
+import stubidp.stubidp.cookies.StubIdpCookieNames;
 import stubidp.stubidp.csrf.CSRFCheckProtection;
 import stubidp.stubidp.domain.EidasScheme;
 import stubidp.stubidp.domain.EidasUser;
@@ -8,17 +10,15 @@ import stubidp.stubidp.domain.SamlResponse;
 import stubidp.stubidp.exceptions.GenericStubIdpException;
 import stubidp.stubidp.exceptions.InvalidEidasSchemeException;
 import stubidp.stubidp.exceptions.InvalidSigningAlgorithmException;
+import stubidp.stubidp.filters.SessionCookieValueMustExistAsASession;
 import stubidp.stubidp.repositories.EidasSession;
 import stubidp.stubidp.repositories.EidasSessionRepository;
 import stubidp.stubidp.repositories.StubCountry;
 import stubidp.stubidp.repositories.StubCountryRepository;
-import stubidp.stubidp.views.EidasConsentView;
-import stubidp.stubidp.views.SamlResponseRedirectViewFactory;
-import stubidp.utils.rest.common.SessionId;
-import stubidp.stubidp.Urls;
-import stubidp.stubidp.cookies.CookieNames;
-import stubidp.stubidp.filters.SessionCookieValueMustExistAsASession;
 import stubidp.stubidp.services.EidasAuthnResponseService;
+import stubidp.stubidp.views.EidasConsentView;
+import stubidp.stubidp.views.SamlMessageRedirectViewFactory;
+import stubidp.utils.rest.common.SessionId;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -47,7 +47,7 @@ public class EidasConsentResource {
     private final StubCountryRepository stubCountryRepository;
     private final EidasAuthnResponseService rsaSha256AuthnResponseService;
     private final EidasAuthnResponseService rsaSsaPssAuthnResponseService;
-    private final SamlResponseRedirectViewFactory samlResponseRedirectViewFactory;
+    private final SamlMessageRedirectViewFactory samlMessageRedirectViewFactory;
 
     public static final String RSASHA_256 = "rsasha256";
     public static final String RSASSA_PSS = "rsassa-pss";
@@ -57,19 +57,19 @@ public class EidasConsentResource {
             EidasSessionRepository sessionRepository,
             @Named(RSASHA256_EIDAS_AUTHN_RESPONSE_SERVICE) EidasAuthnResponseService rsaSha256AuthnResponseService,
             @Named(RSASSAPSS_EIDAS_AUTHN_RESPONSE_SERVICE) EidasAuthnResponseService rsaSsaPssAuthnResponseService,
-            SamlResponseRedirectViewFactory samlResponseRedirectViewFactory,
+            SamlMessageRedirectViewFactory samlMessageRedirectViewFactory,
             StubCountryRepository stubCountryRepository) {
         this.rsaSha256AuthnResponseService = rsaSha256AuthnResponseService;
         this.rsaSsaPssAuthnResponseService = rsaSsaPssAuthnResponseService;
         this.sessionRepository = sessionRepository;
-        this.samlResponseRedirectViewFactory = samlResponseRedirectViewFactory;
+        this.samlMessageRedirectViewFactory = samlMessageRedirectViewFactory;
         this.stubCountryRepository = stubCountryRepository;
     }
 
     @GET
     public Response get(
             @PathParam(Urls.SCHEME_ID_PARAM) @NotNull String schemeId,
-            @CookieParam(CookieNames.SESSION_COOKIE_NAME) @NotNull SessionId sessionCookie) {
+            @CookieParam(StubIdpCookieNames.SESSION_COOKIE_NAME) @NotNull SessionId sessionCookie) {
 
         final Optional<EidasScheme> eidasScheme = EidasScheme.fromString(schemeId);
         if(!eidasScheme.isPresent()) {
@@ -91,7 +91,7 @@ public class EidasConsentResource {
             @PathParam(Urls.SCHEME_ID_PARAM) @NotNull String schemeId,
             @FormParam(Urls.SIGNING_ALGORITHM_PARAM) @NotNull String signingAlgorithm,
             @FormParam(Urls.SUBMIT_PARAM) @NotNull String submitButtonValue,
-            @CookieParam(CookieNames.SESSION_COOKIE_NAME) @NotNull SessionId sessionCookie) {
+            @CookieParam(StubIdpCookieNames.SESSION_COOKIE_NAME) @NotNull SessionId sessionCookie) {
 
         if(!EidasScheme.fromString(schemeId).isPresent()) {
             throw new InvalidEidasSchemeException();
@@ -109,7 +109,7 @@ public class EidasConsentResource {
         EidasSession session = getAndValidateSession(schemeId, sessionCookie, true);
 
         SamlResponse samlResponse = successAuthnResponseService.getSuccessResponse(session, schemeId);
-        return samlResponseRedirectViewFactory.sendSamlMessage(samlResponse);
+        return samlMessageRedirectViewFactory.sendSamlResponse(samlResponse);
     }
 
     private EidasSession getAndValidateSession(String schemeId, SessionId sessionCookie, boolean shouldDelete) {

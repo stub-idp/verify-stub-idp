@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import stubidp.stubidp.Urls;
 import stubidp.stubidp.cookies.CookieNames;
+import stubidp.stubidp.cookies.StubIdpCookieNames;
 import stubidp.test.integration.steps.AuthnRequestSteps;
 import stubidp.test.integration.support.IntegrationTestHelper;
 import stubidp.test.integration.support.StubIdpAppExtension;
@@ -54,8 +55,8 @@ public class AutoEscapingIntegrationTest extends IntegrationTestHelper {
         Response response = client.target(UriBuilder.fromUri("http://localhost:" + applicationRule.getLocalPort()).path(Urls.IDP_DEBUG_RESOURCE).build(IDP_NAME))
                 .queryParam(UNKNOWN_HINTS_PARAM, hint)
                 .request()
-                .cookie(CookieNames.SESSION_COOKIE_NAME, cookies.getSessionId())
-                .cookie(CookieNames.SECURE_COOKIE_NAME, cookies.getSecure())
+                .cookie(StubIdpCookieNames.SESSION_COOKIE_NAME, cookies.getSessionId())
+                .cookie(StubIdpCookieNames.SECURE_COOKIE_NAME, cookies.getSecure())
                 .get();
         assertThat(response.getStatus()).isEqualTo(200);
         return response.readEntity(String.class);

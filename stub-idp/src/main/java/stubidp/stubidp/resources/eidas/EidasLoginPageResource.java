@@ -1,6 +1,8 @@
 package stubidp.stubidp.resources.eidas;
 
 import com.google.common.base.Strings;
+import stubidp.stubidp.Urls;
+import stubidp.stubidp.cookies.StubIdpCookieNames;
 import stubidp.stubidp.csrf.CSRFCheckProtection;
 import stubidp.stubidp.domain.EidasScheme;
 import stubidp.stubidp.domain.SamlResponse;
@@ -8,19 +10,17 @@ import stubidp.stubidp.exceptions.GenericStubIdpException;
 import stubidp.stubidp.exceptions.InvalidEidasSchemeException;
 import stubidp.stubidp.exceptions.InvalidSessionIdException;
 import stubidp.stubidp.exceptions.InvalidUsernameOrPasswordException;
+import stubidp.stubidp.filters.SessionCookieValueMustExistAsASession;
 import stubidp.stubidp.repositories.EidasSession;
 import stubidp.stubidp.repositories.EidasSessionRepository;
 import stubidp.stubidp.repositories.StubCountry;
 import stubidp.stubidp.repositories.StubCountryRepository;
-import stubidp.stubidp.views.EidasLoginPageView;
-import stubidp.stubidp.views.ErrorMessageType;
-import stubidp.stubidp.views.SamlResponseRedirectViewFactory;
-import stubidp.utils.rest.common.SessionId;
-import stubidp.stubidp.Urls;
-import stubidp.stubidp.cookies.CookieNames;
-import stubidp.stubidp.filters.SessionCookieValueMustExistAsASession;
 import stubidp.stubidp.services.EidasAuthnResponseService;
 import stubidp.stubidp.services.StubCountryService;
+import stubidp.stubidp.views.EidasLoginPageView;
+import stubidp.stubidp.views.ErrorMessageType;
+import stubidp.stubidp.views.SamlMessageRedirectViewFactory;
+import stubidp.utils.rest.common.SessionId;
 
 import javax.inject.Inject;
 import javax.validation.constraints.NotNull;
@@ -48,7 +48,7 @@ public class EidasLoginPageResource {
 
     private final EidasSessionRepository sessionRepository;
     private final EidasAuthnResponseService eidasSuccessAuthnResponseRequest;
-    private final SamlResponseRedirectViewFactory samlResponseRedirectViewFactory;
+    private final SamlMessageRedirectViewFactory samlMessageRedirectViewFactory;
     private final StubCountryRepository stubCountryRepository;
     private final StubCountryService stubCountryService;
 
@@ -56,12 +56,12 @@ public class EidasLoginPageResource {
     public EidasLoginPageResource(
             EidasSessionRepository sessionRepository,
             EidasAuthnResponseService eidasSuucessAuthnResponseRequest,
-            SamlResponseRedirectViewFactory samlResponseRedirectViewFactory,
+            SamlMessageRedirectViewFactory samlMessageRedirectViewFactory,
             StubCountryRepository stubCountryRepository,
             StubCountryService stubCountryService) {
         this.sessionRepository = sessionRepository;
         this.eidasSuccessAuthnResponseRequest = eidasSuucessAuthnResponseRequest;
-        this.samlResponseRedirectViewFactory = samlResponseRedirectViewFactory;
+        this.samlMessageRedirectViewFactory = samlMessageRedirectViewFactory;
         this.stubCountryRepository = stubCountryRepository;
         this.stubCountryService = stubCountryService;
     }
@@ -70,7 +70,7 @@ public class EidasLoginPageResource {
     public Response get(
             @PathParam(Urls.SCHEME_ID_PARAM) @NotNull String schemeName,
             @QueryParam(Urls.ERROR_MESSAGE_PARAM) java.util.Optional<ErrorMessageType> errorMessage,
-            @CookieParam(CookieNames.SESSION_COOKIE_NAME) @NotNull SessionId sessionCookie) {
+            @CookieParam(StubIdpCookieNames.SESSION_COOKIE_NAME) @NotNull SessionId sessionCookie) {
 
         final Optional<EidasScheme> eidasScheme = EidasScheme.fromString(schemeName);
         if(!eidasScheme.isPresent()) {
@@ -95,7 +95,7 @@ public class EidasLoginPageResource {
             @PathParam(Urls.SCHEME_ID_PARAM) @NotNull String schemeName,
             @FormParam(Urls.USERNAME_PARAM) String username,
             @FormParam(Urls.PASSWORD_PARAM) String password,
-            @CookieParam(CookieNames.SESSION_COOKIE_NAME) @NotNull SessionId sessionCookie) {
+            @CookieParam(StubIdpCookieNames.SESSION_COOKIE_NAME) @NotNull SessionId sessionCookie) {
 
         final Optional<EidasScheme> eidasScheme = EidasScheme.fromString(schemeName);
         if(!eidasScheme.isPresent()) {
@@ -122,7 +122,7 @@ public class EidasLoginPageResource {
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
     public Response postAuthnFailure(
             @PathParam(Urls.SCHEME_ID_PARAM) @NotNull String schemeName,
-            @CookieParam(CookieNames.SESSION_COOKIE_NAME) @NotNull SessionId sessionCookie) {
+            @CookieParam(StubIdpCookieNames.SESSION_COOKIE_NAME) @NotNull SessionId sessionCookie) {
 
         if(!EidasScheme.fromString(schemeName).isPresent()) {
             throw new InvalidEidasSchemeException();
@@ -131,7 +131,7 @@ public class EidasLoginPageResource {
         EidasSession session = checkAndDeleteAndGetSession(schemeName, sessionCookie);
 
             final SamlResponse loginFailureResponse = eidasSuccessAuthnResponseRequest.generateAuthnFailed(session, schemeName);
-            return samlResponseRedirectViewFactory.sendSamlMessage(loginFailureResponse);
+            return samlMessageRedirectViewFactory.sendSamlResponse(loginFailureResponse);
     }
 
     private EidasSession checkSession(String schemeId, SessionId sessionCookie) {

@@ -1,7 +1,7 @@
 package stubidp.stubidp.resources.singleidp;
 
 import stubidp.stubidp.Urls;
-import stubidp.stubidp.cookies.CookieNames;
+import stubidp.stubidp.cookies.StubIdpCookieNames;
 import stubidp.stubidp.domain.DatabaseIdpUser;
 import stubidp.stubidp.exceptions.SessionNotFoundException;
 import stubidp.stubidp.filters.SessionCookieValueMustExistAsASessionFilter;
@@ -49,8 +49,8 @@ public class SingleIdpHomePageResource {
     @GET
     public Response get(@PathParam(Urls.IDP_ID_PARAM) @NotNull String idpName,
                         @QueryParam(Urls.ERROR_MESSAGE_PARAM) java.util.Optional<ErrorMessageType> errorMessage,
-                        @CookieParam(CookieNames.SESSION_COOKIE_NAME) String sessionCookie,
-                        @CookieParam(CookieNames.SECURE_COOKIE_NAME) String secureCookie) {
+                        @CookieParam(StubIdpCookieNames.SESSION_COOKIE_NAME) String sessionCookie,
+                        @CookieParam(StubIdpCookieNames.SECURE_COOKIE_NAME) String secureCookie) {
 
         Idp idp = idpStubsRepository.getIdpWithFriendlyId(idpName);
 

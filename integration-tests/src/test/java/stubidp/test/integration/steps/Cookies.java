@@ -1,7 +1,7 @@
 package stubidp.test.integration.steps;
 
-import stubidp.stubidp.cookies.CookieNames;
 import stubidp.stubidp.cookies.HttpOnlyNewCookie;
+import stubidp.stubidp.cookies.StubIdpCookieNames;
 
 import javax.ws.rs.core.NewCookie;
 import javax.ws.rs.core.Response;
@@ -26,8 +26,8 @@ public class Cookies {
     }
 
     public void setSessionCookie(String sessionId) {
-        this.cookies.put(CookieNames.SESSION_COOKIE_NAME,
-                new HttpOnlyNewCookie(CookieNames.SESSION_COOKIE_NAME,
+        this.cookies.put(StubIdpCookieNames.SESSION_COOKIE_NAME,
+                new HttpOnlyNewCookie(StubIdpCookieNames.SESSION_COOKIE_NAME,
                                         sessionId,
                                         "/",
                                         "",
@@ -35,9 +35,9 @@ public class Cookies {
                                         false));
     }
 
-    public NewCookie getSessionCookie() { return this.cookies.get(CookieNames.SESSION_COOKIE_NAME); }
+    public NewCookie getSessionCookie() { return this.cookies.get(StubIdpCookieNames.SESSION_COOKIE_NAME); }
 
-    public NewCookie getSecureCookie() { return this.cookies.get(CookieNames.SECURE_COOKIE_NAME); }
+    public NewCookie getSecureCookie() { return this.cookies.get(StubIdpCookieNames.SECURE_COOKIE_NAME); }
 
     public NewCookie getCookie(String name) {
         return cookies.get(name);

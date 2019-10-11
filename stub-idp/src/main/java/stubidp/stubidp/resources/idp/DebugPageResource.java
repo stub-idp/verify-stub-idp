@@ -1,16 +1,16 @@
 package stubidp.stubidp.resources.idp;
 
 import com.google.common.base.Strings;
+import stubidp.stubidp.Urls;
+import stubidp.stubidp.cookies.StubIdpCookieNames;
 import stubidp.stubidp.exceptions.GenericStubIdpException;
+import stubidp.stubidp.filters.SessionCookieValueMustExistAsASession;
 import stubidp.stubidp.repositories.Idp;
 import stubidp.stubidp.repositories.IdpSession;
 import stubidp.stubidp.repositories.IdpSessionRepository;
 import stubidp.stubidp.repositories.IdpStubsRepository;
 import stubidp.stubidp.views.DebugPageView;
 import stubidp.utils.rest.common.SessionId;
-import stubidp.stubidp.Urls;
-import stubidp.stubidp.cookies.CookieNames;
-import stubidp.stubidp.filters.SessionCookieValueMustExistAsASession;
 
 import javax.inject.Inject;
 import javax.validation.constraints.NotNull;
@@ -44,7 +44,7 @@ public class DebugPageResource {
     @GET
     public Response get(
             @PathParam(Urls.IDP_ID_PARAM) @NotNull String idpName,
-            @CookieParam(CookieNames.SESSION_COOKIE_NAME) @NotNull SessionId sessionCookie) {
+            @CookieParam(StubIdpCookieNames.SESSION_COOKIE_NAME) @NotNull SessionId sessionCookie) {
 
         if (Strings.isNullOrEmpty(sessionCookie.toString())) {
             throw new GenericStubIdpException(format("Unable to locate session cookie for " + idpName), Response.Status.BAD_REQUEST);

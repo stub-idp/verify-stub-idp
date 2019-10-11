@@ -6,6 +6,7 @@ import org.jsoup.nodes.Element;
 import stubidp.saml.extensions.IdaConstants;
 import stubidp.stubidp.Urls;
 import stubidp.stubidp.cookies.CookieNames;
+import stubidp.stubidp.cookies.StubIdpCookieNames;
 import stubidp.stubidp.domain.FraudIndicator;
 import stubidp.test.integration.support.IdpAuthnRequestBuilder;
 import stubidp.test.integration.support.eidas.EidasAuthnRequestBuilder;
@@ -23,7 +24,7 @@ import java.util.Objects;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static stubidp.stubidp.csrf.CSRFCheckProtectionFilter.CSRF_PROTECT_FORM_KEY;
+import static stubidp.stubidp.csrf.AbstractCSRFCheckProtectionFilter.CSRF_PROTECT_FORM_KEY;
 import static stubidp.stubidp.repositories.StubCountryRepository.STUB_COUNTRY_FRIENDLY_ID;
 import static stubidp.test.devpki.TestEntityIds.HUB_CONNECTOR_ENTITY_ID;
 
@@ -143,18 +144,18 @@ public class AuthnRequestSteps {
     }
 
     private Cookies getCookiesAndFollowRedirect(Response response) {
-        final NewCookie sessionCookie = response.getCookies().get(CookieNames.SESSION_COOKIE_NAME);
+        final NewCookie sessionCookie = response.getCookies().get(StubIdpCookieNames.SESSION_COOKIE_NAME);
         assertThat(sessionCookie).isNotNull();
         assertThat(sessionCookie.getValue()).isNotNull();
         final String sessionCookieValue = sessionCookie.getValue();
 
-        final NewCookie secureCookie = response.getCookies().get(CookieNames.SECURE_COOKIE_NAME);
+        final NewCookie secureCookie = response.getCookies().get(StubIdpCookieNames.SECURE_COOKIE_NAME);
         final String secureCookieValue = secureCookie==null?null:secureCookie.getValue();
 
         response = client.target(response.getLocation())
                 .request()
-                .cookie(CookieNames.SESSION_COOKIE_NAME, sessionCookieValue)
-                .cookie(CookieNames.SECURE_COOKIE_NAME, secureCookieValue)
+                .cookie(StubIdpCookieNames.SESSION_COOKIE_NAME, sessionCookieValue)
+                .cookie(StubIdpCookieNames.SECURE_COOKIE_NAME, secureCookieValue)
                 .get();
         assertThat(response.getStatus()).isEqualTo(200);
         return new Cookies(sessionCookieValue, secureCookieValue);
@@ -182,8 +183,8 @@ public class AuthnRequestSteps {
     public String userFailureFraud(Cookies cookies) {
         Response response = client.target(getStubIdpUri(Urls.IDP_LOGIN_RESOURCE))
                 .request()
-                .cookie(CookieNames.SESSION_COOKIE_NAME, cookies.getSessionId())
-                .cookie(CookieNames.SECURE_COOKIE_NAME, cookies.getSecure())
+                .cookie(StubIdpCookieNames.SESSION_COOKIE_NAME, cookies.getSessionId())
+                .cookie(StubIdpCookieNames.SECURE_COOKIE_NAME, cookies.getSecure())
                 .get();
 
         Form form = new Form();
@@ -196,8 +197,8 @@ public class AuthnRequestSteps {
 
         response = client.target(getStubIdpUri(Urls.IDP_FRAUD_FAILURE_RESOURCE))
                 .request()
-                .cookie(CookieNames.SESSION_COOKIE_NAME, cookies.getSessionId())
-                .cookie(CookieNames.SECURE_COOKIE_NAME, cookies.getSecure())
+                .cookie(StubIdpCookieNames.SESSION_COOKIE_NAME, cookies.getSessionId())
+                .cookie(StubIdpCookieNames.SECURE_COOKIE_NAME, cookies.getSecure())
                 .post(Entity.form(form));
 
         assertThat(response.getStatus()).isEqualTo(200);
@@ -218,8 +219,8 @@ public class AuthnRequestSteps {
     private void userLogsIn(Cookies cookies, String username, String loginUrl, String consentUrl) {
         Response response = client.target(getStubIdpUri(loginUrl))
                 .request()
-                .cookie(CookieNames.SESSION_COOKIE_NAME, cookies.getSessionId())
-                .cookie(CookieNames.SECURE_COOKIE_NAME, cookies.getSecure())
+                .cookie(StubIdpCookieNames.SESSION_COOKIE_NAME, cookies.getSessionId())
+                .cookie(StubIdpCookieNames.SECURE_COOKIE_NAME, cookies.getSecure())
                 .get();
 
         assertThat(response.getStatus()).isEqualTo(200);
@@ -236,8 +237,8 @@ public class AuthnRequestSteps {
 
         response = client.target(getStubIdpUri(loginUrl))
                 .request()
-                .cookie(CookieNames.SESSION_COOKIE_NAME, cookies.getSessionId())
-                .cookie(CookieNames.SECURE_COOKIE_NAME, cookies.getSecure())
+                .cookie(StubIdpCookieNames.SESSION_COOKIE_NAME, cookies.getSessionId())
+                .cookie(StubIdpCookieNames.SECURE_COOKIE_NAME, cookies.getSecure())
                 .post(Entity.entity(form, MediaType.APPLICATION_FORM_URLENCODED_TYPE));
 
         assertThat(response.getStatus()).isEqualTo(303);
@@ -255,8 +256,8 @@ public class AuthnRequestSteps {
     private String userConsentsReturnSamlResponse(Cookies cookies, boolean randomize, String consentUrl, Optional<String> signingAlgorithm) {
         Response response = client.target(getStubIdpUri(consentUrl))
                 .request()
-                .cookie(CookieNames.SESSION_COOKIE_NAME, cookies.getSessionId())
-                .cookie(CookieNames.SECURE_COOKIE_NAME, cookies.getSecure())
+                .cookie(StubIdpCookieNames.SESSION_COOKIE_NAME, cookies.getSessionId())
+                .cookie(StubIdpCookieNames.SECURE_COOKIE_NAME, cookies.getSecure())
                 .get();
 
         assertThat(response.getStatus()).isEqualTo(200);
@@ -273,8 +274,8 @@ public class AuthnRequestSteps {
 
         response = client.target(getStubIdpUri(consentUrl))
                 .request()
-                .cookie(CookieNames.SESSION_COOKIE_NAME, cookies.getSessionId())
-                .cookie(CookieNames.SECURE_COOKIE_NAME, cookies.getSecure())
+                .cookie(StubIdpCookieNames.SESSION_COOKIE_NAME, cookies.getSessionId())
+                .cookie(StubIdpCookieNames.SECURE_COOKIE_NAME, cookies.getSecure())
                 .post(Entity.entity(form, MediaType.APPLICATION_FORM_URLENCODED_TYPE));
 
         assertThat(response.getStatus()).isEqualTo(200);
@@ -297,8 +298,8 @@ public class AuthnRequestSteps {
     private String userViewsTheDebugPage(Cookies cookies, URI debugUrl) {
         Response response = client.target(debugUrl)
                 .request()
-                .cookie(CookieNames.SESSION_COOKIE_NAME, cookies.getSessionId())
-                .cookie(CookieNames.SECURE_COOKIE_NAME, cookies.getSecure())
+                .cookie(StubIdpCookieNames.SESSION_COOKIE_NAME, cookies.getSessionId())
+                .cookie(StubIdpCookieNames.SECURE_COOKIE_NAME, cookies.getSecure())
                 .get();
 
         assertThat(response.getStatus()).isEqualTo(200);

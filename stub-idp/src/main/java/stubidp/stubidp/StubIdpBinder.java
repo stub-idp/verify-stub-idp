@@ -12,7 +12,11 @@ import stubidp.stubidp.auth.ManagedAuthFilterInstaller;
 import stubidp.stubidp.configuration.IdpStubsConfiguration;
 import stubidp.stubidp.configuration.StubIdpConfiguration;
 import stubidp.stubidp.cookies.CookieFactory;
+import stubidp.stubidp.cookies.CookieNames;
 import stubidp.stubidp.cookies.HmacValidator;
+import stubidp.stubidp.cookies.StubIdpCookieNames;
+import stubidp.stubidp.csrf.AbstractCSRFCheckProtectionFilter;
+import stubidp.stubidp.csrf.StubIDPCSRFCheckProtectionFilter;
 import stubidp.stubidp.domain.factories.StubTransformersFactory;
 import stubidp.stubidp.filters.SessionCookieValueMustExistAsASessionFilter;
 import stubidp.stubidp.listeners.StubIdpsFileListener;
@@ -28,7 +32,7 @@ import stubidp.stubidp.services.AuthnRequestReceiverService;
 import stubidp.stubidp.services.GeneratePasswordService;
 import stubidp.stubidp.services.IdpUserService;
 import stubidp.stubidp.services.UserService;
-import stubidp.stubidp.views.SamlResponseRedirectViewFactory;
+import stubidp.stubidp.views.SamlMessageRedirectViewFactory;
 import stubidp.utils.rest.jerseyclient.JsonResponseProcessor;
 import stubidp.utils.rest.truststore.EmptyKeyStoreProvider;
 import stubidp.utils.security.configuration.SecureCookieConfiguration;
@@ -43,9 +47,9 @@ import javax.ws.rs.core.GenericType;
 import java.security.KeyStore;
 import java.util.function.Function;
 
-public class StubIdpBinder extends AbstractBinder {
+import static stubidp.stubidp.csrf.AbstractCSRFCheckProtectionFilter.IS_SECURE_COOKIE_ENABLED;
 
-    public static final String IS_SECURE_COOKIE_ENABLED = "isSecureCookieEnabled";
+public class StubIdpBinder extends AbstractBinder {
 
     private final StubIdpConfiguration stubIdpConfiguration;
     private final Environment environment;
@@ -58,9 +62,11 @@ public class StubIdpBinder extends AbstractBinder {
 
     @Override
     protected void configure() {
-        bind(SamlResponseRedirectViewFactory.class).to(SamlResponseRedirectViewFactory.class);
+        bind(SamlMessageRedirectViewFactory.class).to(SamlMessageRedirectViewFactory.class);
         bind(IdGenerator.class).to(IdGenerator.class);
         bind(X509CertificateFactory.class).to(X509CertificateFactory.class);
+        bind(StubIdpCookieNames.class).to(CookieNames.class);
+        bind(StubIDPCSRFCheckProtectionFilter.class).to(AbstractCSRFCheckProtectionFilter.class);
 
         bind(AllIdpsUserRepository.class).in(Singleton.class).to(AllIdpsUserRepository.class);
         bind(IdpStubsRepository.class).in(Singleton.class).to(IdpStubsRepository.class);

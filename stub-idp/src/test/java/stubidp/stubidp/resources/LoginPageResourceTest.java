@@ -8,6 +8,7 @@ import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import stubidp.saml.utils.hub.domain.IdaAuthnRequestFromHub;
 import stubidp.stubidp.cookies.CookieFactory;
+import stubidp.stubidp.cookies.CookieNames;
 import stubidp.stubidp.domain.DatabaseIdpUser;
 import stubidp.stubidp.domain.SamlResponseFromValue;
 import stubidp.stubidp.domain.SubmitButtonValue;
@@ -22,7 +23,7 @@ import stubidp.stubidp.resources.idp.LoginPageResource;
 import stubidp.stubidp.services.IdpUserService;
 import stubidp.stubidp.services.NonSuccessAuthnResponseService;
 import stubidp.stubidp.views.ErrorMessageType;
-import stubidp.stubidp.views.SamlResponseRedirectViewFactory;
+import stubidp.stubidp.views.SamlMessageRedirectViewFactory;
 import stubidp.utils.rest.common.SessionId;
 
 import javax.ws.rs.core.Response;
@@ -66,13 +67,15 @@ public class LoginPageResourceTest {
     private Idp idp;
     @Mock
     private CookieFactory cookieFactory;
+    @Mock
+    private CookieNames cookieNames;
 
     @BeforeEach
     public void createResource() {
         resource = new LoginPageResource(
                 idpStubsRepository,
                 nonSuccessAuthnResponseService,
-                new SamlResponseRedirectViewFactory(),
+                new SamlMessageRedirectViewFactory(cookieNames),
                 idpUserService,
                 sessionRepository,
                 cookieFactory);

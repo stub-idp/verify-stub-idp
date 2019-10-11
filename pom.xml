@@ -37,6 +37,7 @@
         <javax_inject.version>2.6.1</javax_inject.version>
         <freemarker.version>2.3.29</freemarker.version>
         <prometheus_client.version>0.7.0</prometheus_client.version>
+        <jsoup.version>1.12.1</jsoup.version>
 
         <!-- test dependencies -->
         <assertj.version>3.13.2</assertj.version>
@@ -48,6 +49,7 @@
     <modules>
         <module>stub-idp</module>
         <module>stub-sp</module>
+        <module>shared-lib</module>
         <module>hub-saml</module>
         <module>saml-extensions</module>
         <module>saml-metadata-bindings</module>
