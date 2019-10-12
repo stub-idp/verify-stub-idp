@@ -77,7 +77,7 @@ public class IdpUserServiceTest {
         when(sessionRepository.get(SESSION_ID)).thenReturn(Optional.ofNullable(new IdpSession(SESSION_ID, idaAuthnRequestFromHubOptional, RELAY_STATE, null, null, null, null, null, null)));
         when(idpStubsRepository.getIdpWithFriendlyId(IDP_NAME)).thenReturn(idp);
         when(idp.userExists(USERNAME)).thenReturn(false);
-        when(idp.createUser(any(), any(), any(), any(), any(), any(), any(), eq(USERNAME), eq(PASSWORD), any())).thenReturn(mock(DatabaseIdpUser.class));
+        when(idp.createUser(any(), any(), any(), any(), any(), any(), any(), eq(USERNAME), any(), any())).thenReturn(mock(DatabaseIdpUser.class));
 
         idpUserService.createAndAttachIdpUserToSession(IDP_NAME, "bob", "jones", "address line 1", "address line 2", "address town", "address postcode", AuthnContext.LEVEL_2, "2000-01-01", USERNAME, "password", SESSION_ID);
 

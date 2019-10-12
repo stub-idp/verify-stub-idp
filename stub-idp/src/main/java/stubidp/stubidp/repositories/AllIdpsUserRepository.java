@@ -71,6 +71,7 @@ public class AllIdpsUserRepository {
                 dateOfBirths,
                 addresses,
                 levelOfAssurance);
+        user.hashPassword();
 
         addUserForIdp(idpFriendlyName, user);
 
@@ -92,6 +93,7 @@ public class AllIdpsUserRepository {
                 firstName, nonLatinFirstName, surname, nonLatinSurname,
                 dob, levelOfAssurance
         );
+        user.hashPassword();
 
         addUserForStubCountry(countryFriendlyName, user);
 

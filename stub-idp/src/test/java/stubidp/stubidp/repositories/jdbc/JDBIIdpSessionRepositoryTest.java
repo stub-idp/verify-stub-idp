@@ -75,7 +75,8 @@ public class JDBIIdpSessionRepositoryTest {
 		IdaAuthnRequestFromHub authnRequest = new IdaAuthnRequestFromHub("155a37d3-5a9d-4cd0-b68a-158717b85202", "test-issuer", authnRequestIssueTime, Arrays.asList(), Optional.empty(), null, null, AuthnContextComparisonTypeEnumeration.EXACT);
 		IdpSession session = createSession(authnRequest);
 		SessionId insertedSessionId = repository.createSession(session);
-		String expectedSerializedSession = "{{\"sessionId\":\""+ insertedSessionId.getSessionId() +"\",\"idaAuthnRequestFromHub\":{\"id\":\"155a37d3-5a9d-4cd0-b68a-158717b85202\",\"issuer\":\"test-issuer\",\"issueInstant\":1524655440000,\"levelsOfAssurance\":[],\"forceAuthentication\":null,\"sessionExpiryTimestamp\":null,\"comparisonType\":{\"comparisonType\":\"exact\"},\"destination\":null},\"relayState\":\"test-relay-state\",\"validHints\":[],\"invalidHints\":[],\"languageHint\":null,\"registration\":null,\"singleIdpJourneyId\":null,\"csrfToken\":null,\"idpUser\":{\"username\":\"jobloggs\",\"persistentId\":\"persistentId\",\"password\":\"12345678\",\"firstnames\":[{\"value\":\"Joe\",\"from\":null,\"to\":null,\"verified\":true}],\"middleNames\":[],\"surnames\":[{\"value\":\"Bloggs\",\"from\":null,\"to\":null,\"verified\":true}],\"gender\":{\"value\":\"MALE\",\"from\":null,\"to\":null,\"verified\":true},\"dateOfBirths\":[{\"value\":[2018,4,25],\"from\":null,\"to\":null,\"verified\":true}],\"addresses\":[],\"levelOfAssurance\":\"LEVEL_1\",\"currentAddress\":null}}}";
+		String expectedSerializedSessionStart = "{{\"sessionId\":\""+ insertedSessionId.getSessionId() +"\",\"idaAuthnRequestFromHub\":{\"id\":\"155a37d3-5a9d-4cd0-b68a-158717b85202\",\"issuer\":\"test-issuer\",\"issueInstant\":1524655440000,\"levelsOfAssurance\":[],\"forceAuthentication\":null,\"sessionExpiryTimestamp\":null,\"comparisonType\":{\"comparisonType\":\"exact\"},\"destination\":null},\"relayState\":\"test-relay-state\",\"validHints\":[],\"invalidHints\":[],\"languageHint\":null,\"registration\":null,\"singleIdpJourneyId\":null,\"csrfToken\":null,\"idpUser\":{\"username\":\"jobloggs\",\"persistentId\":\"persistentId\",\"password\":";
+		String expectedSerializedSessionEnd = ",\"firstnames\":[{\"value\":\"Joe\",\"from\":null,\"to\":null,\"verified\":true}],\"middleNames\":[],\"surnames\":[{\"value\":\"Bloggs\",\"from\":null,\"to\":null,\"verified\":true}],\"gender\":{\"value\":\"MALE\",\"from\":null,\"to\":null,\"verified\":true},\"dateOfBirths\":[{\"value\":[2018,4,25],\"from\":null,\"to\":null,\"verified\":true}],\"addresses\":[],\"levelOfAssurance\":\"LEVEL_1\",\"currentAddress\":null}}}";
 
 		jdbi.useHandle(handle -> {
 			Optional<String> result = handle.select("select session_data from stub_idp_session where session_id = ?", insertedSessionId.toString())
@@ -83,7 +84,10 @@ public class JDBIIdpSessionRepositoryTest {
 				.findFirst();
 				
 			assertThat(result.isPresent()).isEqualTo(true);
-			assertThat(result.get()).isEqualTo(expectedSerializedSession);
+			// skip the password
+			assertThat(result.get()).startsWith(expectedSerializedSessionStart);
+			assertThat(result.get()).endsWith(expectedSerializedSessionEnd);
+			assertThat(result.get()).doesNotContain("12345678"); //password should be hashed
 		});
 	}
 	

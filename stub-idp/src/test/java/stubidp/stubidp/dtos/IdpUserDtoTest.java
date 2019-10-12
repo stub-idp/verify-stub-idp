@@ -6,6 +6,7 @@ import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
 import org.joda.time.LocalDate;
 import org.junit.jupiter.api.Test;
+import org.mindrot.jbcrypt.BCrypt;
 import stubidp.saml.utils.core.domain.Address;
 import stubidp.saml.utils.core.domain.Gender;
 import stubidp.stubidp.builders.AddressBuilder;
@@ -23,12 +24,12 @@ public class IdpUserDtoTest {
     @Test
     public void shouldDeSerialiseJsonToObjectWhenAllFieldsArePopulated() throws IOException {
 
-        IdpUserDto idpUserDtoFromJson = Jackson.newObjectMapper().readValue("{\"pid\":\"00754148-902f-4d94-b0db-cb1f7eb3fd84\",\"username\":\"user1\",\"password\":\"password\",\"firstName\":{\"value\":\"Fred\",\"from\":315532800000,\"to\":1356998400000,\"verified\":true},\"middleNames\":{\"value\":\"Flintstone\",\"from\":315532800000,\"to\":1356998400000,\"verified\":true},\"gender\":{\"value\":\"MALE\",\"from\":315532800000,\"to\":1356998400000,\"verified\":true},\"dateOfBirth\":{\"value\":[1970,1,1],\"from\":315532800000,\"to\":1356998400000,\"verified\":true},\"address\":{\"verified\":false,\"from\":978307200000,\"to\":1355270400000,\"postCode\":\"WC2B 6NH\",\"lines\":[\"Aviation House\",\"London\"],\"internationalPostCode\":null,\"uprn\":null},\"levelOfAssurance\":\"LEVEL_2\",\"surnames\":[{\"value\":\"Smith\",\"from\":315532800000,\"to\":1356998400000,\"verified\":true},{\"value\":\"Henry\",\"from\":315532800000,\"to\":1356998400000,\"verified\":true}]}", IdpUserDto.class);
+        IdpUserDto idpUserDtoFromJson = Jackson.newObjectMapper().readValue("{\"pid\":\"00754148-902f-4d94-b0db-cb1f7eb3fd84\",\"username\":\"user1\",\"password\":\"$2a$10$Dn3LpR9//dOJlnaHCMYMLutaWtEOphNbak9/jAWjaEc3Lt0H9jQy.\",\"firstName\":{\"value\":\"Fred\",\"from\":315532800000,\"to\":1356998400000,\"verified\":true},\"middleNames\":{\"value\":\"Flintstone\",\"from\":315532800000,\"to\":1356998400000,\"verified\":true},\"gender\":{\"value\":\"MALE\",\"from\":315532800000,\"to\":1356998400000,\"verified\":true},\"dateOfBirth\":{\"value\":[1970,1,1],\"from\":315532800000,\"to\":1356998400000,\"verified\":true},\"address\":{\"verified\":false,\"from\":978307200000,\"to\":1355270400000,\"postCode\":\"WC2B 6NH\",\"lines\":[\"Aviation House\",\"London\"],\"internationalPostCode\":null,\"uprn\":null},\"levelOfAssurance\":\"LEVEL_2\",\"surnames\":[{\"value\":\"Smith\",\"from\":315532800000,\"to\":1356998400000,\"verified\":true},{\"value\":\"Henry\",\"from\":315532800000,\"to\":1356998400000,\"verified\":true}]}", IdpUserDto.class);
         
         IdpUserDto idpuserDto = anIdpUserDto()
                 .withPid("00754148-902f-4d94-b0db-cb1f7eb3fd84")
                 .withUserName("user1")
-                .withPassword("password")
+                .withPassword("$2a$10$Dn3LpR9//dOJlnaHCMYMLutaWtEOphNbak9/jAWjaEc3Lt0H9jQy.")
                 .withFirsName(createSimpleMdsValue("Fred"))
                 .withMiddleNames(createSimpleMdsValue("Flintstone"))
                 .addSurname(createSimpleMdsValue("Smith"))

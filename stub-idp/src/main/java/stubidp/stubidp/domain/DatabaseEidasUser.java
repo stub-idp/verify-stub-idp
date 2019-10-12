@@ -38,6 +38,7 @@ public class DatabaseEidasUser implements Serializable {
         this.username = username;
         this.persistentId = persistentId;
         this.password = password;
+        this.hashPassword();
         this.firstname = firstname;
         this.nonLatinFirstname = nonLatinFirstname;
         this.surname = surname;

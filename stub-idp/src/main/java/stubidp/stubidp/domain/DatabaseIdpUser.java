@@ -43,6 +43,7 @@ public class DatabaseIdpUser implements Serializable {
         this.username = username;
         this.persistentId = persistentId;
         this.password = password;
+        this.hashPassword();
         this.firstnames = firstnames;
         this.middleNames = middleNames;
         this.surnames = surnames;

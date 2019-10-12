@@ -50,6 +50,7 @@ public class IdpUserDto {
         this.pid = pid;
         this.username = username;
         this.password = password;
+        this.hashPassword();
         this.firstName = firstName;
         this.middleNames = middleNames;
         this.surname = surnames;
