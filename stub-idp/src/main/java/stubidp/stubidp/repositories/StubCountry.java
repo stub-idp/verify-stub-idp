@@ -1,6 +1,7 @@
 package stubidp.stubidp.repositories;
 
 import org.joda.time.LocalDate;
+import org.mindrot.jbcrypt.BCrypt;
 import stubidp.saml.utils.core.domain.AuthnContext;
 import stubidp.stubidp.domain.DatabaseEidasUser;
 import stubidp.stubidp.domain.MatchingDatasetValue;
@@ -26,7 +27,7 @@ public class StubCountry {
 
     public Optional<DatabaseEidasUser> getUser(String username, String password) {
         Optional<DatabaseEidasUser> userForStubCountry = allIdpsUserRepository.getUserForCountry(friendlyId, username);
-        if (userForStubCountry.isPresent() && userForStubCountry.get().getPassword().equals(password)) {
+        if (userForStubCountry.isPresent() && BCrypt.checkpw(password, userForStubCountry.get().getPassword())) {
             return userForStubCountry;
         }
 
