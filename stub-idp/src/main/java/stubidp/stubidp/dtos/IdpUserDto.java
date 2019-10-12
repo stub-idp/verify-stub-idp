@@ -8,7 +8,6 @@ import stubidp.saml.utils.core.domain.Address;
 import stubidp.saml.utils.core.domain.Gender;
 import stubidp.stubidp.domain.DatabaseIdpUser;
 import stubidp.stubidp.domain.MatchingDatasetValue;
-import stubidp.stubidp.exceptions.UnHashedPasswordException;
 import stubidp.stubidp.security.BCryptHelper;
 
 import java.util.ArrayList;
@@ -50,7 +49,6 @@ public class IdpUserDto {
         this.pid = pid;
         this.username = username;
         this.password = password;
-        this.hashPassword();
         this.firstName = firstName;
         this.middleNames = middleNames;
         this.surname = surnames;
@@ -69,10 +67,7 @@ public class IdpUserDto {
     }
 
     public String getPassword() {
-        if(BCryptHelper.alreadyCrypted(this.password)) {
-            return this.password;
-        }
-        throw new UnHashedPasswordException(this.getUsername());
+        return this.password;
     }
 
     public Optional<MatchingDatasetValue<String>> getFirstName() {

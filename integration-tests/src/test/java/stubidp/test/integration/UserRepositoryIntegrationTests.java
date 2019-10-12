@@ -9,7 +9,6 @@ import org.joda.time.LocalDate;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mindrot.jbcrypt.BCrypt;
 import stubidp.saml.utils.core.domain.Address;
 import stubidp.saml.utils.core.domain.AuthnContext;
 import stubidp.saml.utils.core.domain.Gender;
@@ -17,6 +16,7 @@ import stubidp.stubidp.Urls;
 import stubidp.stubidp.builders.SimpleMdsValueBuilder;
 import stubidp.stubidp.domain.MatchingDatasetValue;
 import stubidp.stubidp.dtos.IdpUserDto;
+import stubidp.stubidp.security.BCryptHelper;
 import stubidp.stubidp.utils.TestUserCredentials;
 import stubidp.test.integration.support.IntegrationTestHelper;
 import stubidp.test.integration.support.StubIdpAppExtension;
@@ -102,7 +102,7 @@ public class UserRepositoryIntegrationTests extends IntegrationTestHelper {
         assertThat(returnedUser.getAddress().get().getLines().get(1)).isEqualTo(user.getAddress().get().getLines().get(1));
         assertThat(returnedUser.getAddress().get().getPostCode()).isEqualTo(user.getAddress().get().getPostCode());
         assertThat(returnedUser.getAddress().get().isVerified()).isEqualTo(user.getAddress().get().isVerified());
-        assertThat(BCrypt.checkpw(user.getPassword(), returnedUser.getPassword())).isTrue();
+        assertThat(BCryptHelper.alreadyCrypted(returnedUser.getPassword())).isTrue();
         assertThat(returnedUser.getLevelOfAssurance()).isEqualTo(user.getLevelOfAssurance());
     }
 
@@ -185,11 +185,7 @@ public class UserRepositoryIntegrationTests extends IntegrationTestHelper {
     }
 
     private static <T> Optional<MatchingDatasetValue<T>> createOptionalMdsValue(Optional<T> value) {
-        if (!value.isPresent()) {
-            return Optional.empty();
-        }
-
-        return Optional.ofNullable(new MatchingDatasetValue<>(value.get(), null, null, true));
+        return value.map(t -> new MatchingDatasetValue<>(t, null, null, true));
     }
 
     protected static class UserBuilder {

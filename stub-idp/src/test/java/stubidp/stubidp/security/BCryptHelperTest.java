@@ -11,5 +11,6 @@ class BCryptHelperTest {
     void checkIfPasswordCryptedAlready() {
         assertThat(BCryptHelper.alreadyCrypted(BCrypt.hashpw("foo", BCrypt.gensalt()))).isTrue();
         assertThat(BCryptHelper.alreadyCrypted("foo")).isFalse();
+        assertThat(BCryptHelper.alreadyCrypted(null)).isFalse();
     }
 }
