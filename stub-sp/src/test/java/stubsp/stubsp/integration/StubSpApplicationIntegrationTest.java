@@ -47,7 +47,8 @@ class StubSpApplicationIntegrationTest {
     void testAvailableServices() {
         final Response response = get(Urls.AVAILABLE_SERVICE_RESOURCE);
         assertThat(response.getStatus()).isEqualTo(200);
-        final List<AvailableServiceDto> availableServices = response.readEntity(new GenericType<>() {});
+        // WARNING: don't remove the type in GenericType, leads to compiler error
+        final List<AvailableServiceDto> availableServices = response.readEntity(new GenericType<List<AvailableServiceDto>>() {});
         assertThat(availableServices).hasSize(1);
     }
 
