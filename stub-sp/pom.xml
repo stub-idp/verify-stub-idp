@@ -69,24 +69,24 @@
 <!--            <version>1.0-SNAPSHOT</version>-->
 <!--            <scope>compile</scope>-->
 <!--        </dependency>-->
-<!--        <dependency>-->
-<!--            <groupId>joda-time</groupId>-->
-<!--            <artifactId>joda-time</artifactId>-->
-<!--            <version>${joda_time.version}</version>-->
-<!--            <scope>compile</scope>-->
-<!--        </dependency>-->
+        <dependency>
+            <groupId>joda-time</groupId>
+            <artifactId>joda-time</artifactId>
+            <version>${joda_time.version}</version>
+            <scope>compile</scope>
+        </dependency>
         <dependency>
             <groupId>net.logstash.logback</groupId>
             <artifactId>logstash-logback-encoder</artifactId>
             <version>${logstash_logback_encoder.version}</version>
             <scope>compile</scope>
         </dependency>
-<!--        <dependency>-->
-<!--            <groupId>com.fasterxml.jackson.datatype</groupId>-->
-<!--            <artifactId>jackson-datatype-joda</artifactId>-->
-<!--            <version>${jackson_datatype_joda.version}</version>-->
-<!--            <scope>compile</scope>-->
-<!--        </dependency>-->
+        <dependency>
+            <groupId>com.fasterxml.jackson.datatype</groupId>
+            <artifactId>jackson-datatype-joda</artifactId>
+            <version>${jackson_datatype_joda.version}</version>
+            <scope>compile</scope>
+        </dependency>
 <!--        <dependency>-->
 <!--            <groupId>de.neuland-bfi</groupId>-->
 <!--            <artifactId>jade4j</artifactId>-->
@@ -153,12 +153,12 @@
 <!--            <version>6.0.4</version>-->
 <!--            <scope>compile</scope>-->
 <!--        </dependency>-->
-<!--        <dependency>-->
-<!--            <groupId>org.freemarker</groupId>-->
-<!--            <artifactId>freemarker</artifactId>-->
-<!--            <version>${freemarker.version}</version>-->
-<!--            <scope>compile</scope>-->
-<!--        </dependency>-->
+        <dependency>
+            <groupId>org.freemarker</groupId>
+            <artifactId>freemarker</artifactId>
+            <version>${freemarker.version}</version>
+            <scope>compile</scope>
+        </dependency>
 <!--        <dependency>-->
 <!--            <groupId>org.jdbi</groupId>-->
 <!--            <artifactId>jdbi3-core</artifactId>-->
@@ -200,7 +200,7 @@
 <!--            <version>42.2.8</version>-->
 <!--            <scope>compile</scope>-->
 <!--        </dependency>-->
-<!--        &lt;!&ndash; verify utils libs &ndash;&gt;-->
+        <!-- verify utils libs -->
 <!--        <dependency>-->
 <!--            <groupId>stub-idp</groupId>-->
 <!--            <artifactId>common-utils</artifactId>-->
@@ -232,7 +232,7 @@
 <!--            <scope>compile</scope>-->
 <!--        </dependency>-->
 
-<!--        &lt;!&ndash; saml libs &ndash;&gt;-->
+        <!-- saml libs -->
 <!--        <dependency>-->
 <!--            <groupId>stub-idp</groupId>-->
 <!--            <artifactId>saml-extensions</artifactId>-->
@@ -275,36 +275,36 @@
 <!--            <version>${commons_codec.version}</version>-->
 <!--            <scope>compile</scope>-->
 <!--        </dependency>-->
-<!--        <dependency>-->
-<!--            <groupId>com.fasterxml.jackson.core</groupId>-->
-<!--            <artifactId>jackson-databind</artifactId>-->
-<!--            <version>${jackson_databind.version}</version>-->
-<!--            <scope>compile</scope>-->
-<!--        </dependency>-->
-<!--        <dependency>-->
-<!--            <groupId>com.fasterxml.jackson.core</groupId>-->
-<!--            <artifactId>jackson-annotations</artifactId>-->
-<!--            <version>${jackson_core.version}</version>-->
-<!--            <scope>compile</scope>-->
-<!--        </dependency>-->
-<!--        <dependency>-->
-<!--            <groupId>com.fasterxml.jackson.core</groupId>-->
-<!--            <artifactId>jackson-core</artifactId>-->
-<!--            <version>${jackson_core.version}</version>-->
-<!--            <scope>compile</scope>-->
-<!--        </dependency>-->
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+            <version>${jackson_databind.version}</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-annotations</artifactId>
+            <version>${jackson_core.version}</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-core</artifactId>
+            <version>${jackson_core.version}</version>
+            <scope>compile</scope>
+        </dependency>
 <!--        <dependency>-->
 <!--            <groupId>org.yaml</groupId>-->
 <!--            <artifactId>snakeyaml</artifactId>-->
 <!--            <version>1.25</version>-->
 <!--            <scope>compile</scope>-->
 <!--        </dependency>-->
-<!--        <dependency>-->
-<!--            <groupId>commons-io</groupId>-->
-<!--            <artifactId>commons-io</artifactId>-->
-<!--            <version>${commons_io.version}</version>-->
-<!--            <scope>compile</scope>-->
-<!--        </dependency>-->
+        <dependency>
+            <groupId>commons-io</groupId>
+            <artifactId>commons-io</artifactId>
+            <version>${commons_io.version}</version>
+            <scope>compile</scope>
+        </dependency>
 
         <!-- test dependencies -->
         <dependency>
