@@ -110,7 +110,7 @@ public class AuthnRequestReceiverService {
         AuthnRequest authnRequest = eidasAuthnRequestValidator.transformAndValidate(schemeId, samlRequest);
         EidasAuthnRequest eidasAuthnRequest = EidasAuthnRequest.buildFromAuthnRequest(authnRequest);
         successfulEidasAuthnRequests.inc();
-        EidasSession session = new EidasSession(SessionId.createNewSessionId(), eidasAuthnRequest, relayState, Collections.emptyList(), Collections.emptyList(), languageHint, Optional.empty(), null);
+        EidasSession session = new EidasSession(SessionId.createNewSessionId(), eidasAuthnRequest, relayState, Collections.emptyList(), Collections.emptyList(), languageHint, Optional.empty(), null, true);
         final SessionId idpSessionId = eidasSessionRepository.createSession(session);
 
         UriBuilder uriBuilder = UriBuilder.fromPath(Urls.EIDAS_LOGIN_RESOURCE);

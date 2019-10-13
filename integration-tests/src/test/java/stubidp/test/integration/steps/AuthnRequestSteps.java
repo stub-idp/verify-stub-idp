@@ -7,6 +7,7 @@ import stubidp.saml.extensions.IdaConstants;
 import stubidp.stubidp.Urls;
 import stubidp.stubidp.cookies.StubIdpCookieNames;
 import stubidp.stubidp.domain.FraudIndicator;
+import stubidp.stubidp.views.SignAssertions;
 import stubidp.test.integration.support.IdpAuthnRequestBuilder;
 import stubidp.test.integration.support.eidas.EidasAuthnRequestBuilder;
 
@@ -228,6 +229,7 @@ public class AuthnRequestSteps {
         form.param(Urls.USERNAME_PARAM, username);
         form.param(Urls.PASSWORD_PARAM, "bar");
         form.param(Urls.SUBMIT_PARAM, "SignIn");
+        form.param(Urls.SIGN_ASSERTIONS_PARAM, SignAssertions.signAssertions.name()); // for eidas logins
         final Document entity = Jsoup.parse(response.readEntity(String.class));
         final Element csrfElement = entity.getElementById(CSRF_PROTECT_FORM_KEY);
         if(!Objects.isNull(csrfElement)) {
@@ -238,7 +240,7 @@ public class AuthnRequestSteps {
                 .request()
                 .cookie(StubIdpCookieNames.SESSION_COOKIE_NAME, cookies.getSessionId())
                 .cookie(StubIdpCookieNames.SECURE_COOKIE_NAME, cookies.getSecure())
-                .post(Entity.entity(form, MediaType.APPLICATION_FORM_URLENCODED_TYPE));
+                .post(Entity.form(form));
 
         assertThat(response.getStatus()).isEqualTo(303);
         assertThat(response.getLocation().getPath()).isEqualTo(getStubIdpUri(consentUrl).getPath());

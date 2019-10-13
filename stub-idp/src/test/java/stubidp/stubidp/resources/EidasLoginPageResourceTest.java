@@ -22,6 +22,7 @@ import stubidp.stubidp.repositories.StubCountryRepository;
 import stubidp.stubidp.resources.eidas.EidasLoginPageResource;
 import stubidp.stubidp.services.EidasAuthnResponseService;
 import stubidp.stubidp.services.StubCountryService;
+import stubidp.stubidp.views.SignAssertions;
 import stubidp.utils.rest.common.SessionId;
 
 import javax.ws.rs.core.Response;
@@ -29,6 +30,7 @@ import javax.ws.rs.core.UriBuilder;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -36,7 +38,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-public class EidasLoginPageResourceTest {
+class EidasLoginPageResourceTest {
 
     private EidasLoginPageResource resource;
     private EidasSession session;
@@ -70,7 +72,7 @@ public class EidasLoginPageResourceTest {
     private CookieNames cookieNames;
 
     @BeforeEach
-    public void setUp() throws URISyntaxException {
+    void setUp() {
         SamlMessageRedirectViewFactory samlResponseRedirectViewFactory = new SamlMessageRedirectViewFactory(cookieNames);
         resource = new EidasLoginPageResource(sessionRepository, eidasSuccessAuthnResponseService, samlResponseRedirectViewFactory, stubCountryRepository, stubCountryService);
         EidasAuthnRequest eidasAuthnRequest = new EidasAuthnRequest("request-id", "issuer", "destination", "loa", Collections.emptyList());
@@ -78,9 +80,9 @@ public class EidasLoginPageResourceTest {
     }
 
     @Test
-    public void loginShouldRedirectToEidasConsentResource() {
+    void loginShouldRedirectToEidasConsentResource() {
         when(sessionRepository.get(SESSION_ID)).thenReturn(Optional.ofNullable(session));
-        final Response response = resource.post(SCHEME_NAME, USERNAME, PASSWORD, SESSION_ID);
+        final Response response = resource.post(SCHEME_NAME, USERNAME, PASSWORD, List.of(SignAssertions.signAssertions), SESSION_ID);
 
         assertThat(response.getLocation()).isEqualTo(UriBuilder.fromPath(Urls.EIDAS_CONSENT_RESOURCE)
                 .build(SCHEME_NAME));
@@ -88,7 +90,7 @@ public class EidasLoginPageResourceTest {
     }
 
     @Test
-    public void loginShouldReturnASuccessfulResponse() {
+    void loginShouldReturnASuccessfulResponse() {
         when(sessionRepository.get(SESSION_ID)).thenReturn(Optional.ofNullable(session));
         when(stubCountryRepository.getStubCountryWithFriendlyId(EidasScheme.fromString(SCHEME_NAME).get())).thenReturn(stubCountry);
 
@@ -98,7 +100,7 @@ public class EidasLoginPageResourceTest {
     }
 
     @Test
-    public void authnFailShouldReturnAnUnsuccessfulResponse() throws URISyntaxException {
+    void authnFailShouldReturnAnUnsuccessfulResponse() throws URISyntaxException {
         when(sessionRepository.deleteAndGet(SESSION_ID)).thenReturn(Optional.ofNullable(session));
         when(eidasSuccessAuthnResponseService.generateAuthnFailed(session, SCHEME_NAME)).thenReturn(samlResponse);
         when(samlResponse.getResponseString()).thenReturn("<saml2p:Response/>");
@@ -115,7 +117,7 @@ public class EidasLoginPageResourceTest {
     }
 
     @Test
-    public void loginShouldThrowAGenericStubIdpExceptionWhenSessionIsEmpty() {
+    void loginShouldThrowAGenericStubIdpExceptionWhenSessionIsEmpty() {
         Assertions.assertThrows(GenericStubIdpException.class,
                 () -> resource.get(SCHEME_NAME, Optional.empty(), null));
     }

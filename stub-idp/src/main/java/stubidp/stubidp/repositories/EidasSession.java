@@ -14,6 +14,7 @@ import java.util.Optional;
 public class EidasSession extends Session {
 	private final EidasAuthnRequest eidasAuthnRequest;
 	private Optional<EidasUser> eidasUser = Optional.empty();
+	private boolean signAssertions = true;
 
 	@JsonCreator
 	public EidasSession(@JsonProperty("sessionId") SessionId sessionId,
@@ -23,9 +24,11 @@ public class EidasSession extends Session {
 						@JsonProperty("invalidHints") List<String> invalidHints,
 						@JsonProperty("languageHint") Optional<IdpLanguageHint> languageHint,
 						@JsonProperty("registration") Optional<Boolean> registration,
-						@JsonProperty("csrfToken") String csrfToken) {
+						@JsonProperty("csrfToken") String csrfToken,
+						@JsonProperty("assertionSigningIntention") boolean signAssertions) {
 		super(sessionId, relayState, validHints, invalidHints, languageHint, registration, csrfToken);
 		this.eidasAuthnRequest = eidasAuthnRequest;
+		this.signAssertions = signAssertions;
 	}
 
 	public EidasSession(SessionId sessionId,
@@ -49,5 +52,13 @@ public class EidasSession extends Session {
 
 	public void setEidasUser(EidasUser eidasUser) {
 		this.eidasUser = Optional.ofNullable(eidasUser);
+	}
+
+	public boolean getSignAssertions() {
+		return signAssertions;
+	}
+
+	public void setSignAssertions(boolean signAssertions) {
+		this.signAssertions = signAssertions;
 	}
 }

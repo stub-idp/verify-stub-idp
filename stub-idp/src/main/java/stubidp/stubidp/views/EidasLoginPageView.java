@@ -17,4 +17,8 @@ public class EidasLoginPageView extends IdpPageView {
     public String getEidasAuthnFailureResource() {
         return Urls.EIDAS_AUTHN_FAILURE_RESOURCE;
     }
+
+    public String getSignAssertionsCheckboxGroup() { return Urls.SIGN_ASSERTIONS_PARAM; }
+
+    public String getSignAssertionsCheckboxValue() { return SignAssertions.signAssertions.name(); }
 }

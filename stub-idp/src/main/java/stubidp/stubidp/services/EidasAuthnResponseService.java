@@ -20,7 +20,6 @@ import stubidp.saml.extensions.extensions.eidas.EidasGender;
 import stubidp.saml.extensions.extensions.eidas.PersonIdentifier;
 import stubidp.stubidp.builders.EidasResponseBuilder;
 import stubidp.stubidp.domain.EidasAddress;
-import stubidp.stubidp.domain.EidasScheme;
 import stubidp.stubidp.domain.EidasUser;
 import stubidp.stubidp.domain.RequestedAttribute;
 import stubidp.stubidp.domain.SamlResponseFromValue;
@@ -81,7 +80,7 @@ public class EidasAuthnResponseService {
 
     public SamlResponseFromValue<Response> getSuccessResponse(EidasSession session, String schemeId) {
         String issuerId = UriBuilder.fromUri(stubCountryMetadataUrl).build(schemeId).toString();
-        boolean shouldSignAssertions = EidasScheme.fromString(schemeId).get().getShouldSignAssertions();
+        boolean shouldSignAssertions = session.getSignAssertions();
         URI hubUrl = metadataProvider.getAssertionConsumerServiceLocation();
         String requestId = session.getEidasAuthnRequest().getRequestId();
         List<Attribute> eidasAttributes = getEidasAttributes(session);

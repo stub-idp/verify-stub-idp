@@ -6,11 +6,9 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.opensaml.core.xml.io.MarshallingException;
 import org.opensaml.saml.saml2.core.Attribute;
 import org.opensaml.saml.saml2.core.Response;
 import org.opensaml.saml.saml2.core.StatusCode;
-import org.opensaml.xmlsec.signature.support.SignatureException;
 import stubidp.saml.extensions.IdaConstants;
 import stubidp.saml.extensions.IdaSamlBootstrap;
 import stubidp.saml.extensions.extensions.eidas.CurrentFamilyName;
@@ -38,10 +36,9 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-public class EidasAuthnResponseServiceTest {
+class EidasAuthnResponseServiceTest {
 
     private final String SCHEME_ID = "stub-country";
-    private final String SCHEME_ID_UNSIGNED_ASSERTIONS = "stub-country-unsigned-assertions";
     private final String SAML_RESPONSE_AS_STRING = "some response";
 
     private EidasAuthnResponseService service;
@@ -55,7 +52,7 @@ public class EidasAuthnResponseServiceTest {
     private final LocalDate dateOfBirth = new LocalDate(1980, 1, 1);
 
     @BeforeEach
-    public void setUp() {
+    void setUp() {
         IdaSamlBootstrap.bootstrap();
         service = new EidasAuthnResponseService(
             "hubEntityId",
@@ -66,7 +63,7 @@ public class EidasAuthnResponseServiceTest {
     }
 
     @Test
-    public void getEidasSuccessResponse() throws URISyntaxException, MarshallingException, SignatureException {
+    void getEidasSuccessResponse() throws URISyntaxException {
         EidasAuthnRequest request = new EidasAuthnRequest("request-id", "issuer", "destination", "loa", Collections.emptyList());
         EidasSession session = new EidasSession(new SessionId("session-id"), request, "relay-state", Collections.emptyList(), Collections.emptyList(), Optional.empty(), Optional.empty());
         session.setEidasUser(new EidasUser("Firstname", Optional.empty(), "Familyname", Optional.empty(), "pid", dateOfBirth, null, null));
@@ -90,7 +87,7 @@ public class EidasAuthnResponseServiceTest {
     }
 
     @Test
-    public void getEidasSuccessWithNonLatinNamesDataResponse() throws URISyntaxException, MarshallingException, SignatureException {
+    void getEidasSuccessWithNonLatinNamesDataResponse() throws URISyntaxException {
         EidasAuthnRequest request = new EidasAuthnRequest("request-id", "issuer", "destination", "loa", Collections.emptyList());
         EidasSession session = new EidasSession(new SessionId("session-id"), request, "relay-state", Collections.emptyList(), Collections.emptyList(), Optional.empty(), Optional.empty());
         session.setEidasUser(new EidasUser("Firstname", Optional.of("nonLatinFirstname"), "Familyname", Optional.of("nonLatinFamilyname"), "pid", dateOfBirth, null, null));
@@ -115,7 +112,7 @@ public class EidasAuthnResponseServiceTest {
     }
 
     @Test
-    public void getAuthnFailResponse() throws URISyntaxException {
+    void getAuthnFailResponse() throws URISyntaxException {
         EidasAuthnRequest request = new EidasAuthnRequest("request-id", "issuer", "destination", "loa", Collections.emptyList());
         EidasSession session = new EidasSession(new SessionId("session-id"), request, "relay-state", Collections.emptyList(), Collections.emptyList(), Optional.empty(), Optional.empty());
         when(metadataRepository.getAssertionConsumerServiceLocation()).thenReturn(new URI("http://hub.url"));
@@ -137,19 +134,20 @@ public class EidasAuthnResponseServiceTest {
     @Test
     void getEidasSuccessResponseForUnsignedAssertionsCountry() throws URISyntaxException {
         EidasAuthnRequest request = new EidasAuthnRequest("request-id", "issuer", "destination", "loa", Collections.emptyList());
-        EidasSession session = new EidasSession(new SessionId("session-id"), request, "relay-state", Collections.emptyList(), Collections.emptyList(), Optional.empty(), Optional.empty());
+        EidasSession session = new EidasSession(new SessionId("session-id"), request, "relay-state", Collections.emptyList(), Collections.emptyList(), Optional.empty(), Optional.empty(), null, false);
         session.setEidasUser(new EidasUser("Firstname", Optional.empty(), "Familyname", Optional.empty(), "pid", dateOfBirth, null, null));
         when(metadataRepository.getAssertionConsumerServiceLocation()).thenReturn(new URI("http://hub.url"));
         when(eidasResponseTransformerProvider.getUnsignedAssertionTransformer(any())).thenReturn(x -> SAML_RESPONSE_AS_STRING);
 
-        SamlResponseFromValue<Response> samlResponse = service.getSuccessResponse(session, SCHEME_ID_UNSIGNED_ASSERTIONS);
+        SamlResponseFromValue<Response> samlResponse = service.getSuccessResponse(session, SCHEME_ID);
         Response response = samlResponse.getResponseObject();
-        assertThat(response.getIssuer().getValue()).isEqualTo("http://stub/stub-country-unsigned-assertions/ServiceMetadata");
+        assertThat(response.getIssuer().getValue()).isEqualTo("http://stub/stub-country/ServiceMetadata");
         assertThat(response.getStatus().getStatusCode().getValue()).isEqualTo(StatusCode.SUCCESS);
         assertThat(response.getInResponseTo()).isEqualTo("request-id");
         assertThat(response.getDestination()).isEqualTo("http://hub.url");
 
         assertThat(response.getAssertions()).hasSize(1);
+        assertThat(response.getAssertions().get(0).isSigned()).isFalse();
         assertThat(response.getAssertions().get(0).getAttributeStatements()).hasSize(1);
         assertThatRequiredAssertionsAreIncluded(response.getAssertions().get(0).getAttributeStatements().get(0).getAttributes());
 

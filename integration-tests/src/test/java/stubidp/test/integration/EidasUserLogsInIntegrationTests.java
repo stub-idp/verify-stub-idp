@@ -100,6 +100,7 @@ public class EidasUserLogsInIntegrationTests extends IntegrationTestHelper {
         assertThat(inboundResponseFromCountry.getStatus().getStatusCode().getValue()).isEqualTo(StatusCode.SUCCESS);
         assertThat(inboundResponseFromCountry.getValidatedIdentityAssertion().getAuthnStatements().size()).isEqualTo(1);
         assertThat(LevelOfAssurance.fromString(inboundResponseFromCountry.getValidatedIdentityAssertion().getAuthnStatements().get(0).getAuthnContext().getAuthnContextClassRef().getAuthnContextClassRef())).isEqualTo(LevelOfAssurance.SUBSTANTIAL);
+        assertThat(inboundResponseFromCountry.getValidatedIdentityAssertion().isSigned()).isTrue();
         assertThat(inboundResponseFromCountry.getValidatedIdentityAssertion().getAttributeStatements().size()).isEqualTo(1);
         final List<Attribute> attributes = inboundResponseFromCountry.getValidatedIdentityAssertion().getAttributeStatements().get(0).getAttributes();
         // stub-country can currently only return these 4 attributes

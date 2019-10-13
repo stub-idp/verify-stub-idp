@@ -38,7 +38,7 @@ import static stubidp.stubidp.domain.SubmitButtonValue.Cancel;
 import static stubidp.stubidp.domain.SubmitButtonValue.Register;
 
 @ExtendWith(MockitoExtension.class)
-public class EidasRegistrationPageResourceTest {
+class EidasRegistrationPageResourceTest {
 
     private final String STUB_COUNTRY = "stub-country";
     private final SessionId SESSION_ID = SessionId.createNewSessionId();
@@ -62,7 +62,7 @@ public class EidasRegistrationPageResourceTest {
     private CookieNames cookieNames;
 
     @BeforeEach
-    public void createResource() {
+    void createResource() {
         resource = new EidasRegistrationPageResource(
                 stubCountryRepository,
                 stubCountryService,
@@ -77,7 +77,7 @@ public class EidasRegistrationPageResourceTest {
     }
 
     @Test
-    public void shouldHaveStatusAuthnCancelledResponseWhenUserCancels(){
+    void shouldHaveStatusAuthnCancelledResponseWhenUserCancels(){
         when(sessionRepository.deleteAndGet(SESSION_ID)).thenReturn(Optional.ofNullable(new EidasSession(SESSION_ID, eidasAuthnRequest, RELAY_STATE, null, null, null, null)));
         when(nonSuccessAuthnResponseService.generateAuthnCancel(anyString(), anyString(), eq(RELAY_STATE))).thenReturn(new SamlResponseFromValue<String>("saml", Function.identity(), RELAY_STATE, URI.create("uri")));
         when(cookieNames.getSessionCookieName()).thenReturn("sessionCookieName");
@@ -88,13 +88,11 @@ public class EidasRegistrationPageResourceTest {
     }
 
     @Test
-    public void shouldHaveStatusSuccessResponseWhenUserRegisters() throws InvalidSessionIdException, IncompleteRegistrationException, InvalidDateException, UsernameAlreadyTakenException, InvalidUsernameOrPasswordException {
+    void shouldHaveStatusSuccessResponseWhenUserRegisters() throws InvalidSessionIdException, IncompleteRegistrationException, InvalidDateException, UsernameAlreadyTakenException, InvalidUsernameOrPasswordException {
 
         final Response response = resource.post(STUB_COUNTRY, "bob", "", "jones", "", "2000-01-01", "username", "password", LEVEL_2, Register, SESSION_ID);
 
         assertThat(response.getStatus()).isEqualTo(303);
         verify(stubCountryService).createAndAttachIdpUserToSession(eq(EidasScheme.fromString(STUB_COUNTRY).get()), anyString(), anyString(), eq(eidasSession), anyString(), anyString(), anyString(), anyString(), anyString(), eq(LEVEL_2));
     }
-
-
 }

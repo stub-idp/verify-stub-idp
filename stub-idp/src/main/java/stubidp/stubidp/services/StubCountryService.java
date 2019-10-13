@@ -32,9 +32,10 @@ public class StubCountryService {
         this.sessionRepository = sessionRepository;
     }
 
-    public void attachStubCountryToSession(EidasScheme eidasScheme, String username, String password, EidasSession session) throws InvalidUsernameOrPasswordException, InvalidSessionIdException {
+    public void attachStubCountryToSession(EidasScheme eidasScheme, String username, String password, boolean signAssertions, EidasSession session) throws InvalidUsernameOrPasswordException, InvalidSessionIdException {
         StubCountry stubCountry = stubCountryRepository.getStubCountryWithFriendlyId(eidasScheme);
         Optional<DatabaseEidasUser> user = stubCountry.getUser(username, password);
+        session.setSignAssertions(signAssertions);
         attachEidasUserToSession(user, session);
     }
 
@@ -91,14 +92,14 @@ public class StubCountryService {
     }
 
     private void attachEidasUserToSession(Optional<DatabaseEidasUser> user, EidasSession session) throws InvalidUsernameOrPasswordException, InvalidSessionIdException {
-        if (!user.isPresent()) {
+        if (user.isEmpty()) {
             throw new InvalidUsernameOrPasswordException();
         }
         EidasUser eidasUser = createEidasUser(user);
 
         session.setEidasUser(eidasUser);
 
-        if (!session.getEidasUser().isPresent()) {
+        if (session.getEidasUser().isEmpty()) {
             throw new InvalidSessionIdException();
         }
         sessionRepository.updateSession(session.getSessionId(), session);
@@ -122,7 +123,7 @@ public class StubCountryService {
     }
 
     private Optional<String> getOptionalValue(Optional<MatchingDatasetValue<String>> fieldValue) {
-        return Optional.ofNullable(fieldValue.map(MatchingDatasetValue::getValue).orElse(null));
+        return fieldValue.map(MatchingDatasetValue::getValue);
     }
 
     private <T> MatchingDatasetValue<T> createMdsValue(T value) {

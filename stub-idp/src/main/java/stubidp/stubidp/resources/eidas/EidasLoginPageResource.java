@@ -20,6 +20,7 @@ import stubidp.stubidp.services.EidasAuthnResponseService;
 import stubidp.stubidp.services.StubCountryService;
 import stubidp.stubidp.views.EidasLoginPageView;
 import stubidp.stubidp.views.ErrorMessageType;
+import stubidp.stubidp.views.SignAssertions;
 import stubidp.utils.rest.common.SessionId;
 
 import javax.inject.Inject;
@@ -37,6 +38,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriBuilder;
 import java.net.URI;
+import java.util.List;
 import java.util.Optional;
 
 import static java.text.MessageFormat.format;
@@ -73,7 +75,7 @@ public class EidasLoginPageResource {
             @CookieParam(StubIdpCookieNames.SESSION_COOKIE_NAME) @NotNull SessionId sessionCookie) {
 
         final Optional<EidasScheme> eidasScheme = EidasScheme.fromString(schemeName);
-        if(!eidasScheme.isPresent()) {
+        if(eidasScheme.isEmpty()) {
             throw new InvalidEidasSchemeException();
         }
 
@@ -95,17 +97,20 @@ public class EidasLoginPageResource {
             @PathParam(Urls.SCHEME_ID_PARAM) @NotNull String schemeName,
             @FormParam(Urls.USERNAME_PARAM) String username,
             @FormParam(Urls.PASSWORD_PARAM) String password,
+            @FormParam(Urls.SIGN_ASSERTIONS_PARAM) List<SignAssertions> signAssertionChecks,
             @CookieParam(StubIdpCookieNames.SESSION_COOKIE_NAME) @NotNull SessionId sessionCookie) {
 
+        final boolean signAssertions = signAssertionChecks.contains(SignAssertions.signAssertions);
+
         final Optional<EidasScheme> eidasScheme = EidasScheme.fromString(schemeName);
-        if(!eidasScheme.isPresent()) {
+        if(eidasScheme.isEmpty()) {
             throw new InvalidEidasSchemeException();
         }
 
         EidasSession session = checkSession(schemeName, sessionCookie);
 
         try {
-            stubCountryService.attachStubCountryToSession(eidasScheme.get(), username, password, session);
+            stubCountryService.attachStubCountryToSession(eidasScheme.get(), username, password, signAssertions, session);
         } catch (InvalidUsernameOrPasswordException e) {
             return createErrorResponse(ErrorMessageType.INVALID_USERNAME_OR_PASSWORD, schemeName);
         } catch (InvalidSessionIdException e) {
@@ -124,7 +129,7 @@ public class EidasLoginPageResource {
             @PathParam(Urls.SCHEME_ID_PARAM) @NotNull String schemeName,
             @CookieParam(StubIdpCookieNames.SESSION_COOKIE_NAME) @NotNull SessionId sessionCookie) {
 
-        if(!EidasScheme.fromString(schemeName).isPresent()) {
+        if(EidasScheme.fromString(schemeName).isEmpty()) {
             throw new InvalidEidasSchemeException();
         }
 
@@ -141,7 +146,7 @@ public class EidasLoginPageResource {
 
         Optional<EidasSession> session = sessionRepository.get(sessionCookie);
 
-        if (!session.isPresent()) {
+        if (session.isEmpty()) {
             throw new GenericStubIdpException(format("Session is invalid for " + schemeId), Response.Status.BAD_REQUEST);
         }
 
@@ -155,7 +160,7 @@ public class EidasLoginPageResource {
 
         Optional<EidasSession> session = sessionRepository.deleteAndGet(sessionCookie);
 
-        if (!session.isPresent()) {
+        if (session.isEmpty()) {
             throw new GenericStubIdpException(format("Session is invalid for " + schemeId), Response.Status.BAD_REQUEST);
         }
         return session.get();

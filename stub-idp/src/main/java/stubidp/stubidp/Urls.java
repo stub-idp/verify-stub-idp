@@ -36,6 +36,7 @@ public interface Urls {
     String SIGNING_ALGORITHM_PARAM = "signingAlgorithm";
     String SOURCE_PARAM = "source";
     String SOURCE_PARAM_PRE_REG_VALUE = "pre-reg";
+    String SIGN_ASSERTIONS_PARAM = "assertionOptions";
 
     String LOGIN_PATH = "/login";
     String REGISTER_PATH = "/register";
