@@ -2,7 +2,6 @@ package stubsp.stubsp.integration;
 
 import io.dropwizard.testing.junit5.DropwizardAppExtension;
 import io.dropwizard.testing.junit5.DropwizardExtensionsSupport;
-import org.glassfish.hk2.api.TypeLiteral;
 import org.glassfish.jersey.client.ClientProperties;
 import org.glassfish.jersey.client.JerseyClientBuilder;
 import org.junit.jupiter.api.Test;
@@ -16,7 +15,6 @@ import javax.ws.rs.client.Client;
 import javax.ws.rs.core.GenericType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriBuilder;
-
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -58,5 +56,4 @@ class StubSpApplicationIntegrationTest {
                 .request()
                 .get();
     }
-
 }

@@ -4,19 +4,17 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import stubsp.stubsp.filters.SecurityHeadersFilter;
 
 import javax.ws.rs.container.ContainerRequestContext;
 import javax.ws.rs.container.ContainerResponseContext;
 import javax.ws.rs.core.MultivaluedHashMap;
 import javax.ws.rs.core.MultivaluedMap;
-import java.io.IOException;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-public class SecurityHeadersFilterTest {
+class SecurityHeadersFilterTest {
 
     @Mock
     private ContainerRequestContext containerRequestContext;
@@ -25,7 +23,7 @@ public class SecurityHeadersFilterTest {
     private ContainerResponseContext containerResponseContext;
 
     @Test
-    public void checkSecurityHeadersAreAdded() throws IOException {
+    void checkSecurityHeadersAreAdded() {
         SecurityHeadersFilter securityHeadersFilter = new SecurityHeadersFilter();
         MultivaluedMap<String, Object> headers = new MultivaluedHashMap<>();
         when(containerResponseContext.getHeaders()).thenReturn(headers);
@@ -36,7 +34,7 @@ public class SecurityHeadersFilterTest {
         checkSecurityHeaders(headers);
     }
 
-    public static void checkSecurityHeaders(MultivaluedMap<String, Object> headers) {
+    static void checkSecurityHeaders(MultivaluedMap<String, Object> headers) {
         assertThat(headers.containsKey("X-Frame-Options")).isTrue();
         assertThat(headers.get("X-Frame-Options").size()).isEqualTo(1);
         assertThat(headers.get("X-Frame-Options").get(0)).isEqualTo("DENY");
