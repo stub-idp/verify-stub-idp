@@ -80,6 +80,7 @@ public class EidasRegistrationPageResourceTest {
     public void shouldHaveStatusAuthnCancelledResponseWhenUserCancels(){
         when(sessionRepository.deleteAndGet(SESSION_ID)).thenReturn(Optional.ofNullable(new EidasSession(SESSION_ID, eidasAuthnRequest, RELAY_STATE, null, null, null, null)));
         when(nonSuccessAuthnResponseService.generateAuthnCancel(anyString(), anyString(), eq(RELAY_STATE))).thenReturn(new SamlResponseFromValue<String>("saml", Function.identity(), RELAY_STATE, URI.create("uri")));
+        when(cookieNames.getSessionCookieName()).thenReturn("sessionCookieName");
 
         resource.post(STUB_COUNTRY, null, null, null, null, null, null, null, null, Cancel, SESSION_ID);
 

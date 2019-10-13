@@ -103,6 +103,8 @@ public class EidasLoginPageResourceTest {
         when(eidasSuccessAuthnResponseService.generateAuthnFailed(session, SCHEME_NAME)).thenReturn(samlResponse);
         when(samlResponse.getResponseString()).thenReturn("<saml2p:Response/>");
         when(samlResponse.getSpSSOUrl()).thenReturn(new URI("http://hub.url/"));
+        when(cookieNames.getSessionCookieName()).thenReturn("sessionCookieName");
+
         final Response response = resource.postAuthnFailure(SCHEME_NAME, SESSION_ID);
 
         verify(eidasSuccessAuthnResponseService).generateAuthnFailed(session, SCHEME_NAME);

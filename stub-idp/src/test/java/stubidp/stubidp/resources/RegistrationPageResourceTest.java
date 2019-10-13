@@ -82,6 +82,7 @@ public class RegistrationPageResourceTest {
         when(idpSessionRepository.deleteAndGet(SESSION_ID)).thenReturn(Optional.ofNullable(new IdpSession(SESSION_ID, idaAuthnRequestFromHub, RELAY_STATE, null, null, null, null, null, null)));
         when(idaAuthnRequestFromHub.getId()).thenReturn(SAML_REQUEST_ID);
         when(nonSuccessAuthnResponseService.generateAuthnCancel(anyString(), anyString(), eq(RELAY_STATE))).thenReturn(new SamlResponseFromValue<String>("saml", Function.identity(), RELAY_STATE, URI.create("uri")));
+        when(cookieNames.getSessionCookieName()).thenReturn("sessionCookieName");
 
         resource.post(IDP_NAME, null, null, null, null, null, null, null, null, null, null, Cancel, SESSION_ID);
 
