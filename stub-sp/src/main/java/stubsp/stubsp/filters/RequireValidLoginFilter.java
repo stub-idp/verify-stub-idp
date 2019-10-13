@@ -27,6 +27,7 @@ public class RequireValidLoginFilter implements ContainerRequestFilter {
     private final HmacValidator hmacValidator;
     private final boolean isSecureCookieEnabled;
     private final SamlMessageRedirectViewFactory samlMessageRedirectViewFactory;
+    private final boolean sessionFound;
 
     public enum Status {VERIFIED, ID_NOT_PRESENT, HASH_NOT_PRESENT, DELETED_SESSION, INVALID_HASH, NOT_FOUND };
     public static final String NO_CURRENT_SESSION_COOKIE_VALUE = "no-current-session";
@@ -34,10 +35,12 @@ public class RequireValidLoginFilter implements ContainerRequestFilter {
     @Inject
     public RequireValidLoginFilter(HmacValidator hmacValidator,
                                    @Named(IS_SECURE_COOKIE_ENABLED) Boolean isSecureCookieEnabled,
-                                   SamlMessageRedirectViewFactory samlMessageRedirectViewFactory) {
+                                   SamlMessageRedirectViewFactory samlMessageRedirectViewFactory,
+                                   @org.jvnet.hk2.annotations.Optional Boolean sessionFound) {
         this.hmacValidator = hmacValidator;
         this.isSecureCookieEnabled = isSecureCookieEnabled;
         this.samlMessageRedirectViewFactory = samlMessageRedirectViewFactory;
+        this.sessionFound = Optional.ofNullable(sessionFound).orElse(false);
     }
 
     @Override
@@ -112,7 +115,7 @@ public class RequireValidLoginFilter implements ContainerRequestFilter {
     }
 
     private boolean sessionExists(SessionId sessionId) {
-        return false;
+        return sessionFound;
     }
 
     private String getValueOfPossiblyNullCookie(Map<String, Cookie> cookies, String cookieName) {
