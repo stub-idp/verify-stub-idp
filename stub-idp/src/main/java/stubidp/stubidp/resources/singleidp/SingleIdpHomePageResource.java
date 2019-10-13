@@ -1,9 +1,9 @@
 package stubidp.stubidp.resources.singleidp;
 
+import stubidp.shared.exceptions.SessionNotFoundException;
 import stubidp.stubidp.Urls;
 import stubidp.stubidp.cookies.StubIdpCookieNames;
 import stubidp.stubidp.domain.DatabaseIdpUser;
-import stubidp.stubidp.exceptions.SessionNotFoundException;
 import stubidp.stubidp.filters.SessionCookieValueMustExistAsASessionFilter;
 import stubidp.stubidp.repositories.Idp;
 import stubidp.stubidp.repositories.IdpSession;

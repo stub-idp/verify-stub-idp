@@ -5,7 +5,6 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import stubidp.saml.extensions.IdaConstants;
 import stubidp.stubidp.Urls;
-import stubidp.stubidp.cookies.CookieNames;
 import stubidp.stubidp.cookies.StubIdpCookieNames;
 import stubidp.stubidp.domain.FraudIndicator;
 import stubidp.test.integration.support.IdpAuthnRequestBuilder;
@@ -24,7 +23,7 @@ import java.util.Objects;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static stubidp.stubidp.csrf.AbstractCSRFCheckProtectionFilter.CSRF_PROTECT_FORM_KEY;
+import static stubidp.shared.csrf.AbstractCSRFCheckProtectionFilter.CSRF_PROTECT_FORM_KEY;
 import static stubidp.stubidp.repositories.StubCountryRepository.STUB_COUNTRY_FRIENDLY_ID;
 import static stubidp.test.devpki.TestEntityIds.HUB_CONNECTOR_ENTITY_ID;
 

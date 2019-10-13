@@ -1,5 +1,7 @@
 package stubidp.stubidp.domain;
 
+import stubidp.shared.domain.SamlResponse;
+
 import java.net.URI;
 import java.util.function.Function;
 

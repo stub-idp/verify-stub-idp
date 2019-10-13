@@ -11,9 +11,9 @@ import stubidp.stubidp.Urls;
 import stubidp.stubidp.domain.SubmitButtonValue;
 import stubidp.test.integration.steps.FormBuilder;
 import stubidp.test.integration.steps.PreRegistrationSteps;
+import stubidp.test.integration.support.IdpAuthnRequestBuilder;
 import stubidp.test.integration.support.IntegrationTestHelper;
 import stubidp.test.integration.support.StubIdpAppExtension;
-import stubidp.test.integration.support.IdpAuthnRequestBuilder;
 
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.Entity;
@@ -21,8 +21,8 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriBuilder;
 import java.util.Map;
 
+import static stubidp.shared.csrf.AbstractCSRFCheckProtectionFilter.CSRF_PROTECT_FORM_KEY;
 import static stubidp.stubidp.builders.StubIdpBuilder.aStubIdp;
-import static stubidp.stubidp.csrf.AbstractCSRFCheckProtectionFilter.CSRF_PROTECT_FORM_KEY;
 
 @ExtendWith(DropwizardExtensionsSupport.class)
 public class PreRegistrationIntegrationTest extends IntegrationTestHelper {
@@ -46,12 +46,12 @@ public class PreRegistrationIntegrationTest extends IntegrationTestHelper {
     public static Client client = JerseyClientBuilder.createClient().property(ClientProperties.FOLLOW_REDIRECTS, false);
 
     @BeforeEach
-    public void setUp() {
+    void setUp() {
         client.target("http://localhost:" + applicationRule.getAdminPort() + "/tasks/metadata-refresh").request().post(Entity.text(""));
     }
 
     @Test
-    public void userPreRegistersAndThenComesFromRP(){
+    void userPreRegistersAndThenComesFromRP() {
         PreRegistrationSteps steps = new PreRegistrationSteps(client, applicationRule);
 
         steps

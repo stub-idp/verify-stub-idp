@@ -1,11 +1,12 @@
 package stubidp.stubidp.resources.eidas;
 
 import com.google.common.base.Strings;
+import stubidp.shared.csrf.CSRFCheckProtection;
+import stubidp.shared.domain.SamlResponse;
+import stubidp.shared.views.SamlMessageRedirectViewFactory;
 import stubidp.stubidp.Urls;
 import stubidp.stubidp.cookies.StubIdpCookieNames;
-import stubidp.stubidp.csrf.CSRFCheckProtection;
 import stubidp.stubidp.domain.EidasScheme;
-import stubidp.stubidp.domain.SamlResponse;
 import stubidp.stubidp.exceptions.GenericStubIdpException;
 import stubidp.stubidp.exceptions.InvalidEidasSchemeException;
 import stubidp.stubidp.exceptions.InvalidSessionIdException;
@@ -19,7 +20,6 @@ import stubidp.stubidp.services.EidasAuthnResponseService;
 import stubidp.stubidp.services.StubCountryService;
 import stubidp.stubidp.views.EidasLoginPageView;
 import stubidp.stubidp.views.ErrorMessageType;
-import stubidp.stubidp.views.SamlMessageRedirectViewFactory;
 import stubidp.utils.rest.common.SessionId;
 
 import javax.inject.Inject;

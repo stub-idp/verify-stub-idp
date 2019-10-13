@@ -2,9 +2,9 @@ package stubsp.stubsp;
 
 import io.dropwizard.setup.Environment;
 import org.glassfish.jersey.internal.inject.AbstractBinder;
-import stubidp.stubidp.cookies.CookieNames;
-import stubidp.stubidp.cookies.HmacValidator;
-import stubidp.stubidp.views.SamlMessageRedirectViewFactory;
+import stubidp.shared.cookies.CookieNames;
+import stubidp.shared.cookies.HmacValidator;
+import stubidp.shared.views.SamlMessageRedirectViewFactory;
 import stubidp.utils.security.configuration.SecureCookieConfiguration;
 import stubidp.utils.security.configuration.SecureCookieKeyStore;
 import stubidp.utils.security.security.HmacDigest;
@@ -18,7 +18,7 @@ import stubsp.stubsp.services.SamlResponseService;
 import stubsp.stubsp.services.SamlSpMetadataService;
 import stubsp.stubsp.services.SecureService;
 
-import static stubidp.stubidp.csrf.AbstractCSRFCheckProtectionFilter.IS_SECURE_COOKIE_ENABLED;
+import static stubidp.shared.csrf.AbstractCSRFCheckProtectionFilter.IS_SECURE_COOKIE_ENABLED;
 
 public class StubSpBinder extends AbstractBinder {
 

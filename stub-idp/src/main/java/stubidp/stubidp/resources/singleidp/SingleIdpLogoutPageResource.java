@@ -1,7 +1,7 @@
 package stubidp.stubidp.resources.singleidp;
 
+import stubidp.shared.cookies.HttpOnlyNewCookie;
 import stubidp.stubidp.Urls;
-import stubidp.stubidp.cookies.HttpOnlyNewCookie;
 import stubidp.stubidp.cookies.StubIdpCookieNames;
 import stubidp.stubidp.filters.SessionCookieValueMustExistAsASession;
 import stubidp.stubidp.repositories.IdpSessionRepository;

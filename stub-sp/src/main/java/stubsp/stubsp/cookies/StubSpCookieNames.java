@@ -1,6 +1,6 @@
 package stubsp.stubsp.cookies;
 
-import stubidp.stubidp.cookies.CookieNames;
+import stubidp.shared.cookies.CookieNames;
 
 import javax.inject.Inject;
 

@@ -1,12 +1,13 @@
 package stubidp.stubidp.resources.idp;
 
 import com.google.common.base.Strings;
+import stubidp.shared.cookies.CookieFactory;
+import stubidp.shared.csrf.CSRFCheckProtection;
+import stubidp.shared.domain.SamlResponse;
+import stubidp.shared.views.SamlMessageRedirectViewFactory;
 import stubidp.stubidp.Urls;
-import stubidp.stubidp.cookies.CookieFactory;
 import stubidp.stubidp.cookies.StubIdpCookieNames;
-import stubidp.stubidp.csrf.CSRFCheckProtection;
 import stubidp.stubidp.domain.FraudIndicator;
-import stubidp.stubidp.domain.SamlResponse;
 import stubidp.stubidp.domain.SubmitButtonValue;
 import stubidp.stubidp.exceptions.GenericStubIdpException;
 import stubidp.stubidp.exceptions.InvalidSessionIdException;
@@ -21,7 +22,6 @@ import stubidp.stubidp.services.IdpUserService;
 import stubidp.stubidp.services.NonSuccessAuthnResponseService;
 import stubidp.stubidp.views.ErrorMessageType;
 import stubidp.stubidp.views.LoginPageView;
-import stubidp.stubidp.views.SamlMessageRedirectViewFactory;
 import stubidp.utils.rest.common.SessionId;
 
 import javax.inject.Inject;

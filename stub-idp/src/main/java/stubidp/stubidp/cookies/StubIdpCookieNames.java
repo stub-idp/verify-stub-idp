@@ -1,5 +1,7 @@
 package stubidp.stubidp.cookies;
 
+import stubidp.shared.cookies.CookieNames;
+
 import javax.inject.Inject;
 
 public class StubIdpCookieNames implements CookieNames {

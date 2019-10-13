@@ -5,12 +5,12 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import stubidp.stubidp.cookies.HmacValidator;
-import stubidp.stubidp.exceptions.InvalidSecureCookieException;
-import stubidp.stubidp.exceptions.SecureCookieNotFoundException;
-import stubidp.stubidp.exceptions.SessionIdCookieNotFoundException;
-import stubidp.stubidp.exceptions.SessionNotFoundException;
-import stubidp.stubidp.views.SamlMessageRedirectViewFactory;
+import stubidp.shared.cookies.HmacValidator;
+import stubidp.shared.exceptions.InvalidSecureCookieException;
+import stubidp.shared.exceptions.SecureCookieNotFoundException;
+import stubidp.shared.exceptions.SessionIdCookieNotFoundException;
+import stubidp.shared.exceptions.SessionNotFoundException;
+import stubidp.shared.views.SamlMessageRedirectViewFactory;
 import stubidp.utils.rest.common.SessionId;
 
 import javax.ws.rs.container.ContainerRequestContext;

@@ -7,7 +7,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import stubidp.stubidp.Urls;
-import stubidp.stubidp.cookies.CookieNames;
 import stubidp.stubidp.cookies.StubIdpCookieNames;
 import stubidp.test.integration.steps.AuthnRequestSteps;
 import stubidp.test.integration.support.IntegrationTestHelper;
@@ -39,12 +38,12 @@ public class AutoEscapingIntegrationTest extends IntegrationTestHelper {
             .withStubIdp(aStubIdp().withId(IDP_NAME).withDisplayName(DISPLAY_NAME).build());
 
     @BeforeEach
-    public void before() {
+    void before() {
         client.target("http://localhost:" + applicationRule.getAdminPort() + "/tasks/metadata-refresh").request().post(Entity.text(""));
     }
 
     @Test
-    public void userHasAnXSSHintAndItIsCorrectlyEscaped() {
+    void userHasAnXSSHintAndItIsCorrectlyEscaped() {
         final String xss = "afd5j\"><script>alert(\"pwnage\")</script>c3tw";
         final AuthnRequestSteps.Cookies cookies = authnRequestSteps.userPostsAuthnRequestToStubIdp(xss);
         final String response = userSeesTheHintOnTheDebugPage(cookies, xss);

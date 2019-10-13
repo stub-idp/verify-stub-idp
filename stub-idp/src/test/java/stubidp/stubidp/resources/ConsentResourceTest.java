@@ -10,7 +10,8 @@ import stubidp.saml.utils.core.domain.AddressFactory;
 import stubidp.saml.utils.core.domain.AuthnContext;
 import stubidp.saml.utils.core.domain.Gender;
 import stubidp.saml.utils.hub.domain.IdaAuthnRequestFromHub;
-import stubidp.stubidp.cookies.CookieNames;
+import stubidp.shared.cookies.CookieNames;
+import stubidp.shared.views.SamlMessageRedirectViewFactory;
 import stubidp.stubidp.domain.DatabaseIdpUser;
 import stubidp.stubidp.domain.MatchingDatasetValue;
 import stubidp.stubidp.repositories.Idp;
@@ -21,7 +22,6 @@ import stubidp.stubidp.resources.idp.ConsentResource;
 import stubidp.stubidp.services.NonSuccessAuthnResponseService;
 import stubidp.stubidp.services.SuccessAuthnResponseService;
 import stubidp.stubidp.views.ConsentView;
-import stubidp.stubidp.views.SamlMessageRedirectViewFactory;
 import stubidp.test.devpki.TestEntityIds;
 import stubidp.utils.rest.common.SessionId;
 

@@ -10,7 +10,7 @@ import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
 import io.dropwizard.views.ViewBundle;
 import stubidp.metrics.prometheus.bundle.PrometheusBundle;
-import stubidp.stubidp.csrf.CSRFViewRenderer;
+import stubidp.shared.csrf.CSRFViewRenderer;
 import stubidp.utils.rest.bundles.LoggingBundle;
 import stubidp.utils.rest.bundles.MonitoringBundle;
 import stubidp.utils.rest.bundles.ServiceStatusBundle;

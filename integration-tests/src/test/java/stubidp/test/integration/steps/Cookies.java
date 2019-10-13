@@ -1,6 +1,6 @@
 package stubidp.test.integration.steps;
 
-import stubidp.stubidp.cookies.HttpOnlyNewCookie;
+import stubidp.shared.cookies.HttpOnlyNewCookie;
 import stubidp.stubidp.cookies.StubIdpCookieNames;
 
 import javax.ws.rs.core.NewCookie;

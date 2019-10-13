@@ -2,9 +2,10 @@ package stubidp.stubidp.resources.idp;
 
 import com.google.common.base.Strings;
 import stubidp.saml.utils.core.domain.AuthnContext;
+import stubidp.shared.csrf.CSRFCheckProtection;
+import stubidp.shared.views.SamlMessageRedirectViewFactory;
 import stubidp.stubidp.Urls;
 import stubidp.stubidp.cookies.StubIdpCookieNames;
-import stubidp.stubidp.csrf.CSRFCheckProtection;
 import stubidp.stubidp.domain.DatabaseIdpUser;
 import stubidp.stubidp.exceptions.GenericStubIdpException;
 import stubidp.stubidp.filters.SessionCookieValueMustExistAsASession;
@@ -15,7 +16,6 @@ import stubidp.stubidp.repositories.IdpStubsRepository;
 import stubidp.stubidp.services.NonSuccessAuthnResponseService;
 import stubidp.stubidp.services.SuccessAuthnResponseService;
 import stubidp.stubidp.views.ConsentView;
-import stubidp.stubidp.views.SamlMessageRedirectViewFactory;
 import stubidp.utils.rest.common.SessionId;
 
 import javax.inject.Inject;

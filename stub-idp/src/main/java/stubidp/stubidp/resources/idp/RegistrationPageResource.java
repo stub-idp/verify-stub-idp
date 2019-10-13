@@ -2,10 +2,11 @@ package stubidp.stubidp.resources.idp;
 
 import com.google.common.base.Strings;
 import stubidp.saml.utils.core.domain.AuthnContext;
+import stubidp.shared.csrf.CSRFCheckProtection;
+import stubidp.shared.domain.SamlResponse;
+import stubidp.shared.views.SamlMessageRedirectViewFactory;
 import stubidp.stubidp.Urls;
 import stubidp.stubidp.cookies.StubIdpCookieNames;
-import stubidp.stubidp.csrf.CSRFCheckProtection;
-import stubidp.stubidp.domain.SamlResponse;
 import stubidp.stubidp.domain.SubmitButtonValue;
 import stubidp.stubidp.exceptions.GenericStubIdpException;
 import stubidp.stubidp.exceptions.IncompleteRegistrationException;
@@ -22,7 +23,6 @@ import stubidp.stubidp.services.IdpUserService;
 import stubidp.stubidp.services.NonSuccessAuthnResponseService;
 import stubidp.stubidp.views.ErrorMessageType;
 import stubidp.stubidp.views.RegistrationPageView;
-import stubidp.stubidp.views.SamlMessageRedirectViewFactory;
 import stubidp.utils.rest.common.SessionId;
 
 import javax.inject.Inject;

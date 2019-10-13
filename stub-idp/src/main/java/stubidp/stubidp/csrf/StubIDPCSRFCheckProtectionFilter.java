@@ -1,7 +1,8 @@
 package stubidp.stubidp.csrf;
 
-import stubidp.stubidp.cookies.CookieNames;
-import stubidp.stubidp.cookies.HmacValidator;
+import stubidp.shared.cookies.CookieNames;
+import stubidp.shared.cookies.HmacValidator;
+import stubidp.shared.csrf.AbstractCSRFCheckProtectionFilter;
 import stubidp.stubidp.repositories.EidasSession;
 import stubidp.stubidp.repositories.EidasSessionRepository;
 import stubidp.stubidp.repositories.IdpSession;

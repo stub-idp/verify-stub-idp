@@ -21,7 +21,7 @@ import java.util.Objects;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.fail;
-import static stubidp.stubidp.csrf.AbstractCSRFCheckProtectionFilter.CSRF_PROTECT_FORM_KEY;
+import static stubidp.shared.csrf.AbstractCSRFCheckProtectionFilter.CSRF_PROTECT_FORM_KEY;
 
 public class PreRegistrationSteps {
     private Response response;

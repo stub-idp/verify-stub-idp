@@ -10,7 +10,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import stubidp.stubidp.Urls;
-import stubidp.stubidp.cookies.CookieNames;
 import stubidp.stubidp.cookies.StubIdpCookieNames;
 import stubidp.stubidp.filters.SecurityHeadersFilterTest;
 import stubidp.test.integration.steps.AuthnRequestSteps;
@@ -28,8 +27,8 @@ import java.util.Objects;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static stubidp.shared.csrf.AbstractCSRFCheckProtectionFilter.CSRF_PROTECT_FORM_KEY;
 import static stubidp.stubidp.builders.StubIdpBuilder.aStubIdp;
-import static stubidp.stubidp.csrf.AbstractCSRFCheckProtectionFilter.CSRF_PROTECT_FORM_KEY;
 
 @ExtendWith(DropwizardExtensionsSupport.class)
 public class SecurityIntegrationTests extends IntegrationTestHelper {
@@ -46,12 +45,12 @@ public class SecurityIntegrationTests extends IntegrationTestHelper {
             .withStubIdp(aStubIdp().withId(IDP_NAME).withDisplayName(DISPLAY_NAME).build());
 
     @BeforeEach
-    public void refreshMetadata() {
+    void refreshMetadata() {
         client.target("http://localhost:"+applicationRule.getAdminPort()+"/tasks/connector-metadata-refresh").request().post(Entity.text(""));
     }
 
     @Test
-    public void securityHeaderTest() {
+    void securityHeaderTest() {
         final Response response = client.target(UriBuilder.fromUri("http://localhost:" + applicationRule.getLocalPort())
                 .path("/page_does_not_exist")
                 .build())
@@ -63,7 +62,7 @@ public class SecurityIntegrationTests extends IntegrationTestHelper {
     }
 
     @Test
-    public void csrfTokenIsUniquePerPageLoad() {
+    void csrfTokenIsUniquePerPageLoad() {
         final AuthnRequestSteps.Cookies cookies = authnRequestSteps.userPostsAuthnRequestToStubIdp();
         String csrfValueOne = getLoginPageCsrfValue(cookies);
         String csrfValueTwo = getLoginPageCsrfValue(cookies);
@@ -71,7 +70,7 @@ public class SecurityIntegrationTests extends IntegrationTestHelper {
     }
 
     @Test
-    public void whenCsrfTokenIsModifiedThenRequestDoesNotWork() {
+    void whenCsrfTokenIsModifiedThenRequestDoesNotWork() {
         final AuthnRequestSteps.Cookies cookies = authnRequestSteps.userPostsAuthnRequestToStubIdp();
         getLoginPageCsrfValue(cookies);
 
@@ -91,7 +90,7 @@ public class SecurityIntegrationTests extends IntegrationTestHelper {
     }
 
     @Test
-    public void whenSecureCookieIsModifiedThenRequestDoesNotWork() {
+    void whenSecureCookieIsModifiedThenRequestDoesNotWork() {
         final AuthnRequestSteps.Cookies cookies = authnRequestSteps.userPostsAuthnRequestToStubIdp();
 
         Response response = client.target(authnRequestSteps.getStubIdpUri(Urls.IDP_LOGIN_RESOURCE))
@@ -112,7 +111,7 @@ public class SecurityIntegrationTests extends IntegrationTestHelper {
     }
 
     @Test
-    public void whenSameAuthnRequestIsSentTwiceItFails() {
+    void whenSameAuthnRequestIsSentTwiceItFails() {
         final String authnRequest = IdpAuthnRequestBuilder.anAuthnRequest()
                 .withDestination(UriBuilder.fromUri(authnRequestSteps.getStubIdpUri(Urls.IDP_SAML2_SSO_RESOURCE)).build().toASCIIString())
                 .build();

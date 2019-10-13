@@ -8,14 +8,15 @@ import io.dropwizard.setup.Environment;
 import org.glassfish.jersey.internal.inject.AbstractBinder;
 import org.jdbi.v3.core.Jdbi;
 import org.opensaml.saml.saml2.core.AuthnRequest;
+import stubidp.shared.cookies.CookieFactory;
+import stubidp.shared.cookies.CookieNames;
+import stubidp.shared.cookies.HmacValidator;
+import stubidp.shared.csrf.AbstractCSRFCheckProtectionFilter;
+import stubidp.shared.views.SamlMessageRedirectViewFactory;
 import stubidp.stubidp.auth.ManagedAuthFilterInstaller;
 import stubidp.stubidp.configuration.IdpStubsConfiguration;
 import stubidp.stubidp.configuration.StubIdpConfiguration;
-import stubidp.stubidp.cookies.CookieFactory;
-import stubidp.stubidp.cookies.CookieNames;
-import stubidp.stubidp.cookies.HmacValidator;
 import stubidp.stubidp.cookies.StubIdpCookieNames;
-import stubidp.stubidp.csrf.AbstractCSRFCheckProtectionFilter;
 import stubidp.stubidp.csrf.StubIDPCSRFCheckProtectionFilter;
 import stubidp.stubidp.domain.factories.StubTransformersFactory;
 import stubidp.stubidp.filters.SessionCookieValueMustExistAsASessionFilter;
@@ -32,7 +33,6 @@ import stubidp.stubidp.services.AuthnRequestReceiverService;
 import stubidp.stubidp.services.GeneratePasswordService;
 import stubidp.stubidp.services.IdpUserService;
 import stubidp.stubidp.services.UserService;
-import stubidp.stubidp.views.SamlMessageRedirectViewFactory;
 import stubidp.utils.rest.jerseyclient.JsonResponseProcessor;
 import stubidp.utils.rest.truststore.EmptyKeyStoreProvider;
 import stubidp.utils.security.configuration.SecureCookieConfiguration;
@@ -47,7 +47,7 @@ import javax.ws.rs.core.GenericType;
 import java.security.KeyStore;
 import java.util.function.Function;
 
-import static stubidp.stubidp.csrf.AbstractCSRFCheckProtectionFilter.IS_SECURE_COOKIE_ENABLED;
+import static stubidp.shared.csrf.AbstractCSRFCheckProtectionFilter.IS_SECURE_COOKIE_ENABLED;
 
 public class StubIdpBinder extends AbstractBinder {
 

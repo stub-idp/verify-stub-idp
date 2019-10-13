@@ -5,7 +5,8 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import stubidp.stubidp.cookies.CookieNames;
+import stubidp.shared.cookies.CookieNames;
+import stubidp.shared.views.SamlMessageRedirectViewFactory;
 import stubidp.stubidp.domain.EidasAuthnRequest;
 import stubidp.stubidp.domain.EidasScheme;
 import stubidp.stubidp.domain.SamlResponseFromValue;
@@ -20,7 +21,6 @@ import stubidp.stubidp.repositories.StubCountryRepository;
 import stubidp.stubidp.resources.eidas.EidasRegistrationPageResource;
 import stubidp.stubidp.services.NonSuccessAuthnResponseService;
 import stubidp.stubidp.services.StubCountryService;
-import stubidp.stubidp.views.SamlMessageRedirectViewFactory;
 import stubidp.utils.rest.common.SessionId;
 
 import javax.ws.rs.core.Response;

@@ -18,8 +18,8 @@ import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.Response;
 import java.util.Map;
 
+import static stubidp.shared.csrf.AbstractCSRFCheckProtectionFilter.CSRF_PROTECT_FORM_KEY;
 import static stubidp.stubidp.builders.StubIdpBuilder.aStubIdp;
-import static stubidp.stubidp.csrf.AbstractCSRFCheckProtectionFilter.CSRF_PROTECT_FORM_KEY;
 
 @ExtendWith(DropwizardExtensionsSupport.class)
 public class HomePageIntegrationTest extends IntegrationTestHelper {
@@ -33,12 +33,12 @@ public class HomePageIntegrationTest extends IntegrationTestHelper {
     public static Client client = JerseyClientBuilder.createClient().property(ClientProperties.FOLLOW_REDIRECTS, false);
 
     @BeforeEach
-    public void setUp() {
+    void setUp() {
         client.target("http://localhost:" + applicationRule.getAdminPort() + "/tasks/metadata-refresh").request().post(Entity.text(""));
     }
 
     @Test
-    public void shouldShowLinkToLogInWhenNotLoggedIn() {
+    void shouldShowLinkToLogInWhenNotLoggedIn() {
         PreRegistrationSteps loggedOutUserVisitsHomePage = new PreRegistrationSteps(client, applicationRule);
 
         loggedOutUserVisitsHomePage.userSuccessfullyNavigatesTo(Urls.SINGLE_IDP_HOMEPAGE_RESOURCE)
@@ -47,7 +47,7 @@ public class HomePageIntegrationTest extends IntegrationTestHelper {
     }
 
     @Test
-    public void shouldWelcomeUserWhenLoggedIn() {
+    void shouldWelcomeUserWhenLoggedIn() {
        PreRegistrationSteps steps = new PreRegistrationSteps(client, applicationRule);
 
         steps.userSuccessfullyNavigatesTo(Urls.IDP_LOGIN_RESOURCE)

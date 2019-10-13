@@ -3,8 +3,8 @@ package stubidp.stubidp.resources.idp;
 import io.prometheus.client.Counter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import stubidp.shared.cookies.CookieFactory;
 import stubidp.stubidp.Urls;
-import stubidp.stubidp.cookies.CookieFactory;
 import stubidp.stubidp.cookies.StubIdpCookieNames;
 import stubidp.stubidp.domain.IdpLanguageHint;
 import stubidp.stubidp.exceptions.InvalidSessionIdException;
@@ -35,7 +35,7 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 
-import static stubidp.stubidp.csrf.AbstractCSRFCheckProtectionFilter.IS_SECURE_COOKIE_ENABLED;
+import static stubidp.shared.csrf.AbstractCSRFCheckProtectionFilter.IS_SECURE_COOKIE_ENABLED;
 
 @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
 @Produces(MediaType.TEXT_HTML)

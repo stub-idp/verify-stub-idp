@@ -2,9 +2,9 @@ package stubsp.stubsp.filters;
 
 import org.apache.commons.lang.StringUtils;
 import org.jboss.logging.MDC;
-import stubidp.stubidp.cookies.HmacValidator;
-import stubidp.stubidp.domain.SamlRequest;
-import stubidp.stubidp.views.SamlMessageRedirectViewFactory;
+import stubidp.shared.cookies.HmacValidator;
+import stubidp.shared.domain.SamlRequest;
+import stubidp.shared.views.SamlMessageRedirectViewFactory;
 import stubidp.utils.rest.common.SessionId;
 
 import javax.inject.Inject;
@@ -18,7 +18,7 @@ import java.net.URI;
 import java.util.Map;
 import java.util.Optional;
 
-import static stubidp.stubidp.csrf.AbstractCSRFCheckProtectionFilter.IS_SECURE_COOKIE_ENABLED;
+import static stubidp.shared.csrf.AbstractCSRFCheckProtectionFilter.IS_SECURE_COOKIE_ENABLED;
 import static stubsp.stubsp.cookies.StubSpCookieNames.SECURE_COOKIE_NAME;
 import static stubsp.stubsp.cookies.StubSpCookieNames.SESSION_COOKIE_NAME;
 

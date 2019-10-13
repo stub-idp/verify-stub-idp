@@ -1,8 +1,8 @@
 package stubidp.stubidp.views;
 
 import io.dropwizard.views.View;
+import stubidp.shared.csrf.CSRFView;
 import stubidp.stubidp.Urls;
-import stubidp.stubidp.csrf.CSRFView;
 
 import java.nio.charset.StandardCharsets;
 import java.util.Optional;

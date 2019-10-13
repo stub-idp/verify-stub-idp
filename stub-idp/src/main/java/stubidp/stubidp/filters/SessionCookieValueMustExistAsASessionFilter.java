@@ -2,13 +2,13 @@ package stubidp.stubidp.filters;
 
 import org.apache.commons.lang.StringUtils;
 import org.jboss.logging.MDC;
-import stubidp.stubidp.cookies.CookieNames;
-import stubidp.stubidp.cookies.HmacValidator;
+import stubidp.shared.cookies.CookieNames;
+import stubidp.shared.cookies.HmacValidator;
+import stubidp.shared.exceptions.InvalidSecureCookieException;
+import stubidp.shared.exceptions.SecureCookieNotFoundException;
+import stubidp.shared.exceptions.SessionIdCookieNotFoundException;
+import stubidp.shared.exceptions.SessionNotFoundException;
 import stubidp.stubidp.cookies.StubIdpCookieNames;
-import stubidp.stubidp.exceptions.InvalidSecureCookieException;
-import stubidp.stubidp.exceptions.SecureCookieNotFoundException;
-import stubidp.stubidp.exceptions.SessionIdCookieNotFoundException;
-import stubidp.stubidp.exceptions.SessionNotFoundException;
 import stubidp.stubidp.repositories.EidasSessionRepository;
 import stubidp.stubidp.repositories.IdpSessionRepository;
 import stubidp.utils.rest.common.SessionId;
@@ -22,7 +22,7 @@ import java.io.IOException;
 import java.util.Map;
 import java.util.Optional;
 
-import static stubidp.stubidp.csrf.AbstractCSRFCheckProtectionFilter.IS_SECURE_COOKIE_ENABLED;
+import static stubidp.shared.csrf.AbstractCSRFCheckProtectionFilter.IS_SECURE_COOKIE_ENABLED;
 
 public class SessionCookieValueMustExistAsASessionFilter implements ContainerRequestFilter {
 
