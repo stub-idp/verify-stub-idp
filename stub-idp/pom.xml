@@ -31,6 +31,14 @@
                             <classpathPrefix>lib/</classpathPrefix>
                             <mainClass>${main.class}</mainClass>
                         </manifest>
+                        <manifestEntries>
+                            <!--suppress UnresolvedMavenProperty -->
+                            <Build-Timestamp>${env.BUILD_TIMESTAMP}</Build-Timestamp>
+                            <!--suppress UnresolvedMavenProperty -->
+                            <Git-Commit>${env.GIT_COMMIT}</Git-Commit>
+                            <!--suppress UnresolvedMavenProperty -->
+                            <Build-Number>${env.BUILD_NUMBER}</Build-Number>
+                        </manifestEntries>
                     </archive>
                 </configuration>
                 <executions>
@@ -73,6 +81,14 @@
                             <classpathPrefix>lib/</classpathPrefix>
                             <mainClass>${main.class}</mainClass>
                         </manifest>
+                        <manifestEntries>
+                            <!--suppress UnresolvedMavenProperty -->
+                            <Build-Timestamp>${env.BUILD_TIMESTAMP}</Build-Timestamp>
+                            <!--suppress UnresolvedMavenProperty -->
+                            <Git-Commit>${env.GIT_COMMIT}</Git-Commit>
+                            <!--suppress UnresolvedMavenProperty -->
+                            <Build-Number>${env.BUILD_NUMBER}</Build-Number>
+                        </manifestEntries>
                     </archive>
                 </configuration>
                 <executions>
