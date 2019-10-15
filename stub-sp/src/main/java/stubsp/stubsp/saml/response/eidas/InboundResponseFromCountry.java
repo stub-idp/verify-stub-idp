@@ -1,4 +1,4 @@
-package stubidp.test.integration.support.eidas;
+package stubsp.stubsp.saml.response.eidas;
 
 import org.opensaml.saml.saml2.core.Assertion;
 import org.opensaml.saml.saml2.core.Status;

@@ -7,13 +7,15 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import stubidp.saml.utils.core.domain.AuthnContext;
+import stubidp.saml.utils.core.test.TestCredentialFactory;
 import stubidp.stubidp.Urls;
 import stubidp.stubidp.domain.SubmitButtonValue;
+import stubidp.test.devpki.TestCertificateStrings;
 import stubidp.test.integration.steps.FormBuilder;
 import stubidp.test.integration.steps.PreRegistrationSteps;
-import stubidp.test.integration.support.IdpAuthnRequestBuilder;
 import stubidp.test.integration.support.IntegrationTestHelper;
 import stubidp.test.integration.support.StubIdpAppExtension;
+import stubsp.stubsp.saml.request.IdpAuthnRequestBuilder;
 
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.Entity;
@@ -23,6 +25,7 @@ import java.util.Map;
 
 import static stubidp.shared.csrf.AbstractCSRFCheckProtectionFilter.CSRF_PROTECT_FORM_KEY;
 import static stubidp.stubidp.builders.StubIdpBuilder.aStubIdp;
+import static stubidp.test.integration.support.StubIdpAppExtension.SP_ENTITY_ID;
 
 @ExtendWith(DropwizardExtensionsSupport.class)
 public class PreRegistrationIntegrationTest extends IntegrationTestHelper {
@@ -52,6 +55,15 @@ public class PreRegistrationIntegrationTest extends IntegrationTestHelper {
 
     @Test
     void userPreRegistersAndThenComesFromRP() {
+
+        String samlRequest = IdpAuthnRequestBuilder
+                .anAuthnRequest()
+                .withDestination(UriBuilder.fromUri("http://localhost:0"+Urls.IDP_SAML2_SSO_RESOURCE).build(IDP_NAME).toASCIIString())
+                .withSigningCredential(new TestCredentialFactory(TestCertificateStrings.HUB_TEST_PUBLIC_SIGNING_CERT, TestCertificateStrings.HUB_TEST_PRIVATE_SIGNING_KEY).getSigningCredential())
+                .withSigningCertificate(TestCertificateStrings.HUB_TEST_PUBLIC_SIGNING_CERT)
+                .withEntityId(SP_ENTITY_ID)
+                .build();
+
         PreRegistrationSteps steps = new PreRegistrationSteps(client, applicationRule);
 
         steps
@@ -89,7 +101,7 @@ public class PreRegistrationIntegrationTest extends IntegrationTestHelper {
 
         // Simulate Authn Request from hub
         .clientPostsFormData(FormBuilder.newForm()
-                                .withParam(Urls.SAML_REQUEST_PARAM, IdpAuthnRequestBuilder.anAuthnRequest().withDestination(UriBuilder.fromUri("http://localhost:0"+Urls.IDP_SAML2_SSO_RESOURCE).build(IDP_NAME).toASCIIString()).build())
+                                .withParam(Urls.SAML_REQUEST_PARAM, samlRequest)
                                 .withParam(Urls.RELAY_STATE_PARAM, "relay-state")
                                 .build(),
                         Urls.IDP_SAML2_SSO_RESOURCE)

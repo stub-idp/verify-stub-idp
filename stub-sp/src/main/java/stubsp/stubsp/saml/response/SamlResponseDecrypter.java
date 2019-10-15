@@ -1,8 +1,9 @@
-package stubidp.test.integration.support;
+package stubsp.stubsp.saml.response;
 
 import net.shibboleth.utilities.java.support.component.ComponentInitializationException;
 import net.shibboleth.utilities.java.support.resolver.ResolverException;
 import net.shibboleth.utilities.java.support.xml.BasicParserPool;
+import org.opensaml.saml.common.SignableSAMLObject;
 import org.opensaml.saml.saml2.core.Assertion;
 import org.opensaml.saml.saml2.core.Response;
 import org.opensaml.saml.saml2.encryption.Decrypter;
@@ -55,71 +56,56 @@ import stubidp.saml.serializers.deserializers.validators.NotNullSamlStringValida
 import stubidp.saml.serializers.serializers.XmlObjectToBase64EncodedStringTransformer;
 import stubidp.saml.utils.core.transformers.AuthnContextFactory;
 import stubidp.saml.utils.hub.validators.StringSizeValidator;
-import stubidp.stubidp.Urls;
-import stubidp.stubidp.saml.EidasAuthnRequestValidator;
-import stubidp.stubidp.saml.IdpAuthnRequestValidator;
-import stubidp.test.integration.support.eidas.EidasAttributeStatementAssertionValidator;
-import stubidp.test.integration.support.eidas.EidasAuthnResponseIssuerValidator;
-import stubidp.test.integration.support.eidas.InboundResponseFromCountry;
-import stubidp.utils.security.security.PrivateKeyFactory;
-import stubidp.utils.security.security.PublicKeyFactory;
-import stubidp.utils.security.security.X509CertificateFactory;
+import stubsp.stubsp.saml.response.eidas.EidasAttributeStatementAssertionValidator;
+import stubsp.stubsp.saml.response.eidas.EidasAuthnResponseIssuerValidator;
+import stubsp.stubsp.saml.response.eidas.InboundResponseFromCountry;
 
 import javax.ws.rs.client.Client;
 import javax.ws.rs.core.UriBuilder;
 import java.net.URI;
-import java.security.KeyPair;
-import java.security.PrivateKey;
-import java.security.PublicKey;
-import java.util.Base64;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
 import static java.text.MessageFormat.format;
-import static stubidp.test.devpki.TestCertificateStrings.HUB_CONNECTOR_TEST_PRIVATE_ENCRYPTION_KEY;
-import static stubidp.test.devpki.TestCertificateStrings.HUB_CONNECTOR_TEST_PUBLIC_SIGNING_CERT;
-import static stubidp.test.devpki.TestCertificateStrings.HUB_TEST_PRIVATE_ENCRYPTION_KEY;
-import static stubidp.test.devpki.TestCertificateStrings.HUB_TEST_PUBLIC_ENCRYPTION_CERT;
 
 /**
  * Be warned that this class does little to no validation and is just for testing the contents of a response
  */
-public class SamlDecrypter {
-
-    private final Client client;
-    private final URI metadataUri;
-    private final String hubEntityId;
-    private final int localPort;
+public class SamlResponseDecrypter {
 
     // Manual Guice injection
     private final StringToOpenSamlObjectTransformer<Response> stringToOpenSamlObjectTransformer = new StringToOpenSamlObjectTransformer<>(new NotNullSamlStringValidator(),
             new Base64StringDecoder(),
             new ResponseSizeValidator(new StringSizeValidator()),
             new OpenSamlXMLObjectUnmarshaller<>(new SamlObjectParser()));
-    private final Optional<String> eidasSchemeName;
+
+    private final Client client;
     private final URI assertionConsumerServices;
     private final boolean checkKeyInfo;
 
-    public SamlDecrypter(Client client, URI metadataUri, String hubEntityId, int localPort, Optional<String> eidasSchemeName, URI assertionConsumerServices) {
-        this.client = client;
-        this.metadataUri = metadataUri;
-        this.hubEntityId = hubEntityId;
-        this.localPort = localPort;
-        this.eidasSchemeName = eidasSchemeName;
-        this.assertionConsumerServices = assertionConsumerServices;
-        this.checkKeyInfo = false;
+    private final URI idpMetadataUri;
+    private final String spEntityId;
+    private final IdaKeyStore spKeyStore;
+
+    private final IdaKeyStore eidasKeyStore;
+    private final Optional<URI> eidasMetadataUri;
+
+    public SamlResponseDecrypter(Client client, URI idpMetadataUri, String spEntityId, Optional<URI> eidasMetadataUri, URI assertionConsumerServices, IdaKeyStore spKeyStore, IdaKeyStore eidasKeyStore) {
+        this(client, idpMetadataUri, spEntityId, eidasMetadataUri, assertionConsumerServices, spKeyStore, eidasKeyStore, false);
     }
 
-    public SamlDecrypter(Client client, URI metadataUri, String hubEntityId, int localPort, Optional<String> eidasSchemeName, URI assertionConsumerServices, boolean checkKeyInfo) {
+    public SamlResponseDecrypter(Client client, URI idpMetadataUri, String spEntityId, Optional<URI> eidasMetadataUri, URI assertionConsumerServices, IdaKeyStore spKeyStore, IdaKeyStore eidasKeyStore, boolean checkKeyInfo) {
         this.client = client;
-        this.metadataUri = metadataUri;
-        this.hubEntityId = hubEntityId;
-        this.localPort = localPort;
-        this.eidasSchemeName = eidasSchemeName;
+        this.idpMetadataUri = idpMetadataUri;
+        this.spEntityId = spEntityId;
+        this.eidasMetadataUri = eidasMetadataUri;
         this.assertionConsumerServices = assertionConsumerServices;
+        this.spKeyStore = spKeyStore;
+        this.eidasKeyStore = eidasKeyStore;
         this.checkKeyInfo = checkKeyInfo;
     }
 
@@ -127,18 +113,39 @@ public class SamlDecrypter {
      * Be warned that this method does little to no validation and is just for testing the contents of a response
      */
     public InboundResponseFromIdp decryptSaml(String samlResponse) {
-        final JerseyClientMetadataResolver jerseyClientMetadataResolver = getMetadataResolver(metadataUri);
+        final JerseyClientMetadataResolver jerseyClientMetadataResolver = getMetadataResolver(idpMetadataUri);
         final SigningCredentialFactory credentialFactory = new SigningCredentialFactory(new AuthnResponseKeyStore(new IdpMetadataPublicKeyStore(jerseyClientMetadataResolver)));
         DecoratedSamlResponseToIdaResponseIssuedByIdpTransformer decoratedSamlResponseToIdaResponseIssuedByIdpTransformer
-                = buildDecoratedSamlResponseToIdaResponseIssuedByIdpTransformer(credentialFactory, createHubKeyStore());
+                = buildDecoratedSamlResponseToIdaResponseIssuedByIdpTransformer(credentialFactory, spKeyStore);
 
         final org.opensaml.saml.saml2.core.Response response = stringToOpenSamlObjectTransformer.apply(samlResponse);
         if(checkKeyInfo) {
-            EidasAuthnRequestValidator.validateKeyInfo(response);
+            validateKeyInfoPresent(response);
         } else {
-            IdpAuthnRequestValidator.validateKeyInfo(response);
+            validateKeyInfoNotPresent(response);
         }
         return decoratedSamlResponseToIdaResponseIssuedByIdpTransformer.apply(response);
+    }
+
+    private void validateKeyInfoNotPresent(SignableSAMLObject signableSAMLObject) {
+        if (Objects.nonNull(signableSAMLObject.getSignature().getKeyInfo())) {
+            throw new RuntimeException("KeyInfo was not null");
+        }
+    }
+
+    private void validateKeyInfoPresent(SignableSAMLObject signableSAMLObject) {
+        if (Objects.isNull(signableSAMLObject.getSignature().getKeyInfo())) {
+            throw new RuntimeException("KeyInfo cannot be null");
+        }
+        if (signableSAMLObject.getSignature().getKeyInfo().getX509Datas().isEmpty()) {
+            throw new RuntimeException("no x509 data found");
+        }
+        if (signableSAMLObject.getSignature().getKeyInfo().getX509Datas().get(0).getX509Certificates().isEmpty()) {
+            throw new RuntimeException("no x509 certificates found in x509 data");
+        }
+        if (Objects.isNull(signableSAMLObject.getSignature().getKeyInfo().getX509Datas().get(0).getX509Certificates().get(0))) {
+            throw new RuntimeException("x509 certificate was invalid");
+        }
     }
 
     private JerseyClientMetadataResolver getMetadataResolver(URI metadataUri) {
@@ -170,9 +177,9 @@ public class SamlDecrypter {
      */
     private InboundResponseFromCountry decryptEidasSaml(String samlResponse, boolean signedAssertions) {
         Response response = stringToOpenSamlObjectTransformer.apply(samlResponse);
-        EidasAuthnRequestValidator.validateKeyInfo(response);
+        validateKeyInfoPresent(response);
         ValidatedResponse validatedResponse = validateResponse(response);
-        AssertionDecrypter assertionDecrypter = getAES256WithGCMAssertionDecrypter(createEidasKeyStore());
+        AssertionDecrypter assertionDecrypter = getAES256WithGCMAssertionDecrypter(eidasKeyStore);
         List<Assertion> assertions = assertionDecrypter.decryptAssertions(validatedResponse);
         Optional<Assertion> validatedIdentityAssertion = validateAssertion(validatedResponse, assertions, signedAssertions);
 
@@ -194,14 +201,14 @@ public class SamlDecrypter {
     }
 
     private ValidatedResponse validateResponse(Response response) {
-        SamlResponseSignatureValidator samlResponseSignatureValidator = new SamlResponseSignatureValidator(getSamlMessageSignatureValidator(hubEntityId));
+        SamlResponseSignatureValidator samlResponseSignatureValidator = new SamlResponseSignatureValidator(getSamlMessageSignatureValidator(spEntityId));
         final ValidatedResponse validatedResponse = samlResponseSignatureValidator.validate(response, IDPSSODescriptor.DEFAULT_ELEMENT_NAME);
         new DestinationValidator(UriBuilder.fromUri(assertionConsumerServices).replacePath(null).build(), assertionConsumerServices.getPath()).validate(response.getDestination());
         return validatedResponse;
     }
 
     private void getValidatedAssertion(List<Assertion> decryptedAssertions, boolean signedAssertions) {
-        SamlAssertionsSignatureValidator samlAssertionsSignatureValidator = new SamlAssertionsSignatureValidator(getSamlMessageSignatureValidator(hubEntityId));
+        SamlAssertionsSignatureValidator samlAssertionsSignatureValidator = new SamlAssertionsSignatureValidator(getSamlMessageSignatureValidator(spEntityId));
         try {
             samlAssertionsSignatureValidator.validate(decryptedAssertions, IDPSSODescriptor.DEFAULT_ELEMENT_NAME);
         } catch(SamlTransformationErrorException e) {
@@ -240,7 +247,7 @@ public class SamlDecrypter {
     }
 
     private SamlMessageSignatureValidator getSamlMessageSignatureValidator(String entityId) {
-        return Optional.of(getMetadataResolver(UriBuilder.fromUri("http://localhost:"+localPort+ Urls.EIDAS_METADATA_RESOURCE).build(eidasSchemeName.get())))
+        return Optional.of(getMetadataResolver(eidasMetadataUri.get()))
                 .map(m -> {
                     try {
                         return new MetadataSignatureTrustEngineFactory().createSignatureTrustEngine(m);
@@ -258,26 +265,6 @@ public class SamlDecrypter {
         Optional<Assertion> identityAssertion = decryptedAssertions.stream().findFirst();
         identityAssertion.ifPresent(assertion -> responseAssertionFromCountryValidatorValidate(validatedResponse, assertion, signedAssertions));
         return identityAssertion;
-    }
-
-    //FIXME: allow this to be set by the test class
-    private IdaKeyStore createHubKeyStore() {
-        PrivateKey privateKey = new PrivateKeyFactory().createPrivateKey(Base64.getDecoder().decode(HUB_TEST_PRIVATE_ENCRYPTION_KEY));
-
-        PublicKey publicKey = new PublicKeyFactory(new X509CertificateFactory()).createPublicKey(HUB_TEST_PUBLIC_ENCRYPTION_CERT);
-
-        List<KeyPair> encryptionKeys = List.of(new KeyPair(publicKey, privateKey));
-        return new IdaKeyStore(null, encryptionKeys);
-    }
-
-    //FIXME: allow this to be set by the test class
-    private IdaKeyStore createEidasKeyStore() {
-        PrivateKey privateKey = new PrivateKeyFactory().createPrivateKey(Base64.getDecoder().decode(HUB_CONNECTOR_TEST_PRIVATE_ENCRYPTION_KEY));
-
-        PublicKey publicKey = new PublicKeyFactory(new X509CertificateFactory()).createPublicKey(HUB_CONNECTOR_TEST_PUBLIC_SIGNING_CERT);
-
-        List<KeyPair> encryptionKeys = List.of(new KeyPair(publicKey, privateKey));
-        return new IdaKeyStore(null, encryptionKeys);
     }
 
     private DecoratedSamlResponseToIdaResponseIssuedByIdpTransformer buildDecoratedSamlResponseToIdaResponseIssuedByIdpTransformer(SigningCredentialFactory credentialFactory, IdaKeyStore keyStore) {
@@ -300,6 +287,6 @@ public class SamlDecrypter {
                         new MatchingDatasetAssertionValidator(new DuplicateAssertionValidatorImpl(new ConcurrentMapIdExpirationCache<>(new ConcurrentHashMap<>()))),
                         new AuthnStatementAssertionValidator(new DuplicateAssertionValidatorImpl(new ConcurrentMapIdExpirationCache<>(new ConcurrentHashMap<>()))),
                         new IPAddressValidator(),
-                        hubEntityId));
+                        spEntityId));
     }
 }

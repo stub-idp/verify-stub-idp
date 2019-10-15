@@ -1,4 +1,4 @@
-package stubidp.test.integration.support.eidas;
+package stubsp.stubsp.saml.response.eidas;
 
 import org.slf4j.event.Level;
 import stubidp.saml.extensions.validation.SamlTransformationErrorException;

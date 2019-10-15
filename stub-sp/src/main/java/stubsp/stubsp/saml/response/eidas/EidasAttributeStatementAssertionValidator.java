@@ -1,4 +1,4 @@
-package stubidp.test.integration.support.eidas;
+package stubsp.stubsp.saml.response.eidas;
 
 import org.opensaml.saml.saml2.core.Assertion;
 import org.opensaml.saml.saml2.core.Attribute;
@@ -17,7 +17,6 @@ import stubidp.saml.extensions.validation.SamlValidationSpecificationFailure;
 import stubidp.saml.hub.core.errors.SamlTransformationErrorFactory;
 
 import javax.xml.namespace.QName;
-import java.util.AbstractMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;

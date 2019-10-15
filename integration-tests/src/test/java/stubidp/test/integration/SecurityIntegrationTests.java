@@ -9,13 +9,15 @@ import org.jsoup.nodes.Element;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import stubidp.saml.utils.core.test.TestCredentialFactory;
 import stubidp.stubidp.Urls;
 import stubidp.stubidp.cookies.StubIdpCookieNames;
 import stubidp.stubidp.filters.SecurityHeadersFilterTest;
+import stubidp.test.devpki.TestCertificateStrings;
 import stubidp.test.integration.steps.AuthnRequestSteps;
-import stubidp.test.integration.support.IdpAuthnRequestBuilder;
 import stubidp.test.integration.support.IntegrationTestHelper;
 import stubidp.test.integration.support.StubIdpAppExtension;
+import stubsp.stubsp.saml.request.IdpAuthnRequestBuilder;
 
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.Entity;
@@ -29,6 +31,7 @@ import java.util.Optional;
 import static org.assertj.core.api.Assertions.assertThat;
 import static stubidp.shared.csrf.AbstractCSRFCheckProtectionFilter.CSRF_PROTECT_FORM_KEY;
 import static stubidp.stubidp.builders.StubIdpBuilder.aStubIdp;
+import static stubidp.test.integration.support.StubIdpAppExtension.SP_ENTITY_ID;
 
 @ExtendWith(DropwizardExtensionsSupport.class)
 public class SecurityIntegrationTests extends IntegrationTestHelper {
@@ -114,6 +117,9 @@ public class SecurityIntegrationTests extends IntegrationTestHelper {
     void whenSameAuthnRequestIsSentTwiceItFails() {
         final String authnRequest = IdpAuthnRequestBuilder.anAuthnRequest()
                 .withDestination(UriBuilder.fromUri(authnRequestSteps.getStubIdpUri(Urls.IDP_SAML2_SSO_RESOURCE)).build().toASCIIString())
+                .withSigningCredential(new TestCredentialFactory(TestCertificateStrings.HUB_TEST_PUBLIC_SIGNING_CERT, TestCertificateStrings.HUB_TEST_PRIVATE_SIGNING_KEY).getSigningCredential())
+                .withSigningCertificate(TestCertificateStrings.HUB_TEST_PUBLIC_SIGNING_CERT)
+                .withEntityId(SP_ENTITY_ID)
                 .build();
 
         Response response = authnRequestSteps.postAuthnRequest(List.of(), Optional.empty(), Optional.empty(), authnRequest, Urls.IDP_SAML2_SSO_RESOURCE);

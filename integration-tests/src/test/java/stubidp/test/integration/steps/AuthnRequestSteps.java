@@ -3,13 +3,20 @@ package stubidp.test.integration.steps;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
+import org.opensaml.security.credential.Credential;
 import stubidp.saml.extensions.IdaConstants;
+import stubidp.saml.security.IdaKeyStore;
+import stubidp.saml.utils.core.test.TestCredentialFactory;
 import stubidp.stubidp.Urls;
 import stubidp.stubidp.cookies.StubIdpCookieNames;
 import stubidp.stubidp.domain.FraudIndicator;
 import stubidp.stubidp.views.SignAssertions;
-import stubidp.test.integration.support.IdpAuthnRequestBuilder;
-import stubidp.test.integration.support.eidas.EidasAuthnRequestBuilder;
+import stubidp.test.devpki.TestCertificateStrings;
+import stubidp.utils.security.security.PrivateKeyFactory;
+import stubidp.utils.security.security.PublicKeyFactory;
+import stubidp.utils.security.security.X509CertificateFactory;
+import stubsp.stubsp.saml.request.EidasAuthnRequestBuilder;
+import stubsp.stubsp.saml.request.IdpAuthnRequestBuilder;
 
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.Entity;
@@ -19,6 +26,12 @@ import javax.ws.rs.core.NewCookie;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriBuilder;
 import java.net.URI;
+import java.security.KeyPair;
+import java.security.PrivateKey;
+import java.security.PublicKey;
+import java.security.cert.X509Certificate;
+import java.util.Base64;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -27,6 +40,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static stubidp.shared.csrf.AbstractCSRFCheckProtectionFilter.CSRF_PROTECT_FORM_KEY;
 import static stubidp.stubidp.repositories.StubCountryRepository.STUB_COUNTRY_FRIENDLY_ID;
 import static stubidp.test.devpki.TestEntityIds.HUB_CONNECTOR_ENTITY_ID;
+import static stubidp.test.integration.support.StubIdpAppExtension.SP_ENTITY_ID;
 
 public class AuthnRequestSteps {
     private final Client client;
@@ -66,9 +80,20 @@ public class AuthnRequestSteps {
     }
 
     public Response userPostsAuthnRequestToStubIdpReturnResponse(List<String> hints, Optional<String> language, Optional<Boolean> registration, boolean withInvalidKey) {
+        Credential signingCredential;
+        String signingCertificate;
+        if(withInvalidKey) {
+            signingCredential = new TestCredentialFactory(TestCertificateStrings.TEST_RP_MS_PUBLIC_SIGNING_CERT, TestCertificateStrings.TEST_RP_MS_PRIVATE_SIGNING_KEY).getSigningCredential();
+            signingCertificate = TestCertificateStrings.TEST_RP_MS_PUBLIC_SIGNING_CERT;
+        } else {
+            signingCredential = new TestCredentialFactory(TestCertificateStrings.HUB_TEST_PUBLIC_SIGNING_CERT, TestCertificateStrings.HUB_TEST_PRIVATE_SIGNING_KEY).getSigningCredential();
+            signingCertificate = TestCertificateStrings.HUB_TEST_PUBLIC_SIGNING_CERT;
+        }
         String authnRequest = IdpAuthnRequestBuilder.anAuthnRequest()
                 .withDestination(UriBuilder.fromUri("http://localhost:"+port+Urls.IDP_SAML2_SSO_RESOURCE).build(idpName).toASCIIString())
-                .withInvalidKey(withInvalidKey)
+                .withSigningCredential(signingCredential)
+                .withSigningCertificate(signingCertificate)
+                .withEntityId(SP_ENTITY_ID)
                 .build();
         return postAuthnRequest(hints, language, registration, authnRequest, Urls.IDP_SAML2_SSO_RESOURCE);
     }
@@ -77,6 +102,9 @@ public class AuthnRequestSteps {
         final String headlessResource = "http://localhost:" + port + Urls.HEADLESS_ROOT;
         String authnRequest = IdpAuthnRequestBuilder.anAuthnRequest()
                 .withDestination(headlessResource)
+                .withSigningCredential(new TestCredentialFactory(TestCertificateStrings.HUB_TEST_PUBLIC_SIGNING_CERT, TestCertificateStrings.HUB_TEST_PRIVATE_SIGNING_KEY).getSigningCredential())
+                .withSigningCertificate(TestCertificateStrings.HUB_TEST_PUBLIC_SIGNING_CERT)
+                .withEntityId(SP_ENTITY_ID)
                 .build();
         Form form = new Form();
         form.param(Urls.CYCLE3_PARAM, Boolean.toString(isCycle3));
@@ -137,7 +165,7 @@ public class AuthnRequestSteps {
         }
         eidasAuthnRequestBuilder.withIssuerEntityId(HUB_CONNECTOR_ENTITY_ID);
         eidasAuthnRequestBuilder.withKeyInfo(withKeyInfo);
-        eidasAuthnRequestBuilder.withInvalidKey(withInvalidKey);
+        eidasAuthnRequestBuilder.withKeyStore(withInvalidKey?createInvalidIdaKeyStore():createValidIdaKeyStore());
         eidasAuthnRequestBuilder.withDestination(UriBuilder.fromUri("http://localhost:"+port+Urls.EIDAS_SAML2_SSO_RESOURCE).build(idpName).toASCIIString());
         String authnRequest = eidasAuthnRequestBuilder.build();
         return postAuthnRequest(List.of(), Optional.empty(), Optional.empty(), authnRequest, Urls.EIDAS_SAML2_SSO_RESOURCE);
@@ -310,6 +338,38 @@ public class AuthnRequestSteps {
         final String page = response.readEntity(String.class);
         assertThat(page).contains(cookies.getSessionId());
         return page;
+    }
+
+    private IdaKeyStore createValidIdaKeyStore() {
+        PublicKeyFactory publicKeyFactory = new PublicKeyFactory(new X509CertificateFactory());
+
+        PrivateKey privateSigningKey = new PrivateKeyFactory().createPrivateKey(Base64.getDecoder().decode(TestCertificateStrings.HUB_CONNECTOR_TEST_PRIVATE_SIGNING_KEY));
+        PublicKey publicSigningKey = publicKeyFactory.createPublicKey(TestCertificateStrings.HUB_CONNECTOR_TEST_PUBLIC_SIGNING_CERT);
+
+        PrivateKey privateEncKey = new PrivateKeyFactory().createPrivateKey(Base64.getDecoder().decode(TestCertificateStrings.HUB_CONNECTOR_TEST_PRIVATE_ENCRYPTION_KEY));
+        PublicKey publicEncKey = publicKeyFactory.createPublicKey(TestCertificateStrings.HUB_CONNECTOR_TEST_PUBLIC_ENCRYPTION_CERT);
+
+        KeyPair signingKeyPair = new KeyPair(publicSigningKey, privateSigningKey);
+        KeyPair encryptionKeyPair = new KeyPair(publicEncKey, privateEncKey);
+
+        X509Certificate certificate = new X509CertificateFactory().createCertificate(TestCertificateStrings.HUB_CONNECTOR_TEST_PUBLIC_SIGNING_CERT);
+        return new IdaKeyStore(certificate, signingKeyPair, Collections.singletonList(encryptionKeyPair));
+    }
+
+    private IdaKeyStore createInvalidIdaKeyStore() {
+        PublicKeyFactory publicKeyFactory = new PublicKeyFactory(new X509CertificateFactory());
+
+        PrivateKey privateSigningKey = new PrivateKeyFactory().createPrivateKey(Base64.getDecoder().decode(TestCertificateStrings.TEST_RP_MS_PRIVATE_SIGNING_KEY));
+        PublicKey publicSigningKey = publicKeyFactory.createPublicKey(TestCertificateStrings.TEST_RP_MS_PUBLIC_SIGNING_CERT);
+
+        PrivateKey privateEncKey = new PrivateKeyFactory().createPrivateKey(Base64.getDecoder().decode(TestCertificateStrings.TEST_RP_MS_PRIVATE_ENCRYPTION_KEY));
+        PublicKey publicEncKey = publicKeyFactory.createPublicKey(TestCertificateStrings.TEST_RP_MS_PUBLIC_ENCRYPTION_CERT);
+
+        KeyPair signingKeyPair = new KeyPair(publicSigningKey, privateSigningKey);
+        KeyPair encryptionKeyPair = new KeyPair(publicEncKey, privateEncKey);
+
+        X509Certificate certificate = new X509CertificateFactory().createCertificate(TestCertificateStrings.TEST_RP_MS_PUBLIC_SIGNING_CERT);
+        return new IdaKeyStore(certificate, signingKeyPair, Collections.singletonList(encryptionKeyPair));
     }
 
     public URI getStubIdpUri(String path) {

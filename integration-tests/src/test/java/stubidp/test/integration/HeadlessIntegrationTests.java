@@ -9,8 +9,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import stubidp.stubidp.resources.idp.HeadlessIdpResource;
 import stubidp.test.integration.steps.AuthnRequestSteps;
 import stubidp.test.integration.support.IntegrationTestHelper;
-import stubidp.test.integration.support.SamlDecrypter;
 import stubidp.test.integration.support.StubIdpAppExtension;
+import stubsp.stubsp.saml.response.SamlResponseDecrypter;
 
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.Entity;
@@ -37,12 +37,13 @@ public class HeadlessIntegrationTests extends IntegrationTestHelper {
             client,
             IDP_NAME,
             applicationRule.getLocalPort());
-    private final SamlDecrypter samlDecrypter = new SamlDecrypter(client,
+    private final SamlResponseDecrypter samlResponseDecrypter = new SamlResponseDecrypter(client,
             applicationRule.getVerifyMetadataPath(),
             applicationRule.getConfiguration().getHubEntityId(),
-            applicationRule.getLocalPort(),
             empty(),
-            applicationRule.getAssertionConsumerServices());
+            applicationRule.getAssertionConsumerServices(),
+            applicationRule.getHubKeyStore(),
+            applicationRule.getEidasKeyStore());
 
     public static final StubIdpAppExtension applicationRule = new StubIdpAppExtension(Map.ofEntries(
             Map.entry("isHeadlessIdpEnabled", "true"),
@@ -58,7 +59,7 @@ public class HeadlessIntegrationTests extends IntegrationTestHelper {
     @Test
     void headlessTest() {
         final String samlResponse = authnRequestSteps.userPostsAuthnRequestToHeadlessIdpReturnResponse(false, "relayState");
-        samlDecrypter.decryptSaml(samlResponse);
+        samlResponseDecrypter.decryptSaml(samlResponse);
         zzz_checkMetrics();
     }
 

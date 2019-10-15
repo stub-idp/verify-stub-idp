@@ -10,10 +10,12 @@ import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
 import io.dropwizard.views.ViewBundle;
 import stubidp.metrics.prometheus.bundle.PrometheusBundle;
+import stubidp.saml.extensions.IdaSamlBootstrap;
 import stubidp.shared.csrf.CSRFViewRenderer;
 import stubidp.utils.rest.bundles.LoggingBundle;
 import stubidp.utils.rest.bundles.MonitoringBundle;
 import stubidp.utils.rest.bundles.ServiceStatusBundle;
+import stubidp.utils.rest.filters.AcceptLanguageFilter;
 import stubsp.stubsp.configuration.StubSpConfiguration;
 import stubsp.stubsp.filters.NoCacheResponseFilter;
 import stubsp.stubsp.filters.RequireValidLoginFeature;
@@ -26,6 +28,8 @@ import stubsp.stubsp.resources.SamlResponseResource;
 import stubsp.stubsp.resources.SamlSpMetadataResource;
 import stubsp.stubsp.resources.SecureResource;
 
+import javax.servlet.DispatcherType;
+import java.util.EnumSet;
 import java.util.Locale;
 
 import static java.util.Collections.singletonList;
@@ -64,6 +68,11 @@ public class StubSpApplication extends Application<StubSpConfiguration> {
 
     @Override
     public void run(StubSpConfiguration configuration, Environment environment) {
+        IdaSamlBootstrap.bootstrap();
+
+//        environment.servlets().addFilter("Cache Control", new StubSpCacheControlFilter(configuration)).addMappingForUrlPatterns(EnumSet.allOf(DispatcherType.class), true, "/consent"+Urls.ROUTE_SUFFIX);
+        environment.servlets().addFilter("Remove Accept-Language headers", AcceptLanguageFilter.class).addMappingForUrlPatterns(EnumSet.allOf(DispatcherType.class), true, "/*");
+
         environment.getObjectMapper().setDateFormat(new StdDateFormat().withLocale(Locale.UK));
         environment.jersey().register(new StubSpBinder(configuration, environment));
 

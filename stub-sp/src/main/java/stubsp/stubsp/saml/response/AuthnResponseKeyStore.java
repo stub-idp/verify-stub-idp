@@ -1,4 +1,4 @@
-package stubidp.test.integration.support;
+package stubsp.stubsp.saml.response;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,7 +21,7 @@ public class AuthnResponseKeyStore implements SigningKeyStore {
 
     @Override
     public List<PublicKey> getVerifyingKeysForEntity(String entityId) {
-        logger.info("Requesting signature verifying key for {} in federation metadata", entityId);
+        logger.info("Requesting signature verifying key for {} in metadata", entityId);
         return idpMetadataPublicKeyStore.getVerifyingKeysForEntity(entityId);
     }
 }

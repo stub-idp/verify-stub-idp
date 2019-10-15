@@ -14,9 +14,9 @@ import stubidp.stubidp.Urls;
 import stubidp.stubidp.domain.EidasScheme;
 import stubidp.test.integration.steps.AuthnRequestSteps;
 import stubidp.test.integration.support.IntegrationTestHelper;
-import stubidp.test.integration.support.SamlDecrypter;
 import stubidp.test.integration.support.StubIdpAppExtension;
-import stubidp.test.integration.support.eidas.InboundResponseFromCountry;
+import stubsp.stubsp.saml.response.SamlResponseDecrypter;
+import stubsp.stubsp.saml.response.eidas.InboundResponseFromCountry;
 
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.Entity;
@@ -40,12 +40,13 @@ public class EidasUserLogsInIntegrationTests extends IntegrationTestHelper {
             client,
             EIDAS_SCHEME_NAME,
             applicationRule.getLocalPort());
-    private final SamlDecrypter samlDecrypter = new SamlDecrypter(client,
+    private final SamlResponseDecrypter samlResponseDecrypter = new SamlResponseDecrypter(client,
             applicationRule.getVerifyMetadataPath(),
             applicationRule.getConfiguration().getEuropeanIdentityConfiguration().getHubConnectorEntityId(),
-            applicationRule.getLocalPort(),
-            Optional.ofNullable(EIDAS_SCHEME_NAME),
-            applicationRule.getAssertionConsumerServices());
+            Optional.ofNullable(UriBuilder.fromUri("http://localhost:"+applicationRule.getLocalPort()+Urls.EIDAS_METADATA_RESOURCE).build(EIDAS_SCHEME_NAME)),
+            applicationRule.getAssertionConsumerServices(),
+            applicationRule.getHubKeyStore(),
+            applicationRule.getEidasKeyStore());
 
     public static final StubIdpAppExtension applicationRule = new StubIdpAppExtension(Map.ofEntries(
             Map.entry("europeanIdentity.enabled", "true"),
@@ -95,7 +96,7 @@ public class EidasUserLogsInIntegrationTests extends IntegrationTestHelper {
         if (requestAddress) { assertThat(page).contains(IdaConstants.Eidas_Attributes.CurrentAddress.NAME); }
         if (requestGender) { assertThat(page).contains(IdaConstants.Eidas_Attributes.Gender.NAME); }
         final String samlResponse = authnRequestSteps.eidasUserConsentsReturnSamlResponse(cookies, false, RSASHA_256);
-        final InboundResponseFromCountry inboundResponseFromCountry = samlDecrypter.decryptEidasSaml(samlResponse);
+        final InboundResponseFromCountry inboundResponseFromCountry = samlResponseDecrypter.decryptEidasSaml(samlResponse);
         assertThat(inboundResponseFromCountry.getIssuer()).isEqualTo(UriBuilder.fromUri("http://localhost:0" + Urls.EIDAS_METADATA_RESOURCE).build(EIDAS_SCHEME_NAME).toASCIIString());
         assertThat(inboundResponseFromCountry.getStatus().getStatusCode().getValue()).isEqualTo(StatusCode.SUCCESS);
         assertThat(inboundResponseFromCountry.getValidatedIdentityAssertion().getAuthnStatements().size()).isEqualTo(1);
@@ -118,7 +119,7 @@ public class EidasUserLogsInIntegrationTests extends IntegrationTestHelper {
         final AuthnRequestSteps.Cookies cookies = authnRequestSteps.userPostsEidasAuthnRequestToStubIdp();
         authnRequestSteps.eidasUserLogsIn(cookies, false);
         final String samlResponse = authnRequestSteps.eidasUserConsentsReturnSamlResponse(cookies, false, RSASHA_256);
-        final InboundResponseFromCountry inboundResponseFromCountry = samlDecrypter.decryptEidasSamlUnsignedAssertions(samlResponse);
+        final InboundResponseFromCountry inboundResponseFromCountry = samlResponseDecrypter.decryptEidasSamlUnsignedAssertions(samlResponse);
         assertThat(inboundResponseFromCountry.getIssuer()).isEqualTo(UriBuilder.fromUri("http://localhost:0" + Urls.EIDAS_METADATA_RESOURCE).build(EIDAS_SCHEME_NAME).toASCIIString());
         assertThat(inboundResponseFromCountry.getStatus().getStatusCode().getValue()).isEqualTo(StatusCode.SUCCESS);
         assertThat(inboundResponseFromCountry.getValidatedIdentityAssertion().getAuthnStatements().size()).isEqualTo(1);

@@ -1,29 +1,23 @@
-package stubidp.test.integration.support;
+package stubsp.stubsp.saml.request;
 
 import org.joda.time.DateTime;
 import org.opensaml.saml.saml2.core.AuthnRequest;
+import org.opensaml.security.credential.Credential;
 import stubidp.saml.serializers.serializers.XmlObjectToBase64EncodedStringTransformer;
-import stubidp.saml.utils.core.test.TestCredentialFactory;
-import stubidp.saml.utils.core.test.builders.IssuerBuilder;
 
 import java.util.Optional;
 import java.util.UUID;
-
-import static stubidp.test.devpki.TestCertificateStrings.HUB_TEST_PRIVATE_SIGNING_KEY;
-import static stubidp.test.devpki.TestCertificateStrings.HUB_TEST_PUBLIC_SIGNING_CERT;
-import static stubidp.test.devpki.TestCertificateStrings.TEST_RP_MS_PRIVATE_SIGNING_KEY;
-import static stubidp.test.devpki.TestCertificateStrings.TEST_RP_MS_PUBLIC_SIGNING_CERT;
-import static stubidp.test.devpki.TestEntityIds.HUB_ENTITY_ID;
 
 public class IdpAuthnRequestBuilder {
 
     private static XmlObjectToBase64EncodedStringTransformer<AuthnRequest> toBase64EncodedStringTransformer = new XmlObjectToBase64EncodedStringTransformer<>();
 
-    private String destination = "destination";
-    private String entityId = HUB_ENTITY_ID;
+    private String destination;
+    private String entityId;
     private DateTime issueInstant = DateTime.now();
-    private boolean withInvalidKey = false;
     private boolean withKeyInfo = false;
+    private Credential signingCredential;
+    private String signingCertificate;
 
     private IdpAuthnRequestBuilder() {}
 
@@ -51,44 +45,33 @@ public class IdpAuthnRequestBuilder {
         return this;
     }
 
-    public IdpAuthnRequestBuilder withInvalidKey(boolean withInvalidKey) {
-        this.withInvalidKey = withInvalidKey;
+    public IdpAuthnRequestBuilder withSigningCredential(Credential signingCredential) {
+        this.signingCredential = signingCredential;
+        return this;
+    }
+
+    public IdpAuthnRequestBuilder withSigningCertificate(String signingCertificate) {
+        this.signingCertificate = signingCertificate;
         return this;
     }
 
     public String build() {
-        return anAuthnRequestX("_"+UUID.randomUUID().toString(),
+        return anAuthnRequest("_"+UUID.randomUUID().toString(),
                 entityId,
                 Optional.of(false),
                 Optional.of(0),
-                withInvalidKey?TEST_RP_MS_PUBLIC_SIGNING_CERT:HUB_TEST_PUBLIC_SIGNING_CERT,
-                withInvalidKey?TEST_RP_MS_PRIVATE_SIGNING_KEY:HUB_TEST_PRIVATE_SIGNING_KEY,
+                signingCredential,
                 destination,
                 Optional.ofNullable(issueInstant),
-                withKeyInfo?Optional.of(withInvalidKey?TEST_RP_MS_PUBLIC_SIGNING_CERT:HUB_TEST_PUBLIC_SIGNING_CERT):Optional.empty());
+                withKeyInfo?Optional.ofNullable(signingCertificate):Optional.empty());
     }
 
-    private static String anAuthnRequestX(
+    private static String anAuthnRequest(
             String id,
             String issuer,
             Optional<Boolean> forceAuthentication,
             Optional<Integer> assertionConsumerServiceIndex,
-            String publicCert,
-            String privateKey,
-            String ssoRequestEndpoint,
-            Optional<DateTime> issueInstant,
-            Optional<String> x509Certificate) {
-        AuthnRequest authnRequest = getAuthnRequest(id, issuer, forceAuthentication, assertionConsumerServiceIndex, publicCert, privateKey, ssoRequestEndpoint, issueInstant, x509Certificate);
-        return toBase64EncodedStringTransformer.apply(authnRequest);
-    }
-
-    private static AuthnRequest getAuthnRequest(
-            String id,
-            String issuer,
-            Optional<Boolean> forceAuthentication,
-            Optional<Integer> assertionConsumerServiceIndex,
-            String publicCert,
-            String privateKey,
+            Credential signingCredential,
             String ssoRequestEndpoint,
             Optional<DateTime> issueInstant,
             Optional<String> x509Certificate) {
@@ -96,14 +79,13 @@ public class IdpAuthnRequestBuilder {
                 .withId(id)
                 .withIssuer(IssuerBuilder.anIssuer().withIssuerId(issuer).build())
                 .withDestination(ssoRequestEndpoint)
-                .withSigningCredential(new TestCredentialFactory(publicCert, privateKey).getSigningCredential());
+                .withSigningCredential(signingCredential);
 
         x509Certificate.ifPresent(authnRequestBuilder::withX509Certificate);
         forceAuthentication.ifPresent(authnRequestBuilder::withForceAuthn);
         assertionConsumerServiceIndex.ifPresent(authnRequestBuilder::withAssertionConsumerServiceIndex);
         issueInstant.ifPresent(authnRequestBuilder::withIssueInstant);
 
-        return authnRequestBuilder.build();
+        return toBase64EncodedStringTransformer.apply(authnRequestBuilder.build());
     }
-
 }

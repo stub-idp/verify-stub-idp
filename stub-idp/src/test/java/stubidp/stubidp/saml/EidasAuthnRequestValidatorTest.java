@@ -16,7 +16,6 @@ import org.opensaml.saml.metadata.resolver.MetadataResolver;
 import org.opensaml.saml.saml2.metadata.EntitiesDescriptor;
 import org.opensaml.saml.saml2.metadata.EntityDescriptor;
 import org.opensaml.xmlsec.signature.support.SignatureException;
-import stubidp.saml.extensions.IdaSamlBootstrap;
 import stubidp.saml.extensions.validation.SamlTransformationErrorException;
 import stubidp.saml.hub.hub.exception.SamlDuplicateRequestIdException;
 import stubidp.saml.hub.hub.exception.SamlRequestTooOldException;
@@ -27,21 +26,32 @@ import stubidp.saml.metadata.MultiTrustStoresBackedMetadataConfiguration;
 import stubidp.saml.metadata.factories.DropwizardMetadataResolverFactory;
 import stubidp.saml.metadata.test.factories.metadata.EntitiesDescriptorFactory;
 import stubidp.saml.metadata.test.factories.metadata.MetadataFactory;
+import stubidp.saml.security.IdaKeyStore;
 import stubidp.saml.utils.Constants;
 import stubidp.saml.utils.core.test.builders.metadata.EntityDescriptorBuilder;
 import stubidp.saml.utils.core.test.builders.metadata.KeyDescriptorBuilder;
 import stubidp.saml.utils.core.test.builders.metadata.SPSSODescriptorBuilder;
+import stubidp.stubidp.OpenSAMLRunner;
 import stubidp.stubidp.Urls;
 import stubidp.stubidp.configuration.EuropeanIdentityConfiguration;
 import stubidp.stubidp.exceptions.InvalidEidasAuthnRequestException;
 import stubidp.test.devpki.TestCertificateStrings;
-import stubidp.test.integration.support.eidas.EidasAuthnRequestBuilder;
 import stubidp.test.utils.httpstub.HttpStubRule;
 import stubidp.test.utils.keystore.KeyStoreResource;
 import stubidp.test.utils.keystore.builders.KeyStoreResourceBuilder;
 import stubidp.utils.rest.jerseyclient.JerseyClientConfigurationBuilder;
+import stubidp.utils.security.security.PrivateKeyFactory;
+import stubidp.utils.security.security.PublicKeyFactory;
+import stubidp.utils.security.security.X509CertificateFactory;
+import stubsp.stubsp.saml.request.EidasAuthnRequestBuilder;
 
 import javax.ws.rs.core.UriBuilder;
+import java.security.KeyPair;
+import java.security.PrivateKey;
+import java.security.PublicKey;
+import java.security.cert.X509Certificate;
+import java.util.Base64;
+import java.util.Collections;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -51,7 +61,7 @@ import static stubidp.test.devpki.TestCertificateStrings.METADATA_SIGNING_A_PRIV
 import static stubidp.test.devpki.TestCertificateStrings.METADATA_SIGNING_A_PUBLIC_CERT;
 
 @ExtendWith(MockitoExtension.class)
-class EidasAuthnRequestValidatorTest {
+class EidasAuthnRequestValidatorTest extends OpenSAMLRunner {
 
     private static final String CONNECTOR_METADATA_RESOURCE = "/saml/metadata/eidas/connector";
     private static final String SCHEME_ID = "cef-ref";
@@ -71,10 +81,9 @@ class EidasAuthnRequestValidatorTest {
     private EidasAuthnRequestValidator eidasAuthnRequestValidator;
 
     @BeforeAll
-    public static void beforeAll() throws MarshallingException, SignatureException, JsonProcessingException {
+    static void beforeAll() throws MarshallingException, SignatureException, JsonProcessingException {
         metadataTrustStore.create();
         spTrustStore.create();
-        IdaSamlBootstrap.bootstrap();
         eidasMetadataServer.reset();
         eidasMetadataServer.register(CONNECTOR_METADATA_RESOURCE, 200, Constants.APPLICATION_SAMLMETADATA_XML, getEidasConnectorMetadata());
 
@@ -92,86 +101,91 @@ class EidasAuthnRequestValidatorTest {
     }
 
     @AfterAll
-    public static void afterAll() {
+    static void afterAll() {
         spTrustStore.delete();
         metadataTrustStore.delete();
     }
 
     @BeforeEach
-    public void beforeEach() {
+    void beforeEach() {
         when(europeanIdentityConfiguration.getStubCountryBaseUrl()).thenReturn(stubCountryBaseUri);
         when(europeanIdentityConfiguration.getMetadata()).thenReturn(metadataConfiguration);
         eidasAuthnRequestValidator = new EidasAuthnRequestValidator(hubConnectorMetadataResolver, europeanIdentityConfiguration);
     }
 
     @Test
-    public void shouldThrowExceptionWhenRequestIsNull() {
+    void shouldThrowExceptionWhenRequestIsNull() {
         SamlTransformationErrorException exception = assertThrows(SamlTransformationErrorException.class, () -> eidasAuthnRequestValidator.transformAndValidate(SCHEME_ID, null));
         assertThat(exception.getMessage()).contains("Missing SAML message");
     }
 
     @Test
-    public void shouldThrowExceptionWhenRequestIsTooSmall() {
+    void shouldThrowExceptionWhenRequestIsTooSmall() {
         SamlTransformationErrorException exception = assertThrows(SamlTransformationErrorException.class, () -> eidasAuthnRequestValidator.transformAndValidate(SCHEME_ID, ""));
         assertThat(exception.getMessage()).contains("The size of string is 0; it should be at least 1,200.");
     }
 
     @Test
-    public void shouldThrowExceptionWhenKeyInfoIsPresentButNoX509DataAre() {
+    void shouldThrowExceptionWhenKeyInfoIsPresentButNoX509DataAre() {
         String _authnRequest = EidasAuthnRequestBuilder.anAuthnRequest()
                 .withKeyInfo(true)
                 .withIssuerEntityId(hubConnectorEntityId)
                 .withIssueInstant(DateTime.now())
                 .withDestination(stubCountryDestination)
                 .removeAllX509Datas(true)
+                .withKeyStore(validIdaKeyStore())
                 .build();
         InvalidEidasAuthnRequestException exception = assertThrows(InvalidEidasAuthnRequestException.class, () -> eidasAuthnRequestValidator.transformAndValidate(SCHEME_ID, _authnRequest));
         assertThat(exception.getMessage()).isEqualTo("no x509 data found");
     }
 
     @Test
-    public void shouldThrowExceptionWhenKeyInfoIsPresentButNoCertificatesAre() {
+    void shouldThrowExceptionWhenKeyInfoIsPresentButNoCertificatesAre() {
         String _authnRequest = EidasAuthnRequestBuilder.anAuthnRequest()
                 .withKeyInfo(true)
                 .withIssuerEntityId(hubConnectorEntityId)
                 .withIssueInstant(DateTime.now())
                 .withDestination(stubCountryDestination)
                 .removeAllCertificates(true)
+                .withKeyStore(validIdaKeyStore())
                 .build();
         InvalidEidasAuthnRequestException exception = assertThrows(InvalidEidasAuthnRequestException.class, () -> eidasAuthnRequestValidator.transformAndValidate(SCHEME_ID, _authnRequest));
         assertThat(exception.getMessage()).isEqualTo("no x509 certificates found in x509 data");
     }
 
     @Test
-    public void shouldThrowExceptionWhenKeyInfoIsNull() {
+    void shouldThrowExceptionWhenKeyInfoIsNull() {
         String _authnRequest = EidasAuthnRequestBuilder.anAuthnRequest()
                 .withKeyInfo(false)
                 .withIssuerEntityId(hubConnectorEntityId)
                 .withIssueInstant(DateTime.now())
                 .withDestination(stubCountryDestination)
+                .withKeyStore(validIdaKeyStore())
                 .build();
         InvalidEidasAuthnRequestException exception = assertThrows(InvalidEidasAuthnRequestException.class, () -> eidasAuthnRequestValidator.transformAndValidate(SCHEME_ID, _authnRequest));
         assertThat(exception.getMessage()).isEqualTo("KeyInfo cannot be null");
     }
 
     @Test
-    public void shouldValidateAValidAuthnRequest() {
+    void shouldValidateAValidAuthnRequest() {
         String _authnRequest = EidasAuthnRequestBuilder.anAuthnRequest()
                 .withKeyInfo(true)
                 .withIssuerEntityId(hubConnectorEntityId)
                 .withIssueInstant(DateTime.now())
                 .withDestination(stubCountryDestination)
+                .withKeyStore(validIdaKeyStore())
                 .build();
         eidasAuthnRequestValidator.transformAndValidate(SCHEME_ID, _authnRequest);
     }
 
     @Test
-    public void shouldFailDuplicateSubmissionsOfSameRequest() {
+    void shouldFailDuplicateSubmissionsOfSameRequest() {
         String _authnRequest = EidasAuthnRequestBuilder.anAuthnRequest()
                 .withKeyInfo(true)
                 .withIssuerEntityId(hubConnectorEntityId)
                 .withIssueInstant(DateTime.now())
                 .withDestination(stubCountryDestination)
+                .withKeyStore(validIdaKeyStore())
                 .build();
         eidasAuthnRequestValidator.transformAndValidate(SCHEME_ID, _authnRequest);
         SamlDuplicateRequestIdException exception = assertThrows(SamlDuplicateRequestIdException.class, () -> eidasAuthnRequestValidator.transformAndValidate(SCHEME_ID, _authnRequest));
@@ -179,49 +193,52 @@ class EidasAuthnRequestValidatorTest {
     }
 
     @Test
-    public void shouldNotValidateAValidAuthnRequestSignedWithWrongKey() {
+    void shouldNotValidateAValidAuthnRequestSignedWithWrongKey() {
         String _authnRequest = EidasAuthnRequestBuilder.anAuthnRequest()
                 .withKeyInfo(true)
                 .withIssuerEntityId(hubConnectorEntityId)
                 .withIssueInstant(DateTime.now())
                 .withDestination(stubCountryDestination)
-                .withInvalidKey(true)
+                .withKeyStore(invalidIdaKeyStore())
                 .build();
         InvalidEidasAuthnRequestException exception = assertThrows(InvalidEidasAuthnRequestException.class, () -> eidasAuthnRequestValidator.transformAndValidate(SCHEME_ID, _authnRequest));
         assertThat(exception.getMessage()).isEqualTo("signature verification failed");
     }
 
     @Test
-    public void shouldNotAllowAnIncorrectDestination() {
+    void shouldNotAllowAnIncorrectDestination() {
         String _authnRequest = EidasAuthnRequestBuilder.anAuthnRequest()
                 .withKeyInfo(true)
                 .withIssuerEntityId(hubConnectorEntityId)
                 .withIssueInstant(DateTime.now())
                 .withDestination(UriBuilder.fromUri(stubCountryBaseUri + Urls.EIDAS_SAML2_SSO_RESOURCE).build("foo").toASCIIString())
+                .withKeyStore(validIdaKeyStore())
                 .build();
         SamlValidationException exception = assertThrows(SamlValidationException.class, () -> eidasAuthnRequestValidator.transformAndValidate(SCHEME_ID, _authnRequest));
         assertThat(exception.getMessage()).contains("Destination is incorrect.");
     }
 
     @Test
-    public void shouldNotValidateRequestFromUnepectedIssuer() {
+    void shouldNotValidateRequestFromUnepectedIssuer() {
         String _authnRequest = EidasAuthnRequestBuilder.anAuthnRequest()
                 .withKeyInfo(true)
                 .withIssuerEntityId("something else")
                 .withIssueInstant(DateTime.now())
                 .withDestination(stubCountryDestination)
+                .withKeyStore(validIdaKeyStore())
                 .build();
         InvalidEidasAuthnRequestException exception = assertThrows(InvalidEidasAuthnRequestException.class, () -> eidasAuthnRequestValidator.transformAndValidate(SCHEME_ID, _authnRequest));
         assertThat(exception.getMessage()).isEqualTo("signature verification failed");
     }
 
     @Test
-    public void shouldNotAcceptExpiredRequest() {
+    void shouldNotAcceptExpiredRequest() {
         String _authnRequest = EidasAuthnRequestBuilder.anAuthnRequest()
                 .withKeyInfo(true)
                 .withIssuerEntityId(hubConnectorEntityId)
                 .withIssueInstant(DateTime.now().minusHours(1))
                 .withDestination(stubCountryDestination)
+                .withKeyStore(validIdaKeyStore())
                 .build();
         SamlRequestTooOldException exception = assertThrows(SamlRequestTooOldException.class, () -> eidasAuthnRequestValidator.transformAndValidate(SCHEME_ID, _authnRequest));
         assertThat(exception.getMessage()).contains("too old");
@@ -239,8 +256,7 @@ class EidasAuthnRequestValidatorTest {
                 .build());
         EntitiesDescriptor entitiesDescriptor = new EntitiesDescriptorFactory()
                 .signedEntitiesDescriptor(entityDescriptorList, METADATA_SIGNING_A_PUBLIC_CERT, METADATA_SIGNING_A_PRIVATE_KEY);
-        final String metadata = new MetadataFactory().metadata(entitiesDescriptor);
-        return metadata;
+        return new MetadataFactory().metadata(entitiesDescriptor);
     }
 
     private static class TestFileBackedTrustStoreConfiguration extends FileBackedTrustStoreConfiguration {
@@ -248,5 +264,37 @@ class EidasAuthnRequestValidatorTest {
             this.store = store;
             this.trustStorePassword = trustStorePassword;
         }
+    }
+
+    private IdaKeyStore validIdaKeyStore() {
+        PublicKeyFactory publicKeyFactory = new PublicKeyFactory(new X509CertificateFactory());
+
+        PrivateKey privateSigningKey = new PrivateKeyFactory().createPrivateKey(Base64.getDecoder().decode(TestCertificateStrings.HUB_CONNECTOR_TEST_PRIVATE_SIGNING_KEY));
+        PublicKey publicSigningKey = publicKeyFactory.createPublicKey(TestCertificateStrings.HUB_CONNECTOR_TEST_PUBLIC_SIGNING_CERT);
+
+        PrivateKey privateEncKey = new PrivateKeyFactory().createPrivateKey(Base64.getDecoder().decode(TestCertificateStrings.HUB_CONNECTOR_TEST_PRIVATE_ENCRYPTION_KEY));
+        PublicKey publicEncKey = publicKeyFactory.createPublicKey(TestCertificateStrings.HUB_CONNECTOR_TEST_PUBLIC_ENCRYPTION_CERT);
+
+        KeyPair signingKeyPair = new KeyPair(publicSigningKey, privateSigningKey);
+        KeyPair encryptionKeyPair = new KeyPair(publicEncKey, privateEncKey);
+
+        X509Certificate certificate = new X509CertificateFactory().createCertificate(TestCertificateStrings.HUB_CONNECTOR_TEST_PUBLIC_SIGNING_CERT);
+        return new IdaKeyStore(certificate, signingKeyPair, Collections.singletonList(encryptionKeyPair));
+    }
+
+    private IdaKeyStore invalidIdaKeyStore() {
+        PublicKeyFactory publicKeyFactory = new PublicKeyFactory(new X509CertificateFactory());
+
+        PrivateKey privateSigningKey = new PrivateKeyFactory().createPrivateKey(Base64.getDecoder().decode(TestCertificateStrings.TEST_RP_MS_PRIVATE_SIGNING_KEY));
+        PublicKey publicSigningKey = publicKeyFactory.createPublicKey(TestCertificateStrings.TEST_RP_MS_PUBLIC_SIGNING_CERT);
+
+        PrivateKey privateEncKey = new PrivateKeyFactory().createPrivateKey(Base64.getDecoder().decode(TestCertificateStrings.TEST_RP_MS_PRIVATE_ENCRYPTION_KEY));
+        PublicKey publicEncKey = publicKeyFactory.createPublicKey(TestCertificateStrings.TEST_RP_MS_PUBLIC_ENCRYPTION_CERT);
+
+        KeyPair signingKeyPair = new KeyPair(publicSigningKey, privateSigningKey);
+        KeyPair encryptionKeyPair = new KeyPair(publicEncKey, privateEncKey);
+
+        X509Certificate certificate = new X509CertificateFactory().createCertificate(TestCertificateStrings.TEST_RP_MS_PUBLIC_SIGNING_CERT);
+        return new IdaKeyStore(certificate, signingKeyPair, Collections.singletonList(encryptionKeyPair));
     }
 }

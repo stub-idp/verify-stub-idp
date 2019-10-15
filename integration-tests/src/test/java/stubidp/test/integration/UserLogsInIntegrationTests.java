@@ -14,8 +14,8 @@ import stubidp.stubidp.Urls;
 import stubidp.stubidp.cookies.StubIdpCookieNames;
 import stubidp.test.integration.steps.AuthnRequestSteps;
 import stubidp.test.integration.support.IntegrationTestHelper;
-import stubidp.test.integration.support.SamlDecrypter;
 import stubidp.test.integration.support.StubIdpAppExtension;
+import stubsp.stubsp.saml.response.SamlResponseDecrypter;
 
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.Entity;
@@ -48,12 +48,13 @@ public class UserLogsInIntegrationTests extends IntegrationTestHelper {
             IDP_NAME,
             applicationRule.getLocalPort());
     private static final boolean checkKeyInfo = true;
-    private final SamlDecrypter samlDecrypter = new SamlDecrypter(client,
+    private final SamlResponseDecrypter samlResponseDecrypter = new SamlResponseDecrypter(client,
             applicationRule.getVerifyMetadataPath(),
             applicationRule.getConfiguration().getHubEntityId(),
-            applicationRule.getLocalPort(),
             empty(),
             applicationRule.getAssertionConsumerServices(),
+            applicationRule.getHubKeyStore(),
+            applicationRule.getEidasKeyStore(),
             checkKeyInfo);
 
     public static final StubIdpAppExtension applicationRule = new StubIdpAppExtension(Map.ofEntries(Map.entry("isPrometheusEnabled", "true")))
@@ -170,13 +171,13 @@ public class UserLogsInIntegrationTests extends IntegrationTestHelper {
         final AuthnRequestSteps.Cookies cookies1 = authnRequestSteps.userPostsAuthnRequestToStubIdp();
         authnRequestSteps.userLogsIn(cookies1);
         final String samlResponse = authnRequestSteps.userConsentsReturnSamlResponse(cookies1, false);
-        final InboundResponseFromIdp inboundResponseFromIdp = samlDecrypter.decryptSaml(samlResponse);
+        final InboundResponseFromIdp inboundResponseFromIdp = samlResponseDecrypter.decryptSaml(samlResponse);
         final String firstPid = inboundResponseFromIdp.getAuthnStatementAssertion().get().getPersistentId().getNameId();
 
         final AuthnRequestSteps.Cookies cookies2 = authnRequestSteps.userPostsAuthnRequestToStubIdp();
         authnRequestSteps.userLogsIn(cookies2);
         final String samlResponse2 = authnRequestSteps.userConsentsReturnSamlResponse(cookies2, true);
-        final InboundResponseFromIdp inboundResponseFromIdp2 = samlDecrypter.decryptSaml(samlResponse2);
+        final InboundResponseFromIdp inboundResponseFromIdp2 = samlResponseDecrypter.decryptSaml(samlResponse2);
         assertThat(inboundResponseFromIdp2.getAuthnStatementAssertion().get().getPersistentId().getNameId()).isNotEqualTo(firstPid);
     }
 

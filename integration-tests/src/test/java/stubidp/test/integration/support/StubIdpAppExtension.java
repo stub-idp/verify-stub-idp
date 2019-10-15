@@ -16,6 +16,7 @@ import org.opensaml.saml.saml2.metadata.EntityDescriptor;
 import org.opensaml.xmlsec.signature.support.SignatureException;
 import stubidp.saml.metadata.test.factories.metadata.EntitiesDescriptorFactory;
 import stubidp.saml.metadata.test.factories.metadata.MetadataFactory;
+import stubidp.saml.security.IdaKeyStore;
 import stubidp.saml.utils.Constants;
 import stubidp.saml.utils.core.test.builders.metadata.AssertionConsumerServiceBuilder;
 import stubidp.saml.utils.core.test.builders.metadata.EntityDescriptorBuilder;
@@ -39,10 +40,16 @@ import stubidp.test.devpki.TestCertificateStrings;
 import stubidp.test.utils.httpstub.HttpStubRule;
 import stubidp.test.utils.keystore.KeyStoreResource;
 import stubidp.test.utils.keystore.builders.KeyStoreResourceBuilder;
+import stubidp.utils.security.security.PrivateKeyFactory;
+import stubidp.utils.security.security.PublicKeyFactory;
+import stubidp.utils.security.security.X509CertificateFactory;
 
 import javax.ws.rs.core.UriBuilder;
 import java.io.File;
 import java.net.URI;
+import java.security.KeyPair;
+import java.security.PrivateKey;
+import java.security.PublicKey;
 import java.util.ArrayList;
 import java.util.Base64;
 import java.util.HashMap;
@@ -57,7 +64,6 @@ import static stubidp.test.devpki.TestCertificateStrings.METADATA_SIGNING_A_PUBL
 import static stubidp.test.devpki.TestCertificateStrings.STUB_IDP_PUBLIC_PRIMARY_CERT;
 import static stubidp.test.devpki.TestCertificateStrings.STUB_IDP_PUBLIC_PRIMARY_PRIVATE_KEY;
 import static stubidp.test.devpki.TestEntityIds.HUB_CONNECTOR_ENTITY_ID;
-import static stubidp.test.devpki.TestEntityIds.HUB_ENTITY_ID;
 
 public class StubIdpAppExtension extends DropwizardAppExtension<StubIdpConfiguration> {
 
@@ -65,6 +71,8 @@ public class StubIdpAppExtension extends DropwizardAppExtension<StubIdpConfigura
 
     private static final String VERIFY_METADATA_PATH = "/saml/metadata/sp";
     private static final String EIDAS_METADATA_PATH = "/saml/metadata/eidas/connector";
+
+    public static final String SP_ENTITY_ID = "http://localhost/stubsp/SAML2/metadata/federation";
 
     private static final HttpStubRule verifyMetadataServer = new HttpStubRule();
     private static final HttpStubRule eidasMetadataServer = new HttpStubRule();
@@ -92,7 +100,7 @@ public class StubIdpAppExtension extends DropwizardAppExtension<StubIdpConfigura
 
     private static ConfigOverride[] withDefaultOverrides(Map<String, String> configOverrides) {
         Map<String, String> config = Map.ofEntries(
-                Map.entry("hubEntityId", HUB_ENTITY_ID),
+                Map.entry("hubEntityId", SP_ENTITY_ID),
                 Map.entry("basicAuthEnabledForUserResource", "true"),
                 Map.entry("isPrometheusEnabled", "false"),
                 Map.entry("isHeadlessIdpEnabled", "false"),
@@ -107,7 +115,7 @@ public class StubIdpAppExtension extends DropwizardAppExtension<StubIdpConfigura
                 Map.entry("signingKeyPairConfiguration.publicKeyConfiguration.type", "x509"),
                 Map.entry("signingKeyPairConfiguration.publicKeyConfiguration.cert", STUB_IDP_PUBLIC_PRIMARY_CERT),
                 Map.entry("metadata.uri", "http://localhost:" + verifyMetadataServer.getPort() + VERIFY_METADATA_PATH),
-                Map.entry("metadata.expectedEntityId", HUB_ENTITY_ID),
+                Map.entry("metadata.expectedEntityId", SP_ENTITY_ID),
                 Map.entry("metadata.trustStore.store", metadataTrustStore.getAbsolutePath()),
                 Map.entry("metadata.trustStore.password", metadataTrustStore.getPassword()),
                 Map.entry("metadata.spTrustStore.store", spTrustStore.getAbsolutePath()),
@@ -166,7 +174,7 @@ public class StubIdpAppExtension extends DropwizardAppExtension<StubIdpConfigura
     private String getVerifyMetadata() throws MarshallingException, SignatureException {
         List<EntityDescriptor> entityDescriptors = new ArrayList<>();
         entityDescriptors.add(EntityDescriptorBuilder.anEntityDescriptor()
-                .withEntityId(HUB_ENTITY_ID)
+                .withEntityId(SP_ENTITY_ID)
                 .withSpSsoDescriptor(SPSSODescriptorBuilder.anSpServiceDescriptor()
                         .withoutDefaultEncryptionKey()
                         .withoutDefaultSigningKey()
@@ -258,4 +266,23 @@ public class StubIdpAppExtension extends DropwizardAppExtension<StubIdpConfigura
             this.stubIdps = idps;
         }
     }
+
+    public IdaKeyStore getHubKeyStore() {
+        PrivateKey privateKey = new PrivateKeyFactory().createPrivateKey(Base64.getDecoder().decode(TestCertificateStrings.HUB_TEST_PRIVATE_ENCRYPTION_KEY));
+
+        PublicKey publicKey = new PublicKeyFactory(new X509CertificateFactory()).createPublicKey(TestCertificateStrings.HUB_TEST_PUBLIC_ENCRYPTION_CERT);
+
+        List<KeyPair> encryptionKeys = List.of(new KeyPair(publicKey, privateKey));
+        return new IdaKeyStore(null, encryptionKeys);
+    }
+
+    public IdaKeyStore getEidasKeyStore() {
+        PrivateKey privateKey = new PrivateKeyFactory().createPrivateKey(Base64.getDecoder().decode(TestCertificateStrings.HUB_CONNECTOR_TEST_PRIVATE_ENCRYPTION_KEY));
+
+        PublicKey publicKey = new PublicKeyFactory(new X509CertificateFactory()).createPublicKey(TestCertificateStrings.HUB_CONNECTOR_TEST_PUBLIC_SIGNING_CERT);
+
+        List<KeyPair> encryptionKeys = List.of(new KeyPair(publicKey, privateKey));
+        return new IdaKeyStore(null, encryptionKeys);
+    }
+
 }
