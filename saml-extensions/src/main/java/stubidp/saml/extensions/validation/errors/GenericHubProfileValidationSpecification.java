@@ -13,6 +13,7 @@ public class GenericHubProfileValidationSpecification extends SamlValidationSpec
     public static final String UNABLE_TO_VALIDATE_ASSERTION_SIGNATURE = "Unknown problem when trying to validate signature for assertion {0}.";
     public static final String MISSING_SIGNATURE = "Message has no signature.";
     public static final String MISSING_ASSERTION_SIGNATURE = "Assertion with id {0} has no signature.";
+    public static final String ASSERTION_SIGNATURE_PRESENT = "Assertion with id {0} has a signature.";
     public static final String SIGNATURE_NOT_SIGNED = "Message signature is not signed";
     public static final String ASSERTION_SIGNATURE_NOT_SIGNED = "Assertion with id {0} is not signed";
 

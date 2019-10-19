@@ -144,6 +144,10 @@ public final class SamlTransformationErrorFactory {
         return new GenericHubProfileValidationSpecification(GenericHubProfileValidationSpecification.MISSING_ASSERTION_SIGNATURE, id);
     }
 
+    public static SamlValidationSpecificationFailure assertionSignaturePresent(final String id) {
+        return new GenericHubProfileValidationSpecification(GenericHubProfileValidationSpecification.ASSERTION_SIGNATURE_PRESENT, id);
+    }
+
     public static SamlValidationSpecificationFailure missingIssueInstant(final String id) {
         return new GenericHubProfileValidationSpecification(GenericHubProfileValidationSpecification.MISSING_ISSUE_INSTANT, id);
     }

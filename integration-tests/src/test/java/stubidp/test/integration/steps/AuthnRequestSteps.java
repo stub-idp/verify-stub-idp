@@ -114,7 +114,7 @@ public class AuthnRequestSteps {
         return userPostsEidasAuthnRequestToStubIdpWithAttribute(requestAddress, requestGender, true);
     }
 
-    public Cookies userPostsEidasAuthnRequestToStubIdpWithAttribute(boolean requestAddress, boolean requestGender, boolean withKeyInfo) {
+    private Cookies userPostsEidasAuthnRequestToStubIdpWithAttribute(boolean requestAddress, boolean requestGender, boolean withKeyInfo) {
         Response response = userPostsEidasAuthnRequestReturnResponse(requestAddress, requestGender, withKeyInfo);
 
         assertThat(response.getStatus()).isEqualTo(303);
@@ -208,15 +208,15 @@ public class AuthnRequestSteps {
         return page.getElementsByAttributeValue("name", "SAMLResponse").val();
     }
 
-    public void eidasUserLogsIn(Cookies cookies) {
-        userLogsIn(cookies, STUB_COUNTRY_FRIENDLY_ID, Urls.EIDAS_LOGIN_RESOURCE, Urls.EIDAS_CONSENT_RESOURCE);
+    public void eidasUserLogsIn(Cookies cookies, boolean signAssertions) {
+        userLogsIn(cookies, STUB_COUNTRY_FRIENDLY_ID, Urls.EIDAS_LOGIN_RESOURCE, Urls.EIDAS_CONSENT_RESOURCE, signAssertions);
     }
 
     public void userLogsIn(Cookies cookies, String username) {
-        userLogsIn(cookies, username, Urls.IDP_LOGIN_RESOURCE, Urls.IDP_CONSENT_RESOURCE);
+        userLogsIn(cookies, username, Urls.IDP_LOGIN_RESOURCE, Urls.IDP_CONSENT_RESOURCE, false);
     }
 
-    private void userLogsIn(Cookies cookies, String username, String loginUrl, String consentUrl) {
+    private void userLogsIn(Cookies cookies, String username, String loginUrl, String consentUrl, boolean eidasSignAssertions) {
         Response response = client.target(getStubIdpUri(loginUrl))
                 .request()
                 .cookie(StubIdpCookieNames.SESSION_COOKIE_NAME, cookies.getSessionId())
@@ -229,7 +229,9 @@ public class AuthnRequestSteps {
         form.param(Urls.USERNAME_PARAM, username);
         form.param(Urls.PASSWORD_PARAM, "bar");
         form.param(Urls.SUBMIT_PARAM, "SignIn");
-        form.param(Urls.SIGN_ASSERTIONS_PARAM, SignAssertions.signAssertions.name()); // for eidas logins
+        if(eidasSignAssertions) {
+            form.param(Urls.SIGN_ASSERTIONS_PARAM, SignAssertions.signAssertions.name());
+        }
         final Document entity = Jsoup.parse(response.readEntity(String.class));
         final Element csrfElement = entity.getElementById(CSRF_PROTECT_FORM_KEY);
         if(!Objects.isNull(csrfElement)) {

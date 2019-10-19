@@ -52,44 +52,44 @@ public class EidasUserLogsInIntegrationTests extends IntegrationTestHelper {
             Map.entry("isIdpEnabled", "false")));
 
     @BeforeEach
-    public void refreshMetadata() {
+    void refreshMetadata() {
         client.target("http://localhost:"+applicationRule.getAdminPort()+"/tasks/connector-metadata-refresh").request().post(Entity.text(""));
     }
 
     @Test
-    public void incorrectlySignedAuthnRequestFailsTest() {
+    void incorrectlySignedAuthnRequestFailsTest() {
         Response response = authnRequestSteps.userPostsEidasAuthnRequestReturnResponse(true, true, true, true);
         assertThat(response.getStatus()).isEqualTo(500);
     }
 
     @Test
-    public void correctlySignedButMissingKeyInfoAuthnRequestFailsTest() {
+    void correctlySignedButMissingKeyInfoAuthnRequestFailsTest() {
         Response response = authnRequestSteps.userPostsEidasAuthnRequestReturnResponse(true, true, false);
         assertThat(response.getStatus()).isEqualTo(500);
     }
 
     @Test
-    public void loginBehaviourTest() {
+    void loginBehaviourTest() {
         final AuthnRequestSteps.Cookies cookies = authnRequestSteps.userPostsEidasAuthnRequestToStubIdp();
-        authnRequestSteps.eidasUserLogsIn(cookies);
+        authnRequestSteps.eidasUserLogsIn(cookies, true);
         authnRequestSteps.eidasUserConsentsReturnSamlResponse(cookies, false, RSASHA_256);
     }
 
     @Test
-    public void loginBehaviourTestPSS() {
+    void loginBehaviourTestPSS() {
         final AuthnRequestSteps.Cookies cookies = authnRequestSteps.userPostsEidasAuthnRequestToStubIdp();
-        authnRequestSteps.eidasUserLogsIn(cookies);
+        authnRequestSteps.eidasUserLogsIn(cookies, true);
         authnRequestSteps.eidasUserConsentsReturnSamlResponse(cookies, false, RSASSA_PSS);
     }
 
     @Test
-    public void debugPageLoadsAndValuesForOptionalAttribuesAreReturnedTest() {
+    void debugPageLoadsAndValuesForOptionalAttribuesAreReturnedTest() {
         // this test requests these attributes and checks that they are displayed on the debug page as requested
         // but stub-country can't currently return any values for these attributes
         final boolean requestGender = true;
         final boolean requestAddress = true;
         final AuthnRequestSteps.Cookies cookies = authnRequestSteps.userPostsEidasAuthnRequestToStubIdpWithAttribute(requestAddress, requestGender);
-        authnRequestSteps.eidasUserLogsIn(cookies);
+        authnRequestSteps.eidasUserLogsIn(cookies, true);
         final String page = authnRequestSteps.eidasUserViewsTheDebugPage(cookies);
         // these can be requested but stub-country currently has no users that contain current address or gender
         if (requestAddress) { assertThat(page).contains(IdaConstants.Eidas_Attributes.CurrentAddress.NAME); }
@@ -113,4 +113,26 @@ public class EidasUserLogsInIntegrationTests extends IntegrationTestHelper {
                         IdaConstants.Eidas_Attributes.DateOfBirth.NAME);
     }
 
+    @Test
+    void unsignedAssertionsAreReturnedWhenRequested() {
+        final AuthnRequestSteps.Cookies cookies = authnRequestSteps.userPostsEidasAuthnRequestToStubIdp();
+        authnRequestSteps.eidasUserLogsIn(cookies, false);
+        final String samlResponse = authnRequestSteps.eidasUserConsentsReturnSamlResponse(cookies, false, RSASHA_256);
+        final InboundResponseFromCountry inboundResponseFromCountry = samlDecrypter.decryptEidasSamlUnsignedAssertions(samlResponse);
+        assertThat(inboundResponseFromCountry.getIssuer()).isEqualTo(UriBuilder.fromUri("http://localhost:0" + Urls.EIDAS_METADATA_RESOURCE).build(EIDAS_SCHEME_NAME).toASCIIString());
+        assertThat(inboundResponseFromCountry.getStatus().getStatusCode().getValue()).isEqualTo(StatusCode.SUCCESS);
+        assertThat(inboundResponseFromCountry.getValidatedIdentityAssertion().getAuthnStatements().size()).isEqualTo(1);
+        assertThat(LevelOfAssurance.fromString(inboundResponseFromCountry.getValidatedIdentityAssertion().getAuthnStatements().get(0).getAuthnContext().getAuthnContextClassRef().getAuthnContextClassRef())).isEqualTo(LevelOfAssurance.SUBSTANTIAL);
+        assertThat(inboundResponseFromCountry.getValidatedIdentityAssertion().isSigned()).isFalse();
+        assertThat(inboundResponseFromCountry.getValidatedIdentityAssertion().getAttributeStatements().size()).isEqualTo(1);
+        final List<Attribute> attributes = inboundResponseFromCountry.getValidatedIdentityAssertion().getAttributeStatements().get(0).getAttributes();
+        // stub-country can currently only return these 4 attributes
+        assertThat(attributes.size()).isEqualTo(4);
+        assertThat(attributes.stream().map(Attribute::getName).collect(Collectors.toList()))
+                .containsExactlyInAnyOrder(
+                        IdaConstants.Eidas_Attributes.FirstName.NAME,
+                        IdaConstants.Eidas_Attributes.FamilyName.NAME,
+                        IdaConstants.Eidas_Attributes.PersonIdentifier.NAME,
+                        IdaConstants.Eidas_Attributes.DateOfBirth.NAME);
+    }
 }

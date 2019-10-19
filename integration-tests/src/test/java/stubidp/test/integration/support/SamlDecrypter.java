@@ -157,17 +157,24 @@ public class SamlDecrypter {
         return jerseyClientMetadataResolver;
     }
 
+    public InboundResponseFromCountry decryptEidasSaml(String samlResponse) {
+        return decryptEidasSaml(samlResponse, true);
+    }
+
+    public InboundResponseFromCountry decryptEidasSamlUnsignedAssertions(String samlResponse) {
+        return decryptEidasSaml(samlResponse, false);
+    }
+
     /**
      * Be warned that this method does little to no validation and is just for testing the contents of a response
      */
-    public InboundResponseFromCountry decryptEidasSaml(String samlResponse) {
-
+    private InboundResponseFromCountry decryptEidasSaml(String samlResponse, boolean signedAssertions) {
         Response response = stringToOpenSamlObjectTransformer.apply(samlResponse);
         EidasAuthnRequestValidator.validateKeyInfo(response);
         ValidatedResponse validatedResponse = validateResponse(response);
         AssertionDecrypter assertionDecrypter = getAES256WithGCMAssertionDecrypter(createEidasKeyStore());
         List<Assertion> assertions = assertionDecrypter.decryptAssertions(validatedResponse);
-        Optional<Assertion> validatedIdentityAssertion = validateAssertion(validatedResponse, assertions);
+        Optional<Assertion> validatedIdentityAssertion = validateAssertion(validatedResponse, assertions, signedAssertions);
 
         return new InboundResponseFromCountry(response.getIssuer().getValue(),
                 validatedIdentityAssertion.get(),
@@ -193,18 +200,28 @@ public class SamlDecrypter {
         return validatedResponse;
     }
 
-    private void getValidatedAssertion(ValidatedResponse validatedResponse, List<Assertion> decryptedAssertions) {
+    private void getValidatedAssertion(List<Assertion> decryptedAssertions, boolean signedAssertions) {
         SamlAssertionsSignatureValidator samlAssertionsSignatureValidator = new SamlAssertionsSignatureValidator(getSamlMessageSignatureValidator(hubEntityId));
-        samlAssertionsSignatureValidator.validate(decryptedAssertions, IDPSSODescriptor.DEFAULT_ELEMENT_NAME);
+        try {
+            samlAssertionsSignatureValidator.validate(decryptedAssertions, IDPSSODescriptor.DEFAULT_ELEMENT_NAME);
+        } catch(SamlTransformationErrorException e) {
+            if(signedAssertions) {
+                throw e;
+            }
+            if(!e.getMessage().contains("Message has no signature")) {
+                throw e;
+            }
+        }
     }
 
-    private void responseAssertionFromCountryValidatorValidate(ValidatedResponse validatedResponse, Assertion validatedIdentityAssertion) {
+    private void responseAssertionFromCountryValidatorValidate(ValidatedResponse validatedResponse, Assertion validatedIdentityAssertion, boolean signedAssertions) {
 
         new IdentityProviderAssertionValidator(
                 new IssuerValidator(),
                 new AssertionSubjectValidator(),
                 new AssertionAttributeStatementValidator(),
-                new AssertionSubjectConfirmationValidator()
+                new AssertionSubjectConfirmationValidator(),
+                signedAssertions
         ).validate(validatedIdentityAssertion, validatedResponse.getInResponseTo(), assertionConsumerServices.toASCIIString());
 
         if (validatedResponse.isSuccess()) {
@@ -236,10 +253,10 @@ public class SamlDecrypter {
                 .orElseThrow(() -> new SamlTransformationErrorException(format("Unable to find metadata resolver for entity Id {0}", entityId), Level.ERROR));
     }
 
-    private Optional<Assertion> validateAssertion(ValidatedResponse validatedResponse, List<Assertion> decryptedAssertions) {
-        getValidatedAssertion(validatedResponse, decryptedAssertions);
+    private Optional<Assertion> validateAssertion(ValidatedResponse validatedResponse, List<Assertion> decryptedAssertions, boolean signedAssertions) {
+        getValidatedAssertion(decryptedAssertions, signedAssertions);
         Optional<Assertion> identityAssertion = decryptedAssertions.stream().findFirst();
-        identityAssertion.ifPresent(assertion -> responseAssertionFromCountryValidatorValidate(validatedResponse, assertion));
+        identityAssertion.ifPresent(assertion -> responseAssertionFromCountryValidatorValidate(validatedResponse, assertion, signedAssertions));
         return identityAssertion;
     }
 

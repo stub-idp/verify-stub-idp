@@ -22,8 +22,16 @@ public class IdentityProviderAssertionValidator extends AssertionValidator {
             AssertionSubjectValidator subjectValidator,
             AssertionAttributeStatementValidator assertionAttributeStatementValidator,
             AssertionSubjectConfirmationValidator subjectConfirmationValidator) {
+        this(issuerValidator, subjectValidator, assertionAttributeStatementValidator, subjectConfirmationValidator, true);
+    }
 
-        super(issuerValidator, subjectValidator, assertionAttributeStatementValidator, subjectConfirmationValidator);
+    public IdentityProviderAssertionValidator(
+            IssuerValidator issuerValidator,
+            AssertionSubjectValidator subjectValidator,
+            AssertionAttributeStatementValidator assertionAttributeStatementValidator,
+            AssertionSubjectConfirmationValidator subjectConfirmationValidator,
+            boolean signedAssertions) {
+        super(issuerValidator, subjectValidator, assertionAttributeStatementValidator, subjectConfirmationValidator, signedAssertions);
 
         this.subjectConfirmationValidator = subjectConfirmationValidator;
     }

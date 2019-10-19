@@ -5,7 +5,8 @@ import org.opensaml.saml.saml2.core.Assertion;
 import org.opensaml.xmlsec.signature.Signature;
 import stubidp.saml.extensions.validation.SamlTransformationErrorException;
 import stubidp.saml.extensions.validation.SamlValidationSpecificationFailure;
-import stubidp.saml.hub.core.errors.SamlTransformationErrorFactory;import stubidp.saml.hub.core.validators.subject.AssertionSubjectValidator;
+import stubidp.saml.hub.core.errors.SamlTransformationErrorFactory;
+import stubidp.saml.hub.core.validators.subject.AssertionSubjectValidator;
 import stubidp.saml.hub.core.validators.subjectconfirmation.BasicAssertionSubjectConfirmationValidator;
 import stubidp.saml.security.validators.issuer.IssuerValidator;
 import stubidp.saml.security.validators.signature.SamlSignatureUtil;
@@ -14,19 +15,30 @@ public class AssertionValidator {
 
     private final IssuerValidator issuerValidator;
     private final AssertionSubjectValidator subjectValidator;
-    protected final AssertionAttributeStatementValidator assertionAttributeStatementValidator;
+    final AssertionAttributeStatementValidator assertionAttributeStatementValidator;
     private final BasicAssertionSubjectConfirmationValidator basicAssertionSubjectConfirmationValidator;
+    private final boolean signedAssertions;
 
     public AssertionValidator(
             IssuerValidator issuerValidator,
             AssertionSubjectValidator subjectValidator,
             AssertionAttributeStatementValidator assertionAttributeStatementValidator,
             BasicAssertionSubjectConfirmationValidator basicAssertionSubjectConfirmationValidator) {
+        this(issuerValidator, subjectValidator, assertionAttributeStatementValidator, basicAssertionSubjectConfirmationValidator, true);
+    }
+
+    public AssertionValidator(
+            IssuerValidator issuerValidator,
+            AssertionSubjectValidator subjectValidator,
+            AssertionAttributeStatementValidator assertionAttributeStatementValidator,
+            BasicAssertionSubjectConfirmationValidator basicAssertionSubjectConfirmationValidator,
+            boolean signedAssertions) {
 
         this.issuerValidator = issuerValidator;
         this.subjectValidator = subjectValidator;
         this.assertionAttributeStatementValidator = assertionAttributeStatementValidator;
         this.basicAssertionSubjectConfirmationValidator = basicAssertionSubjectConfirmationValidator;
+        this.signedAssertions = signedAssertions;
     }
 
     public void validate(
@@ -39,13 +51,20 @@ public class AssertionValidator {
             SamlValidationSpecificationFailure failure = SamlTransformationErrorFactory.missingId();
             throw new SamlTransformationErrorException(failure.getErrorMessage(), failure.getLogLevel());
         }
-        if (signature == null) {
-            SamlValidationSpecificationFailure failure = SamlTransformationErrorFactory.assertionSignatureMissing(assertion.getID());
-            throw new SamlTransformationErrorException(failure.getErrorMessage(), failure.getLogLevel());
-        }
-        if (!SamlSignatureUtil.isSignaturePresent(signature)) {
-            SamlValidationSpecificationFailure failure = SamlTransformationErrorFactory.assertionNotSigned(assertion.getID());
-            throw new SamlTransformationErrorException(failure.getErrorMessage(), failure.getLogLevel());
+        if(signedAssertions) {
+            if (signature == null) {
+                SamlValidationSpecificationFailure failure = SamlTransformationErrorFactory.assertionSignatureMissing(assertion.getID());
+                throw new SamlTransformationErrorException(failure.getErrorMessage(), failure.getLogLevel());
+            }
+            if (!SamlSignatureUtil.isSignaturePresent(signature)) {
+                SamlValidationSpecificationFailure failure = SamlTransformationErrorFactory.assertionNotSigned(assertion.getID());
+                throw new SamlTransformationErrorException(failure.getErrorMessage(), failure.getLogLevel());
+            }
+        } else {
+            if (signature != null) {
+                SamlValidationSpecificationFailure failure = SamlTransformationErrorFactory.assertionSignaturePresent(assertion.getID());
+                throw new SamlTransformationErrorException(failure.getErrorMessage(), failure.getLogLevel());
+            }
         }
         if (assertion.getIssueInstant() == null) {
             SamlValidationSpecificationFailure failure = SamlTransformationErrorFactory.missingIssueInstant(assertion.getID());
