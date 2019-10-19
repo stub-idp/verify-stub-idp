@@ -21,6 +21,7 @@ import stubidp.stubidp.repositories.StubCountryRepository;
 import stubidp.stubidp.resources.eidas.EidasRegistrationPageResource;
 import stubidp.stubidp.services.NonSuccessAuthnResponseService;
 import stubidp.stubidp.services.StubCountryService;
+import stubidp.stubidp.views.SignAssertions;
 import stubidp.utils.rest.common.SessionId;
 
 import javax.ws.rs.core.Response;
@@ -78,11 +79,11 @@ class EidasRegistrationPageResourceTest {
 
     @Test
     void shouldHaveStatusAuthnCancelledResponseWhenUserCancels(){
-        when(sessionRepository.deleteAndGet(SESSION_ID)).thenReturn(Optional.ofNullable(new EidasSession(SESSION_ID, eidasAuthnRequest, RELAY_STATE, null, null, null, null)));
+        when(sessionRepository.deleteAndGet(SESSION_ID)).thenReturn(Optional.of(new EidasSession(SESSION_ID, eidasAuthnRequest, RELAY_STATE, null, null, null, null)));
         when(nonSuccessAuthnResponseService.generateAuthnCancel(anyString(), anyString(), eq(RELAY_STATE))).thenReturn(new SamlResponseFromValue<String>("saml", Function.identity(), RELAY_STATE, URI.create("uri")));
         when(cookieNames.getSessionCookieName()).thenReturn("sessionCookieName");
 
-        resource.post(STUB_COUNTRY, null, null, null, null, null, null, null, null, Cancel, SESSION_ID);
+        resource.post(STUB_COUNTRY, null, null, null, null, null, null, null, null, Cancel, Optional.of(SignAssertions.signAssertions), SESSION_ID);
 
         verify(nonSuccessAuthnResponseService).generateAuthnCancel(STUB_COUNTRY, SAML_REQUEST_ID, RELAY_STATE);
     }
@@ -90,7 +91,7 @@ class EidasRegistrationPageResourceTest {
     @Test
     void shouldHaveStatusSuccessResponseWhenUserRegisters() throws InvalidSessionIdException, IncompleteRegistrationException, InvalidDateException, UsernameAlreadyTakenException, InvalidUsernameOrPasswordException {
 
-        final Response response = resource.post(STUB_COUNTRY, "bob", "", "jones", "", "2000-01-01", "username", "password", LEVEL_2, Register, SESSION_ID);
+        final Response response = resource.post(STUB_COUNTRY, "bob", "", "jones", "", "2000-01-01", "username", "password", LEVEL_2, Register, Optional.of(SignAssertions.signAssertions), SESSION_ID);
 
         assertThat(response.getStatus()).isEqualTo(303);
         verify(stubCountryService).createAndAttachIdpUserToSession(eq(EidasScheme.fromString(STUB_COUNTRY).get()), anyString(), anyString(), eq(eidasSession), anyString(), anyString(), anyString(), anyString(), anyString(), eq(LEVEL_2));

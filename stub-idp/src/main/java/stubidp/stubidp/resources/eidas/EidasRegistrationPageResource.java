@@ -25,6 +25,7 @@ import stubidp.stubidp.services.NonSuccessAuthnResponseService;
 import stubidp.stubidp.services.StubCountryService;
 import stubidp.stubidp.views.EidasRegistrationPageView;
 import stubidp.stubidp.views.ErrorMessageType;
+import stubidp.stubidp.views.SignAssertions;
 import stubidp.utils.rest.common.SessionId;
 
 import javax.inject.Inject;
@@ -79,7 +80,7 @@ public class EidasRegistrationPageResource {
             @CookieParam(StubIdpCookieNames.SESSION_COOKIE_NAME) @NotNull SessionId sessionCookie) {
 
         final Optional<EidasScheme> eidasScheme = EidasScheme.fromString(schemeId);
-        if(!eidasScheme.isPresent()) {
+        if(eidasScheme.isEmpty()) {
             throw new InvalidEidasSchemeException();
         }
 
@@ -112,10 +113,13 @@ public class EidasRegistrationPageResource {
             @FormParam(Urls.PASSWORD_PARAM) String password,
             @FormParam(Urls.LEVEL_OF_ASSURANCE_PARAM) AuthnContext levelOfAssurance,
             @FormParam(Urls.SUBMIT_PARAM) @NotNull SubmitButtonValue submitButtonValue,
+            @FormParam(Urls.SIGN_ASSERTIONS_PARAM) Optional<SignAssertions> signAssertionChecks,
             @CookieParam(StubIdpCookieNames.SESSION_COOKIE_NAME) @NotNull SessionId sessionCookie) {
 
+        final boolean signAssertions = signAssertionChecks.isPresent() && SignAssertions.signAssertions.equals(signAssertionChecks.get());
+
         final Optional<EidasScheme> eidasScheme = EidasScheme.fromString(schemeId);
-        if(!eidasScheme.isPresent()) {
+        if(eidasScheme.isEmpty()) {
             throw new InvalidEidasSchemeException();
         }
 
@@ -125,7 +129,7 @@ public class EidasRegistrationPageResource {
 
         Optional<EidasSession> session = sessionRepository.get(sessionCookie);
 
-        if (!session.isPresent()) {
+        if (session.isEmpty()) {
             throw new GenericStubIdpException(format(("Session is invalid for " + schemeId)), Response.Status.BAD_REQUEST);
         }
 
@@ -141,6 +145,7 @@ public class EidasRegistrationPageResource {
             }
             case Register: {
                 try {
+                    session.get().setSignAssertions(signAssertions);
                     stubCountryService.createAndAttachIdpUserToSession(
                             eidasScheme.get(),
                             username,

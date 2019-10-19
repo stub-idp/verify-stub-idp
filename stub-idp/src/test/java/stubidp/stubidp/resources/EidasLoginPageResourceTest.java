@@ -82,7 +82,7 @@ class EidasLoginPageResourceTest {
     @Test
     void loginShouldRedirectToEidasConsentResource() {
         when(sessionRepository.get(SESSION_ID)).thenReturn(Optional.ofNullable(session));
-        final Response response = resource.post(SCHEME_NAME, USERNAME, PASSWORD, List.of(SignAssertions.signAssertions), SESSION_ID);
+        final Response response = resource.post(SCHEME_NAME, USERNAME, PASSWORD, Optional.of(SignAssertions.signAssertions), SESSION_ID);
 
         assertThat(response.getLocation()).isEqualTo(UriBuilder.fromPath(Urls.EIDAS_CONSENT_RESOURCE)
                 .build(SCHEME_NAME));

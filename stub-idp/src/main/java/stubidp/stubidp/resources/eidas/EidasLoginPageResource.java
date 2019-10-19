@@ -38,7 +38,6 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriBuilder;
 import java.net.URI;
-import java.util.List;
 import java.util.Optional;
 
 import static java.text.MessageFormat.format;
@@ -97,10 +96,10 @@ public class EidasLoginPageResource {
             @PathParam(Urls.SCHEME_ID_PARAM) @NotNull String schemeName,
             @FormParam(Urls.USERNAME_PARAM) String username,
             @FormParam(Urls.PASSWORD_PARAM) String password,
-            @FormParam(Urls.SIGN_ASSERTIONS_PARAM) List<SignAssertions> signAssertionChecks,
+            @FormParam(Urls.SIGN_ASSERTIONS_PARAM) Optional<SignAssertions> signAssertionChecks,
             @CookieParam(StubIdpCookieNames.SESSION_COOKIE_NAME) @NotNull SessionId sessionCookie) {
 
-        final boolean signAssertions = signAssertionChecks.contains(SignAssertions.signAssertions);
+        final boolean signAssertions = signAssertionChecks.isPresent() && SignAssertions.signAssertions.equals(signAssertionChecks.get());
 
         final Optional<EidasScheme> eidasScheme = EidasScheme.fromString(schemeName);
         if(eidasScheme.isEmpty()) {

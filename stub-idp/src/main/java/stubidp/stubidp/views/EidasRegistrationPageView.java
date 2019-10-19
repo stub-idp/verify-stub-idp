@@ -1,5 +1,7 @@
 package stubidp.stubidp.views;
 
+import stubidp.stubidp.Urls;
+
 import java.util.Optional;
 
 public class EidasRegistrationPageView extends IdpPageView {
@@ -12,4 +14,7 @@ public class EidasRegistrationPageView extends IdpPageView {
         return String.format("Registration for %s", getName());
     }
 
+    public String getSignAssertionsCheckboxGroup() { return Urls.SIGN_ASSERTIONS_PARAM; }
+
+    public String getSignAssertionsCheckboxValue() { return SignAssertions.signAssertions.name(); }
 }
