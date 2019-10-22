@@ -9,12 +9,12 @@ public class DatabaseMigrationRunner {
                 .dataSource(dbUrl, null, null)
                 .baselineVersion("0")
                 .baselineOnMigrate(true)
-                .locations("classpath:db.migrations.common", getDBSpecificMigration(dbUrl))
+                .locations("classpath:db/migrations/common", getDBSpecificMigration(dbUrl))
                 .load()
                 .migrate();
     }
 
     private String getDBSpecificMigration(String dbUrl) {
-        return dbUrl.contains(":h2:") ? "classpath:db.migrations.h2" : "classpath:db.migrations.postgres";
+        return dbUrl.contains(":h2:") ? "classpath:db/migrations/h2" : "classpath:db/migrations/postgres";
     }
 }
