@@ -1,10 +1,10 @@
 $(document).ready(function(){
-    $("#dateOfBirth").datepicker({
-        dateFormat:$.datepicker.ISO_8601,
-        changeMonth: true,
-        changeYear: true,
-        yearRange: "-110:+0"
-    });
+//    $("#dateOfBirth").datepicker({
+//        dateFormat:$.datepicker.ISO_8601,
+//        changeMonth: true,
+//        changeYear: true,
+//        yearRange: "-110:+0"
+//    });
     $.validator.addMethod(
             "dateFormat",
             function(value, element) {

@@ -84,7 +84,7 @@
             <div>
                 <label for="dateOfBirth">Date of Birth<abbr title="Required">*</abbr>
                 </label>
-                <input class="field medium required" name="dateOfBirth" id="dateOfBirth" placeholder="YYYY-MM-DD" type="text"/>
+                <input class="field medium required" name="dateOfBirth" id="dateOfBirth" placeholder="YYYY-MM-DD" type="date"/>
                 <em>Note about this field</em>
             </div>
             <div>
@@ -104,7 +104,7 @@
             </div>
             <div>
                 <label for="password">Password<abbr title="Required">*</label>
-                <input class="field medium required" name="password" id="password" type="password"/>
+                <input class="field medium required" name="password" id="password" type="password" autocomplete=”new-password”/>
                 <em>Note about this field</em>
             </div>
             <div>
