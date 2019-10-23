@@ -36,7 +36,7 @@
         <javax_activation.version>1.2.1</javax_activation.version>
         <javax_inject.version>2.6.1</javax_inject.version>
         <freemarker.version>2.3.29</freemarker.version>
-        <prometheus_client.version>0.7.0</prometheus_client.version>
+        <prometheus_client.version>0.8.0</prometheus_client.version>
         <jsoup.version>1.12.1</jsoup.version>
 
         <!-- test dependencies -->
