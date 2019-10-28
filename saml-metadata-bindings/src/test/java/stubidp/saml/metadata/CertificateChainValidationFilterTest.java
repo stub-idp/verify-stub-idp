@@ -29,42 +29,42 @@ import static java.nio.charset.StandardCharsets.UTF_8;
 import static java.util.Arrays.asList;
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class CertificateChainValidationFilterTest extends OpenSAMLRunner {
+class CertificateChainValidationFilterTest extends OpenSAMLRunner {
 
     private static final List<String> IDP_ENTITY_IDS = asList(TestEntityIds.STUB_IDP_ONE, TestEntityIds.STUB_IDP_TWO, TestEntityIds.STUB_IDP_THREE, TestEntityIds.STUB_IDP_FOUR);
     private static final List<String> HUB_ENTITY_IDS = Collections.singletonList(TestEntityIds.HUB_ENTITY_ID);
     private static final List<String> HUB_KEY_NAMES = asList(EntityDescriptorFactory.SIGNING_ONE, EntityDescriptorFactory.SIGNING_TWO, EntityDescriptorFactory.ENCRYPTION);
 
     @RegisterExtension
-    public static KeyStoreRule idpKeyStoreRule = KeyStoreRuleBuilder.aKeyStoreRule().withCertificate("idp", CACertificates.TEST_IDP_CA)
+    static KeyStoreRule idpKeyStoreRule = KeyStoreRuleBuilder.aKeyStoreRule().withCertificate("idp", CACertificates.TEST_IDP_CA)
                                                                     .withCertificate("root", CACertificates.TEST_ROOT_CA).build();
 
     @RegisterExtension
-    public static KeyStoreRule hubKeyStoreRule = KeyStoreRuleBuilder.aKeyStoreRule().withCertificate("hub", CACertificates.TEST_CORE_CA)
+    static KeyStoreRule hubKeyStoreRule = KeyStoreRuleBuilder.aKeyStoreRule().withCertificate("hub", CACertificates.TEST_CORE_CA)
                                                                     .withCertificate("root", CACertificates.TEST_ROOT_CA).build();
 
     @RegisterExtension
-    public static KeyStoreRule rpKeyStoreRule = KeyStoreRuleBuilder.aKeyStoreRule().withCertificate("rp", CACertificates.TEST_RP_CA)
+    static KeyStoreRule rpKeyStoreRule = KeyStoreRuleBuilder.aKeyStoreRule().withCertificate("rp", CACertificates.TEST_RP_CA)
                                                                    .withCertificate("root", CACertificates.TEST_ROOT_CA).build();
 
     private MetadataFactory metadataFactory = new MetadataFactory();
     private CertificateChainValidator certificateChainValidator = new CertificateChainValidator(new PKIXParametersProvider(), new X509CertificateFactory());
 
     @Test
-    public void shouldNotFilterOutTrustedCertificatesWhenAllCertificatesAreValid() throws Exception {
+    void shouldNotFilterOutTrustedCertificatesWhenAllCertificatesAreValid() throws Exception {
         final CertificateChainValidationFilter spCertificateChainValidationFilter = new CertificateChainValidationFilter(SPSSODescriptor.DEFAULT_ELEMENT_NAME, certificateChainValidator, hubKeyStoreRule.getKeyStore());
         final CertificateChainValidationFilter idpCertificateChainValidationFilter = new CertificateChainValidationFilter(IDPSSODescriptor.DEFAULT_ELEMENT_NAME, certificateChainValidator, idpKeyStoreRule.getKeyStore());
 
         XMLObject metadata = validateMetadata(spCertificateChainValidationFilter, metadataFactory.defaultMetadata());
         metadata = idpCertificateChainValidationFilter.filter(metadata);
 
-        assertThat(getEntityIdsFromMetadata(metadata, SPSSODescriptor.DEFAULT_ELEMENT_NAME)).containsOnlyElementsOf(HUB_ENTITY_IDS);
-        assertThat(getKeyNamesFromMetadata(metadata, SPSSODescriptor.DEFAULT_ELEMENT_NAME, TestEntityIds.HUB_ENTITY_ID)).containsOnlyElementsOf(HUB_KEY_NAMES);
-        assertThat(getEntityIdsFromMetadata(metadata, IDPSSODescriptor.DEFAULT_ELEMENT_NAME)).containsOnlyElementsOf(IDP_ENTITY_IDS);
+        assertThat(getEntityIdsFromMetadata(metadata, SPSSODescriptor.DEFAULT_ELEMENT_NAME)).hasSameElementsAs(HUB_ENTITY_IDS);
+        assertThat(getKeyNamesFromMetadata(metadata, SPSSODescriptor.DEFAULT_ELEMENT_NAME, TestEntityIds.HUB_ENTITY_ID)).hasSameElementsAs(HUB_KEY_NAMES);
+        assertThat(getEntityIdsFromMetadata(metadata, IDPSSODescriptor.DEFAULT_ELEMENT_NAME)).hasSameElementsAs(IDP_ENTITY_IDS);
     }
 
     @Test
-    public void shouldReturnNullWhenMetadataIsEmpty() throws Exception {
+    void shouldReturnNullWhenMetadataIsEmpty() throws Exception {
         final CertificateChainValidationFilter spCertificateChainValidationFilter = new CertificateChainValidationFilter(SPSSODescriptor.DEFAULT_ELEMENT_NAME, certificateChainValidator, hubKeyStoreRule.getKeyStore());
         final CertificateChainValidationFilter idpCertificateChainValidationFilter = new CertificateChainValidationFilter(IDPSSODescriptor.DEFAULT_ELEMENT_NAME, certificateChainValidator, idpKeyStoreRule.getKeyStore());
 
@@ -75,28 +75,28 @@ public class CertificateChainValidationFilterTest extends OpenSAMLRunner {
     }
 
     @Test
-    public void shouldFilterOutUntrustedIdpCertificatesWhenAllIdpCertificatesAreNotSignedByCorrectCA() throws Exception {
+    void shouldFilterOutUntrustedIdpCertificatesWhenAllIdpCertificatesAreNotSignedByCorrectCA() throws Exception {
         final CertificateChainValidationFilter certificateChainValidationFilter = new CertificateChainValidationFilter(IDPSSODescriptor.DEFAULT_ELEMENT_NAME, certificateChainValidator, hubKeyStoreRule.getKeyStore());
 
         final XMLObject metadata = validateMetadata(certificateChainValidationFilter, metadataFactory.defaultMetadata());
 
-        assertThat(getEntityIdsFromMetadata(metadata, SPSSODescriptor.DEFAULT_ELEMENT_NAME)).containsOnlyElementsOf(HUB_ENTITY_IDS);
-        assertThat(getKeyNamesFromMetadata(metadata, SPSSODescriptor.DEFAULT_ELEMENT_NAME, TestEntityIds.HUB_ENTITY_ID)).containsOnlyElementsOf(HUB_KEY_NAMES);
+        assertThat(getEntityIdsFromMetadata(metadata, SPSSODescriptor.DEFAULT_ELEMENT_NAME)).hasSameElementsAs(HUB_ENTITY_IDS);
+        assertThat(getKeyNamesFromMetadata(metadata, SPSSODescriptor.DEFAULT_ELEMENT_NAME, TestEntityIds.HUB_ENTITY_ID)).hasSameElementsAs(HUB_KEY_NAMES);
         assertThat(getEntityIdsFromMetadata(metadata, IDPSSODescriptor.DEFAULT_ELEMENT_NAME)).isEmpty();
     }
 
     @Test
-    public void shouldFilterOutUntrustedHubCertificatesWhenAllHubCertificatesAreNotSignedByCorrectCA() throws Exception {
+    void shouldFilterOutUntrustedHubCertificatesWhenAllHubCertificatesAreNotSignedByCorrectCA() throws Exception {
         final CertificateChainValidationFilter certificateChainValidationFilter = new CertificateChainValidationFilter(SPSSODescriptor.DEFAULT_ELEMENT_NAME, certificateChainValidator, idpKeyStoreRule.getKeyStore());
 
         final XMLObject metadata = validateMetadata(certificateChainValidationFilter, metadataFactory.defaultMetadata());
 
         assertThat(getEntityIdsFromMetadata(metadata, SPSSODescriptor.DEFAULT_ELEMENT_NAME)).isEmpty();
-        assertThat(getEntityIdsFromMetadata(metadata, IDPSSODescriptor.DEFAULT_ELEMENT_NAME)).containsOnlyElementsOf(IDP_ENTITY_IDS);
+        assertThat(getEntityIdsFromMetadata(metadata, IDPSSODescriptor.DEFAULT_ELEMENT_NAME)).hasSameElementsAs(IDP_ENTITY_IDS);
     }
 
     @Test
-    public void shouldReturnNullWhenAllCertificatesAreNotSignedByCorrectCA() throws Exception {
+    void shouldReturnNullWhenAllCertificatesAreNotSignedByCorrectCA() throws Exception {
         final CertificateChainValidationFilter spCertificateChainValidationFilter = new CertificateChainValidationFilter(SPSSODescriptor.DEFAULT_ELEMENT_NAME, certificateChainValidator, rpKeyStoreRule.getKeyStore());
         final CertificateChainValidationFilter idpCertificateChainValidationFilter = new CertificateChainValidationFilter(IDPSSODescriptor.DEFAULT_ELEMENT_NAME, certificateChainValidator, rpKeyStoreRule.getKeyStore());
 
@@ -107,7 +107,7 @@ public class CertificateChainValidationFilterTest extends OpenSAMLRunner {
     }
 
     @Test
-    public void shouldFilterOutUntrustedIdpCertificateWhenOneIdpCertificateIsNotSignedByCorrectCA() throws Exception {
+    void shouldFilterOutUntrustedIdpCertificateWhenOneIdpCertificateIsNotSignedByCorrectCA() throws Exception {
         final CertificateChainValidationFilter certificateChainValidationFilter = new CertificateChainValidationFilter(IDPSSODescriptor.DEFAULT_ELEMENT_NAME, certificateChainValidator, idpKeyStoreRule.getKeyStore());
         final EntityDescriptorFactory entityDescriptorFactory =  new EntityDescriptorFactory();
         String metadataWithOneBadIdpCertificate = metadataFactory.metadata(
@@ -121,22 +121,22 @@ public class CertificateChainValidationFilterTest extends OpenSAMLRunner {
 
         final XMLObject metadata = validateMetadata(certificateChainValidationFilter, metadataWithOneBadIdpCertificate);
 
-        assertThat(getEntityIdsFromMetadata(metadata, SPSSODescriptor.DEFAULT_ELEMENT_NAME)).containsOnlyElementsOf(HUB_ENTITY_IDS);
-        assertThat(getKeyNamesFromMetadata(metadata, SPSSODescriptor.DEFAULT_ELEMENT_NAME, TestEntityIds.HUB_ENTITY_ID)).containsOnlyElementsOf(HUB_KEY_NAMES);
-        assertThat(getEntityIdsFromMetadata(metadata, IDPSSODescriptor.DEFAULT_ELEMENT_NAME)).containsOnlyElementsOf(IDP_ENTITY_IDS);
+        assertThat(getEntityIdsFromMetadata(metadata, SPSSODescriptor.DEFAULT_ELEMENT_NAME)).hasSameElementsAs(HUB_ENTITY_IDS);
+        assertThat(getKeyNamesFromMetadata(metadata, SPSSODescriptor.DEFAULT_ELEMENT_NAME, TestEntityIds.HUB_ENTITY_ID)).hasSameElementsAs(HUB_KEY_NAMES);
+        assertThat(getEntityIdsFromMetadata(metadata, IDPSSODescriptor.DEFAULT_ELEMENT_NAME)).hasSameElementsAs(IDP_ENTITY_IDS);
         assertThat(getEntityIdsFromMetadata(metadata, IDPSSODescriptor.DEFAULT_ELEMENT_NAME)).doesNotContain(TestEntityIds.TEST_RP);
     }
 
     @Test
-    public void shouldFilterOutUntrustedHubSigningCertificateWhenAHubSigningCertificateIsNotSignedByCorrectCA() throws Exception {
+    void shouldFilterOutUntrustedHubSigningCertificateWhenAHubSigningCertificateIsNotSignedByCorrectCA() throws Exception {
         final CertificateChainValidationFilter spCertificateChainValidationFilter = new CertificateChainValidationFilter(SPSSODescriptor.DEFAULT_ELEMENT_NAME, certificateChainValidator, hubKeyStoreRule.getKeyStore());
         final EntityDescriptorFactory entityDescriptorFactory =  new EntityDescriptorFactory();
         String metadataWithOneBadKeyName = metadataFactory.metadata(Collections.singletonList(entityDescriptorFactory.badHubEntityDescriptor()));
 
         final XMLObject metadata = validateMetadata(spCertificateChainValidationFilter, metadataWithOneBadKeyName);
 
-        assertThat(getEntityIdsFromMetadata(metadata, SPSSODescriptor.DEFAULT_ELEMENT_NAME)).containsOnlyElementsOf(HUB_ENTITY_IDS);
-        assertThat(getKeyNamesFromMetadata(metadata, SPSSODescriptor.DEFAULT_ELEMENT_NAME, TestEntityIds.HUB_ENTITY_ID)).containsOnlyElementsOf(HUB_KEY_NAMES);
+        assertThat(getEntityIdsFromMetadata(metadata, SPSSODescriptor.DEFAULT_ELEMENT_NAME)).hasSameElementsAs(HUB_ENTITY_IDS);
+        assertThat(getKeyNamesFromMetadata(metadata, SPSSODescriptor.DEFAULT_ELEMENT_NAME, TestEntityIds.HUB_ENTITY_ID)).hasSameElementsAs(HUB_KEY_NAMES);
         assertThat(getKeyNamesFromMetadata(metadata, SPSSODescriptor.DEFAULT_ELEMENT_NAME, TestEntityIds.HUB_ENTITY_ID)).doesNotContain(EntityDescriptorFactory.SIGNING_BAD);
     }
 
