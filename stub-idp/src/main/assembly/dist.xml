@@ -8,9 +8,14 @@
     <fileSets>
         <fileSet>
             <directory>${project.basedir}/../configuration</directory>
-            <outputDirectory>/</outputDirectory>
+            <outputDirectory>/configuration</outputDirectory>
             <includes>
                 <include>stub-idp.yml</include>
+                <include>configured-idps/stub-idps.yml</include>
+                <include>data/pki/stub_idp_signing_primary.pk8</include>
+                <include>data/pki/stub_idp_signing_primary.crt</include>
+                <include>data/pki/metadata.ts</include>
+                <include>data/pki/sp.ts</include>
             </includes>
         </fileSet>
         <fileSet>
@@ -19,6 +24,7 @@
             <includes>
                 <include>README.md</include>
                 <include>LICENCE</include>
+                <include>startup-idp.sh</include>
             </includes>
         </fileSet>
         <fileSet>

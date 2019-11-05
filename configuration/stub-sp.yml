@@ -1,0 +1,17 @@
+server:
+  applicationConnectors:
+    - type: http
+      port: ${PORT:-40000}
+  adminConnectors:
+    - type: http
+      port: 40001
+
+  requestLog:
+    type: classic
+    appenders:
+      - type: console
+
+logging:
+  level: ${LOG_LEVEL:-INFO}
+  appenders:
+    - type: console

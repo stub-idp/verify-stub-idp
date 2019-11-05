@@ -142,7 +142,7 @@ public class UserLogsInIntegrationTests extends IntegrationTestHelper {
     @Test
     @Order(1)
     public void ensureImagesAreCacheableTest() {
-        Response response = client.target(authnRequestSteps.getStubIdpUri("/assets/images/providers/stub-idp-demo-one.png"))
+        Response response = client.target(authnRequestSteps.getStubIdpUri("/assets/images/providers/stub-idp-one.png"))
                 .request()
                 .get();
         assertThat(response.getStatus()).isEqualTo(200);

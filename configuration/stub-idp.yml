@@ -10,19 +10,12 @@ server:
     type: classic
     appenders:
       - type: console
-#      - type: file
-#        currentLogFilename: ${LOG_PATH}/debug/stub-idp_access.log
-#        archivedLogFilenamePattern: ${LOG_PATH}/debug/stub-idp_access.log.%d.gz
-#        archivedFileCount: 7
-#      - type: logstash-file
-#        currentLogFilename: ${LOG_PATH}/stub-idp_access.log
-#        archivedLogFilenamePattern: ${LOG_PATH}/stub-idp_access.log.%d.gz
-#        archivedFileCount: 7
 
 assertionLifetime: 60m
 
 saml:
   entityId: ${ENTITY_ID:-"http://stub_idp.acme.org/%s/SSO/POST"}
+  expectedDestination: ${EXPECTED_DESTINATION:-"http://localhost"}
 
 serviceInfo:
   name: stub-idp
@@ -31,36 +24,20 @@ logging:
   level: ${LOG_LEVEL:-INFO}
   appenders:
     - type: console
-#    - type: file
-#      currentLogFilename: ${LOG_PATH}/debug/stub-idp.log
-#      archivedLogFilenamePattern: ${LOG_PATH}/debug/stub-idp.log.%d.gz
-#      archivedFileCount: 7
-#    - type: logstash-file
-#      currentLogFilename: ${LOG_PATH}/stub-idp.log
-#      archivedLogFilenamePattern: ${LOG_PATH}/stub-idp.log.%d.gz
-#      archivedFileCount: 7
 
 signingKeyPairConfiguration:
   privateKeyConfiguration:
     type: ${KEY_TYPE:-file}
-    key: ${STUB_IDP_SIGNING_PRIVATE_KEY}
+    key: ${STUB_IDP_SIGNING_PRIVATE_KEY:-configuration/data/pki/stub_idp_signing_primary.pk8}
   publicKeyConfiguration:
     type: ${CERT_TYPE:-file}
-    cert: ${STUB_IDP_SIGNING_CERT}
+    cert: ${STUB_IDP_SIGNING_CERT:-configuration/data/pki/stub_idp_signing_primary.crt}
     name: idp.signing.cert
 
-basicAuthEnabledForUserResource: ${STUB_IDP_BASIC_AUTH}
+basicAuthEnabledForUserResource: ${STUB_IDP_BASIC_AUTH:-true}
 
-stubIdpsYmlFileLocation: ${STUB_IDPS_FILE_PATH:-/ida/stub-idp/stub-idps.yml}
+stubIdpsYmlFileLocation: ${STUB_IDPS_FILE_PATH:-configuration/configured-idps/stub-idps.yml}
 stubIdpYmlFileRefresh: 10s
-
-metrics:
-  reporters:
-    - type: graphite
-      host: 127.0.0.1
-      port: 2003
-      prefix: ${GRAPHITE_PREFIX}
-      frequency: ${GRAPHITE_REPORTING_FREQUENCY:-10s}
 
 hubEntityId: ${METADATA_ENTITY_ID}
 
@@ -72,19 +49,23 @@ metadata:
     tls:
       protocol: TLSv1.2
       verifyHostname: false
-  uri: ${METADATA_URL}
+  uri: ${METADATA_URL:-http://localhost/metadata}
+  spTrustStore:
+    type: ${TRUSTSTORE_TYPE:-file}
+    store: ${SP_TRUSTSTORE:-configuration/data/pki/sp.ts}
+    password: ${TRUSTSTORE_PASSWORD:-marshmallow}
   trustStore:
     type: ${TRUSTSTORE_TYPE:-file}
-    store: ${METADATA_TRUSTSTORE}
-    password: ${TRUSTSTORE_PASSWORD}
+    store: ${METADATA_TRUSTSTORE:-configuration/data/pki/metadata.ts}
+    password: ${TRUSTSTORE_PASSWORD:-marshmallow}
   minRefreshDelay: 30000
   maxRefreshDelay: 1800000
   expectedEntityId: ${METADATA_ENTITY_ID}
 
 europeanIdentity:
-  enabled: ${EUROPEAN_IDENTITY_ENABLED:-false}
+  enabled: ${EUROPEAN_IDENTITY_ENABLED:-true}
   hubConnectorEntityId: ${HUB_CONNECTOR_ENTITY_ID:-http://DefaultNotUsed}
-  stubCountryBaseUrl: ${STUB_IDP_HOSTNAME:-DefaultNotUsed}
+  stubCountryBaseUrl: ${STUB_IDP_HOSTNAME:-"http://localhost"}
   metadata:
     jerseyClientName: connector-metadata-client
     client:
@@ -95,20 +76,24 @@ europeanIdentity:
         protocol: TLSv1.2
         verifyHostname: false
     uri: ${CONNECTOR_NODE_METADATA_URI:-http://DefaultNotUsed}
+    spTrustStore:
+      type: ${TRUSTSTORE_TYPE:-file}
+      store: ${SP_TRUSTSTORE:-configuration/data/pki/sp.ts}
+      password: ${TRUSTSTORE_PASSWORD:-marshmallow}
     trustStore:
       type: ${TRUSTSTORE_TYPE:-file}
-      store: ${METADATA_TRUSTSTORE}
-      password: ${TRUSTSTORE_PASSWORD}
+      store: ${METADATA_TRUSTSTORE:-configuration/data/pki/metadata.ts}
+      password: ${TRUSTSTORE_PASSWORD:-marshmallow}
     minRefreshDelay: 30000
     maxRefreshDelay: 1800000
     expectedEntityId: ${HUB_CONNECTOR_ENTITY_ID:-http://DefaultNotUsed}
   signingKeyPairConfiguration:
     privateKeyConfiguration:
       type: ${KEY_TYPE:-file}
-      key: ${STUB_COUNTRY_SIGNING_PRIVATE_KEY}
+      key: ${STUB_COUNTRY_SIGNING_PRIVATE_KEY:-configuration/data/pki/stub_idp_signing_primary.pk8}
     publicKeyConfiguration:
       type: ${CERT_TYPE:-file}
-      cert: ${STUB_COUNTRY_SIGNING_CERT}
+      cert: ${STUB_COUNTRY_SIGNING_CERT:-configuration/data/pki/stub_idp_signing_primary.crt}
       name: stub_country_signing_cert
 
 database:
@@ -118,11 +103,20 @@ database:
   url: ${DB_URI:-}
 
 singleIdpJourney:
-  enabled: ${SINGLE_IDP_FEATURE:-false}
-  serviceListUri: ${SERVICE_LIST_URL:-http://localhost:50300/get-available-services}
+  enabled: ${SINGLE_IDP_FEATURE:-true}
+  serviceListUri: ${SERVICE_LIST_URL:-http://localhost:40000/stub/sp/get-available-services}
   serviceListClient:
     timeout: 60s
     timeToLive: 10m
     connectionTimeout: 4s
-  verifySubmissionUri: ${VERIFY_SUBMISSION_URL:-http://localhost:50300/initiate-single-idp-journey}
+  verifySubmissionUri: ${VERIFY_SUBMISSION_URL:-http://localhost:40000/stub/sp/initiate-single-idp-service}
+
+isPrometheusEnabled: true
+isHeadlessIdpEnabled: true
+isIdpEnabled: true
+
+secureCookieConfiguration:
+    secure: true
+    keyConfiguration:
+      base64EncodedKey: cmljaw==
 

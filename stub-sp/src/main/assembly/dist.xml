@@ -6,19 +6,20 @@
         <format>zip</format>
     </formats>
     <fileSets>
-<!--        <fileSet>-->
-<!--            <directory>${project.basedir}/../configuration</directory>-->
-<!--            <outputDirectory>/</outputDirectory>-->
-<!--            <includes>-->
-<!--                <include>stub-idp.yml</include>-->
-<!--            </includes>-->
-<!--        </fileSet>-->
+        <fileSet>
+            <directory>${project.basedir}/../configuration</directory>
+            <outputDirectory>/configuration</outputDirectory>
+            <includes>
+                <include>stub-sp.yml</include>
+            </includes>
+        </fileSet>
         <fileSet>
             <directory>${project.basedir}/..</directory>
             <outputDirectory>/</outputDirectory>
             <includes>
                 <include>README.md</include>
                 <include>LICENCE</include>
+                <include>startup-sp.sh</include>
             </includes>
         </fileSet>
         <fileSet>

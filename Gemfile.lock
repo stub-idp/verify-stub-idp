@@ -1,0 +1,87 @@
+GIT
+  remote: https://github.com/stub-idp/verify-metadata-generator.git
+  revision: 47b90464d9c9e11d892d9c04f1d75cd9e9a83877
+  specs:
+    verify-metadata-generator (0.0.2)
+      activemodel
+      json-schema
+      nokogiri
+
+GEM
+  remote: http://rubygems.org/
+  specs:
+    OptionParser (0.5.1)
+    activemodel (5.2.3)
+      activesupport (= 5.2.3)
+    activesupport (5.2.3)
+      concurrent-ruby (~> 1.0, >= 1.0.2)
+      i18n (>= 0.7, < 2)
+      minitest (~> 5.1)
+      tzinfo (~> 1.1)
+    addressable (2.7.0)
+      public_suffix (>= 2.0.2, < 5.0)
+    arr-pm (0.0.10)
+      cabin (> 0)
+    backports (3.15.0)
+    cabin (0.9.0)
+    childprocess (0.9.0)
+      ffi (~> 1.0, >= 1.0.11)
+    clamp (1.0.1)
+    concurrent-ruby (1.1.5)
+    dotenv (2.7.5)
+    ffi (1.11.1)
+    fpm (1.11.0)
+      arr-pm (~> 0.0.10)
+      backports (>= 2.6.2)
+      cabin (>= 0.6.0)
+      childprocess (= 0.9.0)
+      clamp (~> 1.0.0)
+      ffi
+      json (>= 1.7.7, < 2.0)
+      pleaserun (~> 0.0.29)
+      ruby-xz (~> 0.2.3)
+      stud
+    i18n (1.7.0)
+      concurrent-ruby (~> 1.0)
+    insist (1.0.0)
+    io-like (0.3.0)
+    json (1.8.6)
+    json-schema (2.8.1)
+      addressable (>= 2.4)
+    mini_portile2 (2.4.0)
+    minitest (5.13.0)
+    mustache (0.99.8)
+    nokogiri (1.10.5)
+      mini_portile2 (~> 2.4.0)
+    pleaserun (0.0.30)
+      cabin (> 0)
+      clamp
+      dotenv
+      insist
+      mustache (= 0.99.8)
+      stud
+    public_suffix (4.0.1)
+    ruby-xz (0.2.3)
+      ffi (~> 1.9)
+      io-like (~> 0.3)
+    stud (0.0.23)
+    thread_safe (0.3.6)
+    tty-cursor (0.7.0)
+    tty-spinner (0.9.1)
+      tty-cursor (~> 0.7)
+    tzinfo (1.2.5)
+      thread_safe (~> 0.1)
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  OptionParser
+  activemodel (< 6)
+  dotenv
+  fpm (>= 1.8.1)
+  tty-spinner
+  verify-metadata-generator!
+
+BUNDLED WITH
+   2.0.2

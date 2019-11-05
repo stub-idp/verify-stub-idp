@@ -35,3 +35,5 @@ bin/
 
 stub-idp/src/dist
 target
+
+configuration/data

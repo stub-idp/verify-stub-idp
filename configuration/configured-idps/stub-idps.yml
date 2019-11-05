@@ -1,0 +1,32 @@
+stubIdps:
+  - friendlyId: stub-idp-one
+    displayName: Stub IDP One
+    assetId: stub-idp-one
+    sendKeyInfo: true
+    idpUserCredentials:
+        - user: stub-idp-admin
+          password: $2a$10$Z09OHSeDgGE5UUM9uIMqwesNW2JJf.M9eRA0HKY7Epngnzn7duypy # password
+  - friendlyId: stub-idp-two
+    displayName: Stub IDP Two
+    assetId: stub-idp-two
+    idpUserCredentials:
+        - user: stub-idp-admin
+          password: $2a$10$Z09OHSeDgGE5UUM9uIMqwesNW2JJf.M9eRA0HKY7Epngnzn7duypy # password
+  - friendlyId: stub-idp-three
+    displayName: Stub IDP Three
+    assetId: stub-idp-three
+    idpUserCredentials:
+        - user: stub-idp-admin
+          password: $2a$10$Z09OHSeDgGE5UUM9uIMqwesNW2JJf.M9eRA0HKY7Epngnzn7duypy # password
+  - friendlyId: stub-idp-four
+    displayName: Stub IDP Four
+    assetId: stub-idp-four
+    idpUserCredentials:
+        - user: srub-idp-admin
+          password: $2a$10$Z09OHSeDgGE5UUM9uIMqwesNW2JJf.M9eRA0HKY7Epngnzn7duypy # password
+  - friendlyId: headless-idp
+    displayName: Headless IDP
+    assetId: headless
+    idpUserCredentials:
+        - user: stub-idp-admin
+          password: $2a$10$Z09OHSeDgGE5UUM9uIMqwesNW2JJf.M9eRA0HKY7Epngnzn7duypy # password
