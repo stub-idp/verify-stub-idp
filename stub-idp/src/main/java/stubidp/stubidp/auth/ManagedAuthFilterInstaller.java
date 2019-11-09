@@ -2,6 +2,7 @@ package stubidp.stubidp.auth;
 
 import io.dropwizard.lifecycle.Managed;
 import io.dropwizard.setup.Environment;
+import org.apache.log4j.Logger;
 import stubidp.stubidp.configuration.StubIdpConfiguration;
 import stubidp.stubidp.repositories.IdpStubsRepository;
 
@@ -18,6 +19,8 @@ import java.util.EnumSet;
 @Singleton
 public class ManagedAuthFilterInstaller implements Managed {
 
+    private static final Logger LOG = Logger.getLogger(ManagedAuthFilterInstaller.class);
+
     private final StubIdpConfiguration stubIdpConfiguration;
     private final IdpStubsRepository idpStubsRepository;
     private final Environment environment;
@@ -32,6 +35,7 @@ public class ManagedAuthFilterInstaller implements Managed {
     @Override
     public void start() throws Exception {
         if(stubIdpConfiguration.isBasicAuthEnabledForUserResource()) {
+            LOG.info("installing auth filter for idp user resource");
             environment.servlets()
                     .addFilter("Basic Auth Filter for Idps", new UserResourceBasicAuthFilter(idpStubsRepository))
                     .addMappingForUrlPatterns(EnumSet.allOf(DispatcherType.class), true, "/*");

@@ -3,9 +3,10 @@ package stubidp.stubidp.auth;
 import com.google.common.base.Splitter;
 import org.apache.log4j.Logger;
 import org.mindrot.jbcrypt.BCrypt;
-import stubidp.utils.common.string.StringEncoding;
+import stubidp.stubidp.Urls;
 import stubidp.stubidp.configuration.UserCredentials;
 import stubidp.stubidp.repositories.IdpStubsRepository;
+import stubidp.utils.common.string.StringEncoding;
 
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
@@ -15,15 +16,19 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.ws.rs.core.UriBuilder;
 import java.io.IOException;
 import java.util.Iterator;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import static java.text.MessageFormat.format;
 
 public class UserResourceBasicAuthFilter implements Filter {
 
-    private final Logger LOG = Logger.getLogger(UserResourceBasicAuthFilter.class);
+    private static final Logger LOG = Logger.getLogger(UserResourceBasicAuthFilter.class);
+    private static final Pattern userResourcePattern = Pattern.compile("^"+ UriBuilder.fromUri(Urls.USERS_RESOURCE).build("(.+)").toASCIIString()+".*$");
 
     private final IdpStubsRepository idpStubsRepository;
     private final Splitter splitter = Splitter.on(':').limit(2);
@@ -45,9 +50,10 @@ public class UserResourceBasicAuthFilter implements Filter {
         UsernamePassword usernamePasswordFromRequest = getUsernamePasswordFromRequest(httpServletRequest);
 
         // Get the friendly id
-        String[] requestSegments = ((HttpServletRequest) request).getRequestURI().split("/");
-        if(isUrlWhichNeedsBasicAuth(requestSegments)) {
-            String friendlyId = requestSegments[1];
+        final String requestURI = ((HttpServletRequest) request).getRequestURI();
+        final Matcher matcher = userResourcePattern.matcher(requestURI);
+        if(matcher.find()) {
+            final String friendlyId = matcher.group(1);
 
             List<UserCredentials> userCredentialsList = idpStubsRepository.getUserCredentialsForFriendlyId(friendlyId);
 
@@ -65,10 +71,6 @@ public class UserResourceBasicAuthFilter implements Filter {
         } else {
             chain.doFilter(request, response);
         }
-    }
-
-    private boolean isUrlWhichNeedsBasicAuth(String[] requestSegments) {
-        return requestSegments.length >= 3 && "users".equals(requestSegments[2]);
     }
 
     @Override

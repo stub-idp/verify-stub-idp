@@ -36,6 +36,7 @@ public class ManagedStaleSessionReaper implements Managed {
 
     @Override
     public void start() throws Exception {
+        LOGGER.info("installing stale session reaper");
         final StaleSessionReaper staleSessionReaper = new StaleSessionReaper(verifySessionRepository, staleSessionReaperConfiguration);
         scheduledExecutorService.scheduleWithFixedDelay(staleSessionReaper,
                 reaperFrequencyInSeconds,

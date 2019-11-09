@@ -29,7 +29,7 @@ public class AllIdpsUserRepository {
         this.userRepository = userRepository;
     }
 
-    public void createHardcodedTestUsersForIdp(String idpFriendlyId, String assetId){
+    void createHardcodedTestUsersForIdp(String idpFriendlyId, String assetId){
         LOG.debug("Creating hard coded users for IDP: " + idpFriendlyId);
         List<DatabaseIdpUser> sacredUsers = HardCodedTestUserList.getHardCodedTestUsers(assetId);
 
@@ -38,7 +38,7 @@ public class AllIdpsUserRepository {
         }
     }
 
-    public void createHardcodedTestUsersForCountries(String countryFriendlyId, String assetId){
+    void createHardcodedTestUsersForCountries(String countryFriendlyId, String assetId){
         LOG.debug("Creating hard coded users for Country: " + countryFriendlyId);
         List<DatabaseEidasUser> sacredUsers = HardCodedTestUserList.getHardCodedCountryTestUsers(assetId);
 
@@ -47,17 +47,17 @@ public class AllIdpsUserRepository {
         }
     }
 
-    public DatabaseIdpUser createUserForIdp(String idpFriendlyName,
-                                            String persistentId,
-                                            List<MatchingDatasetValue<String>> firstnames,
-                                            List<MatchingDatasetValue<String>> middleNames,
-                                            List<MatchingDatasetValue<String>> surnames,
-                                            Optional<MatchingDatasetValue<Gender>> gender,
-                                            List<MatchingDatasetValue<LocalDate>> dateOfBirths,
-                                            List<Address> addresses,
-                                            String username,
-                                            String password,
-                                            AuthnContext levelOfAssurance) {
+    DatabaseIdpUser createUserForIdp(String idpFriendlyName,
+                                     String persistentId,
+                                     List<MatchingDatasetValue<String>> firstnames,
+                                     List<MatchingDatasetValue<String>> middleNames,
+                                     List<MatchingDatasetValue<String>> surnames,
+                                     Optional<MatchingDatasetValue<Gender>> gender,
+                                     List<MatchingDatasetValue<LocalDate>> dateOfBirths,
+                                     List<Address> addresses,
+                                     String username,
+                                     String password,
+                                     AuthnContext levelOfAssurance) {
 
 
         DatabaseIdpUser user = new DatabaseIdpUser(
@@ -78,16 +78,16 @@ public class AllIdpsUserRepository {
         return user;
     }
 
-    public DatabaseEidasUser createUserForStubCountry(String countryFriendlyName,
-                                                      String persistentId,
-                                                      String username,
-                                                      String password,
-                                                      MatchingDatasetValue<String> firstName,
-                                                      Optional<MatchingDatasetValue<String>> nonLatinFirstName,
-                                                      MatchingDatasetValue<String> surname,
-                                                      Optional<MatchingDatasetValue<String>> nonLatinSurname,
-                                                      MatchingDatasetValue<LocalDate> dob,
-                                                      AuthnContext levelOfAssurance){
+    DatabaseEidasUser createUserForStubCountry(String countryFriendlyName,
+                                               String persistentId,
+                                               String username,
+                                               String password,
+                                               MatchingDatasetValue<String> firstName,
+                                               Optional<MatchingDatasetValue<String>> nonLatinFirstName,
+                                               MatchingDatasetValue<String> surname,
+                                               Optional<MatchingDatasetValue<String>> nonLatinSurname,
+                                               MatchingDatasetValue<LocalDate> dob,
+                                               AuthnContext levelOfAssurance){
         DatabaseEidasUser user = new DatabaseEidasUser(
                 username, persistentId, password,
                 firstName, nonLatinFirstName, surname, nonLatinSurname,
@@ -100,25 +100,25 @@ public class AllIdpsUserRepository {
         return user;
     }
 
-    public Collection<DatabaseIdpUser> getAllUsersForIdp(String idpFriendlyName) {
+    Collection<DatabaseIdpUser> getAllUsersForIdp(String idpFriendlyName) {
         return userRepository.getUsersForIdp(idpFriendlyName);
     }
 
-    public Optional<DatabaseIdpUser> getUserForIdp(String idpFriendlyName, String username) {
+    Optional<DatabaseIdpUser> getUserForIdp(String idpFriendlyName, String username) {
         return userRepository.getUsersForIdp(idpFriendlyName)
                 .stream()
                 .filter(u -> u.getUsername().equalsIgnoreCase(username))
                 .findFirst();
     }
 
-    public Optional<DatabaseEidasUser> getUserForCountry(String countryFriendlyName, String username) {
+    Optional<DatabaseEidasUser> getUserForCountry(String countryFriendlyName, String username) {
         return userRepository.getUsersForCountry(STUB_COUNTRY_FRIENDLY_ID)
                 .stream()
                 .filter(u -> u.getUsername().equalsIgnoreCase(username))
                 .findFirst();
     }
 
-    public boolean containsUserForIdp(String idpFriendlyName, String username) {
+    boolean containsUserForIdp(String idpFriendlyName, String username) {
         return getUserForIdp(idpFriendlyName, username).isPresent();
     }
 
@@ -132,7 +132,7 @@ public class AllIdpsUserRepository {
        userRepository.addOrUpdateEidasUserForStubCountry(stubCountryFriendlyName, user);
    }
 
-    public void deleteUserFromIdp(String idpFriendlyName, String username) {
+    void deleteUserFromIdp(String idpFriendlyName, String username) {
         LOG.debug("Deleting user " + username + " from IDP " + idpFriendlyName);
         userRepository.deleteUserFromIdp(idpFriendlyName, username);
     }

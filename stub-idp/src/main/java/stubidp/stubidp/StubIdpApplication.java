@@ -4,16 +4,22 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.util.StdDateFormat;
 import io.dropwizard.Application;
 import io.dropwizard.assets.AssetsBundle;
+import io.dropwizard.configuration.ConfigurationFactory;
+import io.dropwizard.configuration.DefaultConfigurationFactoryFactory;
 import io.dropwizard.configuration.EnvironmentVariableSubstitutor;
 import io.dropwizard.configuration.SubstitutingSourceProvider;
+import io.dropwizard.jackson.Jackson;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
 import io.dropwizard.views.ViewBundle;
+import org.jdbi.v3.core.Jdbi;
 import stubidp.metrics.prometheus.bundle.PrometheusBundle;
 import stubidp.saml.extensions.IdaSamlBootstrap;
 import stubidp.shared.csrf.CSRFCheckProtectionFeature;
 import stubidp.shared.csrf.CSRFViewRenderer;
+import stubidp.stubidp.auth.ManagedAuthFilterInstaller;
 import stubidp.stubidp.bundles.DatabaseMigrationBundle;
+import stubidp.stubidp.configuration.IdpStubsConfiguration;
 import stubidp.stubidp.configuration.StubIdpConfiguration;
 import stubidp.stubidp.csrf.StubIDPCSRFCheckProtectionFilter;
 import stubidp.stubidp.exceptions.mappers.CatchAllExceptionMapper;
@@ -31,6 +37,14 @@ import stubidp.stubidp.filters.SessionCookieValueMustExistAsASessionFeature;
 import stubidp.stubidp.filters.StubIdpCacheControlFilter;
 import stubidp.stubidp.healthcheck.DatabaseHealthCheck;
 import stubidp.stubidp.healthcheck.StubIdpHealthCheck;
+import stubidp.stubidp.listeners.StubIdpsFileListener;
+import stubidp.stubidp.repositories.AllIdpsUserRepository;
+import stubidp.stubidp.repositories.IdpSessionRepository;
+import stubidp.stubidp.repositories.IdpStubsRepository;
+import stubidp.stubidp.repositories.jdbc.JDBIIdpSessionRepository;
+import stubidp.stubidp.repositories.jdbc.JDBIUserRepository;
+import stubidp.stubidp.repositories.jdbc.UserMapper;
+import stubidp.stubidp.repositories.reaper.ManagedStaleSessionReaper;
 import stubidp.stubidp.resources.GeneratePasswordResource;
 import stubidp.stubidp.resources.UserResource;
 import stubidp.stubidp.resources.eidas.EidasAuthnRequestReceiverResource;
@@ -127,6 +141,8 @@ public class StubIdpApplication extends Application<StubIdpConfiguration> {
         environment.jersey().register(new StubIdpEidasBinder(configuration, environment));
         environment.jersey().register(new StubIdpSingleIdpBinder(configuration, environment));
 
+        initialiseManaged(configuration, environment);
+
         // idp resources
         if(configuration.isIdpEnabled()) {
             environment.jersey().register(IdpAuthnRequestReceiverResource.class);
@@ -188,5 +204,20 @@ public class StubIdpApplication extends Application<StubIdpConfiguration> {
 
         DatabaseHealthCheck dbHealthCheck = new DatabaseHealthCheck(configuration.getDatabaseConfiguration().getUrl());
         environment.healthChecks().register("database", dbHealthCheck);
+    }
+
+    /**
+     * This is working around Dropwizard Managed objects not being injectable via HK2
+     */
+    private void initialiseManaged(StubIdpConfiguration configuration, Environment environment) {
+        final Jdbi jdbi = Jdbi.create(configuration.getDatabaseConfiguration().getUrl());
+        final AllIdpsUserRepository allIdpsUserRepository = new AllIdpsUserRepository(new JDBIUserRepository(jdbi, new UserMapper(Jackson.newObjectMapper()), false));
+        final ConfigurationFactory<IdpStubsConfiguration> configurationFactory = new DefaultConfigurationFactoryFactory<IdpStubsConfiguration>()
+                .create(IdpStubsConfiguration.class, environment.getValidator(), environment.getObjectMapper(), "");
+        final IdpStubsRepository idpStubsRepository = new IdpStubsRepository(allIdpsUserRepository, configuration, configurationFactory);
+        environment.lifecycle().manage(new ManagedAuthFilterInstaller(configuration, idpStubsRepository, environment));
+        environment.lifecycle().manage(new StubIdpsFileListener(configuration, idpStubsRepository));
+        final IdpSessionRepository idpSessionRepository = new JDBIIdpSessionRepository(jdbi, false);
+        environment.lifecycle().manage(new ManagedStaleSessionReaper(configuration, idpSessionRepository));
     }
 }

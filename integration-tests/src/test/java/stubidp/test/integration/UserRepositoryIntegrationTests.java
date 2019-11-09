@@ -34,8 +34,10 @@ import java.util.Map;
 import java.util.Optional;
 
 import static java.util.Arrays.asList;
+import static java.util.List.of;
 import static javax.ws.rs.client.Entity.entity;
 import static javax.ws.rs.core.MediaType.APPLICATION_JSON_TYPE;
+import static javax.ws.rs.core.Response.Status.UNAUTHORIZED;
 import static org.assertj.core.api.Assertions.assertThat;
 import static stubidp.stubidp.builders.AddressBuilder.anAddress;
 import static stubidp.stubidp.builders.StubIdpBuilder.aStubIdp;
@@ -53,7 +55,7 @@ public class UserRepositoryIntegrationTests extends IntegrationTestHelper {
     private static final String USERNAME = "integrationTestUser";
     private static final String PASSWORD = "integrationTestUserPassword";
 
-    public static final StubIdpAppExtension applicationRule = new StubIdpAppExtension(Map.ofEntries(Map.entry("isIdpEnabled", "false")))
+    public static final StubIdpAppExtension applicationRule = new StubIdpAppExtension(Map.ofEntries(Map.entry("isIdpEnabled", "false"), Map.entry("basicAuthEnabledForUserResource", "true")))
             .withStubIdp(aStubIdp()
                     .withId(IDP_NAME)
                     .withDisplayName(DISPLAY_NAME)
@@ -63,13 +65,35 @@ public class UserRepositoryIntegrationTests extends IntegrationTestHelper {
     protected Client client = JerseyClientBuilder.createClient().property(ClientProperties.FOLLOW_REDIRECTS, false);
 
     @BeforeEach
-    public void setUp() {
+    void setUp() {
         HttpAuthenticationFeature httpAuthenticationFeature = HttpAuthenticationFeature.basic(USERNAME, PASSWORD);
         client.register(httpAuthenticationFeature);
     }
 
     @Test
-    public void addedUserShouldBePersisted() throws Exception {
+    void shouldNotAllowIncorrectCredentials() throws JsonProcessingException {
+        Client client = JerseyClientBuilder.createClient().property(ClientProperties.FOLLOW_REDIRECTS, false);
+        HttpAuthenticationFeature httpAuthenticationFeature = HttpAuthenticationFeature.basic("USERNAME", "PASSWORD");
+        client.register(httpAuthenticationFeature);
+        IdpUserDto user = aUser().withUsername("user-11111").build();
+
+        Response response = client.target(getAddAllUsersPath(IDP_NAME))
+                .request()
+                .accept(APPLICATION_JSON_TYPE)
+                .post(entity(getJson(of(user)), APPLICATION_JSON_TYPE));
+
+        assertThat(response.getStatus()).isEqualTo(UNAUTHORIZED.getStatusCode());
+
+        response = client.target(getDeleteUserPath(IDP_NAME))
+                .request()
+                .accept(APPLICATION_JSON_TYPE)
+                .post(entity(getJson(of(user)), APPLICATION_JSON_TYPE));
+
+        assertThat(response.getStatus()).isEqualTo(UNAUTHORIZED.getStatusCode());
+    }
+
+    @Test
+    void addedUserShouldBePersisted() throws Exception {
         IdpUserDto user = new IdpUserDto(
                 Optional.of("a pid"),
                 "some test user",
@@ -107,7 +131,7 @@ public class UserRepositoryIntegrationTests extends IntegrationTestHelper {
     }
 
     @Test
-    public void allAddedUsersShouldBePersisted() throws Exception {
+    void allAddedUsersShouldBePersisted() throws Exception {
         IdpUserDto user1 = aUser().withUsername("user-1").build();
         IdpUserDto user2 = aUser().withUsername("user-2").build();
 
@@ -120,7 +144,7 @@ public class UserRepositoryIntegrationTests extends IntegrationTestHelper {
     }
 
     @Test
-    public void deletedUserShouldBeRemoved() throws IOException {
+    void deletedUserShouldBeRemoved() throws IOException {
         IdpUserDto deletableUser = aUser().withUsername("deletable-user").build();
         someUsersAreCreatedForIdp(IDP_NAME, deletableUser);
         IdpUserDto returnedUser1 = readEntity(aUserIsRequestedForIdp(deletableUser.getUsername(), IDP_NAME));
@@ -132,7 +156,7 @@ public class UserRepositoryIntegrationTests extends IntegrationTestHelper {
     }
 
     @Test
-    public void addedUserShouldHavePidGeneratedWhenNotSpecified() throws Exception {
+    void addedUserShouldHavePidGeneratedWhenNotSpecified() throws Exception {
         IdpUserDto user = aUser().withPid(null).build();
 
         aUserIsCreatedForIdp(IDP_NAME, user);
@@ -142,7 +166,7 @@ public class UserRepositoryIntegrationTests extends IntegrationTestHelper {
     }
 
     @Test
-    public void userWithMissingLevelOfAssuranceShouldReturnBadRequestWithErrorMessage() throws Exception {
+    void userWithMissingLevelOfAssuranceShouldReturnBadRequestWithErrorMessage() throws Exception {
         IdpUserDto user = aUser().withLevelOfAssurance(null).build();
 
         Response response = aUserIsCreatedForIdpWithoutResponseChecking(IDP_NAME, user);
@@ -152,7 +176,7 @@ public class UserRepositoryIntegrationTests extends IntegrationTestHelper {
     }
 
     @Test
-    public void userWithMissingUsernameShouldReturnBadRequestWithErrorMessage() throws Exception {
+    void userWithMissingUsernameShouldReturnBadRequestWithErrorMessage() throws Exception {
         IdpUserDto user = aUser().withUsername(null).build();
 
         Response response = aUserIsCreatedForIdpWithoutResponseChecking(IDP_NAME, user);
@@ -162,7 +186,7 @@ public class UserRepositoryIntegrationTests extends IntegrationTestHelper {
     }
 
     @Test
-    public void userWithMissingPasswordShouldReturnBadRequestWithErrorMessage() throws Exception {
+    void userWithMissingPasswordShouldReturnBadRequestWithErrorMessage() throws Exception {
         IdpUserDto user = aUser().withPassword(null).build();
 
         Response response = aUserIsCreatedForIdpWithoutResponseChecking(IDP_NAME, user);
@@ -234,25 +258,25 @@ public class UserRepositoryIntegrationTests extends IntegrationTestHelper {
         }
     }
 
-    public void aUserIsCreatedForIdp(String idpFriendlyId, IdpUserDto user) throws JsonProcessingException {
+    void aUserIsCreatedForIdp(String idpFriendlyId, IdpUserDto user) throws JsonProcessingException {
         Response response = createARequest(getAddUserPath(idpFriendlyId)).post(entity(getJson(Collections.singletonList(user)), APPLICATION_JSON_TYPE));
         assertThat(response.getStatus()).isEqualTo(201);
     }
 
-    public Response aUserIsCreatedForIdpWithoutResponseChecking(String idpFriendlyId, IdpUserDto user) throws JsonProcessingException {
+    Response aUserIsCreatedForIdpWithoutResponseChecking(String idpFriendlyId, IdpUserDto user) throws JsonProcessingException {
         return createARequest(getAddUserPath(idpFriendlyId)).post(entity(getJson(Collections.singletonList(user)), APPLICATION_JSON_TYPE));
     }
 
-    public void someUsersAreCreatedForIdp(String idpFriendlyId, IdpUserDto... users) throws JsonProcessingException {
-        createARequest(getAddAllUsersPath(idpFriendlyId)).post(entity(getJson(asList(users)), APPLICATION_JSON_TYPE));
+    Response someUsersAreCreatedForIdp(String idpFriendlyId, IdpUserDto... users) throws JsonProcessingException {
+        return createARequest(getAddAllUsersPath(idpFriendlyId)).post(entity(getJson(asList(users)), APPLICATION_JSON_TYPE));
     }
 
-    public void aUserIsDeletedFromIdp(String idpFriendlyId, IdpUserDto deletableUser) throws JsonProcessingException {
+    void aUserIsDeletedFromIdp(String idpFriendlyId, IdpUserDto deletableUser) throws JsonProcessingException {
         final Response response = createARequest(getDeleteUserPath(idpFriendlyId)).post(entity(getJson(deletableUser), APPLICATION_JSON_TYPE));
         assertThat(response.getStatus()).isEqualTo(200);
     }
 
-    public Response aUserIsRequestedForIdp(String username, String idpFriendlyId) {
+    Response aUserIsRequestedForIdp(String username, String idpFriendlyId) {
         return createARequest(getUserPath(username, idpFriendlyId)).get();
     }
 

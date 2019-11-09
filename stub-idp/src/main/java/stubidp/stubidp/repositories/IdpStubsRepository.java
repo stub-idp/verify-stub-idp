@@ -79,9 +79,7 @@ public class IdpStubsRepository {
         } catch (IOException | ConfigurationException e) {
             LOG.error("Error parsing configuration file, stubs remain unchanged", e);
         }
-
     }
-
 
     public Idp getIdpWithFriendlyId(String friendlyId) {
         Idp idp = repo.get(friendlyId);

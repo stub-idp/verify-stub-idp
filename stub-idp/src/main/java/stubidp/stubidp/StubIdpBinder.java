@@ -13,14 +13,12 @@ import stubidp.shared.cookies.CookieNames;
 import stubidp.shared.cookies.HmacValidator;
 import stubidp.shared.csrf.AbstractCSRFCheckProtectionFilter;
 import stubidp.shared.views.SamlMessageRedirectViewFactory;
-import stubidp.stubidp.auth.ManagedAuthFilterInstaller;
 import stubidp.stubidp.configuration.IdpStubsConfiguration;
 import stubidp.stubidp.configuration.StubIdpConfiguration;
 import stubidp.stubidp.cookies.StubIdpCookieNames;
 import stubidp.stubidp.csrf.StubIDPCSRFCheckProtectionFilter;
 import stubidp.stubidp.domain.factories.StubTransformersFactory;
 import stubidp.stubidp.filters.SessionCookieValueMustExistAsASessionFilter;
-import stubidp.stubidp.listeners.StubIdpsFileListener;
 import stubidp.stubidp.repositories.AllIdpsUserRepository;
 import stubidp.stubidp.repositories.IdpSessionRepository;
 import stubidp.stubidp.repositories.IdpStubsRepository;
@@ -28,7 +26,6 @@ import stubidp.stubidp.repositories.UserRepository;
 import stubidp.stubidp.repositories.jdbc.JDBIIdpSessionRepository;
 import stubidp.stubidp.repositories.jdbc.JDBIUserRepository;
 import stubidp.stubidp.repositories.jdbc.UserMapper;
-import stubidp.stubidp.repositories.reaper.ManagedStaleSessionReaper;
 import stubidp.stubidp.services.AuthnRequestReceiverService;
 import stubidp.stubidp.services.GeneratePasswordService;
 import stubidp.stubidp.services.IdpUserService;
@@ -70,7 +67,6 @@ public class StubIdpBinder extends AbstractBinder {
 
         bind(AllIdpsUserRepository.class).in(Singleton.class).to(AllIdpsUserRepository.class);
         bind(IdpStubsRepository.class).in(Singleton.class).to(IdpStubsRepository.class);
-        bind(StubIdpsFileListener.class).in(Singleton.class).to(StubIdpsFileListener.class);
         final ObjectMapper objectMapper = Jackson.newObjectMapper();
         final UserMapper userMapper = new UserMapper(objectMapper);
         bind(userMapper).to(UserMapper.class);
@@ -81,10 +77,6 @@ public class StubIdpBinder extends AbstractBinder {
 
         bind(new EmptyKeyStoreProvider().get()).to(KeyStore.class);
 
-        //must be eager singletons to be auto injected
-        // Elegant-hack: this is how we install the basic auth filter, so we can use a guice injected user repository
-        bind(ManagedAuthFilterInstaller.class).in(Singleton.class).to(ManagedAuthFilterInstaller.class);
-
         // FIXME: needed for both eidas + idp
         bind(AuthnRequestReceiverService.class).to(AuthnRequestReceiverService.class);
         final StubTransformersFactory stubTransformersFactory = new StubTransformersFactory();
@@ -93,8 +85,6 @@ public class StubIdpBinder extends AbstractBinder {
         bind(GeneratePasswordService.class).to(GeneratePasswordService.class);
         bind(IdpUserService.class).to(IdpUserService.class);
         bind(UserService.class).to(UserService.class);
-
-        bind(ManagedStaleSessionReaper.class).in(Singleton.class).to(ManagedStaleSessionReaper.class);
 
         bind(JsonResponseProcessor.class).to(JsonResponseProcessor.class);
 
