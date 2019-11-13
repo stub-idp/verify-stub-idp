@@ -22,7 +22,7 @@ stubIdps:
     displayName: Stub IDP Four
     assetId: stub-idp-four
     idpUserCredentials:
-        - user: srub-idp-admin
+        - user: stub-idp-admin
           password: $2a$10$Z09OHSeDgGE5UUM9uIMqwesNW2JJf.M9eRA0HKY7Epngnzn7duypy # password
   - friendlyId: headless-idp
     displayName: Headless IDP
