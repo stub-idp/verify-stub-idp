@@ -2,6 +2,7 @@ package stubidp.stubidp.views;
 
 import stubidp.stubidp.Urls;
 
+import javax.ws.rs.core.UriBuilder;
 import java.util.Optional;
 
 public class LoginPageView extends IdpPageView {
@@ -15,27 +16,27 @@ public class LoginPageView extends IdpPageView {
     }
 
     public String getAuthnPendingResource() {
-        return Urls.IDP_AUTHN_PENDING_RESOURCE;
+        return UriBuilder.fromPath(Urls.IDP_AUTHN_PENDING_RESOURCE).build(idpId).toASCIIString();
     }
 
     public String getNoAuthnContextResource() {
-        return Urls.IDP_NO_AUTHN_CONTEXT_RESOURCE;
+        return UriBuilder.fromPath(Urls.IDP_NO_AUTHN_CONTEXT_RESOURCE).build(idpId).toASCIIString();
     }
 
     public String getAuthnFailureResource() {
-        return Urls.IDP_AUTHN_FAILURE_RESOURCE;
+        return UriBuilder.fromPath(Urls.IDP_AUTHN_FAILURE_RESOURCE).build(idpId).toASCIIString();
     }
 
     public String getUpliftFailedResource() {
-        return Urls.IDP_UPLIFT_FAILED_RESOURCE;
+        return UriBuilder.fromPath(Urls.IDP_UPLIFT_FAILED_RESOURCE).build(idpId).toASCIIString();
     }
 
     public String getFraudFailureResource() {
-        return Urls.IDP_FRAUD_FAILURE_RESOURCE;
+        return UriBuilder.fromPath(Urls.IDP_FRAUD_FAILURE_RESOURCE).build(idpId).toASCIIString();
     }
 
     public String getRequesterErrorResource() {
-        return Urls.IDP_REQUESTER_ERROR_RESOURCE;
+        return UriBuilder.fromPath(Urls.IDP_REQUESTER_ERROR_RESOURCE).build(idpId).toASCIIString();
     }
 
 }

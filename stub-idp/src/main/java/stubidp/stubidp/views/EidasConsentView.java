@@ -3,10 +3,11 @@ package stubidp.stubidp.views;
 import stubidp.stubidp.Urls;
 import stubidp.stubidp.domain.EidasUser;
 
+import javax.ws.rs.core.UriBuilder;
 import java.util.Optional;
 
 public class EidasConsentView extends IdpPageView {
-    private EidasUser user;
+    private final EidasUser user;
 
     public EidasConsentView(String name, String idpId, String assetId, EidasUser user, String csrfToken) {
         super("eidasConsent.ftl", name, idpId, null, assetId, Optional.ofNullable(csrfToken));
@@ -22,7 +23,7 @@ public class EidasConsentView extends IdpPageView {
     }
 
     public String getEidasConsentResource() {
-        return Urls.EIDAS_CONSENT_RESOURCE;
+        return UriBuilder.fromPath(Urls.EIDAS_CONSENT_RESOURCE).build(idpId).toASCIIString();
     }
 
 }

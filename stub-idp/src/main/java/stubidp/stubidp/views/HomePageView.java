@@ -4,12 +4,13 @@ import stubidp.stubidp.Urls;
 import stubidp.stubidp.domain.DatabaseIdpUser;
 import stubidp.stubidp.views.helpers.IdpUserHelper;
 
+import javax.ws.rs.core.UriBuilder;
 import java.util.Arrays;
 import java.util.Optional;
 
 public class HomePageView extends IdpPageView {
-    Optional<DatabaseIdpUser> loggedInUser;
-    IdpUserHelper idpUserHelper;
+    private final Optional<DatabaseIdpUser> loggedInUser;
+    private final IdpUserHelper idpUserHelper;
 
     public HomePageView(String name, String idpId, String errorMessage, String assetId, Optional<DatabaseIdpUser> loggedInUser) {
         super("homePage.ftl", name, idpId, errorMessage, assetId, Optional.empty());
@@ -33,14 +34,14 @@ public class HomePageView extends IdpPageView {
     }
 
     public String getLogoutResource() {
-        return Urls.SINGLE_IDP_LOGOUT_RESOURCE;
+        return UriBuilder.fromPath(Urls.SINGLE_IDP_LOGOUT_RESOURCE).build(idpId).toASCIIString();
     }
 
     public String getPreRegisterResource() {
-        return Urls.SINGLE_IDP_PRE_REGISTER_RESOURCE;
+        return UriBuilder.fromPath(Urls.SINGLE_IDP_PRE_REGISTER_RESOURCE).build(idpId).toASCIIString();
     }
 
     public String getStartPromptResource() {
-        return Urls.SINGLE_IDP_START_PROMPT_RESOURCE;
+        return UriBuilder.fromPath(Urls.SINGLE_IDP_START_PROMPT_RESOURCE).build(idpId).toASCIIString();
     }
 }

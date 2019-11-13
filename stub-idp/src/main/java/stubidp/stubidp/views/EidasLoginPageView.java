@@ -2,6 +2,7 @@ package stubidp.stubidp.views;
 
 import stubidp.stubidp.Urls;
 
+import javax.ws.rs.core.UriBuilder;
 import java.util.Optional;
 
 public class EidasLoginPageView extends IdpPageView {
@@ -15,7 +16,7 @@ public class EidasLoginPageView extends IdpPageView {
     }
 
     public String getEidasAuthnFailureResource() {
-        return Urls.EIDAS_AUTHN_FAILURE_RESOURCE;
+        return UriBuilder.fromPath(Urls.EIDAS_AUTHN_FAILURE_RESOURCE).build(idpId).toASCIIString();
     }
 
     public String getSignAssertionsCheckboxGroup() { return Urls.SIGN_ASSERTIONS_PARAM; }

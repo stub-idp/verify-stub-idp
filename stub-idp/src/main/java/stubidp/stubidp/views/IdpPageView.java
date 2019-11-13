@@ -4,13 +4,14 @@ import io.dropwizard.views.View;
 import stubidp.shared.csrf.CSRFView;
 import stubidp.stubidp.Urls;
 
+import javax.ws.rs.core.UriBuilder;
 import java.nio.charset.StandardCharsets;
 import java.util.Optional;
 
 public class IdpPageView extends View implements CSRFView {
     private final String subPageTemplateName;
     private final String name;
-    private final String idpId;
+    protected final String idpId;
     private final String errorMessage;
     private final String assetId;
     private final Optional<String> csrfToken;
@@ -58,27 +59,27 @@ public class IdpPageView extends View implements CSRFView {
     }
 
     public String getRegistrationResource() {
-        return Urls.IDP_REGISTER_RESOURCE;
+        return UriBuilder.fromPath(Urls.IDP_REGISTER_RESOURCE).build(idpId).toASCIIString();
     }
 
     public String getLoginResource() {
-        return Urls.IDP_LOGIN_RESOURCE;
+        return UriBuilder.fromPath(Urls.IDP_LOGIN_RESOURCE).build(idpId).toASCIIString();
     }
 
     public String getDebugResource() {
-        return Urls.IDP_DEBUG_RESOURCE;
+        return UriBuilder.fromPath(Urls.IDP_DEBUG_RESOURCE).build(idpId).toASCIIString();
     }
 
     public String getEidasRegistrationResource() {
-        return Urls.EIDAS_REGISTER_RESOURCE;
+        return UriBuilder.fromPath(Urls.EIDAS_REGISTER_RESOURCE).build(idpId).toASCIIString();
     }
 
     public String getEidasLoginResource() {
-        return Urls.EIDAS_LOGIN_RESOURCE;
+        return UriBuilder.fromPath(Urls.EIDAS_LOGIN_RESOURCE).build(idpId).toASCIIString();
     }
 
     public String getEidasDebugResource() {
-        return Urls.EIDAS_DEBUG_RESOURCE;
+        return UriBuilder.fromPath(Urls.EIDAS_DEBUG_RESOURCE).build(idpId).toASCIIString();
     }
 
 }

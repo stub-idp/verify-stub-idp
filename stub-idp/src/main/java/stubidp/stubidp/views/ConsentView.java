@@ -6,6 +6,7 @@ import stubidp.stubidp.Urls;
 import stubidp.stubidp.domain.DatabaseIdpUser;
 import stubidp.stubidp.views.helpers.IdpUserHelper;
 
+import javax.ws.rs.core.UriBuilder;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -66,6 +67,6 @@ public class ConsentView extends IdpPageView {
     }
 
     public String getConsentResource() {
-        return Urls.IDP_CONSENT_RESOURCE;
+        return UriBuilder.fromPath(Urls.IDP_CONSENT_RESOURCE).build(idpId).toASCIIString();
     }
 }
