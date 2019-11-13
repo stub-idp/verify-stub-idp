@@ -64,7 +64,7 @@ metadata:
 
 europeanIdentity:
   enabled: ${EUROPEAN_IDENTITY_ENABLED:-true}
-  hubConnectorEntityId: ${HUB_CONNECTOR_ENTITY_ID:-http://DefaultNotUsed}
+  hubConnectorEntityId: ${HUB_CONNECTOR_ENTITY_ID:-http://localhost/does/not/exist}
   stubCountryBaseUrl: ${STUB_IDP_HOSTNAME:-"http://localhost"}
   metadata:
     jerseyClientName: connector-metadata-client
@@ -75,7 +75,7 @@ europeanIdentity:
       tls:
         protocol: TLSv1.2
         verifyHostname: false
-    uri: ${CONNECTOR_NODE_METADATA_URI:-http://DefaultNotUsed}
+    uri: ${CONNECTOR_NODE_METADATA_URI:-http://localhost/does/not/exist}
     spTrustStore:
       type: ${TRUSTSTORE_TYPE:-file}
       store: ${SP_TRUSTSTORE:-configuration/data/pki/sp.ts}
@@ -86,7 +86,7 @@ europeanIdentity:
       password: ${TRUSTSTORE_PASSWORD:-marshmallow}
     minRefreshDelay: 30000
     maxRefreshDelay: 1800000
-    expectedEntityId: ${HUB_CONNECTOR_ENTITY_ID:-http://DefaultNotUsed}
+    expectedEntityId: ${HUB_CONNECTOR_ENTITY_ID:-http://localhost/does/not/exist}
   signingKeyPairConfiguration:
     privateKeyConfiguration:
       type: ${KEY_TYPE:-file}
