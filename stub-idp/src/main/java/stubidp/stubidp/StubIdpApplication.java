@@ -17,7 +17,7 @@ import stubidp.metrics.prometheus.bundle.PrometheusBundle;
 import stubidp.saml.extensions.IdaSamlBootstrap;
 import stubidp.shared.csrf.CSRFCheckProtectionFeature;
 import stubidp.shared.csrf.CSRFViewRenderer;
-import stubidp.stubidp.auth.ManagedAuthFilterInstaller;
+import stubidp.stubidp.auth.StubIdpBasicAuthRequiredFeature;
 import stubidp.stubidp.bundles.DatabaseMigrationBundle;
 import stubidp.stubidp.configuration.IdpStubsConfiguration;
 import stubidp.stubidp.configuration.StubIdpConfiguration;
@@ -31,6 +31,7 @@ import stubidp.stubidp.exceptions.mappers.IdpUserNotFoundExceptionMapper;
 import stubidp.stubidp.exceptions.mappers.InvalidAuthnRequestExceptionMapper;
 import stubidp.stubidp.exceptions.mappers.InvalidEidasAuthnRequestExceptionMapper;
 import stubidp.stubidp.exceptions.mappers.SessionSerializationExceptionMapper;
+import stubidp.stubidp.exceptions.mappers.WebApplicationExceptionMapper;
 import stubidp.stubidp.filters.NoCacheResponseFilter;
 import stubidp.stubidp.filters.SecurityHeadersFilter;
 import stubidp.stubidp.filters.SessionCookieValueMustExistAsASessionFeature;
@@ -39,14 +40,12 @@ import stubidp.stubidp.healthcheck.DatabaseHealthCheck;
 import stubidp.stubidp.healthcheck.StubIdpHealthCheck;
 import stubidp.stubidp.listeners.StubIdpsFileListener;
 import stubidp.stubidp.repositories.AllIdpsUserRepository;
-import stubidp.stubidp.repositories.IdpSessionRepository;
 import stubidp.stubidp.repositories.IdpStubsRepository;
 import stubidp.stubidp.repositories.jdbc.JDBIIdpSessionRepository;
 import stubidp.stubidp.repositories.jdbc.JDBIUserRepository;
 import stubidp.stubidp.repositories.jdbc.UserMapper;
 import stubidp.stubidp.repositories.reaper.ManagedStaleSessionReaper;
 import stubidp.stubidp.resources.GeneratePasswordResource;
-import stubidp.stubidp.resources.UserResource;
 import stubidp.stubidp.resources.eidas.EidasAuthnRequestReceiverResource;
 import stubidp.stubidp.resources.eidas.EidasConsentResource;
 import stubidp.stubidp.resources.eidas.EidasDebugPageResource;
@@ -61,6 +60,7 @@ import stubidp.stubidp.resources.idp.LoginPageResource;
 import stubidp.stubidp.resources.idp.RegistrationPageResource;
 import stubidp.stubidp.resources.idp.SecureLoginPageResource;
 import stubidp.stubidp.resources.idp.SecureRegistrationPageResource;
+import stubidp.stubidp.resources.idp.UserResource;
 import stubidp.stubidp.resources.singleidp.SingleIdpHomePageResource;
 import stubidp.stubidp.resources.singleidp.SingleIdpLogoutPageResource;
 import stubidp.stubidp.resources.singleidp.SingleIdpPreRegistrationResource;
@@ -106,9 +106,9 @@ public class StubIdpApplication extends Application<StubIdpConfiguration> {
 
         // Enable variable substitution with environment variables
         bootstrap.setConfigurationSourceProvider(
-            new SubstitutingSourceProvider(bootstrap.getConfigurationSourceProvider(),
-                new EnvironmentVariableSubstitutor(false)
-            )
+                new SubstitutingSourceProvider(bootstrap.getConfigurationSourceProvider(),
+                        new EnvironmentVariableSubstitutor(false)
+                )
         );
 
         bootstrap.addBundle(new PrometheusBundle());
@@ -131,6 +131,7 @@ public class StubIdpApplication extends Application<StubIdpConfiguration> {
         environment.servlets().addFilter("Cache Control", new StubIdpCacheControlFilter(configuration)).addMappingForUrlPatterns(EnumSet.allOf(DispatcherType.class), true, "/consent"+Urls.ROUTE_SUFFIX);
         environment.servlets().addFilter("Remove Accept-Language headers", AcceptLanguageFilter.class).addMappingForUrlPatterns(EnumSet.allOf(DispatcherType.class), true, "/*");
 
+        environment.jersey().register(StubIdpBasicAuthRequiredFeature.class);
         environment.jersey().register(SessionCookieValueMustExistAsASessionFeature.class);
         environment.jersey().register(new CSRFCheckProtectionFeature(StubIDPCSRFCheckProtectionFilter.class));
 
@@ -193,6 +194,7 @@ public class StubIdpApplication extends Application<StubIdpConfiguration> {
         environment.jersey().register(CatchAllExceptionMapper.class);
         environment.jersey().register(InvalidAuthnRequestExceptionMapper.class);
         environment.jersey().register(InvalidEidasAuthnRequestExceptionMapper.class);
+        environment.jersey().register(WebApplicationExceptionMapper.class);
 
         //filters
         environment.jersey().register(NoCacheResponseFilter.class);
@@ -211,15 +213,15 @@ public class StubIdpApplication extends Application<StubIdpConfiguration> {
      */
     private void initialiseManaged(StubIdpConfiguration configuration, Environment environment) {
         final Jdbi jdbi = Jdbi.create(configuration.getDatabaseConfiguration().getUrl());
-        final AllIdpsUserRepository allIdpsUserRepository = new AllIdpsUserRepository(new JDBIUserRepository(jdbi, new UserMapper(Jackson.newObjectMapper()), false));
-        final ConfigurationFactory<IdpStubsConfiguration> configurationFactory = new DefaultConfigurationFactoryFactory<IdpStubsConfiguration>()
-                .create(IdpStubsConfiguration.class, environment.getValidator(), environment.getObjectMapper(), "");
-        final IdpStubsRepository idpStubsRepository = new IdpStubsRepository(allIdpsUserRepository, configuration, configurationFactory);
-        environment.lifecycle().manage(new ManagedAuthFilterInstaller(configuration, idpStubsRepository, environment));
         if(configuration.isDynamicReloadOfStubIdpYmlEnabled()) {
+            // This adds the hardcoded users into the db, which is done again during initialisation
+            // Since the purpose is reloading this isn't so bad if this feature is enabled
+            final AllIdpsUserRepository allIdpsUserRepository = new AllIdpsUserRepository(new JDBIUserRepository(jdbi, new UserMapper(Jackson.newObjectMapper()), false));
+            final ConfigurationFactory<IdpStubsConfiguration> configurationFactory = new DefaultConfigurationFactoryFactory<IdpStubsConfiguration>()
+                    .create(IdpStubsConfiguration.class, environment.getValidator(), environment.getObjectMapper(), "");
+            final IdpStubsRepository idpStubsRepository = new IdpStubsRepository(allIdpsUserRepository, configuration, configurationFactory);
             environment.lifecycle().manage(new StubIdpsFileListener(configuration, idpStubsRepository));
         }
-        final IdpSessionRepository idpSessionRepository = new JDBIIdpSessionRepository(jdbi, false);
-        environment.lifecycle().manage(new ManagedStaleSessionReaper(configuration, idpSessionRepository));
+        environment.lifecycle().manage(new ManagedStaleSessionReaper(configuration, new JDBIIdpSessionRepository(jdbi, false)));
     }
 }

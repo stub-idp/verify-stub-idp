@@ -105,6 +105,7 @@ public class StubIdpAppExtension extends DropwizardAppExtension<StubIdpConfigura
                 Map.entry("isPrometheusEnabled", "false"),
                 Map.entry("isHeadlessIdpEnabled", "false"),
                 Map.entry("isIdpEnabled", "true"),
+                Map.entry("dynamicReloadOfStubIdpYmlEnabled", "false"),
                 Map.entry("server.requestLog.appenders[0].type", "console"),
                 Map.entry("server.applicationConnectors[0].port", "0"),
                 Map.entry("server.adminConnectors[0].port", "0"),

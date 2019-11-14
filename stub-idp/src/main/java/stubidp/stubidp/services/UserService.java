@@ -46,8 +46,7 @@ public class UserService {
         return user.map(this::transform);
     }
 
-
-    public ResponseMessage createUsers(@PathParam(Urls.IDP_ID_PARAM) @NotNull String idpName, @NotNull IdpUserDto[] users) {
+    public ResponseMessage createUsers(@PathParam(Urls.IDP_ID_PARAM) @NotNull String idpName, @NotNull List<IdpUserDto> users) {
         Idp idp = idpStubsRepository.getIdpWithFriendlyId(idpName);
 
         createIdpUsers(idp, users);
@@ -105,7 +104,7 @@ public class UserService {
         }
     }
 
-    private void createIdpUsers(Idp idp, IdpUserDto[] users) {
+    private void createIdpUsers(Idp idp, List<IdpUserDto> users) {
         for (IdpUserDto user : users) {
             createIdpUser(idp, user);
         }

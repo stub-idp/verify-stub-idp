@@ -1,6 +1,7 @@
-package stubidp.stubidp.resources;
+package stubidp.stubidp.resources.idp;
 
 import stubidp.stubidp.Urls;
+import stubidp.stubidp.auth.StubIdpBasicAuthRequired;
 import stubidp.stubidp.dtos.IdpUserDto;
 import stubidp.stubidp.exceptions.IdpUserNotFoundException;
 import stubidp.stubidp.services.UserService;
@@ -24,8 +25,8 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static java.text.MessageFormat.format;
-import static java.util.Arrays.asList;
 
+@StubIdpBasicAuthRequired
 @Path(Urls.USERS_RESOURCE)
 @Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON)
@@ -58,9 +59,9 @@ public class UserResource {
     @POST
     public Response createUsers(
             @PathParam(Urls.IDP_ID_PARAM) @NotNull String idpName,
-            @NotNull IdpUserDto... users) {
+            @NotNull List<IdpUserDto> users) {
 
-        List<ValidationResponse> validationResponses = userService.validateUsers(asList(users));
+        List<ValidationResponse> validationResponses = userService.validateUsers(users);
 
         if(validationResponses.stream().anyMatch(validationResponse -> !validationResponse.isOk())) {
             final List<String> validationMessages = validationResponses.stream()
@@ -89,5 +90,4 @@ public class UserResource {
                 .entity(Entity.json(responseMessage))
                 .build();
     }
-
 }
