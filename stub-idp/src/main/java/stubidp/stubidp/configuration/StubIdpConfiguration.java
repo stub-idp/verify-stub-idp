@@ -119,6 +119,11 @@ public class StubIdpConfiguration extends Configuration implements
     @JsonProperty
     private boolean isIdpEnabled = true;
 
+    @NotNull
+    @Valid
+    @JsonProperty
+    private boolean dynamicReloadOfStubIdpYmlEnabled = true;
+
     protected StubIdpConfiguration() {
     }
 
@@ -196,5 +201,9 @@ public class StubIdpConfiguration extends Configuration implements
 
     public boolean isIdpEnabled() {
         return isIdpEnabled;
+    }
+
+    public boolean isDynamicReloadOfStubIdpYmlEnabled() {
+        return dynamicReloadOfStubIdpYmlEnabled;
     }
 }

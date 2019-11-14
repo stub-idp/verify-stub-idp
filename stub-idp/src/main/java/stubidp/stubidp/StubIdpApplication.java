@@ -216,7 +216,9 @@ public class StubIdpApplication extends Application<StubIdpConfiguration> {
                 .create(IdpStubsConfiguration.class, environment.getValidator(), environment.getObjectMapper(), "");
         final IdpStubsRepository idpStubsRepository = new IdpStubsRepository(allIdpsUserRepository, configuration, configurationFactory);
         environment.lifecycle().manage(new ManagedAuthFilterInstaller(configuration, idpStubsRepository, environment));
-        environment.lifecycle().manage(new StubIdpsFileListener(configuration, idpStubsRepository));
+        if(configuration.isDynamicReloadOfStubIdpYmlEnabled()) {
+            environment.lifecycle().manage(new StubIdpsFileListener(configuration, idpStubsRepository));
+        }
         final IdpSessionRepository idpSessionRepository = new JDBIIdpSessionRepository(jdbi, false);
         environment.lifecycle().manage(new ManagedStaleSessionReaper(configuration, idpSessionRepository));
     }

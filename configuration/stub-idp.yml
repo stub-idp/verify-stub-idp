@@ -114,6 +114,7 @@ singleIdpJourney:
 isPrometheusEnabled: true
 isHeadlessIdpEnabled: true
 isIdpEnabled: true
+dynamicReloadOfStubIdpYmlEnabled: true
 
 secureCookieConfiguration:
     secure: true
