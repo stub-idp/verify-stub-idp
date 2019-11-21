@@ -7,7 +7,7 @@ jdk:
   - openjdk14
   - openjdk-ea
 install:
-  - mvn test -DskipTests=true -Dmaven.javadoc.skip=true -B -V
+  - mvn dependency:tree test -DskipTests=true -Dmaven.javadoc.skip=true -B -V
 #script:
 #  - mvn test -B -X
 matrix:
