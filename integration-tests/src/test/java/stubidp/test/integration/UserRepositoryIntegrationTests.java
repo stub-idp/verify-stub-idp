@@ -55,7 +55,7 @@ public class UserRepositoryIntegrationTests extends IntegrationTestHelper {
     private static final String USERNAME = "integrationTestUser";
     private static final String PASSWORD = "integrationTestUserPassword";
 
-    public static final StubIdpAppExtension applicationRule = new StubIdpAppExtension(Map.ofEntries(Map.entry("isIdpEnabled", "false"), Map.entry("basicAuthEnabledForUserResource", "true")))
+    public static final StubIdpAppExtension applicationRule = new StubIdpAppExtension(Map.ofEntries(Map.entry("isIdpEnabled", "true"), Map.entry("basicAuthEnabledForUserResource", "true")))
             .withStubIdp(aStubIdp()
                     .withId(IDP_NAME)
                     .withDisplayName(DISPLAY_NAME)

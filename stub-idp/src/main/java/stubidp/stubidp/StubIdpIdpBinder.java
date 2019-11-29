@@ -31,8 +31,11 @@ import stubidp.stubidp.saml.locators.IdpHardCodedEntityToEncryptForLocator;
 import stubidp.stubidp.saml.transformers.OutboundResponseFromIdpTransformerProvider;
 import stubidp.stubidp.security.HubEncryptionKeyStore;
 import stubidp.stubidp.security.IdaAuthnRequestKeyStore;
+import stubidp.stubidp.services.GeneratePasswordService;
+import stubidp.stubidp.services.IdpUserService;
 import stubidp.stubidp.services.NonSuccessAuthnResponseService;
 import stubidp.stubidp.services.SuccessAuthnResponseService;
+import stubidp.stubidp.services.UserService;
 import stubidp.utils.security.security.PublicKeyFactory;
 import stubidp.utils.security.security.X509CertificateFactory;
 
@@ -106,6 +109,11 @@ public class StubIdpIdpBinder extends AbstractBinder {
 //        bind(AuthnRequestReceiverService.class).to(AuthnRequestReceiverService.class);
         bind(SuccessAuthnResponseService.class).to(SuccessAuthnResponseService.class);
         bind(NonSuccessAuthnResponseService.class).to(NonSuccessAuthnResponseService.class);
+
+        // user resource + password gen
+        bind(GeneratePasswordService.class).to(GeneratePasswordService.class);
+        bind(IdpUserService.class).to(IdpUserService.class);
+        bind(UserService.class).to(UserService.class);
     }
 
     private void registerMetadataHealthcheckAndRefresh(Environment environment, MetadataResolver metadataResolver, MetadataResolverConfiguration metadataResolverConfiguration, String name) {

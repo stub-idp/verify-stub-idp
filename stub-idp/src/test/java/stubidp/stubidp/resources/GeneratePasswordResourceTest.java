@@ -2,6 +2,7 @@ package stubidp.stubidp.resources;
 
 import org.junit.jupiter.api.Test;
 import org.mindrot.jbcrypt.BCrypt;
+import stubidp.stubidp.resources.idp.GeneratePasswordResource;
 import stubidp.stubidp.services.GeneratePasswordService;
 import stubidp.stubidp.views.GeneratePasswordView;
 

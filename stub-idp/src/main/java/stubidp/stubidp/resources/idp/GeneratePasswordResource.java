@@ -1,8 +1,8 @@
-package stubidp.stubidp.resources;
+package stubidp.stubidp.resources.idp;
 
-import stubidp.stubidp.views.GeneratePasswordView;
 import stubidp.stubidp.Urls;
 import stubidp.stubidp.services.GeneratePasswordService;
+import stubidp.stubidp.views.GeneratePasswordView;
 
 import javax.inject.Inject;
 import javax.ws.rs.GET;

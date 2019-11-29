@@ -27,9 +27,6 @@ import stubidp.stubidp.repositories.jdbc.JDBIIdpSessionRepository;
 import stubidp.stubidp.repositories.jdbc.JDBIUserRepository;
 import stubidp.stubidp.repositories.jdbc.UserMapper;
 import stubidp.stubidp.services.AuthnRequestReceiverService;
-import stubidp.stubidp.services.GeneratePasswordService;
-import stubidp.stubidp.services.IdpUserService;
-import stubidp.stubidp.services.UserService;
 import stubidp.utils.rest.jerseyclient.JsonResponseProcessor;
 import stubidp.utils.rest.truststore.EmptyKeyStoreProvider;
 import stubidp.utils.security.configuration.SecureCookieConfiguration;
@@ -81,10 +78,6 @@ public class StubIdpBinder extends AbstractBinder {
         bind(AuthnRequestReceiverService.class).to(AuthnRequestReceiverService.class);
         final StubTransformersFactory stubTransformersFactory = new StubTransformersFactory();
         bind(stubTransformersFactory.getStringToAuthnRequest()).to(new GenericType<Function<String, AuthnRequest>>() {});
-
-        bind(GeneratePasswordService.class).to(GeneratePasswordService.class);
-        bind(IdpUserService.class).to(IdpUserService.class);
-        bind(UserService.class).to(UserService.class);
 
         bind(JsonResponseProcessor.class).to(JsonResponseProcessor.class);
 

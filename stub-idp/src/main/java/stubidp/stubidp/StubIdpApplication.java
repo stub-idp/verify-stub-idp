@@ -45,7 +45,7 @@ import stubidp.stubidp.repositories.jdbc.JDBIIdpSessionRepository;
 import stubidp.stubidp.repositories.jdbc.JDBIUserRepository;
 import stubidp.stubidp.repositories.jdbc.UserMapper;
 import stubidp.stubidp.repositories.reaper.ManagedStaleSessionReaper;
-import stubidp.stubidp.resources.GeneratePasswordResource;
+import stubidp.stubidp.resources.idp.GeneratePasswordResource;
 import stubidp.stubidp.resources.eidas.EidasAuthnRequestReceiverResource;
 import stubidp.stubidp.resources.eidas.EidasConsentResource;
 import stubidp.stubidp.resources.eidas.EidasDebugPageResource;
@@ -150,6 +150,10 @@ public class StubIdpApplication extends Application<StubIdpConfiguration> {
             environment.jersey().register(DebugPageResource.class);
             environment.jersey().register(ConsentResource.class);
 
+            // other idp resources
+            environment.jersey().register(UserResource.class);
+            environment.jersey().register(GeneratePasswordResource.class);
+
             // single idp resources
             if (configuration.getSingleIdpJourneyConfiguration().isEnabled()) {
                 environment.jersey().register(SingleIdpStartPromptPageResource.class);
@@ -174,10 +178,6 @@ public class StubIdpApplication extends Application<StubIdpConfiguration> {
             environment.jersey().register(EidasProxyNodeServiceMetadataResource.class);
             environment.jersey().register(EidasDebugPageResource.class);
         }
-
-        // other idp resources
-        environment.jersey().register(UserResource.class);
-        environment.jersey().register(GeneratePasswordResource.class);
 
         // headless
         if(configuration.isHeadlessIdpEnabled()) {

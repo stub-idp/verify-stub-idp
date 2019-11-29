@@ -76,6 +76,14 @@ public interface Urls {
     String IDP_REQUESTER_ERROR_RESOURCE = IDP_LOGIN_RESOURCE + LOGIN_REQUESTER_ERROR_PATH;
     String IDP_AUTHN_PENDING_RESOURCE = IDP_LOGIN_RESOURCE + LOGIN_AUTHN_PENDING_PATH;
 
+    // test user management
+    String USERS_RESOURCE = IDP_ROOT_PATH + "/users";
+    String DELETE_USER_PATH = "/delete";
+    String GET_USER_PATH = "/{" + USERNAME_PARAM + "}";
+
+    @SuppressWarnings("squid:S2068")
+    String PASSWORD_GEN_RESOURCE = USERS_RESOURCE + "/password-gen" + ROUTE_SUFFIX;
+
     // standalone idp
     String SINGLE_IDP_HOMEPAGE_RESOURCE = IDP_ROOT_PATH;
     String SINGLE_IDP_LOGOUT_RESOURCE = IDP_ROOT_PATH + "/logout" + ROUTE_SUFFIX;
@@ -92,11 +100,4 @@ public interface Urls {
     String EIDAS_CONSENT_RESOURCE = EIDAS_ROOT_PATH + CONSENT_PATH + ROUTE_SUFFIX;
     String EIDAS_DEBUG_RESOURCE = EIDAS_ROOT_PATH + DEBUG_PATH + ROUTE_SUFFIX;
 
-    // test user management
-    String USERS_RESOURCE = IDP_ROOT_PATH + "/users";
-    String DELETE_USER_PATH = "/delete";
-    String GET_USER_PATH = "/{" + USERNAME_PARAM + "}";
-
-    @SuppressWarnings("squid:S2068")
-    String PASSWORD_GEN_RESOURCE = "/password-gen";
 }
