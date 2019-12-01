@@ -47,7 +47,7 @@ public abstract class BaseAuthnRequestValidator {
     private static final NotNullSamlStringValidator notNullSamlStringValidator = new NotNullSamlStringValidator();
     private static final Function<String, AuthnRequest> stringToAuthnRequestTransformer = new StubTransformersFactory().getStringToAuthnRequest();
 
-    private static final ReplayCacheCollector replayCacheCollector = new ReplayCacheCollector(concurrentMapIdExpirationCache).register();
+    public static final Collector replayCacheCollector = new ReplayCacheCollector(concurrentMapIdExpirationCache).register();
 
     protected final MetadataBackedSignatureValidator metadataBackedSignatureValidator;
 

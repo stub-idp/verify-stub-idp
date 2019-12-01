@@ -1,7 +1,6 @@
 package stubidp.test.integration;
 
 import io.dropwizard.testing.junit5.DropwizardExtensionsSupport;
-import net.shibboleth.utilities.java.support.resolver.ResolverException;
 import org.glassfish.jersey.client.ClientProperties;
 import org.glassfish.jersey.client.JerseyClientBuilder;
 import org.junit.jupiter.api.BeforeEach;
@@ -21,8 +20,6 @@ import javax.ws.rs.client.Client;
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriBuilder;
-import java.io.IOException;
-import java.security.cert.CertificateException;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -65,13 +62,13 @@ public class UserLogsInIntegrationTests extends IntegrationTestHelper {
                     .build());
 
     @BeforeEach
-    public void refreshMetadata() {
+    void refreshMetadata() {
         client.target("http://localhost:"+applicationRule.getAdminPort()+"/tasks/metadata-refresh").request().post(Entity.text(""));
     }
 
 //    @Test
 //    @Order(Integer.MAX_VALUE)
-    public void zzz_checkMetrics() {
+    void zzz_checkMetrics() {
         Response response = client.target(UriBuilder.fromUri("http://localhost:" + applicationRule.getAdminPort())
                 .path(PROMETHEUS_METRICS_RESOURCE)
                 .build()).request().get();
@@ -89,7 +86,7 @@ public class UserLogsInIntegrationTests extends IntegrationTestHelper {
         metricsContains(metrics, "stubidp_verify_sentAuthnResponses_failure_total{failure_type=\"fraud\",} 1.0");
         metricsContains(metrics, "stubidp_db_users_total 12.0");
         metricsContains(metrics, "stubidp_db_sessions_total 1.0");
-        metricsContains(metrics, "stubidp_replay_cache_total 5.0");
+        metricsContains(metrics, "stubidp_replay_cache_total");
     }
 
     private void metricsContains(List<String> metrics, String metric) {
@@ -98,14 +95,14 @@ public class UserLogsInIntegrationTests extends IntegrationTestHelper {
 
     @Test
     @Order(1)
-    public void incorrectlySignedAuthnRequestFailsTest() {
+    void incorrectlySignedAuthnRequestFailsTest() {
         Response response = authnRequestSteps.userPostsAuthnRequestToStubIdpReturnResponse(List.of(), empty(), empty(), true);
         assertThat(response.getStatus()).isEqualTo(500);
     }
 
     @Test
     @Order(1)
-    public void loginBehaviourTest() {
+    void loginBehaviourTest() {
         final AuthnRequestSteps.Cookies cookies = authnRequestSteps.userPostsAuthnRequestToStubIdp();
         authnRequestSteps.userLogsIn(cookies);
         authnRequestSteps.userConsentsReturnSamlResponse(cookies, false);
@@ -113,7 +110,7 @@ public class UserLogsInIntegrationTests extends IntegrationTestHelper {
 
     @Test
     @Order(1)
-    public void failureBehaviourTest() {
+    void failureBehaviourTest() {
         final AuthnRequestSteps.Cookies cookies = authnRequestSteps.userPostsAuthnRequestToStubIdp();
         final String response = authnRequestSteps.userFailureFraud(cookies);
 
@@ -123,7 +120,7 @@ public class UserLogsInIntegrationTests extends IntegrationTestHelper {
     @Test
     @Order(1)
     @Disabled
-    public void testStaleSessionReaper() throws InterruptedException {
+    void testStaleSessionReaper() throws InterruptedException {
         // set times in StaleSessionReaperConfiguration to 1s, run this test and check the log lines
         for(int i=0;i<10;i++) {
             authnRequestSteps.userPostsAuthnRequestToStubIdp();
@@ -133,7 +130,7 @@ public class UserLogsInIntegrationTests extends IntegrationTestHelper {
 
     @Test
     @Order(1)
-    public void debugPageLoadsTest() {
+    void debugPageLoadsTest() {
         final AuthnRequestSteps.Cookies cookies = authnRequestSteps.userPostsAuthnRequestToStubIdp();
         authnRequestSteps.userLogsIn(cookies);
         authnRequestSteps.userViewsTheDebugPage(cookies);
@@ -141,7 +138,7 @@ public class UserLogsInIntegrationTests extends IntegrationTestHelper {
 
     @Test
     @Order(1)
-    public void ensureImagesAreCacheableTest() {
+    void ensureImagesAreCacheableTest() {
         Response response = client.target(authnRequestSteps.getStubIdpUri("/assets/images/providers/stub-idp-one.png"))
                 .request()
                 .get();
@@ -153,7 +150,7 @@ public class UserLogsInIntegrationTests extends IntegrationTestHelper {
 
     @Test
     @Order(1)
-    public void idpNotFoundTest() {
+    void idpNotFoundTest() {
         final AuthnRequestSteps.Cookies cookies = authnRequestSteps.userPostsAuthnRequestToStubIdp();
         Response response = client.target(authnRequestSteps.getStubIdpUri(UriBuilder.fromPath(Urls.IDP_LOGIN_RESOURCE).build("idp_that_does_not_exist").toString()))
                 .request()
@@ -167,7 +164,7 @@ public class UserLogsInIntegrationTests extends IntegrationTestHelper {
 
     @Test
     @Order(1)
-    public void randomizedPidTest() throws IOException, ResolverException, CertificateException {
+    void randomizedPidTest() {
         final AuthnRequestSteps.Cookies cookies1 = authnRequestSteps.userPostsAuthnRequestToStubIdp();
         authnRequestSteps.userLogsIn(cookies1);
         final String samlResponse = authnRequestSteps.userConsentsReturnSamlResponse(cookies1, false);

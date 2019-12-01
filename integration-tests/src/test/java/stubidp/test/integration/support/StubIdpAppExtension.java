@@ -32,6 +32,7 @@ import stubidp.stubidp.exceptions.mappers.InvalidEidasAuthnRequestExceptionMappe
 import stubidp.stubidp.resources.eidas.EidasAuthnRequestReceiverResource;
 import stubidp.stubidp.resources.idp.HeadlessIdpResource;
 import stubidp.stubidp.resources.idp.IdpAuthnRequestReceiverResource;
+import stubidp.stubidp.saml.BaseAuthnRequestValidator;
 import stubidp.stubidp.services.AuthnRequestReceiverService;
 import stubidp.stubidp.services.EidasAuthnResponseService;
 import stubidp.stubidp.services.NonSuccessAuthnResponseService;
@@ -151,6 +152,7 @@ public class StubIdpAppExtension extends DropwizardAppExtension<StubIdpConfigura
 
     @Override
     public void before() throws Exception {
+        resetStaticMetrics(); // a hack to reset any prometheus metrics that are static as they will be re-used between test classes
         metadataTrustStore.create();
         spTrustStore.create();
 
@@ -243,6 +245,7 @@ public class StubIdpAppExtension extends DropwizardAppExtension<StubIdpConfigura
             c.clear();
             CollectorRegistry.defaultRegistry.register(c);
         });
+        BaseAuthnRequestValidator.replayCacheCollector.register();
     }
 
     public StubIdpAppExtension withStubIdp(StubIdp stubIdp) {
