@@ -27,7 +27,7 @@
         <nimbus_jwt.version>8.4</nimbus_jwt.version>
         <slf4j.version>1.7.30</slf4j.version>
         <jaxb.version>2.3.2</jaxb.version>
-        <commons_codec.version>1.13</commons_codec.version>
+        <commons_codec.version>1.14</commons_codec.version>
         <commons_io.version>2.6</commons_io.version>
         <commons_lang.version>2.6</commons_lang.version>
         <commons_validator.version>1.6</commons_validator.version>
