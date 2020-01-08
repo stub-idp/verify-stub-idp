@@ -9,6 +9,7 @@ import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import stubidp.saml.hub.hub.domain.InboundResponseFromIdp;
+import stubidp.saml.utils.Constants;
 import stubidp.stubidp.Urls;
 import stubidp.stubidp.cookies.StubIdpCookieNames;
 import stubidp.test.integration.steps.AuthnRequestSteps;
@@ -176,6 +177,17 @@ public class UserLogsInIntegrationTests extends IntegrationTestHelper {
         final String samlResponse2 = authnRequestSteps.userConsentsReturnSamlResponse(cookies2, true);
         final InboundResponseFromIdp inboundResponseFromIdp2 = samlResponseDecrypter.decryptSaml(samlResponse2);
         assertThat(inboundResponseFromIdp2.getAuthnStatementAssertion().get().getPersistentId().getNameId()).isNotEqualTo(firstPid);
+    }
+
+    @Test
+    void shouldGenerateIdpMetadata() {
+        Response response = client.target(authnRequestSteps.getStubIdpUri(UriBuilder.fromPath(Urls.IDP_METADATA_RESOURCE).build(IDP_NAME).toString()))
+                .request()
+                .get();
+        assertThat(response.getStatus()).isEqualTo(200);
+        assertThat(response.getMediaType().toString()).isEqualTo(Constants.APPLICATION_SAMLMETADATA_XML);
+        final String body = response.readEntity(String.class);
+        assertThat(body).contains("IDPSSODescriptor");
     }
 
 }

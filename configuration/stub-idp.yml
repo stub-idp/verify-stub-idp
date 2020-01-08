@@ -15,7 +15,7 @@ assertionLifetime: 60m
 
 saml:
   entityId: ${ENTITY_ID:-"http://stub_idp.acme.org/%s/SSO/POST"}
-  expectedDestination: ${EXPECTED_DESTINATION:-"http://localhost"}
+  expectedDestination: ${EXPECTED_DESTINATION:-"http://localhost:50140"}
 
 serviceInfo:
   name: stub-idp
@@ -32,6 +32,15 @@ signingKeyPairConfiguration:
   publicKeyConfiguration:
     type: ${CERT_TYPE:-file}
     cert: ${STUB_IDP_SIGNING_CERT:-configuration/data/pki/stub_idp_signing_primary.crt}
+    name: idp.signing.cert
+
+idpMetadataSigningKeyPairConfiguration:
+  privateKeyConfiguration:
+    type: ${KEY_TYPE:-file}
+    key: ${STUB_IDP_METADATA_SIGNING_PRIVATE_KEY:-configuration/data/pki/metadata_signing_a.pk8}
+  publicKeyConfiguration:
+    type: ${CERT_TYPE:-file}
+    cert: ${STUB_IDP_METADATA_SIGNING_CERT:-configuration/data/pki/metadata_signing_a.crt}
     name: idp.signing.cert
 
 basicAuthEnabledForUserResource: ${STUB_IDP_BASIC_AUTH:-true}

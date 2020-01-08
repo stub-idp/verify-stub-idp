@@ -59,7 +59,7 @@ public class EidasProxyNodeServiceMetadataResource {
             return Response.status(Response.Status.NOT_FOUND).build();
         }
 
-        if(!EidasScheme.fromString(schemeId).isPresent()) {
+        if(EidasScheme.fromString(schemeId).isEmpty()) {
             throw new InvalidEidasSchemeException();
         }
 

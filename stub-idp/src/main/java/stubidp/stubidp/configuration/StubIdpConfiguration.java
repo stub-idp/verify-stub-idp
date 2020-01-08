@@ -54,6 +54,11 @@ public class StubIdpConfiguration extends Configuration implements
     @JsonProperty
     protected SigningKeyPairConfiguration signingKeyPairConfiguration;
 
+    @NotNull
+    @Valid
+    @JsonProperty
+    protected SigningKeyPairConfiguration idpMetadataSigningKeyPairConfiguration;
+
     @Valid
     @JsonProperty
     @NotNull
@@ -167,6 +172,10 @@ public class StubIdpConfiguration extends Configuration implements
 
     public SigningKeyPairConfiguration getSigningKeyPairConfiguration(){
         return signingKeyPairConfiguration;
+    }
+
+    public SigningKeyPairConfiguration getIdpMetadataSigningKeyPairConfiguration(){
+        return idpMetadataSigningKeyPairConfiguration;
     }
 
     public MetadataResolverConfiguration getMetadataConfiguration() {

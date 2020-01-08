@@ -3,8 +3,6 @@ package stubidp.stubidp;
 import io.dropwizard.servlets.tasks.Task;
 import io.dropwizard.setup.Environment;
 import org.glassfish.jersey.internal.inject.AbstractBinder;
-import org.joda.time.Period;
-import org.joda.time.ReadablePeriod;
 import org.opensaml.saml.metadata.resolver.MetadataResolver;
 import org.opensaml.saml.metadata.resolver.impl.AbstractReloadingMetadataResolver;
 import org.opensaml.xmlsec.algorithm.DigestAlgorithm;
@@ -61,7 +59,6 @@ public class StubIdpEidasBinder extends AbstractBinder {
     public static final String STUB_COUNTRY_SSO_URL = "StubCountrySsoUrl";
     public static final String COUNTRY_SIGNING_KEY_STORE = "CountrySigningKeyStore";
     public static final String COUNTRY_METADATA_SIGNATURE_FACTORY = "countryMetadataSignatureFactory";
-    public static final String COUNTRY_METADATA_VALIDITY_PERIOD = "metadataValidityPeriod";
     public static final String RSASHA256_EIDAS_AUTHN_RESPONSE_SERVICE = "RSASHA256EidasAuthnResponseService";
     public static final String RSASSAPSS_EIDAS_AUTHN_RESPONSE_SERVICE = "RSASSAPSSEidasAuthnResponseService";
     private final String RSASHA256_EIDAS_RESPONSE_TRANSFORMER_PROVIDER = "RSASHA256EidasResponseTransfomerProvider";
@@ -92,7 +89,6 @@ public class StubIdpEidasBinder extends AbstractBinder {
             bind(stubCountryMetadataUrl).named(STUB_COUNTRY_METADATA_URL).to(String.class);
             final String stubCountrySsoUrl = stubIdpConfiguration.getEuropeanIdentityConfiguration().getStubCountryBaseUrl() + Urls.EIDAS_SAML2_SSO_RESOURCE;
             bind(stubCountrySsoUrl).named(STUB_COUNTRY_SSO_URL).to(String.class);
-            bind(new Period().withYears(100)).named(COUNTRY_METADATA_VALIDITY_PERIOD).to(ReadablePeriod.class);
 
             final SignatureRSASHA256 signatureAlgorithm = new SignatureRSASHA256();
             bind(signatureAlgorithm).to(SignatureAlgorithm.class);

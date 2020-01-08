@@ -1,18 +1,6 @@
 package stubidp.stubidp.builders;
 // Adapted from package uk.gov.ida.eidas.bridge.helpers;
 
-import static org.apache.commons.codec.binary.Base64.encodeBase64String;
-import static stubidp.stubidp.StubIdpEidasBinder.COUNTRY_METADATA_VALIDITY_PERIOD;
-
-import java.net.URI;
-import java.security.cert.CertificateEncodingException;
-import java.util.Arrays;
-import java.util.List;
-
-import javax.inject.Inject;
-import javax.inject.Named;
-import javax.xml.namespace.QName;
-
 import org.joda.time.DateTime;
 import org.joda.time.ReadablePeriod;
 import org.opensaml.core.xml.XMLObject;
@@ -27,10 +15,20 @@ import org.opensaml.saml.saml2.metadata.SingleSignOnService;
 import org.opensaml.saml.saml2.metadata.impl.SingleSignOnServiceBuilder;
 import org.opensaml.security.SecurityException;
 import org.opensaml.xmlsec.signature.support.SignatureException;
-
-import stubidp.utils.security.security.Certificate;
 import stubidp.saml.utils.core.api.CoreTransformersFactory;
 import stubidp.saml.utils.metadata.transformers.KeyDescriptorsUnmarshaller;
+import stubidp.utils.security.security.Certificate;
+
+import javax.inject.Inject;
+import javax.inject.Named;
+import javax.xml.namespace.QName;
+import java.net.URI;
+import java.security.cert.CertificateEncodingException;
+import java.util.Arrays;
+import java.util.List;
+
+import static org.apache.commons.codec.binary.Base64.encodeBase64String;
+import static stubidp.stubidp.StubIdpBinder.METADATA_VALIDITY_PERIOD;
 
 public class CountryMetadataBuilder {
     private final ReadablePeriod validity;
@@ -40,7 +38,7 @@ public class CountryMetadataBuilder {
 
     @Inject
     public CountryMetadataBuilder(
-            @Named(COUNTRY_METADATA_VALIDITY_PERIOD) ReadablePeriod validity,
+            @Named(METADATA_VALIDITY_PERIOD) ReadablePeriod validity,
             CountryMetadataSigningHelper metadataSigner) {
         this.validity = validity;
         this.metadataSigner = metadataSigner;

@@ -15,9 +15,12 @@ import stubidp.saml.metadata.MetadataResolverConfiguration;
 import stubidp.saml.metadata.factories.DropwizardMetadataResolverFactory;
 import stubidp.saml.security.EntityToEncryptForLocator;
 import stubidp.saml.security.IdaKeyStore;
+import stubidp.saml.security.IdaKeyStoreCredentialRetriever;
+import stubidp.saml.security.SignatureFactory;
 import stubidp.saml.security.SigningKeyStore;
 import stubidp.saml.stubidp.configuration.SamlConfiguration;
 import stubidp.saml.stubidp.stub.transformers.inbound.AuthnRequestToIdaRequestFromHubTransformer;
+import stubidp.stubidp.builders.IdpMetadataBuilder;
 import stubidp.stubidp.configuration.AssertionLifetimeConfiguration;
 import stubidp.stubidp.configuration.SigningKeyPairConfiguration;
 import stubidp.stubidp.configuration.StubIdpConfiguration;
@@ -55,6 +58,9 @@ public class StubIdpIdpBinder extends AbstractBinder {
     public static final String HUB_METADATA_RESOLVER = "HubMetadataResolver";
     public static final String HUB_ENTITY_ID = "HubEntityId";
     public static final String HUB_METADATA_CONFIGURATION = "HubMetadataConfiguration";
+    public static final String IDP_METADATA_SIGNING_KEYSTORE = "IdpMetadataSigningKeystore";
+    public static final String IDP_METADATA_SIGNATURE_FACTORY = "IdpMetadataSignatureFactory";
+    public static final String IDP_SIGNING_CERT = "IdpSigningCert";
 
     private final StubIdpConfiguration stubIdpConfiguration;
     private final Environment environment;
@@ -94,8 +100,16 @@ public class StubIdpIdpBinder extends AbstractBinder {
         bind(signatureAlgorithm).to(SignatureAlgorithm.class);
         final DigestSHA256 digestAlgorithm = new DigestSHA256();
         bind(digestAlgorithm).to(DigestAlgorithm.class);
+
+        bind(IdpMetadataBuilder.class).to(IdpMetadataBuilder.class);
+        final IdaKeyStore idpMetadataSigningKeyStore = getKeystoreFromConfig(stubIdpConfiguration.getIdpMetadataSigningKeyPairConfiguration());
+        bind(idpMetadataSigningKeyStore).named(IDP_METADATA_SIGNING_KEYSTORE).to(IdaKeyStore.class);
+        final SignatureFactory signatureFactory = new SignatureFactory(true, new IdaKeyStoreCredentialRetriever(idpMetadataSigningKeyStore), signatureAlgorithm, digestAlgorithm);
+        bind(signatureFactory).named(IDP_METADATA_SIGNATURE_FACTORY).to(SignatureFactory.class);
+
         final StubTransformersFactory stubTransformersFactory = new StubTransformersFactory();
         bind(stubTransformersFactory.getAuthnRequestToIdaRequestFromHubTransformer(signingKeyStore)).to(AuthnRequestToIdaRequestFromHubTransformer.class);
+        bind(stubIdpConfiguration.getSigningKeyPairConfiguration().getCert()).named(IDP_SIGNING_CERT).to(String.class);
         final IdaKeyStore idpSigningKeyStore = getKeystoreFromConfig(stubIdpConfiguration.getSigningKeyPairConfiguration());
         final HubEncryptionKeyStore hubEncryptionKeyStore = new HubEncryptionKeyStore(idpMetadataRepository, publicKeyFactory);
         bind(new OutboundResponseFromIdpTransformerProvider(hubEncryptionKeyStore,

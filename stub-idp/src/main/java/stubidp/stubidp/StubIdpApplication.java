@@ -45,7 +45,6 @@ import stubidp.stubidp.repositories.jdbc.JDBIIdpSessionRepository;
 import stubidp.stubidp.repositories.jdbc.JDBIUserRepository;
 import stubidp.stubidp.repositories.jdbc.UserMapper;
 import stubidp.stubidp.repositories.reaper.ManagedStaleSessionReaper;
-import stubidp.stubidp.resources.idp.GeneratePasswordResource;
 import stubidp.stubidp.resources.eidas.EidasAuthnRequestReceiverResource;
 import stubidp.stubidp.resources.eidas.EidasConsentResource;
 import stubidp.stubidp.resources.eidas.EidasDebugPageResource;
@@ -54,8 +53,10 @@ import stubidp.stubidp.resources.eidas.EidasProxyNodeServiceMetadataResource;
 import stubidp.stubidp.resources.eidas.EidasRegistrationPageResource;
 import stubidp.stubidp.resources.idp.ConsentResource;
 import stubidp.stubidp.resources.idp.DebugPageResource;
+import stubidp.stubidp.resources.idp.GeneratePasswordResource;
 import stubidp.stubidp.resources.idp.HeadlessIdpResource;
 import stubidp.stubidp.resources.idp.IdpAuthnRequestReceiverResource;
+import stubidp.stubidp.resources.idp.IdpMetadataResource;
 import stubidp.stubidp.resources.idp.LoginPageResource;
 import stubidp.stubidp.resources.idp.RegistrationPageResource;
 import stubidp.stubidp.resources.idp.SecureLoginPageResource;
@@ -149,6 +150,7 @@ public class StubIdpApplication extends Application<StubIdpConfiguration> {
             environment.jersey().register(IdpAuthnRequestReceiverResource.class);
             environment.jersey().register(DebugPageResource.class);
             environment.jersey().register(ConsentResource.class);
+            environment.jersey().register(IdpMetadataResource.class);
 
             // other idp resources
             environment.jersey().register(UserResource.class);

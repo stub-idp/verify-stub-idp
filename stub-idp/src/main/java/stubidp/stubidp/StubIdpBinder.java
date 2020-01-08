@@ -7,6 +7,8 @@ import io.dropwizard.jackson.Jackson;
 import io.dropwizard.setup.Environment;
 import org.glassfish.jersey.internal.inject.AbstractBinder;
 import org.jdbi.v3.core.Jdbi;
+import org.joda.time.Period;
+import org.joda.time.ReadablePeriod;
 import org.opensaml.saml.saml2.core.AuthnRequest;
 import stubidp.shared.cookies.CookieFactory;
 import stubidp.shared.cookies.CookieNames;
@@ -45,6 +47,8 @@ import static stubidp.shared.csrf.AbstractCSRFCheckProtectionFilter.IS_SECURE_CO
 
 public class StubIdpBinder extends AbstractBinder {
 
+    public static final String METADATA_VALIDITY_PERIOD = "metadataValidityPeriod";
+
     private final StubIdpConfiguration stubIdpConfiguration;
     private final Environment environment;
 
@@ -78,6 +82,7 @@ public class StubIdpBinder extends AbstractBinder {
         bind(AuthnRequestReceiverService.class).to(AuthnRequestReceiverService.class);
         final StubTransformersFactory stubTransformersFactory = new StubTransformersFactory();
         bind(stubTransformersFactory.getStringToAuthnRequest()).to(new GenericType<Function<String, AuthnRequest>>() {});
+        bind(new Period().withDays(1)).named(METADATA_VALIDITY_PERIOD).to(ReadablePeriod.class);
 
         bind(JsonResponseProcessor.class).to(JsonResponseProcessor.class);
 
