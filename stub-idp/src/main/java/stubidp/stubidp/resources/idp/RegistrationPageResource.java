@@ -2,6 +2,7 @@ package stubidp.stubidp.resources.idp;
 
 import com.google.common.base.Strings;
 import stubidp.saml.utils.core.domain.AuthnContext;
+import stubidp.saml.utils.core.domain.Gender;
 import stubidp.shared.csrf.CSRFCheckProtection;
 import stubidp.shared.domain.SamlResponse;
 import stubidp.shared.views.SamlMessageRedirectViewFactory;
@@ -96,6 +97,8 @@ public class RegistrationPageResource {
             @FormParam(Urls.ADDRESS_TOWN_PARAM) String addressTown,
             @FormParam(Urls.ADDRESS_POST_CODE_PARAM) String addressPostCode,
             @FormParam(Urls.DATE_OF_BIRTH_PARAM) String dateOfBirth,
+            @FormParam(Urls.INCLUDE_GENDER_PARAM) boolean includeGender,
+            @FormParam(Urls.GENDER_PARAM) Gender gender,
             @FormParam(Urls.USERNAME_PARAM) String username,
             @FormParam(Urls.PASSWORD_PARAM) String password,
             @FormParam(Urls.LEVEL_OF_ASSURANCE_PARAM) AuthnContext levelOfAssurance,
@@ -112,14 +115,14 @@ public class RegistrationPageResource {
 
         Optional<IdpSession> session = idpSessionRepository.get(sessionCookie);
 
-        if (!session.isPresent()) {
+        if (session.isEmpty()) {
             throw new GenericStubIdpException(format("Session is invalid for " + idpName), Response.Status.BAD_REQUEST);
         }
 
         if (session.get().getIdaAuthnRequestFromHub() == null) {
-            return preRegisterResponse(idpName, firstname, surname, addressLine1, addressLine2, addressTown, addressPostCode, dateOfBirth, username, password, levelOfAssurance, submitButtonValue, sessionCookie);
+            return preRegisterResponse(idpName, firstname, surname, addressLine1, addressLine2, addressTown, addressPostCode, dateOfBirth, includeGender?Optional.ofNullable(gender):Optional.empty(), username, password, levelOfAssurance, submitButtonValue, sessionCookie);
         } else {
-            return registerResponse(idpName, firstname, surname, addressLine1, addressLine2, addressTown, addressPostCode, dateOfBirth, username, password, levelOfAssurance, submitButtonValue, sessionCookie, session);
+            return registerResponse(idpName, firstname, surname, addressLine1, addressLine2, addressTown, addressPostCode, dateOfBirth, includeGender?Optional.ofNullable(gender):Optional.empty(), username, password, levelOfAssurance, submitButtonValue, sessionCookie, session);
         }
     }
 
@@ -131,6 +134,7 @@ public class RegistrationPageResource {
                                          String addressTown,
                                          String addressPostCode,
                                          String dateOfBirth,
+                                         Optional<Gender> gender,
                                          String username,
                                          String password,
                                          AuthnContext levelOfAssurance,
@@ -145,7 +149,7 @@ public class RegistrationPageResource {
                 try {
                     idpUserService.createAndAttachIdpUserToSession(idpName,
                             firstname, surname, addressLine1, addressLine2, addressTown, addressPostCode,
-                            levelOfAssurance, dateOfBirth, username, password, sessionCookie);
+                            levelOfAssurance, dateOfBirth, gender, username, password, sessionCookie);
                 } catch (InvalidSessionIdException e) {
                     return createErrorResponse(ErrorMessageType.INVALID_SESSION_ID, idpName);
                 } catch (IncompleteRegistrationException e) {
@@ -178,6 +182,7 @@ public class RegistrationPageResource {
                                   String addressTown,
                                   String addressPostCode,
                                   String dateOfBirth,
+                                  Optional<Gender> gender,
                                   String username,
                                   String password,
                                   AuthnContext levelOfAssurance,
@@ -196,7 +201,7 @@ public class RegistrationPageResource {
             }
             case Register: {
                 try {
-                    idpUserService.createAndAttachIdpUserToSession(idpName, firstname, surname, addressLine1, addressLine2, addressTown, addressPostCode, levelOfAssurance, dateOfBirth, username, password, sessionCookie);
+                    idpUserService.createAndAttachIdpUserToSession(idpName, firstname, surname, addressLine1, addressLine2, addressTown, addressPostCode, levelOfAssurance, dateOfBirth, gender, username, password, sessionCookie);
                     return Response.seeOther(UriBuilder.fromPath(Urls.IDP_CONSENT_RESOURCE)
                             .build(idpName))
                             .build();
@@ -225,7 +230,7 @@ public class RegistrationPageResource {
 
         Optional<IdpSession> session = idpSessionRepository.get(sessionCookie);
 
-        if (!session.isPresent()) {
+        if (session.isEmpty()) {
             throw new GenericStubIdpException(format("Session is invalid for " + idpName), Response.Status.BAD_REQUEST);
         }
 

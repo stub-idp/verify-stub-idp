@@ -52,7 +52,7 @@ public class DebugPageResource {
 
         Optional<IdpSession> session = sessionRepository.get(sessionCookie);
 
-        if (!session.isPresent()) {
+        if (session.isEmpty()) {
             throw new GenericStubIdpException(format("Session is invalid for " + idpName), Response.Status.BAD_REQUEST);
         }
 

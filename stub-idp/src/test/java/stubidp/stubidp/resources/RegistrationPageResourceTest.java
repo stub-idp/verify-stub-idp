@@ -6,7 +6,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import stubidp.saml.utils.hub.domain.IdaAuthnRequestFromHub;
-import stubidp.shared.cookies.CookieFactory;
 import stubidp.shared.cookies.CookieNames;
 import stubidp.shared.views.SamlMessageRedirectViewFactory;
 import stubidp.stubidp.domain.SamlResponseFromValue;
@@ -58,8 +57,6 @@ public class RegistrationPageResourceTest {
     @Mock
     private IdaAuthnRequestFromHub idaAuthnRequestFromHub;
     @Mock
-    private CookieFactory cookieFactory;
-    @Mock
     private IdpSession idpSession;
     @Mock
     private CookieNames cookieNames;
@@ -74,17 +71,17 @@ public class RegistrationPageResourceTest {
                 idpSessionRepository
         );
 
-        when(idpSessionRepository.get(SESSION_ID)).thenReturn(Optional.ofNullable(new IdpSession(SESSION_ID, idaAuthnRequestFromHub, RELAY_STATE, null, null, null, null, null, null)));
+        when(idpSessionRepository.get(SESSION_ID)).thenReturn(Optional.of(new IdpSession(SESSION_ID, idaAuthnRequestFromHub, RELAY_STATE, null, null, null, null, null, null)));
     }
 
     @Test
     public void shouldHaveStatusAuthnCancelledResponseWhenUserCancels(){
-        when(idpSessionRepository.deleteAndGet(SESSION_ID)).thenReturn(Optional.ofNullable(new IdpSession(SESSION_ID, idaAuthnRequestFromHub, RELAY_STATE, null, null, null, null, null, null)));
+        when(idpSessionRepository.deleteAndGet(SESSION_ID)).thenReturn(Optional.of(new IdpSession(SESSION_ID, idaAuthnRequestFromHub, RELAY_STATE, null, null, null, null, null, null)));
         when(idaAuthnRequestFromHub.getId()).thenReturn(SAML_REQUEST_ID);
         when(nonSuccessAuthnResponseService.generateAuthnCancel(anyString(), anyString(), eq(RELAY_STATE))).thenReturn(new SamlResponseFromValue<String>("saml", Function.identity(), RELAY_STATE, URI.create("uri")));
         when(cookieNames.getSessionCookieName()).thenReturn("sessionCookieName");
 
-        resource.post(IDP_NAME, null, null, null, null, null, null, null, null, null, null, Cancel, SESSION_ID);
+        resource.post(IDP_NAME, null, null, null, null, null, null, null, false, null, null, null, null, Cancel, SESSION_ID);
 
         verify(nonSuccessAuthnResponseService).generateAuthnCancel(IDP_NAME, SAML_REQUEST_ID, RELAY_STATE);
     }
@@ -94,11 +91,11 @@ public class RegistrationPageResourceTest {
         when(idaAuthnRequestFromHub.getId()).thenReturn(SAML_REQUEST_ID);
         when(idpSessionRepository.get(SESSION_ID)).thenReturn(Optional.of(idpSession));
         when(idpSession.getIdaAuthnRequestFromHub()).thenReturn(idaAuthnRequestFromHub);
-        final Response response = resource.post(IDP_NAME, "bob", "jones", "address line 1", "address line 2", "address town", "address postcode", "2000-01-01", "username", "password", LEVEL_2, Register, SESSION_ID);
+        final Response response = resource.post(IDP_NAME, "bob", "jones", "address line 1", "address line 2", "address town", "address postcode", "2000-01-01", false, null, "username", "password", LEVEL_2, Register, SESSION_ID);
 
         assertThat(response.getStatus()).isEqualTo(303);
         assertThat(response.getLocation().toString()).contains("consent");
-        verify(idpUserService).createAndAttachIdpUserToSession(eq(IDP_NAME), anyString(), anyString(), anyString(), anyString(), anyString(), anyString(), eq(LEVEL_2), anyString(), anyString(), anyString(), eq(SESSION_ID));
+        verify(idpUserService).createAndAttachIdpUserToSession(eq(IDP_NAME), anyString(), anyString(), anyString(), anyString(), anyString(), anyString(), eq(LEVEL_2), anyString(), eq(Optional.empty()), anyString(), anyString(), eq(SESSION_ID));
     }
 
     @Test
@@ -106,11 +103,11 @@ public class RegistrationPageResourceTest {
 
         when(idpSessionRepository.get(SESSION_ID)).thenReturn(Optional.of(idpSession));
         when(idpSession.getIdaAuthnRequestFromHub()).thenReturn(null);
-        final Response response = resource.post(IDP_NAME, "bob", "jones", "address line 1", "address line 2", "address town", "address postcode", "2000-01-01", "username", "password", LEVEL_2, Register, SESSION_ID);
+        final Response response = resource.post(IDP_NAME, "bob", "jones", "address line 1", "address line 2", "address town", "address postcode", "2000-01-01", false, null, "username", "password", LEVEL_2, Register, SESSION_ID);
 
         assertThat(response.getStatus()).isEqualTo(303);
         assertThat(response.getLocation().toString()).contains("start-prompt");
-        verify(idpUserService).createAndAttachIdpUserToSession(eq(IDP_NAME), anyString(), anyString(), anyString(), anyString(), anyString(), anyString(), eq(LEVEL_2), anyString(), anyString(), anyString(), eq(SESSION_ID));
+        verify(idpUserService).createAndAttachIdpUserToSession(eq(IDP_NAME), anyString(), anyString(), anyString(), anyString(), anyString(), anyString(), eq(LEVEL_2), anyString(), eq(Optional.empty()), anyString(), anyString(), eq(SESSION_ID));
     }
 
 }

@@ -19,7 +19,6 @@ import javax.ws.rs.core.UriBuilder;
 import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static stubidp.stubidp.Urls.UNKNOWN_HINTS_PARAM;
 import static stubidp.stubidp.builders.StubIdpBuilder.aStubIdp;
 
 @ExtendWith(DropwizardExtensionsSupport.class)
@@ -46,13 +45,13 @@ public class AutoEscapingIntegrationTest extends IntegrationTestHelper {
     void userHasAnXSSHintAndItIsCorrectlyEscaped() {
         final String xss = "afd5j\"><script>alert(\"pwnage\")</script>c3tw";
         final AuthnRequestSteps.Cookies cookies = authnRequestSteps.userPostsAuthnRequestToStubIdp(xss);
-        final String response = userSeesTheHintOnTheDebugPage(cookies, xss);
+        final String response = userSeesTheHintOnTheDebugPage(cookies);
         assertThat(response).doesNotContain(xss);
+        assertThat(response).contains("pwnage");
     }
 
-    private String userSeesTheHintOnTheDebugPage(AuthnRequestSteps.Cookies cookies, String hint) {
+    private String userSeesTheHintOnTheDebugPage(AuthnRequestSteps.Cookies cookies) {
         Response response = client.target(UriBuilder.fromUri("http://localhost:" + applicationRule.getLocalPort()).path(Urls.IDP_DEBUG_RESOURCE).build(IDP_NAME))
-                .queryParam(UNKNOWN_HINTS_PARAM, hint)
                 .request()
                 .cookie(StubIdpCookieNames.SESSION_COOKIE_NAME, cookies.getSessionId())
                 .cookie(StubIdpCookieNames.SECURE_COOKIE_NAME, cookies.getSecure())

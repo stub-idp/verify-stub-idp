@@ -21,7 +21,7 @@ import stubidp.stubidp.repositories.IdpSessionRepository;
 import stubidp.stubidp.repositories.IdpStubsRepository;
 import stubidp.utils.rest.common.SessionId;
 
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -60,9 +60,9 @@ public class IdpUserServiceTest {
     @Test
     public void shouldBuildSuccessResponse() throws InvalidUsernameOrPasswordException, InvalidSessionIdException {
         when(idpStubsRepository.getIdpWithFriendlyId(IDP_NAME)).thenReturn(idp);
-        Optional<DatabaseIdpUser> idpUserOptional = Optional.ofNullable(MatchingDatasetFactoryTest.completeUser);
+        Optional<DatabaseIdpUser> idpUserOptional = Optional.of(MatchingDatasetFactoryTest.completeUser);
         when(idp.getUser(USERNAME, PASSWORD)).thenReturn(idpUserOptional);
-        when(sessionRepository.get(SESSION_ID)).thenReturn(Optional.ofNullable(new IdpSession(SESSION_ID, idaAuthnRequestFromHubOptional, RELAY_STATE, null, null, null, null, null, null)));
+        when(sessionRepository.get(SESSION_ID)).thenReturn(Optional.of(new IdpSession(SESSION_ID, idaAuthnRequestFromHubOptional, RELAY_STATE, null, null, null, null, null, null)));
 
         idpUserService.attachIdpUserToSession(IDP_NAME, USERNAME, PASSWORD, SESSION_ID);
 
@@ -73,13 +73,13 @@ public class IdpUserServiceTest {
 
     @Test
     public void shouldHaveStatusSuccessResponseWhenUserRegisters() throws InvalidSessionIdException, IncompleteRegistrationException, InvalidDateException, UsernameAlreadyTakenException, InvalidUsernameOrPasswordException {
-        IdpSession session = new IdpSession(SessionId.createNewSessionId(), idaAuthnRequestFromHubOptional, "test-relay-state", Arrays.asList(), Arrays.asList(), Optional.empty(), Optional.empty(), Optional.empty(), null);
-        when(sessionRepository.get(SESSION_ID)).thenReturn(Optional.ofNullable(new IdpSession(SESSION_ID, idaAuthnRequestFromHubOptional, RELAY_STATE, null, null, null, null, null, null)));
+        IdpSession session = new IdpSession(SessionId.createNewSessionId(), idaAuthnRequestFromHubOptional, "test-relay-state", Collections.emptyList(), Collections.emptyList(), Optional.empty(), Optional.empty(), Optional.empty(), null);
+        when(sessionRepository.get(SESSION_ID)).thenReturn(Optional.of(new IdpSession(SESSION_ID, idaAuthnRequestFromHubOptional, RELAY_STATE, null, null, null, null, null, null)));
         when(idpStubsRepository.getIdpWithFriendlyId(IDP_NAME)).thenReturn(idp);
         when(idp.userExists(USERNAME)).thenReturn(false);
         when(idp.createUser(any(), any(), any(), any(), any(), any(), any(), eq(USERNAME), any(), any())).thenReturn(mock(DatabaseIdpUser.class));
 
-        idpUserService.createAndAttachIdpUserToSession(IDP_NAME, "bob", "jones", "address line 1", "address line 2", "address town", "address postcode", AuthnContext.LEVEL_2, "2000-01-01", USERNAME, "password", SESSION_ID);
+        idpUserService.createAndAttachIdpUserToSession(IDP_NAME, "bob", "jones", "address line 1", "address line 2", "address town", "address postcode", AuthnContext.LEVEL_2, "2000-01-01", Optional.empty(), USERNAME, "password", SESSION_ID);
 
         verify(sessionRepository, times(1)).updateSession(eq(SESSION_ID), any());
     }

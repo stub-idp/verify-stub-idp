@@ -51,10 +51,11 @@ public class IdpUserService {
                                                 String addressLine1, String addressLine2, String addressTown, String addressPostCode,
                                                 AuthnContext levelOfAssurance,
                                                 String dateOfBirth,
+                                                Optional<Gender> gender,
                                                 String username, String password,
                                                 SessionId idpSessionId) throws InvalidSessionIdException, IncompleteRegistrationException, InvalidDateException, UsernameAlreadyTakenException, InvalidUsernameOrPasswordException {
         Idp idp = idpStubsRepository.getIdpWithFriendlyId(idpName);
-        DatabaseIdpUser user = createUserInIdp(firstname, surname, addressLine1, addressLine2, addressTown, addressPostCode, levelOfAssurance, dateOfBirth, username, password, idp);
+        DatabaseIdpUser user = createUserInIdp(firstname, surname, addressLine1, addressLine2, addressTown, addressPostCode, levelOfAssurance, dateOfBirth, gender, username, password, idp);
         attachIdpUserToSession(Optional.ofNullable(user), idpSessionId);
     }
 
@@ -64,20 +65,20 @@ public class IdpUserService {
                                                 AuthnContext levelOfAssurance,
                                                 String dateOfBirth,
                                                 String username, String password
-                                                ) throws IncompleteRegistrationException, InvalidDateException, UsernameAlreadyTakenException, InvalidUsernameOrPasswordException {
+                                                ) throws IncompleteRegistrationException, InvalidDateException, UsernameAlreadyTakenException {
         Idp idp = idpStubsRepository.getIdpWithFriendlyId(idpName);
-        return createUserInIdp(firstname, surname, addressLine1, addressLine2, addressTown, addressPostCode, levelOfAssurance, dateOfBirth, username, password, idp);
+        return createUserInIdp(firstname, surname, addressLine1, addressLine2, addressTown, addressPostCode, levelOfAssurance, dateOfBirth, Optional.empty(), username, password, idp);
     }
 
     public void attachIdpUserToSession(Optional<DatabaseIdpUser> user, SessionId idpSessionId) throws InvalidUsernameOrPasswordException, InvalidSessionIdException {
 
-        if (!user.isPresent()) {
+        if (user.isEmpty()) {
             throw new InvalidUsernameOrPasswordException();
         }
 
         Optional<IdpSession> session = sessionRepository.get(idpSessionId);
 
-        if (!session.isPresent()) {
+        if (session.isEmpty()) {
             throw new InvalidSessionIdException();
         }
 
@@ -85,7 +86,7 @@ public class IdpUserService {
         sessionRepository.updateSession(session.get().getSessionId(), session.get());
     }
 
-    private DatabaseIdpUser createUserInIdp(String firstname, String surname, String addressLine1, String addressLine2, String addressTown, String addressPostCode, final AuthnContext _levelOfAssurance, String dateOfBirth, String username, String password, Idp idp) throws IncompleteRegistrationException, InvalidDateException, UsernameAlreadyTakenException {
+    private DatabaseIdpUser createUserInIdp(String firstname, String surname, String addressLine1, String addressLine2, String addressTown, String addressPostCode, final AuthnContext _levelOfAssurance, String dateOfBirth, Optional<Gender> gender, String username, String password, Idp idp) throws IncompleteRegistrationException, InvalidDateException, UsernameAlreadyTakenException {
         if (!isMandatoryDataPresent(firstname, surname, addressLine1, addressLine2, addressTown, addressPostCode, dateOfBirth, username, password)) {
             throw new IncompleteRegistrationException();
         }
@@ -114,7 +115,7 @@ public class IdpUserService {
                 Collections.singletonList(createMdsValue(Optional.ofNullable(firstname))),
                 Collections.emptyList(),
                 Collections.singletonList(createMdsValue(Optional.ofNullable(surname))),
-                Optional.empty(),
+                gender.map(IdpUserService::createSimpleMdsValue2),
                 Collections.singletonList(createMdsValue(Optional.ofNullable(parsedDateOfBirth))),
                 Collections.singletonList(address),
                 username,
@@ -144,7 +145,7 @@ public class IdpUserService {
                 Collections.singletonList(createSimpleMdsValue2("firstname")),
                 Collections.emptyList(),
                 Collections.singletonList(createSimpleMdsValue2("smith")),
-                Optional.ofNullable(createSimpleMdsValue2(Gender.FEMALE)),
+                Optional.of(createSimpleMdsValue2(Gender.FEMALE)),
                 Collections.emptyList(),
                 Collections.singletonList(
                         new Address(asList("line1", "line2"), "KT23 4XD", null, "fhfhf", DateTime.parse("2000-01-01"), DateTime.parse("2013-05-05"), false)

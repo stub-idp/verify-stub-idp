@@ -28,8 +28,6 @@ public interface Urls {
     String NON_LATIN_SURNAME_PARAM = "nonLatinSurname";
     String FIRSTNAME_PARAM = "firstname";
     String NON_LATIN_FIRSTNAME_PARAM = "nonLatinFirstname";
-    String KNOWN_HINTS_PARAM = "known_hint";
-    String UNKNOWN_HINTS_PARAM = "unknown_hint";
     String RANDOMISE_PID_PARAM = "randomPid";
     String CYCLE3_PARAM = "c3";
     String LEVEL_OF_ASSURANCE_PARAM = "loa";
