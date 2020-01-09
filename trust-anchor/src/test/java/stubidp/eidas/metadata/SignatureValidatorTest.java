@@ -31,7 +31,7 @@ import stubidp.eidas.metadata.support.builders.ResponseBuilder;
 import stubidp.test.devpki.TestEntityIds;
 
 import javax.xml.namespace.QName;
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -57,7 +57,7 @@ public class SignatureValidatorTest extends OpenSAMLRunner {
 
             @Override
             protected List<Criterion> getAdditionalCriteria(String entityId, QName role) {
-                return Arrays.asList(new Criterion() { });
+                return Collections.singletonList(new Criterion() {});
             }
         };
     }
@@ -71,11 +71,11 @@ public class SignatureValidatorTest extends OpenSAMLRunner {
     }
 
     @Test
-    public void shouldAllowSha1DigestMethod() throws SignatureException, SecurityException, MarshallingException {
+    public void shouldNotAllowSha1DigestMethod() throws SignatureException, SecurityException, MarshallingException {
         final Response signedResponse = ResponseBuilder.aResponse()
                 .withDigestAlgorithm(new DigestSHA1())
                 .build();
-        assertThat(signatureValidator.validate(signedResponse, signedResponse.getIssuer().getValue(), SPSSODescriptor.DEFAULT_ELEMENT_NAME)).isTrue();
+        assertThat(signatureValidator.validate(signedResponse, signedResponse.getIssuer().getValue(), SPSSODescriptor.DEFAULT_ELEMENT_NAME)).isFalse();
     }
 
     @Test
@@ -95,11 +95,11 @@ public class SignatureValidatorTest extends OpenSAMLRunner {
     }
 
     @Test
-    public void shouldAllowSigningAlgorithmRsaSHA1() throws Exception {
+    public void shouldNotAllowSigningAlgorithmRsaSHA1() throws Exception {
         final Response signedResponse = ResponseBuilder.aResponse()
                 .withSignatureAlgorithm(new SignatureRSASHA1())
                 .build();
-        assertThat(signatureValidator.validate(signedResponse, signedResponse.getIssuer().getValue(), SPSSODescriptor.DEFAULT_ELEMENT_NAME)).isTrue();
+        assertThat(signatureValidator.validate(signedResponse, signedResponse.getIssuer().getValue(), SPSSODescriptor.DEFAULT_ELEMENT_NAME)).isFalse();
     }
 
     @Test
