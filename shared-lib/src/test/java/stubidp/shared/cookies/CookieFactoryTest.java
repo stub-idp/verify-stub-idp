@@ -62,7 +62,7 @@ public class CookieFactoryTest {
         assertThat(cookie.getValue()).isEqualTo(digestedValue);
         assertThat(cookie.getMaxAge()).isEqualTo(SESSION_COOKIE_MAX_AGE);
         assertThat(cookie.isSecure()).isEqualTo(IS_SECURE);
-        assertIsHttpOnly(cookie);
+        assertCookieOptionsAreSet(cookie);
     }
 
     @Test
@@ -77,10 +77,11 @@ public class CookieFactoryTest {
         assertThat(cookie.getValue()).isEqualTo(expectedValue.toString());
         assertThat(cookie.getMaxAge()).isEqualTo(SESSION_COOKIE_MAX_AGE);
         assertThat(cookie.isSecure()).isEqualTo(IS_SECURE);
-        assertIsHttpOnly(cookie);
+        assertCookieOptionsAreSet(cookie);
     }
 
-    private void assertIsHttpOnly(NewCookie deletedSecureCookie) {
+    private void assertCookieOptionsAreSet(NewCookie deletedSecureCookie) {
         assertThat(deletedSecureCookie.toString()).contains(" HttpOnly");
+        assertThat(deletedSecureCookie.toString()).contains(" SameSite=Strict");
     }
 }
