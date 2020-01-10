@@ -1,5 +1,5 @@
 # Stub IDP
-![Stub IDP logo](././stub-idp/src/main/resources/assets/images/providers/stub-idp-demo-one.png)
+![Stub IDP logo](././stub-idp/src/main/resources/assets/images/providers/stub-idp-one.png)
 
 This microservice is a stub IDP that can be white-labelled to simulate any IDP, or used as a Stub eIDAS Proxy Service Node.
 
