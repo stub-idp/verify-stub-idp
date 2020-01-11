@@ -2,7 +2,7 @@ package stubidp.stubidp.security;
 
 import stubidp.saml.security.SigningKeyStore;
 import stubidp.stubidp.StubIdpIdpBinder;
-import stubidp.stubidp.repositories.MetadataRepository;
+import stubidp.shared.repositories.MetadataRepository;
 import stubidp.utils.security.security.PublicKeyFactory;
 
 import javax.inject.Inject;

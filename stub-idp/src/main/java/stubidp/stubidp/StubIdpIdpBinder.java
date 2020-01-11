@@ -1,10 +1,8 @@
 package stubidp.stubidp;
 
-import io.dropwizard.servlets.tasks.Task;
 import io.dropwizard.setup.Environment;
 import org.glassfish.jersey.internal.inject.AbstractBinder;
 import org.opensaml.saml.metadata.resolver.MetadataResolver;
-import org.opensaml.saml.metadata.resolver.impl.AbstractReloadingMetadataResolver;
 import org.opensaml.xmlsec.algorithm.DigestAlgorithm;
 import org.opensaml.xmlsec.algorithm.SignatureAlgorithm;
 import org.opensaml.xmlsec.algorithm.descriptors.DigestSHA256;
@@ -18,15 +16,15 @@ import stubidp.saml.security.SignatureFactory;
 import stubidp.saml.security.SigningKeyStore;
 import stubidp.saml.stubidp.configuration.SamlConfiguration;
 import stubidp.saml.stubidp.stub.transformers.inbound.AuthnRequestToIdaRequestFromHubTransformer;
+import stubidp.shared.configuration.SigningKeyPairConfiguration;
+import stubidp.shared.repositories.MetadataRepository;
 import stubidp.stubidp.builders.IdpMetadataBuilder;
 import stubidp.stubidp.configuration.AssertionLifetimeConfiguration;
-import stubidp.stubidp.configuration.SigningKeyPairConfiguration;
 import stubidp.stubidp.configuration.StubIdpConfiguration;
 import stubidp.stubidp.domain.factories.AssertionFactory;
 import stubidp.stubidp.domain.factories.AssertionRestrictionsFactory;
 import stubidp.stubidp.domain.factories.IdentityProviderAssertionFactory;
 import stubidp.stubidp.domain.factories.StubTransformersFactory;
-import stubidp.stubidp.repositories.MetadataRepository;
 import stubidp.stubidp.saml.IdpAuthnRequestValidator;
 import stubidp.stubidp.saml.locators.IdpHardCodedEntityToEncryptForLocator;
 import stubidp.stubidp.saml.transformers.OutboundResponseFromIdpTransformerProvider;
@@ -40,14 +38,11 @@ import stubidp.stubidp.services.UserService;
 import stubidp.utils.security.security.PublicKeyFactory;
 import stubidp.utils.security.security.X509CertificateFactory;
 
-import java.io.PrintWriter;
 import java.security.KeyPair;
 import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.security.cert.X509Certificate;
 import java.util.Collections;
-import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 public class StubIdpIdpBinder extends AbstractBinder {
@@ -84,7 +79,6 @@ public class StubIdpIdpBinder extends AbstractBinder {
         bind(PublicKeyFactory.class).to(PublicKeyFactory.class);
 
         final MetadataResolver idpMetadataResolver = idpMetadataResolverBundle.getMetadataResolver();
-        registerMetadataRefreshTask(environment, idpMetadataResolver, "metadata");
         bind(idpMetadataResolver).named(HUB_METADATA_RESOLVER).to(MetadataResolver.class);
         final MetadataRepository idpMetadataRepository = new MetadataRepository(idpMetadataResolverBundle.getMetadataCredentialResolver(), hubEntityId);
         bind(idpMetadataRepository).named(HUB_METADATA_REPOSITORY).to(MetadataRepository.class);
@@ -129,15 +123,6 @@ public class StubIdpIdpBinder extends AbstractBinder {
         bind(GeneratePasswordService.class).to(GeneratePasswordService.class);
         bind(IdpUserService.class).to(IdpUserService.class);
         bind(UserService.class).to(UserService.class);
-    }
-
-    private void registerMetadataRefreshTask(Environment environment, MetadataResolver metadataResolver, String name) {
-        environment.admin().addTask(new Task(name + "-refresh") {
-            @Override
-            public void execute(Map<String, List<String>> parameters, PrintWriter output) throws Exception {
-                ((AbstractReloadingMetadataResolver) metadataResolver).refresh();
-            }
-        });
     }
 
     private IdaKeyStore getKeystoreFromConfig(SigningKeyPairConfiguration keyPairConfiguration) {

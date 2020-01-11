@@ -15,3 +15,51 @@ logging:
   level: ${LOG_LEVEL:-INFO}
   appenders:
     - type: console
+
+assertionLifetime: 60m
+
+saml:
+  entityId: ${ENTITY_ID:-"http://stub_sp.acme.org/%s/SSO/POST"}
+  expectedDestination: ${EXPECTED_DESTINATION:-"http://localhost:40000"}
+
+serviceInfo:
+  name: stub-sp
+
+signingKeyPairConfiguration:
+  privateKeyConfiguration:
+    type: ${KEY_TYPE:-file}
+    key: ${STUB_SP_SIGNING_PRIVATE_KEY:-configuration/data/pki/sp_signing_primary.pk8}
+  publicKeyConfiguration:
+    type: ${CERT_TYPE:-file}
+    cert: ${STUB_SP_SIGNING_CERT:-configuration/data/pki/sp_signing_primary.crt}
+    name: sp.signing.cert
+
+spMetadataSigningKeyPairConfiguration:
+  privateKeyConfiguration:
+    type: ${KEY_TYPE:-file}
+    key: ${STUB_SP_METADATA_SIGNING_PRIVATE_KEY:-configuration/data/pki/metadata_signing_a.pk8}
+  publicKeyConfiguration:
+    type: ${CERT_TYPE:-file}
+    cert: ${STUB_SP_METADATA_SIGNING_CERT:-configuration/data/pki/metadata_signing_a.crt}
+    name: sp.signing.cert
+    
+metadata:
+  client:
+    timeout: 60s
+    timeToLive: 10m
+    connectionTimeout: 4s
+    tls:
+      protocol: TLSv1.2
+      verifyHostname: false
+  uri: ${METADATA_URL:-http://localhost:50140/stub/idp/stub-idp-one/metadata}
+  idpTrustStore:
+    type: ${TRUSTSTORE_TYPE:-file}
+    store: ${SP_TRUSTSTORE:-configuration/data/pki/idp.ts}
+    password: ${TRUSTSTORE_PASSWORD:-marshmallow}
+  trustStore:
+    type: ${TRUSTSTORE_TYPE:-file}
+    store: ${METADATA_TRUSTSTORE:-configuration/data/pki/metadata.ts}
+    password: ${TRUSTSTORE_PASSWORD:-marshmallow}
+  minRefreshDelay: 30000
+  maxRefreshDelay: 1800000
+  expectedEntityId: ${METADATA_ENTITY_ID}

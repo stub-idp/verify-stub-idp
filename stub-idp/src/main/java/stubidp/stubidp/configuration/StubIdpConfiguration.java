@@ -8,6 +8,7 @@ import stubidp.metrics.prometheus.config.PrometheusConfiguration;
 import stubidp.saml.metadata.MetadataResolverConfiguration;
 import stubidp.saml.metadata.MultiTrustStoresBackedMetadataConfiguration;
 import stubidp.saml.stubidp.configuration.SamlConfiguration;
+import stubidp.shared.configuration.SigningKeyPairConfiguration;
 import stubidp.stubidp.repositories.reaper.StaleSessionReaperConfiguration;
 import stubidp.utils.rest.cache.AssetCacheConfiguration;
 import stubidp.utils.rest.common.ServiceInfoConfiguration;

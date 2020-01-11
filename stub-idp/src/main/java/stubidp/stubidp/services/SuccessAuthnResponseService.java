@@ -4,7 +4,6 @@ import io.prometheus.client.Counter;
 import stubidp.saml.utils.core.domain.IdentityProviderAssertion;
 import stubidp.saml.utils.core.domain.IpAddress;
 import stubidp.saml.utils.core.domain.PersistentId;
-import stubidp.stubidp.StubIdpBinder;
 import stubidp.stubidp.StubIdpIdpBinder;
 import stubidp.stubidp.domain.DatabaseIdpUser;
 import stubidp.stubidp.domain.OutboundResponseFromIdp;
@@ -15,7 +14,7 @@ import stubidp.stubidp.domain.factories.MatchingDatasetFactory;
 import stubidp.stubidp.repositories.Idp;
 import stubidp.stubidp.repositories.IdpSession;
 import stubidp.stubidp.repositories.IdpStubsRepository;
-import stubidp.stubidp.repositories.MetadataRepository;
+import stubidp.shared.repositories.MetadataRepository;
 import stubidp.stubidp.resources.idp.HeadlessIdpResource;
 import stubidp.stubidp.saml.transformers.OutboundResponseFromIdpTransformerProvider;
 

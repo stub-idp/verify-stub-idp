@@ -1,10 +1,8 @@
 package stubidp.stubidp;
 
-import io.dropwizard.servlets.tasks.Task;
 import io.dropwizard.setup.Environment;
 import org.glassfish.jersey.internal.inject.AbstractBinder;
 import org.opensaml.saml.metadata.resolver.MetadataResolver;
-import org.opensaml.saml.metadata.resolver.impl.AbstractReloadingMetadataResolver;
 import org.opensaml.xmlsec.algorithm.DigestAlgorithm;
 import org.opensaml.xmlsec.algorithm.SignatureAlgorithm;
 import org.opensaml.xmlsec.algorithm.descriptors.DigestSHA256;
@@ -17,13 +15,13 @@ import stubidp.saml.security.IdaKeyStoreCredentialRetriever;
 import stubidp.saml.security.SignatureFactory;
 import stubidp.saml.security.signature.SignatureRSASSAPSS;
 import stubidp.saml.utils.core.api.CoreTransformersFactory;
+import stubidp.shared.configuration.SigningKeyPairConfiguration;
+import stubidp.shared.repositories.MetadataRepository;
 import stubidp.stubidp.builders.CountryMetadataBuilder;
 import stubidp.stubidp.builders.CountryMetadataSigningHelper;
 import stubidp.stubidp.configuration.EuropeanIdentityConfiguration;
-import stubidp.stubidp.configuration.SigningKeyPairConfiguration;
 import stubidp.stubidp.configuration.StubIdpConfiguration;
 import stubidp.stubidp.repositories.EidasSessionRepository;
-import stubidp.stubidp.repositories.MetadataRepository;
 import stubidp.stubidp.repositories.StubCountryRepository;
 import stubidp.stubidp.repositories.jdbc.JDBIEidasSessionRepository;
 import stubidp.stubidp.saml.EidasAuthnRequestValidator;
@@ -37,14 +35,11 @@ import stubidp.utils.security.security.X509CertificateFactory;
 
 import javax.inject.Singleton;
 import javax.ws.rs.core.GenericType;
-import java.io.PrintWriter;
 import java.security.KeyPair;
 import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.security.cert.X509Certificate;
 import java.util.Collections;
-import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 public class StubIdpEidasBinder extends AbstractBinder {
@@ -102,7 +97,6 @@ public class StubIdpEidasBinder extends AbstractBinder {
             bind(signatureFactory).named(COUNTRY_METADATA_SIGNATURE_FACTORY).to(SignatureFactory.class);
 
             final MetadataResolver metadataResolver = eidasMetadataResolverBundle.getMetadataResolver();
-            registerMetadataRefreshTask(environment, metadataResolver, "connector-metadata");
             bind(metadataResolver).named(HUB_CONNECTOR_METADATA_RESOLVER).to(MetadataResolver.class);
             final MetadataRepository eidasMetadataRepository = new MetadataRepository(eidasMetadataResolverBundle.getMetadataCredentialResolver(), hubConnectorEntityId);
             bind(eidasMetadataRepository).named(HUB_CONNECTOR_METADATA_REPOSITORY).to(MetadataRepository.class);
@@ -142,15 +136,6 @@ public class StubIdpEidasBinder extends AbstractBinder {
 
             bind(EidasAuthnRequestValidator.class).to(EidasAuthnRequestValidator.class);
         }
-    }
-
-    private void registerMetadataRefreshTask(Environment environment, MetadataResolver metadataResolver, String name) {
-        environment.admin().addTask(new Task(name + "-refresh") {
-            @Override
-            public void execute(Map<String, List<String>> parameters, PrintWriter output) throws Exception {
-                ((AbstractReloadingMetadataResolver) metadataResolver).refresh();
-            }
-        });
     }
 
     private IdaKeyStore getKeystoreFromConfig(SigningKeyPairConfiguration keyPairConfiguration) {

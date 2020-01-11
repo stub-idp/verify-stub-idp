@@ -1,10 +1,12 @@
 package stubidp.saml.metadata.bundle;
 
 import io.dropwizard.Configuration;
+import io.dropwizard.servlets.tasks.Task;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
 import net.shibboleth.utilities.java.support.component.ComponentInitializationException;
 import org.opensaml.saml.metadata.resolver.MetadataResolver;
+import org.opensaml.saml.metadata.resolver.impl.AbstractReloadingMetadataResolver;
 import org.opensaml.saml.security.impl.MetadataCredentialResolver;
 import org.opensaml.xmlsec.signature.support.impl.ExplicitKeySignatureTrustEngine;
 import stubidp.saml.metadata.MetadataHealthCheck;
@@ -16,6 +18,9 @@ import stubidp.saml.metadata.factories.MetadataSignatureTrustEngineFactory;
 
 import javax.annotation.Nullable;
 import javax.inject.Provider;
+import java.io.PrintWriter;
+import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 public class MetadataResolverBundle<T extends Configuration> implements io.dropwizard.ConfiguredBundle<T> {
@@ -25,14 +30,20 @@ public class MetadataResolverBundle<T extends Configuration> implements io.dropw
     private ExplicitKeySignatureTrustEngine signatureTrustEngine;
     private MetadataCredentialResolver credentialResolver;
     private final boolean validateSignatures;
+    private final String metadataRefreshName;
 
-    public MetadataResolverBundle(MetadataConfigurationExtractor<T> configExtractor) {
-        this(configExtractor, true);
+    public MetadataResolverBundle(MetadataConfigurationExtractor<T> configExtractor, String metadataRefreshName) {
+        this(configExtractor, true, metadataRefreshName);
     }
 
-    public MetadataResolverBundle(MetadataConfigurationExtractor<T> configExtractor, boolean validateSignatures) {
+    public MetadataResolverBundle(MetadataConfigurationExtractor<T> configExtractor) {
+        this(configExtractor, true, "metadata");
+    }
+
+    public MetadataResolverBundle(MetadataConfigurationExtractor<T> configExtractor, boolean validateSignatures, String metadataRefreshName) {
         this.configExtractor = configExtractor;
         this.validateSignatures = validateSignatures;
+        this.metadataRefreshName = metadataRefreshName;
     }
 
     @Override
@@ -50,7 +61,14 @@ public class MetadataResolverBundle<T extends Configuration> implements io.dropw
                     metadataResolver,
                     mc.getExpectedEntityId()
             );
+
             environment.healthChecks().register(mc.getUri().toString(), healthCheck);
+            environment.admin().addTask(new Task(metadataRefreshName+"-refresh") {
+                @Override
+                public void execute(Map<String, List<String>> parameters, PrintWriter output) throws Exception {
+                    ((AbstractReloadingMetadataResolver) metadataResolver).refresh();
+                }
+            });
         });
     }
 

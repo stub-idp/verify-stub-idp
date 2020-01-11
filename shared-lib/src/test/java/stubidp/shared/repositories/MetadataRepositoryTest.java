@@ -1,14 +1,17 @@
-package stubidp.stubidp.repositories;
+package stubidp.shared.repositories;
 
 import net.shibboleth.utilities.java.support.component.ComponentInitializationException;
 import net.shibboleth.utilities.java.support.resolver.ResolverException;
 import net.shibboleth.utilities.java.support.xml.BasicParserPool;
+import org.apache.log4j.Level;
+import org.apache.log4j.Logger;
 import org.joda.time.DateTime;
 import org.junit.jupiter.api.Test;
 import org.opensaml.core.config.InitializationException;
 import org.opensaml.core.config.InitializationService;
 import org.opensaml.saml.metadata.resolver.impl.FilesystemMetadataResolver;
 import stubidp.saml.metadata.factories.CredentialResolverFactory;
+import stubidp.test.devpki.TestCertificateStrings;
 import stubidp.test.devpki.TestEntityIds;
 
 import java.io.File;
@@ -18,15 +21,12 @@ import java.net.URI;
 import java.text.MessageFormat;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static stubidp.test.devpki.TestCertificateStrings.HUB_TEST_PUBLIC_ENCRYPTION_CERT;
-import static stubidp.test.devpki.TestCertificateStrings.HUB_TEST_PUBLIC_SIGNING_CERT;
-import static stubidp.test.devpki.TestCertificateStrings.TEST_RP_PUBLIC_SIGNING_CERT;
 
 public class MetadataRepositoryTest {
 
-    public static final String ENCRYPTION_CERTIFICATE = HUB_TEST_PUBLIC_ENCRYPTION_CERT;
-    public static final String SIGNING_CERTIFICATE_1 = HUB_TEST_PUBLIC_SIGNING_CERT;
-    public static final String SIGNING_CERTIFICATE_2 = TEST_RP_PUBLIC_SIGNING_CERT;
+    public static final String ENCRYPTION_CERTIFICATE = TestCertificateStrings.HUB_TEST_PUBLIC_ENCRYPTION_CERT;
+    public static final String SIGNING_CERTIFICATE_1 = TestCertificateStrings.HUB_TEST_PUBLIC_SIGNING_CERT;
+    public static final String SIGNING_CERTIFICATE_2 = TestCertificateStrings.TEST_RP_PUBLIC_SIGNING_CERT;
     public static final String LOCATION = "http://localhost:50190/SAML2/SSO/Response/POST";
 
     public static final String METADATA_PATTERN = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" +
@@ -115,6 +115,7 @@ public class MetadataRepositoryTest {
         FileWriter fileWriter = new FileWriter(metadataFile);
         fileWriter.write(metadata);
         fileWriter.flush();
+        Logger.getRootLogger().setLevel(Level.INFO);
         InitializationService.initialize();
         FilesystemMetadataResolver filesystemMetadataResolver = new FilesystemMetadataResolver(metadataFile);
         BasicParserPool pool = new BasicParserPool();

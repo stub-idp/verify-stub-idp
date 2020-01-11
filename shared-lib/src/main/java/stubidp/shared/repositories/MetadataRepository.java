@@ -1,4 +1,4 @@
-package stubidp.stubidp.repositories;
+package stubidp.shared.repositories;
 
 import net.shibboleth.utilities.java.support.resolver.CriteriaSet;
 import net.shibboleth.utilities.java.support.resolver.ResolverException;

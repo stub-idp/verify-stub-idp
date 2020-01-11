@@ -17,7 +17,7 @@ import stubidp.stubidp.domain.factories.AssertionFactory;
 import stubidp.stubidp.repositories.Idp;
 import stubidp.stubidp.repositories.IdpSession;
 import stubidp.stubidp.repositories.IdpStubsRepository;
-import stubidp.stubidp.repositories.MetadataRepository;
+import stubidp.shared.repositories.MetadataRepository;
 import stubidp.stubidp.saml.transformers.OutboundResponseFromIdpTransformerProvider;
 import stubidp.utils.rest.common.SessionId;
 

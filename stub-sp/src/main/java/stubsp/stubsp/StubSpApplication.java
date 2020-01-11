@@ -11,6 +11,7 @@ import io.dropwizard.setup.Environment;
 import io.dropwizard.views.ViewBundle;
 import stubidp.metrics.prometheus.bundle.PrometheusBundle;
 import stubidp.saml.extensions.IdaSamlBootstrap;
+import stubidp.saml.metadata.bundle.MetadataResolverBundle;
 import stubidp.shared.csrf.CSRFViewRenderer;
 import stubidp.utils.rest.bundles.LoggingBundle;
 import stubidp.utils.rest.bundles.MonitoringBundle;
@@ -36,6 +37,8 @@ import static java.util.Collections.singletonList;
 
 public class StubSpApplication extends Application<StubSpConfiguration> {
 
+    private MetadataResolverBundle<StubSpConfiguration> metadataResolverBundle;
+
     public static void main(String[] args) throws Exception {
         new StubSpApplication().run(args);
     }
@@ -60,6 +63,8 @@ public class StubSpApplication extends Application<StubSpConfiguration> {
         bootstrap.addBundle(new ViewBundle<>(singletonList(new CSRFViewRenderer())));
         bootstrap.addBundle(new LoggingBundle<>());
         bootstrap.addBundle(new MonitoringBundle());
+        metadataResolverBundle = new MetadataResolverBundle<>(StubSpConfiguration::getMetadata, "idp-metadata");
+        bootstrap.addBundle(metadataResolverBundle);
 
         bootstrap.addBundle(new AssetsBundle("/assets/", "/assets/"));
 
@@ -74,7 +79,7 @@ public class StubSpApplication extends Application<StubSpConfiguration> {
         environment.servlets().addFilter("Remove Accept-Language headers", AcceptLanguageFilter.class).addMappingForUrlPatterns(EnumSet.allOf(DispatcherType.class), true, "/*");
 
         environment.getObjectMapper().setDateFormat(new StdDateFormat().withLocale(Locale.UK));
-        environment.jersey().register(new StubSpBinder(configuration, environment));
+        environment.jersey().register(new StubSpBinder(configuration, environment, metadataResolverBundle));
 
         // resources
         environment.jersey().register(RootResource.class);

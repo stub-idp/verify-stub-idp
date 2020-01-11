@@ -128,8 +128,8 @@ public class StubIdpApplication extends Application<StubIdpConfiguration> {
 
         bootstrap.addBundle(new AssetsBundle("/assets/", "/assets/"));
 
-        idpMetadataResolverBundle = new MetadataResolverBundle<>(x -> Optional.ofNullable(x.getMetadataConfiguration()));
-        eidasMetadataResolverBundle = new MetadataResolverBundle<>(x -> Optional.ofNullable(x.getEuropeanIdentityConfiguration().getMetadata()));
+        idpMetadataResolverBundle = new MetadataResolverBundle<>(x -> Optional.ofNullable(x.getMetadataConfiguration()), "metadata");
+        eidasMetadataResolverBundle = new MetadataResolverBundle<>(x -> Optional.ofNullable(x.getEuropeanIdentityConfiguration().getMetadata()), "connector-metadata");
         bootstrap.addBundle(idpMetadataResolverBundle);
         bootstrap.addBundle(eidasMetadataResolverBundle);
 

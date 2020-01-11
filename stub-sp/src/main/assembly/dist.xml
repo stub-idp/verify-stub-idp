@@ -11,6 +11,12 @@
             <outputDirectory>/configuration</outputDirectory>
             <includes>
                 <include>stub-sp.yml</include>
+                <include>data/pki/sp_signing_primary.pk8</include>
+                <include>data/pki/sp_signing_primary.crt</include>
+                <include>data/pki/metadata_signing_a.pk8</include>
+                <include>data/pki/metadata_signing_a.crt</include>
+                <include>data/pki/metadata.ts</include>
+                <include>data/pki/idp.ts</include>
             </includes>
         </fileSet>
         <fileSet>

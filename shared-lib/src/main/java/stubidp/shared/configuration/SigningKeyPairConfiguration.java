@@ -1,4 +1,4 @@
-package stubidp.stubidp.configuration;
+package stubidp.shared.configuration;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import stubidp.utils.security.configuration.DeserializablePublicKeyConfiguration;

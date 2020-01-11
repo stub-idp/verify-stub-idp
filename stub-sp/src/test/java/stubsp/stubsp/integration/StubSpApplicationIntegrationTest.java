@@ -1,17 +1,18 @@
 package stubsp.stubsp.integration;
 
-import io.dropwizard.testing.junit5.DropwizardAppExtension;
 import io.dropwizard.testing.junit5.DropwizardExtensionsSupport;
 import org.glassfish.jersey.client.ClientProperties;
 import org.glassfish.jersey.client.JerseyClientBuilder;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import stubsp.stubsp.StubSpApplication;
+import stubidp.saml.extensions.IdaSamlBootstrap;
 import stubsp.stubsp.Urls;
-import stubsp.stubsp.configuration.StubSpConfiguration;
 import stubsp.stubsp.domain.AvailableServiceDto;
+import stubsp.stubsp.integration.support.StubSpAppExtension;
 
 import javax.ws.rs.client.Client;
+import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.GenericType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriBuilder;
@@ -22,9 +23,21 @@ import static org.assertj.core.api.Assertions.assertThat;
 @ExtendWith(DropwizardExtensionsSupport.class)
 class StubSpApplicationIntegrationTest {
 
-    private static DropwizardAppExtension<StubSpConfiguration> stubSpApplication = new DropwizardAppExtension<>(StubSpApplication.class);
+    static {
+        IdaSamlBootstrap.bootstrap();
+    }
 
-    private final Client client = JerseyClientBuilder.createClient().property(ClientProperties.FOLLOW_REDIRECTS, false);
+    private static final StubSpAppExtension stubSpAppExtension = new StubSpAppExtension();
+
+    private final Client client = JerseyClientBuilder.createClient()
+            .property(ClientProperties.FOLLOW_REDIRECTS, false);
+
+    @BeforeEach
+    void refreshMetadata() {
+        client.target("http://localhost:"+stubSpAppExtension.getAdminPort()+"/tasks/idp-metadata-refresh")
+                .request()
+                .post(Entity.text(""));
+    }
 
     @Test
     void testJourney() {
@@ -53,7 +66,7 @@ class StubSpApplicationIntegrationTest {
     }
 
     private Response get(String resource) {
-        return client.target(UriBuilder.fromUri("http://localhost:" + stubSpApplication.getLocalPort() + resource).build())
+        return client.target(UriBuilder.fromUri("http://localhost:" + stubSpAppExtension.getLocalPort() + resource).build())
                 .request()
                 .get();
     }

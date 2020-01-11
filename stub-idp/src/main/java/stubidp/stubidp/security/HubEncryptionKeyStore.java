@@ -1,6 +1,6 @@
 package stubidp.stubidp.security;
 
-import stubidp.stubidp.repositories.MetadataRepository;
+import stubidp.shared.repositories.MetadataRepository;
 import stubidp.utils.security.security.PublicKeyFactory;
 import stubidp.saml.security.EncryptionKeyStore;
 

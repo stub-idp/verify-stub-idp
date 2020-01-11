@@ -24,7 +24,7 @@ import stubidp.stubidp.domain.EidasUser;
 import stubidp.stubidp.domain.RequestedAttribute;
 import stubidp.stubidp.domain.SamlResponseFromValue;
 import stubidp.stubidp.repositories.EidasSession;
-import stubidp.stubidp.repositories.MetadataRepository;
+import stubidp.shared.repositories.MetadataRepository;
 import stubidp.stubidp.saml.transformers.EidasResponseTransformerProvider;
 
 import javax.inject.Inject;
