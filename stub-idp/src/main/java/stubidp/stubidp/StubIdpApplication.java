@@ -15,6 +15,7 @@ import io.dropwizard.views.ViewBundle;
 import org.jdbi.v3.core.Jdbi;
 import stubidp.metrics.prometheus.bundle.PrometheusBundle;
 import stubidp.saml.extensions.IdaSamlBootstrap;
+import stubidp.saml.metadata.bundle.MetadataResolverBundle;
 import stubidp.shared.csrf.CSRFCheckProtectionFeature;
 import stubidp.shared.csrf.CSRFViewRenderer;
 import stubidp.stubidp.auth.StubIdpBasicAuthRequiredFeature;
@@ -74,10 +75,14 @@ import stubidp.utils.rest.filters.AcceptLanguageFilter;
 import javax.servlet.DispatcherType;
 import java.util.EnumSet;
 import java.util.Locale;
+import java.util.Optional;
 
 import static java.util.Collections.singletonList;
 
 public class StubIdpApplication extends Application<StubIdpConfiguration> {
+
+    private MetadataResolverBundle<StubIdpConfiguration> idpMetadataResolverBundle;
+    private MetadataResolverBundle<StubIdpConfiguration> eidasMetadataResolverBundle;
 
     public static void main(String[] args) {
         try {
@@ -123,6 +128,11 @@ public class StubIdpApplication extends Application<StubIdpConfiguration> {
 
         bootstrap.addBundle(new AssetsBundle("/assets/", "/assets/"));
 
+        idpMetadataResolverBundle = new MetadataResolverBundle<>(x -> Optional.ofNullable(x.getMetadataConfiguration()));
+        eidasMetadataResolverBundle = new MetadataResolverBundle<>(x -> Optional.ofNullable(x.getEuropeanIdentityConfiguration().getMetadata()));
+        bootstrap.addBundle(idpMetadataResolverBundle);
+        bootstrap.addBundle(eidasMetadataResolverBundle);
+
         bootstrap.getObjectMapper().enable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
     }
 
@@ -139,8 +149,8 @@ public class StubIdpApplication extends Application<StubIdpConfiguration> {
         environment.getObjectMapper().setDateFormat(new StdDateFormat().withLocale(Locale.UK));
 
         environment.jersey().register(new StubIdpBinder(configuration, environment));
-        environment.jersey().register(new StubIdpIdpBinder(configuration, environment));
-        environment.jersey().register(new StubIdpEidasBinder(configuration, environment));
+        environment.jersey().register(new StubIdpIdpBinder(configuration, environment, idpMetadataResolverBundle));
+        environment.jersey().register(new StubIdpEidasBinder(configuration, environment, eidasMetadataResolverBundle));
         environment.jersey().register(new StubIdpSingleIdpBinder(configuration, environment));
 
         initialiseManaged(configuration, environment);

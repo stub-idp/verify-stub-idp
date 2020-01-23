@@ -36,7 +36,7 @@ public class MetadataResolverBundle<T extends Configuration> implements io.dropw
     }
 
     @Override
-    public void run(T configuration, Environment environment) throws Exception {
+    public void run(T configuration, Environment environment) {
         configExtractor.getMetadataConfiguration(configuration).ifPresent(mc -> {
             metadataResolver = dropwizardMetadataResolverFactory.createMetadataResolver(environment, mc, validateSignatures);
             try {

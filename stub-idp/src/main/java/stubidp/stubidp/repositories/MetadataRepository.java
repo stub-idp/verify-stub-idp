@@ -3,83 +3,75 @@ package stubidp.stubidp.repositories;
 import net.shibboleth.utilities.java.support.resolver.CriteriaSet;
 import net.shibboleth.utilities.java.support.resolver.ResolverException;
 import org.opensaml.core.criterion.EntityIdCriterion;
-import org.opensaml.saml.metadata.resolver.MetadataResolver;
-import org.opensaml.saml.saml2.metadata.AssertionConsumerService;
-import org.opensaml.saml.saml2.metadata.EntityDescriptor;
+import org.opensaml.core.xml.schema.XSBase64Binary;
+import org.opensaml.saml.common.xml.SAMLConstants;
+import org.opensaml.saml.criterion.EntityRoleCriterion;
+import org.opensaml.saml.criterion.ProtocolCriterion;
 import org.opensaml.saml.saml2.metadata.KeyDescriptor;
 import org.opensaml.saml.saml2.metadata.SPSSODescriptor;
+import org.opensaml.saml.security.impl.MetadataCredentialResolver;
 import org.opensaml.security.credential.UsageType;
-import org.opensaml.xmlsec.signature.X509Certificate;
+import org.opensaml.security.criteria.UsageCriterion;
 
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 public class MetadataRepository {
+    private final MetadataCredentialResolver metadataResolver;
+    private final String expectedEntityId;
 
-    private static final String SUPPORTED_PROTOCOL = "urn:oasis:names:tc:SAML:2.0:protocol";
-    private static final String HTTP_POST = "urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST";
-    private final MetadataResolver metadataResolver;
-    private final String hubEntityId;
-
-    public MetadataRepository(MetadataResolver metadataResolver, String hubEntityId) {
+    public MetadataRepository(MetadataCredentialResolver metadataResolver, String expectedEntityId) {
         this.metadataResolver = metadataResolver;
-        this.hubEntityId = hubEntityId;
-    }
-
-    private List<AssertionConsumerService> getAssertionConsumerServiceBindings() {
-        SPSSODescriptor spssoDescriptor = hubEntityDescriptor().getSPSSODescriptor(SUPPORTED_PROTOCOL);
-        return spssoDescriptor.getAssertionConsumerServices();
+        this.expectedEntityId = expectedEntityId;
     }
 
     public Iterable<String> getSigningCertificates() {
-        return hubEntityDescriptor().getSPSSODescriptor(SUPPORTED_PROTOCOL).getKeyDescriptors().stream()
-                .filter(input -> input.getUse().equals(UsageType.SIGNING))
-                .map(keyDescriptor -> keyDescriptor.getKeyInfo().getX509Datas().get(0).getX509Certificates().get(0).getValue())
-                .collect(Collectors.toList());
-    }
-
-    private EntityDescriptor hubEntityDescriptor() {
-        try {
-            CriteriaSet criteria = new CriteriaSet(new EntityIdCriterion(hubEntityId));
-            EntityDescriptor hubEntityDescriptor = metadataResolver.resolveSingle(criteria);
-			if (hubEntityDescriptor == null) {
-				throw new InvalidMetadataException("Federation metadata does not contain a hub entity descriptor");
-			}
-            return hubEntityDescriptor;
-        } catch (ResolverException e) {
-            throw new InvalidMetadataException("Federation message is invalid", e);
-        }
+        return getCertificates(UsageType.SIGNING);
     }
 
     public String getEncryptionCertificate() {
-        List<KeyDescriptor> keyDescriptors = hubEntityDescriptor().getSPSSODescriptor(SUPPORTED_PROTOCOL).getKeyDescriptors();
-        KeyDescriptor keyDescriptor = keyDescriptors.stream().filter(input -> input.getUse().equals(UsageType.ENCRYPTION)).findFirst().get();
-        X509Certificate x509Certificate = keyDescriptor.getKeyInfo().getX509Datas().get(0).getX509Certificates().get(0);
-        return x509Certificate.getValue();
+        return getCertificates(UsageType.ENCRYPTION).stream().findFirst().orElseThrow();
+    }
+
+    private Set<String> extractAllCerts(KeyDescriptor keyDescriptor) {
+        return keyDescriptor.getKeyInfo().getX509Datas().stream()
+                .flatMap(x -> x.getX509Certificates().stream())
+                .map(XSBase64Binary::getValue)
+                .collect(Collectors.toUnmodifiableSet());
+    }
+
+    private Set<String> getCertificates(final UsageType usageType) {
+        CriteriaSet criteriaSet = new CriteriaSet();
+        criteriaSet.add(new EntityIdCriterion(expectedEntityId));
+        criteriaSet.add(new EntityRoleCriterion(SPSSODescriptor.DEFAULT_ELEMENT_NAME));
+        criteriaSet.add(new UsageCriterion(usageType));
+        criteriaSet.add(new ProtocolCriterion(SAMLConstants.SAML20P_NS));
+        try {
+            return StreamSupport.stream(metadataResolver.getRoleDescriptorResolver().resolve(criteriaSet).spliterator(), false)
+                    .flatMap(x -> x.getKeyDescriptors().stream())
+                    .filter(x -> usageType.equals(x.getUse()))
+                    .flatMap(x -> extractAllCerts(x).stream())
+                    .collect(Collectors.toUnmodifiableSet());
+        } catch (ResolverException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public URI getAssertionConsumerServiceLocation() {
-        for (AssertionConsumerService endpointDto : getAssertionConsumerServiceBindings()) {
-            if (HTTP_POST.equals(endpointDto.getBinding())) {
-                try {
-                    return new URI(endpointDto.getLocation());
-                } catch (URISyntaxException e) {
-                    throw new RuntimeException(e);
-                }
-            }
-        }
-        throw new UnsupportedOperationException();
-    }
-
-    public static class InvalidMetadataException extends RuntimeException {
-        public InvalidMetadataException(String message, Exception cause) {
-            super(message, cause);
-        }
-        
-        public InvalidMetadataException(String message) {
-            super(message);
+        CriteriaSet criteriaSet = new CriteriaSet();
+        criteriaSet.add(new EntityIdCriterion(expectedEntityId));
+        criteriaSet.add(new EntityRoleCriterion(SPSSODescriptor.DEFAULT_ELEMENT_NAME));
+        criteriaSet.add(new ProtocolCriterion(SAMLConstants.SAML20P_NS));
+        try {
+            return new URI(StreamSupport.stream(metadataResolver.getRoleDescriptorResolver().resolve(criteriaSet).spliterator(), false)
+                    .flatMap(x -> ((SPSSODescriptor) x).getAssertionConsumerServices().stream())
+                    .filter(x -> SAMLConstants.SAML2_POST_BINDING_URI.equals(x.getBinding()))
+                    .findFirst().orElseThrow().getLocation());
+        } catch (URISyntaxException | ResolverException e) {
+            throw new RuntimeException(e);
         }
     }
 }

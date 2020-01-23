@@ -10,9 +10,7 @@ import org.opensaml.xmlsec.algorithm.SignatureAlgorithm;
 import org.opensaml.xmlsec.algorithm.descriptors.DigestSHA256;
 import org.opensaml.xmlsec.algorithm.descriptors.SignatureRSASHA256;
 import stubidp.saml.metadata.MetadataConfiguration;
-import stubidp.saml.metadata.MetadataHealthCheck;
-import stubidp.saml.metadata.MetadataResolverConfiguration;
-import stubidp.saml.metadata.factories.DropwizardMetadataResolverFactory;
+import stubidp.saml.metadata.bundle.MetadataResolverBundle;
 import stubidp.saml.security.EntityToEncryptForLocator;
 import stubidp.saml.security.IdaKeyStore;
 import stubidp.saml.security.IdaKeyStoreCredentialRetriever;
@@ -64,11 +62,14 @@ public class StubIdpIdpBinder extends AbstractBinder {
 
     private final StubIdpConfiguration stubIdpConfiguration;
     private final Environment environment;
+    private final MetadataResolverBundle<StubIdpConfiguration> idpMetadataResolverBundle;
 
     StubIdpIdpBinder(StubIdpConfiguration stubIdpConfiguration,
-                     Environment environment) {
+                     Environment environment,
+                     MetadataResolverBundle<StubIdpConfiguration> idpMetadataResolverBundle) {
         this.stubIdpConfiguration = stubIdpConfiguration;
         this.environment = environment;
+        this.idpMetadataResolverBundle = idpMetadataResolverBundle;
     }
 
     @Override
@@ -82,10 +83,10 @@ public class StubIdpIdpBinder extends AbstractBinder {
         bind(entityToEncryptForLocator).to(EntityToEncryptForLocator.class);
         bind(PublicKeyFactory.class).to(PublicKeyFactory.class);
 
-        final MetadataResolver idpMetadataResolver = new DropwizardMetadataResolverFactory().createMetadataResolver(environment, stubIdpConfiguration.getMetadataConfiguration());
-        registerMetadataHealthcheckAndRefresh(environment, idpMetadataResolver, stubIdpConfiguration.getMetadataConfiguration(), "metadata");
+        final MetadataResolver idpMetadataResolver = idpMetadataResolverBundle.getMetadataResolver();
+        registerMetadataRefreshTask(environment, idpMetadataResolver, "metadata");
         bind(idpMetadataResolver).named(HUB_METADATA_RESOLVER).to(MetadataResolver.class);
-        final MetadataRepository idpMetadataRepository = new MetadataRepository(idpMetadataResolver, hubEntityId);
+        final MetadataRepository idpMetadataRepository = new MetadataRepository(idpMetadataResolverBundle.getMetadataCredentialResolver(), hubEntityId);
         bind(idpMetadataRepository).named(HUB_METADATA_REPOSITORY).to(MetadataRepository.class);
         final PublicKeyFactory publicKeyFactory = new PublicKeyFactory(new X509CertificateFactory());
         bind(stubIdpConfiguration.getMetadataConfiguration()).named(HUB_METADATA_CONFIGURATION).to(MetadataConfiguration.class);
@@ -130,11 +131,7 @@ public class StubIdpIdpBinder extends AbstractBinder {
         bind(UserService.class).to(UserService.class);
     }
 
-    private void registerMetadataHealthcheckAndRefresh(Environment environment, MetadataResolver metadataResolver, MetadataResolverConfiguration metadataResolverConfiguration, String name) {
-        String expectedEntityId = metadataResolverConfiguration.getExpectedEntityId();
-        MetadataHealthCheck metadataHealthCheck = new MetadataHealthCheck(metadataResolver, expectedEntityId);
-        environment.healthChecks().register(name, metadataHealthCheck);
-
+    private void registerMetadataRefreshTask(Environment environment, MetadataResolver metadataResolver, String name) {
         environment.admin().addTask(new Task(name + "-refresh") {
             @Override
             public void execute(Map<String, List<String>> parameters, PrintWriter output) throws Exception {

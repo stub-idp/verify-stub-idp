@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Test;
 import org.opensaml.core.config.InitializationException;
 import org.opensaml.core.config.InitializationService;
 import org.opensaml.saml.metadata.resolver.impl.FilesystemMetadataResolver;
+import stubidp.saml.metadata.factories.CredentialResolverFactory;
 import stubidp.test.devpki.TestEntityIds;
 
 import java.io.File;
@@ -17,7 +18,6 @@ import java.net.URI;
 import java.text.MessageFormat;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Fail.fail;
 import static stubidp.test.devpki.TestCertificateStrings.HUB_TEST_PUBLIC_ENCRYPTION_CERT;
 import static stubidp.test.devpki.TestCertificateStrings.HUB_TEST_PUBLIC_SIGNING_CERT;
 import static stubidp.test.devpki.TestCertificateStrings.TEST_RP_PUBLIC_SIGNING_CERT;
@@ -25,11 +25,8 @@ import static stubidp.test.devpki.TestCertificateStrings.TEST_RP_PUBLIC_SIGNING_
 public class MetadataRepositoryTest {
 
     public static final String ENCRYPTION_CERTIFICATE = HUB_TEST_PUBLIC_ENCRYPTION_CERT;
-
     public static final String SIGNING_CERTIFICATE_1 = HUB_TEST_PUBLIC_SIGNING_CERT;
-
     public static final String SIGNING_CERTIFICATE_2 = TEST_RP_PUBLIC_SIGNING_CERT;
-
     public static final String LOCATION = "http://localhost:50190/SAML2/SSO/Response/POST";
 
     public static final String METADATA_PATTERN = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" +
@@ -74,8 +71,8 @@ public class MetadataRepositoryTest {
             "<md:EntitiesDescriptor xmlns:md=\"urn:oasis:names:tc:SAML:2.0:metadata\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" ID=\"_entities\">\n" +
             "</md:EntitiesDescriptor>\n";
 
-    public static final String DEFAULT_METADATA = MessageFormat.format(METADATA_PATTERN, DateTime.now().withDurationAdded(10000, 1), ENCRYPTION_CERTIFICATE, SIGNING_CERTIFICATE_1, SIGNING_CERTIFICATE_2, LOCATION);
-    public static final String METADATA_WITHUOUT_HUB = MessageFormat.format(METADATA_WITHOUT_HUB_PATTERN, DateTime.now().withDurationAdded(10000, 1));
+    public static final String DEFAULT_METADATA = MessageFormat.format(METADATA_PATTERN, DateTime.now().plusHours(1), ENCRYPTION_CERTIFICATE, SIGNING_CERTIFICATE_1, SIGNING_CERTIFICATE_2, LOCATION);
+    public static final String METADATA_WITHUOUT_HUB = MessageFormat.format(METADATA_WITHOUT_HUB_PATTERN, DateTime.now().plusHours(1));
 
     private MetadataRepository metadataRepository;
 
@@ -97,28 +94,20 @@ public class MetadataRepositoryTest {
         metadataRepository = initializeMetadata(DEFAULT_METADATA);
 
         Iterable<String> signingCertificates = metadataRepository.getSigningCertificates();
-        assertThat(signingCertificates).containsExactly(SIGNING_CERTIFICATE_1, SIGNING_CERTIFICATE_2);
+        assertThat(signingCertificates).containsExactlyInAnyOrder(SIGNING_CERTIFICATE_1, SIGNING_CERTIFICATE_2);
     }
 
     @Test
-    public void shouldThrowExpiredExceptionIfMetadataIsOld() throws Exception {
+    public void shouldReturnNoCertificatesIfMetadataIsOld() throws Exception {
         DateTime expiredDateTime = new DateTime(2001, 1, 1, 0, 0);
         metadataRepository = initializeMetadata(MessageFormat.format(METADATA_PATTERN, expiredDateTime, ENCRYPTION_CERTIFICATE, SIGNING_CERTIFICATE_1, SIGNING_CERTIFICATE_2, LOCATION));
-        try {
-            metadataRepository.getSigningCertificates();
-            fail("Expected exception");
-        } catch (MetadataRepository.InvalidMetadataException e) {
-        }
+        assertThat(metadataRepository.getSigningCertificates()).isEmpty();
     }
 
     @Test
-    public void shouldThrowInvalidExceptionIfMetadataIsMissingHubEntityDescriptor() throws Exception {
+    public void shouldReturnNoCertificatesIfMetadataIsMissingHubEntityDescriptor() throws Exception {
         metadataRepository = initializeMetadata(METADATA_WITHUOUT_HUB);
-        try {
-            metadataRepository.getSigningCertificates();
-            fail("Expected exception");
-        } catch (MetadataRepository.InvalidMetadataException e) {
-        }
+        assertThat(metadataRepository.getSigningCertificates()).isEmpty();
     }
 
     private MetadataRepository initializeMetadata(String metadata) throws IOException, InitializationException, ComponentInitializationException, ResolverException {
@@ -134,7 +123,7 @@ public class MetadataRepositoryTest {
         filesystemMetadataResolver.setRequireValidMetadata(true);
         filesystemMetadataResolver.setId("some id");
         filesystemMetadataResolver.initialize();
-        return new MetadataRepository(filesystemMetadataResolver, TestEntityIds.HUB_ENTITY_ID);
+        return new MetadataRepository(new CredentialResolverFactory().create(filesystemMetadataResolver), TestEntityIds.HUB_ENTITY_ID);
     }
 
 }

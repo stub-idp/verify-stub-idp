@@ -9,9 +9,7 @@ import org.opensaml.xmlsec.algorithm.DigestAlgorithm;
 import org.opensaml.xmlsec.algorithm.SignatureAlgorithm;
 import org.opensaml.xmlsec.algorithm.descriptors.DigestSHA256;
 import org.opensaml.xmlsec.algorithm.descriptors.SignatureRSASHA256;
-import stubidp.saml.metadata.MetadataHealthCheck;
-import stubidp.saml.metadata.MetadataResolverConfiguration;
-import stubidp.saml.metadata.factories.DropwizardMetadataResolverFactory;
+import stubidp.saml.metadata.bundle.MetadataResolverBundle;
 import stubidp.saml.security.EncryptionKeyStore;
 import stubidp.saml.security.EntityToEncryptForLocator;
 import stubidp.saml.security.IdaKeyStore;
@@ -66,11 +64,14 @@ public class StubIdpEidasBinder extends AbstractBinder {
 
     private final StubIdpConfiguration stubIdpConfiguration;
     private final Environment environment;
+    private final MetadataResolverBundle<StubIdpConfiguration> eidasMetadataResolverBundle;
 
     StubIdpEidasBinder(StubIdpConfiguration stubIdpConfiguration,
-                       Environment environment) {
+                       Environment environment,
+                       MetadataResolverBundle<StubIdpConfiguration> eidasMetadataResolverBundle) {
         this.stubIdpConfiguration = stubIdpConfiguration;
         this.environment = environment;
+        this.eidasMetadataResolverBundle = eidasMetadataResolverBundle;
     }
 
     @Override
@@ -100,10 +101,10 @@ public class StubIdpEidasBinder extends AbstractBinder {
             final SignatureFactory signatureFactory = new SignatureFactory(true, new IdaKeyStoreCredentialRetriever(countryKeyStore), signatureAlgorithm, digestAlgorithm);
             bind(signatureFactory).named(COUNTRY_METADATA_SIGNATURE_FACTORY).to(SignatureFactory.class);
 
-            final MetadataResolver metadataResolver = new DropwizardMetadataResolverFactory().createMetadataResolver(environment, stubIdpConfiguration.getEuropeanIdentityConfiguration().getMetadata());
-            registerMetadataHealthcheckAndRefresh(environment, metadataResolver, stubIdpConfiguration.getEuropeanIdentityConfiguration().getMetadata(), "connector-metadata");
+            final MetadataResolver metadataResolver = eidasMetadataResolverBundle.getMetadataResolver();
+            registerMetadataRefreshTask(environment, metadataResolver, "connector-metadata");
             bind(metadataResolver).named(HUB_CONNECTOR_METADATA_RESOLVER).to(MetadataResolver.class);
-            final MetadataRepository eidasMetadataRepository = new MetadataRepository(metadataResolver, hubConnectorEntityId);
+            final MetadataRepository eidasMetadataRepository = new MetadataRepository(eidasMetadataResolverBundle.getMetadataCredentialResolver(), hubConnectorEntityId);
             bind(eidasMetadataRepository).named(HUB_CONNECTOR_METADATA_REPOSITORY).to(MetadataRepository.class);
             final PublicKeyFactory publicKeyFactory = new PublicKeyFactory(new X509CertificateFactory());
             final Optional<HubEncryptionKeyStore> eidasHubEncryptionKeyStore = Optional.of(new HubEncryptionKeyStore(eidasMetadataRepository, publicKeyFactory));
@@ -143,11 +144,7 @@ public class StubIdpEidasBinder extends AbstractBinder {
         }
     }
 
-    private void registerMetadataHealthcheckAndRefresh(Environment environment, MetadataResolver metadataResolver, MetadataResolverConfiguration metadataResolverConfiguration, String name) {
-        String expectedEntityId = metadataResolverConfiguration.getExpectedEntityId();
-        MetadataHealthCheck metadataHealthCheck = new MetadataHealthCheck(metadataResolver, expectedEntityId);
-        environment.healthChecks().register(name, metadataHealthCheck);
-
+    private void registerMetadataRefreshTask(Environment environment, MetadataResolver metadataResolver, String name) {
         environment.admin().addTask(new Task(name + "-refresh") {
             @Override
             public void execute(Map<String, List<String>> parameters, PrintWriter output) throws Exception {
