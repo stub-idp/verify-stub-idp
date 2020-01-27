@@ -19,6 +19,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -49,13 +50,13 @@ public class LogstashFileAppenderAppRuleTest {
             );
 
     @AfterAll
-    public static void after() {
+    static void after() {
         requestLog.delete();
         logLog.delete();
     }
 
     @Test
-    public void testLoggingLogstashRequestLog() throws InterruptedException, IOException {
+    void testLoggingLogstashRequestLog() throws InterruptedException, IOException {
         Client client = new JerseyClientBuilder().build();
 
         final Response response = client.target("http://localhost:" + dropwizardAppRule.getLocalPort() + "/").request().get();
@@ -82,12 +83,21 @@ public class LogstashFileAppenderAppRuleTest {
     }
 
     @Test
-    public void testLoggingLogstashFileLog() throws IOException {
+    void testLoggingLogstashFileLog() throws IOException, InterruptedException {
 
         Client client = new JerseyClientBuilder().build();
 
         final Response response = client.target("http://localhost:" + dropwizardAppRule.getLocalPort() + "/log").request()
                 .get();
+
+        assertThat(response.getStatus()).isEqualTo(204);
+
+        // wait for the logs to be written
+        int count = 0;
+        while(count<5 && (logLog.length() == 0)) {
+            count++;
+            Thread.sleep(count*50);
+        }
 
         assertThat(logLog.length()).isGreaterThan(0);
 
@@ -110,7 +120,7 @@ public class LogstashFileAppenderAppRuleTest {
                         return null;
                     }
                 })
-                .filter(object -> object != null)
+                .filter(Objects::nonNull)
                 .collect(Collectors.toList());
     }
 }
