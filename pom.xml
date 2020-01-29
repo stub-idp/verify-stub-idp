@@ -40,7 +40,7 @@
         <jsoup.version>1.12.1</jsoup.version>
 
         <!-- test dependencies -->
-        <assertj.version>3.14.0</assertj.version>
+        <assertj.version>3.15.0</assertj.version>
         <assertj_jodatime.version>2.2.0</assertj_jodatime.version>
         <junit.version>5.6.0</junit.version>
         <mockito.version>3.2.4</mockito.version>
