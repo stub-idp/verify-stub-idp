@@ -21,7 +21,6 @@ import stubsp.stubsp.configuration.StubSpConfiguration;
 import stubsp.stubsp.filters.NoCacheResponseFilter;
 import stubsp.stubsp.filters.RequireValidLoginFeature;
 import stubsp.stubsp.filters.SecurityHeadersFilter;
-import stubsp.stubsp.filters.StubSpCacheControlFilter;
 import stubsp.stubsp.resources.AvailableServicesResource;
 import stubsp.stubsp.resources.InitiateSingleIdpJourneyResource;
 import stubsp.stubsp.resources.RootResource;
@@ -90,7 +89,7 @@ public class StubSpApplication extends Application<StubSpConfiguration> {
         environment.jersey().register(InitiateSingleIdpJourneyResource.class);
 
         // filters
-        environment.jersey().register(StubSpCacheControlFilter.class);
+//        environment.jersey().register(StubSpCacheControlFilter.class);
         environment.jersey().register(NoCacheResponseFilter.class);
         environment.jersey().register(SecurityHeadersFilter.class);
         environment.jersey().register(RequireValidLoginFeature.class);

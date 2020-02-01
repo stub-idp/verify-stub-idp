@@ -13,16 +13,16 @@ module stubidp.saml.extensions {
     exports stubidp.saml.extensions.extensions.versioning.application;
     exports stubidp.saml.extensions.extensions.impl;
 
+    requires transitive java.xml;
+    requires transitive net.shibboleth.utilities.java.support;
+    requires transitive org.checkerframework.checker.qual;
+    requires transitive org.opensaml.core;
+    requires transitive org.opensaml.saml.impl;
+    requires transitive org.opensaml.saml;
+    requires transitive org.slf4j;
+
     requires org.apache.santuario.xmlsec;
     requires org.bouncycastle.provider;
     requires org.opensaml.xmlsec;
     requires org.opensaml.xmlsec.impl;
-
-    requires transitive org.slf4j;
-    requires transitive org.checkerframework.checker.qual;
-    requires transitive org.opensaml.core;
-    requires transitive java.xml;
-    requires transitive org.opensaml.saml;
-    requires transitive org.opensaml.saml.impl;
-    requires transitive net.shibboleth.utilities.java.support;
 }
