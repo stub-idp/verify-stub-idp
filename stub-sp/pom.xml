@@ -128,12 +128,6 @@
             <version>${jackson_datatype_joda.version}</version>
             <scope>compile</scope>
         </dependency>
-<!--        <dependency>-->
-<!--            <groupId>de.neuland-bfi</groupId>-->
-<!--            <artifactId>jade4j</artifactId>-->
-<!--            <version>1.2.7</version>-->
-<!--            <scope>compile</scope>-->
-<!--        </dependency>-->
         <dependency>
             <groupId>io.dropwizard</groupId>
             <artifactId>dropwizard-assets</artifactId>
