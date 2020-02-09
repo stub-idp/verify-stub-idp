@@ -37,7 +37,7 @@
         <javax_inject.version>2.6.1</javax_inject.version>
         <freemarker.version>2.3.29</freemarker.version>
         <prometheus_client.version>0.8.1</prometheus_client.version>
-        <jsoup.version>1.12.1</jsoup.version>
+        <jsoup.version>1.12.2</jsoup.version>
 
         <!-- test dependencies -->
         <assertj.version>3.15.0</assertj.version>
