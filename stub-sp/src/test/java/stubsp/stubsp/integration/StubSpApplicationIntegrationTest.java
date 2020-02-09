@@ -43,7 +43,7 @@ class StubSpApplicationIntegrationTest {
     void testJourney() {
         final Response response = get(Urls.ROOT_RESOURCE);
         assertThat(response.getStatus()).isEqualTo(200);
-        assertThat(response.readEntity(String.class)).contains("hello");
+        assertThat(response.readEntity(String.class)).contains("<a href=\"/stub/sp/secure\">Secure Area</a>");
     }
 
     @Test

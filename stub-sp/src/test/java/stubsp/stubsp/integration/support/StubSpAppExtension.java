@@ -30,6 +30,8 @@ import java.util.stream.Collectors;
 import static stubidp.test.devpki.TestCertificateStrings.METADATA_SIGNING_A_PRIVATE_KEY;
 import static stubidp.test.devpki.TestCertificateStrings.METADATA_SIGNING_A_PUBLIC_CERT;
 import static stubidp.test.devpki.TestCertificateStrings.STUB_IDP_PUBLIC_PRIMARY_CERT;
+import static stubidp.test.devpki.TestCertificateStrings.TEST_RP_PRIVATE_SIGNING_KEY;
+import static stubidp.test.devpki.TestCertificateStrings.TEST_RP_PUBLIC_SIGNING_CERT;
 
 public class StubSpAppExtension extends DropwizardAppExtension<StubSpConfiguration> {
 
@@ -52,7 +54,15 @@ public class StubSpAppExtension extends DropwizardAppExtension<StubSpConfigurati
                 Map.entry("metadata.trustStore.store", metadataTrustStore.getAbsolutePath()),
                 Map.entry("metadata.trustStore.password", metadataTrustStore.getPassword()),
                 Map.entry("metadata.idpTrustStore.store", idpTrustStore.getAbsolutePath()),
-                Map.entry("metadata.idpTrustStore.password", idpTrustStore.getPassword())
+                Map.entry("metadata.idpTrustStore.password", idpTrustStore.getPassword()),
+                Map.entry("signingKeyPairConfiguration.privateKeyConfiguration.type", "encoded"),
+                Map.entry("signingKeyPairConfiguration.privateKeyConfiguration.key", TEST_RP_PRIVATE_SIGNING_KEY),
+                Map.entry("signingKeyPairConfiguration.publicKeyConfiguration.type", "x509"),
+                Map.entry("signingKeyPairConfiguration.publicKeyConfiguration.cert", TEST_RP_PUBLIC_SIGNING_CERT),
+                Map.entry("spMetadataSigningKeyPairConfiguration.privateKeyConfiguration.type", "encoded"),
+                Map.entry("spMetadataSigningKeyPairConfiguration.privateKeyConfiguration.key", METADATA_SIGNING_A_PRIVATE_KEY),
+                Map.entry("spMetadataSigningKeyPairConfiguration.publicKeyConfiguration.type", "x509"),
+                Map.entry("spMetadataSigningKeyPairConfiguration.publicKeyConfiguration.cert", METADATA_SIGNING_A_PUBLIC_CERT)
         );
         config = new HashMap<>(config);
         config.putAll(configOverrides);

@@ -10,8 +10,10 @@ import stubidp.shared.exceptions.InvalidSecureCookieException;
 import stubidp.shared.exceptions.SecureCookieNotFoundException;
 import stubidp.shared.exceptions.SessionIdCookieNotFoundException;
 import stubidp.shared.exceptions.SessionNotFoundException;
+import stubidp.shared.repositories.MetadataRepository;
 import stubidp.shared.views.SamlMessageRedirectViewFactory;
 import stubidp.utils.rest.common.SessionId;
+import stubsp.stubsp.configuration.StubSpConfiguration;
 
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.container.ContainerRequestContext;
@@ -37,26 +39,30 @@ class RequireValidLoginFilterTest {
     private ContainerRequestContext containerRequestContext;
     @Mock
     private SamlMessageRedirectViewFactory samlMessageRedirectViewFactory;
+    @Mock
+    private MetadataRepository metadataRepository;
+    @Mock
+    private StubSpConfiguration stubSpConfiguration;
 
     @Test
     void shouldReturnNullWhenCheckingNotRequiredButNoCookies() {
         Map<String, Cookie> cookies = Map.of();
         when(containerRequestContext.getCookies()).thenReturn(cookies);
-        validateThrowsAndPostsSamlToIdp(new RequireValidLoginFilter(hmacValidator, isSecureCookieEnabled, samlMessageRedirectViewFactory, true), containerRequestContext);
+        validateThrowsAndPostsSamlToIdp(new RequireValidLoginFilter(hmacValidator, isSecureCookieEnabled, samlMessageRedirectViewFactory, true, metadataRepository, stubSpConfiguration), containerRequestContext);
     }
 
     @Test
     void shouldReturnNullWhenCheckingNotRequiredButSecureCookie() {
         Map<String, Cookie> cookies = Map.of(SESSION_COOKIE_NAME, new NewCookie(SESSION_COOKIE_NAME, "some-session-id"));
         when(containerRequestContext.getCookies()).thenReturn(cookies);
-        validateThrowsAndPostsSamlToIdp(new RequireValidLoginFilter(hmacValidator, isSecureCookieEnabled, samlMessageRedirectViewFactory, true), containerRequestContext);
+        validateThrowsAndPostsSamlToIdp(new RequireValidLoginFilter(hmacValidator, isSecureCookieEnabled, samlMessageRedirectViewFactory, true, metadataRepository, stubSpConfiguration), containerRequestContext);
     }
 
     @Test
     void shouldReturnNullWhenCheckingNotRequiredButSessionCookieIsSetToNoCurrentValue() {
         Map<String, Cookie> cookies = Map.of(SESSION_COOKIE_NAME, new NewCookie(SESSION_COOKIE_NAME, "some-session-id"), SECURE_COOKIE_NAME, new NewCookie(SECURE_COOKIE_NAME, NO_CURRENT_SESSION_COOKIE_VALUE));
         when(containerRequestContext.getCookies()).thenReturn(cookies);
-        validateThrowsAndPostsSamlToIdp(new RequireValidLoginFilter(hmacValidator, isSecureCookieEnabled, samlMessageRedirectViewFactory, true), containerRequestContext);
+        validateThrowsAndPostsSamlToIdp(new RequireValidLoginFilter(hmacValidator, isSecureCookieEnabled, samlMessageRedirectViewFactory, true, metadataRepository, stubSpConfiguration), containerRequestContext);
     }
 
     @Test
@@ -65,7 +71,7 @@ class RequireValidLoginFilterTest {
         Map<String, Cookie> cookies = Map.of(SESSION_COOKIE_NAME, new NewCookie(SESSION_COOKIE_NAME, sessionId.toString()), SECURE_COOKIE_NAME, new NewCookie(SECURE_COOKIE_NAME, "secure-cookie"));
         when(hmacValidator.validateHMACSHA256("secure-cookie", sessionId.getSessionId())).thenReturn(false);
         when(containerRequestContext.getCookies()).thenReturn(cookies);
-        validateThrowsAndPostsSamlToIdp(new RequireValidLoginFilter(hmacValidator, isSecureCookieEnabled, samlMessageRedirectViewFactory, true), containerRequestContext);
+        validateThrowsAndPostsSamlToIdp(new RequireValidLoginFilter(hmacValidator, isSecureCookieEnabled, samlMessageRedirectViewFactory, true, metadataRepository, stubSpConfiguration), containerRequestContext);
     }
 
     @Test
@@ -74,21 +80,21 @@ class RequireValidLoginFilterTest {
         Map<String, Cookie> cookies = Map.of(SESSION_COOKIE_NAME, new NewCookie(SESSION_COOKIE_NAME, sessionId.toString()), SECURE_COOKIE_NAME, new NewCookie(SECURE_COOKIE_NAME, "secure-cookie"));
         when(containerRequestContext.getCookies()).thenReturn(cookies);
         when(hmacValidator.validateHMACSHA256("secure-cookie", sessionId.getSessionId())).thenReturn(true);
-        new RequireValidLoginFilter(hmacValidator, isSecureCookieEnabled, samlMessageRedirectViewFactory, true).filter(containerRequestContext);
+        new RequireValidLoginFilter(hmacValidator, isSecureCookieEnabled, samlMessageRedirectViewFactory, true, metadataRepository, stubSpConfiguration).filter(containerRequestContext);
     }
 
     @Test
     void shouldThrowCookieNotFoundExceptionWhenCheckingRequiredButNoCookies() {
         Map<String, Cookie> cookies = Map.of();
         when(containerRequestContext.getCookies()).thenReturn(cookies);
-        validateThrowsAndPostsSamlToIdp(new RequireValidLoginFilter(hmacValidator, isSecureCookieEnabled, samlMessageRedirectViewFactory, true), containerRequestContext);
+        validateThrowsAndPostsSamlToIdp(new RequireValidLoginFilter(hmacValidator, isSecureCookieEnabled, samlMessageRedirectViewFactory, true, metadataRepository, stubSpConfiguration), containerRequestContext);
     }
 
     @Test
     void shouldThrowSecureCookieNotFoundExceptionWhenCheckingRequiredButNoSessionIdCookie() {
         Map<String, Cookie> cookies = Map.of();
         when(containerRequestContext.getCookies()).thenReturn(cookies);
-        validateThrowsAndPostsSamlToIdp(new RequireValidLoginFilter(hmacValidator, isSecureCookieEnabled, samlMessageRedirectViewFactory, true), containerRequestContext);
+        validateThrowsAndPostsSamlToIdp(new RequireValidLoginFilter(hmacValidator, isSecureCookieEnabled, samlMessageRedirectViewFactory, true, metadataRepository, stubSpConfiguration), containerRequestContext);
     }
 
     @Test
@@ -97,7 +103,7 @@ class RequireValidLoginFilterTest {
                 SESSION_COOKIE_NAME, new NewCookie(SESSION_COOKIE_NAME, "some-session-id")
         );
         when(containerRequestContext.getCookies()).thenReturn(cookies);
-        validateThrowsAndPostsSamlToIdp(new RequireValidLoginFilter(hmacValidator, isSecureCookieEnabled, samlMessageRedirectViewFactory, true), containerRequestContext);
+        validateThrowsAndPostsSamlToIdp(new RequireValidLoginFilter(hmacValidator, isSecureCookieEnabled, samlMessageRedirectViewFactory, true, metadataRepository, stubSpConfiguration), containerRequestContext);
     }
 
     @Test
@@ -107,7 +113,7 @@ class RequireValidLoginFilterTest {
                 SECURE_COOKIE_NAME, new NewCookie(SECURE_COOKIE_NAME, NO_CURRENT_SESSION_COOKIE_VALUE)
         );
         when(containerRequestContext.getCookies()).thenReturn(cookies);
-        validateThrowsAndPostsSamlToIdp(new RequireValidLoginFilter(hmacValidator, isSecureCookieEnabled, samlMessageRedirectViewFactory, true), containerRequestContext);
+        validateThrowsAndPostsSamlToIdp(new RequireValidLoginFilter(hmacValidator, isSecureCookieEnabled, samlMessageRedirectViewFactory, true, metadataRepository, stubSpConfiguration), containerRequestContext);
     }
 
     @Test
@@ -119,7 +125,7 @@ class RequireValidLoginFilterTest {
         );
         when(containerRequestContext.getCookies()).thenReturn(cookies);
         when(hmacValidator.validateHMACSHA256("secure-cookie", sessionId.getSessionId())).thenReturn(false);
-        validateThrowsAndPostsSamlToIdp(new RequireValidLoginFilter(hmacValidator, isSecureCookieEnabled, samlMessageRedirectViewFactory, true), containerRequestContext);
+        validateThrowsAndPostsSamlToIdp(new RequireValidLoginFilter(hmacValidator, isSecureCookieEnabled, samlMessageRedirectViewFactory, true, metadataRepository, stubSpConfiguration), containerRequestContext);
     }
 
     @Test
@@ -131,7 +137,7 @@ class RequireValidLoginFilterTest {
         );
         when(containerRequestContext.getCookies()).thenReturn(cookies);
         when(hmacValidator.validateHMACSHA256("secure-cookie", sessionId.getSessionId())).thenReturn(true);
-        validateThrowsAndPostsSamlToIdp(new RequireValidLoginFilter(hmacValidator, isSecureCookieEnabled, samlMessageRedirectViewFactory, false), containerRequestContext);
+        validateThrowsAndPostsSamlToIdp(new RequireValidLoginFilter(hmacValidator, isSecureCookieEnabled, samlMessageRedirectViewFactory, false, metadataRepository, stubSpConfiguration), containerRequestContext);
     }
 
     @Test
@@ -142,7 +148,7 @@ class RequireValidLoginFilterTest {
                 SECURE_COOKIE_NAME, new NewCookie(SECURE_COOKIE_NAME, "secure-cookies")
         );
         when(containerRequestContext.getCookies()).thenReturn(cookies);
-        new RequireValidLoginFilter(hmacValidator, false, samlMessageRedirectViewFactory, true).filter(containerRequestContext);
+        new RequireValidLoginFilter(hmacValidator, false, samlMessageRedirectViewFactory, true, metadataRepository, stubSpConfiguration).filter(containerRequestContext);
     }
 
     private void validateThrowsAndPostsSamlToIdp(RequireValidLoginFilter requireValidLoginFilter, ContainerRequestContext containerRequestContext) {

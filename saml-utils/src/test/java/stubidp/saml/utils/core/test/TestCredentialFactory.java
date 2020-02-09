@@ -8,6 +8,7 @@ import org.opensaml.security.credential.UsageType;
 import javax.inject.Inject;
 import java.io.ByteArrayInputStream;
 import java.io.UnsupportedEncodingException;
+import java.nio.charset.StandardCharsets;
 import java.security.KeyFactory;
 import java.security.NoSuchAlgorithmException;
 import java.security.PrivateKey;
@@ -77,7 +78,7 @@ public class TestCredentialFactory {
         } else {
             fullCert = MessageFormat.format("-----BEGIN CERTIFICATE-----\n{0}\n-----END CERTIFICATE-----", partialCert.trim());
         }
-        ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(fullCert.getBytes("UTF-8"));
+        ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(fullCert.getBytes(StandardCharsets.UTF_8));
         Certificate certificate = certificateFactory.generateCertificate(byteArrayInputStream);
         return certificate.getPublicKey();
     }

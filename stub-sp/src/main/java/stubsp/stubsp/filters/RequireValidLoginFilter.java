@@ -2,10 +2,17 @@ package stubsp.stubsp.filters;
 
 import org.apache.commons.lang.StringUtils;
 import org.jboss.logging.MDC;
+import org.joda.time.DateTime;
+import org.opensaml.security.credential.BasicCredential;
+import org.opensaml.security.credential.Credential;
+import org.opensaml.security.credential.UsageType;
 import stubidp.shared.cookies.HmacValidator;
 import stubidp.shared.domain.SamlRequest;
+import stubidp.shared.repositories.MetadataRepository;
 import stubidp.shared.views.SamlMessageRedirectViewFactory;
 import stubidp.utils.rest.common.SessionId;
+import stubsp.stubsp.configuration.StubSpConfiguration;
+import stubsp.stubsp.saml.request.IdpAuthnRequestBuilder;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -14,11 +21,20 @@ import javax.ws.rs.container.ContainerRequestContext;
 import javax.ws.rs.container.ContainerRequestFilter;
 import javax.ws.rs.core.Cookie;
 import javax.ws.rs.core.UriBuilder;
+import java.io.ByteArrayInputStream;
+import java.io.UnsupportedEncodingException;
 import java.net.URI;
+import java.nio.charset.StandardCharsets;
+import java.security.PublicKey;
+import java.security.cert.Certificate;
+import java.security.cert.CertificateException;
+import java.security.cert.CertificateFactory;
+import java.text.MessageFormat;
 import java.util.Map;
 import java.util.Optional;
 
 import static stubidp.shared.csrf.AbstractCSRFCheckProtectionFilter.IS_SECURE_COOKIE_ENABLED;
+import static stubsp.stubsp.StubSpBinder.IDP_METADATA_REPOSITORY;
 import static stubsp.stubsp.cookies.StubSpCookieNames.SECURE_COOKIE_NAME;
 import static stubsp.stubsp.cookies.StubSpCookieNames.SESSION_COOKIE_NAME;
 
@@ -28,6 +44,8 @@ public class RequireValidLoginFilter implements ContainerRequestFilter {
     private final boolean isSecureCookieEnabled;
     private final SamlMessageRedirectViewFactory samlMessageRedirectViewFactory;
     private final boolean sessionFound;
+    private final MetadataRepository metadataRepository;
+    private final StubSpConfiguration stubSpConfiguration;
 
     public enum Status {VERIFIED, ID_NOT_PRESENT, HASH_NOT_PRESENT, DELETED_SESSION, INVALID_HASH, NOT_FOUND };
     public static final String NO_CURRENT_SESSION_COOKIE_VALUE = "no-current-session";
@@ -36,11 +54,15 @@ public class RequireValidLoginFilter implements ContainerRequestFilter {
     public RequireValidLoginFilter(HmacValidator hmacValidator,
                                    @Named(IS_SECURE_COOKIE_ENABLED) Boolean isSecureCookieEnabled,
                                    SamlMessageRedirectViewFactory samlMessageRedirectViewFactory,
-                                   @org.jvnet.hk2.annotations.Optional Boolean sessionFound) {
+                                   @org.jvnet.hk2.annotations.Optional Boolean sessionFound,
+                                   @Named(IDP_METADATA_REPOSITORY) MetadataRepository metadataRepository,
+                                   StubSpConfiguration stubSpConfiguration) {
         this.hmacValidator = hmacValidator;
         this.isSecureCookieEnabled = isSecureCookieEnabled;
         this.samlMessageRedirectViewFactory = samlMessageRedirectViewFactory;
         this.sessionFound = Optional.ofNullable(sessionFound).orElse(false);
+        this.metadataRepository = metadataRepository;
+        this.stubSpConfiguration = stubSpConfiguration;
     }
 
     @Override
@@ -67,7 +89,33 @@ public class RequireValidLoginFilter implements ContainerRequestFilter {
         throw new WebApplicationException(samlMessageRedirectViewFactory.sendSamlRequest(new SamlRequest() {
             @Override
             public String getRequestString() {
-                return "a_request";
+                BasicCredential signingCredential = new BasicCredential(createPublicKey(stubSpConfiguration.getSigningKeyPairConfiguration().getCert()), stubSpConfiguration.getSigningKeyPairConfiguration().getPrivateKey());
+                signingCredential.setUsageType(UsageType.SIGNING);
+                return IdpAuthnRequestBuilder.anAuthnRequest()
+                        .withDestination(metadataRepository.getAssertionConsumerServiceLocation().toASCIIString())
+                        .withKeyInfo(true)
+                        .withIssueInstant(DateTime.now())
+                        .withEntityId(stubSpConfiguration.getSaml().getEntityId())
+                        .withSigningCertificate(stubSpConfiguration.getSigningKeyPairConfiguration().getCert())
+                        .withSigningCredential(signingCredential)
+                        .build();
+            }
+
+            private PublicKey createPublicKey(String partialCert) {
+                try {
+                    CertificateFactory certificateFactory = CertificateFactory.getInstance("X.509");
+                    String fullCert;
+                    if (partialCert.contains("-----BEGIN CERTIFICATE-----")) {
+                        fullCert = partialCert;
+                    } else {
+                        fullCert = MessageFormat.format("-----BEGIN CERTIFICATE-----\n{0}\n-----END CERTIFICATE-----", partialCert.trim());
+                    }
+                    ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(fullCert.getBytes(StandardCharsets.UTF_8));
+                    Certificate certificate = certificateFactory.generateCertificate(byteArrayInputStream);
+                    return certificate.getPublicKey();
+                } catch (CertificateException e) {
+                    throw new RuntimeException(e);
+                }
             }
 
             @Override
@@ -77,7 +125,7 @@ public class RequireValidLoginFilter implements ContainerRequestFilter {
 
             @Override
             public URI getIdpSSOUrl() {
-                return UriBuilder.fromUri("http://localhost:4000/sso").build();
+                return metadataRepository.getAssertionConsumerServiceLocation();
             }
         }));
 

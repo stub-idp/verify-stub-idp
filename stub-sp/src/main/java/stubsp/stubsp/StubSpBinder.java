@@ -33,7 +33,7 @@ public class StubSpBinder extends AbstractBinder {
 
     public static final String SERVICE_NAME = "serviceName";
     private static final String IDP_METADATA_RESOLVER = "IdpMetadataResolver";
-    private static final String IDP_METADATA_REPOSITORY = "IdpMetadataRepository";
+    public static final String IDP_METADATA_REPOSITORY = "IdpMetadataRepository";
     private static final String IDP_METADATA_CONFIGURATION = "IdpMetadataConfiguration";
 
     private final StubSpConfiguration configuration;
