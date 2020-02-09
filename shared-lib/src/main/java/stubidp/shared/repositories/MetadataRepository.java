@@ -7,6 +7,7 @@ import org.opensaml.core.xml.schema.XSBase64Binary;
 import org.opensaml.saml.common.xml.SAMLConstants;
 import org.opensaml.saml.criterion.EntityRoleCriterion;
 import org.opensaml.saml.criterion.ProtocolCriterion;
+import org.opensaml.saml.saml2.metadata.IDPSSODescriptor;
 import org.opensaml.saml.saml2.metadata.KeyDescriptor;
 import org.opensaml.saml.saml2.metadata.SPSSODescriptor;
 import org.opensaml.saml.security.impl.MetadataCredentialResolver;
@@ -68,6 +69,21 @@ public class MetadataRepository {
         try {
             return new URI(StreamSupport.stream(metadataResolver.getRoleDescriptorResolver().resolve(criteriaSet).spliterator(), false)
                     .flatMap(x -> ((SPSSODescriptor) x).getAssertionConsumerServices().stream())
+                    .filter(x -> SAMLConstants.SAML2_POST_BINDING_URI.equals(x.getBinding()))
+                    .findFirst().orElseThrow().getLocation());
+        } catch (URISyntaxException | ResolverException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public URI getSingleSignOnService() {
+        CriteriaSet criteriaSet = new CriteriaSet();
+        criteriaSet.add(new EntityIdCriterion(expectedEntityId));
+        criteriaSet.add(new EntityRoleCriterion(IDPSSODescriptor.DEFAULT_ELEMENT_NAME));
+        criteriaSet.add(new ProtocolCriterion(SAMLConstants.SAML20P_NS));
+        try {
+            return new URI(StreamSupport.stream(metadataResolver.getRoleDescriptorResolver().resolve(criteriaSet).spliterator(), false)
+                    .flatMap(x -> ((IDPSSODescriptor) x).getSingleSignOnServices().stream())
                     .filter(x -> SAMLConstants.SAML2_POST_BINDING_URI.equals(x.getBinding()))
                     .findFirst().orElseThrow().getLocation());
         } catch (URISyntaxException | ResolverException e) {

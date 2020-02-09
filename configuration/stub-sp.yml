@@ -62,4 +62,4 @@ metadata:
     password: ${TRUSTSTORE_PASSWORD:-marshmallow}
   minRefreshDelay: 30000
   maxRefreshDelay: 1800000
-  expectedEntityId: ${METADATA_ENTITY_ID}
+  expectedEntityId: ${METADATA_ENTITY_ID:-"http://stub_idp.acme.org/stub-idp-one/SSO/POST"}

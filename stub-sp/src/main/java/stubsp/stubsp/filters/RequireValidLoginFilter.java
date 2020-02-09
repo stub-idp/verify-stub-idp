@@ -92,7 +92,7 @@ public class RequireValidLoginFilter implements ContainerRequestFilter {
                 BasicCredential signingCredential = new BasicCredential(createPublicKey(stubSpConfiguration.getSigningKeyPairConfiguration().getCert()), stubSpConfiguration.getSigningKeyPairConfiguration().getPrivateKey());
                 signingCredential.setUsageType(UsageType.SIGNING);
                 return IdpAuthnRequestBuilder.anAuthnRequest()
-                        .withDestination(metadataRepository.getAssertionConsumerServiceLocation().toASCIIString())
+                        .withDestination(metadataRepository.getSingleSignOnService().toASCIIString())
                         .withKeyInfo(true)
                         .withIssueInstant(DateTime.now())
                         .withEntityId(stubSpConfiguration.getSaml().getEntityId())
@@ -125,7 +125,7 @@ public class RequireValidLoginFilter implements ContainerRequestFilter {
 
             @Override
             public URI getIdpSSOUrl() {
-                return metadataRepository.getAssertionConsumerServiceLocation();
+                return metadataRepository.getSingleSignOnService();
             }
         }));
 
