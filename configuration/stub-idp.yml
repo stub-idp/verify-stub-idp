@@ -48,8 +48,6 @@ basicAuthEnabledForUserResource: ${STUB_IDP_BASIC_AUTH:-true}
 stubIdpsYmlFileLocation: ${STUB_IDPS_FILE_PATH:-configuration/configured-idps/stub-idps.yml}
 stubIdpYmlFileRefresh: 10s
 
-hubEntityId: ${METADATA_ENTITY_ID}
-
 metadata:
   client:
     timeout: 60s
@@ -69,7 +67,7 @@ metadata:
     password: ${TRUSTSTORE_PASSWORD:-marshmallow}
   minRefreshDelay: 30000
   maxRefreshDelay: 1800000
-  expectedEntityId: ${METADATA_ENTITY_ID}
+  expectedEntityId: ${METADATA_ENTITY_ID:-"http://stub_sp.acme.org/%s/SSO/POST"}
 
 europeanIdentity:
   enabled: ${EUROPEAN_IDENTITY_ENABLED:-true}

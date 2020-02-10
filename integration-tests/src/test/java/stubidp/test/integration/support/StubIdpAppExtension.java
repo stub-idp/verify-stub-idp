@@ -101,7 +101,6 @@ public class StubIdpAppExtension extends DropwizardAppExtension<StubIdpConfigura
 
     private static ConfigOverride[] withDefaultOverrides(Map<String, String> configOverrides) {
         Map<String, String> config = Map.ofEntries(
-                Map.entry("hubEntityId", SP_ENTITY_ID),
                 Map.entry("basicAuthEnabledForUserResource", "true"),
                 Map.entry("isPrometheusEnabled", "false"),
                 Map.entry("isHeadlessIdpEnabled", "false"),

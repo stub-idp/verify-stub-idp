@@ -49,7 +49,7 @@ public class StubIdpIdpBinder extends AbstractBinder {
 
     public static final String HUB_METADATA_REPOSITORY = "HubMetadataRepository";
     public static final String HUB_METADATA_RESOLVER = "HubMetadataResolver";
-    public static final String HUB_ENTITY_ID = "HubEntityId";
+    public static final String SP_ENTITY_ID = "SpEntityId";
     public static final String HUB_METADATA_CONFIGURATION = "HubMetadataConfiguration";
     public static final String IDP_METADATA_SIGNING_KEYSTORE = "IdpMetadataSigningKeystore";
     public static final String IDP_METADATA_SIGNATURE_FACTORY = "IdpMetadataSignatureFactory";
@@ -71,16 +71,16 @@ public class StubIdpIdpBinder extends AbstractBinder {
     protected void configure() {
         bind(stubIdpConfiguration).to(AssertionLifetimeConfiguration.class);
         bind(stubIdpConfiguration.getSamlConfiguration()).to(SamlConfiguration.class);
-        final String hubEntityId = stubIdpConfiguration.getHubEntityId();
-        bind(hubEntityId).named(HUB_ENTITY_ID).to(String.class);
+        final String spEntityId = stubIdpConfiguration.getMetadataConfiguration().getExpectedEntityId();
+        bind(spEntityId).named(SP_ENTITY_ID).to(String.class);
 
-        final IdpHardCodedEntityToEncryptForLocator entityToEncryptForLocator = new IdpHardCodedEntityToEncryptForLocator(hubEntityId);
+        final IdpHardCodedEntityToEncryptForLocator entityToEncryptForLocator = new IdpHardCodedEntityToEncryptForLocator(spEntityId);
         bind(entityToEncryptForLocator).to(EntityToEncryptForLocator.class);
         bind(PublicKeyFactory.class).to(PublicKeyFactory.class);
 
         final MetadataResolver idpMetadataResolver = idpMetadataResolverBundle.getMetadataResolver();
         bind(idpMetadataResolver).named(HUB_METADATA_RESOLVER).to(MetadataResolver.class);
-        final MetadataRepository idpMetadataRepository = new MetadataRepository(idpMetadataResolverBundle.getMetadataCredentialResolver(), hubEntityId);
+        final MetadataRepository idpMetadataRepository = new MetadataRepository(idpMetadataResolverBundle.getMetadataCredentialResolver(), spEntityId);
         bind(idpMetadataRepository).named(HUB_METADATA_REPOSITORY).to(MetadataRepository.class);
         final PublicKeyFactory publicKeyFactory = new PublicKeyFactory(new X509CertificateFactory());
         bind(stubIdpConfiguration.getMetadataConfiguration()).named(HUB_METADATA_CONFIGURATION).to(MetadataConfiguration.class);

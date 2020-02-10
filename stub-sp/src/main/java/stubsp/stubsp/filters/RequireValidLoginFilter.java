@@ -93,7 +93,7 @@ public class RequireValidLoginFilter implements ContainerRequestFilter {
                 signingCredential.setUsageType(UsageType.SIGNING);
                 return IdpAuthnRequestBuilder.anAuthnRequest()
                         .withDestination(metadataRepository.getSingleSignOnService().toASCIIString())
-                        .withKeyInfo(true)
+                        .withKeyInfo(false) // not expected in Verify authn requests
                         .withIssueInstant(DateTime.now())
                         .withEntityId(stubSpConfiguration.getSaml().getEntityId())
                         .withSigningCertificate(stubSpConfiguration.getSigningKeyPairConfiguration().getCert())

@@ -37,7 +37,7 @@ public class HubMetadataPublicKeyStore implements InternalPublicKeyStore {
     @Inject
     public HubMetadataPublicKeyStore(MetadataResolver metadataResolver,
                                      PublicKeyFactory publicKeyFactory,
-                                     @Named("HubEntityId") String hubEntityId) {
+                                     @Named("SpEntityId") String hubEntityId) {
         this.metadataResolver = metadataResolver;
         this.publicKeyFactory = publicKeyFactory;
         this.hubEntityId = hubEntityId;

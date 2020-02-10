@@ -39,7 +39,7 @@ public class HeadlessIntegrationTests extends IntegrationTestHelper {
             applicationRule.getLocalPort());
     private final SamlResponseDecrypter samlResponseDecrypter = new SamlResponseDecrypter(client,
             applicationRule.getVerifyMetadataPath(),
-            applicationRule.getConfiguration().getHubEntityId(),
+            applicationRule.getConfiguration().getMetadataConfiguration().getExpectedEntityId(),
             empty(),
             applicationRule.getAssertionConsumerServices(),
             applicationRule.getHubKeyStore(),

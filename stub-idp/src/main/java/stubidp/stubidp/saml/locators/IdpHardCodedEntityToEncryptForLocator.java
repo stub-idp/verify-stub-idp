@@ -6,7 +6,7 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import javax.inject.Singleton;
 
-import static stubidp.stubidp.StubIdpIdpBinder.HUB_ENTITY_ID;
+import static stubidp.stubidp.StubIdpIdpBinder.SP_ENTITY_ID;
 
 @Singleton
 public class IdpHardCodedEntityToEncryptForLocator implements EntityToEncryptForLocator {
@@ -14,7 +14,7 @@ public class IdpHardCodedEntityToEncryptForLocator implements EntityToEncryptFor
     private final String hubEntityId;
 
     @Inject
-    public IdpHardCodedEntityToEncryptForLocator(@Named(HUB_ENTITY_ID) String hubEntityId) {
+    public IdpHardCodedEntityToEncryptForLocator(@Named(SP_ENTITY_ID) String hubEntityId) {
         this.hubEntityId = hubEntityId;
     }
 

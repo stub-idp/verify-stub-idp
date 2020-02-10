@@ -81,11 +81,6 @@ public class StubIdpConfiguration extends Configuration implements
     @JsonProperty
     protected MultiTrustStoresBackedMetadataConfiguration metadata;
 
-    @NotNull
-    @Valid
-    @JsonProperty
-    protected String hubEntityId = "https://signin.service.gov.uk";
-
     // to generate a new cookie.key use the command `dd if=/dev/random count=1 bs=64 | base64`
     @NotNull
     @Valid
@@ -132,10 +127,6 @@ public class StubIdpConfiguration extends Configuration implements
     private boolean dynamicReloadOfStubIdpYmlEnabled = true;
 
     protected StubIdpConfiguration() {
-    }
-
-    public String getHubEntityId() {
-        return hubEntityId;
     }
 
     @Override
