@@ -4,7 +4,6 @@ import org.apache.commons.lang.StringUtils;
 import org.jboss.logging.MDC;
 import org.joda.time.DateTime;
 import org.opensaml.security.credential.BasicCredential;
-import org.opensaml.security.credential.Credential;
 import org.opensaml.security.credential.UsageType;
 import stubidp.shared.cookies.HmacValidator;
 import stubidp.shared.domain.SamlRequest;
@@ -20,9 +19,7 @@ import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.container.ContainerRequestContext;
 import javax.ws.rs.container.ContainerRequestFilter;
 import javax.ws.rs.core.Cookie;
-import javax.ws.rs.core.UriBuilder;
 import java.io.ByteArrayInputStream;
-import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.nio.charset.StandardCharsets;
 import java.security.PublicKey;
@@ -34,7 +31,7 @@ import java.util.Map;
 import java.util.Optional;
 
 import static stubidp.shared.csrf.AbstractCSRFCheckProtectionFilter.IS_SECURE_COOKIE_ENABLED;
-import static stubsp.stubsp.StubSpBinder.IDP_METADATA_REPOSITORY;
+import static stubsp.stubsp.StubSpBinder.SP_METADATA_REPOSITORY;
 import static stubsp.stubsp.cookies.StubSpCookieNames.SECURE_COOKIE_NAME;
 import static stubsp.stubsp.cookies.StubSpCookieNames.SESSION_COOKIE_NAME;
 
@@ -55,7 +52,7 @@ public class RequireValidLoginFilter implements ContainerRequestFilter {
                                    @Named(IS_SECURE_COOKIE_ENABLED) Boolean isSecureCookieEnabled,
                                    SamlMessageRedirectViewFactory samlMessageRedirectViewFactory,
                                    @org.jvnet.hk2.annotations.Optional Boolean sessionFound,
-                                   @Named(IDP_METADATA_REPOSITORY) MetadataRepository metadataRepository,
+                                   @Named(SP_METADATA_REPOSITORY) MetadataRepository metadataRepository,
                                    StubSpConfiguration stubSpConfiguration) {
         this.hmacValidator = hmacValidator;
         this.isSecureCookieEnabled = isSecureCookieEnabled;

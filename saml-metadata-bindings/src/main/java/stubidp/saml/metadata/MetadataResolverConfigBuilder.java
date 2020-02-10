@@ -26,7 +26,7 @@ public class MetadataResolverConfigBuilder {
                 fullUri(configuration.getMetadataSourceUri(), trustAnchor.getKeyID()),
                 configuration.getMinRefreshDelay(),
                 configuration.getMaxRefreshDelay(),
-                null,
+                "foo",
                 configuration.getJerseyClientConfiguration(),
                 configuration.getJerseyClientName(),
                 null,

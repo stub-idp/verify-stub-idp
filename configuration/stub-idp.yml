@@ -56,7 +56,7 @@ metadata:
     tls:
       protocol: TLSv1.2
       verifyHostname: false
-  uri: ${METADATA_URL:-http://localhost/metadata}
+  uri: ${METADATA_URL:-http://localhost:40000/stub/sp/SAML2/metadata/federation}
   spTrustStore:
     type: ${TRUSTSTORE_TYPE:-file}
     store: ${SP_TRUSTSTORE:-configuration/data/pki/sp.ts}

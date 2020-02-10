@@ -65,6 +65,14 @@ class StubSpApplicationIntegrationTest {
         assertThat(availableServices).hasSize(1);
     }
 
+    @Test
+    void testMetadata() {
+        final Response response = get(Urls.SAML_FEDERATION_METADATA_RESOURCE);
+        assertThat(response.getStatus()).isEqualTo(200);
+        final String metadata = response.readEntity(String.class);
+        assertThat(metadata).contains("Stub Sp");
+    }
+
     private Response get(String resource) {
         return client.target(UriBuilder.fromUri("http://localhost:" + stubSpAppExtension.getLocalPort() + resource).build())
                 .request()
