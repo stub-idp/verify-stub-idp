@@ -10,14 +10,20 @@ public class SamlConfigurationImpl implements SamlConfiguration {
     protected SamlConfigurationImpl() {
     }
 
+    public SamlConfigurationImpl(String entityId, URI expectedDestination) {
+        this.entityId = entityId;
+        this.expectedDestination = expectedDestination;
+    }
+
     @Valid
     @NotNull
     @JsonProperty
     protected String entityId;
 
     @Valid
+    @NotNull
     @JsonProperty
-    protected URI expectedDestination = URI.create("http://configure.me/if/i/fail");
+    protected URI expectedDestination;
 
     @Override
     public URI getExpectedDestinationHost() {
