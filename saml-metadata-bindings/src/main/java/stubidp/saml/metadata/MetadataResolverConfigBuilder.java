@@ -26,7 +26,7 @@ public class MetadataResolverConfigBuilder {
                 fullUri(configuration.getMetadataSourceUri(), trustAnchor.getKeyID()),
                 configuration.getMinRefreshDelay(),
                 configuration.getMaxRefreshDelay(),
-                "foo",
+                "https://signin.service.gov.uk",
                 configuration.getJerseyClientConfiguration(),
                 configuration.getJerseyClientName(),
                 null,

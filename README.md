@@ -32,7 +32,7 @@ This microservice is a stub IDP that can be white-labelled to simulate any IDP, 
 *First* generate a set of test PKI files `./configuration/pki-gen/go.sh`
 Requires: cfssl, openssl, ruby
 
-*Second* generate dist zip packages that will contain startup scripts and test PKI
+*Second* generate dist zip packages that will contain startup scripts and test PKI `mvn clean test package`
 
 *Third* run the stub-idp & stub-sp apps - they will use each other's dynamic metadata
 
