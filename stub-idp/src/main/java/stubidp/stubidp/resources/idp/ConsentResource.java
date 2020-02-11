@@ -73,7 +73,7 @@ public class ConsentResource {
 
         List<AuthnContext> requestLevelsOfAssurance = session.getIdaAuthnRequestFromHub().getLevelsOfAssurance();
         AuthnContext userLevelOfAssurance = idpUser.getLevelOfAssurance();
-        boolean isUserLOATooLow = !requestLevelsOfAssurance.stream().anyMatch(loa -> loa.equals(userLevelOfAssurance));
+        boolean isUserLOATooLow = requestLevelsOfAssurance.stream().noneMatch(loa -> loa.equals(userLevelOfAssurance));
 
         Idp idp = idpStubsRepository.getIdpWithFriendlyId(idpName);
         sessionRepository.updateSession(session.getSessionId(), session.setNewCsrfToken());
@@ -114,7 +114,7 @@ public class ConsentResource {
 
         Optional<IdpSession> session = sessionRepository.get(sessionCookie);
         
-        if (!session.isPresent() || !session.get().getIdpUser().isPresent() || session.get().getIdaAuthnRequestFromHub() == null) {
+        if (session.isEmpty() || session.get().getIdpUser().isEmpty() || session.get().getIdaAuthnRequestFromHub() == null) {
             throw errorResponse("Session is invalid for " + idpName);
         }
         

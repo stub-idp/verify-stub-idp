@@ -72,7 +72,7 @@ public class EidasConsentResource {
             @CookieParam(StubIdpCookieNames.SESSION_COOKIE_NAME) @NotNull SessionId sessionCookie) {
 
         final Optional<EidasScheme> eidasScheme = EidasScheme.fromString(schemeId);
-        if(!eidasScheme.isPresent()) {
+        if(eidasScheme.isEmpty()) {
             throw new InvalidEidasSchemeException();
         }
 
@@ -93,7 +93,7 @@ public class EidasConsentResource {
             @FormParam(Urls.SUBMIT_PARAM) @NotNull String submitButtonValue,
             @CookieParam(StubIdpCookieNames.SESSION_COOKIE_NAME) @NotNull SessionId sessionCookie) {
 
-        if(!EidasScheme.fromString(schemeId).isPresent()) {
+        if(EidasScheme.fromString(schemeId).isEmpty()) {
             throw new InvalidEidasSchemeException();
         }
 
@@ -119,7 +119,7 @@ public class EidasConsentResource {
 
         Optional<EidasSession> session = shouldDelete ? sessionRepository.deleteAndGet(sessionCookie) : sessionRepository.get(sessionCookie);
 
-        if (!session.isPresent() || !session.get().getEidasUser().isPresent() || session.get().getEidasAuthnRequest() == null) {
+        if (session.isEmpty() || session.get().getEidasUser().isEmpty() || session.get().getEidasAuthnRequest() == null) {
             throw errorResponse("Session is invalid for " + schemeId);
         }
 
