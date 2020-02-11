@@ -25,10 +25,16 @@ This microservice is a stub IDP that can be white-labelled to simulate any IDP, 
 * No Gradle, only Maven
 * Adding in changes from alphagov
 * All user passwords are hashed before they go into the database (no plaintext passwords) 
+* stub-sp service
 
 ## Running
 
-Does not yet run, because app needs a run config :D
+*First* generate a set of test PKI files `./configuration/pki-gen/go.sh`
+Requires: cfssl, openssl, ruby
+
+*Second* generate dist zip packages that will contain startup scripts and test PKI
+
+*Third* run the stub-idp & stub-sp apps - they will use each other's dynamic metadata
 
 ## Configuring the app
 
