@@ -45,7 +45,7 @@ public class StubSpConfiguration extends Configuration implements PrometheusConf
     @Valid
     @NotNull
     @JsonProperty
-    private SecureCookieConfiguration secureCookieConfiguration = new SecureCookieConfiguration() {{ this.secure = false; this.keyConfiguration = new KeyConfiguration() {{}}; }};
+    private SecureCookieConfiguration secureCookieConfiguration;
 
     @Valid
     @NotNull

@@ -22,6 +22,7 @@ import stubsp.stubsp.StubSpApplication;
 import stubsp.stubsp.configuration.StubSpConfiguration;
 
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -62,7 +63,9 @@ public class StubSpAppExtension extends DropwizardAppExtension<StubSpConfigurati
                 Map.entry("spMetadataSigningKeyPairConfiguration.privateKeyConfiguration.type", "encoded"),
                 Map.entry("spMetadataSigningKeyPairConfiguration.privateKeyConfiguration.key", METADATA_SIGNING_A_PRIVATE_KEY),
                 Map.entry("spMetadataSigningKeyPairConfiguration.publicKeyConfiguration.type", "x509"),
-                Map.entry("spMetadataSigningKeyPairConfiguration.publicKeyConfiguration.cert", METADATA_SIGNING_A_PUBLIC_CERT)
+                Map.entry("spMetadataSigningKeyPairConfiguration.publicKeyConfiguration.cert", METADATA_SIGNING_A_PUBLIC_CERT),
+                Map.entry("secureCookieConfiguration.secure", "true"),
+                Map.entry("secureCookieConfiguration.keyConfiguration.base64EncodedKey", Base64.getEncoder().encodeToString(new byte[64]))
         );
         config = new HashMap<>(config);
         config.putAll(configOverrides);

@@ -63,3 +63,8 @@ metadata:
   minRefreshDelay: 30000
   maxRefreshDelay: 1800000
   expectedEntityId: ${METADATA_ENTITY_ID:-"http://stub_idp.acme.org/stub-idp-one/SSO/POST"}
+
+secureCookieConfiguration:
+  secure: true
+  keyConfiguration:
+    base64EncodedKey: cmljaw==
