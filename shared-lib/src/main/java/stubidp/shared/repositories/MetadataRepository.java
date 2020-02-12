@@ -13,6 +13,9 @@ import org.opensaml.saml.saml2.metadata.SPSSODescriptor;
 import org.opensaml.saml.security.impl.MetadataCredentialResolver;
 import org.opensaml.security.credential.UsageType;
 import org.opensaml.security.criteria.UsageCriterion;
+import stubidp.shared.exceptions.NoAssertionConsumerServiceForEntityException;
+import stubidp.shared.exceptions.NoEncryptionCertificateFoundForEntityException;
+import stubidp.shared.exceptions.NoSingleSignOnServiceForEntityException;
 
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -34,7 +37,9 @@ public class MetadataRepository {
     }
 
     public String getEncryptionCertificate() {
-        return getCertificates(UsageType.ENCRYPTION).stream().findFirst().orElseThrow();
+        return getCertificates(UsageType.ENCRYPTION).stream()
+                .findFirst()
+                .orElseThrow(() -> new NoEncryptionCertificateFoundForEntityException(expectedEntityId));
     }
 
     private Set<String> extractAllCerts(KeyDescriptor keyDescriptor) {
@@ -70,7 +75,9 @@ public class MetadataRepository {
             return new URI(StreamSupport.stream(metadataResolver.getRoleDescriptorResolver().resolve(criteriaSet).spliterator(), false)
                     .flatMap(x -> ((SPSSODescriptor) x).getAssertionConsumerServices().stream())
                     .filter(x -> SAMLConstants.SAML2_POST_BINDING_URI.equals(x.getBinding()))
-                    .findFirst().orElseThrow().getLocation());
+                    .findFirst()
+                    .orElseThrow(() -> new NoAssertionConsumerServiceForEntityException(expectedEntityId))
+                    .getLocation());
         } catch (URISyntaxException | ResolverException e) {
             throw new RuntimeException(e);
         }
@@ -85,7 +92,9 @@ public class MetadataRepository {
             return new URI(StreamSupport.stream(metadataResolver.getRoleDescriptorResolver().resolve(criteriaSet).spliterator(), false)
                     .flatMap(x -> ((IDPSSODescriptor) x).getSingleSignOnServices().stream())
                     .filter(x -> SAMLConstants.SAML2_POST_BINDING_URI.equals(x.getBinding()))
-                    .findFirst().orElseThrow().getLocation());
+                    .findFirst()
+                    .orElseThrow(() -> new NoSingleSignOnServiceForEntityException(expectedEntityId))
+                    .getLocation());
         } catch (URISyntaxException | ResolverException e) {
             throw new RuntimeException(e);
         }

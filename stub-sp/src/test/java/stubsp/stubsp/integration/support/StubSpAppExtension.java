@@ -31,7 +31,9 @@ import java.util.stream.Collectors;
 import static stubidp.test.devpki.TestCertificateStrings.METADATA_SIGNING_A_PRIVATE_KEY;
 import static stubidp.test.devpki.TestCertificateStrings.METADATA_SIGNING_A_PUBLIC_CERT;
 import static stubidp.test.devpki.TestCertificateStrings.STUB_IDP_PUBLIC_PRIMARY_CERT;
+import static stubidp.test.devpki.TestCertificateStrings.TEST_RP_PRIVATE_ENCRYPTION_KEY;
 import static stubidp.test.devpki.TestCertificateStrings.TEST_RP_PRIVATE_SIGNING_KEY;
+import static stubidp.test.devpki.TestCertificateStrings.TEST_RP_PUBLIC_ENCRYPTION_CERT;
 import static stubidp.test.devpki.TestCertificateStrings.TEST_RP_PUBLIC_SIGNING_CERT;
 
 public class StubSpAppExtension extends DropwizardAppExtension<StubSpConfiguration> {
@@ -60,6 +62,10 @@ public class StubSpAppExtension extends DropwizardAppExtension<StubSpConfigurati
                 Map.entry("signingKeyPairConfiguration.privateKeyConfiguration.key", TEST_RP_PRIVATE_SIGNING_KEY),
                 Map.entry("signingKeyPairConfiguration.publicKeyConfiguration.type", "x509"),
                 Map.entry("signingKeyPairConfiguration.publicKeyConfiguration.cert", TEST_RP_PUBLIC_SIGNING_CERT),
+                Map.entry("encryptionKeyPairConfiguration.privateKeyConfiguration.type", "encoded"),
+                Map.entry("encryptionKeyPairConfiguration.privateKeyConfiguration.key", TEST_RP_PRIVATE_ENCRYPTION_KEY),
+                Map.entry("encryptionKeyPairConfiguration.publicKeyConfiguration.type", "x509"),
+                Map.entry("encryptionKeyPairConfiguration.publicKeyConfiguration.cert", TEST_RP_PUBLIC_ENCRYPTION_CERT),
                 Map.entry("spMetadataSigningKeyPairConfiguration.privateKeyConfiguration.type", "encoded"),
                 Map.entry("spMetadataSigningKeyPairConfiguration.privateKeyConfiguration.key", METADATA_SIGNING_A_PRIVATE_KEY),
                 Map.entry("spMetadataSigningKeyPairConfiguration.publicKeyConfiguration.type", "x509"),

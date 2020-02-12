@@ -52,6 +52,7 @@ public class StubSpBinder extends AbstractBinder {
     public static final String SP_METADATA_REPOSITORY = "SpMetadataRepository";
     public static final String SP_METADATA_SIGNATURE_FACTORY = "SpMetadataSignatureFactory";
     public static final String SP_SIGNING_CERT = "SpSigningCert";
+    public static final String SP_ENCRYPTION_CERT = "SpEncryptionCert";
     public static final String METADATA_VALIDITY_PERIOD = "metadataValidityPeriod";
     private static final String SP_METADATA_RESOLVER = "SpMetadataResolver";
     private static final String SP_METADATA_CONFIGURATION = "SpMetadataConfiguration";
@@ -117,6 +118,7 @@ public class StubSpBinder extends AbstractBinder {
         final SignatureFactory signatureFactory = new SignatureFactory(true, new IdaKeyStoreCredentialRetriever(spMetadataSigningKeyStore), signatureAlgorithm, digestAlgorithm);
         bind(signatureFactory).named(SP_METADATA_SIGNATURE_FACTORY).to(SignatureFactory.class);
         bind(configuration.getSigningKeyPairConfiguration().getCert()).named(SP_SIGNING_CERT).to(String.class);
+        bind(configuration.getEncryptionKeyPairConfiguration().getCert()).named(SP_ENCRYPTION_CERT).to(String.class);
     }
 
     private IdaKeyStore getKeystoreFromConfig(SigningKeyPairConfiguration keyPairConfiguration) {

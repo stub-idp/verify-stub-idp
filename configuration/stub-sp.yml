@@ -34,6 +34,17 @@ signingKeyPairConfiguration:
     cert: ${STUB_SP_SIGNING_CERT:-configuration/data/pki/sp_signing_primary.crt}
     name: sp.signing.cert
 
+# TODO: add secondary+ signing certs for metadata
+
+encryptionKeyPairConfiguration:
+  privateKeyConfiguration:
+    type: ${KEY_TYPE:-file}
+    key: ${STUB_SP_ENCRYPTION_PRIVATE_KEY:-configuration/data/pki/sp_encryption_primary.pk8}
+  publicKeyConfiguration:
+    type: ${CERT_TYPE:-file}
+    cert: ${STUB_SP_ENCRYPTION_CERT:-configuration/data/pki/sp_encryption_primary.crt}
+    name: sp.encryption.cert
+
 spMetadataSigningKeyPairConfiguration:
   privateKeyConfiguration:
     type: ${KEY_TYPE:-file}

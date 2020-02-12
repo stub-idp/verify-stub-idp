@@ -70,6 +70,11 @@ public class StubSpConfiguration extends Configuration implements PrometheusConf
     @NotNull
     @Valid
     @JsonProperty
+    protected SigningKeyPairConfiguration encryptionKeyPairConfiguration;
+
+    @NotNull
+    @Valid
+    @JsonProperty
     protected SigningKeyPairConfiguration spMetadataSigningKeyPairConfiguration;
 
     @NotNull
@@ -119,6 +124,10 @@ public class StubSpConfiguration extends Configuration implements PrometheusConf
 
     public SigningKeyPairConfiguration getSigningKeyPairConfiguration() {
         return signingKeyPairConfiguration;
+    }
+
+    public SigningKeyPairConfiguration getEncryptionKeyPairConfiguration() {
+        return encryptionKeyPairConfiguration;
     }
 
     public SigningKeyPairConfiguration getSpMetadataSigningKeyPairConfiguration() {

@@ -36,10 +36,11 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import javax.ws.rs.core.UriBuilder;
 import java.net.URI;
-import java.util.Collections;
+import java.util.List;
 
 import static stubsp.stubsp.StubSpBinder.METADATA_VALIDITY_PERIOD;
 import static stubsp.stubsp.StubSpBinder.SERVICE_NAME;
+import static stubsp.stubsp.StubSpBinder.SP_ENCRYPTION_CERT;
 import static stubsp.stubsp.StubSpBinder.SP_METADATA_SIGNATURE_FACTORY;
 import static stubsp.stubsp.StubSpBinder.SP_SIGNING_CERT;
 
@@ -48,6 +49,7 @@ public class SpMetadataBuilder {
     private final ReadablePeriod validity;
     private final KeyDescriptorsUnmarshaller keyDescriptorsUnmarshaller;
     private final String spSigningCert;
+    private final String spEncryptionCert;
     private final SamlConfiguration samlConfiguration;
     private final XmlObjectToElementTransformer<EntitiesDescriptor> transformer = new XmlObjectToElementTransformer<>();
     private final String serviceName;
@@ -57,11 +59,13 @@ public class SpMetadataBuilder {
             @Named(SP_METADATA_SIGNATURE_FACTORY) SignatureFactory signatureFactory,
             @Named(METADATA_VALIDITY_PERIOD) ReadablePeriod validity,
             @Named(SP_SIGNING_CERT) String spSigningCert,
+            @Named(SP_ENCRYPTION_CERT) String spEncryptionCert,
             SamlConfiguration samlConfiguration,
             @Named(SERVICE_NAME) String serviceName) {
         this.signatureFactory = signatureFactory;
         this.validity = validity;
         this.spSigningCert = spSigningCert;
+        this.spEncryptionCert = spEncryptionCert;
         this.samlConfiguration = samlConfiguration;
         this.keyDescriptorsUnmarshaller = new CoreTransformersFactory().getCertificatesToKeyDescriptorsTransformer();
         this.serviceName = serviceName;
@@ -84,16 +88,18 @@ public class SpMetadataBuilder {
         organizationURL.setValue(UriBuilder.fromUri(samlConfiguration.getExpectedDestinationHost() + Urls.ROOT_RESOURCE).build().toASCIIString());
         organization.getURLs().add(organizationURL);
         entityDescriptor.setOrganization(organization);
-        entityDescriptor.getRoleDescriptors().add(getSpSsoDescriptor(ssoEndpoint, new Certificate(samlConfiguration.getEntityId(), spSigningCert, Certificate.KeyUse.Signing)));
+        entityDescriptor.getRoleDescriptors().add(getSpSsoDescriptor(ssoEndpoint,
+                List.of(new Certificate(samlConfiguration.getEntityId(), spSigningCert, Certificate.KeyUse.Signing),
+                        new Certificate(samlConfiguration.getEntityId(), spEncryptionCert, Certificate.KeyUse.Encryption))));
         entitiesDescriptor.getEntityDescriptors().add(entityDescriptor);
         return sign(entitiesDescriptor);
     }
 
-    private SPSSODescriptor getSpSsoDescriptor(URI ssoEndpoint, Certificate signingCertificate) {
+    private SPSSODescriptor getSpSsoDescriptor(URI ssoEndpoint, List<Certificate> certificates) {
         SPSSODescriptor spssoDescriptor = new SPSSODescriptorBuilder().buildObject();
         spssoDescriptor.setAuthnRequestsSigned(true);
         spssoDescriptor.addSupportedProtocol(SAMLConstants.SAML20P_NS);
-        spssoDescriptor.getKeyDescriptors().addAll(keyDescriptorsUnmarshaller.fromCertificates(Collections.singletonList(signingCertificate)));
+        spssoDescriptor.getKeyDescriptors().addAll(keyDescriptorsUnmarshaller.fromCertificates(certificates));
         AssertionConsumerService assertionConsumerService = new AssertionConsumerServiceBuilder().buildObject();
         assertionConsumerService.setLocation(ssoEndpoint.toString());
         assertionConsumerService.setBinding(SAMLConstants.SAML2_POST_BINDING_URI);
