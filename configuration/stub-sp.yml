@@ -76,6 +76,6 @@ metadata:
   expectedEntityId: ${METADATA_ENTITY_ID:-"http://stub_idp.acme.org/stub-idp-one/SSO/POST"}
 
 secureCookieConfiguration:
-  secure: true
+  secure: ${SECURE_COOKIES:-true}
   keyConfiguration:
     base64EncodedKey: cmljaw==

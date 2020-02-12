@@ -124,7 +124,7 @@ isIdpEnabled: true
 dynamicReloadOfStubIdpYmlEnabled: true
 
 secureCookieConfiguration:
-    secure: true
+    secure: ${SECURE_COOKIES:-true}
     keyConfiguration:
       base64EncodedKey: cmljaw==
 
