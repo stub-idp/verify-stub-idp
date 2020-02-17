@@ -5,6 +5,15 @@ jdk:
   - openjdk14
   - openjdk15
   - openjdk-ea
+env:
+  global:
+    - DROPWIZARD_VERSION="2.0.10"
+before_install: # hack around jpms issue with the dropwizard jars
+  - mvn dependency:get -Dartifact=io.dropwizard:dropwizard-core:$DROPWIZARD_VERSION:jar
+  - unzip ~/.m2/repository/io/dropwizard/dropwizard-core/$DROPWIZARD_VERSION/dropwizard-core-$DROPWIZARD_VERSION.jar io/dropwizard/validation/InjectValidatorFeature.class
+  - zip -d ~/.m2/repository/io/dropwizard/dropwizard-core/$DROPWIZARD_VERSION/dropwizard-core-$DROPWIZARD_VERSION.jar io/dropwizard/validation/InjectValidatorFeature.class
+  - zip ~/.m2/repository/io/dropwizard/dropwizard-validation/$DROPWIZARD_VERSION/dropwizard-validation-$DROPWIZARD_VERSION.jar io/dropwizard/validation/InjectValidatorFeature.class
+  - rm -rf io/
 install:
   - mvn dependency:tree test -DskipTests=true -Dmaven.javadoc.skip=true -B -V
 #script:
