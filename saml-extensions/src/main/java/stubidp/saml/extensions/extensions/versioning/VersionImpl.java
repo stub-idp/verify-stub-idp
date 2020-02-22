@@ -1,5 +1,7 @@
 package stubidp.saml.extensions.extensions.versioning;
 
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.opensaml.core.xml.XMLObject;
 import org.opensaml.core.xml.io.Marshaller;
 import org.opensaml.core.xml.io.Unmarshaller;
@@ -7,8 +9,6 @@ import org.opensaml.saml.common.AbstractSAMLObject;
 import org.opensaml.saml.common.xml.SAMLConstants;
 import stubidp.saml.extensions.extensions.versioning.application.ApplicationVersion;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -25,7 +25,7 @@ public class VersionImpl extends AbstractSAMLObject implements Version {
         super.setSchemaType(TYPE_NAME);
     }
 
-    public VersionImpl(@Nullable String namespaceURI, @Nonnull String elementLocalName, @Nullable String namespacePrefix) {
+    public VersionImpl(@Nullable String namespaceURI, @NonNull String elementLocalName, @Nullable String namespacePrefix) {
         super(namespaceURI, elementLocalName, namespacePrefix);
     }
 

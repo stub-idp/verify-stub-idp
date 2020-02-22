@@ -1,10 +1,10 @@
 package stubidp.saml.extensions.extensions.eidas.impl;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.opensaml.core.xml.XMLObject;
 import org.opensaml.saml.common.AbstractSAMLObject;
 import stubidp.saml.extensions.extensions.eidas.PersonIdentifier;
 
-import javax.annotation.Nullable;
 import java.util.List;
 
 public class PersonIdentifierImpl extends AbstractSAMLObject implements PersonIdentifier {

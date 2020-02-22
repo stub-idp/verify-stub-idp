@@ -1,6 +1,5 @@
 package stubidp.saml.hub.hub.transformers.outbound;
 
-import java.util.Optional;
 import org.joda.time.DateTime;
 import org.opensaml.saml.saml2.core.Assertion;
 import org.opensaml.saml.saml2.core.Attribute;
@@ -11,17 +10,17 @@ import org.opensaml.saml.saml2.core.NameID;
 import org.opensaml.saml.saml2.core.Subject;
 import org.opensaml.saml.saml2.core.SubjectConfirmation;
 import org.opensaml.saml.saml2.core.SubjectConfirmationData;
-import stubidp.saml.utils.core.OpenSamlXmlObjectFactory;
-import stubidp.saml.utils.core.domain.HubAssertion;
 import stubidp.saml.hub.hub.domain.HubAttributeQueryRequest;
 import stubidp.saml.hub.hub.domain.UserAccountCreationAttribute;
 import stubidp.saml.hub.hub.factories.AttributeQueryAttributeFactory;
+import stubidp.saml.utils.core.OpenSamlXmlObjectFactory;
+import stubidp.saml.utils.core.domain.HubAssertion;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-
 
 public class HubAttributeQueryRequestToSamlAttributeQueryTransformer implements Function<HubAttributeQueryRequest,AttributeQuery> {
 

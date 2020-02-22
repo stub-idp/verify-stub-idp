@@ -5,6 +5,7 @@ import io.dropwizard.servlets.tasks.Task;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
 import net.shibboleth.utilities.java.support.component.ComponentInitializationException;
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.opensaml.saml.metadata.resolver.MetadataResolver;
 import org.opensaml.saml.metadata.resolver.impl.AbstractReloadingMetadataResolver;
 import org.opensaml.saml.security.impl.MetadataCredentialResolver;
@@ -16,7 +17,6 @@ import stubidp.saml.metadata.factories.CredentialResolverFactory;
 import stubidp.saml.metadata.factories.DropwizardMetadataResolverFactory;
 import stubidp.saml.metadata.factories.MetadataSignatureTrustEngineFactory;
 
-import javax.annotation.Nullable;
 import javax.inject.Provider;
 import java.io.PrintWriter;
 import java.util.List;

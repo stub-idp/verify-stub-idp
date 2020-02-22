@@ -1,21 +1,20 @@
 package stubidp.saml.extensions.extensions.versioning;
 
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.opensaml.saml.common.AbstractSAMLObjectBuilder;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 
 public class VersionBuilder extends AbstractSAMLObjectBuilder<Version> {
 
-    @Nonnull
+    @NonNull
     @Override
     public Version buildObject() {
         return buildObject(Version.DEFAULT_ELEMENT_NAME, Version.TYPE_NAME);
     }
 
-    @Nonnull
+    @NonNull
     @Override
-    public Version buildObject(@Nullable String namespaceURI, @Nonnull String localName, @Nullable String namespacePrefix) {
+    public Version buildObject(@Nullable String namespaceURI, @NonNull String localName, @Nullable String namespacePrefix) {
         return new VersionImpl(namespaceURI, localName, namespacePrefix);
     }
 }

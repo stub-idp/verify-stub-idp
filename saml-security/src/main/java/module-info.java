@@ -13,7 +13,7 @@ module stubidp.saml.security {
     requires com.google.common;
     requires org.slf4j;
     requires xmlsec;
-    requires jsr305; // https://github.com/google/guava/issues/2960
+    requires org.checkerframework.checker.qual;
     requires org.opensaml.core;
 
     requires transitive org.opensaml.xmlsec.impl;

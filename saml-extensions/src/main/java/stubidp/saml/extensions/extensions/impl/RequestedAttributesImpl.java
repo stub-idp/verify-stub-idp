@@ -1,5 +1,7 @@
 package stubidp.saml.extensions.extensions.impl;
 
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.opensaml.core.xml.XMLObject;
 import org.opensaml.core.xml.io.Marshaller;
 import org.opensaml.core.xml.io.Unmarshaller;
@@ -8,8 +10,6 @@ import org.opensaml.saml.common.AbstractSAMLObjectMarshaller;
 import stubidp.saml.extensions.extensions.RequestedAttribute;
 import stubidp.saml.extensions.extensions.RequestedAttributes;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -22,7 +22,7 @@ public class RequestedAttributesImpl extends AbstractSAMLObject implements Reque
 
     private List<XMLObject> requestedAttributeObjects = new ArrayList<>();
 
-    RequestedAttributesImpl(@Nullable String namespaceURI, @Nonnull String elementLocalName, @Nullable String namespacePrefix) {
+    RequestedAttributesImpl(@Nullable String namespaceURI, @NonNull String elementLocalName, @Nullable String namespacePrefix) {
         super(namespaceURI, elementLocalName, namespacePrefix);
     }
 

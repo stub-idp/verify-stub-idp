@@ -1,5 +1,6 @@
 package stubidp.saml.extensions.extensions.eidas.impl;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.joda.time.LocalDate;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
@@ -7,7 +8,6 @@ import org.opensaml.core.xml.XMLObject;
 import org.opensaml.saml.common.AbstractSAMLObject;
 import stubidp.saml.extensions.extensions.eidas.DateOfBirth;
 
-import javax.annotation.Nullable;
 import java.util.List;
 
 public class DateOfBirthImpl extends AbstractSAMLObject implements DateOfBirth {

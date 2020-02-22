@@ -1,5 +1,6 @@
 package stubidp.saml.hub.hub.transformers.outbound;
 
+import org.checkerframework.checker.nullness.qual.NonNull;
 import org.opensaml.core.xml.XMLObjectBuilder;
 import org.opensaml.core.xml.XMLObjectBuilderFactory;
 import org.opensaml.core.xml.config.XMLObjectProviderRegistrySupport;
@@ -14,20 +15,19 @@ import org.opensaml.saml.saml2.core.RequestedAuthnContext;
 import org.opensaml.saml.saml2.core.StatusResponseType;
 import org.opensaml.saml.saml2.core.impl.ExtensionsBuilder;
 import org.opensaml.security.SecurityException;
-import stubidp.saml.utils.core.OpenSamlXmlObjectFactory;
-import stubidp.saml.utils.core.domain.AuthnContext;
 import stubidp.saml.extensions.extensions.RequestedAttribute;
 import stubidp.saml.extensions.extensions.RequestedAttributes;
 import stubidp.saml.extensions.extensions.SPType;
 import stubidp.saml.extensions.extensions.impl.RequestedAttributeImpl;
 import stubidp.saml.extensions.extensions.impl.RequestedAttributesImpl;
 import stubidp.saml.extensions.extensions.impl.SPTypeImpl;
+import stubidp.saml.utils.core.OpenSamlXmlObjectFactory;
+import stubidp.saml.utils.core.domain.AuthnContext;
 import stubidp.saml.utils.core.transformers.AuthnContextFactory;
 import stubidp.saml.utils.hub.domain.EidasAuthnRequestFromHub;
-import javax.annotation.Nonnull;
+
 import javax.inject.Inject;
 import java.util.function.Function;
-
 
 public class EidasAuthnRequestFromHubToAuthnRequestTransformer implements Function<EidasAuthnRequestFromHub,AuthnRequest> {
     public static final AuthnContextComparisonTypeEnumeration MINIMUM_AUTHNCONTEXT = AuthnContextComparisonTypeEnumeration.MINIMUM;
@@ -115,7 +115,7 @@ public class EidasAuthnRequestFromHubToAuthnRequestTransformer implements Functi
         return samlObjectFactory;
     }
 
-    @Nonnull
+    @NonNull
     private RequestedAttributeImpl createRequestedAttribute(String friendlyName, String nameSuffix, boolean required) {
         XMLObjectBuilder<?> requestedAttributeBuilder = xmlObjectBuilderFactory.getBuilder(RequestedAttribute.DEFAULT_ELEMENT_NAME);
         RequestedAttributeImpl requestedAttribute = (RequestedAttributeImpl) requestedAttributeBuilder.buildObject(RequestedAttribute.DEFAULT_ELEMENT_NAME);

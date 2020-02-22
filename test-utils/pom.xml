@@ -43,6 +43,12 @@
             <version>${junit.version}</version>
             <scope>compile</scope>
         </dependency>
+        <dependency>
+            <groupId>org.checkerframework</groupId>
+            <artifactId>checker-qual</artifactId>
+            <version>${checker_qual.version}</version>
+            <scope>compile</scope>
+        </dependency>
         <!-- test dependencies -->
         <dependency>
             <groupId>org.mockito</groupId>

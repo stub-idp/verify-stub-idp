@@ -17,7 +17,7 @@ module stubidp.saml.extensions {
     requires org.opensaml.xmlsec.impl;
 
     requires transitive org.slf4j;
-    requires transitive jsr305; // https://github.com/google/guava/issues/2960
+    requires transitive org.checkerframework.checker.qual;
     requires transitive org.opensaml.core;
     requires transitive org.joda.time;
     requires transitive java.xml;

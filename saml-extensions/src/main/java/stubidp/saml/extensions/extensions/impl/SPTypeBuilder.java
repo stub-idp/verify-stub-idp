@@ -5,20 +5,20 @@ import org.opensaml.saml.common.AbstractSAMLObjectBuilder;
 import stubidp.saml.extensions.IdaConstants;
 import stubidp.saml.extensions.extensions.SPType;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import org.checkerframework.checker.nullness.qual.Nullable;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
 public class SPTypeBuilder extends AbstractSAMLObjectBuilder<SPType> {
 
-    @Nonnull
+    @NonNull
     @Override
     public SPType buildObject() {
         return buildObject(IdaConstants.EIDAS_NS, SPType.DEFAULT_ELEMENT_LOCAL_NAME, IdaConstants.EIDAS_PREFIX);
     }
 
-    @Nonnull
+    @NonNull
     @Override
-    public SPType buildObject(@Nullable String namespaceURI, @Nonnull @NotEmpty String localName, @Nullable String namespacePrefix) {
+    public SPType buildObject(@Nullable String namespaceURI, @NonNull @NotEmpty String localName, @Nullable String namespacePrefix) {
         return new SPTypeImpl(namespaceURI, localName, namespacePrefix);
     }
 }

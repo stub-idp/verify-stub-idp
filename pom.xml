@@ -46,6 +46,7 @@
         <freemarker.version>2.3.29</freemarker.version>
         <prometheus_client.version>0.8.1</prometheus_client.version>
         <jsoup.version>1.12.2</jsoup.version>
+        <checker_qual.version>3.1.0</checker_qual.version>
 
         <!-- test dependencies -->
         <assertj.version>3.15.0</assertj.version>

@@ -1,5 +1,7 @@
 package stubidp.saml.metadata;
 
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.opensaml.core.xml.XMLObject;
 import org.opensaml.saml.metadata.resolver.filter.MetadataFilter;
 import org.opensaml.saml.saml2.metadata.EntitiesDescriptor;
@@ -11,9 +13,6 @@ import org.slf4j.LoggerFactory;
 import stubidp.saml.metadata.exception.CertificateConversionException;
 import stubidp.utils.security.security.verification.CertificateChainValidator;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import javax.validation.constraints.NotNull;
 import javax.xml.namespace.QName;
 import java.security.KeyStore;
 import java.security.cert.CertificateException;
@@ -31,9 +30,9 @@ public final class CertificateChainValidationFilter implements MetadataFilter {
     private final KeyStore keyStore;
 
     public CertificateChainValidationFilter(
-        @NotNull final QName role,
-        @NotNull final CertificateChainValidator certificateChainValidator,
-        @NotNull final KeyStore keyStore) {
+        @NonNull final QName role,
+        @NonNull final CertificateChainValidator certificateChainValidator,
+        @NonNull final KeyStore keyStore) {
 
         this.role = role;
         this.certificateChainValidator = certificateChainValidator;
@@ -86,7 +85,7 @@ public final class CertificateChainValidationFilter implements MetadataFilter {
         return metadata;
     }
 
-    private void filterOutUntrustedEntityDescriptors(@Nonnull EntitiesDescriptor entitiesDescriptor) {
+    private void filterOutUntrustedEntityDescriptors(@NonNull EntitiesDescriptor entitiesDescriptor) {
         final String name = getGroupName(entitiesDescriptor);
         LOG.trace("Processing EntitiesDescriptor group: {}", name);
 
@@ -110,7 +109,7 @@ public final class CertificateChainValidationFilter implements MetadataFilter {
     }
 
 
-    private void filterOutUntrustedRoleDescriptors(@Nonnull EntityDescriptor entityDescriptor) {
+    private void filterOutUntrustedRoleDescriptors(@NonNull EntityDescriptor entityDescriptor) {
         final String entityID = entityDescriptor.getEntityID();
         LOG.trace("Processing EntityDescriptor: {}", entityID);
 
@@ -129,7 +128,7 @@ public final class CertificateChainValidationFilter implements MetadataFilter {
             });
     }
 
-    private void filterOutUntrustedKeyDescriptors(@Nonnull RoleDescriptor roleDescriptor) {
+    private void filterOutUntrustedKeyDescriptors(@NonNull RoleDescriptor roleDescriptor) {
         roleDescriptor.getKeyDescriptors().removeIf(
             keyDescriptor -> {
                 KeyInfo keyInfo = keyDescriptor.getKeyInfo();
