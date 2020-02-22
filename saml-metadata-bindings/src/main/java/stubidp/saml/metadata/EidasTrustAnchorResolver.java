@@ -23,7 +23,6 @@ import java.security.cert.CertificateFactory;
 import java.security.cert.PKIXParameters;
 import java.security.cert.X509Certificate;
 import java.text.ParseException;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 

@@ -15,7 +15,6 @@ import stubidp.stubidp.domain.SamlResponseFromValue;
 import stubidp.stubidp.domain.SubmitButtonValue;
 import stubidp.stubidp.exceptions.InvalidSessionIdException;
 import stubidp.stubidp.exceptions.InvalidUsernameOrPasswordException;
-import stubidp.stubidp.repositories.AllIdpsUserRepository;
 import stubidp.stubidp.repositories.Idp;
 import stubidp.stubidp.repositories.IdpSession;
 import stubidp.stubidp.repositories.IdpSessionRepository;
@@ -60,8 +59,6 @@ public class LoginPageResourceTest {
     @Mock
     private IdpUserService idpUserService;
     @Mock
-    private AllIdpsUserRepository allIdpsUserRepository;
-    @Mock
     private DatabaseIdpUser databaseIdpUser;
     @Mock
     private Idp idp;
@@ -83,7 +80,7 @@ public class LoginPageResourceTest {
 
     @Test
     public void shouldBuildNoAuthnContext(){
-        when(sessionRepository.deleteAndGet(SESSION_ID)).thenReturn(Optional.ofNullable(new IdpSession(SESSION_ID, idaAuthnRequestFromHub, RELAY_STATE, null, null, null, null, null, null)));
+        when(sessionRepository.deleteAndGet(SESSION_ID)).thenReturn(Optional.of(new IdpSession(SESSION_ID, idaAuthnRequestFromHub, RELAY_STATE, null, null, null, null, null, null)));
         when(idaAuthnRequestFromHub.getId()).thenReturn(SAML_REQUEST_ID);
         when(nonSuccessAuthnResponseService.generateNoAuthnContext(anyString(), anyString(), eq(RELAY_STATE))).thenReturn(new SamlResponseFromValue<String>("saml", Function.identity(), RELAY_STATE, URI.create("uri")));
         when(cookieNames.getSessionCookieName()).thenReturn("sessionCookieName");
@@ -95,7 +92,7 @@ public class LoginPageResourceTest {
 
     @Test
     public void shouldBuildUpliftFailed() {
-        when(sessionRepository.deleteAndGet(SESSION_ID)).thenReturn(Optional.ofNullable(new IdpSession(SESSION_ID, idaAuthnRequestFromHub, RELAY_STATE, null, null, null, null, null, null)));
+        when(sessionRepository.deleteAndGet(SESSION_ID)).thenReturn(Optional.of(new IdpSession(SESSION_ID, idaAuthnRequestFromHub, RELAY_STATE, null, null, null, null, null, null)));
         when(idaAuthnRequestFromHub.getId()).thenReturn(SAML_REQUEST_ID);
         when(nonSuccessAuthnResponseService.generateUpliftFailed(anyString(), anyString(), eq(RELAY_STATE))).thenReturn(new SamlResponseFromValue<String>("saml", Function.identity(), RELAY_STATE, URI.create("uri")));
         when(cookieNames.getSessionCookieName()).thenReturn("sessionCookieName");
@@ -107,7 +104,7 @@ public class LoginPageResourceTest {
 
     @Test
     public void shouldBuildNoAuthnCancel() {
-        when(sessionRepository.deleteAndGet(SESSION_ID)).thenReturn(Optional.ofNullable(new IdpSession(SESSION_ID, idaAuthnRequestFromHub, RELAY_STATE, null, null, null, null, null, null)));
+        when(sessionRepository.deleteAndGet(SESSION_ID)).thenReturn(Optional.of(new IdpSession(SESSION_ID, idaAuthnRequestFromHub, RELAY_STATE, null, null, null, null, null, null)));
         when(idaAuthnRequestFromHub.getId()).thenReturn(SAML_REQUEST_ID);
         when(nonSuccessAuthnResponseService.generateAuthnCancel(anyString(), anyString(), eq(RELAY_STATE))).thenReturn(new SamlResponseFromValue<String>("saml", Function.identity(), RELAY_STATE, URI.create("uri")));
         when(cookieNames.getSessionCookieName()).thenReturn("sessionCookieName");
@@ -119,7 +116,7 @@ public class LoginPageResourceTest {
 
     @Test
     public void shouldBuildSuccessResponse() throws InvalidUsernameOrPasswordException, InvalidSessionIdException {
-        when(sessionRepository.get(SESSION_ID)).thenReturn(Optional.ofNullable(new IdpSession(SESSION_ID, idaAuthnRequestFromHub, RELAY_STATE, null, null, null, null, null, null)));
+        when(sessionRepository.get(SESSION_ID)).thenReturn(Optional.of(new IdpSession(SESSION_ID, idaAuthnRequestFromHub, RELAY_STATE, null, null, null, null, null, null)));
         final Response response = resource.post(IDP_NAME, USERNAME, PASSWORD, SubmitButtonValue.SignIn, SESSION_ID);
 
         verify(idpUserService).attachIdpUserToSession(IDP_NAME, USERNAME, PASSWORD, SESSION_ID);
@@ -128,7 +125,7 @@ public class LoginPageResourceTest {
 
     @Test
     public void shouldBuildAuthnPending(){
-        when(sessionRepository.deleteAndGet(SESSION_ID)).thenReturn(Optional.ofNullable(new IdpSession(SESSION_ID, idaAuthnRequestFromHub, RELAY_STATE, null, null, null, null, null, null)));
+        when(sessionRepository.deleteAndGet(SESSION_ID)).thenReturn(Optional.of(new IdpSession(SESSION_ID, idaAuthnRequestFromHub, RELAY_STATE, null, null, null, null, null, null)));
         when(idaAuthnRequestFromHub.getId()).thenReturn(SAML_REQUEST_ID);
         when(nonSuccessAuthnResponseService.generateAuthnPending(anyString(), anyString(), eq(RELAY_STATE))).thenReturn(new SamlResponseFromValue<String>("saml", Function.identity(), RELAY_STATE, URI.create("uri")));
         when(cookieNames.getSessionCookieName()).thenReturn("sessionCookieName");
@@ -140,7 +137,6 @@ public class LoginPageResourceTest {
 
     @Test
     public void shouldRedirectToConsentWhenNewlyRegisteredUserReturnsFromHub() {
-        when(sessionRepository.get(SESSION_ID)).thenReturn(Optional.ofNullable(new IdpSession(SESSION_ID, idaAuthnRequestFromHub, RELAY_STATE, null, null, null, null, null, null)));
         Optional<IdpSession> idpSession = Optional.of(Mockito.mock(IdpSession.class));
         when(idpStubsRepository.getIdpWithFriendlyId(IDP_NAME)).thenReturn(idp);
         when(sessionRepository.get(SESSION_ID)).thenReturn(idpSession);
@@ -153,7 +149,6 @@ public class LoginPageResourceTest {
 
     @Test
     public void shouldRedirectLoggedInUserToHomePageIfNoIdaAuthReqFromHub() {
-        when(sessionRepository.get(SESSION_ID)).thenReturn(Optional.ofNullable(new IdpSession(SESSION_ID, idaAuthnRequestFromHub, RELAY_STATE, null, null, null, null, null, null)));
         Optional<IdpSession> idpSession = Optional.of(Mockito.mock(IdpSession.class));
         when(idpStubsRepository.getIdpWithFriendlyId(IDP_NAME)).thenReturn(idp);
         when(sessionRepository.get(SESSION_ID)).thenReturn(idpSession);
@@ -173,7 +168,6 @@ public class LoginPageResourceTest {
 
     @Test
     public void shouldPresentLoginScreenInWhenThereIsNoActivePreRegSession() {
-        when(sessionRepository.get(SESSION_ID)).thenReturn(Optional.ofNullable(new IdpSession(SESSION_ID, idaAuthnRequestFromHub, RELAY_STATE, null, null, null, null, null, null)));
         Optional<IdpSession> preRegSession = Optional.of(Mockito.mock(IdpSession.class));
         when(sessionRepository.get(SESSION_ID)).thenReturn(preRegSession);
         when(preRegSession.get().getIdpUser()).thenReturn(Optional.empty());

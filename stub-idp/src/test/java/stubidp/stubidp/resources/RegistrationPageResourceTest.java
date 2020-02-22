@@ -70,15 +70,14 @@ public class RegistrationPageResourceTest {
                 nonSuccessAuthnResponseService,
                 idpSessionRepository
         );
-
-        when(idpSessionRepository.get(SESSION_ID)).thenReturn(Optional.of(new IdpSession(SESSION_ID, idaAuthnRequestFromHub, RELAY_STATE, null, null, null, null, null, null)));
     }
 
     @Test
-    public void shouldHaveStatusAuthnCancelledResponseWhenUserCancels(){
+    public void shouldHaveStatusAuthnCancelledResponseWhenUserCancels() {
+        when(idpSessionRepository.get(SESSION_ID)).thenReturn(Optional.of(new IdpSession(SESSION_ID, idaAuthnRequestFromHub, RELAY_STATE, null, null, null, null, null, null)));
         when(idpSessionRepository.deleteAndGet(SESSION_ID)).thenReturn(Optional.of(new IdpSession(SESSION_ID, idaAuthnRequestFromHub, RELAY_STATE, null, null, null, null, null, null)));
         when(idaAuthnRequestFromHub.getId()).thenReturn(SAML_REQUEST_ID);
-        when(nonSuccessAuthnResponseService.generateAuthnCancel(anyString(), anyString(), eq(RELAY_STATE))).thenReturn(new SamlResponseFromValue<String>("saml", Function.identity(), RELAY_STATE, URI.create("uri")));
+        when(nonSuccessAuthnResponseService.generateAuthnCancel(anyString(), anyString(), eq(RELAY_STATE))).thenReturn(new SamlResponseFromValue<>("saml", Function.identity(), RELAY_STATE, URI.create("uri")));
         when(cookieNames.getSessionCookieName()).thenReturn("sessionCookieName");
 
         resource.post(IDP_NAME, null, null, null, null, null, null, null, false, null, null, null, null, Cancel, SESSION_ID);
@@ -100,7 +99,6 @@ public class RegistrationPageResourceTest {
 
     @Test
     public void shouldHaveResponseStatusRedirectWhenUserPreRegisters() throws InvalidSessionIdException, IncompleteRegistrationException, InvalidDateException, UsernameAlreadyTakenException, InvalidUsernameOrPasswordException {
-
         when(idpSessionRepository.get(SESSION_ID)).thenReturn(Optional.of(idpSession));
         when(idpSession.getIdaAuthnRequestFromHub()).thenReturn(null);
         final Response response = resource.post(IDP_NAME, "bob", "jones", "address line 1", "address line 2", "address town", "address postcode", "2000-01-01", false, null, "username", "password", LEVEL_2, Register, SESSION_ID);
@@ -109,5 +107,4 @@ public class RegistrationPageResourceTest {
         assertThat(response.getLocation().toString()).contains("start-prompt");
         verify(idpUserService).createAndAttachIdpUserToSession(eq(IDP_NAME), anyString(), anyString(), anyString(), anyString(), anyString(), anyString(), eq(LEVEL_2), anyString(), eq(Optional.empty()), anyString(), anyString(), eq(SESSION_ID));
     }
-
 }

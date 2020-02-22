@@ -75,7 +75,7 @@ public class EidasMetadataResolverRepository implements MetadataResolverReposito
 
     @Override
     public List<String> getResolverEntityIds() {
-        return List.<String>copyOf(metadataResolvers.keySet());
+        return List.copyOf(metadataResolvers.keySet());
     }
 
     @Override
@@ -182,7 +182,7 @@ public class EidasMetadataResolverRepository implements MetadataResolverReposito
                 .collect(toList());
     }
 
-    private MetadataResolverContainer createMetadataResolverContainer(JWK trustAnchor) throws CertificateException, ComponentInitializationException, UnsupportedEncodingException {
+    private MetadataResolverContainer createMetadataResolverContainer(JWK trustAnchor) throws CertificateException, ComponentInitializationException {
         MetadataResolverConfiguration metadataResolverConfiguration = metadataResolverConfigBuilder.createMetadataResolverConfiguration(trustAnchor, eidasMetadataConfiguration);
         JerseyClientMetadataResolver metadataResolver = (JerseyClientMetadataResolver) dropwizardMetadataResolverFactory.createMetadataResolverWithClient(metadataResolverConfiguration, true, client);
         return new MetadataResolverContainer(metadataResolver, metadataSignatureTrustEngineFactory.createSignatureTrustEngine(metadataResolver));

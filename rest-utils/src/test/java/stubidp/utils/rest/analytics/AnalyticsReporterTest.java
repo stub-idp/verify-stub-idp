@@ -20,7 +20,6 @@ import stubidp.utils.rest.configuration.AnalyticsConfiguration;
 import stubidp.utils.rest.configuration.AnalyticsConfigurationBuilder;
 
 import javax.ws.rs.core.Cookie;
-import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
@@ -51,7 +50,7 @@ public class AnalyticsReporterTest {
     private String visitorId = "123";
 
     @BeforeEach
-    public void setUp() throws Exception {
+    public void setUp() {
         DateTimeUtils.setCurrentMillisFixed(DateTime.now().getMillis());
     }
 
@@ -75,7 +74,7 @@ public class AnalyticsReporterTest {
     }
 
     @Test
-    public void shouldCallGenerateUrlAndSendToPiwkAsynchronously() throws MalformedURLException, URISyntaxException {
+    public void shouldCallGenerateUrlAndSendToPiwkAsynchronously() throws URISyntaxException {
         doReturn(Map.of(PIWIK_VISITOR_ID, new Cookie(PIWIK_VISITOR_ID, visitorId))).when(requestContext).getCookies();
 
         String friendlyDescription = "friendly description of URL";
@@ -83,7 +82,7 @@ public class AnalyticsReporterTest {
 
         AnalyticsReporter analyticsReporter = spy(new AnalyticsReporter(piwikClient, new AnalyticsConfigurationBuilder().build()));
 
-        doReturn(piwikUri).when(analyticsReporter).generateURI(friendlyDescription, requestContext, Optional.<CustomVariable>empty(), Optional.of(visitorId));
+        doReturn(piwikUri).when(analyticsReporter).generateURI(friendlyDescription, requestContext, Optional.empty(), Optional.of(visitorId));
 
         analyticsReporter.report(friendlyDescription, requestContext);
 
@@ -91,7 +90,7 @@ public class AnalyticsReporterTest {
     }
 
     @Test
-    public void shouldHandleAnyExceptions() throws MalformedURLException, URISyntaxException {
+    public void shouldHandleAnyExceptions() throws URISyntaxException {
         doReturn(Map.of(PIWIK_VISITOR_ID, new Cookie(PIWIK_VISITOR_ID, visitorId))).when(requestContext).getCookies();
 
         String friendlyDescription = "friendly description of URL";
@@ -104,9 +103,7 @@ public class AnalyticsReporterTest {
     }
 
     @Test
-    public void shouldGeneratePiwikUrl() throws MalformedURLException, URISyntaxException {
-        when(requestContext.getRequestUri()).thenReturn(URI.create("http://localhost"));
-
+    public void shouldGeneratePiwikUrl() throws URISyntaxException {
         DateTime now = DateTime.now();
 
         when(requestContext.getHeaderString("Referer")).thenReturn("http://piwikserver/referrerUrl");
@@ -122,7 +119,7 @@ public class AnalyticsReporterTest {
 
         URIBuilder testURI = new URIBuilder(analyticsReporter.generateURI("SERVER friendly description of URL", requestContext, Optional.empty(), Optional.of("abc")));
 
-        Map<String, NameValuePair> expectedParams = Maps.uniqueIndex(expectedURI.getQueryParams(), from -> from.getName());
+        Map<String, NameValuePair> expectedParams = Maps.uniqueIndex(expectedURI.getQueryParams(), NameValuePair::getName);
 
         for (NameValuePair param : testURI.getQueryParams()) {
             assertThat(expectedParams).containsEntry(param.getName(), param);
@@ -193,8 +190,6 @@ public class AnalyticsReporterTest {
 
     @Test
     public void simulatePageView_handlesMissingVisitorId() {
-        doReturn(Map.of(PIWIK_VISITOR_ID, new Cookie(PIWIK_VISITOR_ID, visitorId))).when(requestContext).getCookies();
-
         when(requestContext.getCookies()).thenReturn(Map.of());
         AnalyticsConfiguration config = new AnalyticsConfigurationBuilder().build();
         AnalyticsReporter reporter = new AnalyticsReporter(piwikClient, config);

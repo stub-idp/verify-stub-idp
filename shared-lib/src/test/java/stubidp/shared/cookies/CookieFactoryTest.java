@@ -44,16 +44,15 @@ public class CookieFactoryTest {
     @BeforeEach
     public void setup() {
         cookieFactory = new CookieFactory(hmacDigest, secureCookieConfiguration, cookieNames);
-        when(secureCookieConfiguration.isSecure()).thenReturn(IS_SECURE);
     }
 
     @Test
-    public void createSecureCookieWithSecurelyHashedValue_shouldCreateACookie() throws Exception {
+    public void createSecureCookieWithSecurelyHashedValue_shouldCreateACookie() {
+        when(secureCookieConfiguration.isSecure()).thenReturn(IS_SECURE);
         SessionId sessionId = new SessionId(UUID.randomUUID().toString());
 
         String digestedValue = "ummm cookie";
         when(hmacDigest.digest(sessionId.toString())).thenReturn(digestedValue);
-
 
         NewCookie cookie = cookieFactory.createSecureCookieWithSecurelyHashedValue(sessionId);
 
@@ -66,8 +65,7 @@ public class CookieFactoryTest {
     }
 
     @Test
-    public void createSessionIdCookie_shouldCreateACookie() throws Exception {
-
+    public void createSessionIdCookie_shouldCreateACookie() {
         when(secureCookieConfiguration.isSecure()).thenReturn(IS_SECURE);
         SessionId expectedValue = SessionId.createNewSessionId();
 

@@ -61,8 +61,7 @@ class StubCountryServiceTest {
     private StubCountry stubCountry;
 
     @BeforeEach
-    void setUp(){
-        when(stubCountryRepository.getStubCountryWithFriendlyId(EIDAS_SCHEME)).thenReturn(stubCountry);
+    void setUp() {
         stubCountryService = new StubCountryService(stubCountryRepository, sessionRepository);
         eidasAuthnRequest = new EidasAuthnRequest("request-id", "issuer", "destination", "loa", Collections.emptyList());
         session = new EidasSession(SESSION_ID, eidasAuthnRequest, null, null, null, Optional.empty(), Optional.empty());
@@ -72,6 +71,7 @@ class StubCountryServiceTest {
     @Test
     void shouldAttachEidasToSession() throws InvalidUsernameOrPasswordException, InvalidSessionIdException {
         when(stubCountry.getUser(USERNAME, PASSWORD)).thenReturn(user);
+        when(stubCountryRepository.getStubCountryWithFriendlyId(EIDAS_SCHEME)).thenReturn(stubCountry);
 
         stubCountryService.attachStubCountryToSession(EIDAS_SCHEME, USERNAME, PASSWORD, true, session);
 
@@ -82,6 +82,7 @@ class StubCountryServiceTest {
     void shouldThrowExceptionWhenUserIsNotPresent() {
         user = Optional.empty();
         when(stubCountry.getUser(USERNAME, PASSWORD)).thenReturn(user);
+        when(stubCountryRepository.getStubCountryWithFriendlyId(EIDAS_SCHEME)).thenReturn(stubCountry);
 
         Assertions.assertThrows(InvalidUsernameOrPasswordException.class, () -> stubCountryService.attachStubCountryToSession(EIDAS_SCHEME, USERNAME, PASSWORD, true, session));
     }
@@ -105,4 +106,3 @@ class StubCountryServiceTest {
         return (value == null) ? null : new MatchingDatasetValue<>(value, null, null, true);
     }
 }
-
