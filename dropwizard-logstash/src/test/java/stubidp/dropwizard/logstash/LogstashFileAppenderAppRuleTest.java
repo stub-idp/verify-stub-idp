@@ -59,9 +59,10 @@ public class LogstashFileAppenderAppRuleTest {
     void testLoggingLogstashRequestLog() throws InterruptedException, IOException {
         Client client = new JerseyClientBuilder().build();
 
-        final Response response = client.target("http://localhost:" + dropwizardAppRule.getLocalPort() + "/").request().get();
-
-        assertThat(response.readEntity(String.class)).isEqualTo("hello!");
+        for(int i=0;i<5;i++) {
+            final Response response = client.target("http://localhost:" + dropwizardAppRule.getLocalPort() + "/").request().get();
+            assertThat(response.readEntity(String.class)).isEqualTo("hello!");
+        }
 
         // wait for the logs to be written
         int count = 0;
@@ -74,12 +75,9 @@ public class LogstashFileAppenderAppRuleTest {
 
         final List<LoggingEventFormat> list = parseLog(requestLog);
 
-        assertThat(list.size()).isEqualTo(1);
-
-        // this is currently returning the host, like this: "GET //localhost:63932/ HTTP/1.1" 200
-//        assertThat(list.get(0).getMessage()).contains("\"GET / HTTP/1.1\" 200");
+        assertThat(list.size()).isGreaterThanOrEqualTo(1);
+        assertThat(list.get(0).getMessage()).contains("\"GET / HTTP/1.1\" 200");
         assertThat(list.get(0).getLoggerName()).isEqualTo("http.request");
-
     }
 
     @Test
@@ -87,10 +85,11 @@ public class LogstashFileAppenderAppRuleTest {
 
         Client client = new JerseyClientBuilder().build();
 
-        final Response response = client.target("http://localhost:" + dropwizardAppRule.getLocalPort() + "/log").request()
-                .get();
-
-        assertThat(response.getStatus()).isEqualTo(204);
+        for(int i=0;i<5;i++) {
+            final Response response = client.target("http://localhost:" + dropwizardAppRule.getLocalPort() + "/log").request()
+                    .get();
+            assertThat(response.getStatus()).isEqualTo(204);
+        }
 
         // wait for the logs to be written
         int count = 0;
@@ -107,7 +106,7 @@ public class LogstashFileAppenderAppRuleTest {
 
         assertThat(list.stream()
                 .filter(logFormat -> logFormat.getMessage().equals(TEST_LOG_LINE))
-                .count()).isEqualTo(1);
+                .count()).isGreaterThanOrEqualTo(1);
     }
 
     private List<LoggingEventFormat> parseLog(File logLog) throws IOException {
