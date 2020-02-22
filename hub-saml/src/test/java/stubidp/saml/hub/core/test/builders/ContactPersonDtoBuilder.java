@@ -10,7 +10,7 @@ import java.util.List;
 public class ContactPersonDtoBuilder {
 
     private static final String DEFAULT_TELEPHONE_NUMBER = "0113 496 0000";
-    private static final URI DEFAULT_EMAIL_ADDRESS = URI.create("mailto:default@example.com");
+    private static final URI DEFAULT_EMAIL_ADDRESS = URI.create("mailto:default@example.local");
 
     private String companyName = "default-company-name";
     private String givenName = "default-given-name";

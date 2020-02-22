@@ -3,8 +3,6 @@ package stubidp.shared.repositories;
 import net.shibboleth.utilities.java.support.component.ComponentInitializationException;
 import net.shibboleth.utilities.java.support.resolver.ResolverException;
 import net.shibboleth.utilities.java.support.xml.BasicParserPool;
-import org.apache.log4j.Level;
-import org.apache.log4j.Logger;
 import org.joda.time.DateTime;
 import org.junit.jupiter.api.Test;
 import org.opensaml.core.config.InitializationException;
@@ -115,7 +113,6 @@ public class MetadataRepositoryTest {
         FileWriter fileWriter = new FileWriter(metadataFile);
         fileWriter.write(metadata);
         fileWriter.flush();
-        Logger.getRootLogger().setLevel(Level.INFO);
         InitializationService.initialize();
         FilesystemMetadataResolver filesystemMetadataResolver = new FilesystemMetadataResolver(metadataFile);
         BasicParserPool pool = new BasicParserPool();

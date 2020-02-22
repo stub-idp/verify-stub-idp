@@ -15,7 +15,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class CryptoHelperTest {
 
-    static final String EXAMPLE_IDP = "http://example.com/idp";
+    static final String EXAMPLE_IDP = "http://example.local/idp";
     static final String KEY = base64(new byte[CryptoHelper.KEY_AND_NONCE_AND_IV_LENGTH_IN_BYTES]);
     private static CryptoHelper cryptoHelper;
 
@@ -28,7 +28,7 @@ public class CryptoHelperTest {
     }
 
     @BeforeAll
-    public static void setUp() throws Exception {
+    public static void setUp() {
         cryptoHelper = new CryptoHelper(KEY);
     }
 
@@ -95,7 +95,7 @@ public class CryptoHelperTest {
 
     @Test
     public void testShortEntityIDProducesSameLengthEncryptedOutput() {
-        String veryLongIdpEntityId = "http://example.com/something/incredibly/long/which/wont/be/beaten/by/a/real/life/entityId/like_______________________________this";
+        String veryLongIdpEntityId = "http://example.local/something/incredibly/long/which/wont/be/beaten/by/a/real/life/entityId/like_______________________________this";
         String standedEntityIDEncryptionValue = cryptoHelper.encrypt_yesIKnowThisCryptoCodeHasNotBeenAudited(veryLongIdpEntityId).get();
         String shortEntityIDEncryptionValue = cryptoHelper.encrypt_yesIKnowThisCryptoCodeHasNotBeenAudited("h").get();
         assertThat(unbase64(standedEntityIDEncryptionValue).length).isEqualTo(unbase64(shortEntityIDEncryptionValue).length);

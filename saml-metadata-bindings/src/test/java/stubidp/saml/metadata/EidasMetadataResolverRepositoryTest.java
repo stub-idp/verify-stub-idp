@@ -119,7 +119,7 @@ public class EidasMetadataResolverRepositoryTest {
         JWK trustAnchor = createJWK(entityId, stringCertChain, true);
         trustAnchors.add(trustAnchor);
 
-        when(metadataConfiguration.getMetadataSourceUri()).thenReturn(UriBuilder.fromUri("https://source.com").build());
+        when(metadataConfiguration.getMetadataSourceUri()).thenReturn(UriBuilder.fromUri("https://source.local").build());
         EidasMetadataResolverRepository metadataResolverRepository = new EidasMetadataResolverRepository(
                 trustAnchorResolver,
                 metadataConfiguration,
@@ -140,7 +140,7 @@ public class EidasMetadataResolverRepositoryTest {
         assertThat(createdMetadataResolver).isEqualTo(metadataResolver);
         assertThat(expectedTrustStoreCertificate).containsExactly(actualTrustStoreCertificate);
         assertThat(expectedTrustStoreCACertificate).containsExactly(actualTrustStoreCACertificate);
-        assertThat(metadataResolverConfiguration.getUri().toString()).isEqualTo("https://source.com/" + ResourceEncoder.entityIdAsResource(entityId));
+        assertThat(metadataResolverConfiguration.getUri().toString()).isEqualTo("https://source.local/" + ResourceEncoder.entityIdAsResource(entityId));
         assertThat(metadataResolverRepository.getSignatureTrustEngine(trustAnchor.getKeyID())).isEqualTo(Optional.of(explicitKeySignatureTrustEngine));
     }
 
@@ -160,7 +160,7 @@ public class EidasMetadataResolverRepositoryTest {
         JWK trustAnchor = createJWK(entityId, stringCertsChain, true);
         trustAnchors.add(trustAnchor);
 
-        when(metadataConfiguration.getMetadataSourceUri()).thenReturn(UriBuilder.fromUri("https://source.com").build());
+        when(metadataConfiguration.getMetadataSourceUri()).thenReturn(UriBuilder.fromUri("https://source.local").build());
         EidasMetadataResolverRepository metadataResolverRepository = new EidasMetadataResolverRepository(
                 trustAnchorResolver,
                 metadataConfiguration,

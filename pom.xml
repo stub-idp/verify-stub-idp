@@ -29,7 +29,7 @@
         <shibboleth_utils.version>7.5.1</shibboleth_utils.version>
         <javax_validation.version>2.0.2</javax_validation.version>
         <jackson_core.version>2.10.2</jackson_core.version>
-        <jackson_databind.version>2.10.0</jackson_databind.version>
+        <jackson_databind.version>2.10.2</jackson_databind.version>
         <jackson_datatype_joda.version>2.10.2</jackson_datatype_joda.version>
         <nimbus_jwt.version>8.6</nimbus_jwt.version>
         <slf4j.version>1.7.30</slf4j.version>
@@ -38,6 +38,7 @@
         <commons_io.version>2.6</commons_io.version>
         <commons_lang.version>2.6</commons_lang.version>
         <commons_validator.version>1.6</commons_validator.version>
+        <commons_collections.version>3.2.2</commons_collections.version>
         <logstash_logback_encoder.version>6.3</logstash_logback_encoder.version>
         <logback.version>1.2.3</logback.version>
         <javax_activation.version>1.2.2</javax_activation.version>

@@ -10,7 +10,7 @@ import java.util.Map;
 import java.util.Optional;
 
 public class SamlStatusToIdpIdaStatusMappingsFactory {
-    enum SamlStatusDefinitions {
+    public enum SamlStatusDefinitions {
         Success(DetailedStatusCode.Success, Optional.empty()),
         AuthenticationCancelled(DetailedStatusCode.NoAuthenticationContext, Optional.of(StatusValue.CANCEL)),
         AuthenticationPending(DetailedStatusCode.NoAuthenticationContext, Optional.of(StatusValue.PENDING)),

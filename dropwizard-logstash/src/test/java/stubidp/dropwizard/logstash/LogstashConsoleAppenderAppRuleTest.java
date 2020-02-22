@@ -35,11 +35,11 @@ public class LogstashConsoleAppenderAppRuleTest {
     public void testLoggingLogstashRequestLog(CaptureSystemOutput.OutputCapture outputCapture) throws InterruptedException, IOException {
         Client client = new JerseyClientBuilder().build();
 
-        final Response response = client.target("http://localhost:" + dropwizardAppRule.getLocalPort() + "/?queryparam=test").request()
-                .header("Referer", "http://foobar/").header("User-Agent","lynx/1.337").get();
-
-        assertThat(response.readEntity(String.class)).isEqualTo("hello!");
-
+        for(int i=0;i<5;i++) {
+            final Response response = client.target("http://localhost:" + dropwizardAppRule.getLocalPort() + "/?queryparam=test").request()
+                    .header("Referer", "http://foobar/").header("User-Agent", "lynx/1.337").get();
+            assertThat(response.readEntity(String.class)).isEqualTo("hello!");
+        }
         // If we try to read systemOutRule too quickly, under some circumstances the appender won't have
         // successfully written the expected access log line yet.  We haven't got to the bottom of this
         // but it seems to depend on whether another DropwizardAppRule test has been run before this one.
@@ -49,7 +49,7 @@ public class LogstashConsoleAppenderAppRuleTest {
         final List<AccessEventFormat> list = parseLogsOfType(AccessEventFormat.class, outputCapture);
 
         List<AccessEventFormat> accessEventStream = list.stream().filter(accessLog -> accessLog.getMethod().equals("GET")).collect(toList());
-        assertThat(accessEventStream.size()).as("check there's an access log in the following:\n%s", List.of(outputCapture.toString().split(System.lineSeparator()))).isEqualTo(1);
+        assertThat(accessEventStream.size()).as("check there's an access log in the following:\n%s", List.of(outputCapture.toString().split(System.lineSeparator()))).isGreaterThanOrEqualTo(1);
         AccessEventFormat accessEvent = accessEventStream.get(0);
         assertThat(accessEvent.getMethod()).isEqualTo("GET");
         assertThat(accessEvent.getReferer()).isEqualTo("http://foobar/");
@@ -71,10 +71,11 @@ public class LogstashConsoleAppenderAppRuleTest {
     public void testRequestLogWithMissingRefererHeader(CaptureSystemOutput.OutputCapture outputCapture) throws InterruptedException, IOException {
         Client client = new JerseyClientBuilder().build();
 
-        final Response response = client.target("http://localhost:" + dropwizardAppRule.getLocalPort() + "/").request()
-                .get();
-
-        assertThat(response.readEntity(String.class)).isEqualTo("hello!");
+        for(int i=0;i<5;i++) {
+            final Response response = client.target("http://localhost:" + dropwizardAppRule.getLocalPort() + "/").request()
+                    .get();
+            assertThat(response.readEntity(String.class)).isEqualTo("hello!");
+        }
 
         // If we try to read systemOutRule too quickly, under some circumstances the appender won't have
         // successfully written the expected access log line yet.  We haven't got to the bottom of this
@@ -85,7 +86,7 @@ public class LogstashConsoleAppenderAppRuleTest {
         final List<AccessEventFormat> list = parseLogsOfType(AccessEventFormat.class, outputCapture);
 
         List<AccessEventFormat> accessEventStream = list.stream().filter(accessLog -> accessLog.getMethod().equals("GET")).collect(toList());
-        assertThat(accessEventStream.size()).as("check there's an access log in the following:\n%s", List.of(outputCapture.toString().split(System.lineSeparator()))).isEqualTo(1);
+        assertThat(accessEventStream.size()).as("check there's an access log in the following:\n%s", List.of(outputCapture.toString().split(System.lineSeparator()))).isGreaterThanOrEqualTo(1);
         AccessEventFormat accessEvent = accessEventStream.get(0);
         assertThat(accessEvent.getReferer()).isEqualTo("-");
     }

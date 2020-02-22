@@ -6,7 +6,6 @@ import org.glassfish.jersey.client.JerseyClientBuilder;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import stubidp.saml.extensions.IdaSamlBootstrap;
 import stubsp.stubsp.Urls;
 import stubsp.stubsp.domain.AvailableServiceDto;
 import stubsp.stubsp.integration.support.StubSpAppExtension;
@@ -21,13 +20,9 @@ import java.util.List;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @ExtendWith(DropwizardExtensionsSupport.class)
-class StubSpApplicationIntegrationTest {
+public class StubSpApplicationIntegrationTest {
 
-    static {
-        IdaSamlBootstrap.bootstrap();
-    }
-
-    private static final StubSpAppExtension stubSpAppExtension = new StubSpAppExtension();
+    public static final StubSpAppExtension stubSpAppExtension = new StubSpAppExtension();
 
     private final Client client = JerseyClientBuilder.createClient()
             .property(ClientProperties.FOLLOW_REDIRECTS, false);
@@ -60,7 +55,7 @@ class StubSpApplicationIntegrationTest {
     void testAvailableServices() {
         final Response response = get(Urls.AVAILABLE_SERVICE_RESOURCE);
         assertThat(response.getStatus()).isEqualTo(200);
-        // WARNING: don't remove the type in GenericType, leads to compiler error
+        // WARNING: don't remove the type in GenericType, leads to compiler error on 11.0.2+9/travis
         final List<AvailableServiceDto> availableServices = response.readEntity(new GenericType<List<AvailableServiceDto>>() {});
         assertThat(availableServices).hasSize(1);
     }

@@ -7,7 +7,7 @@ import java.util.AbstractMap;
 import java.util.Map;
 
 public class SamlStatusToCountryAuthenticationStatusMappingsFactory {
-    enum SamlStatusDefinitions {
+    public enum SamlStatusDefinitions {
         Success(DetailedStatusCode.Success);
 
         private final DetailedStatusCode statusCode;

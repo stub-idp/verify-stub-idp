@@ -63,10 +63,10 @@ public class AuthnRequestFromRelyingPartyUnmarshallerTest extends OpenSAMLRunner
         issuer.setValue("some-service-entity-id");
         authnRequest.setIssuer(issuer);
         authnRequest.setIssueInstant(issueInstant);
-        authnRequest.setDestination("http://example.com");
+        authnRequest.setDestination("http://example.local");
         authnRequest.setForceAuthn(true);
         authnRequest.setAssertionConsumerServiceURL("some-url");
-        authnRequest.setAssertionConsumerServiceIndex(Integer.valueOf(5));
+        authnRequest.setAssertionConsumerServiceIndex(5);
         authnRequest.setSignature(signature);
         authnRequest.setExtensions(createApplicationVersionExtensions("some-version"));
 
@@ -75,10 +75,10 @@ public class AuthnRequestFromRelyingPartyUnmarshallerTest extends OpenSAMLRunner
             "some-id",
             "some-service-entity-id",
             issueInstant,
-            URI.create("http://example.com"),
-            Optional.ofNullable(true),
+            URI.create("http://example.local"),
+            Optional.of(true),
             Optional.of(URI.create("some-url")),
-            Optional.of(Integer.valueOf(5)),
+            Optional.of(5),
             Optional.of(signature),
             Optional.of("some-version")
         );
@@ -87,10 +87,10 @@ public class AuthnRequestFromRelyingPartyUnmarshallerTest extends OpenSAMLRunner
     }
 
     @Test
-    public void fromSamlMessage_shouldNotComplainWhenThereIsNoExtensionsElement() throws Exception {
+    public void fromSamlMessage_shouldNotComplainWhenThereIsNoExtensionsElement() {
         AuthnRequest authnRequest = new AuthnRequestBuilder().buildObject();
         authnRequest.setIssuer(new IssuerBuilder().buildObject());
-        authnRequest.setDestination("http://example.com");
+        authnRequest.setDestination("http://example.local");
 
         AuthnRequestFromRelyingParty authnRequestFromRelyingParty = unmarshaller.fromSamlMessage(authnRequest);
 
@@ -101,7 +101,7 @@ public class AuthnRequestFromRelyingPartyUnmarshallerTest extends OpenSAMLRunner
     public void fromSamlMessage_shouldNotComplainWhenExceptionDuringDecryption() throws Exception {
         AuthnRequest authnRequest = new AuthnRequestBuilder().buildObject();
         authnRequest.setIssuer(new IssuerBuilder().buildObject());
-        authnRequest.setDestination("http://example.com");
+        authnRequest.setDestination("http://example.local");
         authnRequest.setExtensions(createApplicationVersionExtensions(null));
 
         AuthnRequestFromRelyingParty authnRequestFromRelyingParty = unmarshaller.fromSamlMessage(authnRequest);
@@ -121,10 +121,9 @@ public class AuthnRequestFromRelyingPartyUnmarshallerTest extends OpenSAMLRunner
     private Version createApplicationVersion(String versionNumber) {
         ApplicationVersion applicationVersion = new ApplicationVersionImpl();
         applicationVersion.setValue(versionNumber);
-        Version version = new VersionImpl() {{
+        return new VersionImpl() {{
             setApplicationVersion(applicationVersion);
         }};
-        return version;
     }
 
     private BasicCredential createBasicCredential() {

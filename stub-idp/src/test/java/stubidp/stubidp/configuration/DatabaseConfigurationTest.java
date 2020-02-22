@@ -23,7 +23,7 @@ class DatabaseConfigurationTest {
 
     @Test
     void shouldReturnUrlIfOnlyUrlProvided() throws Exception {
-        String url = "jdbc:postgresql://db.example.com:5432/broker?password=dbpassword&ssl=true&user=dbuser";
+        String url = "jdbc:postgresql://db.example.local:5432/broker?password=dbpassword&ssl=true&user=dbuser";
 
         DatabaseConfiguration dbCfg = factory.build(new StringConfigurationSourceProvider("url: " + url), "");
 
@@ -32,7 +32,7 @@ class DatabaseConfigurationTest {
 
     @Test
     void shouldReturnVcapIfOnlyVcapProvided() throws Exception {
-        String url = "jdbc:postgresql://db.example.com:5432/broker?password=dbpassword&ssl=true&user=dbuser";
+        String url = "jdbc:postgresql://db.example.local:5432/broker?password=dbpassword&ssl=true&user=dbuser";
         String vcap = "{\"postgres\":[{ \"credentials\": { \"jdbcuri\": \"" + url + "\"}}]}";
 
         DatabaseConfiguration dbCfg = factory.build(new StringConfigurationSourceProvider("vcapServices: '" + vcap + "'"), "");
@@ -42,7 +42,7 @@ class DatabaseConfigurationTest {
 
     @Test
     void shouldReturnVcapIfBothUrlAndVcapProvided() throws Exception {
-        String url = "jdbc:postgresql://db.example.com:5432/broker?password=dbpassword&ssl=true&user=dbuser";
+        String url = "jdbc:postgresql://db.example.local:5432/broker?password=dbpassword&ssl=true&user=dbuser";
         String vcap = "{\"postgres\":[{ \"credentials\": { \"jdbcuri\": \"" + url + "\"}}]}";
 
         DatabaseConfiguration dbCfg = factory.build(new StringConfigurationSourceProvider("url: idontcare\nvcapServices: '" + vcap + "'"), "");

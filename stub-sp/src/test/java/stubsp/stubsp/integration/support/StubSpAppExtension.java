@@ -9,6 +9,7 @@ import org.opensaml.core.xml.io.MarshallingException;
 import org.opensaml.saml.saml2.metadata.EntitiesDescriptor;
 import org.opensaml.saml.saml2.metadata.EntityDescriptor;
 import org.opensaml.xmlsec.signature.support.SignatureException;
+import stubidp.saml.extensions.IdaSamlBootstrap;
 import stubidp.saml.metadata.test.factories.metadata.EntitiesDescriptorFactory;
 import stubidp.saml.metadata.test.factories.metadata.MetadataFactory;
 import stubidp.saml.utils.Constants;
@@ -37,6 +38,10 @@ import static stubidp.test.devpki.TestCertificateStrings.TEST_RP_PUBLIC_ENCRYPTI
 import static stubidp.test.devpki.TestCertificateStrings.TEST_RP_PUBLIC_SIGNING_CERT;
 
 public class StubSpAppExtension extends DropwizardAppExtension<StubSpConfiguration> {
+
+    static {
+        IdaSamlBootstrap.bootstrap();
+    }
 
     private static final Logger LOG = Logger.getLogger(StubSpAppExtension.class);
     private static final HttpStubRule metadataServer = new HttpStubRule();

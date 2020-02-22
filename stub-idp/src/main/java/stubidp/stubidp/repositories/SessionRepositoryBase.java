@@ -4,8 +4,7 @@ import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.PropertyAccessor;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
-import com.fasterxml.jackson.datatype.joda.JodaModule;
+import io.dropwizard.jackson.Jackson;
 import org.jdbi.v3.core.Jdbi;
 import org.joda.time.Duration;
 import org.opensaml.core.xml.XMLObject;
@@ -76,7 +75,7 @@ public abstract class SessionRepositoryBase<T extends Session> implements Sessio
                             .bind("lastModified", Instant.now())
                             .execute());
         } catch (JsonProcessingException e) {
-            throw new SessionSerializationException("Unable to create session update.");
+            throw new SessionSerializationException("Unable to create session update.", e);
         }
 
         return sessionToken;
@@ -123,7 +122,7 @@ public abstract class SessionRepositoryBase<T extends Session> implements Sessio
                         .bind("sessionData", serializedSession)
                         .execute());
         } catch (JsonProcessingException e) {
-            throw new SessionSerializationException("Unable to create session update.");
+            throw new SessionSerializationException("Unable to create session update.", e);
         }
 
         return sessionToken;
@@ -136,14 +135,12 @@ public abstract class SessionRepositoryBase<T extends Session> implements Sessio
     }
 
     private ObjectMapper createObjectMapperForSerialization() {
-        ObjectMapper objectMapper = new ObjectMapper();
+        ObjectMapper objectMapper = Jackson.newObjectMapper();
         objectMapper.setVisibility(PropertyAccessor.FIELD, JsonAutoDetect.Visibility.ANY);
         objectMapper.addMixIn(XMLObject.class, XmlObjectMixin.class);
         objectMapper.addMixIn(IdaAuthnRequestFromHub.class, IdaAuthnRequestFromHubMixin.class);
         objectMapper.addMixIn(AuthnContextComparisonTypeEnumeration.class, AuthnContextComparisonTypeMixin.class);
         objectMapper.addMixIn(Gender.class, GenderMixin.class);
-        objectMapper.registerModule(new JodaModule());
-        objectMapper.registerModule(new Jdk8Module());
         objectMapper.configure(FAIL_ON_UNKNOWN_PROPERTIES, false);
 
         return objectMapper;

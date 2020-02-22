@@ -34,7 +34,7 @@ public class MetadataResolverFactoryTest {
     public void shouldProvideMetadataResolver() throws Exception {
         Client client = new JerseyClientBuilder().build();
         MetadataResolverFactory metadataResolverFactory = new MetadataResolverFactory();
-        MetadataResolver metadataResolver = metadataResolverFactory.create(client, URI.create("http://example.com"), asList(signatureValidationFilter,  expiredCertificateMetadataFilter),20, 60);
+        MetadataResolver metadataResolver = metadataResolverFactory.create(client, URI.create("http://example.local"), asList(signatureValidationFilter,  expiredCertificateMetadataFilter),20, 60);
         assertThat(metadataResolver).isNotNull();
 
         AbstractBatchMetadataResolver batchMetadataResolver = (AbstractBatchMetadataResolver) metadataResolver;

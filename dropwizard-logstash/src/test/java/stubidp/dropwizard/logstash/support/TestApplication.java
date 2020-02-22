@@ -9,11 +9,11 @@ public class TestApplication extends Application<TestConfiguration> {
     @Override
     public void initialize(Bootstrap<TestConfiguration> bootstrap) {
         super.initialize(bootstrap);
-        bootstrap.addBundle(new LogstashBundle<TestConfiguration>());
+        bootstrap.addBundle(new LogstashBundle<>());
     }
 
     @Override
-    public void run(TestConfiguration configuration, Environment environment) throws Exception {
+    public void run(TestConfiguration configuration, Environment environment) {
         environment.jersey().register(new RootResource());
     }
 }
