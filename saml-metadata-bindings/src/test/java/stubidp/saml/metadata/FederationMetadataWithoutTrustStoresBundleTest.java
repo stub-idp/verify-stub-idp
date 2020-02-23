@@ -2,7 +2,7 @@ package stubidp.saml.metadata;
 
 import certificates.values.CACertificates;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.github.tomakehurst.wiremock.core.WireMockConfiguration;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import io.dropwizard.Application;
 import io.dropwizard.Configuration;
 import io.dropwizard.client.JerseyClientBuilder;
@@ -21,9 +21,9 @@ import org.junit.jupiter.api.extension.RegisterExtension;
 import org.opensaml.core.criterion.EntityIdCriterion;
 import org.opensaml.saml.metadata.resolver.MetadataResolver;
 import stubidp.saml.metadata.bundle.MetadataResolverBundle;
-import stubidp.saml.metadata.support.WireMockExtension;
 import stubidp.saml.metadata.test.factories.metadata.MetadataFactory;
 import stubidp.test.devpki.TestEntityIds;
+import stubidp.test.utils.httpstub.HttpStubRule;
 import stubidp.test.utils.keystore.KeyStoreRule;
 import stubidp.test.utils.keystore.builders.KeyStoreRuleBuilder;
 
@@ -33,37 +33,37 @@ import javax.ws.rs.client.Client;
 import javax.ws.rs.core.Response;
 import java.util.Optional;
 
-import static com.github.tomakehurst.wiremock.client.WireMock.aResponse;
-import static com.github.tomakehurst.wiremock.client.WireMock.get;
-import static com.github.tomakehurst.wiremock.client.WireMock.urlEqualTo;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @ExtendWith(DropwizardExtensionsSupport.class)
 public class FederationMetadataWithoutTrustStoresBundleTest {
 
-    @RegisterExtension
-    public static final WireMockExtension metadataResource;
+    private static final String APPLICATION_SAMLMETADATA_XML = "application/samlmetadata+xml";
+    private static final String VERIFY_METADATA_PATH = "/saml/metadata/sp";
+    private static final HttpStubRule verifyMetadataServer = new HttpStubRule();
     @RegisterExtension
     public static KeyStoreRule metadataKeyStoreRule;
 
     static {
         try {
-            metadataKeyStoreRule = metadataKeyStoreRule = new KeyStoreRuleBuilder().withCertificate("metadata", CACertificates.TEST_METADATA_CA).withCertificate("root", CACertificates.TEST_ROOT_CA).build();
+            metadataKeyStoreRule = new KeyStoreRuleBuilder().withCertificate("metadata", CACertificates.TEST_METADATA_CA).withCertificate("root", CACertificates.TEST_ROOT_CA).build();
             metadataKeyStoreRule.beforeEach(null);
         } catch(Exception e) {
             throw new RuntimeException(e);
         }
 
-        metadataResource = new WireMockExtension(WireMockConfiguration.options().dynamicPort());
-        // starting here to get the port to pass to the app
-        metadataResource.start();
-        metadataResource.stubFor(get(urlEqualTo("/metadata")).willReturn(aResponse().withBody(new MetadataFactory().defaultMetadata())));
+        verifyMetadataServer.reset();
+        try {
+            verifyMetadataServer.register(VERIFY_METADATA_PATH, 200, APPLICATION_SAMLMETADATA_XML, new MetadataFactory().defaultMetadata());
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public static final DropwizardAppExtension<TestConfiguration> APPLICATION_DROPWIZARD_APP_RULE = new DropwizardAppExtension<>(
         TestApplication.class,
         ResourceHelpers.resourceFilePath("test-app.yml"),
-        ConfigOverride.config("metadata.uri", () -> "http://localhost:" + metadataResource.port() + "/metadata"),
+        ConfigOverride.config("metadata.uri", "http://localhost:" + verifyMetadataServer.getPort() + VERIFY_METADATA_PATH),
         ConfigOverride.config("metadata.trustStore.path", () -> metadataKeyStoreRule.getAbsolutePath()),
         ConfigOverride.config("metadata.trustStore.password", () -> metadataKeyStoreRule.getPassword()),
         ConfigOverride.config("metadata.unknownProperty", () -> "unknownValue")

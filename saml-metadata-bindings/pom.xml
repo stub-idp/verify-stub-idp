@@ -235,11 +235,5 @@
             <version>${dropwizard.version}</version>
             <scope>test</scope>
         </dependency>
-        <dependency>
-            <groupId>com.github.tomakehurst</groupId>
-            <artifactId>wiremock-standalone</artifactId>
-            <version>2.26.0</version>
-            <scope>test</scope>
-        </dependency>
     </dependencies>
 </project>
