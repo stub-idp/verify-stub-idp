@@ -26,8 +26,6 @@ import javax.ws.rs.core.Response;
 import java.util.Objects;
 import java.util.Optional;
 
-import static java.util.Optional.ofNullable;
-
 @Path(Urls.SINGLE_IDP_HOMEPAGE_RESOURCE)
 @Produces(MediaType.TEXT_HTML)
 public class SingleIdpHomePageResource {
@@ -48,7 +46,7 @@ public class SingleIdpHomePageResource {
 
     @GET
     public Response get(@PathParam(Urls.IDP_ID_PARAM) @NotNull String idpName,
-                        @QueryParam(Urls.ERROR_MESSAGE_PARAM) java.util.Optional<ErrorMessageType> errorMessage,
+                        @QueryParam(Urls.ERROR_MESSAGE_PARAM) Optional<ErrorMessageType> errorMessage,
                         @CookieParam(StubIdpCookieNames.SESSION_COOKIE_NAME) String sessionCookie,
                         @CookieParam(StubIdpCookieNames.SECURE_COOKIE_NAME) String secureCookie) {
 
@@ -63,7 +61,7 @@ public class SingleIdpHomePageResource {
         Optional<DatabaseIdpUser> loggedInUser = Optional.empty();
         if(Objects.nonNull(sessionCookie)&&Objects.nonNull(secureCookie)) {
             try {
-                sessionCookieValueMustExistAsASessionFilter.validateSessionCookies(ofNullable(sessionCookie), ofNullable(secureCookie));
+                sessionCookieValueMustExistAsASessionFilter.validateSessionCookies(Optional.of(sessionCookie), Optional.of(secureCookie));
             } catch(SessionNotFoundException s) {
                 // do nothing
             }

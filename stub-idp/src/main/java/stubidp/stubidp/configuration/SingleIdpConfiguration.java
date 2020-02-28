@@ -15,7 +15,7 @@ public class SingleIdpConfiguration {
 
     @Valid
     @JsonProperty
-    private URI serviceListUri = URI.create("http://NotUsed");
+    private URI serviceListUri = URI.create("http://NotUsed.local");
 
     @Valid
     @JsonProperty
@@ -23,7 +23,7 @@ public class SingleIdpConfiguration {
 
     @Valid
     @JsonProperty
-    private URI verifySubmissionUri = URI.create("http://NotUsed");
+    private URI verifySubmissionUri = URI.create("http://NotUsed.local");
 
     public URI getServiceListUri() {
         return serviceListUri;

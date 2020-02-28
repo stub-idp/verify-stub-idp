@@ -7,14 +7,12 @@ public class Service {
     private String name;
     @JsonProperty
     private String loa;
-
     @JsonProperty
     private String serviceId;
     @JsonProperty
     private String serviceCategory;
 
     public Service() {
-
     }
 
     public Service(String name, String loa, String serviceId, String serviceCategory) {

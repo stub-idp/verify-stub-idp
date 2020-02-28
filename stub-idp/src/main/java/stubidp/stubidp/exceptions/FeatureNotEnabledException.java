@@ -1,5 +1,4 @@
 package stubidp.stubidp.exceptions;
 
-public class FeatureNotEnabledException extends Exception {
-
+public class FeatureNotEnabledException extends RuntimeException {
 }

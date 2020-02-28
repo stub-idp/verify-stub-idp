@@ -4,7 +4,6 @@ import stubidp.stubidp.Urls;
 import stubidp.stubidp.configuration.SingleIdpConfiguration;
 import stubidp.stubidp.cookies.StubIdpCookieNames;
 import stubidp.stubidp.domain.DatabaseIdpUser;
-import stubidp.stubidp.domain.Service;
 import stubidp.stubidp.exceptions.FeatureNotEnabledException;
 import stubidp.stubidp.filters.SessionCookieValueMustExistAsASession;
 import stubidp.stubidp.repositories.Idp;
@@ -26,7 +25,6 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -60,10 +58,8 @@ public class SingleIdpStartPromptPageResource {
             @CookieParam(StubIdpCookieNames.SESSION_COOKIE_NAME) SessionId sessionCookie) throws FeatureNotEnabledException {
         if (!singleIdpConfiguration.isEnabled()) throw new FeatureNotEnabledException();
         Idp idp = idpStubsRepository.getIdpWithFriendlyId(idpName);
-        UUID uuid = UUID.randomUUID();
         Optional<DatabaseIdpUser> idpUser = Optional.empty();
 
-        List<Service> serviceList = serviceListService.getServices();
         if (source.isPresent() && source.get().equals(Urls.SOURCE_PARAM_PRE_REG_VALUE) && sessionCookie != null) {
             Optional<IdpSession> idpSession = idpSessionRepository.get(sessionCookie);
             if(idpSession.isPresent()) {
@@ -72,17 +68,14 @@ public class SingleIdpStartPromptPageResource {
         }
 
         return Response.ok()
-            .entity(
-                new SingleIdpPromptPageView(idp.getDisplayName(),
-                    idp.getIssuerId(),
-                    errorMessage.orElse(ErrorMessageType.NO_ERROR).getMessage(),
-                    idp.getAssetId(),
-                    serviceList,
-                    singleIdpConfiguration.getVerifySubmissionUri(),
-                    uuid,
-                    idpUser.orElse(null)
-                )
-            )
-            .build();
+                .entity(new SingleIdpPromptPageView(idp.getDisplayName(),
+                        idp.getIssuerId(),
+                        errorMessage.orElse(ErrorMessageType.NO_ERROR).getMessage(),
+                        idp.getAssetId(),
+                        serviceListService.getServices(),
+                        singleIdpConfiguration.getVerifySubmissionUri(),
+                        UUID.randomUUID(),
+                        idpUser.orElse(null)))
+                .build();
     }
 }

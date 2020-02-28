@@ -7,7 +7,6 @@ public class AvailableServiceDto {
     private String name;
     @JsonProperty
     private String loa;
-
     @JsonProperty
     private String serviceId;
     @JsonProperty

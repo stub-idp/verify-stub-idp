@@ -1,5 +1,8 @@
 package stubidp.stubidp.services;
 
+import com.google.common.cache.CacheBuilder;
+import com.google.common.cache.CacheLoader;
+import com.google.common.cache.LoadingCache;
 import org.apache.log4j.Logger;
 import stubidp.stubidp.configuration.SingleIdpConfiguration;
 import stubidp.stubidp.domain.Service;
@@ -9,15 +12,25 @@ import stubidp.utils.rest.jerseyclient.JsonClient;
 import javax.inject.Inject;
 import javax.ws.rs.core.GenericType;
 import java.text.MessageFormat;
-import java.util.ArrayList;
+import java.time.Duration;
+import java.util.Collections;
 import java.util.List;
 
 public class ServiceListService {
 
-    private final Logger LOG = Logger.getLogger(ServiceListService.class);
+    private static final Logger LOG = Logger.getLogger(ServiceListService.class);
+    private enum Source { Hub }
 
     private final SingleIdpConfiguration singleIdpConfiguration;
     private final JsonClient jsonClient;
+    private final LoadingCache<Source, List<Service>> servicesCache = CacheBuilder.newBuilder()
+            .expireAfterWrite(Duration.ofSeconds(5))
+            .build(new CacheLoader<>() {
+                @Override
+                public List<Service> load(Source key) {
+                    return readServices();
+                }
+            });
 
     @Inject
     public ServiceListService(SingleIdpConfiguration singleIdpConfiguration, JsonClient jsonClient) {
@@ -25,21 +38,20 @@ public class ServiceListService {
         this.jsonClient = jsonClient;
     }
 
-    public List<Service> getServices() throws FeatureNotEnabledException {
+    public List<Service> getServices() {
+        if (!singleIdpConfiguration.isEnabled()) {
+            throw new FeatureNotEnabledException();
+        }
 
-        if (!singleIdpConfiguration.isEnabled()) throw new FeatureNotEnabledException();
-
-        return readListFromHub();
+        return servicesCache.getUnchecked(Source.Hub);
     }
 
-    private List<Service> readListFromHub(){
+    private List<Service> readServices() {
         try {
-            List<Service> services = jsonClient.get(singleIdpConfiguration.getServiceListUri(), new GenericType<List<Service>>() {});
-
-            return services;
+            return jsonClient.get(singleIdpConfiguration.getServiceListUri(), new GenericType<List<Service>>() {});
         } catch (RuntimeException ex) {
             LOG.error(MessageFormat.format("Error getting service list from {0}", singleIdpConfiguration.getServiceListUri().toString()), ex);
         }
-        return new ArrayList<Service>() {};
+        return Collections.emptyList();
     }
 }
