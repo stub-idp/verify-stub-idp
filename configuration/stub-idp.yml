@@ -111,7 +111,7 @@ database:
 
 singleIdpJourney:
   enabled: ${SINGLE_IDP_FEATURE:-true}
-  serviceListUri: ${SERVICE_LIST_URL:-http://localhost:40000/stub/sp/get-available-services}
+  serviceListUri: ${SERVICE_LIST_URL:-http://localhost:40000/stub/sp/available-services}
   serviceListClient:
     timeout: 60s
     timeToLive: 10m
