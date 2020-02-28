@@ -33,7 +33,7 @@
         <jackson_datatype_joda.version>2.10.2</jackson_datatype_joda.version>
         <nimbus_jwt.version>8.8</nimbus_jwt.version>
         <slf4j.version>1.7.30</slf4j.version>
-        <jaxb.version>2.3.2</jaxb.version>
+        <jaxb.version>2.3.3</jaxb.version>
         <commons_codec.version>1.14</commons_codec.version>
         <commons_io.version>2.6</commons_io.version>
         <commons_lang.version>2.6</commons_lang.version>
