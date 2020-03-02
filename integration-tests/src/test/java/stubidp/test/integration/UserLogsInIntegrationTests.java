@@ -23,6 +23,8 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriBuilder;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 import static java.text.MessageFormat.format;
@@ -97,7 +99,7 @@ public class UserLogsInIntegrationTests extends IntegrationTestHelper {
     @Test
     @Order(1)
     void incorrectlySignedAuthnRequestFailsTest() {
-        Response response = authnRequestSteps.userPostsAuthnRequestToStubIdpReturnResponse(List.of(), empty(), empty(), true);
+        Response response = authnRequestSteps.userPostsAuthnRequestToStubIdpReturnResponse(List.of(), empty(), empty(), true, empty());
         assertThat(response.getStatus()).isEqualTo(500);
     }
 
@@ -131,10 +133,15 @@ public class UserLogsInIntegrationTests extends IntegrationTestHelper {
 
     @Test
     @Order(1)
-    void debugPageLoadsTest() {
-        final AuthnRequestSteps.Cookies cookies = authnRequestSteps.userPostsAuthnRequestToStubIdp();
+    void debugPageLoadsAndRelayStateIsCorrectlyDisplayedAndReturnedTest() {
+        String relayState = UUID.randomUUID().toString();
+        final AuthnRequestSteps.Cookies cookies = authnRequestSteps.userPostsAuthnRequestToStubIdp(Optional.of(relayState));
         authnRequestSteps.userLogsIn(cookies);
-        authnRequestSteps.userViewsTheDebugPage(cookies);
+        final String debugPage = authnRequestSteps.userViewsTheDebugPage(cookies);
+        assertThat(debugPage).contains(format("Relay state is \"{0}\"", relayState));
+        final Response response = authnRequestSteps.userConsentsReturnResponse(cookies, false);
+        final String relayStateInResponse = authnRequestSteps.getRelayStateFromResponseHtml(response.readEntity(String.class));
+        assertThat(relayStateInResponse).isEqualTo(relayState);
     }
 
     @Test

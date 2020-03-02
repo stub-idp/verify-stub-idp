@@ -50,11 +50,11 @@ public class HintsIntegrationTests extends IntegrationTestHelper {
     }
 
     @Test
-    public void debugPageShowsHints() throws Exception {
+    public void debugPageShowsHints() {
         List<String> hints = List.of(IdpHint.has_apps.name(), "snakes", "plane");
         final Optional<Boolean> registration = Optional.of(true);
         final Optional<String> language = Optional.empty();
-        final AuthnRequestSteps.Cookies cookies = authnRequestSteps.userPostsAuthnRequestToStubIdp(hints, language, registration);
+        final AuthnRequestSteps.Cookies cookies = authnRequestSteps.userPostsAuthnRequestToStubIdp(hints, language, registration, Optional.empty());
         Response response = aUserVisitsTheDebugPage(IDP_NAME, cookies);
 
         assertThat(response.getStatus()).isEqualTo(Response.Status.OK.getStatusCode());
@@ -69,11 +69,11 @@ public class HintsIntegrationTests extends IntegrationTestHelper {
     }
 
     @Test
-    public void debugPageShowsLanguageHint() throws Exception {
+    public void debugPageShowsLanguageHint() {
         List<String> hints = List.of();
         final Optional<Boolean> registration = Optional.empty();
         final Optional<String> language = Optional.of("cy");
-        final AuthnRequestSteps.Cookies cookies = authnRequestSteps.userPostsAuthnRequestToStubIdp(hints, language, registration);
+        final AuthnRequestSteps.Cookies cookies = authnRequestSteps.userPostsAuthnRequestToStubIdp(hints, language, registration, Optional.empty());
         Response response = aUserVisitsTheDebugPage(IDP_NAME, cookies);
 
         assertThat(response.getStatus()).isEqualTo(Response.Status.OK.getStatusCode());

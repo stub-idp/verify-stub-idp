@@ -122,10 +122,10 @@ public class SecurityIntegrationTests extends IntegrationTestHelper {
                 .withEntityId(SP_ENTITY_ID)
                 .build();
 
-        Response response = authnRequestSteps.postAuthnRequest(List.of(), Optional.empty(), Optional.empty(), authnRequest, Urls.IDP_SAML2_SSO_RESOURCE);
+        Response response = authnRequestSteps.postAuthnRequest(List.of(), Optional.empty(), Optional.empty(), authnRequest, Optional.empty(), Urls.IDP_SAML2_SSO_RESOURCE);
         assertThat(response.getStatus()).isEqualTo(303);
 
-        response = authnRequestSteps.postAuthnRequest(List.of(), Optional.empty(), Optional.empty(), authnRequest, Urls.IDP_SAML2_SSO_RESOURCE);
+        response = authnRequestSteps.postAuthnRequest(List.of(), Optional.empty(), Optional.empty(), authnRequest, Optional.empty(), Urls.IDP_SAML2_SSO_RESOURCE);
         assertThat(response.getStatus()).isEqualTo(500);
     }
 

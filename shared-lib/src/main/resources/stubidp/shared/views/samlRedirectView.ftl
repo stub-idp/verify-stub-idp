@@ -32,9 +32,9 @@
        <h1>Continue to next step</h1>
        <p>Because Javascript is not enabled on your browser, you must press the continue button</p>
     <input type="hidden" value="${body}" name="${samlMessageType}"/>
-    <input type="hidden" value="${relayState}" name="RelayState"/>
+    <input type="hidden" value="${relayState}" name="RelayState" id="RelayState"/>
     <#if showRegistration>
-        <input type="hidden" value="${registration}" name="registration"/>
+        <input type="hidden" value="${registration}" name="registration" id="registration"/>
     </#if>
     <button class='verify-button' id="continue-button">Continue</button>
 </form>

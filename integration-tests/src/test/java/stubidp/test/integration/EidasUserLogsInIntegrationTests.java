@@ -25,8 +25,10 @@ import javax.ws.rs.core.UriBuilder;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
+import static java.text.MessageFormat.format;
 import static org.assertj.core.api.Assertions.assertThat;
 import static stubidp.stubidp.resources.eidas.EidasConsentResource.RSASHA_256;
 import static stubidp.stubidp.resources.eidas.EidasConsentResource.RSASSA_PSS;
@@ -59,13 +61,13 @@ public class EidasUserLogsInIntegrationTests extends IntegrationTestHelper {
 
     @Test
     void incorrectlySignedAuthnRequestFailsTest() {
-        Response response = authnRequestSteps.userPostsEidasAuthnRequestReturnResponse(true, true, true, true);
+        Response response = authnRequestSteps.userPostsEidasAuthnRequestReturnResponse(true, true, true, true, Optional.empty());
         assertThat(response.getStatus()).isEqualTo(500);
     }
 
     @Test
     void correctlySignedButMissingKeyInfoAuthnRequestFailsTest() {
-        Response response = authnRequestSteps.userPostsEidasAuthnRequestReturnResponse(true, true, false);
+        Response response = authnRequestSteps.userPostsEidasAuthnRequestReturnResponse(true, true, false, Optional.empty());
         assertThat(response.getStatus()).isEqualTo(500);
     }
 
@@ -89,13 +91,19 @@ public class EidasUserLogsInIntegrationTests extends IntegrationTestHelper {
         // but stub-country can't currently return any values for these attributes
         final boolean requestGender = true;
         final boolean requestAddress = true;
-        final AuthnRequestSteps.Cookies cookies = authnRequestSteps.userPostsEidasAuthnRequestToStubIdpWithAttribute(requestAddress, requestGender);
+        final String relayState = UUID.randomUUID().toString();
+        final AuthnRequestSteps.Cookies cookies = authnRequestSteps.userPostsEidasAuthnRequestToStubIdpWithAttribute(requestAddress, requestGender, Optional.ofNullable(relayState));
         authnRequestSteps.eidasUserLogsIn(cookies, true);
-        final String page = authnRequestSteps.eidasUserViewsTheDebugPage(cookies);
+        final String debugPage = authnRequestSteps.eidasUserViewsTheDebugPage(cookies);
         // these can be requested but stub-country currently has no users that contain current address or gender
-        if (requestAddress) { assertThat(page).contains(IdaConstants.Eidas_Attributes.CurrentAddress.NAME); }
-        if (requestGender) { assertThat(page).contains(IdaConstants.Eidas_Attributes.Gender.NAME); }
-        final String samlResponse = authnRequestSteps.eidasUserConsentsReturnSamlResponse(cookies, false, RSASHA_256);
+        if (requestAddress) { assertThat(debugPage).contains(IdaConstants.Eidas_Attributes.CurrentAddress.NAME); }
+        if (requestGender) { assertThat(debugPage).contains(IdaConstants.Eidas_Attributes.Gender.NAME); }
+        assertThat(debugPage).contains(format("Relay state is \"{0}\"", relayState));
+        final Response response = authnRequestSteps.eidasUserConsentsReturnResponse(cookies, false, RSASHA_256);
+        final String responseBody = response.readEntity(String.class);
+        final String relayStateResponse = authnRequestSteps.getRelayStateFromResponseHtml(responseBody);
+        assertThat(relayStateResponse).isEqualTo(relayState);
+        final String samlResponse = authnRequestSteps.getSamlResponseFromResponseString(responseBody);
         final InboundResponseFromCountry inboundResponseFromCountry = samlResponseDecrypter.decryptEidasSaml(samlResponse);
         assertThat(inboundResponseFromCountry.getIssuer()).isEqualTo(UriBuilder.fromUri("http://localhost:0" + Urls.EIDAS_METADATA_RESOURCE).build(EIDAS_SCHEME_NAME).toASCIIString());
         assertThat(inboundResponseFromCountry.getStatus().getStatusCode().getValue()).isEqualTo(StatusCode.SUCCESS);

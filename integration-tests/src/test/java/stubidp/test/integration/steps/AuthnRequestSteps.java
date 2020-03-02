@@ -38,6 +38,7 @@ import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static stubidp.shared.csrf.AbstractCSRFCheckProtectionFilter.CSRF_PROTECT_FORM_KEY;
+import static stubidp.stubidp.Urls.RELAY_STATE_PARAM;
 import static stubidp.stubidp.repositories.StubCountryRepository.STUB_COUNTRY_FRIENDLY_ID;
 import static stubidp.test.devpki.TestEntityIds.HUB_CONNECTOR_ENTITY_ID;
 import static stubidp.test.integration.support.StubIdpAppExtension.SP_ENTITY_ID;
@@ -71,15 +72,19 @@ public class AuthnRequestSteps {
         this.port = port;
     }
 
+    public Cookies userPostsAuthnRequestToStubIdp(Optional<String> relayState) {
+        return userPostsAuthnRequestToStubIdp(List.of(), Optional.empty(), Optional.empty(), relayState);
+    }
+
     public Cookies userPostsAuthnRequestToStubIdp() {
-        return userPostsAuthnRequestToStubIdp(List.of(), Optional.empty(), Optional.empty());
+        return userPostsAuthnRequestToStubIdp(List.of(), Optional.empty(), Optional.empty(), Optional.empty());
     }
 
     public Cookies userPostsAuthnRequestToStubIdp(String hint) {
-        return userPostsAuthnRequestToStubIdp(List.of(hint), Optional.empty(), Optional.empty());
+        return userPostsAuthnRequestToStubIdp(List.of(hint), Optional.empty(), Optional.empty(), Optional.empty());
     }
 
-    public Response userPostsAuthnRequestToStubIdpReturnResponse(List<String> hints, Optional<String> language, Optional<Boolean> registration, boolean withInvalidKey) {
+    public Response userPostsAuthnRequestToStubIdpReturnResponse(List<String> hints, Optional<String> language, Optional<Boolean> registration, boolean withInvalidKey, Optional<String> relayState) {
         Credential signingCredential;
         String signingCertificate;
         if(withInvalidKey) {
@@ -95,7 +100,7 @@ public class AuthnRequestSteps {
                 .withSigningCertificate(signingCertificate)
                 .withEntityId(SP_ENTITY_ID)
                 .build();
-        return postAuthnRequest(hints, language, registration, authnRequest, Urls.IDP_SAML2_SSO_RESOURCE);
+        return postAuthnRequest(hints, language, registration, authnRequest, relayState, Urls.IDP_SAML2_SSO_RESOURCE);
     }
 
     public String userPostsAuthnRequestToHeadlessIdpReturnResponse(boolean isCycle3, String relayState) {
@@ -108,21 +113,31 @@ public class AuthnRequestSteps {
                 .build();
         Form form = new Form();
         form.param(Urls.CYCLE3_PARAM, Boolean.toString(isCycle3));
-        form.param(Urls.RELAY_STATE_PARAM, relayState);
+        form.param(RELAY_STATE_PARAM, relayState);
         form.param(Urls.SAML_REQUEST_PARAM, authnRequest);
 
         Response response = client.target(headlessResource)
                 .request()
                 .post(Entity.form(form));
         assertThat(response.getStatus()).isEqualTo(200);
-        final Document page = Jsoup.parse(response.readEntity(String.class));
-        assertThat(page.getElementsByTag("title").text()).isEqualTo("Saml Processing...");
+        return getSamlResponseFromResponseString(response.readEntity(String.class));
+    }
 
+    public String getSamlResponseFromResponseString(String responseString) {
+        final Document page = Jsoup.parse(responseString);
+        assertThat(page.getElementsByTag("title").text()).isEqualTo("Saml Processing...");
         return page.getElementsByAttributeValue("name", "SAMLResponse").val();
     }
 
-    public Cookies userPostsAuthnRequestToStubIdp(List<String> hints, Optional<String> language, Optional<Boolean> registration) {
-        Response response = userPostsAuthnRequestToStubIdpReturnResponse(hints, language, registration, false);
+    public String getRelayStateFromResponseHtml(String entityString) {
+        final Document page = Jsoup.parse(entityString);
+        assertThat(page.getElementsByTag("title").text()).isEqualTo("Saml Processing...");
+        final Element relayStateElement = page.getElementById(RELAY_STATE_PARAM);
+        return relayStateElement.val();
+    }
+
+    public Cookies userPostsAuthnRequestToStubIdp(List<String> hints, Optional<String> language, Optional<Boolean> registration, Optional<String> relayState) {
+        Response response = userPostsAuthnRequestToStubIdpReturnResponse(hints, language, registration, false, relayState);
 
         assertThat(response.getStatus()).isEqualTo(303);
         if(registration.isPresent() && registration.get()) {
@@ -135,15 +150,19 @@ public class AuthnRequestSteps {
     }
 
     public Cookies userPostsEidasAuthnRequestToStubIdp() {
-        return userPostsEidasAuthnRequestToStubIdpWithAttribute(false, false, true);
+        return userPostsEidasAuthnRequestToStubIdpWithAttribute(false, false, true, Optional.empty());
     }
 
     public Cookies userPostsEidasAuthnRequestToStubIdpWithAttribute(boolean requestAddress, boolean requestGender) {
-        return userPostsEidasAuthnRequestToStubIdpWithAttribute(requestAddress, requestGender, true);
+        return userPostsEidasAuthnRequestToStubIdpWithAttribute(requestAddress, requestGender, true, Optional.empty());
     }
 
-    private Cookies userPostsEidasAuthnRequestToStubIdpWithAttribute(boolean requestAddress, boolean requestGender, boolean withKeyInfo) {
-        Response response = userPostsEidasAuthnRequestReturnResponse(requestAddress, requestGender, withKeyInfo);
+    public Cookies userPostsEidasAuthnRequestToStubIdpWithAttribute(boolean requestAddress, boolean requestGender, Optional<String> relayState) {
+        return userPostsEidasAuthnRequestToStubIdpWithAttribute(requestAddress, requestGender, true, relayState);
+    }
+
+    private Cookies userPostsEidasAuthnRequestToStubIdpWithAttribute(boolean requestAddress, boolean requestGender, boolean withKeyInfo, Optional<String> relayState) {
+        Response response = userPostsEidasAuthnRequestReturnResponse(requestAddress, requestGender, withKeyInfo, relayState);
 
         assertThat(response.getStatus()).isEqualTo(303);
         assertThat(response.getLocation().getPath()).startsWith(getStubIdpUri(Urls.EIDAS_LOGIN_RESOURCE).getPath());
@@ -151,11 +170,11 @@ public class AuthnRequestSteps {
         return getCookiesAndFollowRedirect(response);
     }
 
-    public Response userPostsEidasAuthnRequestReturnResponse(boolean requestAddress, boolean requestGender, boolean withKeyInfo) {
-        return userPostsEidasAuthnRequestReturnResponse(requestAddress, requestGender, withKeyInfo, false);
+    public Response userPostsEidasAuthnRequestReturnResponse(boolean requestAddress, boolean requestGender, boolean withKeyInfo, Optional<String> relayState) {
+        return userPostsEidasAuthnRequestReturnResponse(requestAddress, requestGender, withKeyInfo, false, relayState);
     }
 
-    public Response userPostsEidasAuthnRequestReturnResponse(boolean requestAddress, boolean requestGender, boolean withKeyInfo, boolean withInvalidKey) {
+    public Response userPostsEidasAuthnRequestReturnResponse(boolean requestAddress, boolean requestGender, boolean withKeyInfo, boolean withInvalidKey, Optional<String> relayState) {
         final EidasAuthnRequestBuilder eidasAuthnRequestBuilder = EidasAuthnRequestBuilder.anAuthnRequest();
         if(requestAddress) {
             eidasAuthnRequestBuilder.withRequestedAttribute(IdaConstants.Eidas_Attributes.CurrentAddress.NAME);
@@ -168,7 +187,7 @@ public class AuthnRequestSteps {
         eidasAuthnRequestBuilder.withKeyStore(withInvalidKey?createInvalidIdaKeyStore():createValidIdaKeyStore());
         eidasAuthnRequestBuilder.withDestination(UriBuilder.fromUri("http://localhost:"+port+Urls.EIDAS_SAML2_SSO_RESOURCE).build(idpName).toASCIIString());
         String authnRequest = eidasAuthnRequestBuilder.build();
-        return postAuthnRequest(List.of(), Optional.empty(), Optional.empty(), authnRequest, Urls.EIDAS_SAML2_SSO_RESOURCE);
+        return postAuthnRequest(List.of(), Optional.empty(), Optional.empty(), authnRequest, relayState, Urls.EIDAS_SAML2_SSO_RESOURCE);
     }
 
     private Cookies getCookiesAndFollowRedirect(Response response) {
@@ -189,7 +208,7 @@ public class AuthnRequestSteps {
         return new Cookies(sessionCookieValue, secureCookieValue);
     }
 
-    public Response postAuthnRequest(List<String> hints, Optional<String> language, Optional<Boolean> registration, String authnRequest, String ssoEndpoint) {
+    public Response postAuthnRequest(List<String> hints, Optional<String> language, Optional<Boolean> registration, String authnRequest, Optional<String> relayState, String ssoEndpoint) {
         Form form = new Form();
         form.param(Urls.SAML_REQUEST_PARAM, authnRequest);
         registration.ifPresent(b -> form.param(Urls.REGISTRATION_PARAM, b.toString()));
@@ -197,7 +216,7 @@ public class AuthnRequestSteps {
         for(String hint : hints) {
             form.param(Urls.HINTS_PARAM, hint);
         }
-        form.param(Urls.RELAY_STATE_PARAM, "relay_state");
+        form.param(RELAY_STATE_PARAM, relayState.orElse("relay_state"));
 
         return client.target(getStubIdpUri(ssoEndpoint))
                 .request()
@@ -230,10 +249,7 @@ public class AuthnRequestSteps {
                 .post(Entity.form(form));
 
         assertThat(response.getStatus()).isEqualTo(200);
-        final Document page = Jsoup.parse(response.readEntity(String.class));
-        assertThat(page.getElementsByTag("title").text()).isEqualTo("Saml Processing...");
-
-        return page.getElementsByAttributeValue("name", "SAMLResponse").val();
+        return getSamlResponseFromResponseString(response.readEntity(String.class));
     }
 
     public void eidasUserLogsIn(Cookies cookies, boolean signAssertions) {
@@ -276,6 +292,14 @@ public class AuthnRequestSteps {
         assertThat(response.getLocation().getPath()).isEqualTo(getStubIdpUri(consentUrl).getPath());
     }
 
+    public Response userConsentsReturnResponse(Cookies cookies, boolean randomize) {
+        return userConsentsReturnResponse(cookies, randomize, Urls.IDP_CONSENT_RESOURCE, Optional.empty());
+    }
+
+    public Response eidasUserConsentsReturnResponse(Cookies cookies, boolean randomize, String signingAlgorithm) {
+        return userConsentsReturnResponse(cookies, randomize, Urls.EIDAS_CONSENT_RESOURCE, Optional.of(signingAlgorithm));
+    }
+
     public String userConsentsReturnSamlResponse(Cookies cookies, boolean randomize) {
         return userConsentsReturnSamlResponse(cookies, randomize, Urls.IDP_CONSENT_RESOURCE, Optional.empty());
     }
@@ -284,7 +308,7 @@ public class AuthnRequestSteps {
         return userConsentsReturnSamlResponse(cookies, randomize, Urls.EIDAS_CONSENT_RESOURCE, Optional.of(signingAlgorithm));
     }
 
-    private String userConsentsReturnSamlResponse(Cookies cookies, boolean randomize, String consentUrl, Optional<String> signingAlgorithm) {
+    private Response userConsentsReturnResponse(Cookies cookies, boolean randomize, String consentUrl, Optional<String> signingAlgorithm) {
         Response response = client.target(getStubIdpUri(consentUrl))
                 .request()
                 .cookie(StubIdpCookieNames.SESSION_COOKIE_NAME, cookies.getSessionId())
@@ -298,7 +322,7 @@ public class AuthnRequestSteps {
         form.param(Urls.RANDOMISE_PID_PARAM, Boolean.toString(randomize));
         final Document entity = Jsoup.parse(response.readEntity(String.class));
         final Element csrfElement = entity.getElementById(CSRF_PROTECT_FORM_KEY);
-        if(!Objects.isNull(csrfElement)) {
+        if (!Objects.isNull(csrfElement)) {
             form.param(CSRF_PROTECT_FORM_KEY, entity.getElementById(CSRF_PROTECT_FORM_KEY).val());
         }
         signingAlgorithm.ifPresent(s -> form.param(Urls.SIGNING_ALGORITHM_PARAM, s)); // only for eidas consent POST
@@ -310,14 +334,17 @@ public class AuthnRequestSteps {
                 .post(Entity.entity(form, MediaType.APPLICATION_FORM_URLENCODED_TYPE));
 
         assertThat(response.getStatus()).isEqualTo(200);
-        final Document page = Jsoup.parse(response.readEntity(String.class));
-        assertThat(page.getElementsByTag("title").text()).isEqualTo("Saml Processing...");
-
-        return page.getElementsByAttributeValue("name", "SAMLResponse").val();
+        return response;
     }
 
-    public void userViewsTheDebugPage(Cookies cookies) {
-        userViewsTheDebugPage(cookies, getStubIdpUri(Urls.IDP_DEBUG_RESOURCE));
+    private String userConsentsReturnSamlResponse(Cookies cookies, boolean randomize, String consentUrl, Optional<String> signingAlgorithm) {
+        final Response response = userConsentsReturnResponse(cookies, randomize, consentUrl, signingAlgorithm);
+        assertThat(response.getStatus()).isEqualTo(200);
+        return getSamlResponseFromResponseString(response.readEntity(String.class));
+    }
+
+    public String userViewsTheDebugPage(Cookies cookies) {
+        return userViewsTheDebugPage(cookies, getStubIdpUri(Urls.IDP_DEBUG_RESOURCE));
     }
 
     public String eidasUserViewsTheDebugPage(Cookies cookies) {
