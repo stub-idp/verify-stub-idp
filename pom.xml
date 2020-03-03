@@ -28,7 +28,7 @@
         <joda_time.version>2.10.5</joda_time.version>
         <shibboleth_utils.version>7.5.1</shibboleth_utils.version>
         <javax_validation.version>2.0.2</javax_validation.version>
-        <jackson_core.version>2.10.2</jackson_core.version>
+        <jackson_core.version>2.10.3</jackson_core.version>
         <jackson_databind.version>2.10.2</jackson_databind.version>
         <jackson_datatype_joda.version>2.10.2</jackson_datatype_joda.version>
         <nimbus_jwt.version>8.8</nimbus_jwt.version>
