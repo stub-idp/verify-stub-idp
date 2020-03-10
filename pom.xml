@@ -26,7 +26,7 @@
         <dropwizard.version>2.0.2</dropwizard.version>
         <guava.version>28.2-jre</guava.version>
         <joda_time.version>2.10.5</joda_time.version>
-        <shibboleth_utils.version>7.5.1</shibboleth_utils.version>
+        <shibboleth_utils.version>8.0.0</shibboleth_utils.version>
         <javax_validation.version>2.0.2</javax_validation.version>
         <jackson.version>2.10.3</jackson.version>
         <nimbus_jwt.version>8.10</nimbus_jwt.version>
