@@ -22,7 +22,7 @@
         <maven_surefire_plugin.version>3.0.0-M4</maven_surefire_plugin.version>
 
         <!-- runtime dependencies -->
-        <opensaml.version>3.4.5</opensaml.version>
+        <opensaml.version>4.0.0</opensaml.version>
         <dropwizard.version>2.0.2</dropwizard.version>
         <guava.version>28.2-jre</guava.version>
         <joda_time.version>2.10.5</joda_time.version>
