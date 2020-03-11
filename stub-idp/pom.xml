@@ -240,7 +240,7 @@
         <dependency>
             <groupId>org.postgresql</groupId>
             <artifactId>postgresql</artifactId>
-            <version>42.2.10</version>
+            <version>42.2.11</version>
             <scope>compile</scope>
         </dependency>
         <!-- verify utils libs -->
