@@ -3,7 +3,6 @@ package stubidp.shared.repositories;
 import net.shibboleth.utilities.java.support.component.ComponentInitializationException;
 import net.shibboleth.utilities.java.support.resolver.ResolverException;
 import net.shibboleth.utilities.java.support.xml.BasicParserPool;
-import org.joda.time.DateTime;
 import org.junit.jupiter.api.Test;
 import org.opensaml.core.config.InitializationException;
 import org.opensaml.core.config.InitializationService;
@@ -17,10 +16,18 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.net.URI;
 import java.text.MessageFormat;
+import java.time.Instant;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeFormatterBuilder;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class MetadataRepositoryTest {
+    private static final DateTimeFormatter dateTimeFormatter = new DateTimeFormatterBuilder()
+            .appendInstant(3) // ensure that 0 millis is printed, and does not get truncated
+            .toFormatter()
+            .withZone(ZoneId.of("UTC"));
 
     public static final String ENCRYPTION_CERTIFICATE = TestCertificateStrings.HUB_TEST_PUBLIC_ENCRYPTION_CERT;
     public static final String SIGNING_CERTIFICATE_1 = TestCertificateStrings.HUB_TEST_PUBLIC_SIGNING_CERT;
@@ -69,8 +76,8 @@ public class MetadataRepositoryTest {
             "<md:EntitiesDescriptor xmlns:md=\"urn:oasis:names:tc:SAML:2.0:metadata\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" ID=\"_entities\">\n" +
             "</md:EntitiesDescriptor>\n";
 
-    public static final String DEFAULT_METADATA = MessageFormat.format(METADATA_PATTERN, DateTime.now().plusHours(1), ENCRYPTION_CERTIFICATE, SIGNING_CERTIFICATE_1, SIGNING_CERTIFICATE_2, LOCATION);
-    public static final String METADATA_WITHUOUT_HUB = MessageFormat.format(METADATA_WITHOUT_HUB_PATTERN, DateTime.now().plusHours(1));
+    public static final String DEFAULT_METADATA = MessageFormat.format(METADATA_PATTERN, dateTimeFormatter.format(Instant.now().atZone(ZoneId.of("UTC")).plusHours(1)), ENCRYPTION_CERTIFICATE, SIGNING_CERTIFICATE_1, SIGNING_CERTIFICATE_2, LOCATION);
+    public static final String METADATA_WITHUOUT_HUB = MessageFormat.format(METADATA_WITHOUT_HUB_PATTERN, dateTimeFormatter.format(Instant.now().atZone(ZoneId.of("UTC")).plusHours(1)));
 
     private MetadataRepository metadataRepository;
 
@@ -97,7 +104,7 @@ public class MetadataRepositoryTest {
 
     @Test
     public void shouldReturnNoCertificatesIfMetadataIsOld() throws Exception {
-        DateTime expiredDateTime = new DateTime(2001, 1, 1, 0, 0);
+        String expiredDateTime = dateTimeFormatter.format(Instant.now().atZone(ZoneId.of("UTC")).minusYears(100));
         metadataRepository = initializeMetadata(MessageFormat.format(METADATA_PATTERN, expiredDateTime, ENCRYPTION_CERTIFICATE, SIGNING_CERTIFICATE_1, SIGNING_CERTIFICATE_2, LOCATION));
         assertThat(metadataRepository.getSigningCertificates()).isEmpty();
     }
