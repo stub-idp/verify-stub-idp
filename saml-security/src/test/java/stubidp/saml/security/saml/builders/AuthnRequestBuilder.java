@@ -1,7 +1,6 @@
 package stubidp.saml.security.saml.builders;
 
 import com.google.common.base.Strings;
-import org.joda.time.DateTime;
 import org.opensaml.core.xml.config.XMLObjectProviderRegistrySupport;
 import org.opensaml.core.xml.io.MarshallingException;
 import org.opensaml.saml.common.xml.SAMLConstants;
@@ -20,6 +19,7 @@ import org.opensaml.xmlsec.signature.support.Signer;
 import stubidp.saml.extensions.extensions.IdaAuthnContext;
 import stubidp.saml.security.saml.TestSamlObjectFactory;
 
+import java.time.Instant;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -48,7 +48,7 @@ public class AuthnRequestBuilder {
 
     private Optional<Issuer> issuer = ofNullable(IssuerBuilder.anIssuer().build());
     private Optional<String> id = ofNullable(RANDOM_UUID);
-    private Optional<DateTime> issueInstant = ofNullable(DateTime.now());
+    private Optional<Instant> issueInstant = ofNullable(Instant.now());
 
     private Optional<String> destination = empty();
     private Optional<Credential> signingCredential = empty();

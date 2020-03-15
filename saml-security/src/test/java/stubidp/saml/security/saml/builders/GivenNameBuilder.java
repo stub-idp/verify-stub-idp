@@ -13,7 +13,7 @@ public class GivenNameBuilder {
 
     public GivenName build() {
         GivenName givenName = new org.opensaml.saml.saml2.metadata.impl.GivenNameBuilder().buildObject();
-        givenName.setName(value.get());
+        givenName.setValue(value.get());
         return givenName;
     }
 }

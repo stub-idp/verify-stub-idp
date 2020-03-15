@@ -75,8 +75,9 @@ public class CredentialFactorySignatureValidatorTest extends OpenSAMLRunner {
      */
     @Test
     public void shouldNotValidateBadSignatureAlgorithm() throws Exception {
-        URL authnRequestUrl = getClass().getClassLoader().getResource("authnRequestBadAlgorithm.xml");
+        URL authnRequestUrl = getClass().getClassLoader().getResource("authnRequestNormal.xml");//sha1 authnrequest
         String input = StringEncoding.toBase64Encoded(Resources.toString(authnRequestUrl, Charsets.UTF_8));
+        //md5 authnrequests throw an exception here as they are not allowed to be unmarshalled
         AuthnRequest request = getStringtoOpenSamlObjectTransformer().apply(input);
         assertThat(credentialFactorySignatureValidator.validate(request, issuerId, null)).isFalse();
     }

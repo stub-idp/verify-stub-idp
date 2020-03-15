@@ -1,7 +1,6 @@
 package stubidp.saml.security.saml.builders;
 
-import org.apache.commons.lang.StringUtils;
-import org.joda.time.DateTime;
+import org.apache.commons.lang3.StringUtils;
 import org.opensaml.core.xml.config.XMLObjectProviderRegistrySupport;
 import org.opensaml.core.xml.io.MarshallingException;
 import org.opensaml.saml.saml2.metadata.AttributeAuthorityDescriptor;
@@ -15,6 +14,9 @@ import org.opensaml.xmlsec.signature.support.SignatureException;
 import org.opensaml.xmlsec.signature.support.Signer;
 import stubidp.test.devpki.TestEntityIds;
 
+import java.time.Duration;
+import java.time.Instant;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -29,10 +31,10 @@ public class EntityDescriptorBuilder {
     private boolean addDefaultSpServiceDescriptor = true;
     private boolean addDefaultContactPerson = true;
     private boolean shouldBeSigned = true;
-    private Long cacheDuration = 100_000L;
+    private Duration cacheDuration = Duration.ofMillis(100_000L);
     private Organization organization = OrganizationBuilder.anOrganization().build();
     private List<SPSSODescriptor> spServiceDescriptors = new ArrayList<>();
-    private DateTime validUntil = DateTime.now().plusDays(1);
+    private Instant validUntil = Instant.now().atZone(ZoneId.of("UTC")).plusDays(1).toInstant();
     private List<ContactPerson> contactPersons = new ArrayList<>();
     private String id = UUID.randomUUID().toString();
     private final SPSSODescriptor defaultSpServiceDescriptor = SPSSODescriptorBuilder.anSpServiceDescriptor().addKeyDescriptor(aKeyDescriptor().withX509ForSigning("").build()).addKeyDescriptor(aKeyDescriptor().withX509ForEncryption("").build()).build();
@@ -52,13 +54,8 @@ public class EntityDescriptorBuilder {
 
         entityDescriptor.setOrganization(organization);
 
-        if (idpSsoDescriptor.isPresent()) {
-            entityDescriptor.getRoleDescriptors().add(idpSsoDescriptor.get());
-        }
-
-        if (attributeAuthorityDescriptor.isPresent()) {
-            entityDescriptor.getRoleDescriptors().add(attributeAuthorityDescriptor.get());
-        }
+        idpSsoDescriptor.ifPresent(idpssoDescriptor -> entityDescriptor.getRoleDescriptors().add(idpssoDescriptor));
+        attributeAuthorityDescriptor.ifPresent(authorityDescriptor -> entityDescriptor.getRoleDescriptors().add(authorityDescriptor));
 
         if (addDefaultSpServiceDescriptor) {
             entityDescriptor.getRoleDescriptors().add(defaultSpServiceDescriptor);
@@ -123,13 +120,13 @@ public class EntityDescriptorBuilder {
         return this;
     }
 
-    public EntityDescriptorBuilder withValidUntil(DateTime validUntil) {
+    public EntityDescriptorBuilder withValidUntil(Instant validUntil) {
         this.validUntil = validUntil;
         return this;
     }
 
-    public EntityDescriptorBuilder withCacheDuration(Long milliseconds) {
-        this.cacheDuration = milliseconds;
+    public EntityDescriptorBuilder withCacheDuration(Duration duration) {
+        this.cacheDuration = duration;
         return this;
     }
 

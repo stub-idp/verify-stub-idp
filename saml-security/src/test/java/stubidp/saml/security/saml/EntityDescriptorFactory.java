@@ -1,6 +1,5 @@
 package stubidp.saml.security.saml;
 
-import org.joda.time.DateTime;
 import org.opensaml.core.xml.io.MarshallingException;
 import org.opensaml.saml.saml2.metadata.AttributeAuthorityDescriptor;
 import org.opensaml.saml.saml2.metadata.EntityDescriptor;
@@ -25,6 +24,8 @@ import stubidp.saml.security.saml.builders.X509DataBuilder;
 import stubidp.test.devpki.TestCertificateStrings;
 import stubidp.test.devpki.TestEntityIds;
 
+import java.time.Instant;
+import java.time.ZoneId;
 import java.util.List;
 
 import static java.util.Arrays.asList;
@@ -53,7 +54,7 @@ public class EntityDescriptorFactory {
                     .withEntityId(TestEntityIds.HUB_ENTITY_ID)
                     .addSpServiceDescriptor(spssoDescriptor)
                     .withIdpSsoDescriptor(null)
-                    .withValidUntil(DateTime.now().plusWeeks(2))
+                    .withValidUntil(Instant.now().atZone(ZoneId.of("UTC")).plusWeeks(2).toInstant())
                     .withSignature(null)
                     .withoutSigning()
                     .build();
@@ -77,7 +78,7 @@ public class EntityDescriptorFactory {
                     .withEntityId(TestEntityIds.HUB_ENTITY_ID)
                     .addSpServiceDescriptor(spssoDescriptor)
                     .withIdpSsoDescriptor(null)
-                    .withValidUntil(DateTime.now().plusWeeks(2))
+                    .withValidUntil(Instant.now().atZone(ZoneId.of("UTC")).plusWeeks(2).toInstant())
                     .withSignature(null)
                     .withoutSigning()
                     .build();
@@ -99,21 +100,21 @@ public class EntityDescriptorFactory {
         KeyDescriptor encryptionKeyDescriptor = createKeyDescriptor(TestCertificateStrings.HUB_TEST_PUBLIC_ENCRYPTION_CERT, ENCRYPTION, ENCRYPTION_USAGE);
         KeyDescriptor siginingKeyDescriptorBad = createKeyDescriptor(TestCertificateStrings.TEST_RP_PUBLIC_SIGNING_CERT, SIGNING_BAD, SIGNING_USAGE);
         SPSSODescriptor spssoDescriptor = SPSSODescriptorBuilder.anSpServiceDescriptor()
-                                                                .addKeyDescriptor(siginingKeyDescriptorOne)
-                                                                .addKeyDescriptor(siginingKeyDescriptorTwo)
-                                                                .addKeyDescriptor(encryptionKeyDescriptor)
-                                                                .addKeyDescriptor(siginingKeyDescriptorBad)
-                                                                .withoutDefaultSigningKey()
-                                                                .withoutDefaultEncryptionKey().build();
+                .addKeyDescriptor(siginingKeyDescriptorOne)
+                .addKeyDescriptor(siginingKeyDescriptorTwo)
+                .addKeyDescriptor(encryptionKeyDescriptor)
+                .addKeyDescriptor(siginingKeyDescriptorBad)
+                .withoutDefaultSigningKey()
+                .withoutDefaultEncryptionKey().build();
         try {
             return EntityDescriptorBuilder.anEntityDescriptor()
-                                          .withEntityId(TestEntityIds.HUB_ENTITY_ID)
-                                          .addSpServiceDescriptor(spssoDescriptor)
-                                          .withIdpSsoDescriptor(null)
-                                          .withValidUntil(DateTime.now().plusWeeks(2))
-                                          .withSignature(null)
-                                          .withoutSigning()
-                                          .build();
+                    .withEntityId(TestEntityIds.HUB_ENTITY_ID)
+                    .addSpServiceDescriptor(spssoDescriptor)
+                    .withIdpSsoDescriptor(null)
+                    .withValidUntil(Instant.now().atZone(ZoneId.of("UTC")).plusWeeks(2).toInstant())
+                    .withSignature(null)
+                    .withoutSigning()
+                    .build();
         } catch (MarshallingException | SignatureException e) {
             throw new RuntimeException(e);
         }
@@ -124,14 +125,14 @@ public class EntityDescriptorFactory {
             return getEntityDescriptorBuilder(idpEntityId)
                     .withSignature(null)
                     .withoutSigning()
-                    .withValidUntil(DateTime.now().plusWeeks(2))
+                    .withValidUntil(Instant.now().atZone(ZoneId.of("UTC")).plusWeeks(2).toInstant())
                     .build();
         } catch (MarshallingException | SignatureException e) {
             throw new RuntimeException(e);
         }
     }
 
-    public EntityDescriptor signedIdpEntityDescriptor(String idpEntityId, Credential signingCredential, DateTime validUntil) {
+    public EntityDescriptor signedIdpEntityDescriptor(String idpEntityId, Credential signingCredential, Instant validUntil) {
         Signature signature = SignatureBuilder.aSignature().withX509Data(TestCertificateStrings.PUBLIC_SIGNING_CERTS.get(idpEntityId)).withSigningCredential(signingCredential).build();
         try {
             return getEntityDescriptorBuilder(idpEntityId)
@@ -160,7 +161,7 @@ public class EntityDescriptorFactory {
             return EntityDescriptorBuilder.anEntityDescriptor()
                     .withEntityId(attributeAuthorityEntityId)
                     .withIdpSsoDescriptor(null)
-                    .withValidUntil(DateTime.now().plusWeeks(2))
+                    .withValidUntil(Instant.now().atZone(ZoneId.of("UTC")).plusWeeks(2).toInstant())
                     .withSignature(null)
                     .withoutSigning()
                     .withAttributeAuthorityDescriptor(attributeAuthorityDescriptor)
@@ -173,11 +174,11 @@ public class EntityDescriptorFactory {
 
     public List<EntityDescriptor> defaultEntityDescriptors() {
         return asList(
-            hubEntityDescriptor(),
-            idpEntityDescriptor(TestEntityIds.STUB_IDP_ONE),
-            idpEntityDescriptor(TestEntityIds.STUB_IDP_TWO),
-            idpEntityDescriptor(TestEntityIds.STUB_IDP_THREE),
-            idpEntityDescriptor(TestEntityIds.STUB_IDP_FOUR)
+                hubEntityDescriptor(),
+                idpEntityDescriptor(TestEntityIds.STUB_IDP_ONE),
+                idpEntityDescriptor(TestEntityIds.STUB_IDP_TWO),
+                idpEntityDescriptor(TestEntityIds.STUB_IDP_THREE),
+                idpEntityDescriptor(TestEntityIds.STUB_IDP_FOUR)
         );
     }
 

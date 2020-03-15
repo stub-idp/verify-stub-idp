@@ -1,6 +1,5 @@
 package stubidp.saml.security.validators;
 
-import org.joda.time.DateTime;
 import org.opensaml.saml.saml2.core.EncryptedAssertion;
 import org.opensaml.saml.saml2.core.Issuer;
 import org.opensaml.saml.saml2.core.Response;
@@ -8,6 +7,7 @@ import org.opensaml.saml.saml2.core.Status;
 import org.opensaml.saml.saml2.core.StatusCode;
 import org.opensaml.xmlsec.signature.Signature;
 
+import java.time.Instant;
 import java.util.List;
 
 public class ValidatedResponse implements ValidatedEncryptedAssertionContainer {
@@ -33,7 +33,7 @@ public class ValidatedResponse implements ValidatedEncryptedAssertionContainer {
         return response.getIssuer();
     }
 
-    public DateTime getIssueInstant() {
+    public Instant getIssueInstant() {
         return response.getIssueInstant();
     }
 

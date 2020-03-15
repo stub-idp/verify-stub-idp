@@ -13,7 +13,7 @@ public class SurNameBuilder {
 
     public SurName build() {
         SurName name = new org.opensaml.saml.saml2.metadata.impl.SurNameBuilder().buildObject();
-        name.setName(this.name.get());
+        name.setValue(this.name.get());
         return name;
     }
 }

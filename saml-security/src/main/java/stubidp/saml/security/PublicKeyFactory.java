@@ -1,7 +1,5 @@
 package stubidp.saml.security;
 
-import org.apache.xml.security.exceptions.Base64DecodingException;
-import org.apache.xml.security.utils.Base64;
 import org.opensaml.xmlsec.signature.X509Certificate;
 
 import java.io.ByteArrayInputStream;
@@ -9,6 +7,7 @@ import java.security.PublicKey;
 import java.security.cert.Certificate;
 import java.security.cert.CertificateException;
 import java.security.cert.CertificateFactory;
+import java.util.Base64;
 
 public class PublicKeyFactory {
 
@@ -20,10 +19,10 @@ public class PublicKeyFactory {
 
     public PublicKey create(X509Certificate x509Certificate) {
         try {
-            byte[] derValue = Base64.decode(x509Certificate.getValue());
+            byte[] derValue = Base64.getMimeDecoder().decode(x509Certificate.getValue());
             Certificate certificate = certificateFactory.generateCertificate(new ByteArrayInputStream(derValue));
             return certificate.getPublicKey();
-        } catch (Base64DecodingException | CertificateException e) {
+        } catch (CertificateException e) {
             throw new RuntimeException(e);
         }
     }

@@ -12,7 +12,7 @@ module stubidp.saml.security {
 
     requires com.google.common;
     requires org.slf4j;
-    requires xmlsec;
+    requires org.apache.santuario.xmlsec;
     requires org.checkerframework.checker.qual;
     requires org.opensaml.core;
 

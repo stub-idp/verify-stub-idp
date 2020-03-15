@@ -1,6 +1,5 @@
 package stubidp.saml.security.saml.builders;
 
-import org.joda.time.DateTime;
 import org.opensaml.saml.saml2.core.NameID;
 import org.opensaml.saml.saml2.core.NameIDType;
 import org.opensaml.saml.saml2.core.Subject;
@@ -9,22 +8,22 @@ import org.opensaml.saml.saml2.core.SubjectConfirmationData;
 import stubidp.saml.security.saml.TestSamlObjectFactory;
 import stubidp.test.devpki.TestEntityIds;
 
-import java.util.Arrays;
+import java.time.Instant;
+import java.time.ZoneId;
+import java.util.Collections;
 
 public class SubjectBuilder {
 
     private static TestSamlObjectFactory testSamlObjectFactory = new TestSamlObjectFactory();
-    public static final int NOT_ON_OR_AFTER_DEFAULT_PERIOD = 15;
+    public static final int NOT_ON_OR_AFTER_DEFAULT_PERIOD_MINS = 15;
     public static SubjectBuilder aSubject() {
         return new SubjectBuilder();
     }
 
     public Subject build() {
         Subject subject = testSamlObjectFactory.createSubject();
-
         subject.setNameID(buildNameID());
-        subject.getSubjectConfirmations().addAll(Arrays.asList(buildSubjectConfirmation()));
-
+        subject.getSubjectConfirmations().addAll(Collections.singletonList(buildSubjectConfirmation()));
         return subject;
     }
 
@@ -55,14 +54,8 @@ public class SubjectBuilder {
     private SubjectConfirmationData buildSubjectConfirmationData() {
         SubjectConfirmationData subjectConfirmationData = testSamlObjectFactory.createSubjectConfirmationData();
         subjectConfirmationData.setRecipient(TestEntityIds.HUB_ENTITY_ID);
-        subjectConfirmationData.setNotOnOrAfter(DateTime.now().plusMinutes(NOT_ON_OR_AFTER_DEFAULT_PERIOD));
+        subjectConfirmationData.setNotOnOrAfter(Instant.now().atZone(ZoneId.of("UTC")).plusMinutes(NOT_ON_OR_AFTER_DEFAULT_PERIOD_MINS).toInstant());
         subjectConfirmationData.setInResponseTo(ResponseBuilder.DEFAULT_REQUEST_ID);
         return subjectConfirmationData;
     }
-
-
-
-
-
-
 }

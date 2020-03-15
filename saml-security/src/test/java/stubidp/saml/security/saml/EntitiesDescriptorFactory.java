@@ -1,6 +1,5 @@
 package stubidp.saml.security.saml;
 
-import org.joda.time.DateTime;
 import org.opensaml.core.xml.io.MarshallingException;
 import org.opensaml.saml.saml2.metadata.EntitiesDescriptor;
 import org.opensaml.saml.saml2.metadata.EntityDescriptor;
@@ -10,6 +9,8 @@ import org.opensaml.xmlsec.signature.support.SignatureException;
 import stubidp.saml.security.saml.builders.EntitiesDescriptorBuilder;
 import stubidp.saml.security.saml.builders.SignatureBuilder;
 
+import java.time.Instant;
+import java.time.ZoneId;
 import java.util.List;
 import java.util.Optional;
 
@@ -19,8 +20,8 @@ import static stubidp.test.devpki.TestCertificateStrings.METADATA_SIGNING_A_PRIV
 import static stubidp.test.devpki.TestCertificateStrings.METADATA_SIGNING_A_PUBLIC_CERT;
 
 public class EntitiesDescriptorFactory {
-    private final DateTime validUntil = DateTime.now().plusWeeks(2);
-    private EntityDescriptorFactory entityDescriptorFactory = new EntityDescriptorFactory();
+    private final Instant validUntil = Instant.now().atZone(ZoneId.of("UTC")).plusWeeks(2).toInstant();
+    private final EntityDescriptorFactory entityDescriptorFactory = new EntityDescriptorFactory();
 
     public EntitiesDescriptor defaultEntitiesDescriptor() {
         return entitiesDescriptor(defaultEntityDescriptors());
@@ -35,7 +36,7 @@ public class EntitiesDescriptorFactory {
     }
 
     public EntitiesDescriptor expiredEntitiesDescriptor() {
-        DateTime expired = DateTime.now().minusWeeks(2);
+        Instant expired = Instant.now().atZone(ZoneId.of("UTC")).minusWeeks(2).toInstant();
         return buildEntitiesDescriptor(defaultEntityDescriptors(), Optional.of(defaultSignature()), expired);
     }
 
@@ -43,7 +44,7 @@ public class EntitiesDescriptorFactory {
         return buildEntitiesDescriptor(defaultEntityDescriptors(), Optional.empty(), validUntil);
     }
 
-    private EntitiesDescriptor buildEntitiesDescriptor(List<EntityDescriptor> entityDescriptors, Optional<Signature> signature, DateTime validUntil) {
+    private EntitiesDescriptor buildEntitiesDescriptor(List<EntityDescriptor> entityDescriptors, Optional<Signature> signature, Instant validUntil) {
         EntitiesDescriptorBuilder entitiesDescriptorBuilder = entitiesDescriptorBuilder(entityDescriptors, signature, validUntil);
         return buildEntitiesDescriptor(entitiesDescriptorBuilder);
     }
@@ -56,7 +57,7 @@ public class EntitiesDescriptorFactory {
         }
     }
 
-    private EntitiesDescriptorBuilder entitiesDescriptorBuilder(List<EntityDescriptor> entityDescriptors, Optional<Signature> signature, DateTime validUntil) {
+    private EntitiesDescriptorBuilder entitiesDescriptorBuilder(List<EntityDescriptor> entityDescriptors, Optional<Signature> signature, Instant validUntil) {
         EntitiesDescriptorBuilder entitiesDescriptorBuilder = anEntitiesDescriptor()
                 .withEntityDescriptors(entityDescriptors)
                 .withValidUntil(validUntil);

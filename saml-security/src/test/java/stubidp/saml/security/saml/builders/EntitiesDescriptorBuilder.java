@@ -1,6 +1,5 @@
 package stubidp.saml.security.saml.builders;
 
-import org.joda.time.DateTime;
 import org.opensaml.core.xml.config.XMLObjectProviderRegistrySupport;
 import org.opensaml.core.xml.io.MarshallingException;
 import org.opensaml.saml.saml2.metadata.EntitiesDescriptor;
@@ -9,6 +8,8 @@ import org.opensaml.xmlsec.signature.Signature;
 import org.opensaml.xmlsec.signature.support.SignatureException;
 import org.opensaml.xmlsec.signature.support.Signer;
 
+import java.time.Duration;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -19,8 +20,8 @@ public class EntitiesDescriptorBuilder {
     private List<EntityDescriptor> entityDescriptors = new ArrayList<>();
     private Optional<Signature> signature = Optional.empty();
     private String id = UUID.randomUUID().toString();
-    private Optional<DateTime> validUntil = Optional.empty();
-    private Optional<Long> cacheDuration = Optional.empty();
+    private Optional<Instant> validUntil = Optional.empty();
+    private Optional<Duration> cacheDuration = Optional.empty();
 
     public static EntitiesDescriptorBuilder anEntitiesDescriptor() {
         return new EntitiesDescriptorBuilder();
@@ -46,12 +47,12 @@ public class EntitiesDescriptorBuilder {
         return this;
     }
 
-    public EntitiesDescriptorBuilder withValidUntil(DateTime validUntil) {
+    public EntitiesDescriptorBuilder withValidUntil(Instant validUntil) {
         this.validUntil = Optional.of(validUntil);
         return this;
     }
 
-    public EntitiesDescriptorBuilder withCacheDuration(Long cacheDuration) {
+    public EntitiesDescriptorBuilder withCacheDuration(Duration cacheDuration) {
         this.cacheDuration = Optional.of(cacheDuration);
         return this;
     }

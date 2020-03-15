@@ -12,7 +12,7 @@ public class CompanyBuilder {
 
     public Company build() {
         Company company = new org.opensaml.saml.saml2.metadata.impl.CompanyBuilder().buildObject();
-        company.setName(name);
+        company.setValue(name);
         return company;
     }
 

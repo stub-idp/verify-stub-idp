@@ -31,6 +31,7 @@ import stubidp.utils.security.security.verification.exceptions.CertificateChainV
 import java.security.KeyStore;
 import java.security.cert.CertPathValidatorException;
 import java.security.cert.X509Certificate;
+import java.util.Objects;
 import java.util.Optional;
 
 /**
@@ -51,7 +52,7 @@ public class CertificateChainEvaluableCriterion implements EvaluableCredentialCr
     }
 
     @Override
-    public boolean apply(Credential target) {
+    public boolean test(Credential target) {
         if (target == null) {
             log.error("Credential target was null");
             return Boolean.FALSE;
@@ -63,7 +64,7 @@ public class CertificateChainEvaluableCriterion implements EvaluableCredentialCr
         X509Credential x509Cred = (X509Credential) target;
 
         X509Certificate entityCert = x509Cred.getEntityCertificate();
-        if (entityCert == null) {
+        if (Objects.isNull(entityCert)) {
             log.info("X509Credential did not contain an entity certificate, can not evaluate X509CertSelector criteria");
             return Boolean.FALSE;
         }
@@ -74,9 +75,7 @@ public class CertificateChainEvaluableCriterion implements EvaluableCredentialCr
                 return Boolean.TRUE;
             }
             Optional<CertPathValidatorException> exception = result.getException();
-            if (exception.isPresent()) {
-                log.info(exception.get().getMessage());
-            }
+            exception.ifPresent(e -> log.info(e.getMessage()));
             return Boolean.FALSE;
         }
         catch (CertificateChainValidationException ex) {

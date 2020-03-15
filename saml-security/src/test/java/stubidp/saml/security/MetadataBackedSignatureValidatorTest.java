@@ -4,7 +4,6 @@ import com.google.common.base.Charsets;
 import com.google.common.io.Resources;
 import net.shibboleth.utilities.java.support.component.ComponentInitializationException;
 import net.shibboleth.utilities.java.support.xml.BasicParserPool;
-import org.joda.time.DateTime;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.opensaml.core.xml.io.MarshallingException;
@@ -45,6 +44,9 @@ import stubidp.utils.security.security.verification.CertificateValidity;
 import java.net.URL;
 import java.security.cert.CertPathValidatorException;
 import java.security.cert.X509Certificate;
+import java.time.Duration;
+import java.time.Instant;
+import java.time.ZoneId;
 import java.util.Collections;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -133,8 +135,8 @@ public class MetadataBackedSignatureValidatorTest extends OpenSAMLRunner {
             final EntityDescriptor entityDescriptor = EntityDescriptorBuilder.anEntityDescriptor()
                     .withId("0a2bf940-e6fe-4f32-833d-022dfbfc77c5")
                     .withEntityId("https://signin.service.gov.uk")
-                    .withValidUntil(DateTime.now().plusYears(100))
-                    .withCacheDuration(6000000L)
+                    .withValidUntil(Instant.now().atZone(ZoneId.of("UTC")).plusYears(100).toInstant())
+                    .withCacheDuration(Duration.ofMillis(6000000L))
                     .addSpServiceDescriptor(spssoDescriptor)
                     .build();
 
@@ -218,8 +220,9 @@ public class MetadataBackedSignatureValidatorTest extends OpenSAMLRunner {
      */
     @Test
     public void shouldNotValidateBadSignatureAlgorithm() throws Exception {
-        URL authnRequestUrl = getClass().getClassLoader().getResource("authnRequestBadAlgorithm.xml");
+        URL authnRequestUrl = getClass().getClassLoader().getResource("authnRequestNormal.xml");//sha1 authnrequest
         String input = StringEncoding.toBase64Encoded(Resources.toString(authnRequestUrl, Charsets.UTF_8));
+        //md5 authnrequests throw an exception here as they are not allowed to be unmarshalled
         AuthnRequest request = getStringtoOpenSamlObjectTransformer().apply(input);
         assertThat(createMetadataBackedSignatureValidator().validate(request, issuerId, SPSSODescriptor.DEFAULT_ELEMENT_NAME)).isFalse();
     }
@@ -228,7 +231,7 @@ public class MetadataBackedSignatureValidatorTest extends OpenSAMLRunner {
      * Signature object should exist.
      */
     @Test
-    public void shouldNotValidateMissingSignature() throws Exception {
+    public void shouldNotValidateMissingSignature() {
         Assertions.assertThrows(SignatureException.class, () -> validateAuthnRequestFile("authnRequestNoSignature.xml"));
     }
 
@@ -236,7 +239,7 @@ public class MetadataBackedSignatureValidatorTest extends OpenSAMLRunner {
      * Signature must be an immediate child of the SAML object.
      */
     @Test
-    public void shouldNotValidateSignatureNotImmediateChild() throws Exception {
+    public void shouldNotValidateSignatureNotImmediateChild() {
         Assertions.assertThrows(SignatureException.class, () -> validateAuthnRequestFile("authnRequestNotImmediateChild.xml"));
     }
 
@@ -244,7 +247,7 @@ public class MetadataBackedSignatureValidatorTest extends OpenSAMLRunner {
      * Signature should not contain more than one Reference.
      */
     @Test
-    public void shouldNotValidateSignatureTooManyReferences() throws Exception {
+    public void shouldNotValidateSignatureTooManyReferences() {
         Assertions.assertThrows(SignatureException.class, () -> validateAuthnRequestFile("authnRequestTooManyRefs.xml"));
     }
 
@@ -252,7 +255,7 @@ public class MetadataBackedSignatureValidatorTest extends OpenSAMLRunner {
      * Reference requires a valid URI pointing to a fragment ID.
      */
     @Test
-    public void shouldNotValidateSignatureBadReferenceURI() throws Exception {
+    public void shouldNotValidateSignatureBadReferenceURI() {
         Assertions.assertThrows(SignatureException.class, () -> validateAuthnRequestFile("authnRequestBadRefURI.xml"));
     }
 
@@ -260,7 +263,7 @@ public class MetadataBackedSignatureValidatorTest extends OpenSAMLRunner {
      * Reference URI should point to parent SAML object.
      */
     @Test
-    public void shouldNotValidateSignatureReferenceURINotParentID() throws Exception {
+    public void shouldNotValidateSignatureReferenceURINotParentID() {
         Assertions.assertThrows(SignatureException.class, () -> validateAuthnRequestFile("authnRequestRefURINotParentID.xml"));
     }
 
@@ -268,7 +271,7 @@ public class MetadataBackedSignatureValidatorTest extends OpenSAMLRunner {
      * Root SAML object should have an ID.
      */
     @Test
-    public void shouldNotValidateSignatureNoParentID() throws Exception {
+    public void shouldNotValidateSignatureNoParentID() {
         Assertions.assertThrows(SignatureException.class, () -> validateAuthnRequestFile("authnRequestNoParentID.xml"));
     }
 
@@ -276,7 +279,7 @@ public class MetadataBackedSignatureValidatorTest extends OpenSAMLRunner {
      * Signature must have Transforms defined.
      */
     @Test
-    public void shouldNotValidateSignatureNoTransforms() throws Exception {
+    public void shouldNotValidateSignatureNoTransforms() {
         Assertions.assertThrows(SignatureException.class, () -> validateAuthnRequestFile("authnRequestNoTransforms.xml"));
     }
 
@@ -284,7 +287,7 @@ public class MetadataBackedSignatureValidatorTest extends OpenSAMLRunner {
      * Signature should not have more than two Transforms.
      */
     @Test
-    public void shouldNotValidateSignatureTooManyTransforms() throws Exception {
+    public void shouldNotValidateSignatureTooManyTransforms() {
         Assertions.assertThrows(SignatureException.class, () -> validateAuthnRequestFile("authnRequestTooManyTransforms.xml"));
     }
 
@@ -292,7 +295,7 @@ public class MetadataBackedSignatureValidatorTest extends OpenSAMLRunner {
      * Signature must have enveloped-signature Transform.
      */
     @Test
-    public void shouldNotValidateSignatureNoEnvelopeTransform() throws Exception {
+    public void shouldNotValidateSignatureNoEnvelopeTransform() {
         Assertions.assertThrows(SignatureException.class, () -> validateAuthnRequestFile("authnRequestNoEnvTransform.xml"));
     }
 
@@ -300,7 +303,7 @@ public class MetadataBackedSignatureValidatorTest extends OpenSAMLRunner {
      * Signature must have a valid enveloped-signature Transform.
      */
     @Test
-    public void shouldNotValidateSignatureInvalidEnvelopeTransform() throws Exception {
+    public void shouldNotValidateSignatureInvalidEnvelopeTransform() {
         Assertions.assertThrows(SignatureException.class, () -> validateAuthnRequestFile("authnRequestInvalidEnvTransform.xml"));
     }
 
@@ -308,7 +311,7 @@ public class MetadataBackedSignatureValidatorTest extends OpenSAMLRunner {
      * Signature should not contain any Object children.
      */
     @Test
-    public void shouldNotValidateSignatureContainingObject() throws Exception {
+    public void shouldNotValidateSignatureContainingObject() {
         Assertions.assertThrows(SignatureException.class, () -> validateAuthnRequestFile("authnRequestSigContainsChildren.xml"));
     }
 
