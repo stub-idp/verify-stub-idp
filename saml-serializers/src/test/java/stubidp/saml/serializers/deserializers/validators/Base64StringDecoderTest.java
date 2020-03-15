@@ -1,10 +1,11 @@
 package stubidp.saml.serializers.deserializers.validators;
 
-import org.apache.xml.security.utils.Base64;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import stubidp.saml.extensions.validation.SamlTransformationErrorException;
 import stubidp.saml.extensions.validation.SamlValidationSpecificationFailure;
+
+import java.util.Base64;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.fail;
@@ -25,7 +26,7 @@ public class Base64StringDecoderTest {
     }
 
     private String toBase64Encoded(String string) {
-        return Base64.encode(string.getBytes());
+        return Base64.getEncoder().encodeToString(string.getBytes());
     }
 
     @Test
