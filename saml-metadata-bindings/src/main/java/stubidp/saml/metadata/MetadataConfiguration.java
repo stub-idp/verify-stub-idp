@@ -5,6 +5,7 @@ import io.dropwizard.client.JerseyClientConfiguration;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.net.URI;
+import java.time.Duration;
 import java.util.Optional;
 
 public abstract class MetadataConfiguration implements MetadataResolverConfiguration {
@@ -17,12 +18,12 @@ public abstract class MetadataConfiguration implements MetadataResolverConfigura
     @NotNull
     @Valid
     /* Used to set {@link org.opensaml.saml2.metadata.provider.AbstractReloadingMetadataProvider#minRefreshDelay} */
-    private Long minRefreshDelay = 60000L;
+    private Duration minRefreshDelay;
 
     @NotNull
     @Valid
     /* Used to set {@link org.opensaml.saml2.metadata.provider.AbstractReloadingMetadataProvider#maxRefreshDelay} */
-    private Long maxRefreshDelay = 600000L;
+    private Duration maxRefreshDelay;
 
     @NotNull
     @Valid
@@ -38,23 +39,23 @@ public abstract class MetadataConfiguration implements MetadataResolverConfigura
 
     @NotNull
     @Valid
-    private String jerseyClientName = "MetadataClient";
+    private String jerseyClientName;
 
     @NotNull
     @Valid
-    private String hubFederationId = "VERIFY-FEDERATION";
+    private String hubFederationId;
 
     public MetadataConfiguration(URI uri,
-        Long minRefreshDelay,
-        Long maxRefreshDelay,
-        String expectedEntityId,
-        JerseyClientConfiguration client,
-        String jerseyClientName,
-        String hubFederationId
+                                 Duration minRefreshDelay,
+                                 Duration maxRefreshDelay,
+                                 String expectedEntityId,
+                                 JerseyClientConfiguration client,
+                                 String jerseyClientName,
+                                 String hubFederationId
     ) {
         this.uri = uri;
-        this.minRefreshDelay = Optional.ofNullable(minRefreshDelay).orElse(60000L);
-        this.maxRefreshDelay = Optional.ofNullable(maxRefreshDelay).orElse(600000L);
+        this.minRefreshDelay = Optional.ofNullable(minRefreshDelay).orElse(Duration.ofMillis(60000L));
+        this.maxRefreshDelay = Optional.ofNullable(maxRefreshDelay).orElse(Duration.ofMillis(600000L));
         this.expectedEntityId = Optional.ofNullable(expectedEntityId).orElseThrow();
         this.client = Optional.ofNullable(client).orElse(new JerseyClientConfiguration());
         this.jerseyClientName = Optional.ofNullable(jerseyClientName).orElse("MetadataClient");
@@ -67,12 +68,12 @@ public abstract class MetadataConfiguration implements MetadataResolverConfigura
     }
 
     @Override
-    public Long getMinRefreshDelay() {
+    public Duration getMinRefreshDelay() {
         return minRefreshDelay;
     }
 
     @Override
-    public Long getMaxRefreshDelay() {
+    public Duration getMaxRefreshDelay() {
         return maxRefreshDelay;
     }
 

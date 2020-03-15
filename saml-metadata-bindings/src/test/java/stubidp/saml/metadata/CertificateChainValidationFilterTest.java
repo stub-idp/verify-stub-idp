@@ -56,7 +56,7 @@ class CertificateChainValidationFilterTest extends OpenSAMLRunner {
         final CertificateChainValidationFilter idpCertificateChainValidationFilter = new CertificateChainValidationFilter(IDPSSODescriptor.DEFAULT_ELEMENT_NAME, certificateChainValidator, idpKeyStoreRule.getKeyStore());
 
         XMLObject metadata = validateMetadata(spCertificateChainValidationFilter, metadataFactory.defaultMetadata());
-        metadata = idpCertificateChainValidationFilter.filter(metadata);
+        metadata = idpCertificateChainValidationFilter.filter(metadata, null);
 
         assertThat(getEntityIdsFromMetadata(metadata, SPSSODescriptor.DEFAULT_ELEMENT_NAME)).hasSameElementsAs(HUB_ENTITY_IDS);
         assertThat(getKeyNamesFromMetadata(metadata, SPSSODescriptor.DEFAULT_ELEMENT_NAME, TestEntityIds.HUB_ENTITY_ID)).hasSameElementsAs(HUB_KEY_NAMES);
@@ -69,7 +69,7 @@ class CertificateChainValidationFilterTest extends OpenSAMLRunner {
         final CertificateChainValidationFilter idpCertificateChainValidationFilter = new CertificateChainValidationFilter(IDPSSODescriptor.DEFAULT_ELEMENT_NAME, certificateChainValidator, idpKeyStoreRule.getKeyStore());
 
         XMLObject metadata = validateMetadata(spCertificateChainValidationFilter, metadataFactory.emptyMetadata());
-        metadata = idpCertificateChainValidationFilter.filter(metadata);
+        metadata = idpCertificateChainValidationFilter.filter(metadata, null);
 
         assertThat(metadata).isNull();
     }
@@ -101,7 +101,7 @@ class CertificateChainValidationFilterTest extends OpenSAMLRunner {
         final CertificateChainValidationFilter idpCertificateChainValidationFilter = new CertificateChainValidationFilter(IDPSSODescriptor.DEFAULT_ELEMENT_NAME, certificateChainValidator, rpKeyStoreRule.getKeyStore());
 
         XMLObject metadata = validateMetadata(spCertificateChainValidationFilter, metadataFactory.defaultMetadata());
-        metadata = idpCertificateChainValidationFilter.filter(metadata);
+        metadata = idpCertificateChainValidationFilter.filter(metadata, null);
 
         assertThat(metadata).isNull();
     }
@@ -144,7 +144,7 @@ class CertificateChainValidationFilterTest extends OpenSAMLRunner {
         BasicParserPool parserPool = new BasicParserPool();
         parserPool.initialize();
         XMLObject metadata = XMLObjectSupport.unmarshallFromInputStream(parserPool, IOUtils.toInputStream(metadataContent, UTF_8));
-        return certificateChainValidationFilter.filter(metadata);
+        return certificateChainValidationFilter.filter(metadata, null);
     }
 
     private List<String> getEntityIdsFromMetadata(final XMLObject metadata, final QName role) {

@@ -11,10 +11,11 @@ import org.opensaml.core.xml.XMLObject;
 import org.opensaml.core.xml.io.UnmarshallingException;
 import org.opensaml.core.xml.util.XMLObjectSupport;
 import org.opensaml.saml.metadata.resolver.filter.FilterException;
+import org.opensaml.saml.metadata.resolver.filter.MetadataFilterContext;
 import org.opensaml.saml.metadata.resolver.filter.impl.SignatureValidationFilter;
 import org.opensaml.xmlsec.algorithm.descriptors.DigestMD5;
 import org.opensaml.xmlsec.algorithm.descriptors.DigestSHA256;
-import org.opensaml.xmlsec.algorithm.descriptors.SignatureRSAMD5;
+import org.opensaml.xmlsec.algorithm.descriptors.SignatureRSASHA1;
 import org.opensaml.xmlsec.algorithm.descriptors.SignatureRSASHA256;
 import org.opensaml.xmlsec.signature.Signature;
 import stubidp.saml.extensions.IdaSamlBootstrap;
@@ -36,6 +37,7 @@ import java.util.UUID;
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.mockito.Mockito.mock;
 
 public class PKIXSignatureValidationFilterProviderTest {
 
@@ -89,7 +91,7 @@ public class PKIXSignatureValidationFilterProviderTest {
     }
 
     @Test
-    public void shouldErrorLoadingInvalidMetadataWhenSignedWithCertificateIssuedByOtherCA() throws Exception {
+    public void shouldErrorLoadingInvalidMetadataWhenSignedWithCertificateIssuedByOtherCA() {
         assertThatThrownBy(()-> validateMetadata(metadataFactory.signedMetadata(TestCertificateStrings.HUB_TEST_PUBLIC_SIGNING_CERT, TestCertificateStrings.HUB_TEST_PRIVATE_SIGNING_KEY))).isInstanceOf(FilterException.class);
     }
 
@@ -105,9 +107,9 @@ public class PKIXSignatureValidationFilterProviderTest {
     }
 
     @Test
-    public void shouldErrorLoadingInvalidMetadataWhenSignedWithBadSignatureAlgorithm() throws Exception {
+    public void shouldErrorLoadingInvalidMetadataWhenSignedWithBadSignatureAlgorithm() {
         Signature signature = SignatureBuilder.aSignature()
-                .withSignatureAlgorithm(new SignatureRSAMD5())
+                .withSignatureAlgorithm(new SignatureRSASHA1())
                 .withX509Data(TestCertificateStrings.METADATA_SIGNING_A_PUBLIC_CERT)
                 .withSigningCredential(new TestCredentialFactory(TestCertificateStrings.METADATA_SIGNING_A_PUBLIC_CERT, TestCertificateStrings.METADATA_SIGNING_A_PRIVATE_KEY).getSigningCredential()).build();
         String metadataContent = metadataFactory.metadata(new EntitiesDescriptorFactory().signedEntitiesDescriptor(signature));
@@ -129,7 +131,7 @@ public class PKIXSignatureValidationFilterProviderTest {
     }
 
     @Test
-    public void shouldErrorLoadingInvalidMetadataWhenSignedWithBadDigestAlgorithm() throws Exception {
+    public void shouldErrorLoadingInvalidMetadataWhenSignedWithBadDigestAlgorithm() {
         String id = UUID.randomUUID().toString();
         Signature signature = SignatureBuilder.aSignature()
                 .withDigestAlgorithm(id, new DigestMD5())
@@ -165,7 +167,7 @@ public class PKIXSignatureValidationFilterProviderTest {
         BasicParserPool parserPool = new BasicParserPool();
         parserPool.initialize();
         XMLObject metadata = XMLObjectSupport.unmarshallFromInputStream(parserPool, IOUtils.toInputStream(metadataContent, UTF_8));
-        return signatureValidationFilter.filter(metadata);
+        return signatureValidationFilter.filter(metadata, mock(MetadataFilterContext.class));
     }
 
     private static String createInlineCertificate(String pemString) {

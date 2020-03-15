@@ -5,9 +5,6 @@ import com.nimbusds.jose.util.X509CertUtils;
 import net.shibboleth.utilities.java.support.component.AbstractInitializableComponent;
 import net.shibboleth.utilities.java.support.component.ComponentInitializationException;
 import org.apache.commons.collections.ListUtils;
-import org.apache.xml.security.exceptions.Base64DecodingException;
-import org.apache.xml.security.utils.Base64;
-import org.joda.time.DateTime;
 import org.opensaml.saml.metadata.resolver.MetadataResolver;
 import org.opensaml.xmlsec.signature.support.impl.ExplicitKeySignatureTrustEngine;
 import org.slf4j.Logger;
@@ -21,10 +18,12 @@ import javax.ws.rs.client.Client;
 import java.io.UnsupportedEncodingException;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
+import java.time.Duration;
+import java.time.Instant;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.Collection;
 import java.util.Comparator;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -46,7 +45,7 @@ public class EidasMetadataResolverRepository implements MetadataResolverReposito
     private final EidasMetadataConfiguration eidasMetadataConfiguration;
     private final Timer timer;
     private final MetadataSignatureTrustEngineFactory metadataSignatureTrustEngineFactory;
-    private long delayBeforeNextRefresh;
+    private Duration delayBeforeNextRefresh;
     private Client client;
 
     @Inject
@@ -117,7 +116,7 @@ public class EidasMetadataResolverRepository implements MetadataResolverReposito
                 public void run() {
                     refresh();
                 }
-            }, delayBeforeNextRefresh);
+            }, delayBeforeNextRefresh.toMillis());
         }
     }
 
@@ -159,9 +158,9 @@ public class EidasMetadataResolverRepository implements MetadataResolverReposito
             throw new Error(String.format("Managed to generate an invalid anchor: %s", String.join(", ", errors)));
         }
 
-        Date metadataSigningCertExpiryDate = sortCertsByDate(trustAnchor).get(0).getNotAfter();
-        Date nextRunTime = DateTime.now().plus(delayBeforeNextRefresh).toDate();
-        if (metadataSigningCertExpiryDate.before(nextRunTime)) {
+        Instant metadataSigningCertExpiryDate = sortCertsByDate(trustAnchor).get(0).getNotAfter().toInstant();
+        Instant nextRunTime = Instant.now().plus(delayBeforeNextRefresh);
+        if (metadataSigningCertExpiryDate.isBefore(nextRunTime)) {
             setShortRefreshDelay();
         }
 
@@ -171,13 +170,7 @@ public class EidasMetadataResolverRepository implements MetadataResolverReposito
     @Override
     public List<X509Certificate> sortCertsByDate(JWK trustAnchor) {
         return trustAnchor.getX509CertChain().stream()
-                .map(base64 -> {
-                    try {
-                        return X509CertUtils.parse(Base64.decode(String.valueOf(base64)));
-                    } catch (Base64DecodingException e) {
-                        throw new IllegalArgumentException(String.format("Failed to parse X509 certificate: %s", e.getMessage()));
-                    }
-                })
+                .map(base64 -> X509CertUtils.parse(Base64.getDecoder().decode(String.valueOf(base64))))
                 .sorted(Comparator.comparing(X509Certificate::getNotAfter))
                 .collect(toList());
     }

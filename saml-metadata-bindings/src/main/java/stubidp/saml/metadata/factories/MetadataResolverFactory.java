@@ -14,12 +14,13 @@ import stubidp.saml.metadata.JerseyClientMetadataResolver;
 
 import javax.ws.rs.client.Client;
 import java.net.URI;
+import java.time.Duration;
 import java.util.List;
 import java.util.Timer;
 
 public class MetadataResolverFactory {
 
-    public MetadataResolver create(Client client, URI metadataUri, List<MetadataFilter> metadataFilterList, long minRefreshDelay, long maxRefreshDelay) {
+    public MetadataResolver create(Client client, URI metadataUri, List<MetadataFilter> metadataFilterList, Duration minRefreshDelay, Duration maxRefreshDelay) {
         try {
             InitializationService.initialize();
             JerseyClientMetadataResolver metadataResolver = new JerseyClientMetadataResolver(

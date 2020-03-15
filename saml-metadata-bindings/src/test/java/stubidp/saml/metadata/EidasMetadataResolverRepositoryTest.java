@@ -8,7 +8,6 @@ import ch.qos.logback.core.Appender;
 import com.nimbusds.jose.JOSEException;
 import com.nimbusds.jose.jwk.JWK;
 import net.shibboleth.utilities.java.support.component.ComponentInitializationException;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -24,7 +23,6 @@ import stubidp.eidas.trustanchor.CountryTrustAnchor;
 import stubidp.saml.metadata.factories.DropwizardMetadataResolverFactory;
 import stubidp.saml.metadata.factories.MetadataSignatureTrustEngineFactory;
 import stubidp.test.devpki.TestCertificateStrings;
-import stubidp.utils.common.datetime.DateTimeFreezer;
 import stubidp.utils.security.security.X509CertificateFactory;
 
 import javax.ws.rs.client.Client;
@@ -34,6 +32,7 @@ import java.security.SignatureException;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
 import java.text.ParseException;
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -89,18 +88,13 @@ public class EidasMetadataResolverRepositoryTest {
     @Captor
     private ArgumentCaptor<MetadataResolverConfiguration> metadataResolverConfigurationCaptor;
 
-    private X509CertificateFactory certificateFactory = new X509CertificateFactory();
+    private final X509CertificateFactory certificateFactory = new X509CertificateFactory();
 
     private List<JWK> trustAnchors;
 
     @BeforeEach
     public void setUp() {
         trustAnchors = new ArrayList<>();
-    }
-
-    @AfterEach
-    public void tearDown() {
-        DateTimeFreezer.unfreezeTime();
     }
 
     @Test
@@ -120,6 +114,7 @@ public class EidasMetadataResolverRepositoryTest {
         trustAnchors.add(trustAnchor);
 
         when(metadataConfiguration.getMetadataSourceUri()).thenReturn(UriBuilder.fromUri("https://source.local").build());
+        when(metadataConfiguration.getTrustAnchorMaxRefreshDelay()).thenReturn(Duration.ofSeconds(60));
         EidasMetadataResolverRepository metadataResolverRepository = new EidasMetadataResolverRepository(
                 trustAnchorResolver,
                 metadataConfiguration,
@@ -162,6 +157,7 @@ public class EidasMetadataResolverRepositoryTest {
         trustAnchors.add(trustAnchor);
 
         when(metadataConfiguration.getMetadataSourceUri()).thenReturn(UriBuilder.fromUri("https://source.local").build());
+        when(metadataConfiguration.getTrustAnchorMaxRefreshDelay()).thenReturn(Duration.ofSeconds(60));
         EidasMetadataResolverRepository metadataResolverRepository = new EidasMetadataResolverRepository(
                 trustAnchorResolver,
                 metadataConfiguration,
@@ -189,6 +185,7 @@ public class EidasMetadataResolverRepositoryTest {
     @Test
     public void shouldNotCreateMetadataResolverAndLogWhenCertificateIsExpired() throws CertificateException, SignatureException, ParseException, JOSEException {
         when(trustAnchorResolver.getTrustAnchors()).thenReturn(trustAnchors);
+        when(metadataConfiguration.getTrustAnchorMaxRefreshDelay()).thenReturn(Duration.ofSeconds(60));
         Logger logger = (Logger) LoggerFactory.getLogger(EidasMetadataResolverRepository.class);
         logger.addAppender(mockAppender);
         ArgumentCaptor<LoggingEvent> loggingEventCaptor = ArgumentCaptor.forClass(LoggingEvent.class);
@@ -220,6 +217,7 @@ public class EidasMetadataResolverRepositoryTest {
     @Test
     public void shouldNotCreateMetadataResolverRepositoryWhenCertificateIsInvalid() throws CertificateException, SignatureException, ParseException, JOSEException {
         when(trustAnchorResolver.getTrustAnchors()).thenReturn(trustAnchors);
+        when(metadataConfiguration.getTrustAnchorMaxRefreshDelay()).thenReturn(Duration.ofSeconds(60));
         String entityId = "http://signin.gov.uk/entity-id";
         List<String> invalidCertChain = asList(
                 CACertificates.TEST_ROOT_CA,
@@ -243,6 +241,7 @@ public class EidasMetadataResolverRepositoryTest {
     public void shouldAddNewMetadataResolverWhenRefreshing() throws CertificateException, SignatureException, ParseException, JOSEException, ComponentInitializationException {
         when(dropwizardMetadataResolverFactory.createMetadataResolverWithClient(any(), eq(true), eq(metadataClient))).thenReturn(metadataResolver);
         when(metadataSignatureTrustEngineFactory.createSignatureTrustEngine(metadataResolver)).thenReturn(explicitKeySignatureTrustEngine);
+        when(metadataConfiguration.getTrustAnchorMaxRefreshDelay()).thenReturn(Duration.ofSeconds(60));
 
         EidasMetadataResolverRepository metadataResolverRepository = createMetadataResolverRepositoryWithTrustAnchors();
 
@@ -308,6 +307,7 @@ public class EidasMetadataResolverRepositoryTest {
     private EidasMetadataResolverRepository createMetadataResolverRepositoryWithTrustAnchors(JWK... trustAnchors) throws ParseException, CertificateException, JOSEException, SignatureException {
         if(Objects.nonNull(trustAnchors) && trustAnchors.length>0) {
             when(trustAnchorResolver.getTrustAnchors()).thenReturn(asList(trustAnchors));
+            when(metadataConfiguration.getTrustAnchorMaxRefreshDelay()).thenReturn(Duration.ofSeconds(60));
         }
 
         return new EidasMetadataResolverRepository(

@@ -11,6 +11,7 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.net.URI;
 import java.security.KeyStore;
+import java.time.Duration;
 
 /**
  * Uses a flat structure to parse metadata details
@@ -36,8 +37,8 @@ public class TrustStorePathMetadataConfiguration extends MetadataConfiguration {
     @JsonCreator
     public TrustStorePathMetadataConfiguration(
             @JsonProperty("uri") @JsonAlias({ "url" }) URI uri,
-            @JsonProperty("minRefreshDelay") Long minRefreshDelay,
-            @JsonProperty("maxRefreshDelay") Long maxRefreshDelay,
+            @JsonProperty("minRefreshDelay") Duration minRefreshDelay,
+            @JsonProperty("maxRefreshDelay") Duration maxRefreshDelay,
             @JsonProperty("expectedEntityId") String expectedEntityId,
             @JsonProperty("client") JerseyClientConfiguration client,
             @JsonProperty("jerseyClientName") @JsonAlias({ "client" }) String jerseyClientName,

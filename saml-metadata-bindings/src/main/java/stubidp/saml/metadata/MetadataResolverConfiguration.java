@@ -4,6 +4,7 @@ import io.dropwizard.client.JerseyClientConfiguration;
 
 import java.net.URI;
 import java.security.KeyStore;
+import java.time.Duration;
 import java.util.Optional;
 
 public interface MetadataResolverConfiguration {
@@ -20,9 +21,9 @@ public interface MetadataResolverConfiguration {
 
     URI getUri();
 
-    Long getMinRefreshDelay();
+    Duration getMinRefreshDelay();
 
-    Long getMaxRefreshDelay();
+    Duration getMaxRefreshDelay();
 
     String getExpectedEntityId();
 

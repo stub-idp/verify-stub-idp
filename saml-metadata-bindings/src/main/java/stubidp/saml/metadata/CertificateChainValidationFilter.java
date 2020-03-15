@@ -4,6 +4,7 @@ import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.opensaml.core.xml.XMLObject;
 import org.opensaml.saml.metadata.resolver.filter.MetadataFilter;
+import org.opensaml.saml.metadata.resolver.filter.MetadataFilterContext;
 import org.opensaml.saml.saml2.metadata.EntitiesDescriptor;
 import org.opensaml.saml.saml2.metadata.EntityDescriptor;
 import org.opensaml.saml.saml2.metadata.RoleDescriptor;
@@ -53,7 +54,7 @@ public final class CertificateChainValidationFilter implements MetadataFilter {
 
     @Nullable
     @Override
-    public XMLObject filter(@Nullable XMLObject metadata) {
+    public XMLObject filter(@Nullable XMLObject metadata, MetadataFilterContext metadataFilterContext) {
         if (metadata == null) {
             return null;
         }
@@ -70,7 +71,7 @@ public final class CertificateChainValidationFilter implements MetadataFilter {
                 EntitiesDescriptor entitiesDescriptor = (EntitiesDescriptor) metadata;
                 filterOutUntrustedEntityDescriptors(entitiesDescriptor);
                 if (entitiesDescriptor.getEntityDescriptors().isEmpty()) {
-                    LOG.warn("EntitiesDescriptor '{}' has empty entity descriptor list, metadata will be filtered out");
+                    LOG.warn("EntitiesDescriptor '{}' has empty entity descriptor list, metadata will be filtered out", entitiesDescriptor.getID());
                     return null;
                 }
             } else {

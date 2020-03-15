@@ -10,6 +10,7 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.net.URI;
 import java.security.KeyStore;
+import java.time.Duration;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class TrustStoreBackedMetadataConfiguration extends MetadataConfiguration {
@@ -21,8 +22,8 @@ public class TrustStoreBackedMetadataConfiguration extends MetadataConfiguration
     @JsonCreator
     public TrustStoreBackedMetadataConfiguration(
         @JsonProperty("uri") @JsonAlias({ "url" }) URI uri,
-        @JsonProperty("minRefreshDelay") Long minRefreshDelay,
-        @JsonProperty("maxRefreshDelay") Long maxRefreshDelay,
+        @JsonProperty("minRefreshDelay") Duration minRefreshDelay,
+        @JsonProperty("maxRefreshDelay") Duration maxRefreshDelay,
         @JsonProperty("expectedEntityId") String expectedEntityId,
         @JsonProperty("client") JerseyClientConfiguration client,
         @JsonProperty("jerseyClientName") String jerseyClientName,

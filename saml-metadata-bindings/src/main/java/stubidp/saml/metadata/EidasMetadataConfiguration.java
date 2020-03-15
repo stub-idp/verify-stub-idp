@@ -6,6 +6,7 @@ import io.dropwizard.client.JerseyClientConfiguration;
 
 import java.net.URI;
 import java.security.KeyStore;
+import java.time.Duration;
 import java.util.Optional;
 
 public class EidasMetadataConfiguration {
@@ -13,14 +14,14 @@ public class EidasMetadataConfiguration {
     private URI trustAnchorUri;
 
     /* Used to set {@link org.opensaml.saml2.metadata.provider.AbstractReloadingMetadataProvider#minRefreshDelay} */
-    private Long minRefreshDelay;
+    private Duration minRefreshDelay;
 
     /* Used to set {@link org.opensaml.saml2.metadata.provider.AbstractReloadingMetadataProvider#maxRefreshDelay} */
-    private Long maxRefreshDelay;
+    private Duration maxRefreshDelay;
 
-    private Long trustAnchorMaxRefreshDelay;
+    private Duration trustAnchorMaxRefreshDelay;
 
-    private Long trustAnchorMinRefreshDelay;
+    private Duration trustAnchorMinRefreshDelay;
 
     private JerseyClientConfiguration client;
 
@@ -32,10 +33,10 @@ public class EidasMetadataConfiguration {
 
     @JsonCreator
     public EidasMetadataConfiguration(@JsonProperty("trustAnchorUri") URI trustAnchorUri,
-                                      @JsonProperty("minRefreshDelay") Long minRefreshDelay,
-                                      @JsonProperty("maxRefreshDelay") Long maxRefreshDelay,
-                                      @JsonProperty("trustAnchorMaxRefreshDelay") Long trustAnchorMaxRefreshDelay,
-                                      @JsonProperty("trustAnchorMinRefreshDelay") Long trustAnchorMinRefreshDelay,
+                                      @JsonProperty("minRefreshDelay") Duration minRefreshDelay,
+                                      @JsonProperty("maxRefreshDelay") Duration maxRefreshDelay,
+                                      @JsonProperty("trustAnchorMaxRefreshDelay") Duration trustAnchorMaxRefreshDelay,
+                                      @JsonProperty("trustAnchorMinRefreshDelay") Duration trustAnchorMinRefreshDelay,
                                       @JsonProperty("client") JerseyClientConfiguration client,
                                       @JsonProperty("jerseyClientName") String jerseyClientName,
                                       @JsonProperty("trustStore") TrustStoreConfiguration trustStore,
@@ -43,10 +44,10 @@ public class EidasMetadataConfiguration {
     )
     {
         this.trustAnchorUri = trustAnchorUri;
-        this.minRefreshDelay = Optional.ofNullable(minRefreshDelay).orElse(60000L);
-        this.maxRefreshDelay = Optional.ofNullable(maxRefreshDelay).orElse(600000L);
-        this.trustAnchorMinRefreshDelay = Optional.ofNullable(trustAnchorMinRefreshDelay).orElse(60000L);
-        this.trustAnchorMaxRefreshDelay = Optional.ofNullable(trustAnchorMaxRefreshDelay).orElse(3600000L);
+        this.minRefreshDelay = Optional.ofNullable(minRefreshDelay).orElse(Duration.ofMillis(60000L));
+        this.maxRefreshDelay = Optional.ofNullable(maxRefreshDelay).orElse(Duration.ofMillis(600000L));
+        this.trustAnchorMinRefreshDelay = Optional.ofNullable(trustAnchorMinRefreshDelay).orElse(Duration.ofMillis(60000L));
+        this.trustAnchorMaxRefreshDelay = Optional.ofNullable(trustAnchorMaxRefreshDelay).orElse(Duration.ofMillis(3600000L));
         this.client = Optional.ofNullable(client).orElse(new JerseyClientConfiguration());
         this.jerseyClientName = Optional.ofNullable(jerseyClientName).orElse("MetadataClient");
         this.trustStore = trustStore;
@@ -57,19 +58,19 @@ public class EidasMetadataConfiguration {
         return trustAnchorUri;
     }
 
-    public Long getMinRefreshDelay() {
+    public Duration getMinRefreshDelay() {
         return minRefreshDelay;
     }
 
-    public Long getMaxRefreshDelay() {
+    public Duration getMaxRefreshDelay() {
         return maxRefreshDelay;
     }
 
-    public Long getTrustAnchorMaxRefreshDelay() {
+    public Duration getTrustAnchorMaxRefreshDelay() {
         return trustAnchorMaxRefreshDelay;
     }
 
-    public Long getTrustAnchorMinRefreshDelay() {
+    public Duration getTrustAnchorMinRefreshDelay() {
         return trustAnchorMinRefreshDelay;
     }
 

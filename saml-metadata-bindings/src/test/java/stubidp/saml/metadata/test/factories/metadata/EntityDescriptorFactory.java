@@ -1,6 +1,5 @@
 package stubidp.saml.metadata.test.factories.metadata;
 
-import org.joda.time.DateTime;
 import org.opensaml.core.xml.io.MarshallingException;
 import org.opensaml.saml.saml2.metadata.AttributeAuthorityDescriptor;
 import org.opensaml.saml.saml2.metadata.EntityDescriptor;
@@ -25,12 +24,13 @@ import stubidp.saml.utils.core.test.builders.metadata.X509DataBuilder;
 import stubidp.test.devpki.TestCertificateStrings;
 import stubidp.test.devpki.TestEntityIds;
 
+import java.time.Instant;
+import java.time.ZoneId;
 import java.util.List;
 
 import static java.util.Arrays.asList;
 
 public class EntityDescriptorFactory {
-
     public static final String SIGNING_ONE = "signing_one";
     public static final String SIGNING_TWO = "signing_two";
     public static final String ENCRYPTION = "encryption";
@@ -53,7 +53,7 @@ public class EntityDescriptorFactory {
                     .withEntityId(TestEntityIds.HUB_ENTITY_ID)
                     .addSpServiceDescriptor(spssoDescriptor)
                     .withIdpSsoDescriptor(null)
-                    .withValidUntil(DateTime.now().plusWeeks(2))
+                    .withValidUntil(Instant.now().atZone(ZoneId.of("UTC")).plusWeeks(2).toInstant())
                     .withSignature(null)
                     .withoutSigning()
                     .build();
@@ -77,7 +77,7 @@ public class EntityDescriptorFactory {
                     .withEntityId(TestEntityIds.HUB_ENTITY_ID)
                     .addSpServiceDescriptor(spssoDescriptor)
                     .withIdpSsoDescriptor(null)
-                    .withValidUntil(DateTime.now().plusWeeks(2))
+                    .withValidUntil(Instant.now().atZone(ZoneId.of("UTC")).plusWeeks(2).toInstant())
                     .withSignature(null)
                     .withoutSigning()
                     .build();
@@ -110,7 +110,7 @@ public class EntityDescriptorFactory {
                                           .withEntityId(TestEntityIds.HUB_ENTITY_ID)
                                           .addSpServiceDescriptor(spssoDescriptor)
                                           .withIdpSsoDescriptor(null)
-                                          .withValidUntil(DateTime.now().plusWeeks(2))
+                                          .withValidUntil(Instant.now().atZone(ZoneId.of("UTC")).plusWeeks(2).toInstant())
                                           .withSignature(null)
                                           .withoutSigning()
                                           .build();
@@ -124,14 +124,14 @@ public class EntityDescriptorFactory {
             return getEntityDescriptorBuilder(idpEntityId)
                     .withSignature(null)
                     .withoutSigning()
-                    .withValidUntil(DateTime.now().plusWeeks(2))
+                    .withValidUntil(Instant.now().atZone(ZoneId.of("UTC")).plusWeeks(2).toInstant())
                     .build();
         } catch (MarshallingException | SignatureException e) {
             throw new RuntimeException(e);
         }
     }
 
-    public EntityDescriptor signedIdpEntityDescriptor(String idpEntityId, Credential signingCredential, DateTime validUntil) {
+    public EntityDescriptor signedIdpEntityDescriptor(String idpEntityId, Credential signingCredential, Instant validUntil) {
         Signature signature = SignatureBuilder.aSignature().withX509Data(TestCertificateStrings.PUBLIC_SIGNING_CERTS.get(idpEntityId)).withSigningCredential(signingCredential).build();
         try {
             return getEntityDescriptorBuilder(idpEntityId)
@@ -160,7 +160,7 @@ public class EntityDescriptorFactory {
             return EntityDescriptorBuilder.anEntityDescriptor()
                     .withEntityId(attributeAuthorityEntityId)
                     .withIdpSsoDescriptor(null)
-                    .withValidUntil(DateTime.now().plusWeeks(2))
+                    .withValidUntil(Instant.now().atZone(ZoneId.of("UTC")).plusWeeks(2).toInstant())
                     .withSignature(null)
                     .withoutSigning()
                     .withAttributeAuthorityDescriptor(attributeAuthorityDescriptor)

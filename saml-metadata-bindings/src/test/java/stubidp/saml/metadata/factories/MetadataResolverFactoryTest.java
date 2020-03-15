@@ -1,6 +1,5 @@
 package stubidp.saml.metadata.factories;
 
-import com.google.common.base.Predicate;
 import net.shibboleth.utilities.java.support.resolver.CriterionPredicateRegistry;
 import org.glassfish.jersey.client.JerseyClientBuilder;
 import org.junit.jupiter.api.Test;
@@ -17,6 +16,8 @@ import stubidp.saml.metadata.ExpiredCertificateMetadataFilter;
 
 import javax.ws.rs.client.Client;
 import java.net.URI;
+import java.time.Duration;
+import java.util.function.Predicate;
 
 import static java.util.Arrays.asList;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -34,7 +35,7 @@ public class MetadataResolverFactoryTest {
     public void shouldProvideMetadataResolver() throws Exception {
         Client client = new JerseyClientBuilder().build();
         MetadataResolverFactory metadataResolverFactory = new MetadataResolverFactory();
-        MetadataResolver metadataResolver = metadataResolverFactory.create(client, URI.create("http://example.local"), asList(signatureValidationFilter,  expiredCertificateMetadataFilter),20, 60);
+        MetadataResolver metadataResolver = metadataResolverFactory.create(client, URI.create("http://example.local"), asList(signatureValidationFilter,  expiredCertificateMetadataFilter), Duration.ofSeconds(20), Duration.ofSeconds(60));
         assertThat(metadataResolver).isNotNull();
 
         AbstractBatchMetadataResolver batchMetadataResolver = (AbstractBatchMetadataResolver) metadataResolver;

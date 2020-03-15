@@ -9,6 +9,7 @@ import io.dropwizard.client.JerseyClientConfiguration;
 import javax.validation.Valid;
 import java.net.URI;
 import java.security.KeyStore;
+import java.time.Duration;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -24,8 +25,8 @@ public class MultiTrustStoresBackedMetadataConfiguration extends TrustStoreBacke
     @JsonCreator
     public MultiTrustStoresBackedMetadataConfiguration(
         @JsonProperty("uri") @JsonAlias({ "url" }) URI uri,
-        @JsonProperty("minRefreshDelay") Long minRefreshDelay,
-        @JsonProperty("maxRefreshDelay") Long maxRefreshDelay,
+        @JsonProperty("minRefreshDelay") Duration minRefreshDelay,
+        @JsonProperty("maxRefreshDelay") Duration maxRefreshDelay,
         @JsonProperty("expectedEntityId") String expectedEntityId,
         @JsonProperty("client") JerseyClientConfiguration client,
         @JsonProperty("jerseyClientName") String jerseyClientName,

@@ -5,17 +5,18 @@ import org.opensaml.saml.metadata.resolver.MetadataResolver;
 import org.opensaml.saml.metadata.resolver.filter.MetadataFilter;
 import org.opensaml.saml.saml2.metadata.IDPSSODescriptor;
 import org.opensaml.saml.saml2.metadata.SPSSODescriptor;
-import stubidp.utils.security.security.X509CertificateFactory;
-import stubidp.utils.security.security.verification.CertificateChainValidator;
-import stubidp.utils.security.security.verification.PKIXParametersProvider;
 import stubidp.saml.metadata.CertificateChainValidationFilter;
 import stubidp.saml.metadata.ExpiredCertificateMetadataFilter;
 import stubidp.saml.metadata.MetadataResolverConfiguration;
 import stubidp.saml.metadata.PKIXSignatureValidationFilterProvider;
+import stubidp.utils.security.security.X509CertificateFactory;
+import stubidp.utils.security.security.verification.CertificateChainValidator;
+import stubidp.utils.security.security.verification.PKIXParametersProvider;
 
 import javax.ws.rs.client.Client;
 import java.net.URI;
 import java.security.KeyStore;
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -52,8 +53,8 @@ public class DropwizardMetadataResolverFactory {
             boolean validateSignatures,
             Client client) {
         URI uri = metadataConfiguration.getUri();
-        Long minRefreshDelay = metadataConfiguration.getMinRefreshDelay();
-        Long maxRefreshDelay = metadataConfiguration.getMaxRefreshDelay();
+        Duration minRefreshDelay = metadataConfiguration.getMinRefreshDelay();
+        Duration maxRefreshDelay = metadataConfiguration.getMaxRefreshDelay();
 
         return metadataResolverFactory.create(
             client,
