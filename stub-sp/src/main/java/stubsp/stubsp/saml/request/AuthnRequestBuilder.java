@@ -1,7 +1,6 @@
 package stubsp.stubsp.saml.request;
 
 import com.google.common.base.Strings;
-import org.joda.time.DateTime;
 import org.opensaml.core.xml.config.XMLObjectProviderRegistrySupport;
 import org.opensaml.core.xml.io.MarshallingException;
 import org.opensaml.saml.common.xml.SAMLConstants;
@@ -20,6 +19,7 @@ import stubidp.saml.extensions.IdaConstants;
 import stubidp.saml.extensions.extensions.IdaAuthnContext;
 import stubidp.saml.utils.core.OpenSamlXmlObjectFactory;
 
+import java.time.Instant;
 import java.util.Optional;
 
 public class AuthnRequestBuilder {
@@ -36,7 +36,7 @@ public class AuthnRequestBuilder {
     private Optional<String> minimumLevelOfAssurance = Optional.of(IdaAuthnContext.LEVEL_1_AUTHN_CTX);
     private boolean shouldSign = true;
     private boolean shouldAddSignature = true;
-    private Optional<DateTime> issueInstant = Optional.of(DateTime.now());
+    private Optional<Instant> issueInstant = Optional.of(Instant.now());
 
     private Optional<String> versionNumber = Optional.of(IdaConstants.SAML_VERSION_NUMBER);
     private Optional<String> destination = Optional.empty();
@@ -142,12 +142,12 @@ public class AuthnRequestBuilder {
     }
 
     public AuthnRequestBuilder withIsPassive(boolean isPassive) {
-        this.isPassive = Optional.ofNullable(isPassive);
+        this.isPassive = Optional.of(isPassive);
         return this;
     }
 
-    public AuthnRequestBuilder withIssueInstant(DateTime dateTime) {
-        this.issueInstant = Optional.ofNullable(dateTime);
+    public AuthnRequestBuilder withIssueInstant(Instant instant) {
+        this.issueInstant = Optional.ofNullable(instant);
         return this;
     }
 

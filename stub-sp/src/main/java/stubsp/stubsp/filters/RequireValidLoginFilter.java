@@ -2,7 +2,6 @@ package stubsp.stubsp.filters;
 
 import org.apache.commons.lang.StringUtils;
 import org.jboss.logging.MDC;
-import org.joda.time.DateTime;
 import org.opensaml.security.credential.BasicCredential;
 import org.opensaml.security.credential.UsageType;
 import stubidp.shared.cookies.HmacValidator;
@@ -27,6 +26,7 @@ import java.security.cert.Certificate;
 import java.security.cert.CertificateException;
 import java.security.cert.CertificateFactory;
 import java.text.MessageFormat;
+import java.time.Instant;
 import java.util.Map;
 import java.util.Optional;
 
@@ -91,7 +91,7 @@ public class RequireValidLoginFilter implements ContainerRequestFilter {
                 return IdpAuthnRequestBuilder.anAuthnRequest()
                         .withDestination(metadataRepository.getSingleSignOnService().toASCIIString())
                         .withKeyInfo(false) // not expected in Verify authn requests
-                        .withIssueInstant(DateTime.now())
+                        .withIssueInstant(Instant.now())
                         .withEntityId(stubSpConfiguration.getSaml().getEntityId())
                         .withSigningCertificate(stubSpConfiguration.getSigningKeyPairConfiguration().getCert())
                         .withSigningCredential(signingCredential)

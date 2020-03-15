@@ -1,12 +1,11 @@
 package stubsp.stubsp.saml.request;
 
-import org.joda.time.DateTime;
 import org.opensaml.saml.saml2.core.AuthnRequest;
 import org.opensaml.security.credential.Credential;
 import stubidp.saml.serializers.serializers.XmlObjectToBase64EncodedStringTransformer;
 
+import java.time.Instant;
 import java.util.Optional;
-import java.util.UUID;
 
 public class IdpAuthnRequestBuilder {
 
@@ -14,7 +13,7 @@ public class IdpAuthnRequestBuilder {
 
     private String destination;
     private String entityId;
-    private DateTime issueInstant = DateTime.now();
+    private Instant issueInstant = Instant.now();
     private boolean withKeyInfo = false;
     private Credential signingCredential;
     private String signingCertificate;
@@ -40,7 +39,7 @@ public class IdpAuthnRequestBuilder {
         return this;
     }
 
-    public IdpAuthnRequestBuilder withIssueInstant(DateTime issueInstant) {
+    public IdpAuthnRequestBuilder withIssueInstant(Instant issueInstant) {
         this.issueInstant = issueInstant;
         return this;
     }
@@ -56,7 +55,7 @@ public class IdpAuthnRequestBuilder {
     }
 
     public String build() {
-        return anAuthnRequest("_"+UUID.randomUUID().toString(),
+        return anAuthnRequest(AuthnRequestIdGenerator.generateRequestId(),
                 entityId,
                 Optional.of(false),
                 Optional.of(0),
@@ -73,7 +72,7 @@ public class IdpAuthnRequestBuilder {
             Optional<Integer> assertionConsumerServiceIndex,
             Credential signingCredential,
             String ssoRequestEndpoint,
-            Optional<DateTime> issueInstant,
+            Optional<Instant> issueInstant,
             Optional<String> x509Certificate) {
         AuthnRequestBuilder authnRequestBuilder = AuthnRequestBuilder.anAuthnRequest()
                 .withId(id)

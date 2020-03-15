@@ -2,8 +2,6 @@ package stubsp.stubsp;
 
 import io.dropwizard.setup.Environment;
 import org.glassfish.jersey.internal.inject.AbstractBinder;
-import org.joda.time.Period;
-import org.joda.time.ReadablePeriod;
 import org.opensaml.saml.metadata.resolver.MetadataResolver;
 import org.opensaml.xmlsec.algorithm.DigestAlgorithm;
 import org.opensaml.xmlsec.algorithm.SignatureAlgorithm;
@@ -42,6 +40,7 @@ import java.security.KeyPair;
 import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.security.cert.X509Certificate;
+import java.time.Duration;
 import java.util.Collections;
 
 import static stubidp.shared.csrf.AbstractCSRFCheckProtectionFilter.IS_SECURE_COOKIE_ENABLED;
@@ -106,7 +105,7 @@ public class StubSpBinder extends AbstractBinder {
 //        final PublicKeyFactory publicKeyFactory = new PublicKeyFactory(new X509CertificateFactory());
         bind(configuration.getMetadata()).named(SP_METADATA_CONFIGURATION).to(MetadataConfiguration.class);
         bind(SpMetadataBuilder.class).to(SpMetadataBuilder.class);
-        bind(new Period().withDays(1)).named(METADATA_VALIDITY_PERIOD).to(ReadablePeriod.class);
+        bind(Duration.ofDays(1)).named(METADATA_VALIDITY_PERIOD).to(Duration.class);
 
         final SignatureRSASHA256 signatureAlgorithm = new SignatureRSASHA256();
         bind(signatureAlgorithm).to(SignatureAlgorithm.class);

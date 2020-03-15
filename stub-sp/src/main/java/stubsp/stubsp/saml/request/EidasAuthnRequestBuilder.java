@@ -1,7 +1,5 @@
 package stubsp.stubsp.saml.request;
 
-import net.shibboleth.utilities.java.support.security.SecureRandomIdentifierGenerationStrategy;
-import org.joda.time.DateTime;
 import org.opensaml.core.xml.config.XMLObjectProviderRegistrySupport;
 import org.opensaml.core.xml.io.MarshallingException;
 import org.opensaml.saml.saml2.core.Attribute;
@@ -36,16 +34,16 @@ import stubidp.saml.hub.hub.domain.LevelOfAssurance;
 import stubidp.saml.security.IdaKeyStore;
 import stubidp.saml.security.IdaKeyStoreCredentialRetriever;
 import stubidp.saml.security.SignatureFactory;
-import stubidp.saml.security.SigningCredentialFactory;
 import stubidp.saml.serializers.serializers.XmlObjectToBase64EncodedStringTransformer;
 
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 
 public class EidasAuthnRequestBuilder {
     private String issuerEntityId = "issuerEntityId";
     private String destination = "destination";
-    private DateTime issueInstant = DateTime.now();
+    private Instant issueInstant = Instant.now();
     private List<RequestedAttribute> requestedAttributeList = new ArrayList<>();
     private boolean withKeyInfo = true;
     private boolean removeAllX509Datas = false;
@@ -66,7 +64,7 @@ public class EidasAuthnRequestBuilder {
         return this;
     }
 
-    public EidasAuthnRequestBuilder withIssueInstant(DateTime issueInstant) {
+    public EidasAuthnRequestBuilder withIssueInstant(Instant issueInstant) {
         this.issueInstant = issueInstant;
         return this;
     }
@@ -96,7 +94,7 @@ public class EidasAuthnRequestBuilder {
         credential.setUsageType(UsageType.SIGNING);
 
         AuthnRequest authnRequest = AuthnRequestBuilder.anAuthnRequest()
-                .withId(new SecureRandomIdentifierGenerationStrategy().generateIdentifier())
+                .withId(AuthnRequestIdGenerator.generateRequestId())
                 .withDestination(destination)
                 .withIssueInstant(issueInstant)
                 .withIssuer(createIssuer(issuerEntityId))
@@ -150,7 +148,7 @@ public class EidasAuthnRequestBuilder {
         requestedAuthnContext.setComparison(comparisonType);
 
         AuthnContextClassRef authnContextClassRef = new AuthnContextClassRefBuilder().buildObject();
-        authnContextClassRef.setAuthnContextClassRef(loa);
+        authnContextClassRef.setURI(loa);
         requestedAuthnContext.getAuthnContextClassRefs().add(authnContextClassRef);
         return requestedAuthnContext;
     }
