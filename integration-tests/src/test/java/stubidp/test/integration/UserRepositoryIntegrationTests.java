@@ -71,7 +71,7 @@ public class UserRepositoryIntegrationTests extends IntegrationTestHelper {
     }
 
     @Test
-    void shouldNotAllowIncorrectCredentials() throws JsonProcessingException {
+    void shouldNotAllowIncorrectCredentialsTest() throws JsonProcessingException {
         Client client = JerseyClientBuilder.createClient().property(ClientProperties.FOLLOW_REDIRECTS, false);
         HttpAuthenticationFeature httpAuthenticationFeature = HttpAuthenticationFeature.basic("USERNAME", "PASSWORD");
         client.register(httpAuthenticationFeature);
@@ -93,7 +93,7 @@ public class UserRepositoryIntegrationTests extends IntegrationTestHelper {
     }
 
     @Test
-    void addedUserShouldBePersisted() throws Exception {
+    void addedUserShouldBePersistedTest() throws Exception {
         IdpUserDto user = new IdpUserDto(
                 Optional.of("a pid"),
                 "some test user",
@@ -131,7 +131,7 @@ public class UserRepositoryIntegrationTests extends IntegrationTestHelper {
     }
 
     @Test
-    void allAddedUsersShouldBePersisted() throws Exception {
+    void allAddedUsersShouldBePersistedTest() throws Exception {
         IdpUserDto user1 = aUser().withUsername("user-1").build();
         IdpUserDto user2 = aUser().withUsername("user-2").build();
 
@@ -144,7 +144,7 @@ public class UserRepositoryIntegrationTests extends IntegrationTestHelper {
     }
 
     @Test
-    void deletedUserShouldBeRemoved() throws IOException {
+    void deletedUserShouldBeRemovedTest() throws IOException {
         IdpUserDto deletableUser = aUser().withUsername("deletable-user").build();
         someUsersAreCreatedForIdp(IDP_NAME, deletableUser);
         IdpUserDto returnedUser1 = readEntity(aUserIsRequestedForIdp(deletableUser.getUsername(), IDP_NAME));
@@ -156,7 +156,7 @@ public class UserRepositoryIntegrationTests extends IntegrationTestHelper {
     }
 
     @Test
-    void addedUserShouldHavePidGeneratedWhenNotSpecified() throws Exception {
+    void addedUserShouldHavePidGeneratedWhenNotSpecifiedTest() throws Exception {
         IdpUserDto user = aUser().withPid(null).build();
 
         aUserIsCreatedForIdp(IDP_NAME, user);
@@ -186,7 +186,7 @@ public class UserRepositoryIntegrationTests extends IntegrationTestHelper {
     }
 
     @Test
-    void userWithMissingPasswordShouldReturnBadRequestWithErrorMessage() throws Exception {
+    void userWithMissingPasswordShouldReturnBadRequestWithErrorMessageTest() throws Exception {
         IdpUserDto user = aUser().withPassword(null).build();
 
         Response response = aUserIsCreatedForIdpWithoutResponseChecking(IDP_NAME, user);

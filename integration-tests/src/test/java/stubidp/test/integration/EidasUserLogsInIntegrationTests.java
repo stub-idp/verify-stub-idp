@@ -79,7 +79,7 @@ public class EidasUserLogsInIntegrationTests extends IntegrationTestHelper {
     }
 
     @Test
-    void loginBehaviourTestPSS() {
+    void loginBehaviourTestPSSTest() {
         final AuthnRequestSteps.Cookies cookies = authnRequestSteps.userPostsEidasAuthnRequestToStubIdp();
         authnRequestSteps.eidasUserLogsIn(cookies, true);
         authnRequestSteps.eidasUserConsentsReturnSamlResponse(cookies, false, RSASSA_PSS);
@@ -123,7 +123,7 @@ public class EidasUserLogsInIntegrationTests extends IntegrationTestHelper {
     }
 
     @Test
-    void unsignedAssertionsAreReturnedWhenRequested() {
+    void unsignedAssertionsAreReturnedWhenRequestedTest() {
         final AuthnRequestSteps.Cookies cookies = authnRequestSteps.userPostsEidasAuthnRequestToStubIdp();
         authnRequestSteps.eidasUserLogsIn(cookies, false);
         final String samlResponse = authnRequestSteps.eidasUserConsentsReturnSamlResponse(cookies, false, RSASHA_256);

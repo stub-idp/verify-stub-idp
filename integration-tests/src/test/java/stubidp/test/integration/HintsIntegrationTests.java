@@ -50,7 +50,7 @@ public class HintsIntegrationTests extends IntegrationTestHelper {
     }
 
     @Test
-    public void debugPageShowsHints() {
+    public void debugPageShowsHintsTest() {
         List<String> hints = List.of(IdpHint.has_apps.name(), "snakes", "plane");
         final Optional<Boolean> registration = Optional.of(true);
         final Optional<String> language = Optional.empty();
@@ -69,7 +69,7 @@ public class HintsIntegrationTests extends IntegrationTestHelper {
     }
 
     @Test
-    public void debugPageShowsLanguageHint() {
+    public void debugPageShowsLanguageHintTest() {
         List<String> hints = List.of();
         final Optional<Boolean> registration = Optional.empty();
         final Optional<String> language = Optional.of("cy");

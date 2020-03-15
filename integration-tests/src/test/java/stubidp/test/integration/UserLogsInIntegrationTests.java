@@ -78,11 +78,11 @@ public class UserLogsInIntegrationTests extends IntegrationTestHelper {
         assertThat(response.getStatus()).isEqualTo(200);
         final String entity = response.readEntity(String.class);
         final List<String> metrics = List.of(entity.split(System.lineSeparator())).stream().filter(s -> s.startsWith("stubidp_")).collect(Collectors.toList());
-        metricsContains(metrics, "stubidp_verify_receivedAuthnRequests_total 6.0");
+        metricsContains(metrics, "stubidp_verify_receivedAuthnRequests_total 7.0");
 //        metricsContains(metrics, "stubidp_eidas_receivedAuthnRequests_total");
-        metricsContains(metrics, "stubidp_verify_successfulAuthnRequests_total 5.0");
+        metricsContains(metrics, "stubidp_verify_successfulAuthnRequests_total 6.0");
         metricsContains(metrics, "stubidp_eidas_successfulAuthnRequests_total 0.0");
-        metricsContains(metrics, "stubidp_verify_sentAuthnResponses_success_total 3.0");
+        metricsContains(metrics, "stubidp_verify_sentAuthnResponses_success_total 4.0");
 //        metricsContains(metrics, "stubidp_eidas_sentAuthnResponses_success_total 0.0");
         metricsContains(metrics, "stubidp_verify_invalid_AuthnRequests_received_total 1.0");
         metricsContains(metrics, "stubidp_eidas_invalid_AuthnRequests_received_total 0.0");
@@ -112,7 +112,7 @@ public class UserLogsInIntegrationTests extends IntegrationTestHelper {
     }
 
     @Test
-    @Order(1)
+    @Order(Integer.MAX_VALUE)
     void failureBehaviourTest() {
         final AuthnRequestSteps.Cookies cookies = authnRequestSteps.userPostsAuthnRequestToStubIdp();
         final String response = authnRequestSteps.userFailureFraud(cookies);
@@ -187,7 +187,7 @@ public class UserLogsInIntegrationTests extends IntegrationTestHelper {
     }
 
     @Test
-    void shouldGenerateIdpMetadata() {
+    void shouldGenerateIdpMetadataTest() {
         Response response = client.target(authnRequestSteps.getStubIdpUri(UriBuilder.fromPath(Urls.IDP_METADATA_RESOURCE).build(IDP_NAME).toString()))
                 .request()
                 .get();

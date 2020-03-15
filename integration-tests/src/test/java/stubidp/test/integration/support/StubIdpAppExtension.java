@@ -2,7 +2,7 @@ package stubidp.test.integration.support;
 
 import certificates.values.CACertificates;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import io.dropwizard.jackson.Jackson;
 import io.dropwizard.testing.ConfigOverride;
 import io.dropwizard.testing.junit5.DropwizardAppExtension;
 import io.prometheus.client.CollectorRegistry;
@@ -162,7 +162,7 @@ public class StubIdpAppExtension extends DropwizardAppExtension<StubIdpConfigura
 
         IdpStubsConfiguration idpStubsConfiguration = new TestIdpStubsConfiguration(stubIdps);
         try {
-            FileUtils.write(STUB_IDPS_FILE, new ObjectMapper().writeValueAsString(idpStubsConfiguration), UTF_8);
+            FileUtils.write(STUB_IDPS_FILE, Jackson.newObjectMapper().writeValueAsString(idpStubsConfiguration), UTF_8);
             STUB_IDPS_FILE.deleteOnExit();
 
             InitializationService.initialize();

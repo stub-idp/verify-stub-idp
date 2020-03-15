@@ -65,7 +65,7 @@ public class SecurityIntegrationTests extends IntegrationTestHelper {
     }
 
     @Test
-    void csrfTokenIsUniquePerPageLoad() {
+    void csrfTokenIsUniquePerPageLoadTest() {
         final AuthnRequestSteps.Cookies cookies = authnRequestSteps.userPostsAuthnRequestToStubIdp();
         String csrfValueOne = getLoginPageCsrfValue(cookies);
         String csrfValueTwo = getLoginPageCsrfValue(cookies);
@@ -73,7 +73,7 @@ public class SecurityIntegrationTests extends IntegrationTestHelper {
     }
 
     @Test
-    void whenCsrfTokenIsModifiedThenRequestDoesNotWork() {
+    void whenCsrfTokenIsModifiedThenRequestDoesNotWorkTest() {
         final AuthnRequestSteps.Cookies cookies = authnRequestSteps.userPostsAuthnRequestToStubIdp();
         getLoginPageCsrfValue(cookies);
 
@@ -93,7 +93,7 @@ public class SecurityIntegrationTests extends IntegrationTestHelper {
     }
 
     @Test
-    void whenSecureCookieIsModifiedThenRequestDoesNotWork() {
+    void whenSecureCookieIsModifiedThenRequestDoesNotWorkTest() {
         final AuthnRequestSteps.Cookies cookies = authnRequestSteps.userPostsAuthnRequestToStubIdp();
 
         Response response = client.target(authnRequestSteps.getStubIdpUri(Urls.IDP_LOGIN_RESOURCE))
@@ -114,7 +114,7 @@ public class SecurityIntegrationTests extends IntegrationTestHelper {
     }
 
     @Test
-    void whenSameAuthnRequestIsSentTwiceItFails() {
+    void whenSameAuthnRequestIsSentTwiceItFailsTest() {
         final String authnRequest = IdpAuthnRequestBuilder.anAuthnRequest()
                 .withDestination(UriBuilder.fromUri(authnRequestSteps.getStubIdpUri(Urls.IDP_SAML2_SSO_RESOURCE)).build().toASCIIString())
                 .withSigningCredential(new TestCredentialFactory(TestCertificateStrings.HUB_TEST_PUBLIC_SIGNING_CERT, TestCertificateStrings.HUB_TEST_PRIVATE_SIGNING_KEY).getSigningCredential())

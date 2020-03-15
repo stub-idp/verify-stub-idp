@@ -42,7 +42,7 @@ public class AutoEscapingIntegrationTest extends IntegrationTestHelper {
     }
 
     @Test
-    void userHasAnXSSHintAndItIsCorrectlyEscaped() {
+    void userHasAnXSSHintAndItIsCorrectlyEscapedTest() {
         final String xss = "afd5j\"><script>alert(\"pwnage\")</script>c3tw";
         final AuthnRequestSteps.Cookies cookies = authnRequestSteps.userPostsAuthnRequestToStubIdp(xss);
         final String response = userSeesTheHintOnTheDebugPage(cookies);

@@ -54,7 +54,7 @@ public class PreRegistrationIntegrationTest extends IntegrationTestHelper {
     }
 
     @Test
-    void userPreRegistersAndThenComesFromRP() {
+    void userPreRegistersAndThenComesFromRPTest() {
 
         String samlRequest = IdpAuthnRequestBuilder
                 .anAuthnRequest()

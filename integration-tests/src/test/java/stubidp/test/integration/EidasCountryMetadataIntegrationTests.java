@@ -44,7 +44,7 @@ public class EidasCountryMetadataIntegrationTests extends IntegrationTestHelper 
     }
 
     @Test
-    public void countryMetadataShouldContainCorrectEntityIdAndSsoUrl() {
+    public void countryMetadataShouldContainCorrectEntityIdAndSsoUrlTest() {
         String baseUrl = applicationRule.getConfiguration().getEuropeanIdentityConfiguration().getStubCountryBaseUrl();
         String metadataEndpoint = UriBuilder.fromUri(baseUrl + Urls.EIDAS_METADATA_RESOURCE).build(COUNTRY_NAME).toASCIIString();
         String expectedSsoUrl = UriBuilder.fromUri(baseUrl + Urls.EIDAS_SAML2_SSO_RESOURCE).build(COUNTRY_NAME).toASCIIString();

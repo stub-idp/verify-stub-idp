@@ -38,7 +38,7 @@ public class HomePageIntegrationTest extends IntegrationTestHelper {
     }
 
     @Test
-    void shouldShowLinkToLogInWhenNotLoggedIn() {
+    void shouldShowLinkToLogInWhenNotLoggedInTest() {
         PreRegistrationSteps loggedOutUserVisitsHomePage = new PreRegistrationSteps(client, applicationRule);
 
         loggedOutUserVisitsHomePage.userSuccessfullyNavigatesTo(Urls.SINGLE_IDP_HOMEPAGE_RESOURCE)
@@ -47,7 +47,7 @@ public class HomePageIntegrationTest extends IntegrationTestHelper {
     }
 
     @Test
-    void shouldWelcomeUserWhenLoggedIn() {
+    void shouldWelcomeUserWhenLoggedInTest() {
        PreRegistrationSteps steps = new PreRegistrationSteps(client, applicationRule);
 
         steps.userSuccessfullyNavigatesTo(Urls.IDP_LOGIN_RESOURCE)

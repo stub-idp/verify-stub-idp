@@ -47,7 +47,7 @@ public class LevelOfAssuranceIntegrationTests extends IntegrationTestHelper {
     }
 
     @Test
-    public void debugPageShowsAuthnContextsAndComparisonType() throws Exception {
+    public void debugPageShowsAuthnContextsAndComparisonTypeTest() throws Exception {
         final AuthnRequestSteps.Cookies cookies = authnRequestSteps.userPostsAuthnRequestToStubIdp("hint");
 
         Response response = aUserVisitsTheDebugPage(IDP_NAME, cookies);
