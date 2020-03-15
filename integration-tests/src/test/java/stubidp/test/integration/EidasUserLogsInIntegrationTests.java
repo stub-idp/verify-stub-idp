@@ -108,7 +108,7 @@ public class EidasUserLogsInIntegrationTests extends IntegrationTestHelper {
         assertThat(inboundResponseFromCountry.getIssuer()).isEqualTo(UriBuilder.fromUri("http://localhost:0" + Urls.EIDAS_METADATA_RESOURCE).build(EIDAS_SCHEME_NAME).toASCIIString());
         assertThat(inboundResponseFromCountry.getStatus().getStatusCode().getValue()).isEqualTo(StatusCode.SUCCESS);
         assertThat(inboundResponseFromCountry.getValidatedIdentityAssertion().getAuthnStatements().size()).isEqualTo(1);
-        assertThat(LevelOfAssurance.fromString(inboundResponseFromCountry.getValidatedIdentityAssertion().getAuthnStatements().get(0).getAuthnContext().getAuthnContextClassRef().getAuthnContextClassRef())).isEqualTo(LevelOfAssurance.SUBSTANTIAL);
+        assertThat(LevelOfAssurance.fromString(inboundResponseFromCountry.getValidatedIdentityAssertion().getAuthnStatements().get(0).getAuthnContext().getAuthnContextClassRef().getURI())).isEqualTo(LevelOfAssurance.SUBSTANTIAL);
         assertThat(inboundResponseFromCountry.getValidatedIdentityAssertion().isSigned()).isTrue();
         assertThat(inboundResponseFromCountry.getValidatedIdentityAssertion().getAttributeStatements().size()).isEqualTo(1);
         final List<Attribute> attributes = inboundResponseFromCountry.getValidatedIdentityAssertion().getAttributeStatements().get(0).getAttributes();
@@ -131,7 +131,7 @@ public class EidasUserLogsInIntegrationTests extends IntegrationTestHelper {
         assertThat(inboundResponseFromCountry.getIssuer()).isEqualTo(UriBuilder.fromUri("http://localhost:0" + Urls.EIDAS_METADATA_RESOURCE).build(EIDAS_SCHEME_NAME).toASCIIString());
         assertThat(inboundResponseFromCountry.getStatus().getStatusCode().getValue()).isEqualTo(StatusCode.SUCCESS);
         assertThat(inboundResponseFromCountry.getValidatedIdentityAssertion().getAuthnStatements().size()).isEqualTo(1);
-        assertThat(LevelOfAssurance.fromString(inboundResponseFromCountry.getValidatedIdentityAssertion().getAuthnStatements().get(0).getAuthnContext().getAuthnContextClassRef().getAuthnContextClassRef())).isEqualTo(LevelOfAssurance.SUBSTANTIAL);
+        assertThat(LevelOfAssurance.fromString(inboundResponseFromCountry.getValidatedIdentityAssertion().getAuthnStatements().get(0).getAuthnContext().getAuthnContextClassRef().getURI())).isEqualTo(LevelOfAssurance.SUBSTANTIAL);
         assertThat(inboundResponseFromCountry.getValidatedIdentityAssertion().isSigned()).isFalse();
         assertThat(inboundResponseFromCountry.getValidatedIdentityAssertion().getAttributeStatements().size()).isEqualTo(1);
         final List<Attribute> attributes = inboundResponseFromCountry.getValidatedIdentityAssertion().getAttributeStatements().get(0).getAttributes();

@@ -5,7 +5,6 @@ import io.dropwizard.testing.junit5.DropwizardExtensionsSupport;
 import org.glassfish.jersey.client.ClientProperties;
 import org.glassfish.jersey.client.JerseyClientBuilder;
 import org.glassfish.jersey.client.authentication.HttpAuthenticationFeature;
-import org.joda.time.LocalDate;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -28,6 +27,7 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriBuilder;
 import java.io.IOException;
 import java.text.MessageFormat;
+import java.time.Instant;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -102,7 +102,7 @@ public class UserRepositoryIntegrationTests extends IntegrationTestHelper {
                 createOptionalMdsValue(Optional.of("some user middlename")),
                 Collections.singletonList(SimpleMdsValueBuilder.<String>aSimpleMdsValue().withValue("some user addSurname").build()),
                 createOptionalMdsValue(Optional.of(Gender.FEMALE)),
-                createOptionalMdsValue(Optional.of(LocalDate.now())),
+                createOptionalMdsValue(Optional.of(Instant.now())),
                 Optional.ofNullable(anAddress().withLines(asList("blah", "blah2")).withPostCode("WC1V7AA").withVerified(true).build()),
                 AuthnContext.LEVEL_4.toString()
         );
@@ -232,7 +232,7 @@ public class UserRepositoryIntegrationTests extends IntegrationTestHelper {
                     Optional.<MatchingDatasetValue<String>>empty(),
                     Collections.<MatchingDatasetValue<String>>emptyList(),
                     Optional.<MatchingDatasetValue<Gender>>empty(),
-                    Optional.<MatchingDatasetValue<LocalDate>>empty(),
+                    Optional.<MatchingDatasetValue<Instant>>empty(),
                     address,
                     levelOfAssurance.orElse(null));
         }
