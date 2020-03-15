@@ -43,7 +43,7 @@ public class IdaAuthnRequestFromHubUnmarshallerTest extends OpenSAMLRunner {
         when(authnRequest.getConditions()).thenReturn(conditions);
         when(requestedAuthnContext.getAuthnContextClassRefs()).thenReturn(Arrays.asList(authnContextClassRef, authnContextClassRef));
         when(requestedAuthnContext.getComparison()).thenReturn(EXACT);
-        when(authnContextClassRef.getAuthnContextClassRef()).thenReturn(IdaAuthnContext.LEVEL_2_AUTHN_CTX, IdaAuthnContext.LEVEL_1_AUTHN_CTX);
+        when(authnContextClassRef.getURI()).thenReturn(IdaAuthnContext.LEVEL_2_AUTHN_CTX, IdaAuthnContext.LEVEL_1_AUTHN_CTX);
     }
 
     @Test

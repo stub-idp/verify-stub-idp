@@ -1,15 +1,15 @@
 package stubidp.saml.stubidp.stub.domain;
 
-import java.util.Optional;
-import org.joda.time.DateTime;
 import org.opensaml.saml.saml2.core.Attribute;
-import stubidp.saml.utils.core.domain.PersistentId;
 import stubidp.saml.utils.core.domain.AuthnContext;
 import stubidp.saml.utils.core.domain.IdaSamlResponse;
+import stubidp.saml.utils.core.domain.PersistentId;
 import stubidp.saml.utils.core.domain.TransactionIdaStatus;
 
 import java.net.URI;
+import java.time.Instant;
 import java.util.List;
+import java.util.Optional;
 
 public class InboundResponseFromHub extends IdaSamlResponse {
     private final Optional<List<Attribute>> attributes;
@@ -18,7 +18,7 @@ public class InboundResponseFromHub extends IdaSamlResponse {
     private final Optional<AuthnContext> authnContext;
 
     public InboundResponseFromHub(String responseId,
-                                  DateTime issueInstant,
+                                  Instant issueInstant,
                                   String inResponseTo,
                                   String issuer,
                                   URI destination,

@@ -16,7 +16,7 @@ public class IdaAuthnRequestFromHubUnmarshaller {
 
         ArrayList<AuthnContext> levelsOfAssurance = new ArrayList<>();
         for (AuthnContextClassRef authnContextClassRef : authnContextClassRefs) {
-            levelsOfAssurance.add(mapAuthnContextClassReference(authnContextClassRef.getAuthnContextClassRef()));
+            levelsOfAssurance.add(mapAuthnContextClassReference(authnContextClassRef.getURI()));
         }
         Collections.sort(levelsOfAssurance); // use the fact that enums sort properly to guarantee the correct order
 

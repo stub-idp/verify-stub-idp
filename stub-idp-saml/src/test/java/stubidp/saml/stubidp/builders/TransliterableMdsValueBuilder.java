@@ -1,14 +1,14 @@
 package stubidp.saml.stubidp.builders;
 
-import org.joda.time.DateTime;
 import stubidp.saml.utils.core.domain.TransliterableMdsValue;
 
+import java.time.Instant;
+import java.time.ZoneId;
+
 public class TransliterableMdsValueBuilder {
-
     private String value = null;
-
-    private DateTime from = DateTime.now().minusDays(5);
-    private DateTime to = DateTime.now().plusDays(5);
+    private Instant from = Instant.now().atZone(ZoneId.of("UTC")).minusDays(5).toInstant();
+    private Instant to = Instant.now();
     private boolean verified = false;
 
     public static TransliterableMdsValueBuilder asTransliterableMdsValue() {
@@ -29,12 +29,12 @@ public class TransliterableMdsValueBuilder {
         return this;
     }
 
-    public TransliterableMdsValueBuilder withFrom(DateTime from) {
+    public TransliterableMdsValueBuilder withFrom(Instant from) {
         this.from = from;
         return this;
     }
 
-    public TransliterableMdsValueBuilder withTo(DateTime to) {
+    public TransliterableMdsValueBuilder withTo(Instant to) {
         this.to = to;
         return this;
     }

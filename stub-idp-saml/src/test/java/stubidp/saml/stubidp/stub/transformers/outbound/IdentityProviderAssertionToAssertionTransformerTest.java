@@ -1,7 +1,5 @@
 package stubidp.saml.stubidp.stub.transformers.outbound;
 
-import org.joda.time.DateTime;
-import org.joda.time.LocalDate;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -10,10 +8,11 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.opensaml.saml.saml2.core.Assertion;
 import org.opensaml.saml.saml2.core.Attribute;
+import stubidp.saml.extensions.extensions.impl.BaseMdsSamlObjectUnmarshaller;
+import stubidp.saml.stubidp.OpenSAMLRunner;
 import stubidp.saml.stubidp.builders.MatchingDatasetBuilder;
 import stubidp.saml.stubidp.builders.SimpleMdsValueBuilder;
 import stubidp.saml.stubidp.builders.TransliterableMdsValueBuilder;
-import stubidp.saml.stubidp.OpenSAMLRunner;
 import stubidp.saml.utils.core.OpenSamlXmlObjectFactory;
 import stubidp.saml.utils.core.domain.Address;
 import stubidp.saml.utils.core.domain.AddressFactory;
@@ -29,6 +28,7 @@ import stubidp.saml.utils.core.domain.TransliterableMdsValue;
 import stubidp.saml.utils.core.transformers.outbound.OutboundAssertionToSubjectTransformer;
 import stubidp.saml.utils.hub.factories.AttributeFactory;
 
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -54,8 +54,8 @@ public class IdentityProviderAssertionToAssertionTransformerTest extends OpenSAM
     @Mock
     private OutboundAssertionToSubjectTransformer outboundAssertionToSubjectTransformer;
 
-    private final Address currentAddress = new AddressFactory().create(singletonList("subject-address-line-1"), "subject-address-post-code", "internation-postcode", "uprn", DateTime.parse("1999-03-15"), DateTime.parse("2000-02-09"), true);
-    private final Address previousAddress = new AddressFactory().create(singletonList("subject-address-line-1"), "subject-address-post-code", "internation-postcode", "uprn", DateTime.parse("1999-03-15"), DateTime.parse("2000-02-09"), true);
+    private final Address currentAddress = new AddressFactory().create(singletonList("subject-address-line-1"), "subject-address-post-code", "internation-postcode", "uprn", "1999-03-15", "2000-02-09", true);
+    private final Address previousAddress = new AddressFactory().create(singletonList("subject-address-line-1"), "subject-address-post-code", "internation-postcode", "uprn", "1999-03-15", "2000-02-09", true);
     private final TransliterableMdsValue previousSurname = TransliterableMdsValueBuilder.asTransliterableMdsValue().withValue("subject-previousSurname").withVerifiedStatus(true).build();
     private final TransliterableMdsValue currentSurname = TransliterableMdsValueBuilder.asTransliterableMdsValue().withValue("subject-currentSurname").withVerifiedStatus(true).build();
 
@@ -95,7 +95,7 @@ public class IdentityProviderAssertionToAssertionTransformerTest extends OpenSAM
                 .addMiddleNames(TransliterableMdsValueBuilder.asTransliterableMdsValue().withValue("subject-middlename").withVerifiedStatus(true).build())
                 .withSurnameHistory(asList(previousSurname, currentSurname))
                 .withGender(SimpleMdsValueBuilder.<Gender>aSimpleMdsValue().withValue(Gender.FEMALE).withVerifiedStatus(true).build())
-                .addDateOfBirth(SimpleMdsValueBuilder.<LocalDate>aSimpleMdsValue().withValue(LocalDate.parse("2000-02-09")).withVerifiedStatus(true).build())
+                .addDateOfBirth(SimpleMdsValueBuilder.<Instant>aSimpleMdsValue().withValue(BaseMdsSamlObjectUnmarshaller.InstantFromDate.of("2000-02-09")).withVerifiedStatus(true).build())
                 .withCurrentAddresses(singletonList(currentAddress))
                 .withPreviousAddresses(singletonList(previousAddress))
                 .build();
@@ -123,7 +123,7 @@ public class IdentityProviderAssertionToAssertionTransformerTest extends OpenSAM
                 .addFirstName(TransliterableMdsValueBuilder.asTransliterableMdsValue().withValue("subject-firstname").withVerifiedStatus(true).build())
                 .withSurnameHistory(asList(previousSurname, currentSurname))
                 .withGender(SimpleMdsValueBuilder.<Gender>aSimpleMdsValue().withValue(Gender.FEMALE).withVerifiedStatus(true).build())
-                .addDateOfBirth(SimpleMdsValueBuilder.<LocalDate>aSimpleMdsValue().withValue(LocalDate.parse("2000-02-09")).withVerifiedStatus(true).build())
+                .addDateOfBirth(SimpleMdsValueBuilder.<Instant>aSimpleMdsValue().withValue(BaseMdsSamlObjectUnmarshaller.InstantFromDate.of("2000-02-09")).withVerifiedStatus(true).build())
                 .withCurrentAddresses(singletonList(currentAddress))
                 .withPreviousAddresses(singletonList(previousAddress))
                 .build();
@@ -174,7 +174,7 @@ public class IdentityProviderAssertionToAssertionTransformerTest extends OpenSAM
 
     @Test
     public void shouldTransformAssertionSubjectsDateOfBirth() {
-        SimpleMdsValue<LocalDate> dateOfBirth = SimpleMdsValueBuilder.<LocalDate>aSimpleMdsValue().withValue(LocalDate.parse("1986-12-05")).build();
+        SimpleMdsValue<Instant> dateOfBirth = SimpleMdsValueBuilder.<Instant>aSimpleMdsValue().withValue(BaseMdsSamlObjectUnmarshaller.InstantFromDate.of("1986-12-05")).build();
         IdentityProviderAssertion assertion = anIdentityProviderAssertion().withMatchingDataset(MatchingDatasetBuilder.aMatchingDataset().addDateOfBirth(dateOfBirth).build()).build();
 
         transformer.transform(assertion);
@@ -202,7 +202,7 @@ public class IdentityProviderAssertionToAssertionTransformerTest extends OpenSAM
 
     @Test
     public void shouldTransformAssertionSubjectsCurrentAddress() {
-        List<Address> address = singletonList(new AddressFactory().create(asList("221b Baker St."), "W4 1SH", "A 1", "4536789", DateTime.parse("2007-09-28"), DateTime.parse("2007-10-29"), true));
+        List<Address> address = singletonList(new AddressFactory().create(singletonList("221b Baker St."), "W4 1SH", "A 1", "4536789", "2007-09-28", "2007-10-29", true));
         IdentityProviderAssertion assertion = anIdentityProviderAssertion().withMatchingDataset(MatchingDatasetBuilder.aMatchingDataset().withCurrentAddresses(address).build()).build();
 
         transformer.transform(assertion);
@@ -212,7 +212,7 @@ public class IdentityProviderAssertionToAssertionTransformerTest extends OpenSAM
 
     @Test
     public void shouldHandleMissingAssertionSubjectsCurrentAddress() {
-        IdentityProviderAssertion assertion = anIdentityProviderAssertion().withMatchingDataset(MatchingDatasetBuilder.aFullyPopulatedMatchingDataset().withCurrentAddresses(new ArrayList<Address>()).build()).build();
+        IdentityProviderAssertion assertion = anIdentityProviderAssertion().withMatchingDataset(MatchingDatasetBuilder.aFullyPopulatedMatchingDataset().withCurrentAddresses(new ArrayList<>()).build()).build();
 
         transformer.transform(assertion);
 
@@ -221,8 +221,8 @@ public class IdentityProviderAssertionToAssertionTransformerTest extends OpenSAM
 
     @Test
     public void shouldTransformAssertionSubjectsPreviousAddresses() {
-        Address previousAddressOne = new AddressFactory().create(singletonList("221b Baker St."), "W4 1SH", null, null, DateTime.parse("2007-09-27"), DateTime.parse("2007-09-28"), true);
-        Address previousAddressTwo = new AddressFactory().create(singletonList("1 Goose Lane"), "M1 2FG", null, null, DateTime.parse("2006-09-29"), DateTime.parse("2006-09-28"), false);
+        Address previousAddressOne = new AddressFactory().create(singletonList("221b Baker St."), "W4 1SH", null, null, "2007-09-27", "2007-09-28", true);
+        Address previousAddressTwo = new AddressFactory().create(singletonList("1 Goose Lane"), "M1 2FG", null, null, "2006-09-29", "2006-09-28", false);
         IdentityProviderAssertion assertion = anIdentityProviderAssertion().withMatchingDataset(MatchingDatasetBuilder.aMatchingDataset().withPreviousAddresses(asList(previousAddressOne, previousAddressTwo)).build()).build();
 
         transformer.transform(assertion);
@@ -232,7 +232,7 @@ public class IdentityProviderAssertionToAssertionTransformerTest extends OpenSAM
 
     @Test
     public void shouldHandleMissingAssertionSubjectsPreviousAddress() {
-        IdentityProviderAssertion assertion = anIdentityProviderAssertion().withMatchingDataset(MatchingDatasetBuilder.aFullyPopulatedMatchingDataset().withPreviousAddresses(new ArrayList<Address>()).build()).build();
+        IdentityProviderAssertion assertion = anIdentityProviderAssertion().withMatchingDataset(MatchingDatasetBuilder.aFullyPopulatedMatchingDataset().withPreviousAddresses(new ArrayList<>()).build()).build();
 
         transformer.transform(assertion);
 
@@ -261,7 +261,7 @@ public class IdentityProviderAssertionToAssertionTransformerTest extends OpenSAM
 
     @Test
     public void shouldTransformAssertionIssuerInstance() {
-        DateTime issueInstant = DateTime.parse("2012-12-31T12:34:56Z");
+        Instant issueInstant = Instant.parse("2012-12-31T12:34:56Z");
         IdentityProviderAssertion assertion = anIdentityProviderAssertion().withIssueInstant(issueInstant).build();
 
         Assertion transformedAssertion = transformer.transform(assertion);
