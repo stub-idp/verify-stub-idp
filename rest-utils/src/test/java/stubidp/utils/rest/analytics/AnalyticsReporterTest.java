@@ -5,12 +5,6 @@ import org.apache.http.NameValuePair;
 import org.apache.http.client.utils.URIBuilder;
 import org.apache.http.message.BasicNameValuePair;
 import org.glassfish.jersey.server.ContainerRequest;
-import org.joda.time.DateTime;
-import org.joda.time.DateTimeUtils;
-import org.joda.time.format.DateTimeFormat;
-import org.joda.time.format.DateTimeFormatter;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
@@ -22,6 +16,11 @@ import stubidp.utils.rest.configuration.AnalyticsConfigurationBuilder;
 import javax.ws.rs.core.Cookie;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.time.Clock;
+import java.time.Instant;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeFormatterBuilder;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -41,6 +40,11 @@ import static stubidp.utils.rest.analytics.AnalyticsReporter.PIWIK_VISITOR_ID;
 @ExtendWith(MockitoExtension.class)
 public class AnalyticsReporterTest {
 
+    private static final DateTimeFormatter dateTimeFormatter = new DateTimeFormatterBuilder().appendPattern("yyyy-MM-dd HH:mm:ss")
+            .appendInstant(0)
+            .toFormatter()
+            .withZone(ZoneId.of("UTC"));
+
     @Mock
     private ContainerRequest requestContext;
 
@@ -49,22 +53,14 @@ public class AnalyticsReporterTest {
 
     private String visitorId = "123";
 
-    @BeforeEach
-    public void setUp() {
-        DateTimeUtils.setCurrentMillisFixed(DateTime.now().getMillis());
-    }
-
-    @AfterEach
-    public void tearDown() {
-        DateTimeUtils.setCurrentMillisSystem();
-    }
+    private Clock clock = Clock.fixed(Instant.now(), ZoneId.of("UTC"));
 
     @Test
     public void shouldCallGenerateUrlAndSendToPiwikAsynchronouslyWhenReportingCustomVariable() throws Exception {
         doReturn(Map.of(PIWIK_VISITOR_ID, new Cookie(PIWIK_VISITOR_ID, visitorId))).when(requestContext).getCookies();
         when(requestContext.getRequestUri()).thenReturn(URI.create("http://localhost"));
 
-        AnalyticsReporter analyticsReporter = spy(new AnalyticsReporter(piwikClient, new AnalyticsConfigurationBuilder().build()));
+        AnalyticsReporter analyticsReporter = spy(new AnalyticsReporter(piwikClient, new AnalyticsConfigurationBuilder().build(), clock));
         CustomVariable customVariable = new CustomVariable(2, "IDP", "Experian");
 
         analyticsReporter.reportCustomVariable("friendly description of URL", requestContext, customVariable);
@@ -80,7 +76,7 @@ public class AnalyticsReporterTest {
         String friendlyDescription = "friendly description of URL";
         URI piwikUri = URI.create("piwik");
 
-        AnalyticsReporter analyticsReporter = spy(new AnalyticsReporter(piwikClient, new AnalyticsConfigurationBuilder().build()));
+        AnalyticsReporter analyticsReporter = spy(new AnalyticsReporter(piwikClient, new AnalyticsConfigurationBuilder().build(), clock));
 
         doReturn(piwikUri).when(analyticsReporter).generateURI(friendlyDescription, requestContext, Optional.empty(), Optional.of(visitorId));
 
@@ -95,27 +91,26 @@ public class AnalyticsReporterTest {
 
         String friendlyDescription = "friendly description of URL";
 
-        AnalyticsReporter analyticsReporter = spy(new AnalyticsReporter(piwikClient, new AnalyticsConfigurationBuilder().build()));
+        AnalyticsReporter analyticsReporter = spy(new AnalyticsReporter(piwikClient, new AnalyticsConfigurationBuilder().build(), clock));
 
-        doThrow(new RuntimeException("error")).when(analyticsReporter).generateURI(friendlyDescription, requestContext, Optional.<CustomVariable>empty(), Optional.of(visitorId));
+        doThrow(new RuntimeException("error")).when(analyticsReporter).generateURI(friendlyDescription, requestContext, Optional.empty(), Optional.of(visitorId));
 
         analyticsReporter.report(friendlyDescription, requestContext);
     }
 
     @Test
     public void shouldGeneratePiwikUrl() throws URISyntaxException {
-        DateTime now = DateTime.now();
+        Instant now = Instant.now(clock);
 
         when(requestContext.getHeaderString("Referer")).thenReturn("http://piwikserver/referrerUrl");
         when(requestContext.getRequestUri()).thenReturn(new URI("http://piwikserver/requestUrl"));
 
         AnalyticsConfiguration analyticsConfiguration = new AnalyticsConfigurationBuilder().build();
-        URIBuilder expectedURI = new URIBuilder(format("http://piwik-digds.rhcloud.com/analytics?idsite={0}&rec=1&apiv=1&url=http%3A%2F%2Fpiwikserver%2FrequestUrl&urlref=http%3A%2F%2Fpiwikserver%2FreferrerUrl&_id=abc&ref=http%3A%2F%2Fpiwikserver%2FreferrerUrl&cookie=false&action_name=SERVER+friendly+description+of+URL", analyticsConfiguration.getSiteId()));
+        URIBuilder expectedURI = new URIBuilder(format("http://piwik-digds.rhcloud.local/analytics?idsite={0}&rec=1&apiv=1&url=http%3A%2F%2Fpiwikserver%2FrequestUrl&urlref=http%3A%2F%2Fpiwikserver%2FreferrerUrl&_id=abc&ref=http%3A%2F%2Fpiwikserver%2FreferrerUrl&cookie=false&action_name=SERVER+friendly+description+of+URL", analyticsConfiguration.getSiteId()));
 
-        DateTimeFormatter fmt = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss");
-        expectedURI.addParameter("cdt", fmt.print(now));
+        expectedURI.addParameter("cdt", dateTimeFormatter.format(now));
 
-        AnalyticsReporter analyticsReporter = new AnalyticsReporter(piwikClient, analyticsConfiguration);
+        AnalyticsReporter analyticsReporter = new AnalyticsReporter(piwikClient, analyticsConfiguration, clock);
 
         URIBuilder testURI = new URIBuilder(analyticsReporter.generateURI("SERVER friendly description of URL", requestContext, Optional.empty(), Optional.of("abc")));
 
@@ -133,18 +128,17 @@ public class AnalyticsReporterTest {
         doReturn(Map.of(PIWIK_VISITOR_ID, new Cookie(PIWIK_VISITOR_ID, visitorId))).when(requestContext).getCookies();
         when(requestContext.getRequestUri()).thenReturn(URI.create("http://localhost"));
 
-        DateTime now = DateTime.now();
+        Instant now = Instant.now(clock);
         String customVariable = "{\"1\":[\"RP\",\"HMRC BLA\"]}";
 
         AnalyticsConfiguration analyticsConfiguration = new AnalyticsConfigurationBuilder().build();
-        URIBuilder expectedURI = new URIBuilder(format("http://piwiki-dgds.rhcloud.com/analytics?_id=123&idsite={0}&rec=1&apiv=1&action_name=page-title&cookie=false", analyticsConfiguration.getSiteId()));
+        URIBuilder expectedURI = new URIBuilder(format("http://piwiki-dgds.rhcloud.local/analytics?_id=123&idsite={0}&rec=1&apiv=1&action_name=page-title&cookie=false", analyticsConfiguration.getSiteId()));
         expectedURI.addParameter("_cvar", customVariable);
         expectedURI.addParameter("url", requestContext.getRequestUri().toString());
-        DateTimeFormatter fmt = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss");
-        expectedURI.addParameter("cdt", fmt.print(now));
-        AnalyticsReporter analyticsReporter = new AnalyticsReporter(piwikClient, analyticsConfiguration);
+        expectedURI.addParameter("cdt", dateTimeFormatter.format(now));
+        AnalyticsReporter analyticsReporter = new AnalyticsReporter(piwikClient, analyticsConfiguration, clock);
         Optional<Cookie> piwikCookie = Optional.ofNullable(requestContext.getCookies().get(PIWIK_VISITOR_ID));
-        Optional<String> visitorId = Optional.of(piwikCookie.get().getValue());
+        Optional<String> visitorId = piwikCookie.map(Cookie::getValue);
         Optional<CustomVariable> customVariableOptional = Optional.of(new CustomVariable(1, "RP", "HMRC BLA"));
         URIBuilder testURI = new URIBuilder(analyticsReporter.generateURI("page-title", requestContext, customVariableOptional, visitorId));
 
@@ -162,7 +156,7 @@ public class AnalyticsReporterTest {
         doReturn(Map.of(PIWIK_VISITOR_ID, new Cookie(PIWIK_VISITOR_ID, visitorId))).when(requestContext).getCookies();
 
         AnalyticsConfiguration config = new AnalyticsConfigurationBuilder().build();
-        AnalyticsReporter reporter = new AnalyticsReporter(piwikClient, config);
+        AnalyticsReporter reporter = new AnalyticsReporter(piwikClient, config, clock);
         ArgumentCaptor<URI> captor = ArgumentCaptor.forClass(URI.class);
 
         reporter.reportPageView("Title", requestContext, "http://page-view");
@@ -179,7 +173,7 @@ public class AnalyticsReporterTest {
     public void simulatePageView_includesVisitorIdIfPresent() {
         doReturn(Map.of(PIWIK_VISITOR_ID, new Cookie(PIWIK_VISITOR_ID, visitorId))).when(requestContext).getCookies();
 
-        AnalyticsReporter reporter = new AnalyticsReporter(piwikClient, new AnalyticsConfigurationBuilder().build());
+        AnalyticsReporter reporter = new AnalyticsReporter(piwikClient, new AnalyticsConfigurationBuilder().build(), clock);
         ArgumentCaptor<URI> captor = ArgumentCaptor.forClass(URI.class);
 
         reporter.reportPageView("Title", requestContext, "http://page-view");
@@ -192,7 +186,7 @@ public class AnalyticsReporterTest {
     public void simulatePageView_handlesMissingVisitorId() {
         when(requestContext.getCookies()).thenReturn(Map.of());
         AnalyticsConfiguration config = new AnalyticsConfigurationBuilder().build();
-        AnalyticsReporter reporter = new AnalyticsReporter(piwikClient, config);
+        AnalyticsReporter reporter = new AnalyticsReporter(piwikClient, config, clock);
         ArgumentCaptor<URI> captor = ArgumentCaptor.forClass(URI.class);
 
         reporter.reportPageView("Title", requestContext, "http://page-view");
@@ -205,7 +199,7 @@ public class AnalyticsReporterTest {
     @Test
     public void simulatePageView_doesNotReportIfAnalyticsIsDisabled() {
         AnalyticsConfiguration config = new AnalyticsConfigurationBuilder().setEnabled(false).build();
-        AnalyticsReporter reporter = new AnalyticsReporter(piwikClient, config);
+        AnalyticsReporter reporter = new AnalyticsReporter(piwikClient, config, clock);
 
         reporter.reportPageView("Title", requestContext, "http://page-view");
 
@@ -255,7 +249,7 @@ public class AnalyticsReporterTest {
     private void checkParams(URIBuilder uriBuilder, String siteId) {
         checkCommonParams(uriBuilder, siteId);
         checkQueryParam(uriBuilder, "cookie", "false");
-        checkQueryParam(uriBuilder, "cdt", DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss").print(DateTime.now()));
+        checkQueryParam(uriBuilder, "cdt", dateTimeFormatter.format(Instant.now(clock)));
     }
 
 }

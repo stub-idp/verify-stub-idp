@@ -2,8 +2,6 @@ package stubidp.utils.rest.analytics;
 
 import org.apache.http.client.utils.URIBuilder;
 import org.glassfish.jersey.server.ContainerRequest;
-import org.joda.time.DateTime;
-import org.joda.time.format.DateTimeFormat;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import stubidp.utils.rest.configuration.AnalyticsConfiguration;
@@ -12,21 +10,37 @@ import javax.inject.Inject;
 import javax.ws.rs.core.Cookie;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.time.Clock;
+import java.time.Instant;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeFormatterBuilder;
 import java.util.Optional;
 
 public class AnalyticsReporter {
 
     private static final Logger LOG = LoggerFactory.getLogger(AnalyticsReporter.class);
+    private static final DateTimeFormatter dateTimeFormatter = new DateTimeFormatterBuilder().appendPattern("yyyy-MM-dd HH:mm:ss")
+            .appendInstant(0)
+            .toFormatter()
+            .withZone(ZoneId.of("UTC"));
+
     public static final String PIWIK_VISITOR_ID = "PIWIK_VISITOR_ID";
     public static final String REFERER = "Referer";
 
-    private AnalyticsConfiguration analyticsConfiguration;
-    private PiwikClient piwikClient;
+    private final AnalyticsConfiguration analyticsConfiguration;
+    private final Clock clock;
+    private final PiwikClient piwikClient;
 
     @Inject
     public AnalyticsReporter(PiwikClient piwikClient, AnalyticsConfiguration analyticsConfiguration) {
+        this(piwikClient, analyticsConfiguration, Clock.systemUTC());
+    }
+
+    AnalyticsReporter(PiwikClient piwikClient, AnalyticsConfiguration analyticsConfiguration, Clock clock) {
         this.piwikClient = piwikClient;
         this.analyticsConfiguration = analyticsConfiguration;
+        this.clock = clock;
     }
 
     public void reportCustomVariable(String friendlyDescription, ContainerRequest context, CustomVariable customVariable) {
@@ -58,9 +72,7 @@ public class AnalyticsReporter {
 
     private URIBuilder buildBaseURI(Optional<String> visitorId) throws URISyntaxException {
         URIBuilder uriBuilder = new URIBuilder(analyticsConfiguration.getPiwikServerSideUrl());
-        if(visitorId.isPresent()) {
-            uriBuilder.addParameter("_id", visitorId.get());
-        }
+        visitorId.ifPresent(s -> uriBuilder.addParameter("_id", s));
         return uriBuilder
                 .addParameter("idsite", analyticsConfiguration.getSiteId().toString())
                 .addParameter("apiv", "1")
@@ -72,7 +84,7 @@ public class AnalyticsReporter {
         return buildBaseURI(visitorId)
                 .addParameter("action_name", friendlyDescription)
                 .addParameter("url", url)
-                .addParameter("cdt", DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss").print(DateTime.now()))
+                .addParameter("cdt", dateTimeFormatter.format(Instant.now(clock)))
                 .addParameter("cookie", "false");
     }
 
