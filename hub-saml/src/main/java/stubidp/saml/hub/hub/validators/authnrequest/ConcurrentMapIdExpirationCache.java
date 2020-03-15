@@ -1,13 +1,12 @@
 package stubidp.saml.hub.hub.validators.authnrequest;
 
-import org.joda.time.DateTime;
-
+import java.time.Instant;
 import java.util.concurrent.ConcurrentMap;
 
 public class ConcurrentMapIdExpirationCache<T> implements IdExpirationCache<T> {
-    private final ConcurrentMap<T, DateTime> infinispanMap;
+    private final ConcurrentMap<T, Instant> infinispanMap;
 
-    public ConcurrentMapIdExpirationCache(ConcurrentMap<T, DateTime> infinispanMap) {
+    public ConcurrentMapIdExpirationCache(ConcurrentMap<T, Instant> infinispanMap) {
         this.infinispanMap = infinispanMap;
     }
 
@@ -17,12 +16,12 @@ public class ConcurrentMapIdExpirationCache<T> implements IdExpirationCache<T> {
     }
 
     @Override
-    public DateTime getExpiration(T key) {
+    public Instant getExpiration(T key) {
         return infinispanMap.get(key);
     }
 
     @Override
-    public void setExpiration(T key, DateTime expirationTime) {
+    public void setExpiration(T key, Instant expirationTime) {
         infinispanMap.put(key, expirationTime);
     }
 

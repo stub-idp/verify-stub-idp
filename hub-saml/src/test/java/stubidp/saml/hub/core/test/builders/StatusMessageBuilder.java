@@ -15,9 +15,7 @@ public class StatusMessageBuilder {
 
     public StatusMessage build() {
         StatusMessage statusCode = openSamlXmlObjectFactory.createStatusMessage();
-
-        statusCode.setMessage(message);
-
+        statusCode.setValue(message);
        return statusCode;
     }
 

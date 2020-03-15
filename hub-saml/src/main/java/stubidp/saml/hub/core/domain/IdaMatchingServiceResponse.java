@@ -1,8 +1,9 @@
 package stubidp.saml.hub.core.domain;
 
-import org.joda.time.DateTime;
 import stubidp.saml.utils.core.domain.IdaMessage;
 import stubidp.saml.utils.core.domain.IdaResponse;
+
+import java.time.Instant;
 
 public abstract class IdaMatchingServiceResponse extends IdaMessage implements IdaResponse {
 
@@ -11,7 +12,7 @@ public abstract class IdaMatchingServiceResponse extends IdaMessage implements I
     protected IdaMatchingServiceResponse() {
     }
 
-    public IdaMatchingServiceResponse(String responseId, String inResponseTo, String issuer, DateTime issueInstant) {
+    public IdaMatchingServiceResponse(String responseId, String inResponseTo, String issuer, Instant issueInstant) {
         super(responseId, issuer, issueInstant);
         this.inResponseTo = inResponseTo;
     }

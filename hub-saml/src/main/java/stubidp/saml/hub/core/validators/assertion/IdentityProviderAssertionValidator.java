@@ -114,7 +114,7 @@ public class IdentityProviderAssertionValidator extends AssertionValidator {
     private void validateFraudAttribute(Assertion assertion) {
         if (assertion.getAuthnStatements().size() == 1){
             AuthnStatement authnStatement = assertion.getAuthnStatements().get(0);
-            boolean isFraudResponse = authnStatement.getAuthnContext().getAuthnContextClassRef().getAuthnContextClassRef().equals(AuthnContext.LEVEL_X.getUri());
+            boolean isFraudResponse = authnStatement.getAuthnContext().getAuthnContextClassRef().getURI().equals(AuthnContext.LEVEL_X.getUri());
             if (isFraudResponse)
             {
                 assertionAttributeStatementValidator.validateFraudEvent(assertion);

@@ -1,15 +1,15 @@
 package stubidp.saml.hub.core.test;
 
-import org.apache.commons.lang.StringUtils;
-import org.joda.time.DateTime;
+import org.apache.commons.lang3.StringUtils;
 import org.opensaml.core.xml.XMLObject;
 import org.opensaml.saml.saml2.core.AuthnRequest;
+import stubidp.saml.serializers.serializers.XmlObjectToBase64EncodedStringTransformer;
 import stubidp.saml.utils.core.test.TestCredentialFactory;
 import stubidp.saml.utils.core.test.builders.AuthnRequestBuilder;
 import stubidp.saml.utils.core.test.builders.IssuerBuilder;
-import stubidp.saml.serializers.serializers.XmlObjectToBase64EncodedStringTransformer;
 
 import java.net.URI;
+import java.time.Instant;
 import java.util.Optional;
 import java.util.function.Function;
 
@@ -29,7 +29,7 @@ public class AuthnRequestFactory {
             String publicCert,
             String privateKey,
             String ssoRequestEndpoint,
-            Optional<DateTime> issueInstant) {
+            Optional<Instant> issueInstant) {
         AuthnRequest authnRequest = getAuthnRequest(
                 id,
                 issuer,
@@ -52,7 +52,7 @@ public class AuthnRequestFactory {
             String publicCert,
             String privateKey,
             String ssoRequestEndpoint,
-            Optional<DateTime> issueInstant) {
+            Optional<Instant> issueInstant) {
         AuthnRequestBuilder authnRequestBuilder = AuthnRequestBuilder.anAuthnRequest()
                 .withId(id)
                 .withIssuer(IssuerBuilder.anIssuer().withIssuerId(issuer).build())
@@ -76,7 +76,7 @@ public class AuthnRequestFactory {
             String publicCert,
             String privateKey,
             String ssoRequestEndpoint,
-            Optional<DateTime> issueInstant) {
+            Optional<Instant> issueInstant) {
         // Pad ID to ensure request is long enough
         AuthnRequest authnRequest = getAuthnRequest(
                 StringUtils.rightPad(id, 1200, "x"),

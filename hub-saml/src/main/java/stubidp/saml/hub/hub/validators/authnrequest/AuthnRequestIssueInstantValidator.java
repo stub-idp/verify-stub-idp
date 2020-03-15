@@ -1,22 +1,29 @@
 package stubidp.saml.hub.hub.validators.authnrequest;
 
 import io.dropwizard.util.Duration;
-import org.joda.time.DateTime;
 import stubidp.saml.hub.hub.configuration.SamlAuthnRequestValidityDurationConfiguration;
 
 import javax.inject.Inject;
+import java.time.Clock;
+import java.time.Instant;
 
 public class AuthnRequestIssueInstantValidator {
     private final SamlAuthnRequestValidityDurationConfiguration samlAuthnRequestValidityDurationConfiguration;
+    private final Clock clock;
 
     @Inject
     public AuthnRequestIssueInstantValidator(SamlAuthnRequestValidityDurationConfiguration samlAuthnRequestValidityDurationConfiguration) {
-
-        this.samlAuthnRequestValidityDurationConfiguration = samlAuthnRequestValidityDurationConfiguration;
+        this(samlAuthnRequestValidityDurationConfiguration, Clock.systemUTC());
     }
 
-    public boolean isValid(DateTime issueInstant) {
+    AuthnRequestIssueInstantValidator(SamlAuthnRequestValidityDurationConfiguration samlAuthnRequestValidityDurationConfiguration,
+                                             Clock clock) {
+        this.samlAuthnRequestValidityDurationConfiguration = samlAuthnRequestValidityDurationConfiguration;
+        this.clock = clock;
+    }
+
+    public boolean isValid(Instant issueInstant) {
         final Duration authnRequestValidityDuration = samlAuthnRequestValidityDurationConfiguration.getAuthnRequestValidityDuration();
-        return !issueInstant.isBefore(DateTime.now().minus(authnRequestValidityDuration.toMilliseconds()));
+        return !issueInstant.isBefore(Instant.now(clock).minusMillis(authnRequestValidityDuration.toMilliseconds()));
     }
 }

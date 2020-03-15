@@ -1,6 +1,5 @@
 package stubidp.saml.hub.hub.transformers.outbound;
 
-import org.joda.time.DateTime;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.opensaml.saml.common.xml.SAMLConstants;
@@ -16,6 +15,8 @@ import stubidp.saml.utils.core.OpenSamlXmlObjectFactory;
 import stubidp.saml.utils.core.domain.AuthnContext;
 import stubidp.saml.utils.hub.domain.IdaAuthnRequestFromHub;
 
+import java.time.Instant;
+import java.time.ZoneId;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
@@ -23,7 +24,6 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.jodatime.api.Assertions.assertThat;
 import static stubidp.saml.hub.hub.test.builders.IdaAuthnRequestBuilder.anIdaAuthnRequest;
 
 public class IdaAuthnRequestFromHubToAuthnRequestTransformerTest extends OpenSAMLRunner {
@@ -47,7 +47,7 @@ public class IdaAuthnRequestFromHubToAuthnRequestTransformerTest extends OpenSAM
 
     @Test
     public void shouldUseTheOriginalExpiryTimestampToSetTheNotOnOrAfter() {
-        DateTime sessionExpiry = DateTime.now().plusHours(2);
+        Instant sessionExpiry = Instant.now().atZone(ZoneId.of("UTC")).plusHours(2).toInstant();
         IdaAuthnRequestFromHub originalRequestFromHub = anIdaAuthnRequest().withSessionExpiryTimestamp(sessionExpiry).buildFromHub();
 
         AuthnRequest transformedRequest = transformer.apply(originalRequestFromHub);
@@ -90,7 +90,7 @@ public class IdaAuthnRequestFromHubToAuthnRequestTransformerTest extends OpenSAM
         RequestedAuthnContext requestedAuthnContext = transformedRequest.getRequestedAuthnContext();
 
         List<String> actual = requestedAuthnContext.getAuthnContextClassRefs().stream()
-                .map(AuthnContextClassRef::getAuthnContextClassRef)
+                .map(AuthnContextClassRef::getURI)
                 .collect(Collectors.toList());
 
         assertThat(actual).containsAll(expected);
@@ -119,7 +119,7 @@ public class IdaAuthnRequestFromHubToAuthnRequestTransformerTest extends OpenSAM
 
         List<AuthnContextClassRef> authnContextClassRefs = requestedAuthnContext.getAuthnContextClassRefs();
         List<String> authnContexts = authnContextClassRefs.stream()
-                .map(AuthnContextClassRef::getAuthnContextClassRef).collect(Collectors.toList());
+                .map(AuthnContextClassRef::getURI).collect(Collectors.toList());
 
         assertThat(authnContexts).containsSequence(IdaAuthnContext.LEVEL_1_AUTHN_CTX, IdaAuthnContext.LEVEL_2_AUTHN_CTX);
     }

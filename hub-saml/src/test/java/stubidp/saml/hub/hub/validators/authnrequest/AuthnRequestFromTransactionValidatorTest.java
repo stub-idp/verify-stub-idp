@@ -1,9 +1,6 @@
 package stubidp.saml.hub.hub.validators.authnrequest;
 
 import io.dropwizard.util.Duration;
-import org.joda.time.DateTime;
-import org.joda.time.DateTimeZone;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -12,7 +9,7 @@ import org.opensaml.saml.saml2.core.AuthnRequest;
 import org.opensaml.saml.saml2.core.NameIDType;
 import stubidp.saml.extensions.validation.SamlTransformationErrorException;
 import stubidp.saml.extensions.validation.SamlValidationSpecificationFailure;
-import stubidp.saml.hub.core.DateTimeFreezer;
+import stubidp.saml.hub.core.OpenSAMLRunner;
 import stubidp.saml.hub.core.errors.SamlTransformationErrorFactory;
 import stubidp.saml.hub.core.test.builders.NameIdPolicyBuilder;
 import stubidp.saml.hub.core.test.builders.ScopingBuilder;
@@ -21,8 +18,9 @@ import stubidp.saml.hub.hub.configuration.SamlDuplicateRequestValidationConfigur
 import stubidp.saml.hub.hub.exception.SamlDuplicateRequestIdException;
 import stubidp.saml.hub.hub.exception.SamlRequestTooOldException;
 import stubidp.saml.security.validators.issuer.IssuerValidator;
-import stubidp.saml.hub.core.OpenSAMLRunner;
 
+import java.time.Instant;
+import java.time.ZoneId;
 import java.util.concurrent.ConcurrentHashMap;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -37,18 +35,8 @@ public class AuthnRequestFromTransactionValidatorTest extends OpenSAMLRunner {
 
     @BeforeEach
     public void setup() {
-        SamlDuplicateRequestValidationConfiguration samlDuplicateRequestValidationConfiguration = new SamlDuplicateRequestValidationConfiguration() {
-            @Override
-            public Duration getAuthnRequestIdExpirationDuration() {
-                return Duration.hours(2);
-            }
-        };
-        SamlAuthnRequestValidityDurationConfiguration samlAuthnRequestValidityDurationConfiguration = new SamlAuthnRequestValidityDurationConfiguration() {
-            @Override
-            public Duration getAuthnRequestValidityDuration() {
-                return Duration.minutes(5);
-            }
-        };
+        SamlDuplicateRequestValidationConfiguration samlDuplicateRequestValidationConfiguration = () -> Duration.hours(2);
+        SamlAuthnRequestValidityDurationConfiguration samlAuthnRequestValidityDurationConfiguration = () -> Duration.minutes(5);
         IdExpirationCache<AuthnRequestIdKey> idExpirationCache = new ConcurrentMapIdExpirationCache<>(new ConcurrentHashMap<>());
         validator = new AuthnRequestFromTransactionValidator(
                 new IssuerValidator(),
@@ -57,13 +45,8 @@ public class AuthnRequestFromTransactionValidatorTest extends OpenSAMLRunner {
         );
     }
 
-    @AfterEach
-    public void unfreezeTime() {
-        DateTimeFreezer.unfreezeTime();
-    }
-
     @Test
-    public void validate_shouldThrowExceptionIfIdIsInvalid() throws Exception {
+    public void validate_shouldThrowExceptionIfIdIsInvalid() {
         validateThrows(
                 anAuthnRequest().withId("6135ce2c-fe0d-413a-9d12-2ae1063153bd").build(),
                 SamlTransformationErrorFactory.invalidRequestID()
@@ -72,21 +55,19 @@ public class AuthnRequestFromTransactionValidatorTest extends OpenSAMLRunner {
     }
 
     @Test
-    public void validate_shouldDoNothingIfIdIsValid() throws Exception {
+    public void validate_shouldDoNothingIfIdIsValid() {
         validator.validate(anAuthnRequest().withId("a43qif88dsfv").build());
 
         validator.validate(anAuthnRequest().withId("_443qif88dsfv").build());
     }
 
     @Test
-    public void validateRequest_shouldDoNothingIfRequestIsSigned() throws Exception {
-
+    public void validateRequest_shouldDoNothingIfRequestIsSigned() {
         validator.validate(anAuthnRequest().build());
     }
 
     @Test
-    public void validateRequest_shouldThrowExceptionIfRequestDoesNotContainASignature() throws Exception {
-
+    public void validateRequest_shouldThrowExceptionIfRequestDoesNotContainASignature() {
         validateThrows(
                 anAuthnRequest().withoutSignatureElement().build(),
                 SamlTransformationErrorFactory.missingSignature()
@@ -94,7 +75,7 @@ public class AuthnRequestFromTransactionValidatorTest extends OpenSAMLRunner {
     }
 
     @Test
-    public void validateRequest_shouldThrowExceptionIfRequestIsNotSigned() throws Exception {
+    public void validateRequest_shouldThrowExceptionIfRequestIsNotSigned() {
         validateThrows(
                 anAuthnRequest().withoutSigning().build(),
                 SamlTransformationErrorFactory.signatureNotSigned()
@@ -102,7 +83,7 @@ public class AuthnRequestFromTransactionValidatorTest extends OpenSAMLRunner {
     }
 
     @Test
-    public void validateIssuer_shouldThrowExceptionIfFormatAttributeHasInvalidValue() throws Exception {
+    public void validateIssuer_shouldThrowExceptionIfFormatAttributeHasInvalidValue() {
         String invalidFormat = "goo";
 
         validateThrows(
@@ -112,31 +93,29 @@ public class AuthnRequestFromTransactionValidatorTest extends OpenSAMLRunner {
     }
 
     @Test
-    public void validateIssuer_shouldDoNothingIfFormatAttributeIsMissing() throws Exception {
+    public void validateIssuer_shouldDoNothingIfFormatAttributeIsMissing() {
         validator.validate(anAuthnRequest().withIssuer(anIssuer().withFormat(null).build()).build());
 
     }
 
     @Test
-    public void validateIssuer_shouldDoNothingIfFormatAttributeHasValidValue() throws Exception {
+    public void validateIssuer_shouldDoNothingIfFormatAttributeHasValidValue() {
         validator.validate(anAuthnRequest().withIssuer(anIssuer().withFormat(NameIDType.ENTITY).build()).build());
 
     }
 
     @Test
-    public void validateNameIdPolicy_shouldDoNothingIfNameIdPolicyIsMissing() throws Exception {
+    public void validateNameIdPolicy_shouldDoNothingIfNameIdPolicyIsMissing() {
         validator.validate(anAuthnRequest().build());
-
     }
 
     @Test
-    public void validateNameIdPolicy_shouldDoNothingIfNameIdPolicyFormatHasValidValue() throws Exception {
+    public void validateNameIdPolicy_shouldDoNothingIfNameIdPolicyFormatHasValidValue() {
         validator.validate(anAuthnRequest().withNameIdPolicy(NameIdPolicyBuilder.aNameIdPolicy().withFormat(NameIDType.PERSISTENT).build()).build());
-
     }
 
     @Test
-    public void validateRequest_shouldThrowExceptionIfScopingIsPresent() throws Exception {
+    public void validateRequest_shouldThrowExceptionIfScopingIsPresent() {
         validateThrows(
                 anAuthnRequest().withScoping(ScopingBuilder.aScoping().build()).build(),
                 SamlTransformationErrorFactory.scopingNotAllowed()
@@ -144,13 +123,12 @@ public class AuthnRequestFromTransactionValidatorTest extends OpenSAMLRunner {
     }
 
     @Test
-    public void validateProtocolBinding_shouldDoNothingIfProtocolBindingHasValidValue() throws Exception {
+    public void validateProtocolBinding_shouldDoNothingIfProtocolBindingHasValidValue() {
         validator.validate(anAuthnRequest().withProtocolBinding(SAMLConstants.SAML2_POST_BINDING_URI).build());
-
     }
 
     @Test
-    public void validateProtocolBinding_shouldThrowExceptionIfProtocolBindingHasInvalidValue() throws Exception {
+    public void validateProtocolBinding_shouldThrowExceptionIfProtocolBindingHasInvalidValue() {
         String invalidValue = "goo";
         validateThrows(
                 anAuthnRequest().withProtocolBinding(invalidValue).build(),
@@ -159,7 +137,7 @@ public class AuthnRequestFromTransactionValidatorTest extends OpenSAMLRunner {
     }
 
     @Test
-    public void validateRequest_shouldThrowExceptionIfIsPassiveIsPresent() throws Exception {
+    public void validateRequest_shouldThrowExceptionIfIsPassiveIsPresent() {
         validateThrows(
                 anAuthnRequest().withIsPassive(true).build(),
                 SamlTransformationErrorFactory.isPassiveNotAllowed()
@@ -167,7 +145,7 @@ public class AuthnRequestFromTransactionValidatorTest extends OpenSAMLRunner {
     }
 
     @Test
-    public void validateRequest_shouldThrowExceptionIfIsDuplicateRequestIdIsPresent() throws Exception {
+    public void validateRequest_shouldThrowExceptionIfIsDuplicateRequestIdIsPresent() {
         final String requestId = generateRequestId();
         final String oneIssuerId = "some-issuer-id";
         final String anotherIssuerId = "some-other-issuer-id";
@@ -185,15 +163,13 @@ public class AuthnRequestFromTransactionValidatorTest extends OpenSAMLRunner {
     }
 
     @Test
-    public void validateRequest_shouldThrowExceptionIfRequestIsTooOld() throws Exception {
-        DateTimeFreezer.freezeTime();
-
+    public void validateRequest_shouldThrowExceptionIfRequestIsTooOld() {
         String requestId = generateRequestId();
-        DateTime issueInstant = DateTime.now().minusMinutes(5).minusSeconds(1);
+        Instant issueInstant = Instant.now().atZone(ZoneId.of("UTC")).minusMinutes(5).minusSeconds(1).toInstant();
 
         final AuthnRequest authnRequest = anAuthnRequest().withId(requestId).withIssueInstant(issueInstant).build();
 
-        SamlValidationSpecificationFailure failure = SamlTransformationErrorFactory.requestTooOld(requestId, issueInstant.withZone(DateTimeZone.UTC), DateTime.now());
+        SamlValidationSpecificationFailure failure = SamlTransformationErrorFactory.requestTooOld(requestId, issueInstant, Instant.now());
 
         final SamlRequestTooOldException e = Assertions.assertThrows(SamlRequestTooOldException.class, () -> validator.validate(authnRequest));
         assertThat(e.getMessage()).isEqualTo(failure.getErrorMessage());
@@ -201,7 +177,7 @@ public class AuthnRequestFromTransactionValidatorTest extends OpenSAMLRunner {
     }
 
     @Test
-    public void validate_shouldThrowExceptionIfIdIsMissing() throws Exception {
+    public void validate_shouldThrowExceptionIfIdIsMissing() {
         validateThrows(
                 anAuthnRequest().withId(null).build(),
                 SamlTransformationErrorFactory.missingRequestId()
@@ -209,7 +185,7 @@ public class AuthnRequestFromTransactionValidatorTest extends OpenSAMLRunner {
     }
 
     @Test
-    public void validate_shouldThrowExceptionIfIssuerElementIsMissing() throws Exception {
+    public void validate_shouldThrowExceptionIfIssuerElementIsMissing() {
         validateThrows(
                 anAuthnRequest().withIssuer(null).build(),
                 SamlTransformationErrorFactory.missingIssuer()
@@ -217,7 +193,7 @@ public class AuthnRequestFromTransactionValidatorTest extends OpenSAMLRunner {
     }
 
     @Test
-    public void validate_shouldThrowExceptionIfIssuerIdIsMissing() throws Exception {
+    public void validate_shouldThrowExceptionIfIssuerIdIsMissing() {
         validateThrows(
                 anAuthnRequest().withIssuer(anIssuer().withIssuerId(null).build()).build(),
                 SamlTransformationErrorFactory.emptyIssuer()
@@ -225,7 +201,7 @@ public class AuthnRequestFromTransactionValidatorTest extends OpenSAMLRunner {
     }
 
     @Test
-    public void validate_shouldThrowExceptionIfIssueInstantIsMissing() throws Exception {
+    public void validate_shouldThrowExceptionIfIssueInstantIsMissing() {
         AuthnRequest authnRequest = anAuthnRequest().withIssueInstant(null).build();
         validateThrows(
                 authnRequest,
@@ -234,7 +210,7 @@ public class AuthnRequestFromTransactionValidatorTest extends OpenSAMLRunner {
     }
 
     @Test
-    public void validate_shouldThrowExceptionIfVersionNumberIsMissing() throws Exception {
+    public void validate_shouldThrowExceptionIfVersionNumberIsMissing() {
         AuthnRequest authnRequest = anAuthnRequest().withVersionNumber(null).build();
 
         validateThrows(
@@ -244,7 +220,7 @@ public class AuthnRequestFromTransactionValidatorTest extends OpenSAMLRunner {
     }
 
     @Test
-    public void validate_shouldThrowExceptionIfVersionNumberIsNotTwoPointZero() throws Exception {
+    public void validate_shouldThrowExceptionIfVersionNumberIsNotTwoPointZero() {
         validateThrows(
                 anAuthnRequest().withVersionNumber("1.0").build(),
                 SamlTransformationErrorFactory.illegalRequestVersionNumber()
@@ -252,7 +228,7 @@ public class AuthnRequestFromTransactionValidatorTest extends OpenSAMLRunner {
     }
 
     @Test
-    public void validate_shouldDoNothingIfVersionNumberIsTwoPointZero() throws Exception {
+    public void validate_shouldDoNothingIfVersionNumberIsTwoPointZero() {
         validator.validate(anAuthnRequest().withVersionNumber(SAML_VERSION_NUMBER).build());
     }
 

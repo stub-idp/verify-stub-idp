@@ -1,17 +1,17 @@
 package stubidp.saml.hub.hub.test.builders;
 
-import org.joda.time.DateTime;
 import stubidp.saml.utils.core.domain.AuthnContext;
 import stubidp.saml.utils.hub.domain.EidasAuthnRequestFromHub;
 
 import java.net.URI;
+import java.time.Instant;
 import java.util.List;
 import java.util.UUID;
 
 public class EidasAuthnRequestBuilder {
     private String id = UUID.randomUUID().toString();
     private String issuer = "issuer_id";
-    private DateTime issueInstant = DateTime.now();
+    private Instant issueInstant = Instant.now();
     private String destination;
     private String providerName;
     private List<AuthnContext> authnContextList;

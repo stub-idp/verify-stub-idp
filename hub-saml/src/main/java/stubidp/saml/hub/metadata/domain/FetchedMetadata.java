@@ -1,21 +1,20 @@
 package stubidp.saml.hub.metadata.domain;
 
-import org.joda.time.DateTime;
 import stubidp.utils.security.security.Certificate;
 
-import java.util.ArrayList;
+import java.time.Instant;
 import java.util.Collection;
 
 public abstract class FetchedMetadata {
-    private DateTime validUntil;
+    private Instant validUntil;
     private String entityId;
     private OrganisationDto organisation;
-    private Collection<ContactPersonDto> contactPersons = new ArrayList<>();
+    private Collection<ContactPersonDto> contactPersons;
     private Certificate signingCertificate;
 
     public FetchedMetadata(
         String entityId,
-        DateTime validUntil,
+        Instant validUntil,
         OrganisationDto organisation,
         Collection<ContactPersonDto> contactPersons,
         Certificate signingCertificate) {
@@ -26,7 +25,7 @@ public abstract class FetchedMetadata {
         this.signingCertificate = signingCertificate;
     }
 
-    public DateTime getValidUntil() {
+    public Instant getValidUntil() {
         return validUntil;
     }
 

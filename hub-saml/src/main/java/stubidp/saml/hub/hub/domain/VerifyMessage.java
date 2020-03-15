@@ -1,17 +1,17 @@
 package stubidp.saml.hub.hub.domain;
 
-import org.joda.time.DateTime;
+import java.time.Instant;
 
 public abstract class VerifyMessage {
 
     private String id;
     private String issuer;
-    private DateTime issueInstant;
+    private Instant issueInstant;
 
     protected VerifyMessage() {
     }
 
-    public VerifyMessage(String id, String issuer, DateTime issueInstant) {
+    public VerifyMessage(String id, String issuer, Instant issueInstant) {
         this.id = id;
         this.issuer = issuer;
         this.issueInstant = issueInstant;
@@ -25,7 +25,7 @@ public abstract class VerifyMessage {
         return issuer;
     }
 
-    public DateTime getIssueInstant() {
+    public Instant getIssueInstant() {
         return issueInstant;
     }
 }

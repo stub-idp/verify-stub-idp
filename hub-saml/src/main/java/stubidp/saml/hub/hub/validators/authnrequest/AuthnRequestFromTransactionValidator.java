@@ -1,7 +1,6 @@
 package stubidp.saml.hub.hub.validators.authnrequest;
 
 import com.google.common.base.Strings;
-import org.joda.time.DateTime;
 import org.opensaml.saml.common.SAMLVersion;
 import org.opensaml.saml.common.xml.SAMLConstants;
 import org.opensaml.saml.saml2.core.AuthnRequest;
@@ -17,6 +16,8 @@ import stubidp.saml.hub.hub.exception.SamlDuplicateRequestIdException;
 import stubidp.saml.hub.hub.exception.SamlRequestTooOldException;
 import stubidp.saml.security.validators.issuer.IssuerValidator;
 import stubidp.saml.security.validators.signature.SamlSignatureUtil;
+
+import java.time.Instant;
 
 public class AuthnRequestFromTransactionValidator implements SamlValidator<AuthnRequest> {
 
@@ -110,14 +111,14 @@ public class AuthnRequestFromTransactionValidator implements SamlValidator<Authn
 
     private void validateIssueInstant(final AuthnRequest request) {
         final String requestId = request.getID();
-        DateTime issueInstant = request.getIssueInstant();
+        Instant issueInstant = request.getIssueInstant();
         if (issueInstant == null) {
             SamlValidationSpecificationFailure failure = SamlTransformationErrorFactory.missingRequestIssueInstant(requestId);
             throw new SamlTransformationErrorException(failure.getErrorMessage(), failure.getLogLevel());
         }
 
         if (!issueInstantValidator.isValid(issueInstant)) {
-            SamlValidationSpecificationFailure failure = SamlTransformationErrorFactory.requestTooOld(request.getID(), issueInstant, DateTime.now());
+            SamlValidationSpecificationFailure failure = SamlTransformationErrorFactory.requestTooOld(request.getID(), issueInstant, Instant.now());
             throw new SamlRequestTooOldException(failure.getErrorMessage(), failure.getLogLevel());
         }
     }

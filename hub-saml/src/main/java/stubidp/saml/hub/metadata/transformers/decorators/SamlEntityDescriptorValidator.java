@@ -1,7 +1,7 @@
 package stubidp.saml.hub.metadata.transformers.decorators;
 
 import com.google.common.base.Strings;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.opensaml.saml.saml2.metadata.EntityDescriptor;
 import org.opensaml.saml.saml2.metadata.RoleDescriptor;
 import org.opensaml.xmlsec.signature.KeyInfo;

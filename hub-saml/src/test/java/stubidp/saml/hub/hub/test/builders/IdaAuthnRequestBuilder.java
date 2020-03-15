@@ -1,13 +1,14 @@
 package stubidp.saml.hub.hub.test.builders;
 
-import org.joda.time.DateTime;
 import org.opensaml.saml.saml2.core.AuthnContextComparisonTypeEnumeration;
 import org.opensaml.xmlsec.signature.Signature;
-import stubidp.saml.utils.core.domain.AuthnContext;
 import stubidp.saml.hub.hub.domain.AuthnRequestFromTransaction;
+import stubidp.saml.utils.core.domain.AuthnContext;
 import stubidp.saml.utils.hub.domain.IdaAuthnRequestFromHub;
 
 import java.net.URI;
+import java.time.Instant;
+import java.time.ZoneId;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -21,13 +22,13 @@ public class IdaAuthnRequestBuilder {
 
     private String id = UUID.randomUUID().toString();
     private String issuer = "issuer_id";
-    private DateTime issueInstant = DateTime.now();
+    private Instant issueInstant = Instant.now();
     private List<AuthnContext> levelsOfAssurance = Collections.singletonList(AuthnContext.LEVEL_1);
     private Optional<Boolean> forceAuthentication = empty();
     private Optional<Integer> assertionConsumerServiceIndex = empty();
     private Optional<Signature> signature = empty();
     private URI destination = URI.create("http://thehub");
-    private Optional<DateTime> sessionExpiry = empty();
+    private Optional<Instant> sessionExpiry = empty();
     private Optional<URI> assertionConsumerServiceUrl = empty();
     private AuthnContextComparisonTypeEnumeration comparisonType = AuthnContextComparisonTypeEnumeration.EXACT;
 
@@ -42,7 +43,7 @@ public class IdaAuthnRequestBuilder {
                 issueInstant,
                 levelsOfAssurance,
                 forceAuthentication,
-                sessionExpiry.orElse(DateTime.now().plusHours(20)),
+                sessionExpiry.orElse(Instant.now().atZone(ZoneId.of("UTC")).plusHours(20).toInstant()),
                 URI.create("/location"),
                 comparisonType);
     }
@@ -72,7 +73,7 @@ public class IdaAuthnRequestBuilder {
         return this;
     }
 
-    public IdaAuthnRequestBuilder withIssueInstant(DateTime issueInstant) {
+    public IdaAuthnRequestBuilder withIssueInstant(Instant issueInstant) {
         this.issueInstant = issueInstant;
         return this;
     }
@@ -107,7 +108,7 @@ public class IdaAuthnRequestBuilder {
         return this;
     }
 
-    public IdaAuthnRequestBuilder withSessionExpiryTimestamp(DateTime sessionExpiryTimestamp) {
+    public IdaAuthnRequestBuilder withSessionExpiryTimestamp(Instant sessionExpiryTimestamp) {
         this.sessionExpiry = ofNullable(sessionExpiryTimestamp);
         return this;
     }

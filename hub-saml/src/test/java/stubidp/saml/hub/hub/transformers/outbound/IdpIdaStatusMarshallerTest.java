@@ -70,7 +70,7 @@ public class IdpIdaStatusMarshallerTest extends OpenSAMLRunner {
         Status transformedStatus = marshaller.toSamlStatus(IdpIdaStatus.requesterError(Optional.of(message)));
 
         assertThat(transformedStatus.getStatusCode().getValue()).isEqualTo(StatusCode.REQUESTER);
-        assertThat(transformedStatus.getStatusMessage().getMessage()).isEqualTo(message);
+        assertThat(transformedStatus.getStatusMessage().getValue()).isEqualTo(message);
     }
 
     @Test

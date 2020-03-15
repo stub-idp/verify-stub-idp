@@ -1,11 +1,11 @@
 package stubidp.saml.hub.hub.validators.authnrequest;
 
-import org.joda.time.DateTime;
+import java.time.Instant;
 
 public interface IdExpirationCache<T> {
     boolean contains(T key);
 
-    DateTime getExpiration(T key);
+    Instant getExpiration(T key);
 
-    void setExpiration(T key, DateTime dateTime);
+    void setExpiration(T key, Instant dateTime);
 }

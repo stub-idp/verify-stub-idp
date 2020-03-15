@@ -1,8 +1,8 @@
 package stubidp.saml.hub.core.domain;
 
-import org.joda.time.DateTime;
 import stubidp.saml.hub.hub.domain.IdpIdaStatus;
 
+import java.time.Instant;
 import java.util.Optional;
 
 public class InboundResponseFromIdpData {
@@ -16,7 +16,7 @@ public class InboundResponseFromIdpData {
     private String levelOfAssurance;
     private Optional<String> idpFraudEventId;
     private Optional<String> fraudIndicator;
-    private Optional<DateTime> notOnOrAfter;
+    private Optional<Instant> notOnOrAfter;
 
     public InboundResponseFromIdpData(
             IdpIdaStatus.Status status,
@@ -29,7 +29,7 @@ public class InboundResponseFromIdpData {
             String levelOfAssurance,
             Optional<String> idpFraudEventId,
             Optional<String> fraudIndicator,
-            Optional<DateTime> notOnOrAfter) {
+            Optional<Instant> notOnOrAfter) {
         this.status = status;
         this.statusMessage = statusMessage;
         this.issuer = issuer;
@@ -86,7 +86,7 @@ public class InboundResponseFromIdpData {
         return encryptedMatchingDatasetAssertion;
     }
 
-    public Optional<DateTime> getNotOnOrAfter() {
+    public Optional<Instant> getNotOnOrAfter() {
         return notOnOrAfter;
     }
 

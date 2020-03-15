@@ -22,7 +22,7 @@ public class AuthnStatementAssertionValidator {
             throw new SamlValidationException(SamlTransformationErrorFactory.authnContextMissingError());
         if (authnStatement.getAuthnContext().getAuthnContextClassRef() == null)
             throw new SamlValidationException(SamlTransformationErrorFactory.authnContextClassRefMissing());
-        if (authnStatement.getAuthnContext().getAuthnContextClassRef().getAuthnContextClassRef() == null)
+        if (authnStatement.getAuthnContext().getAuthnContextClassRef().getURI() == null)
             throw new SamlValidationException(SamlTransformationErrorFactory.authnContextClassRefValueMissing());
         if (authnStatement.getAuthnInstant() == null)
             throw new SamlValidationException(SamlTransformationErrorFactory.authnInstantMissing());

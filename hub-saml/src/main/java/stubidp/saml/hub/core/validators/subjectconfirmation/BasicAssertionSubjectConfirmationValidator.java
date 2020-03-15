@@ -1,11 +1,12 @@
 package stubidp.saml.hub.core.validators.subjectconfirmation;
 
-import org.joda.time.DateTime;
 import org.opensaml.saml.saml2.core.SubjectConfirmation;
 import org.opensaml.saml.saml2.core.SubjectConfirmationData;
 import stubidp.saml.extensions.validation.SamlTransformationErrorException;
 import stubidp.saml.extensions.validation.SamlValidationSpecificationFailure;
 import stubidp.saml.hub.core.errors.SamlTransformationErrorFactory;
+
+import java.time.Instant;
 
 public class BasicAssertionSubjectConfirmationValidator {
 
@@ -27,14 +28,14 @@ public class BasicAssertionSubjectConfirmationValidator {
             throw new SamlTransformationErrorException(failure.getErrorMessage(), failure.getLogLevel());
         }
 
-        final DateTime notOnOrAfter = subjectConfirmationData.getNotOnOrAfter();
+        final Instant notOnOrAfter = subjectConfirmationData.getNotOnOrAfter();
         if (notOnOrAfter == null) {
             SamlValidationSpecificationFailure failure = SamlTransformationErrorFactory.missingNotOnOrAfter();
             throw new SamlTransformationErrorException(failure.getErrorMessage(), failure.getLogLevel());
         }
 
-        final DateTime now = DateTime.now();
-        if (notOnOrAfter.isEqual(now) || notOnOrAfter.isBefore(now)) {
+        final Instant now = Instant.now();
+        if (notOnOrAfter.equals(now) || notOnOrAfter.isBefore(now)) {
             SamlValidationSpecificationFailure failure = SamlTransformationErrorFactory.exceededNotOnOrAfter(notOnOrAfter);
             throw new SamlTransformationErrorException(failure.getErrorMessage(), failure.getLogLevel());
         }

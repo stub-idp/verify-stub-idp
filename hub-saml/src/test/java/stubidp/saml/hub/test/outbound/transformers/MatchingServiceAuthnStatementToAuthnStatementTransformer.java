@@ -1,12 +1,12 @@
 package stubidp.saml.hub.test.outbound.transformers;
 
-import org.joda.time.DateTime;
 import org.opensaml.saml.saml2.core.AuthnContext;
 import org.opensaml.saml.saml2.core.AuthnStatement;
-import stubidp.saml.utils.core.OpenSamlXmlObjectFactory;
 import stubidp.saml.hub.core.domain.MatchingServiceAuthnStatement;
+import stubidp.saml.utils.core.OpenSamlXmlObjectFactory;
 
 import javax.inject.Inject;
+import java.time.Instant;
 
 public class MatchingServiceAuthnStatementToAuthnStatementTransformer {
 
@@ -24,7 +24,7 @@ public class MatchingServiceAuthnStatementToAuthnStatementTransformer {
         AuthnContext authnContext = openSamlXmlObjectFactory.createAuthnContext();
         authnContext.setAuthnContextClassRef(openSamlXmlObjectFactory.createAuthnContextClassReference(idaAuthnStatement.getAuthnContext().getUri()));
         authnStatement.setAuthnContext(authnContext);
-        authnStatement.setAuthnInstant(DateTime.now());
+        authnStatement.setAuthnInstant(Instant.now());
         return authnStatement;
     }
 }

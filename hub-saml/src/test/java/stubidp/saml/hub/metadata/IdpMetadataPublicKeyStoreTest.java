@@ -2,9 +2,6 @@ package stubidp.saml.hub.metadata;
 
 import net.shibboleth.utilities.java.support.component.ComponentInitializationException;
 import net.shibboleth.utilities.java.support.xml.BasicParserPool;
-import org.apache.xml.security.exceptions.Base64DecodingException;
-import org.apache.xml.security.utils.Base64;
-import org.joda.time.DateTime;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -19,11 +16,11 @@ import org.opensaml.xmlsec.signature.KeyInfo;
 import org.opensaml.xmlsec.signature.X509Certificate;
 import org.opensaml.xmlsec.signature.X509Data;
 import org.opensaml.xmlsec.signature.support.SignatureException;
+import stubidp.saml.hub.core.OpenSAMLRunner;
 import stubidp.saml.hub.metadata.exceptions.NoKeyConfiguredForEntityException;
 import stubidp.saml.metadata.StringBackedMetadataResolver;
 import stubidp.saml.metadata.test.factories.metadata.EntityDescriptorFactory;
 import stubidp.saml.metadata.test.factories.metadata.MetadataFactory;
-import stubidp.saml.hub.core.OpenSAMLRunner;
 import stubidp.saml.utils.core.test.builders.metadata.EntityDescriptorBuilder;
 import stubidp.saml.utils.core.test.builders.metadata.IdpSsoDescriptorBuilder;
 import stubidp.saml.utils.core.test.builders.metadata.KeyDescriptorBuilder;
@@ -34,11 +31,14 @@ import stubidp.test.devpki.TestCertificateStrings;
 import stubidp.test.devpki.TestEntityIds;
 
 import java.io.ByteArrayInputStream;
-import java.net.URISyntaxException;
 import java.security.PublicKey;
 import java.security.cert.Certificate;
 import java.security.cert.CertificateException;
 import java.security.cert.CertificateFactory;
+import java.time.Duration;
+import java.time.Instant;
+import java.time.ZoneId;
+import java.util.Base64;
 
 import static java.util.Arrays.asList;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -48,11 +48,11 @@ public class IdpMetadataPublicKeyStoreTest extends OpenSAMLRunner {
     private static MetadataResolver metadataResolver;
 
     @BeforeAll
-    public static void setUp() throws Exception {
+    public static void setUp() {
         metadataResolver = initializeMetadata();
     }
 
-    private static MetadataResolver initializeMetadata() throws URISyntaxException {
+    private static MetadataResolver initializeMetadata() {
         try {
             EntityDescriptorFactory descriptorFactory = new EntityDescriptorFactory();
             String metadata = new MetadataFactory().metadata(asList(
@@ -64,7 +64,7 @@ public class IdpMetadataPublicKeyStoreTest extends OpenSAMLRunner {
             BasicParserPool basicParserPool = new BasicParserPool();
             basicParserPool.initialize();
             stringBackedMetadataResolver.setParserPool(basicParserPool);
-            stringBackedMetadataResolver.setMinRefreshDelay(14400000);
+            stringBackedMetadataResolver.setMinRefreshDelay(Duration.ofMillis(14400000));
             stringBackedMetadataResolver.setRequireValidMetadata(true);
             stringBackedMetadataResolver.setId("testResolver");
             stringBackedMetadataResolver.initialize();
@@ -74,8 +74,8 @@ public class IdpMetadataPublicKeyStoreTest extends OpenSAMLRunner {
         }
     }
 
-    private static PublicKey getX509Key(String encodedCertificate) throws Base64DecodingException, CertificateException {
-        byte[] derValue = Base64.decode(encodedCertificate);
+    private static PublicKey getX509Key(String encodedCertificate) throws CertificateException {
+        byte[] derValue = Base64.getMimeDecoder().decode(encodedCertificate);
         CertificateFactory certificateFactory = CertificateFactory.getInstance("X.509");
         Certificate certificate = certificateFactory.generateCertificate(new ByteArrayInputStream(derValue));
         return certificate.getPublicKey();
@@ -88,7 +88,7 @@ public class IdpMetadataPublicKeyStoreTest extends OpenSAMLRunner {
             return EntityDescriptorBuilder.anEntityDescriptor()
                     .withEntityId(idpEntityId)
                     .withIdpSsoDescriptor(idpssoDescriptor)
-                    .withValidUntil(DateTime.now().plusWeeks(2))
+                    .withValidUntil(Instant.now().atZone(ZoneId.of("UTC")).plusWeeks(2).toInstant())
                     .withSignature(null)
                     .withoutSigning()
                     .setAddDefaultSpServiceDescriptor(false)
@@ -114,13 +114,13 @@ public class IdpMetadataPublicKeyStoreTest extends OpenSAMLRunner {
     }
 
     @Test
-    public void shouldRaiseAnExceptionWhenThereIsNoEntityDescriptor() throws Exception {
+    public void shouldRaiseAnExceptionWhenThereIsNoEntityDescriptor() {
         IdpMetadataPublicKeyStore idpMetadataPublicKeyStore = new IdpMetadataPublicKeyStore(metadataResolver);
         Assertions.assertThrows(NoKeyConfiguredForEntityException.class, () -> idpMetadataPublicKeyStore.getVerifyingKeysForEntity("my-invented-entity-id"));
     }
 
     @Test
-    public void shouldRaiseAnExceptionWhenAttemptingToRetrieveAnSPSSOFromMetadata() throws Exception {
+    public void shouldRaiseAnExceptionWhenAttemptingToRetrieveAnSPSSOFromMetadata() {
         IdpMetadataPublicKeyStore idpMetadataPublicKeyStore = new IdpMetadataPublicKeyStore(metadataResolver);
         Assertions.assertThrows(NoKeyConfiguredForEntityException.class, () -> idpMetadataPublicKeyStore.getVerifyingKeysForEntity("https://signin.service.gov.uk"));
     }

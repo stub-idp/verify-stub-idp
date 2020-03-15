@@ -1,8 +1,9 @@
 package stubidp.saml.hub.hub.domain;
 
-import org.joda.time.DateTime;
 import stubidp.saml.hub.core.domain.IdaMatchingServiceResponse;
 import stubidp.saml.hub.hub.transformers.inbound.MatchingServiceIdaStatus;
+
+import java.time.Instant;
 
 public class InboundHealthCheckResponseFromMatchingService extends IdaMatchingServiceResponse {
     private MatchingServiceIdaStatus status;
@@ -15,7 +16,7 @@ public class InboundHealthCheckResponseFromMatchingService extends IdaMatchingSe
             final String responseId,
             final String inResponseTo,
             final String issuer,
-            final DateTime issueInstant,
+            final Instant issueInstant,
             final MatchingServiceIdaStatus status) {
 
         super(responseId, inResponseTo, issuer, issueInstant);

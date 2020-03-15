@@ -1,7 +1,5 @@
 package stubidp.saml.hub.core.test.builders.metadata;
 
-import org.joda.time.DateTime;
-import org.joda.time.Duration;
 import stubidp.saml.hub.core.test.builders.ContactPersonDtoBuilder;
 import stubidp.saml.hub.core.test.builders.OrganisationDtoBuilder;
 import stubidp.saml.hub.metadata.domain.ContactPersonDto;
@@ -13,6 +11,8 @@ import stubidp.test.devpki.TestEntityIds;
 import stubidp.utils.security.security.Certificate;
 
 import java.net.URI;
+import java.time.Instant;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,7 +23,7 @@ public class IdentityProviderMetadataDtoBuilder {
     private OrganisationDto organisation = OrganisationDtoBuilder.anOrganisationDto().build();
     private List<ContactPersonDto> contactPersons = new ArrayList<>();
     private List<Certificate> signingCertificates = null;
-    private DateTime validUntil = DateTime.now().plus(Duration.standardDays(365));
+    private Instant validUntil = Instant.now().atZone(ZoneId.of("UTC")).plusDays(365).toInstant();
     private List<Certificate> idpSigningCertificates = new ArrayList<>();
     private Certificate encryptionCertificate = null;
 
@@ -93,7 +93,7 @@ public class IdentityProviderMetadataDtoBuilder {
         return this;
     }
 
-    public IdentityProviderMetadataDtoBuilder withValidUntil(DateTime validUntil) {
+    public IdentityProviderMetadataDtoBuilder withValidUntil(Instant validUntil) {
         this.validUntil = validUntil;
         return this;
     }

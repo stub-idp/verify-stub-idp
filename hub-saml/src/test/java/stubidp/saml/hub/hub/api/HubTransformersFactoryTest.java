@@ -1,7 +1,5 @@
 package stubidp.saml.hub.hub.api;
 
-import org.apache.xml.security.exceptions.Base64DecodingException;
-import org.apache.xml.security.utils.Base64;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -29,6 +27,7 @@ import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.security.cert.X509Certificate;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.Collections;
 import java.util.List;
 import java.util.function.Function;
@@ -52,7 +51,7 @@ public class HubTransformersFactoryTest {
     }
 
     @Test
-    public void shouldNotContainKeyInfoInIdaAuthnRequest() throws Exception {
+    public void shouldNotContainKeyInfoInIdaAuthnRequest() {
         Function<IdaAuthnRequestFromHub, String> eidasTransformer = new HubTransformersFactory().getIdaAuthnRequestFromHubToStringTransformer(
             getKeyStore(hubSigningCert),
             signatureAlgorithm,
@@ -72,7 +71,7 @@ public class HubTransformersFactoryTest {
     }
 
     @Test
-    public void shouldContainKeyInfoInEidasAuthnRequestWhenHubSignCertIsPresent() throws Exception {
+    public void shouldContainKeyInfoInEidasAuthnRequestWhenHubSignCertIsPresent() {
         Function<EidasAuthnRequestFromHub, String> eidasTransformer = new HubTransformersFactory().getEidasAuthnRequestFromHubToStringTransformer(
             getKeyStore(hubSigningCert),
             signatureAlgorithm,
@@ -92,7 +91,7 @@ public class HubTransformersFactoryTest {
     }
 
     @Test
-    public void shouldThrowExceptionWhenKeyInfoIsRequiredButSigningCertIsNotPresent() throws Base64DecodingException {
+    public void shouldThrowExceptionWhenKeyInfoIsRequiredButSigningCertIsNotPresent() {
         Function<EidasAuthnRequestFromHub, String> eidasTransformer = new HubTransformersFactory().getEidasAuthnRequestFromHubToStringTransformer(
                 getKeyStore(null),
                 signatureAlgorithm,
@@ -106,15 +105,15 @@ public class HubTransformersFactoryTest {
         assertThat(e.getMessage()).isEqualTo("Unable to generate key info without a signing certificate");
     }
 
-    private static IdaKeyStore getKeyStore(X509Certificate hubSigningCert) throws Base64DecodingException {
+    private static IdaKeyStore getKeyStore(X509Certificate hubSigningCert) {
         List<KeyPair> encryptionKeyPairs = new ArrayList<>();
         PublicKeyFactory publicKeyFactory = new PublicKeyFactory(new X509CertificateFactory());
         PrivateKeyFactory privateKeyFactory = new PrivateKeyFactory();
         PublicKey encryptionPublicKey = publicKeyFactory.createPublicKey(TestCertificateStrings.HUB_TEST_PUBLIC_ENCRYPTION_CERT);
-        PrivateKey encryptionPrivateKey = privateKeyFactory.createPrivateKey(Base64.decode(TestCertificateStrings.HUB_TEST_PRIVATE_ENCRYPTION_KEY.getBytes()));
+        PrivateKey encryptionPrivateKey = privateKeyFactory.createPrivateKey(Base64.getDecoder().decode(TestCertificateStrings.HUB_TEST_PRIVATE_ENCRYPTION_KEY.getBytes()));
         encryptionKeyPairs.add(new KeyPair(encryptionPublicKey, encryptionPrivateKey));
         PublicKey publicSigningKey = publicKeyFactory.createPublicKey(TestCertificateStrings.HUB_TEST_PUBLIC_SIGNING_CERT);
-        PrivateKey privateSigningKey = privateKeyFactory.createPrivateKey(Base64.decode(TestCertificateStrings.HUB_TEST_PRIVATE_SIGNING_KEY.getBytes()));
+        PrivateKey privateSigningKey = privateKeyFactory.createPrivateKey(Base64.getDecoder().decode(TestCertificateStrings.HUB_TEST_PRIVATE_SIGNING_KEY.getBytes()));
         KeyPair signingKeyPair = new KeyPair(publicSigningKey, privateSigningKey);
 
         return new IdaKeyStore(hubSigningCert, signingKeyPair, encryptionKeyPairs);

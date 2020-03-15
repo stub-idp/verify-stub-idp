@@ -1,8 +1,8 @@
 package stubidp.saml.hub.metadata.domain;
 
-import org.joda.time.DateTime;
 import stubidp.utils.security.security.Certificate;
 
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -11,7 +11,7 @@ import java.util.stream.Stream;
 
 public abstract class MetadataDto {
     protected List<Certificate> encryptionCertificates;
-    private DateTime validUntil;
+    private Instant validUntil;
     private String entityId;
     private OrganisationDto organisation;
     private Collection<ContactPersonDto> contactPersons = new ArrayList<>();
@@ -21,7 +21,7 @@ public abstract class MetadataDto {
 
     public MetadataDto(
             String entityId,
-            DateTime validUntil,
+            Instant validUntil,
             OrganisationDto organisation,
             Collection<ContactPersonDto> contactPersons,
             List<Certificate> hubSigningCertificates, List<Certificate> encryptionCertificates) {
@@ -33,7 +33,7 @@ public abstract class MetadataDto {
         this.encryptionCertificates = encryptionCertificates;
     }
 
-    public DateTime getValidUntil() {
+    public Instant getValidUntil() {
         return validUntil;
     }
 

@@ -1,12 +1,12 @@
 package stubidp.saml.hub.test.domain;
 
-import org.joda.time.DateTime;
 import org.opensaml.saml.saml2.core.Attribute;
-import stubidp.saml.utils.core.domain.AssertionRestrictions;
 import stubidp.saml.hub.core.domain.MatchingServiceAuthnStatement;
+import stubidp.saml.utils.core.domain.AssertionRestrictions;
 import stubidp.saml.utils.core.domain.OutboundAssertion;
 import stubidp.saml.utils.core.domain.PersistentId;
 
+import java.time.Instant;
 import java.util.List;
 
 public class MatchingServiceAssertion extends OutboundAssertion {
@@ -17,7 +17,7 @@ public class MatchingServiceAssertion extends OutboundAssertion {
     public MatchingServiceAssertion(
             String id,
             String issuerId,
-            DateTime issueInstant,
+            Instant issueInstant,
             PersistentId persistentId,
             AssertionRestrictions assertionRestrictions,
             MatchingServiceAuthnStatement authnStatement,

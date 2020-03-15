@@ -1,11 +1,11 @@
 package stubidp.saml.hub.hub.domain;
 
-import org.joda.time.DateTime;
 import org.opensaml.xmlsec.signature.Signature;
-import stubidp.utils.security.security.IdGenerator;
 import stubidp.saml.utils.core.domain.IdaSamlMessage;
+import stubidp.utils.security.security.IdGenerator;
 
 import java.net.URI;
+import java.time.Instant;
 import java.util.Optional;
 
 public class AuthnRequestFromTransaction extends IdaSamlMessage {
@@ -20,7 +20,7 @@ public class AuthnRequestFromTransaction extends IdaSamlMessage {
     public AuthnRequestFromTransaction(
             String id,
             String issuer,
-            DateTime issueInstant,
+            Instant issueInstant,
             Optional<Boolean> forceAuthentication,
             Optional<URI> assertionConsumerServiceUrl,
             Optional<Integer> assertionConsumerServiceIndex,
@@ -38,7 +38,7 @@ public class AuthnRequestFromTransaction extends IdaSamlMessage {
     public static AuthnRequestFromTransaction createRequestReceivedFromTransaction(
         String id,
         String issuerId,
-        DateTime issueInstant,
+        Instant issueInstant,
         boolean forceAuthentication,
         Optional<URI> assertionConsumerServiceUrl,
         Optional<Integer> assertionConsumerServiceIndex,
@@ -49,7 +49,7 @@ public class AuthnRequestFromTransaction extends IdaSamlMessage {
                 id,
                 issuerId,
                 issueInstant,
-                Optional.ofNullable(forceAuthentication),
+                Optional.of(forceAuthentication),
                 assertionConsumerServiceUrl,
                 assertionConsumerServiceIndex,
                 signature,
@@ -68,7 +68,7 @@ public class AuthnRequestFromTransaction extends IdaSamlMessage {
         return createRequestReceivedFromTransaction(
                 new IdGenerator().getId(),
                 issuerId,
-                DateTime.now(),
+                Instant.now(),
                 forceAuthentication,
                 assertionConsumerServiceUrl,
                 assertionConsumerServiceIndex,

@@ -1,17 +1,16 @@
 package stubidp.saml.hub.metadata.domain;
 
-import org.joda.time.DateTime;
 import stubidp.utils.security.security.Certificate;
 
-import java.util.ArrayList;
-import java.util.Arrays;
+import java.time.Instant;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 public class HubIdentityProviderMetadataDto extends MetadataDto {
 
     private Collection<Certificate> idpSigningCertificates;
-    private Collection<SamlEndpointDto> singleSignOnEndpoints = new ArrayList<>();
+    private Collection<SamlEndpointDto> singleSignOnEndpoints;
 
     public HubIdentityProviderMetadataDto(
             Collection<SamlEndpointDto> singleSignOnEndpoints,
@@ -19,11 +18,11 @@ public class HubIdentityProviderMetadataDto extends MetadataDto {
             OrganisationDto organisation,
             Collection<ContactPersonDto> contactPersons,
             Collection<Certificate> idpSigningCertificates,
-            DateTime validUntil,
+            Instant validUntil,
             List<Certificate> hubSigningCertificates,
             Certificate hubEncryptionCertificate) {
 
-        super(entityId, validUntil, organisation, contactPersons, hubSigningCertificates, Arrays.asList(hubEncryptionCertificate));
+        super(entityId, validUntil, organisation, contactPersons, hubSigningCertificates, Collections.singletonList(hubEncryptionCertificate));
 
         this.singleSignOnEndpoints = singleSignOnEndpoints;
 

@@ -27,7 +27,7 @@ public abstract class IdaStatusUnmarshaller<T extends IdaStatus> {
 
         String message = null;
         if (status.getStatusMessage() != null) {
-            message = status.getStatusMessage().getMessage();
+            message = status.getStatusMessage().getValue();
         }
         return transformStatus(statusMapperStatus, message);
     }

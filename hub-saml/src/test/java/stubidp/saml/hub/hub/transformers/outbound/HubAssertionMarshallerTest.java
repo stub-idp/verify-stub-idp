@@ -1,6 +1,5 @@
 package stubidp.saml.hub.hub.transformers.outbound;
 
-import org.joda.time.DateTime;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -15,6 +14,7 @@ import stubidp.saml.utils.core.domain.HubAssertion;
 import stubidp.saml.utils.core.transformers.outbound.OutboundAssertionToSubjectTransformer;
 import stubidp.saml.utils.hub.factories.AttributeFactory_1_1;
 
+import java.time.Instant;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -40,7 +40,7 @@ public class HubAssertionMarshallerTest extends OpenSAMLRunner {
     }
 
     @Test
-    public void transform_shouldTransformAssertionSubjects() throws Exception {
+    public void transform_shouldTransformAssertionSubjects() {
         HubAssertion assertion = aHubAssertion().build();
 
         marshaller.toSaml(assertion);
@@ -49,7 +49,7 @@ public class HubAssertionMarshallerTest extends OpenSAMLRunner {
     }
 
     @Test
-    public void transform_shouldTransformAssertionId() throws Exception {
+    public void transform_shouldTransformAssertionId() {
         String assertionId = "assertion-id";
         HubAssertion assertion = aHubAssertion().withId(assertionId).build();
 
@@ -59,7 +59,7 @@ public class HubAssertionMarshallerTest extends OpenSAMLRunner {
     }
 
     @Test
-    public void transform_shouldTransformAssertionIssuer() throws Exception {
+    public void transform_shouldTransformAssertionIssuer() {
         String assertionIssuerId = "assertion issuer";
         HubAssertion assertion = aHubAssertion().withIssuerId(assertionIssuerId).build();
 
@@ -69,8 +69,8 @@ public class HubAssertionMarshallerTest extends OpenSAMLRunner {
     }
 
     @Test
-    public void transform_shouldTransformAssertionIssuerInstance() throws Exception {
-        DateTime issueInstant = DateTime.parse("2012-12-31T12:34:56Z");
+    public void transform_shouldTransformAssertionIssuerInstance() {
+        Instant issueInstant = Instant.parse("2012-12-31T12:34:56Z");
         HubAssertion assertion = aHubAssertion().withIssueInstant(issueInstant).build();
 
         Assertion transformedAssertion = marshaller.toSaml(assertion);
@@ -79,7 +79,7 @@ public class HubAssertionMarshallerTest extends OpenSAMLRunner {
     }
 
     @Test
-    public void transform_shouldTransformCycle3DataAssertion() throws Exception {
+    public void transform_shouldTransformCycle3DataAssertion() {
         String attributeName = "someName";
         String value = "some value";
         HubAssertion assertion = aHubAssertion().withCycle3Data(aCycle3Dataset().addCycle3Data(attributeName, value).build()).build();
@@ -95,7 +95,7 @@ public class HubAssertionMarshallerTest extends OpenSAMLRunner {
     }
 
     @Test
-    public void transform_shouldTransformLevelOfCycle3DataAssertion() throws Exception {
+    public void transform_shouldTransformLevelOfCycle3DataAssertion() {
         String attributeName = "someName";
         String value = "some value";
         HubAssertion assertion = aHubAssertion().withCycle3Data(aCycle3Dataset().addCycle3Data(attributeName, value).build()).build();

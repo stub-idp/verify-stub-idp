@@ -55,7 +55,7 @@ public class CountryAuthenticationStatusUnmarshallerTest extends OpenSAMLRunner 
         StatusCode successStatusCode = samlObjectFactory.createStatusCode();
         successStatusCode.setValue(StatusCode.SUCCESS);
         StatusMessage statusMessage = samlObjectFactory.createStatusMessage();
-        statusMessage.setMessage(StatusCode.SUCCESS);
+        statusMessage.setValue(StatusCode.SUCCESS);
         originalStatus.setStatusCode(successStatusCode);
         originalStatus.setStatusMessage(statusMessage);
 

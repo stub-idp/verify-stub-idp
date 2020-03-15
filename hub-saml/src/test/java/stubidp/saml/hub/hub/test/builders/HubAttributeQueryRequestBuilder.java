@@ -1,16 +1,16 @@
 package stubidp.saml.hub.hub.test.builders;
 
-import java.util.Optional;
-import org.joda.time.DateTime;
+import stubidp.saml.hub.hub.domain.HubAttributeQueryRequest;
+import stubidp.saml.hub.hub.domain.UserAccountCreationAttribute;
 import stubidp.saml.utils.core.domain.AuthnContext;
 import stubidp.saml.utils.core.domain.HubAssertion;
 import stubidp.saml.utils.core.domain.PersistentId;
-import stubidp.saml.hub.hub.domain.HubAttributeQueryRequest;
-import stubidp.saml.hub.hub.domain.UserAccountCreationAttribute;
 
 import java.net.URI;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static java.util.Optional.empty;
 import static java.util.Optional.ofNullable;
@@ -40,7 +40,7 @@ public class HubAttributeQueryRequestBuilder {
                 encryptedAuthnAssertion,
                 cycle3AttributeAssertion,
                 userAccountCreationAttributes,
-                DateTime.now(),
+                Instant.now(),
                 assertionConsumerServiceUrl,
                 authnRequestIssuerEntityId,
                 authnContext,

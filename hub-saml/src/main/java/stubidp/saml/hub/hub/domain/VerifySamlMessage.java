@@ -1,8 +1,7 @@
 package stubidp.saml.hub.hub.domain;
 
-import org.joda.time.DateTime;
-
 import java.net.URI;
+import java.time.Instant;
 
 public abstract class VerifySamlMessage extends VerifyMessage {
 
@@ -11,7 +10,7 @@ public abstract class VerifySamlMessage extends VerifyMessage {
     protected VerifySamlMessage() {
     }
 
-    public VerifySamlMessage(String id, String issuer, DateTime issueInstant, URI destination) {
+    public VerifySamlMessage(String id, String issuer, Instant issueInstant, URI destination) {
         super(id, issuer, issueInstant);
         this.destination = destination;
     }

@@ -1,6 +1,5 @@
 package stubidp.saml.hub.hub.transformers.outbound;
 
-import org.joda.time.DateTime;
 import org.opensaml.saml.saml2.core.Assertion;
 import org.opensaml.saml.saml2.core.Attribute;
 import org.opensaml.saml.saml2.core.AttributeQuery;
@@ -10,12 +9,13 @@ import org.opensaml.saml.saml2.core.NameID;
 import org.opensaml.saml.saml2.core.Subject;
 import org.opensaml.saml.saml2.core.SubjectConfirmation;
 import org.opensaml.saml.saml2.core.SubjectConfirmationData;
-import stubidp.saml.utils.core.OpenSamlXmlObjectFactory;
-import stubidp.saml.utils.core.domain.HubAssertion;
 import stubidp.saml.hub.hub.domain.HubEidasAttributeQueryRequest;
 import stubidp.saml.hub.hub.domain.UserAccountCreationAttribute;
 import stubidp.saml.hub.hub.factories.AttributeQueryAttributeFactory;
+import stubidp.saml.utils.core.OpenSamlXmlObjectFactory;
+import stubidp.saml.utils.core.domain.HubAssertion;
 
+import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
@@ -51,7 +51,7 @@ public class HubEidasAttributeQueryRequestToSamlAttributeQueryTransformer implem
 
         transformedQuery.setID(originalQuery.getId());
         transformedQuery.setIssuer(issuer);
-        transformedQuery.setIssueInstant(DateTime.now());
+        transformedQuery.setIssueInstant(Instant.now());
 
         if (originalQuery.getUserAccountCreationAttributes().isPresent()){
             transformedQuery.getAttributes().addAll(createAttributeList(originalQuery.getUserAccountCreationAttributes().get()));

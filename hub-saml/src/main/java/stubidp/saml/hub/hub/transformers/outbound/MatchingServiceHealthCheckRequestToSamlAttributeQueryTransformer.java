@@ -1,16 +1,16 @@
 package stubidp.saml.hub.hub.transformers.outbound;
 
-import org.joda.time.DateTime;
 import org.opensaml.saml.saml2.core.AttributeQuery;
 import org.opensaml.saml.saml2.core.Issuer;
 import org.opensaml.saml.saml2.core.NameID;
 import org.opensaml.saml.saml2.core.Subject;
 import org.opensaml.saml.saml2.core.SubjectConfirmation;
 import org.opensaml.saml.saml2.core.SubjectConfirmationData;
-import stubidp.saml.utils.core.OpenSamlXmlObjectFactory;
 import stubidp.saml.hub.hub.domain.MatchingServiceHealthCheckRequest;
+import stubidp.saml.utils.core.OpenSamlXmlObjectFactory;
 
 import javax.inject.Inject;
+import java.time.Instant;
 import java.util.function.Function;
 
 public class MatchingServiceHealthCheckRequestToSamlAttributeQueryTransformer implements Function<MatchingServiceHealthCheckRequest,AttributeQuery> {
@@ -29,7 +29,7 @@ public class MatchingServiceHealthCheckRequestToSamlAttributeQueryTransformer im
 
         transformedQuery.setID(originalQuery.getId());
         transformedQuery.setIssuer(issuer);
-        transformedQuery.setIssueInstant(DateTime.now());
+        transformedQuery.setIssueInstant(Instant.now());
 
         Subject subject = samlObjectFactory.createSubject();
         NameID nameId = samlObjectFactory.createNameId(originalQuery.getPersistentId().getNameId());

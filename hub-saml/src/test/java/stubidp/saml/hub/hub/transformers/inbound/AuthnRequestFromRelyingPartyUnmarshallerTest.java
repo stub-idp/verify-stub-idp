@@ -1,7 +1,6 @@
 package stubidp.saml.hub.hub.transformers.inbound;
 
 import org.apache.commons.codec.binary.Base64;
-import org.joda.time.DateTime;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.opensaml.saml.saml2.core.Attribute;
@@ -31,6 +30,7 @@ import stubidp.utils.security.security.X509CertificateFactory;
 import java.net.URI;
 import java.security.PrivateKey;
 import java.security.PublicKey;
+import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
 
@@ -54,7 +54,7 @@ public class AuthnRequestFromRelyingPartyUnmarshallerTest extends OpenSAMLRunner
 
     @Test
     public void fromSamlMessage_shouldMapAuthnRequestToAuthnRequestFromRelyingParty() throws Exception {
-        DateTime issueInstant = new DateTime();
+        Instant issueInstant = Instant.now();
         SignatureImpl signature = new SignatureBuilder().buildObject();
 
         AuthnRequest authnRequest = new AuthnRequestBuilder().buildObject();

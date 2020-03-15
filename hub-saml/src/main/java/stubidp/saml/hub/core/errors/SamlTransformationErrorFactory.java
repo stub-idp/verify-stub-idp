@@ -1,20 +1,29 @@
 package stubidp.saml.hub.core.errors;
 
-import org.joda.time.DateTime;
 import stubidp.saml.extensions.validation.SamlValidationSpecificationFailure;
 import stubidp.saml.extensions.validation.SamlValidationSpecificationWarning;
-import stubidp.saml.extensions.validation.errors.*;
+import stubidp.saml.extensions.validation.errors.AuthnContextMissingError;
+import stubidp.saml.extensions.validation.errors.AuthnRequestFromTransactionValidationSpecification;
+import stubidp.saml.extensions.validation.errors.BearerSubjectConfirmationValidationSpecification;
+import stubidp.saml.extensions.validation.errors.DuplicateRequestIdValidationSpecificationFailure;
+import stubidp.saml.extensions.validation.errors.GenericHubProfileValidationSpecification;
+import stubidp.saml.extensions.validation.errors.InvalidAttributeLanguageInAssertion;
+import stubidp.saml.extensions.validation.errors.InvalidAttributeNameFormat;
+import stubidp.saml.extensions.validation.errors.RelayStateValidationSpecification;
+import stubidp.saml.extensions.validation.errors.RequestFreshnessValidationSpecification;
+import stubidp.saml.extensions.validation.errors.ResponseProcessingValidationSpecification;
+import stubidp.saml.extensions.validation.errors.SamlValidationSpecification;
 
 import javax.xml.namespace.QName;
 import java.net.URI;
+import java.time.Instant;
 
 import static java.text.MessageFormat.format;
 import static stubidp.saml.extensions.validation.errors.ResponseProcessingValidationSpecification.ATTRIBUTE_STATEMENT_EMPTY;
 
 public final class SamlTransformationErrorFactory {
 
-    private SamlTransformationErrorFactory() {
-    }
+    private SamlTransformationErrorFactory() {}
 
     public static SamlValidationSpecificationFailure duplicateRequestId(String requestId, String issuerId) {
         return new DuplicateRequestIdValidationSpecificationFailure(DuplicateRequestIdValidationSpecificationFailure.DUPLICATE_REQUEST_ID, requestId, issuerId);
@@ -200,7 +209,7 @@ public final class SamlTransformationErrorFactory {
         return new AuthnRequestFromTransactionValidationSpecification(AuthnRequestFromTransactionValidationSpecification.INCORRECT_VERSION);
     }
 
-    public static SamlValidationSpecificationFailure requestTooOld(String requestId, DateTime issueInstant, DateTime currentTime) {
+    public static SamlValidationSpecificationFailure requestTooOld(String requestId, Instant issueInstant, Instant currentTime) {
         return new RequestFreshnessValidationSpecification(RequestFreshnessValidationSpecification.REQUEST_TOO_OLD, requestId, issueInstant, currentTime);
     }
 
@@ -264,7 +273,7 @@ public final class SamlTransformationErrorFactory {
         return new BearerSubjectConfirmationValidationSpecification(BearerSubjectConfirmationValidationSpecification.NO_NOT_ON_OR_AFTER);
     }
 
-    public static SamlValidationSpecificationFailure exceededNotOnOrAfter(DateTime expiredTime) {
+    public static SamlValidationSpecificationFailure exceededNotOnOrAfter(Instant expiredTime) {
         return new BearerSubjectConfirmationValidationSpecification(format(BearerSubjectConfirmationValidationSpecification.EXCEEDED_NOT_ON_OR_AFTER, expiredTime));
     }
 

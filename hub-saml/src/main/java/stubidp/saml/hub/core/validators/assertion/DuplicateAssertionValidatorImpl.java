@@ -1,12 +1,12 @@
 package stubidp.saml.hub.core.validators.assertion;
 
-import org.joda.time.DateTime;
 import org.opensaml.saml.saml2.core.Assertion;
 import stubidp.saml.hub.core.errors.SamlTransformationErrorFactory;
 import stubidp.saml.hub.hub.exception.SamlValidationException;
 import stubidp.saml.hub.hub.validators.authnrequest.IdExpirationCache;
 
 import javax.inject.Inject;
+import java.time.Instant;
 
 public class DuplicateAssertionValidatorImpl implements DuplicateAssertionValidator {
 
@@ -33,13 +33,13 @@ public class DuplicateAssertionValidatorImpl implements DuplicateAssertionValida
         if (isDuplicateNonExpired(assertion))
             return false;
 
-        DateTime expire = assertion.getSubject().getSubjectConfirmations().get(0).getSubjectConfirmationData().getNotOnOrAfter();
+        Instant expire = assertion.getSubject().getSubjectConfirmations().get(0).getSubjectConfirmationData().getNotOnOrAfter();
         idExpirationCache.setExpiration(assertion.getID(), expire);
         return true;
     }
 
     private boolean isDuplicateNonExpired(Assertion assertion) {
         return idExpirationCache.contains(assertion.getID())
-                && idExpirationCache.getExpiration(assertion.getID()).isAfterNow();
+                && idExpirationCache.getExpiration(assertion.getID()).isAfter(Instant.now());
     }
 }

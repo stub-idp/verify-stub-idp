@@ -43,7 +43,7 @@ public class PassthroughAssertionUnmarshaller {
         Optional<AuthnContext> levelOfAssurance = Optional.empty();
         Optional<String> principalIpAddress = getPrincipalIpAddress(assertion.getAttributeStatements());
         if (!assertion.getAuthnStatements().isEmpty()) {
-            String levelOfAssuranceAsString = assertion.getAuthnStatements().get(0).getAuthnContext().getAuthnContextClassRef().getAuthnContextClassRef();
+            String levelOfAssuranceAsString = assertion.getAuthnStatements().get(0).getAuthnContext().getAuthnContextClassRef().getURI();
 
             levelOfAssurance = isEidas ?
                     Optional.ofNullable(authnContextFactory.mapFromEidasToLoA(levelOfAssuranceAsString)) :
@@ -55,7 +55,7 @@ public class PassthroughAssertionUnmarshaller {
         Optional<FraudDetectedDetails> fraudDetectedDetails = Optional.empty();
         if (levelOfAssurance.isPresent() && levelOfAssurance.get().equals(AuthnContext.LEVEL_X)) {
             String idpFraudEventId = getIdpFraudEventId(assertion.getAttributeStatements());
-            fraudDetectedDetails = Optional.ofNullable(new FraudDetectedDetails(idpFraudEventId, gpg45Status(assertion.getAttributeStatements())));
+            fraudDetectedDetails = Optional.of(new FraudDetectedDetails(idpFraudEventId, gpg45Status(assertion.getAttributeStatements())));
         }
 
         return new PassthroughAssertion(persistentId, levelOfAssurance, underlyingAssertion, fraudDetectedDetails, principalIpAddress);
@@ -63,7 +63,7 @@ public class PassthroughAssertionUnmarshaller {
 
     private Optional<String> getPrincipalIpAddress(List<AttributeStatement> attributeStatements) {
         Optional<XMLObject> attribute = getAttributeNamed(attributeStatements, IdaConstants.Attributes_1_1.IPAddress.NAME);
-        if (!attribute.isPresent()){
+        if (attribute.isEmpty()){
             return Optional.empty();
         }
         String ipAddress = ((IPAddress) attribute.get()).getValue();

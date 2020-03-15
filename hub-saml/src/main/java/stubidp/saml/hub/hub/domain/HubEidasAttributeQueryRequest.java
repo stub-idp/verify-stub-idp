@@ -1,11 +1,11 @@
 package stubidp.saml.hub.hub.domain;
 
-import org.joda.time.DateTime;
 import stubidp.saml.utils.core.domain.AuthnContext;
 import stubidp.saml.utils.core.domain.HubAssertion;
 import stubidp.saml.utils.core.domain.PersistentId;
 
 import java.net.URI;
+import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
 
@@ -19,7 +19,7 @@ public class HubEidasAttributeQueryRequest extends BaseHubAttributeQueryRequest 
     public HubEidasAttributeQueryRequest(
         String requestId,
         String issuer,
-        DateTime issueInstant,
+        Instant issueInstant,
         PersistentId persistentId, // FIXME - change to use new PersistenceId with equal and hashcode at both places
         URI assertionConsumerServiceUrl,
         String authnRequestIssuerEntityId,

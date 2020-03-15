@@ -38,6 +38,6 @@ public abstract class AuthenticationStatusUnmarshallerBase<T extends Enum, U ext
 
     private Optional<String> getStatusMessage(final Status samlStatus) {
         final StatusMessage statusMessage = samlStatus.getStatusMessage();
-        return statusMessage != null ? Optional.of(statusMessage.getMessage()) : Optional.empty();
+        return statusMessage != null ? Optional.of(statusMessage.getValue()) : Optional.empty();
     }
 }

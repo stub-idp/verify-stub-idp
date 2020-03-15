@@ -1,17 +1,17 @@
 package stubidp.saml.hub.hub.domain;
 
-import org.joda.time.DateTime;
 import org.opensaml.xmlsec.signature.Signature;
 import stubidp.saml.utils.core.domain.IdaSamlResponse;
 import stubidp.saml.utils.core.domain.PassthroughAssertion;
 
 import java.net.URI;
+import java.time.Instant;
 import java.util.Optional;
 
 public class InboundResponseFromIdp extends IdaSamlResponse {
     private Optional<PassthroughAssertion> matchingDatasetAssertion;
     private Optional<PassthroughAssertion> authnStatementAssertion;
-    private Optional<DateTime> notOnOrAfter;
+    private Optional<Instant> notOnOrAfter;
     private Optional<Signature> signature;
     private IdpIdaStatus status;
 
@@ -19,8 +19,8 @@ public class InboundResponseFromIdp extends IdaSamlResponse {
             String id,
             String inResponseTo,
             String issuer,
-            DateTime issueInstant,
-            Optional<DateTime> notOnOrAfter,
+            Instant issueInstant,
+            Optional<Instant> notOnOrAfter,
             IdpIdaStatus status,
             Optional<Signature> signature,
             Optional<PassthroughAssertion> matchingDatasetAssertion,
@@ -50,7 +50,7 @@ public class InboundResponseFromIdp extends IdaSamlResponse {
         return status;
     }
 
-    public Optional<DateTime> getNotOnOrAfter() {
+    public Optional<Instant> getNotOnOrAfter() {
         return notOnOrAfter;
     }
 }

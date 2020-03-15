@@ -1,6 +1,5 @@
 package stubidp.saml.hub.hub.transformers.inbound;
 
-import org.joda.time.DateTime;
 import org.opensaml.saml.saml2.core.Attribute;
 import org.opensaml.saml.saml2.core.AuthnRequest;
 import org.opensaml.saml.saml2.core.EncryptedAttribute;
@@ -14,6 +13,7 @@ import stubidp.saml.extensions.extensions.versioning.Version;
 import stubidp.saml.hub.hub.domain.AuthnRequestFromRelyingParty;
 
 import java.net.URI;
+import java.time.Instant;
 import java.util.Optional;
 
 import static java.util.Optional.ofNullable;
@@ -31,7 +31,7 @@ public class AuthnRequestFromRelyingPartyUnmarshaller {
     public AuthnRequestFromRelyingParty fromSamlMessage(AuthnRequest authnRequest) {
         final String id = authnRequest.getID();
         final String issuerId = authnRequest.getIssuer().getValue();
-        final DateTime issueInstant = authnRequest.getIssueInstant();
+        final Instant issueInstant = authnRequest.getIssueInstant();
         final Boolean forceAuthn = authnRequest.isForceAuthn();
         final Optional<String> assertionConsumerServiceURL = Optional.ofNullable(authnRequest.getAssertionConsumerServiceURL());
         final Integer assertionConsumerServiceIndex = authnRequest.getAssertionConsumerServiceIndex();

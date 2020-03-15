@@ -1,9 +1,9 @@
 package stubidp.saml.hub.hub.domain;
 
-import org.joda.time.DateTime;
 import org.opensaml.xmlsec.signature.Signature;
 
 import java.net.URI;
+import java.time.Instant;
 import java.util.Optional;
 
 public class AuthnRequestFromRelyingParty extends VerifySamlMessage {
@@ -20,7 +20,7 @@ public class AuthnRequestFromRelyingParty extends VerifySamlMessage {
     public AuthnRequestFromRelyingParty(
         String id,
         String issuer,
-        DateTime issueInstant,
+        Instant issueInstant,
         URI destination,
         Optional<Boolean> forceAuthentication,
         Optional<URI> assertionConsumerServiceUrl,

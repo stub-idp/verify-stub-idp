@@ -1,14 +1,14 @@
 package stubidp.saml.hub.hub.domain;
 
-import java.util.Optional;
-import javax.validation.constraints.NotNull;
-import org.joda.time.DateTime;
 import stubidp.saml.utils.core.domain.AuthnContext;
 import stubidp.saml.utils.core.domain.HubAssertion;
 import stubidp.saml.utils.core.domain.PersistentId;
 
+import javax.validation.constraints.NotNull;
 import java.net.URI;
+import java.time.Instant;
 import java.util.List;
+import java.util.Optional;
 
 public class HubAttributeQueryRequest extends BaseHubAttributeQueryRequest {
     private String encryptedAuthnAssertion;
@@ -25,7 +25,7 @@ public class HubAttributeQueryRequest extends BaseHubAttributeQueryRequest {
             String encryptedAuthnAssertion,
             Optional<HubAssertion> cycle3AttributeAssertion,
             Optional<List<UserAccountCreationAttribute>> userAccountCreationAttributes,
-            DateTime issueInstant,
+            Instant issueInstant,
             URI assertionConsumerServiceUrl,
             String authnRequestIssuerEntityId,
             AuthnContext authnContext,
@@ -37,7 +37,6 @@ public class HubAttributeQueryRequest extends BaseHubAttributeQueryRequest {
         this.authnContext = authnContext;
         this.encryptedMatchingDatasetAssertion = encryptedMatchingDatasetAssertion;
     }
-
 
     public Optional<HubAssertion> getCycle3AttributeAssertion() {
         return cycle3AttributeAssertion;

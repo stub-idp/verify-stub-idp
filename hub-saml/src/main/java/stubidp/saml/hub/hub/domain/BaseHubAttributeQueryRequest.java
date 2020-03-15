@@ -1,10 +1,10 @@
 package stubidp.saml.hub.hub.domain;
 
-import org.joda.time.DateTime;
 import stubidp.saml.utils.core.domain.IdaSamlMessage;
 import stubidp.saml.utils.core.domain.PersistentId;
 
 import java.net.URI;
+import java.time.Instant;
 
 public class BaseHubAttributeQueryRequest extends IdaSamlMessage {
     protected PersistentId persistentId;
@@ -13,7 +13,7 @@ public class BaseHubAttributeQueryRequest extends IdaSamlMessage {
 
     public BaseHubAttributeQueryRequest(String id,
                                         String issuer,
-                                        DateTime issueInstant,
+                                        Instant issueInstant,
                                         URI destination,
                                         PersistentId persistentId,
                                         URI assertionConsumerServiceUrl,

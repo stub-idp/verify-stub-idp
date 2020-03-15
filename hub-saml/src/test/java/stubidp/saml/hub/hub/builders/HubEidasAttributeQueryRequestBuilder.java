@@ -1,13 +1,13 @@
 package stubidp.saml.hub.hub.builders;
 
-import org.joda.time.DateTime;
+import stubidp.saml.hub.hub.domain.HubEidasAttributeQueryRequest;
+import stubidp.saml.hub.hub.domain.UserAccountCreationAttribute;
 import stubidp.saml.utils.core.domain.AuthnContext;
 import stubidp.saml.utils.core.domain.HubAssertion;
 import stubidp.saml.utils.core.domain.PersistentId;
-import stubidp.saml.hub.hub.domain.HubEidasAttributeQueryRequest;
-import stubidp.saml.hub.hub.domain.UserAccountCreationAttribute;
 
 import java.net.URI;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -32,7 +32,7 @@ public class HubEidasAttributeQueryRequestBuilder {
         return new HubEidasAttributeQueryRequest(
                 id,
                 hubEidasEntityId,
-                DateTime.now(),
+                Instant.now(),
                 persistentId,
                 assertionConsumerServiceUrl,
                 authnRequestIssuerEntityId,
@@ -79,10 +79,9 @@ public class HubEidasAttributeQueryRequestBuilder {
     }
 
     public HubEidasAttributeQueryRequestBuilder addUserAccountCreationAttribute(final UserAccountCreationAttribute userAccountCreationAttribute) {
-        if(!userAccountCreationAttributes.isPresent()){
+        if(userAccountCreationAttributes.isEmpty()){
            List<UserAccountCreationAttribute> userAccountCreationAttributeList = new ArrayList<>();
-
-           userAccountCreationAttributes = Optional.ofNullable(userAccountCreationAttributeList);
+           userAccountCreationAttributes = Optional.of(userAccountCreationAttributeList);
         }
         this.userAccountCreationAttributes.get().add(userAccountCreationAttribute);
         return this;

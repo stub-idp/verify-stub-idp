@@ -1,6 +1,5 @@
 package stubidp.saml.hub.hub.transformers.outbound;
 
-import org.joda.time.DateTime;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.opensaml.core.xml.XMLObject;
@@ -21,8 +20,8 @@ import stubidp.saml.extensions.extensions.RequestedAttributes;
 import stubidp.saml.extensions.extensions.SPType;
 import stubidp.saml.extensions.extensions.impl.RequestedAttributeImpl;
 import stubidp.saml.extensions.extensions.impl.SPTypeImpl;
-import stubidp.saml.hub.hub.domain.LevelOfAssurance;
 import stubidp.saml.hub.core.OpenSAMLRunner;
+import stubidp.saml.hub.hub.domain.LevelOfAssurance;
 import stubidp.saml.utils.core.OpenSamlXmlObjectFactory;
 import stubidp.saml.utils.core.domain.AuthnContext;
 import stubidp.saml.utils.core.transformers.AuthnContextFactory;
@@ -30,7 +29,7 @@ import stubidp.saml.utils.hub.domain.EidasAuthnRequestFromHub;
 
 import javax.xml.namespace.QName;
 import java.net.URI;
-import java.util.Arrays;
+import java.time.Instant;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -57,12 +56,12 @@ public class EidasAuthnRequestFromHubToAuthnRequestTransformerTest extends OpenS
     @Test
     public void shouldApplyNameIdPolicy() {
         EidasAuthnRequestFromHub request = new EidasAuthnRequestFromHub(
-            "theId",
-            "theIssuer",
-            DateTime.now(),
-            Arrays.asList(AuthnContext.LEVEL_2),
-            URI.create("theUri"),
-            "theProviderName"
+                "theId",
+                "theIssuer",
+                Instant.now(),
+                Collections.singletonList(AuthnContext.LEVEL_2),
+                URI.create("theUri"),
+                "theProviderName"
         );
 
         AuthnRequest authnRequest = transformer.apply(request);
@@ -101,7 +100,7 @@ public class EidasAuthnRequestFromHubToAuthnRequestTransformerTest extends OpenS
         RequestedAuthnContext requestedAuthnContext = transformedRequest.getRequestedAuthnContext();
         assertThat(requestedAuthnContext.getComparison()).isEqualTo(AuthnContextComparisonTypeEnumeration.MINIMUM);
         AuthnContextClassRef authnContextClassRef = requestedAuthnContext.getAuthnContextClassRefs().get(0);
-        assertThat(authnContextClassRef.getAuthnContextClassRef()).isEqualTo(LevelOfAssurance.SUBSTANTIAL.toString());
+        assertThat(authnContextClassRef.getURI()).isEqualTo(LevelOfAssurance.SUBSTANTIAL.toString());
     }
 
     @Test
