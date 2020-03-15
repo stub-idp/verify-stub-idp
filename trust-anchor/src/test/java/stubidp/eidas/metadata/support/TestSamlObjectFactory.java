@@ -101,7 +101,7 @@ public class TestSamlObjectFactory {
 
     public AuthnContextClassRef createAuthnContextClassReference(String authnContextUrn) {
         AuthnContextClassRef authnContextClassRef = (AuthnContextClassRef) openSamlBuilderFactory.getBuilder(AuthnContextClassRef.DEFAULT_ELEMENT_NAME).buildObject(AuthnContextClassRef.DEFAULT_ELEMENT_NAME);
-        authnContextClassRef.setAuthnContextClassRef(authnContextUrn);
+        authnContextClassRef.setURI(authnContextUrn);
         return authnContextClassRef;
     }
 
@@ -136,8 +136,7 @@ public class TestSamlObjectFactory {
 
     private Audience createAudience(String audienceId) {
         Audience audience = (Audience) openSamlBuilderFactory.getBuilder(Audience.DEFAULT_ELEMENT_NAME).buildObject(Audience.DEFAULT_ELEMENT_NAME);
-        audience.setAudienceURI(audienceId);
-
+        audience.setURI(audienceId);
         return audience;
     }
 

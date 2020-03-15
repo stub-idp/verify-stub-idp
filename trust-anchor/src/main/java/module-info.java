@@ -11,7 +11,8 @@ module stubidp.trust.anchor {
     requires org.opensaml.security;
     requires org.opensaml.xmlsec;
     requires java.xml;
-    requires xmlsec;
+    requires org.apache.santuario.xmlsec;
+    requires org.bouncycastle.provider;
     requires net.shibboleth.utilities.java.support;
     requires stubidp.saml.extensions;
     requires stubidp.saml.serializers;

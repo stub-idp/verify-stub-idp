@@ -1,7 +1,6 @@
 package stubidp.eidas.metadata.support.builders;
 
 import com.google.common.base.Strings;
-import org.joda.time.DateTime;
 import org.opensaml.core.xml.config.XMLObjectProviderRegistrySupport;
 import org.opensaml.core.xml.io.MarshallingException;
 import org.opensaml.saml.saml2.core.Assertion;
@@ -19,6 +18,7 @@ import org.opensaml.xmlsec.signature.support.SignatureException;
 import org.opensaml.xmlsec.signature.support.Signer;
 import stubidp.eidas.metadata.support.TestSamlObjectFactory;
 
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -44,7 +44,7 @@ public class ResponseBuilder {
 
     private Optional<Issuer> issuer = ofNullable(IssuerBuilder.anIssuer().build());
     private Optional<String> id = ofNullable(DEFAULT_RESPONSE_ID);
-    private Optional<DateTime> issueInstant = ofNullable(DateTime.now());
+    private Optional<Instant> issueInstant = ofNullable(Instant.now());
     private Optional<String> inResponseTo = ofNullable(DEFAULT_REQUEST_ID);
     private Optional<Status> status = ofNullable(getStatus());
     private Optional<Credential> signingCredential = empty();

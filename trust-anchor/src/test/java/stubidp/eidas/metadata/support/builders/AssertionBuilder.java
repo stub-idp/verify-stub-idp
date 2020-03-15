@@ -1,6 +1,5 @@
 package stubidp.eidas.metadata.support.builders;
 
-import org.joda.time.DateTime;
 import org.opensaml.core.xml.config.XMLObjectProviderRegistrySupport;
 import org.opensaml.core.xml.io.MarshallingException;
 import org.opensaml.saml.common.SAMLVersion;
@@ -17,6 +16,7 @@ import org.opensaml.xmlsec.signature.support.Signer;
 import stubidp.eidas.metadata.support.TestSamlObjectFactory;
 import stubidp.saml.extensions.extensions.IPAddress;
 
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -37,7 +37,7 @@ public class AssertionBuilder {
     private Optional<Issuer> issuer = ofNullable(IssuerBuilder.anIssuer().build());
     private Optional<Signature> signature = ofNullable(SignatureBuilder.aSignature().build());
     private Optional<Conditions> conditions = ofNullable(ConditionsBuilder.aConditions().build());
-    private Optional<DateTime> issueInstant = ofNullable(DateTime.now());
+    private Optional<Instant> issueInstant = ofNullable(Instant.now());
 
     public static AssertionBuilder anAssertion() {
         return new AssertionBuilder();
