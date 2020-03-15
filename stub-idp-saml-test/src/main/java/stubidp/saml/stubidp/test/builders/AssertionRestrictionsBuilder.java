@@ -1,11 +1,13 @@
 package stubidp.saml.stubidp.test.builders;
 
-import org.joda.time.DateTime;
 import stubidp.saml.utils.core.domain.AssertionRestrictions;
+
+import java.time.Instant;
+import java.time.ZoneId;
 
 public class AssertionRestrictionsBuilder {
 
-    private DateTime notOnOrAfter = DateTime.now().plusDays(2);
+    private Instant notOnOrAfter = Instant.now().atZone(ZoneId.of("UTC")).plusDays(2).toInstant();
     private String inResponseTo = "default-in-response-to";
     private String recipient = "recipient";
 
@@ -20,7 +22,7 @@ public class AssertionRestrictionsBuilder {
                 recipient);
     }
 
-    public AssertionRestrictionsBuilder withNotOnOrAfter(DateTime notOnOrAfter) {
+    public AssertionRestrictionsBuilder withNotOnOrAfter(Instant notOnOrAfter) {
         this.notOnOrAfter = notOnOrAfter;
         return this;
     }

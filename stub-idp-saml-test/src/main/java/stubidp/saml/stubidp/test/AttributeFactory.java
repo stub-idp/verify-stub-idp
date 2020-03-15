@@ -16,10 +16,9 @@ import stubidp.saml.extensions.extensions.eidas.impl.CurrentGivenNameBuilder;
 import stubidp.saml.extensions.extensions.eidas.impl.DateOfBirthBuilder;
 import stubidp.saml.extensions.extensions.eidas.impl.EidasGenderBuilder;
 import stubidp.saml.extensions.extensions.eidas.impl.PersonIdentifierBuilder;
+import stubidp.saml.extensions.extensions.impl.BaseMdsSamlObjectUnmarshaller;
 
 import java.util.Arrays;
-
-import static stubidp.saml.extensions.extensions.eidas.impl.DateOfBirthImpl.DATE_OF_BIRTH_FORMAT;
 
 public class AttributeFactory {
 
@@ -58,7 +57,7 @@ public class AttributeFactory {
 
     public static Attribute dateOfBirthAttribute(String dateOfBirth) {
         DateOfBirth dateOfBirthAttributeValue = new DateOfBirthBuilder().buildObject();
-        dateOfBirthAttributeValue.setDateOfBirth(DATE_OF_BIRTH_FORMAT.parseLocalDate("1965-01-01"));
+        dateOfBirthAttributeValue.setDateOfBirth(BaseMdsSamlObjectUnmarshaller.InstantFromDate.of("1965-01-01"));
         return buildAttribute(Eidas_Attributes.DateOfBirth.FRIENDLY_NAME, Eidas_Attributes.DateOfBirth.NAME, dateOfBirthAttributeValue);
     }
 

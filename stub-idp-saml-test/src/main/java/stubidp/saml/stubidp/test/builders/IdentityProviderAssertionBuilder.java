@@ -1,12 +1,12 @@
 package stubidp.saml.stubidp.test.builders;
 
-import org.joda.time.DateTime;
 import stubidp.saml.utils.core.domain.AssertionRestrictions;
 import stubidp.saml.utils.core.domain.IdentityProviderAssertion;
-import stubidp.saml.utils.core.domain.PersistentId;
 import stubidp.saml.utils.core.domain.IdentityProviderAuthnStatement;
 import stubidp.saml.utils.core.domain.MatchingDataset;
+import stubidp.saml.utils.core.domain.PersistentId;
 
+import java.time.Instant;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -14,7 +14,7 @@ public class IdentityProviderAssertionBuilder {
 
     private String id = "assertion-id" + UUID.randomUUID();
     private String issuerId = "assertion issuer id";
-    private DateTime issueInstant = DateTime.now();
+    private Instant issueInstant = Instant.now();
     private PersistentId persistentId = PersistentIdBuilder.aPersistentId().build();
     private AssertionRestrictions assertionRestrictions = AssertionRestrictionsBuilder.anAssertionRestrictions().build();
     private Optional<MatchingDataset> matchingDataset = Optional.empty();
@@ -45,7 +45,7 @@ public class IdentityProviderAssertionBuilder {
         return this;
     }
 
-    public IdentityProviderAssertionBuilder withIssueInstant(DateTime issueInstant) {
+    public IdentityProviderAssertionBuilder withIssueInstant(Instant issueInstant) {
         this.issueInstant = issueInstant;
         return this;
     }
