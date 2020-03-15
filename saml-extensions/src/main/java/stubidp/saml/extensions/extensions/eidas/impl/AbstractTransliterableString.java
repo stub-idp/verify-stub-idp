@@ -1,9 +1,9 @@
 package stubidp.saml.extensions.extensions.eidas.impl;
 
-import org.opensaml.saml.common.AbstractSAMLObject;
+import org.opensaml.core.xml.schema.impl.XSAnyImpl;
 import stubidp.saml.extensions.extensions.eidas.TransliterableString;
 
-public abstract class AbstractTransliterableString extends AbstractSAMLObject implements TransliterableString {
+public abstract class AbstractTransliterableString extends XSAnyImpl implements TransliterableString {
 
     private Boolean isLatinScript = true;
 

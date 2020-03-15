@@ -4,6 +4,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import stubidp.saml.Utils;
 import stubidp.saml.extensions.extensions.eidas.DateOfBirth;
+import stubidp.saml.extensions.extensions.impl.BaseMdsSamlObjectMarshaller;
 import stubidp.saml.test.OpenSAMLRunner;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -21,6 +22,6 @@ public class DateOfBirthUnmarshallerTest extends OpenSAMLRunner {
                 "</saml2:AttributeValue>"
         );
 
-        assertThat(dateOfBirth.getDateOfBirth().toString()).isEqualTo("1965-01-01");
+        assertThat(BaseMdsSamlObjectMarshaller.DateFromInstant.of(dateOfBirth.getDateOfBirth())).isEqualTo("1965-01-01");
     }
 }

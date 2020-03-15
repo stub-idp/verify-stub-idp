@@ -4,14 +4,14 @@ package stubidp.saml.extensions.extensions.impl;
 import org.opensaml.core.xml.XMLObject;
 import org.opensaml.core.xml.io.Marshaller;
 import org.opensaml.core.xml.io.Unmarshaller;
-import org.opensaml.saml.common.AbstractSAMLObject;
+import org.opensaml.core.xml.schema.impl.XSAnyImpl;
 import stubidp.saml.extensions.extensions.Verified;
 
 import javax.xml.namespace.QName;
 import java.util.ArrayList;
 import java.util.List;
 
-public class VerifiedImpl extends AbstractSAMLObject implements Verified {
+public class VerifiedImpl extends XSAnyImpl implements Verified {
     public static final Marshaller MARSHALLER = new BooleanBasedMdsAttributeValueMarshaller(Verified.TYPE_LOCAL_NAME);
     public static final Unmarshaller UNMARSHALLER = new BooleanBasedMdsAttributeValueUnmarshaller();
 

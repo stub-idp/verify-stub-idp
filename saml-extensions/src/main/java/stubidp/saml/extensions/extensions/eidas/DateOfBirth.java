@@ -1,11 +1,11 @@
 package stubidp.saml.extensions.extensions.eidas;
 
-import org.joda.time.LocalDate;
 import org.opensaml.saml.common.xml.SAMLConstants;
 import org.opensaml.saml.saml2.core.AttributeValue;
 import stubidp.saml.extensions.IdaConstants;
 
 import javax.xml.namespace.QName;
+import java.time.Instant;
 
 import static stubidp.saml.extensions.IdaConstants.EIDAS_NATURAL_PERSON_NS;
 
@@ -28,12 +28,12 @@ public interface DateOfBirth extends AttributeValue {
      *
      * @return the date of birth
      */
-    public LocalDate getDateOfBirth();
+    Instant getDateOfBirth();
 
     /**
      * Sets the date of birth.
      *
      * @param dateOfBirth the date of birth
      */
-    public void setDateOfBirth(LocalDate dateOfBirth);
+    void setDateOfBirth(Instant dateOfBirth);
 }

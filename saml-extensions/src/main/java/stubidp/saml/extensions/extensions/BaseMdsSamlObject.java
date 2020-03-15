@@ -1,18 +1,20 @@
 package stubidp.saml.extensions.extensions;
 
+import java.time.Instant;
+
 public interface BaseMdsSamlObject {
 
     String FROM_ATTRIB_NAME = "From";
     String TO_ATTRIB_NAME = "To";
     String VERIFIED_ATTRIB_NAME = "Verified";
 
-    org.joda.time.DateTime getFrom();
+    Instant getFrom();
 
-    void setFrom(org.joda.time.DateTime fromTime);
+    void setFrom(Instant fromTime);
 
-    org.joda.time.DateTime getTo();
+    Instant getTo();
 
-    void setTo(org.joda.time.DateTime toTime);
+    void setTo(Instant toTime);
 
     boolean getVerified();
 

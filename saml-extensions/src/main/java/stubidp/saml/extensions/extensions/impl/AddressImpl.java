@@ -1,8 +1,7 @@
 package stubidp.saml.extensions.extensions.impl;
 
-import org.joda.time.DateTime;
 import org.opensaml.core.xml.XMLObject;
-import org.opensaml.saml.common.AbstractSAMLObject;
+import org.opensaml.core.xml.schema.impl.XSAnyImpl;
 import stubidp.saml.extensions.extensions.Address;
 import stubidp.saml.extensions.extensions.InternationalPostCode;
 import stubidp.saml.extensions.extensions.Line;
@@ -10,15 +9,16 @@ import stubidp.saml.extensions.extensions.PostCode;
 import stubidp.saml.extensions.extensions.UPRN;
 
 import javax.xml.namespace.QName;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class AddressImpl extends AbstractSAMLObject implements Address {
+public class AddressImpl extends XSAnyImpl implements Address {
     private List<Line> lines = new ArrayList<>();
     private PostCode postCode;
-    private DateTime from;
-    private DateTime to;
+    private Instant from;
+    private Instant to;
     private InternationalPostCode internationalPostCode;
     private UPRN uprn;
     private boolean verified;
@@ -33,22 +33,22 @@ public class AddressImpl extends AbstractSAMLObject implements Address {
     }
 
     @Override
-    public DateTime getFrom() {
+    public Instant getFrom() {
         return from;
     }
 
     @Override
-    public void setFrom(DateTime from) {
+    public void setFrom(Instant from) {
         this.from = prepareForAssignment(this.from, from);
     }
 
     @Override
-    public DateTime getTo() {
+    public Instant getTo() {
         return to;
     }
 
     @Override
-    public void setTo(DateTime to) {
+    public void setTo(Instant to) {
         this.to = prepareForAssignment(this.to, to);
     }
 

@@ -1,10 +1,6 @@
 package stubidp.saml.extensions.extensions.impl;
 
-import org.joda.time.DateTime;
-import org.joda.time.DateTimeZone;
-import org.joda.time.format.DateTimeFormat;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import stubidp.saml.Utils;
 import stubidp.saml.extensions.extensions.Address;
 import stubidp.saml.extensions.extensions.Line;
@@ -15,13 +11,14 @@ import java.util.List;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class AddressUnmarshallerTest extends OpenSAMLRunner {
+
     @Test
     public void unmarshall_shouldUnmarshallAnAddress() throws Exception {
         String line1Value = "1 Cherry Cottage";
         String line2Value = "Wurpel Lane";
         String postCodeValue = "RG99 1YY";
-        DateTime fromDateValue = DateTime.parse("1969-01-11", DateTimeFormat.forPattern("yyyy-MM-dd").withZone(DateTimeZone.UTC));
-        DateTime toDateValue = DateTime.parse("1969-02-11", DateTimeFormat.forPattern("yyyy-MM-dd").withZone(DateTimeZone.UTC));
+        String fromDateValue = "1969-01-11";
+        String toDateValue = "1969-02-11";
         String internationalPostCodeValue = "RG98 1ZZ";
         String uprn = "672347923456";
         boolean verifiedValue = true;
@@ -37,8 +34,8 @@ public class AddressUnmarshallerTest extends OpenSAMLRunner {
 
         Address address = Utils.unmarshall(addressXmlString);
 
-        org.assertj.jodatime.api.Assertions.assertThat(address.getFrom()).isEqualTo(fromDateValue);
-        org.assertj.jodatime.api.Assertions.assertThat(address.getTo()).isEqualTo(toDateValue);
+        assertThat(BaseMdsSamlObjectMarshaller.DateFromInstant.of(address.getFrom())).isEqualTo(fromDateValue);
+        assertThat(BaseMdsSamlObjectMarshaller.DateFromInstant.of(address.getTo())).isEqualTo(toDateValue);
         assertThat(address.getVerified()).isEqualTo(verifiedValue);
         List<Line> lines = address.getLines();
         assertThat(lines.size()).isEqualTo(2);
@@ -51,7 +48,7 @@ public class AddressUnmarshallerTest extends OpenSAMLRunner {
 
     @Test
     public void unmarshall_shouldUnmarshallVerifiedWhenTrue() throws Exception {
-        String addressXmlString = createAddressXmlString("", "", "", "", DateTime.now(), DateTime.now(), true, "");
+        String addressXmlString = createAddressXmlString("", "", "", "", "2020-03-15", "2020-03-15", true, "");
 
         Address address = Utils.unmarshall(addressXmlString);
 
@@ -60,7 +57,7 @@ public class AddressUnmarshallerTest extends OpenSAMLRunner {
 
     @Test
     public void unmarshall_shouldUnmarshallVerifiedWhenFalse() throws Exception {
-        String addressXmlString = createAddressXmlString("", "", "", "", DateTime.now(), DateTime.now(), false, "");
+        String addressXmlString = createAddressXmlString("", "", "", "", "2020-03-15", "2020-03-15", false, "");
 
         Address address = Utils.unmarshall(addressXmlString);
 
@@ -88,8 +85,8 @@ public class AddressUnmarshallerTest extends OpenSAMLRunner {
             String line2Value,
             String internationalPostCodeValue,
             String postCodeValue,
-            DateTime fromDateValue,
-            DateTime toDateValue,
+            String fromDateValue,
+            String toDateValue,
             boolean verifiedValue,
             String uprn) {
 
@@ -108,8 +105,8 @@ public class AddressUnmarshallerTest extends OpenSAMLRunner {
                 "    <ida:InternationalPostCode>%s</ida:InternationalPostCode>\n" +
                 "    <ida:UPRN>%s</ida:UPRN>\n" +
                 "  </saml:AttributeValue>",
-                fromDateValue.toString("yyyy-MM-dd"),
-                toDateValue.toString("yyyy-MM-dd"),
+                fromDateValue,
+                toDateValue,
                 verifiedValue,
                 line1Value,
                 line2Value,

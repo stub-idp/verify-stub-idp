@@ -1,21 +1,17 @@
 package stubidp.saml.extensions.extensions.eidas.impl;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
-import org.joda.time.LocalDate;
-import org.joda.time.format.DateTimeFormat;
-import org.joda.time.format.DateTimeFormatter;
 import org.opensaml.core.xml.XMLObject;
-import org.opensaml.saml.common.AbstractSAMLObject;
+import org.opensaml.core.xml.schema.impl.XSAnyImpl;
 import stubidp.saml.extensions.extensions.eidas.DateOfBirth;
 
+import java.time.Instant;
 import java.util.List;
 
-public class DateOfBirthImpl extends AbstractSAMLObject implements DateOfBirth {
-
-    public static final DateTimeFormatter DATE_OF_BIRTH_FORMAT = DateTimeFormat.forPattern("yyyy-MM-dd");
+public class DateOfBirthImpl extends XSAnyImpl implements DateOfBirth {
 
     /** String to hold the date of birth. */
-    private LocalDate dateOfBirth;
+    private Instant dateOfBirth;
 
     /**
      * Constructor.
@@ -29,12 +25,12 @@ public class DateOfBirthImpl extends AbstractSAMLObject implements DateOfBirth {
     }
 
     /** {@inheritDoc} */
-    public LocalDate getDateOfBirth() {
+    public Instant getDateOfBirth() {
         return dateOfBirth;
     }
 
     /** {@inheritDoc} */
-    public void setDateOfBirth(LocalDate dob) {
+    public void setDateOfBirth(Instant dob) {
         dateOfBirth = prepareForAssignment(dateOfBirth, dob);
     }
 

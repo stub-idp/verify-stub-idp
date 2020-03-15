@@ -2,12 +2,12 @@ package stubidp.saml.extensions.extensions.eidas.impl;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.opensaml.core.xml.XMLObject;
-import org.opensaml.saml.common.AbstractSAMLObject;
+import org.opensaml.core.xml.schema.impl.XSAnyImpl;
 import stubidp.saml.extensions.extensions.eidas.BirthName;
 
 import java.util.List;
 
-public class BirthNameImpl extends AbstractSAMLObject implements BirthName {
+public class BirthNameImpl extends XSAnyImpl implements BirthName {
 
     /** String to hold the birth name. */
     private String birthName;

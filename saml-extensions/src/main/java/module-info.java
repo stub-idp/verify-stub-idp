@@ -1,5 +1,7 @@
 @SuppressWarnings({"requires-automatic", "requires-transitive-automatic"})
 module stubidp.saml.extensions {
+    opens stubidp.saml.extensions.extensions.impl;
+
     exports stubidp.saml.extensions;
     exports stubidp.saml.extensions.domain;
     exports stubidp.saml.extensions.extensions;
@@ -11,8 +13,8 @@ module stubidp.saml.extensions {
     exports stubidp.saml.extensions.extensions.versioning.application;
     exports stubidp.saml.extensions.extensions.impl;
 
-    requires xmlsec;
-    requires bcprov.jdk15on;
+    requires org.apache.santuario.xmlsec;
+    requires org.bouncycastle.provider;
     requires org.opensaml.xmlsec;
     requires org.opensaml.xmlsec.impl;
 

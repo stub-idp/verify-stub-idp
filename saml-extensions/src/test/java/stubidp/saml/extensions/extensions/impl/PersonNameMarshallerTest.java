@@ -3,14 +3,12 @@ package stubidp.saml.extensions.extensions.impl;
 import net.shibboleth.utilities.java.support.xml.XMLConstants;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.opensaml.core.xml.config.XMLObjectProviderRegistrySupport;
 import org.opensaml.core.xml.io.Marshaller;
 import org.opensaml.core.xml.io.MarshallingException;
 import org.w3c.dom.Element;
 import stubidp.saml.extensions.IdaConstants;
 import stubidp.saml.extensions.extensions.PersonName;
-import stubidp.saml.extensions.extensions.impl.PersonNameBuilder;
 import stubidp.saml.test.OpenSAMLRunner;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -54,7 +52,7 @@ public class PersonNameMarshallerTest extends OpenSAMLRunner {
     @Test
     public void marshall_shouldMarshallFromDateInCorrectFormat() throws Exception {
         String fromDate = "2012-02-09";
-        personName.setFrom(org.joda.time.DateTime.parse(fromDate));
+        personName.setFrom(BaseMdsSamlObjectUnmarshaller.InstantFromDate.of(fromDate));
 
         Element marshalledElement = marshaller.marshall(personName);
 
@@ -63,7 +61,7 @@ public class PersonNameMarshallerTest extends OpenSAMLRunner {
 
     @Test
     public void marshall_shouldMarshallFromDateWithNamespacePrefix() throws Exception {
-        personName.setFrom(org.joda.time.DateTime.parse("2012-02-09"));
+        personName.setFrom(BaseMdsSamlObjectUnmarshaller.InstantFromDate.of("2012-02-09"));
 
         Element marshalledElement = marshaller.marshall(personName);
 
@@ -73,7 +71,7 @@ public class PersonNameMarshallerTest extends OpenSAMLRunner {
     @Test
     public void marshall_shouldMarshallToDateInCorrectFormat() throws Exception {
         String toDate = "2012-02-09";
-        personName.setTo(org.joda.time.DateTime.parse(toDate));
+        personName.setTo(BaseMdsSamlObjectUnmarshaller.InstantFromDate.of(toDate));
 
         Element marshalledElement = marshaller.marshall(personName);
 
@@ -82,7 +80,7 @@ public class PersonNameMarshallerTest extends OpenSAMLRunner {
 
     @Test
     public void marshall_shouldMarshallToDateWithNamespacePrefix() throws Exception {
-        personName.setTo(org.joda.time.DateTime.parse("2012-02-09"));
+        personName.setTo(BaseMdsSamlObjectUnmarshaller.InstantFromDate.of("2012-02-09"));
 
         Element marshalledElement = marshaller.marshall(personName);
 

@@ -1,13 +1,8 @@
 package stubidp.saml.extensions.extensions.impl;
 
 import net.shibboleth.utilities.java.support.xml.XMLConstants;
-import org.joda.time.DateTime;
-import org.joda.time.DateTimeZone;
-import org.joda.time.format.DateTimeFormat;
-import org.joda.time.format.ISODateTimeFormat;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.opensaml.core.xml.config.XMLObjectProviderRegistrySupport;
 import org.opensaml.core.xml.io.Marshaller;
 import org.opensaml.core.xml.io.MarshallingException;
@@ -99,7 +94,7 @@ public class AddressMarshallerTest extends OpenSAMLRunner {
     @Test
     public void marshall_shouldMarshallFromDateInCorrectFormat() throws Exception {
         String fromDate = "2012-02-09";
-        address.setFrom(DateTime.parse(fromDate, ISODateTimeFormat.date().withZoneUTC()));
+        address.setFrom(BaseMdsSamlObjectUnmarshaller.InstantFromDate.of(fromDate));
 
         Element marshalledElement = marshaller.marshall(address);
 
@@ -108,7 +103,7 @@ public class AddressMarshallerTest extends OpenSAMLRunner {
 
     @Test
     public void marshall_shouldMarshallFromDateWithNamespacePrefix() throws Exception {
-        address.setFrom(DateTime.parse("2012-02-09"));
+        address.setFrom(BaseMdsSamlObjectUnmarshaller.InstantFromDate.of("2012-02-09"));
 
         Element marshalledElement = marshaller.marshall(address);
 
@@ -118,7 +113,7 @@ public class AddressMarshallerTest extends OpenSAMLRunner {
     @Test
     public void marshall_shouldMarshallToDateInCorrectFormat() throws Exception {
         String toDate = "2012-02-09";
-        address.setTo(DateTime.parse(toDate, ISODateTimeFormat.date().withZoneUTC()));
+        address.setTo(BaseMdsSamlObjectUnmarshaller.InstantFromDate.of(toDate));
 
         Element marshalledElement = marshaller.marshall(address);
 
@@ -127,7 +122,7 @@ public class AddressMarshallerTest extends OpenSAMLRunner {
 
     @Test
     public void marshall_shouldMarshallToDateWithNamespacePrefix() throws Exception {
-        address.setTo(DateTime.parse("2012-02-09"));
+        address.setTo(BaseMdsSamlObjectUnmarshaller.InstantFromDate.of("2012-02-09"));
 
         Element marshalledElement = marshaller.marshall(address);
 
@@ -193,8 +188,8 @@ public class AddressMarshallerTest extends OpenSAMLRunner {
 
     private Address createAddress() {
         Address address = new AddressImpl(SAMLConstants.SAML20_NS, Address.DEFAULT_ELEMENT_LOCAL_NAME, SAMLConstants.SAML20_PREFIX);
-        address.setFrom(DateTime.parse(FROM_DATE, DateTimeFormat.forPattern("yyyy-MM-dd").withZone(DateTimeZone.UTC)));
-        address.setTo(DateTime.parse(TO_DATE, DateTimeFormat.forPattern("yyyy-MM-dd").withZone(DateTimeZone.UTC)));
+        address.setFrom(BaseMdsSamlObjectUnmarshaller.InstantFromDate.of(FROM_DATE));
+        address.setTo(BaseMdsSamlObjectUnmarshaller.InstantFromDate.of(TO_DATE));
 
         PostCode postCode = new PostCodeImpl(IDA_NS, PostCode.DEFAULT_ELEMENT_LOCAL_NAME, IDA_PREFIX);
         postCode.setValue(POST_CODE_VALUE);

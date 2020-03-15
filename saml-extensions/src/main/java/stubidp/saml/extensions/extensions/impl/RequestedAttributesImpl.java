@@ -5,7 +5,7 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 import org.opensaml.core.xml.XMLObject;
 import org.opensaml.core.xml.io.Marshaller;
 import org.opensaml.core.xml.io.Unmarshaller;
-import org.opensaml.saml.common.AbstractSAMLObject;
+import org.opensaml.core.xml.schema.impl.XSAnyImpl;
 import org.opensaml.saml.common.AbstractSAMLObjectMarshaller;
 import stubidp.saml.extensions.extensions.RequestedAttribute;
 import stubidp.saml.extensions.extensions.RequestedAttributes;
@@ -15,7 +15,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-public class RequestedAttributesImpl extends AbstractSAMLObject implements RequestedAttributes {
+public class RequestedAttributesImpl extends XSAnyImpl implements RequestedAttributes {
 
     public static final Marshaller MARSHALLER = new AbstractSAMLObjectMarshaller() { };
     public static final Unmarshaller UNMARSHALLER = new RequestedAttributesUnmarshaller();

@@ -2,12 +2,12 @@ package stubidp.saml.extensions.extensions.eidas.impl;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.opensaml.core.xml.XMLObject;
-import org.opensaml.saml.common.AbstractSAMLObject;
+import org.opensaml.core.xml.schema.impl.XSAnyImpl;
 import stubidp.saml.extensions.extensions.eidas.CurrentAddress;
 
 import java.util.List;
 
-public class CurrentAddressImpl extends AbstractSAMLObject implements CurrentAddress {
+public class CurrentAddressImpl extends XSAnyImpl implements CurrentAddress {
 
     /** String to hold the address in base64 encoded. */
     private String currentAddressInBase64Encoded;

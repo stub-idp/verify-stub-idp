@@ -2,12 +2,12 @@ package stubidp.saml.extensions.extensions.eidas.impl;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.opensaml.core.xml.XMLObject;
-import org.opensaml.saml.common.AbstractSAMLObject;
+import org.opensaml.core.xml.schema.impl.XSAnyImpl;
 import stubidp.saml.extensions.extensions.eidas.PlaceOfBirth;
 
 import java.util.List;
 
-public class PlaceOfBirthImpl extends AbstractSAMLObject implements PlaceOfBirth {
+public class PlaceOfBirthImpl extends XSAnyImpl implements PlaceOfBirth {
 
     /** String to hold the place of birth. */
     private String placeOfBirth;

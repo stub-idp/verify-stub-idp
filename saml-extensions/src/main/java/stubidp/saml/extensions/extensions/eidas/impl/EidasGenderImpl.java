@@ -2,12 +2,12 @@ package stubidp.saml.extensions.extensions.eidas.impl;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.opensaml.core.xml.XMLObject;
-import org.opensaml.saml.common.AbstractSAMLObject;
+import org.opensaml.core.xml.schema.impl.XSAnyImpl;
 import stubidp.saml.extensions.extensions.eidas.EidasGender;
 
 import java.util.List;
 
-public class EidasGenderImpl extends AbstractSAMLObject implements EidasGender {
+public class EidasGenderImpl extends XSAnyImpl implements EidasGender {
 
     /** String to hold the gender value. */
     private String value;

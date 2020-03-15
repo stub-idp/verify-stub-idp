@@ -11,8 +11,18 @@ import stubidp.saml.extensions.IdaConstants;
 import stubidp.saml.extensions.extensions.BaseMdsSamlObject;
 
 import javax.xml.namespace.QName;
+import java.time.Instant;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 
 public class BaseMdsSamlObjectMarshaller extends AbstractSAMLObjectMarshaller {
+
+    public static class DateFromInstant {
+        private static final DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ISO_LOCAL_DATE.withZone(ZoneId.of("UTC"));
+        public static String of(Instant instant) {
+            return dateTimeFormatter.format(instant);
+        }
+    }
 
     private final String xsiType;
 
@@ -35,10 +45,10 @@ public class BaseMdsSamlObjectMarshaller extends AbstractSAMLObjectMarshaller {
         }
 
         if (simpleValueSamlObject.getFrom() != null) {
-            XMLObjectSupport.marshallAttribute(new QName(IdaConstants.IDA_NS, BaseMdsSamlObject.FROM_ATTRIB_NAME, IdaConstants.IDA_PREFIX), simpleValueSamlObject.getFrom().toString(IdaConstants.DATETIME_FORMAT), domElement, false);
+            XMLObjectSupport.marshallAttribute(new QName(IdaConstants.IDA_NS, BaseMdsSamlObject.FROM_ATTRIB_NAME, IdaConstants.IDA_PREFIX), DateFromInstant.of(simpleValueSamlObject.getFrom()), domElement, false);
         }
         if (simpleValueSamlObject.getTo() != null) {
-            XMLObjectSupport.marshallAttribute(new QName(IdaConstants.IDA_NS, BaseMdsSamlObject.TO_ATTRIB_NAME, IdaConstants.IDA_PREFIX), simpleValueSamlObject.getTo().toString(IdaConstants.DATETIME_FORMAT), domElement, false);
+            XMLObjectSupport.marshallAttribute(new QName(IdaConstants.IDA_NS, BaseMdsSamlObject.TO_ATTRIB_NAME, IdaConstants.IDA_PREFIX), DateFromInstant.of(simpleValueSamlObject.getTo()), domElement, false);
         }
         XMLObjectSupport.marshallAttribute(new QName(IdaConstants.IDA_NS, BaseMdsSamlObject.VERIFIED_ATTRIB_NAME, IdaConstants.IDA_PREFIX), Boolean.toString(simpleValueSamlObject.getVerified()), domElement, false);
 
