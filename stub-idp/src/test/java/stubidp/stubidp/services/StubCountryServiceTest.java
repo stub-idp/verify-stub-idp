@@ -1,12 +1,12 @@
 package stubidp.stubidp.services;
 
-import org.joda.time.LocalDate;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import stubidp.saml.extensions.extensions.impl.BaseMdsSamlObjectUnmarshaller;
 import stubidp.saml.utils.core.domain.AuthnContext;
 import stubidp.stubidp.domain.DatabaseEidasUser;
 import stubidp.stubidp.domain.EidasAuthnRequest;
@@ -99,7 +99,7 @@ class StubCountryServiceTest {
     }
 
     private Optional<DatabaseEidasUser> newUser() {
-        return Optional.of(new DatabaseEidasUser("stub-country", UUID.randomUUID().toString(), "bar", createMdsValue("Jack"), Optional.of(createMdsValue("JackNonLatin")), createMdsValue("Griffin"), Optional.of(createMdsValue("GriffinNonLatin")), createMdsValue(LocalDate.parse("1983-06-21")), AuthnContext.LEVEL_2));
+        return Optional.of(new DatabaseEidasUser("stub-country", UUID.randomUUID().toString(), "bar", createMdsValue("Jack"), Optional.of(createMdsValue("JackNonLatin")), createMdsValue("Griffin"), Optional.of(createMdsValue("GriffinNonLatin")), createMdsValue(BaseMdsSamlObjectUnmarshaller.InstantFromDate.of("1983-06-21")), AuthnContext.LEVEL_2));
     }
 
     private static <T> MatchingDatasetValue<T> createMdsValue(T value) {

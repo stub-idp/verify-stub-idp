@@ -1,6 +1,5 @@
 package stubidp.stubidp.services;
 
-import org.joda.time.DateTime;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -10,6 +9,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.opensaml.saml.saml2.core.AuthnContextComparisonTypeEnumeration;
 import stubidp.saml.utils.hub.domain.IdaAuthnRequestFromHub;
+import stubidp.shared.repositories.MetadataRepository;
 import stubidp.stubidp.domain.FraudIndicator;
 import stubidp.stubidp.domain.IdpIdaStatus;
 import stubidp.stubidp.domain.OutboundResponseFromIdp;
@@ -17,11 +17,11 @@ import stubidp.stubidp.domain.factories.AssertionFactory;
 import stubidp.stubidp.repositories.Idp;
 import stubidp.stubidp.repositories.IdpSession;
 import stubidp.stubidp.repositories.IdpStubsRepository;
-import stubidp.shared.repositories.MetadataRepository;
 import stubidp.stubidp.saml.transformers.OutboundResponseFromIdpTransformerProvider;
 import stubidp.utils.rest.common.SessionId;
 
 import java.net.URI;
+import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
@@ -122,7 +122,7 @@ public class NonSuccessAuthnResponseServiceTest {
     @Test
     public void shouldBuildFraudResponse(){
         IdpSession session = new IdpSession(SessionId.createNewSessionId(),
-                IdaAuthnRequestFromHub.createRequestReceivedFromHub(REQUEST_ID, HUB_URI.toString(), List.of(LEVEL_2), false, DateTime.now(), AuthnContextComparisonTypeEnumeration.EXACT),
+                IdaAuthnRequestFromHub.createRequestReceivedFromHub(REQUEST_ID, HUB_URI.toString(), List.of(LEVEL_2), false, Instant.now(), AuthnContextComparisonTypeEnumeration.EXACT),
                 RELAY_STATE, null, null, null, null, null, null);
         nonSuccessAuthnResponseService.generateFraudResponse(IDP_NAME, REQUEST_ID, FraudIndicator.FI01, "ipAddress", session).getResponseString();
 

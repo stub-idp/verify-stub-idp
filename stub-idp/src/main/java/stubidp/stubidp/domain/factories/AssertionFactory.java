@@ -1,6 +1,5 @@
 package stubidp.stubidp.domain.factories;
 
-import org.joda.time.DateTime;
 import stubidp.saml.utils.core.domain.FraudAuthnDetails;
 import stubidp.saml.utils.core.domain.IdentityProviderAssertion;
 import stubidp.saml.utils.core.domain.IpAddress;
@@ -9,6 +8,7 @@ import stubidp.saml.utils.core.domain.PersistentId;
 import stubidp.stubidp.domain.DatabaseIdpUser;
 
 import javax.inject.Inject;
+import java.time.Instant;
 
 import static stubidp.saml.utils.core.domain.IdentityProviderAuthnStatement.createIdentityProviderFraudAuthnStatement;
 
@@ -38,7 +38,7 @@ public class AssertionFactory {
         return identityProviderAssertionFactory.createAuthnStatementAssertion(
                 createPersistentId(user.getPersistentId()),
                 issuerId,
-                createIdentityProviderFraudAuthnStatement(new FraudAuthnDetails(idpName + DateTime.now().toString() + inResponseToId, indicator), userIpAddress),
+                createIdentityProviderFraudAuthnStatement(new FraudAuthnDetails(idpName + Instant.now() + inResponseToId, indicator), userIpAddress),
                 assertionRestrictionsFactory.createRestrictionsForSendingToHub(inResponseToId)
         );
     }

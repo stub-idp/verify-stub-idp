@@ -5,7 +5,6 @@ import io.dropwizard.util.Duration;
 import io.prometheus.client.Collector;
 import io.prometheus.client.GaugeMetricFamily;
 import net.shibboleth.utilities.java.support.component.ComponentInitializationException;
-import org.joda.time.DateTime;
 import org.opensaml.saml.metadata.resolver.MetadataResolver;
 import org.opensaml.saml.metadata.resolver.impl.PredicateRoleDescriptorResolver;
 import org.opensaml.saml.saml2.core.AuthnRequest;
@@ -33,6 +32,7 @@ import stubidp.utils.security.security.verification.CertificateChainValidator;
 import stubidp.utils.security.security.verification.PKIXParametersProvider;
 
 import java.security.KeyStore;
+import java.time.Instant;
 import java.util.List;
 import java.util.function.Function;
 
@@ -40,7 +40,7 @@ public abstract class BaseAuthnRequestValidator {
 
     private static final Logger LOG = LoggerFactory.getLogger(BaseAuthnRequestValidator.class);
 
-    private static final ConcurrentMapIdExpirationCache<AuthnRequestIdKey> concurrentMapIdExpirationCache = new ConcurrentMapIdExpirationCache<>(CacheBuilder.newBuilder().expireAfterWrite(java.time.Duration.ofHours(3)).<AuthnRequestIdKey, DateTime>build().asMap());
+    private static final ConcurrentMapIdExpirationCache<AuthnRequestIdKey> concurrentMapIdExpirationCache = new ConcurrentMapIdExpirationCache<>(CacheBuilder.newBuilder().expireAfterWrite(java.time.Duration.ofHours(3)).<AuthnRequestIdKey, Instant>build().asMap());
     private static final Duration requestValidityDuration = Duration.minutes(5); // should be long enough...
     private static final AuthnRequestFromTransactionValidator authnRequestFromTransactionValidator = new AuthnRequestFromTransactionValidator(new IssuerValidator(), new DuplicateAuthnRequestValidator(concurrentMapIdExpirationCache, () -> requestValidityDuration), new AuthnRequestIssueInstantValidator(() -> requestValidityDuration));
     private static final AuthnRequestSizeValidator authnRequestSizeValidator = new AuthnRequestSizeValidator(new StringSizeValidator());

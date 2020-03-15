@@ -54,7 +54,7 @@ public final class MatchingDatasetFactory {
     private static List<Address> getCurrentAddresses(List<Address> addresses) {
         List<Address> currentAddresses = new ArrayList<>();
         for (Address address : addresses) {
-            if (!address.getTo().isPresent()) {
+            if (address.getTo().isEmpty()) {
                 currentAddresses.add(address);
             }
         }

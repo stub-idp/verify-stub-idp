@@ -1,15 +1,14 @@
 package stubidp.stubidp.domain.factories;
 
-import org.joda.time.DateTime;
-import stubidp.utils.security.security.IdGenerator;
 import stubidp.saml.utils.core.domain.AssertionRestrictions;
 import stubidp.saml.utils.core.domain.IdentityProviderAssertion;
 import stubidp.saml.utils.core.domain.IdentityProviderAuthnStatement;
 import stubidp.saml.utils.core.domain.MatchingDataset;
 import stubidp.saml.utils.core.domain.PersistentId;
+import stubidp.utils.security.security.IdGenerator;
 
 import javax.inject.Inject;
-
+import java.time.Instant;
 import java.util.Optional;
 
 public class IdentityProviderAssertionFactory {
@@ -30,7 +29,7 @@ public class IdentityProviderAssertionFactory {
         return new IdentityProviderAssertion(
                 idGenerator.getId(),
                 issuerId,
-                DateTime.now(),
+                Instant.now(),
                 persistentId,
                 assertionRestrictions,
                 Optional.ofNullable(matchingDataset),
@@ -46,7 +45,7 @@ public class IdentityProviderAssertionFactory {
         return new IdentityProviderAssertion(
                 idGenerator.getId(),
                 issuerId,
-                DateTime.now(),
+                Instant.now(),
                 persistentId,
                 assertionRestrictions,
                 Optional.empty(),

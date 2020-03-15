@@ -2,23 +2,24 @@ package stubidp.stubidp.domain;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import org.joda.time.DateTime;
-import org.joda.time.base.BaseDateTime;
 import stubidp.saml.utils.core.domain.SimpleMdsValue;
 
 import java.io.Serializable;
+import java.time.Instant;
 import java.util.Objects;
-import java.util.Optional;
 
 public class MatchingDatasetValue<T> implements Serializable {
 
     private T value;
-    private DateTime from;
-    private DateTime to;
+    private Instant from;
+    private Instant to;
     private boolean verified;
 
     @JsonCreator
-    public MatchingDatasetValue(@JsonProperty("value") T value, @JsonProperty("from") DateTime from, @JsonProperty("to") DateTime to, @JsonProperty("verified") boolean verified) {
+    public MatchingDatasetValue(@JsonProperty("value") T value,
+                                @JsonProperty("from") Instant from,
+                                @JsonProperty("to") Instant to,
+                                @JsonProperty("verified") boolean verified) {
         this.value = value;
         this.from = from;
         this.to = to;
@@ -29,11 +30,11 @@ public class MatchingDatasetValue<T> implements Serializable {
         return value;
     }
 
-    public DateTime getFrom() {
+    public Instant getFrom() {
         return from;
     }
 
-    public DateTime getTo() {
+    public Instant getTo() {
         return to;
     }
 
@@ -54,21 +55,16 @@ public class MatchingDatasetValue<T> implements Serializable {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof MatchingDatasetValue)) return false;
+        if (o == null || getClass() != o.getClass()) return false;
         MatchingDatasetValue<?> that = (MatchingDatasetValue<?>) o;
         return verified == that.verified &&
-            Objects.equals(value, that.value) &&
-            Objects.equals(
-                Optional.ofNullable(from).map(BaseDateTime::getMillis),
-                Optional.ofNullable(that.from).map(BaseDateTime::getMillis)) &&
-            Objects.equals(
-                Optional.ofNullable(to).map(BaseDateTime::getMillis),
-                Optional.ofNullable(that.to).map(BaseDateTime::getMillis));
+                Objects.equals(value, that.value) &&
+                Objects.equals(from, that.from) &&
+                Objects.equals(to, that.to);
     }
 
     @Override
     public int hashCode() {
-
         return Objects.hash(value, from, to, verified);
     }
 

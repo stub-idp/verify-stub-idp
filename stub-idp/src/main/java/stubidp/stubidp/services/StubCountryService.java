@@ -1,8 +1,7 @@
 package stubidp.stubidp.services;
 
 import com.google.common.base.Strings;
-import org.joda.time.LocalDate;
-import org.joda.time.format.DateTimeFormat;
+import stubidp.saml.extensions.extensions.impl.BaseMdsSamlObjectUnmarshaller;
 import stubidp.saml.utils.core.domain.AuthnContext;
 import stubidp.stubidp.domain.DatabaseEidasUser;
 import stubidp.stubidp.domain.EidasScheme;
@@ -19,6 +18,7 @@ import stubidp.stubidp.repositories.StubCountry;
 import stubidp.stubidp.repositories.StubCountryRepository;
 
 import javax.inject.Inject;
+import java.time.Instant;
 import java.util.Optional;
 
 public class StubCountryService {
@@ -71,12 +71,7 @@ public class StubCountryService {
             throw new IncompleteRegistrationException();
         }
 
-        LocalDate parsedDateOfBirth;
-        try {
-            parsedDateOfBirth = LocalDate.parse(dob, DateTimeFormat.forPattern("yyyy-MM-dd"));
-        } catch (IllegalArgumentException e) {
-            throw new InvalidDateException();
-        }
+        Instant parsedDateOfBirth = BaseMdsSamlObjectUnmarshaller.InstantFromDate.of(dob);
 
         boolean usernameAlreadyTaken = stubCountry.userExists(username);
         if (usernameAlreadyTaken) {

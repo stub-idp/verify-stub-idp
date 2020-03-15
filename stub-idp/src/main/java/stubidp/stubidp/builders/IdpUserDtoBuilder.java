@@ -1,11 +1,11 @@
 package stubidp.stubidp.builders;
 
-import org.joda.time.LocalDate;
 import stubidp.saml.utils.core.domain.Address;
 import stubidp.saml.utils.core.domain.Gender;
 import stubidp.stubidp.domain.MatchingDatasetValue;
 import stubidp.stubidp.dtos.IdpUserDto;
 
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -17,7 +17,7 @@ public class IdpUserDtoBuilder {
     private Optional<MatchingDatasetValue<String>> middleNames = Optional.empty();
     private List<MatchingDatasetValue<String>> surnames = new ArrayList<>();
     private Optional<MatchingDatasetValue<Gender>> gender = Optional.empty();
-    private Optional<MatchingDatasetValue<LocalDate>> dateOfBirth = Optional.empty();
+    private Optional<MatchingDatasetValue<Instant>> dateOfBirth = Optional.empty();
     private Optional<Address> address = Optional.empty();
     private String userName;
     private String password;
@@ -77,7 +77,7 @@ public class IdpUserDtoBuilder {
         return this;
     }
 
-    public IdpUserDtoBuilder withDateOfBirth(final MatchingDatasetValue<LocalDate> dateOfBirth) {
+    public IdpUserDtoBuilder withDateOfBirth(final MatchingDatasetValue<Instant> dateOfBirth) {
         this.dateOfBirth = Optional.ofNullable(dateOfBirth);
         return this;
     }

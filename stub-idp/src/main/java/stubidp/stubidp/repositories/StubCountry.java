@@ -1,11 +1,11 @@
 package stubidp.stubidp.repositories;
 
-import org.joda.time.LocalDate;
 import org.mindrot.jbcrypt.BCrypt;
 import stubidp.saml.utils.core.domain.AuthnContext;
 import stubidp.stubidp.domain.DatabaseEidasUser;
 import stubidp.stubidp.domain.MatchingDatasetValue;
 
+import java.time.Instant;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -39,7 +39,7 @@ public class StubCountry {
                                         Optional<MatchingDatasetValue<String>> nonLatinFirstName,
                                         MatchingDatasetValue<String> surname,
                                         Optional<MatchingDatasetValue<String>> nonLatinSurname,
-                                        MatchingDatasetValue<LocalDate> dateOfBirth,
+                                        MatchingDatasetValue<Instant> dateOfBirth,
                                         AuthnContext levelOfAssurance){
         return allIdpsUserRepository.createUserForStubCountry(
                 friendlyId, UUID.randomUUID().toString(),

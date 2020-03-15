@@ -1,8 +1,5 @@
 package stubidp.stubidp.builders;
-// Adapted from package uk.gov.ida.eidas.bridge.helpers;
 
-import org.joda.time.DateTime;
-import org.joda.time.ReadablePeriod;
 import org.opensaml.core.xml.XMLObject;
 import org.opensaml.core.xml.XMLObjectBuilderFactory;
 import org.opensaml.core.xml.config.XMLObjectProviderRegistrySupport;
@@ -24,6 +21,8 @@ import javax.inject.Named;
 import javax.xml.namespace.QName;
 import java.net.URI;
 import java.security.cert.CertificateEncodingException;
+import java.time.Duration;
+import java.time.Instant;
 import java.util.Arrays;
 import java.util.List;
 
@@ -31,14 +30,14 @@ import static org.apache.commons.codec.binary.Base64.encodeBase64String;
 import static stubidp.stubidp.StubIdpBinder.METADATA_VALIDITY_PERIOD;
 
 public class CountryMetadataBuilder {
-    private final ReadablePeriod validity;
+    private final Duration validity;
     private final KeyDescriptorsUnmarshaller keyDescriptorsUnmarshaller;
     private final XMLObjectBuilderFactory xmlFactory;
     private final CountryMetadataSigningHelper metadataSigner;
 
     @Inject
     public CountryMetadataBuilder(
-            @Named(METADATA_VALIDITY_PERIOD) ReadablePeriod validity,
+            @Named(METADATA_VALIDITY_PERIOD) Duration validity,
             CountryMetadataSigningHelper metadataSigner) {
         this.validity = validity;
         this.metadataSigner = metadataSigner;
@@ -54,7 +53,7 @@ public class CountryMetadataBuilder {
     ) throws MarshallingException, SecurityException, SignatureException, CertificateEncodingException {
         EntityDescriptor entityDescriptor = createElement(EntityDescriptor.DEFAULT_ELEMENT_NAME, EntityDescriptor.TYPE_NAME);
         entityDescriptor.setEntityID(entityId.toString());
-        entityDescriptor.setValidUntil(DateTime.now().plus(validity));
+        entityDescriptor.setValidUntil(Instant.now().plus(validity));
         entityDescriptor.getRoleDescriptors().add(getIdpSsoDescriptor(entityId, ssoEndpoint, signingCertificate, encryptingCertificate));
 
         metadataSigner.sign(entityDescriptor);

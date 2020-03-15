@@ -4,9 +4,9 @@ import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.PropertyAccessor;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import io.dropwizard.jackson.Jackson;
 import org.jdbi.v3.core.Jdbi;
-import org.joda.time.Duration;
 import org.opensaml.core.xml.XMLObject;
 import org.opensaml.saml.saml2.core.AuthnContextComparisonTypeEnumeration;
 import stubidp.saml.utils.core.domain.Gender;
@@ -19,6 +19,7 @@ import stubidp.stubidp.repositories.jdbc.mixins.XmlObjectMixin;
 import stubidp.utils.rest.common.SessionId;
 
 import java.io.IOException;
+import java.time.Duration;
 import java.time.Instant;
 import java.util.Optional;
 
@@ -95,13 +96,13 @@ public abstract class SessionRepositoryBase<T extends Session> implements Sessio
 
     public long countSessionsOlderThan(Duration duration) {
         return jdbi.withHandle(handle -> handle.select("select count(*) from stub_idp_session where last_modified < :lastModified")
-                .bind("lastModified", Instant.now().minusSeconds(duration.getStandardSeconds()))
+                .bind("lastModified", Instant.now().minus(duration))
                 .mapTo(Long.class)
                 .one());
     }
 
     public void deleteSessionsOlderThan(Duration duration) {
-        jdbi.withHandle(handle -> handle.execute("DELETE FROM stub_idp_session where last_modified < ?", Instant.now().minusSeconds(duration.getStandardSeconds())));
+        jdbi.withHandle(handle -> handle.execute("DELETE FROM stub_idp_session where last_modified < ?", Instant.now().minus(duration)));
     }
 
     public long countSessionsInDatabase() {
@@ -142,6 +143,7 @@ public abstract class SessionRepositoryBase<T extends Session> implements Sessio
         objectMapper.addMixIn(AuthnContextComparisonTypeEnumeration.class, AuthnContextComparisonTypeMixin.class);
         objectMapper.addMixIn(Gender.class, GenderMixin.class);
         objectMapper.configure(FAIL_ON_UNKNOWN_PROPERTIES, false);
+        objectMapper.registerModule(new JavaTimeModule());
 
         return objectMapper;
     }

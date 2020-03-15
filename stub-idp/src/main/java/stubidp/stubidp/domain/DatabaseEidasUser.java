@@ -2,13 +2,13 @@ package stubidp.stubidp.domain;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import org.joda.time.LocalDate;
 import org.mindrot.jbcrypt.BCrypt;
 import stubidp.saml.utils.core.domain.AuthnContext;
 import stubidp.stubidp.exceptions.UnHashedPasswordException;
 import stubidp.stubidp.security.BCryptHelper;
 
 import java.io.Serializable;
+import java.time.Instant;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -20,7 +20,7 @@ public class DatabaseEidasUser implements Serializable {
     private final Optional<MatchingDatasetValue<String>> nonLatinFirstname;
     private final MatchingDatasetValue<String> surname;
     private final Optional<MatchingDatasetValue<String>> nonLatinSurname;
-    private final MatchingDatasetValue<LocalDate> dateOfBirth;
+    private final MatchingDatasetValue<Instant> dateOfBirth;
     private final AuthnContext levelOfAssurance;
 
     @JsonCreator
@@ -32,7 +32,7 @@ public class DatabaseEidasUser implements Serializable {
         @JsonProperty("firstnameNonLatin") Optional<MatchingDatasetValue<String>> nonLatinFirstname,
         @JsonProperty("surname") MatchingDatasetValue<String> surname,
         @JsonProperty("surnameNonLatin") Optional<MatchingDatasetValue<String>> nonLatinSurname,
-        @JsonProperty("dateOfBirth") MatchingDatasetValue<LocalDate> dateOfBirth,
+        @JsonProperty("dateOfBirth") MatchingDatasetValue<Instant> dateOfBirth,
         @JsonProperty("levelOfAssurance") AuthnContext levelOfAssurance) {
 
         this.username = username;
@@ -78,7 +78,7 @@ public class DatabaseEidasUser implements Serializable {
         return nonLatinSurname;
     }
 
-    public MatchingDatasetValue<LocalDate> getDateOfBirth() {
+    public MatchingDatasetValue<Instant> getDateOfBirth() {
         return dateOfBirth;
     }
 

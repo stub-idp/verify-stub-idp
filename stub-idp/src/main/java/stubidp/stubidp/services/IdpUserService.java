@@ -1,9 +1,7 @@
 package stubidp.stubidp.services;
 
-import org.joda.time.DateTime;
-import org.joda.time.LocalDate;
-import org.joda.time.format.DateTimeFormat;
 import org.mindrot.jbcrypt.BCrypt;
+import stubidp.saml.extensions.extensions.impl.BaseMdsSamlObjectUnmarshaller;
 import stubidp.saml.utils.core.domain.Address;
 import stubidp.saml.utils.core.domain.AuthnContext;
 import stubidp.saml.utils.core.domain.Gender;
@@ -21,6 +19,7 @@ import stubidp.stubidp.repositories.IdpStubsRepository;
 import stubidp.utils.rest.common.SessionId;
 
 import javax.inject.Inject;
+import java.time.Instant;
 import java.util.Collections;
 import java.util.Optional;
 import java.util.UUID;
@@ -91,13 +90,7 @@ public class IdpUserService {
             throw new IncompleteRegistrationException();
         }
 
-        LocalDate parsedDateOfBirth;
-        try {
-            parsedDateOfBirth = LocalDate.parse(dateOfBirth, DateTimeFormat.forPattern("yyyy-MM-dd"));
-        } catch (IllegalArgumentException e) {
-            throw new InvalidDateException();
-        }
-
+        Instant parsedDateOfBirth = BaseMdsSamlObjectUnmarshaller.InstantFromDate.of(dateOfBirth);
         boolean usernameAlreadyTaken = idp.userExists(username);
         if (usernameAlreadyTaken) {
             throw new UsernameAlreadyTakenException();
@@ -148,13 +141,13 @@ public class IdpUserService {
                 Optional.of(createSimpleMdsValue2(Gender.FEMALE)),
                 Collections.emptyList(),
                 Collections.singletonList(
-                        new Address(asList("line1", "line2"), "KT23 4XD", null, "fhfhf", DateTime.parse("2000-01-01"), DateTime.parse("2013-05-05"), false)
+                        new Address(asList("line1", "line2"), "KT23 4XD", null, "fhfhf", BaseMdsSamlObjectUnmarshaller.InstantFromDate.of("2000-01-01"), BaseMdsSamlObjectUnmarshaller.InstantFromDate.of("2013-05-05"), false)
                 ),
                 AuthnContext.LEVEL_2);
     }
 
     private static <T> MatchingDatasetValue<T> createSimpleMdsValue2(T value) {
-        return new MatchingDatasetValue<>(value, DateTime.parse("2000-01-01"), DateTime.parse("2013-01-03"), false);
+        return new MatchingDatasetValue<>(value, BaseMdsSamlObjectUnmarshaller.InstantFromDate.of("2000-01-01"), BaseMdsSamlObjectUnmarshaller.InstantFromDate.of("2013-01-03"), false);
     }
 
 }

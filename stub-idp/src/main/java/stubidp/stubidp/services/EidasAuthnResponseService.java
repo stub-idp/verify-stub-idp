@@ -1,8 +1,6 @@
 package stubidp.stubidp.services;
 
 import io.prometheus.client.Counter;
-import org.joda.time.DateTime;
-import org.joda.time.LocalDate;
 import org.opensaml.core.xml.XMLObject;
 import org.opensaml.core.xml.XMLObjectBuilder;
 import org.opensaml.core.xml.util.XMLObjectSupport;
@@ -18,13 +16,13 @@ import stubidp.saml.extensions.extensions.eidas.CurrentGivenName;
 import stubidp.saml.extensions.extensions.eidas.DateOfBirth;
 import stubidp.saml.extensions.extensions.eidas.EidasGender;
 import stubidp.saml.extensions.extensions.eidas.PersonIdentifier;
+import stubidp.shared.repositories.MetadataRepository;
 import stubidp.stubidp.builders.EidasResponseBuilder;
 import stubidp.stubidp.domain.EidasAddress;
 import stubidp.stubidp.domain.EidasUser;
 import stubidp.stubidp.domain.RequestedAttribute;
 import stubidp.stubidp.domain.SamlResponseFromValue;
 import stubidp.stubidp.repositories.EidasSession;
-import stubidp.shared.repositories.MetadataRepository;
 import stubidp.stubidp.saml.transformers.EidasResponseTransformerProvider;
 
 import javax.inject.Inject;
@@ -32,6 +30,7 @@ import javax.inject.Named;
 import javax.ws.rs.core.UriBuilder;
 import javax.xml.namespace.QName;
 import java.net.URI;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -84,7 +83,7 @@ public class EidasAuthnResponseService {
         URI hubUrl = metadataProvider.getAssertionConsumerServiceLocation();
         String requestId = session.getEidasAuthnRequest().getRequestId();
         List<Attribute> eidasAttributes = getEidasAttributes(session);
-        DateTime issueInstant = DateTime.now();
+        Instant issueInstant = Instant.now();
 
         Response response = EidasResponseBuilder.createEidasResponse(
             issuerId,
@@ -118,7 +117,7 @@ public class EidasAuthnResponseService {
                 .withStatus(StatusCode.RESPONDER, StatusCode.AUTHN_FAILED)
                 .withIssuer(issuerId)
                 .withInResponseTo(requestId)
-                .withIssueInstant(DateTime.now())
+                .withIssueInstant(Instant.now())
                 .withDestination(hubUrl.toString())
                 .build();
 
@@ -182,7 +181,7 @@ public class EidasAuthnResponseService {
     }
 
     @SuppressWarnings({"unchecked", "cast"})
-    private Attribute buildDateOfBirthAttribute(LocalDate dateOfBirth) {
+    private Attribute buildDateOfBirthAttribute(Instant dateOfBirth) {
         XMLObjectBuilder<? extends DateOfBirth> eidasTypeBuilder = (XMLObjectBuilder<? extends DateOfBirth>) XMLObjectSupport.getBuilder(DateOfBirth.TYPE_NAME);
         DateOfBirth dateOfBirthAttributeValue = eidasTypeBuilder.buildObject(AttributeValue.DEFAULT_ELEMENT_NAME, DateOfBirth.TYPE_NAME);
         dateOfBirthAttributeValue.setDateOfBirth(dateOfBirth);

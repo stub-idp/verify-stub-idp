@@ -3,7 +3,6 @@ package stubidp.stubidp.repositories.jdbc;
 import io.dropwizard.jackson.Jackson;
 import io.prometheus.client.CollectorRegistry;
 import org.jdbi.v3.core.Jdbi;
-import org.joda.time.LocalDate;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -14,6 +13,7 @@ import stubidp.stubidp.domain.DatabaseIdpUser;
 import stubidp.stubidp.domain.MatchingDatasetValue;
 import stubidp.stubidp.repositories.jdbc.migrations.DatabaseMigrationRunner;
 
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -114,7 +114,7 @@ public class JDBIUserRepositoryTest {
     public void addOrUpdateUserForStubCountryShouldAddRecordIfUserDoesNotExist(){
         ensureNoUserExistsFor("stub-country-friendly-id");
 
-        DatabaseEidasUser eidasUser = new DatabaseEidasUser("some-username", null, "some-password", createMdsValue("firstName"), Optional.of(createMdsValue("firstNameNonLatin")), createMdsValue("surname"), Optional.of(createMdsValue("surnameNonLatin")), createMdsValue(LocalDate.now()), AuthnContext.LEVEL_2);
+        DatabaseEidasUser eidasUser = new DatabaseEidasUser("some-username", null, "some-password", createMdsValue("firstName"), Optional.of(createMdsValue("firstNameNonLatin")), createMdsValue("surname"), Optional.of(createMdsValue("surnameNonLatin")), createMdsValue(Instant.now()), AuthnContext.LEVEL_2);
 
         repository.addOrUpdateEidasUserForStubCountry("stub-country-friendly-id", eidasUser);
 

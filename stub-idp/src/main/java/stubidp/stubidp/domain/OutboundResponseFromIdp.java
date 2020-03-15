@@ -1,13 +1,13 @@
 package stubidp.stubidp.domain;
 
 import org.apache.commons.lang.StringUtils;
-import org.joda.time.DateTime;
-import stubidp.utils.security.security.IdGenerator;
 import stubidp.saml.utils.core.domain.IdaSamlResponse;
 import stubidp.saml.utils.core.domain.IdentityProviderAssertion;
+import stubidp.utils.security.security.IdGenerator;
 
 import java.io.Serializable;
 import java.net.URI;
+import java.time.Instant;
 import java.util.Optional;
 
 public class OutboundResponseFromIdp extends IdaSamlResponse implements Serializable {
@@ -24,7 +24,7 @@ public class OutboundResponseFromIdp extends IdaSamlResponse implements Serializ
             String id,
             String inResponseTo,
             String issuer,
-            DateTime issueInstant,
+            Instant issueInstant,
             IdpIdaStatus status,
             Optional<IdentityProviderAssertion> matchingDatasetAssertion,
             Optional<IdentityProviderAssertion> authnStatementAssertion,
@@ -45,7 +45,6 @@ public class OutboundResponseFromIdp extends IdaSamlResponse implements Serializ
         return authnStatementAssertion;
     }
 
-
     public static OutboundResponseFromIdp createSuccessResponseFromIdp(
             String inResponseTo,
             String issuerId,
@@ -57,7 +56,7 @@ public class OutboundResponseFromIdp extends IdaSamlResponse implements Serializ
                 idGenerator.getId(),
                 inResponseTo,
                 issuerId,
-                DateTime.now(),
+                Instant.now(),
                 IdpIdaStatus.success(),
                 Optional.ofNullable(matchingDatasetAssertion),
                 Optional.ofNullable(authnStatementAssertion),
@@ -115,7 +114,7 @@ public class OutboundResponseFromIdp extends IdaSamlResponse implements Serializ
                 idGenerator.getId(),
                 inResponseTo,
                 issuerId,
-                DateTime.now(),
+                Instant.now(),
                 status,
                 Optional.<IdentityProviderAssertion>empty(),
                 Optional.<IdentityProviderAssertion>empty(),

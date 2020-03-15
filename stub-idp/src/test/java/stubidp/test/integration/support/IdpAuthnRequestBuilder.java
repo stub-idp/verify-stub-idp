@@ -1,11 +1,11 @@
 package stubidp.test.integration.support;
 
-import org.joda.time.DateTime;
 import org.opensaml.saml.saml2.core.AuthnRequest;
 import stubidp.saml.serializers.serializers.XmlObjectToBase64EncodedStringTransformer;
 import stubidp.saml.utils.core.test.TestCredentialFactory;
 import stubidp.saml.utils.core.test.builders.IssuerBuilder;
 
+import java.time.Instant;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -21,7 +21,7 @@ public class IdpAuthnRequestBuilder {
 
     private String destination = "destination";
     private String entityId = HUB_ENTITY_ID;
-    private DateTime issueInstant = DateTime.now();
+    private Instant issueInstant = Instant.now();
     private boolean withInvalidKey = false;
     private boolean withKeyInfo = false;
 
@@ -46,7 +46,7 @@ public class IdpAuthnRequestBuilder {
         return this;
     }
 
-    public IdpAuthnRequestBuilder withIssueInstant(DateTime issueInstant) {
+    public IdpAuthnRequestBuilder withIssueInstant(Instant issueInstant) {
         this.issueInstant = issueInstant;
         return this;
     }
@@ -76,7 +76,7 @@ public class IdpAuthnRequestBuilder {
             String publicCert,
             String privateKey,
             String ssoRequestEndpoint,
-            Optional<DateTime> issueInstant,
+            Optional<Instant> issueInstant,
             Optional<String> x509Certificate) {
         AuthnRequest authnRequest = getAuthnRequest(id, issuer, forceAuthentication, assertionConsumerServiceIndex, publicCert, privateKey, ssoRequestEndpoint, issueInstant, x509Certificate);
         return toBase64EncodedStringTransformer.apply(authnRequest);
@@ -90,7 +90,7 @@ public class IdpAuthnRequestBuilder {
             String publicCert,
             String privateKey,
             String ssoRequestEndpoint,
-            Optional<DateTime> issueInstant,
+            Optional<Instant> issueInstant,
             Optional<String> x509Certificate) {
         AuthnRequestBuilder authnRequestBuilder = AuthnRequestBuilder.anAuthnRequest()
                 .withId(id)

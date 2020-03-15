@@ -1,7 +1,5 @@
 package stubidp.stubidp.builders;
 
-import org.joda.time.DateTime;
-import org.joda.time.ReadablePeriod;
 import org.opensaml.core.xml.config.XMLObjectProviderRegistrySupport;
 import org.opensaml.core.xml.io.MarshallingException;
 import org.opensaml.saml.common.SignableSAMLObject;
@@ -39,6 +37,8 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import javax.ws.rs.core.UriBuilder;
 import java.net.URI;
+import java.time.Duration;
+import java.time.Instant;
 import java.util.Collections;
 import java.util.List;
 
@@ -48,7 +48,7 @@ import static stubidp.stubidp.StubIdpIdpBinder.IDP_SIGNING_CERT;
 
 public class IdpMetadataBuilder {
     private final SignatureFactory signatureFactory;
-    private final ReadablePeriod validity;
+    private final Duration validity;
     private final KeyDescriptorsUnmarshaller keyDescriptorsUnmarshaller;
     private final String idpSigningCert;
     private final SamlConfiguration samlConfiguration;
@@ -58,7 +58,7 @@ public class IdpMetadataBuilder {
     @Inject
     public IdpMetadataBuilder(
             @Named(IDP_METADATA_SIGNATURE_FACTORY) SignatureFactory signatureFactory,
-            @Named(METADATA_VALIDITY_PERIOD) ReadablePeriod validity,
+            @Named(METADATA_VALIDITY_PERIOD) Duration validity,
             @Named(IDP_SIGNING_CERT) String idpSigningCert,
             SamlConfiguration samlConfiguration,
             StubIdpConfiguration stubIdpConfiguration) {
@@ -71,7 +71,7 @@ public class IdpMetadataBuilder {
     }
 
     private EntitiesDescriptor createMetadata(List<Idp> idps) throws MarshallingException, SignatureException {
-        final DateTime validUntil = DateTime.now().plus(validity);
+        final Instant validUntil = Instant.now().plus(validity);
         EntitiesDescriptor entitiesDescriptor = new EntitiesDescriptorBuilder().buildObject();;
         entitiesDescriptor.setValidUntil(validUntil);
         entitiesDescriptor.setID("STUB-IDP");
@@ -86,7 +86,7 @@ public class IdpMetadataBuilder {
             organization.getDisplayNames().add(organizationDisplayName);
             if(singleIdpIsEnabled) {
                 OrganizationURL organizationURL = new OrganizationURLBuilder().buildObject();
-                organizationURL.setValue(UriBuilder.fromUri(samlConfiguration.getExpectedDestinationHost() + Urls.SINGLE_IDP_HOMEPAGE_RESOURCE).build(idp.getFriendlyId()).toASCIIString());
+                organizationURL.setURI(UriBuilder.fromUri(samlConfiguration.getExpectedDestinationHost() + Urls.SINGLE_IDP_HOMEPAGE_RESOURCE).build(idp.getFriendlyId()).toASCIIString());
                 organization.getURLs().add(organizationURL);
             }
             entityDescriptor.setOrganization(organization);

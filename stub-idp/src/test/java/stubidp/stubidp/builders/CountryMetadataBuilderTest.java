@@ -1,7 +1,5 @@
 package stubidp.stubidp.builders;
 
-import org.joda.time.DateTime;
-import org.joda.time.Period;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -17,7 +15,9 @@ import org.opensaml.saml.saml2.metadata.ManageNameIDService;
 import org.opensaml.saml.saml2.metadata.SingleLogoutService;
 import org.opensaml.security.SecurityException;
 import org.opensaml.security.credential.UsageType;
+import org.opensaml.xmlsec.signature.KeyInfo;
 import org.opensaml.xmlsec.signature.X509Certificate;
+import org.opensaml.xmlsec.signature.X509Data;
 import org.opensaml.xmlsec.signature.support.SignatureException;
 import org.w3c.dom.Document;
 import stubidp.saml.extensions.IdaSamlBootstrap;
@@ -28,6 +28,9 @@ import stubidp.utils.security.security.X509CertificateFactory;
 
 import java.net.URI;
 import java.security.cert.CertificateEncodingException;
+import java.time.Duration;
+import java.time.Instant;
+import java.time.ZoneId;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -56,10 +59,10 @@ public class CountryMetadataBuilderTest extends OpenSAMLRunner {
 
     private void assertCertificate(Optional<KeyDescriptor> keyDescriptor, String certString) {
         Optional<X509Certificate> signingCertificate = keyDescriptor
-            .map(k -> k.getKeyInfo())
-            .map(k -> k.getX509Datas())
+            .map(KeyDescriptor::getKeyInfo)
+            .map(KeyInfo::getX509Datas)
             .map(x -> x.get(0))
-            .map(x -> x.getX509Certificates())
+            .map(X509Data::getX509Certificates)
             .map(c -> c.get(0));
         assertThat(signingCertificate).isPresent();
         assertThat(prepareCertString(signingCertificate.get().getValue())).isEqualTo(prepareCertString(certString));
@@ -71,7 +74,7 @@ public class CountryMetadataBuilderTest extends OpenSAMLRunner {
 
     private EntityDescriptor getMetadata() throws CertificateEncodingException, MarshallingException, SecurityException, SignatureException {
         when(metadataSigner.sign(any(EntityDescriptor.class))).thenAnswer(i -> i.getArguments()[0]);
-        CountryMetadataBuilder countryMetadataBuilder = new CountryMetadataBuilder(new Period(1, 0, 0, 0), metadataSigner);
+        CountryMetadataBuilder countryMetadataBuilder = new CountryMetadataBuilder(Duration.ofHours(1), metadataSigner);
         return countryMetadataBuilder.createEntityDescriptorForProxyNodeService(ENTITY_ID, SSO_URL, SIGNING_CERTIFICATE, ENCRYPTING_CERTIFICATE);
     }
 
@@ -80,7 +83,7 @@ public class CountryMetadataBuilderTest extends OpenSAMLRunner {
         EntityDescriptor metadata = getMetadata();
         assertThat(metadata).isNotNull();
         assertThat(metadata.getValidUntil()).isNotNull();
-        assertThat(metadata.getValidUntil()).isLessThanOrEqualTo(DateTime.now().plusHours(1));
+        assertThat(metadata.getValidUntil()).isBeforeOrEqualTo(Instant.now().atZone(ZoneId.of("UTC")).plusHours(1).toInstant());
         assertThat(metadata.getEntityID()).isEqualTo(ENTITY_ID.toString());
         assertThat(metadata.getIDPSSODescriptor(SAMLConstants.SAML20P_NS).getSingleSignOnServices().get(0).getLocation()).isEqualTo(SSO_URL.toString());
     }

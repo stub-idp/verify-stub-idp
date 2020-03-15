@@ -3,9 +3,9 @@ package stubidp.stubidp.domain;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import org.joda.time.LocalDate;
 import stubidp.saml.utils.core.domain.Gender;
 
+import java.time.Instant;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -17,7 +17,7 @@ public class EidasUser {
     private String familyName;
     private final Optional<String> familyNameNonLatin;
     private String persistentId;
-    private LocalDate dateOfBirth;
+    private Instant dateOfBirth;
     private Optional<EidasAddress> address;
     private Optional<Gender> gender;
 
@@ -27,7 +27,7 @@ public class EidasUser {
                      @JsonProperty("familyName") String familyName,
                      @JsonProperty("familyNameNonLatin") Optional<String> familyNameNonLatin,
                      @JsonProperty("persistentId") String persistentId,
-                     @JsonProperty("dateOfBirth") LocalDate dateOfBirth,
+                     @JsonProperty("dateOfBirth") Instant dateOfBirth,
                      @JsonProperty("address") Optional<EidasAddress> address,
                      @JsonProperty("gender") Optional<Gender> gender) {
         this.firstName = firstName;
@@ -64,7 +64,7 @@ public class EidasUser {
         return address;
     }
 
-    public LocalDate getDateOfBirth() {
+    public Instant getDateOfBirth() {
         return dateOfBirth;
     }
 

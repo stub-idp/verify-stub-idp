@@ -1,7 +1,6 @@
 package stubidp.stubidp.builders;
 
-import net.shibboleth.utilities.java.support.security.SecureRandomIdentifierGenerationStrategy;
-import org.joda.time.DateTime;
+import net.shibboleth.utilities.java.support.security.impl.SecureRandomIdentifierGenerationStrategy;
 import org.opensaml.core.xml.XMLObject;
 import org.opensaml.core.xml.util.XMLObjectSupport;
 import org.opensaml.saml.saml2.core.Assertion;
@@ -13,6 +12,7 @@ import org.opensaml.saml.saml2.core.Status;
 import org.opensaml.saml.saml2.core.StatusCode;
 
 import javax.xml.namespace.QName;
+import java.time.Instant;
 import java.util.List;
 
 public class EidasResponseBuilder {
@@ -57,7 +57,7 @@ public class EidasResponseBuilder {
         return this;
     }
 
-    public EidasResponseBuilder withIssueInstant(DateTime issueInstant) {
+    public EidasResponseBuilder withIssueInstant(Instant issueInstant) {
         eidasResponse.setIssueInstant(issueInstant);
         return this;
     }
@@ -77,9 +77,9 @@ public class EidasResponseBuilder {
         String loa,
         List<Attribute> attributes,
         String inResponseTo,
-        DateTime issueInstant,
-        DateTime assertionIssueInstant,
-        DateTime authnStatementAuthnInstant,
+        Instant issueInstant,
+        Instant assertionIssueInstant,
+        Instant authnStatementAuthnInstant,
         String destinationUrl,
         String connectorNodeIssuerId
     ) {

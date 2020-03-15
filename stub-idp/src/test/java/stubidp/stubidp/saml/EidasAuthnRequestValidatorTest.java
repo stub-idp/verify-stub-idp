@@ -3,7 +3,6 @@ package stubidp.stubidp.saml;
 import certificates.values.CACertificates;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import org.glassfish.jersey.client.JerseyClientBuilder;
-import org.joda.time.DateTime;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -50,6 +49,9 @@ import java.security.KeyPair;
 import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.security.cert.X509Certificate;
+import java.time.Duration;
+import java.time.Instant;
+import java.time.ZoneId;
 import java.util.Base64;
 import java.util.Collections;
 import java.util.List;
@@ -62,7 +64,6 @@ import static stubidp.test.devpki.TestCertificateStrings.METADATA_SIGNING_A_PUBL
 
 @ExtendWith(MockitoExtension.class)
 class EidasAuthnRequestValidatorTest extends OpenSAMLRunner {
-
     private static final String CONNECTOR_METADATA_RESOURCE = "/saml/metadata/eidas/connector";
     private static final String SCHEME_ID = "cef-ref";
     private static final String hubConnectorEntityId = "https://not.a.real.entity.uk/connector";
@@ -88,8 +89,8 @@ class EidasAuthnRequestValidatorTest extends OpenSAMLRunner {
         eidasMetadataServer.register(CONNECTOR_METADATA_RESOURCE, 200, Constants.APPLICATION_SAMLMETADATA_XML, getEidasConnectorMetadata());
 
         metadataConfiguration = new MultiTrustStoresBackedMetadataConfiguration(UriBuilder.fromUri("http://localhost:" + eidasMetadataServer.getPort() + CONNECTOR_METADATA_RESOURCE).build(),
-                10L,
-                60L,
+                Duration.ofSeconds(10L),
+                Duration.ofSeconds(60L),
                 hubConnectorEntityId,
                 JerseyClientConfigurationBuilder.aJerseyClientConfiguration().build(),
                 EidasAuthnRequestValidatorTest.class.getName(),
@@ -130,7 +131,7 @@ class EidasAuthnRequestValidatorTest extends OpenSAMLRunner {
         String _authnRequest = EidasAuthnRequestBuilder.anAuthnRequest()
                 .withKeyInfo(true)
                 .withIssuerEntityId(hubConnectorEntityId)
-                .withIssueInstant(DateTime.now())
+                .withIssueInstant(Instant.now())
                 .withDestination(stubCountryDestination)
                 .removeAllX509Datas(true)
                 .withKeyStore(validIdaKeyStore())
@@ -144,7 +145,7 @@ class EidasAuthnRequestValidatorTest extends OpenSAMLRunner {
         String _authnRequest = EidasAuthnRequestBuilder.anAuthnRequest()
                 .withKeyInfo(true)
                 .withIssuerEntityId(hubConnectorEntityId)
-                .withIssueInstant(DateTime.now())
+                .withIssueInstant(Instant.now())
                 .withDestination(stubCountryDestination)
                 .removeAllCertificates(true)
                 .withKeyStore(validIdaKeyStore())
@@ -158,7 +159,7 @@ class EidasAuthnRequestValidatorTest extends OpenSAMLRunner {
         String _authnRequest = EidasAuthnRequestBuilder.anAuthnRequest()
                 .withKeyInfo(false)
                 .withIssuerEntityId(hubConnectorEntityId)
-                .withIssueInstant(DateTime.now())
+                .withIssueInstant(Instant.now())
                 .withDestination(stubCountryDestination)
                 .withKeyStore(validIdaKeyStore())
                 .build();
@@ -171,7 +172,7 @@ class EidasAuthnRequestValidatorTest extends OpenSAMLRunner {
         String _authnRequest = EidasAuthnRequestBuilder.anAuthnRequest()
                 .withKeyInfo(true)
                 .withIssuerEntityId(hubConnectorEntityId)
-                .withIssueInstant(DateTime.now())
+                .withIssueInstant(Instant.now())
                 .withDestination(stubCountryDestination)
                 .withKeyStore(validIdaKeyStore())
                 .build();
@@ -183,7 +184,7 @@ class EidasAuthnRequestValidatorTest extends OpenSAMLRunner {
         String _authnRequest = EidasAuthnRequestBuilder.anAuthnRequest()
                 .withKeyInfo(true)
                 .withIssuerEntityId(hubConnectorEntityId)
-                .withIssueInstant(DateTime.now())
+                .withIssueInstant(Instant.now())
                 .withDestination(stubCountryDestination)
                 .withKeyStore(validIdaKeyStore())
                 .build();
@@ -197,7 +198,7 @@ class EidasAuthnRequestValidatorTest extends OpenSAMLRunner {
         String _authnRequest = EidasAuthnRequestBuilder.anAuthnRequest()
                 .withKeyInfo(true)
                 .withIssuerEntityId(hubConnectorEntityId)
-                .withIssueInstant(DateTime.now())
+                .withIssueInstant(Instant.now())
                 .withDestination(stubCountryDestination)
                 .withKeyStore(invalidIdaKeyStore())
                 .build();
@@ -210,7 +211,7 @@ class EidasAuthnRequestValidatorTest extends OpenSAMLRunner {
         String _authnRequest = EidasAuthnRequestBuilder.anAuthnRequest()
                 .withKeyInfo(true)
                 .withIssuerEntityId(hubConnectorEntityId)
-                .withIssueInstant(DateTime.now())
+                .withIssueInstant(Instant.now())
                 .withDestination(UriBuilder.fromUri(stubCountryBaseUri + Urls.EIDAS_SAML2_SSO_RESOURCE).build("foo").toASCIIString())
                 .withKeyStore(validIdaKeyStore())
                 .build();
@@ -223,7 +224,7 @@ class EidasAuthnRequestValidatorTest extends OpenSAMLRunner {
         String _authnRequest = EidasAuthnRequestBuilder.anAuthnRequest()
                 .withKeyInfo(true)
                 .withIssuerEntityId("something else")
-                .withIssueInstant(DateTime.now())
+                .withIssueInstant(Instant.now())
                 .withDestination(stubCountryDestination)
                 .withKeyStore(validIdaKeyStore())
                 .build();
@@ -236,7 +237,7 @@ class EidasAuthnRequestValidatorTest extends OpenSAMLRunner {
         String _authnRequest = EidasAuthnRequestBuilder.anAuthnRequest()
                 .withKeyInfo(true)
                 .withIssuerEntityId(hubConnectorEntityId)
-                .withIssueInstant(DateTime.now().minusHours(1))
+                .withIssueInstant(Instant.now().atZone(ZoneId.of("UTC")).minusHours(1).toInstant())
                 .withDestination(stubCountryDestination)
                 .withKeyStore(validIdaKeyStore())
                 .build();

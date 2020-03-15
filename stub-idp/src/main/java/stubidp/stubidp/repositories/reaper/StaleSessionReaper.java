@@ -1,8 +1,9 @@
 package stubidp.stubidp.repositories.reaper;
 
 import org.apache.log4j.Logger;
-import org.joda.time.Duration;
 import stubidp.stubidp.repositories.IdpSessionRepository;
+
+import java.time.Duration;
 
 import static java.text.MessageFormat.format;
 

@@ -23,19 +23,19 @@ public class ManagedStaleSessionReaper implements Managed {
     private final StaleSessionReaperConfiguration staleSessionReaperConfiguration;
     private final IdpSessionRepository verifySessionRepository;
     private final long terminationTimeoutSeconds;
-    private final int reaperFrequencyInSeconds;
+    private final long reaperFrequencyInSeconds;
 
     @Inject
     public ManagedStaleSessionReaper(StubIdpConfiguration stubIdpConfiguration,
                                      IdpSessionRepository verifySessionRepository) {
         this.staleSessionReaperConfiguration = stubIdpConfiguration.getStaleSessionReaperConfiguration();
         this.verifySessionRepository = verifySessionRepository;
-        this.terminationTimeoutSeconds = staleSessionReaperConfiguration.getTerminationTimeout().getStandardSeconds();
-        this.reaperFrequencyInSeconds = staleSessionReaperConfiguration.getReaperFrequency().toStandardSeconds().getSeconds();
+        this.terminationTimeoutSeconds = staleSessionReaperConfiguration.getTerminationTimeout().toSeconds();
+        this.reaperFrequencyInSeconds = staleSessionReaperConfiguration.getReaperFrequency().getSeconds();
     }
 
     @Override
-    public void start() throws Exception {
+    public void start() {
         LOGGER.info("installing stale session reaper");
         final StaleSessionReaper staleSessionReaper = new StaleSessionReaper(verifySessionRepository, staleSessionReaperConfiguration);
         scheduledExecutorService.scheduleWithFixedDelay(staleSessionReaper,
@@ -45,7 +45,7 @@ public class ManagedStaleSessionReaper implements Managed {
     }
 
     @Override
-    public void stop() throws Exception {
+    public void stop() {
         LOGGER.info("shutting down; waiting for any active reapers to finish");
         scheduledExecutorService.shutdown();
         try {

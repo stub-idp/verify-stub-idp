@@ -1,6 +1,5 @@
 package stubidp.stubidp.repositories;
 
-import org.joda.time.LocalDate;
 import org.mindrot.jbcrypt.BCrypt;
 import stubidp.saml.utils.core.domain.Address;
 import stubidp.saml.utils.core.domain.AuthnContext;
@@ -8,6 +7,7 @@ import stubidp.saml.utils.core.domain.Gender;
 import stubidp.stubidp.domain.DatabaseIdpUser;
 import stubidp.stubidp.domain.MatchingDatasetValue;
 
+import java.time.Instant;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
@@ -62,7 +62,7 @@ public class Idp {
             List<MatchingDatasetValue<String>> middleNames,
             List<MatchingDatasetValue<String>> surnames,
             Optional<MatchingDatasetValue<Gender>> gender,
-            List<MatchingDatasetValue<LocalDate>> dateOfBirths,
+            List<MatchingDatasetValue<Instant>> dateOfBirths,
             List<Address> addresses,
             String username,
             String password,

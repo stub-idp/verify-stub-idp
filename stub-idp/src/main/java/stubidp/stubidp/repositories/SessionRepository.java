@@ -1,8 +1,8 @@
 package stubidp.stubidp.repositories;
 
-import org.joda.time.Duration;
 import stubidp.utils.rest.common.SessionId;
 
+import java.time.Duration;
 import java.util.Optional;
 
 interface SessionRepository<T extends Session> {

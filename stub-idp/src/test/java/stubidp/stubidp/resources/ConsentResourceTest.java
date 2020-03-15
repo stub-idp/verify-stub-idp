@@ -1,11 +1,11 @@
 package stubidp.stubidp.resources;
 
-import org.joda.time.LocalDate;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import stubidp.saml.extensions.extensions.impl.BaseMdsSamlObjectUnmarshaller;
 import stubidp.saml.utils.core.domain.AddressFactory;
 import stubidp.saml.utils.core.domain.AuthnContext;
 import stubidp.saml.utils.core.domain.Gender;
@@ -26,6 +26,7 @@ import stubidp.test.devpki.TestEntityIds;
 import stubidp.utils.rest.common.SessionId;
 
 import javax.ws.rs.core.Response;
+import java.time.Instant;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -68,7 +69,7 @@ public class ConsentResourceTest {
 
         IdpSession session = new IdpSession(idpSessionId, idaAuthnRequestFromHub, RELAY_STATE, null, null, null, null, null, null);
         session.setIdpUser(newUser(AuthnContext.LEVEL_1));
-        when(sessionRepository.get(idpSessionId)).thenReturn(Optional.ofNullable(session));
+        when(sessionRepository.get(idpSessionId)).thenReturn(Optional.of(session));
 
         when(idaAuthnRequestFromHub.getLevelsOfAssurance()).thenReturn(Collections.singletonList(AuthnContext.LEVEL_2));
         when(idpStubsRepository.getIdpWithFriendlyId(idpName)).thenReturn(idp);
@@ -85,7 +86,7 @@ public class ConsentResourceTest {
 
         IdpSession session = new IdpSession(idpSessionId, idaAuthnRequestFromHub, RELAY_STATE, null, null, null, null, null, null);
         session.setIdpUser(newUser(AuthnContext.LEVEL_1));
-        when(sessionRepository.get(idpSessionId)).thenReturn(Optional.ofNullable(session));
+        when(sessionRepository.get(idpSessionId)).thenReturn(Optional.of(session));
 
         when(idaAuthnRequestFromHub.getLevelsOfAssurance()).thenReturn(List.of(AuthnContext.LEVEL_1, AuthnContext.LEVEL_2));
         when(idpStubsRepository.getIdpWithFriendlyId(idpName)).thenReturn(idp);
@@ -102,7 +103,7 @@ public class ConsentResourceTest {
 
         IdpSession session = new IdpSession(idpSessionId, idaAuthnRequestFromHub, RELAY_STATE, null, null, null, null, null, null);
         session.setIdpUser(newUser(AuthnContext.LEVEL_2));
-        when(sessionRepository.get(idpSessionId)).thenReturn(Optional.ofNullable(session));
+        when(sessionRepository.get(idpSessionId)).thenReturn(Optional.of(session));
 
         when(idaAuthnRequestFromHub.getLevelsOfAssurance()).thenReturn(Collections.singletonList(AuthnContext.LEVEL_2));
         when(idpStubsRepository.getIdpWithFriendlyId(idpName)).thenReturn(idp);
@@ -114,16 +115,16 @@ public class ConsentResourceTest {
     }
 
     private Optional<DatabaseIdpUser> newUser(AuthnContext levelOfAssurance) {
-        return Optional.ofNullable(new DatabaseIdpUser(
+        return Optional.of(new DatabaseIdpUser(
                 idpName + "-new",
                 UUID.randomUUID().toString(),
                 "bar",
                 Collections.singletonList(createMdsValue("Jack")),
                 Collections.emptyList(),
                 Collections.singletonList(createMdsValue("Griffin")),
-                Optional.ofNullable(createMdsValue(Gender.NOT_SPECIFIED)),
-                Collections.singletonList(createMdsValue(LocalDate.parse("1983-06-21"))),
-                Collections.singletonList(new AddressFactory().create(Collections.singletonList("Lion's Head Inn"), "1A 2BC", null, null, null, null, true)),
+                Optional.of(createMdsValue(Gender.NOT_SPECIFIED)),
+                Collections.singletonList(createMdsValue(BaseMdsSamlObjectUnmarshaller.InstantFromDate.of("1983-06-21"))),
+                Collections.singletonList(new AddressFactory().createNoDates(Collections.singletonList("Lion's Head Inn"), "1A 2BC", null, null, true)),
                 levelOfAssurance));
     }
 

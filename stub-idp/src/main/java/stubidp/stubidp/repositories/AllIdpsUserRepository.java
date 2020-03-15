@@ -1,6 +1,5 @@
 package stubidp.stubidp.repositories;
 
-import org.joda.time.LocalDate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import stubidp.saml.utils.core.domain.Address;
@@ -12,6 +11,7 @@ import stubidp.stubidp.domain.MatchingDatasetValue;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
+import java.time.Instant;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
@@ -53,7 +53,7 @@ public class AllIdpsUserRepository {
                                      List<MatchingDatasetValue<String>> middleNames,
                                      List<MatchingDatasetValue<String>> surnames,
                                      Optional<MatchingDatasetValue<Gender>> gender,
-                                     List<MatchingDatasetValue<LocalDate>> dateOfBirths,
+                                     List<MatchingDatasetValue<Instant>> dateOfBirths,
                                      List<Address> addresses,
                                      String username,
                                      String password,
@@ -86,7 +86,7 @@ public class AllIdpsUserRepository {
                                                Optional<MatchingDatasetValue<String>> nonLatinFirstName,
                                                MatchingDatasetValue<String> surname,
                                                Optional<MatchingDatasetValue<String>> nonLatinSurname,
-                                               MatchingDatasetValue<LocalDate> dob,
+                                               MatchingDatasetValue<Instant> dob,
                                                AuthnContext levelOfAssurance){
         DatabaseEidasUser user = new DatabaseEidasUser(
                 username, persistentId, password,

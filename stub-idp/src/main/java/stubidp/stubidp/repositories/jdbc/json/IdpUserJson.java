@@ -3,12 +3,12 @@ package stubidp.stubidp.repositories.jdbc.json;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import org.joda.time.LocalDate;
 import stubidp.saml.utils.core.domain.Address;
 import stubidp.saml.utils.core.domain.AuthnContext;
 import stubidp.saml.utils.core.domain.Gender;
 import stubidp.stubidp.domain.MatchingDatasetValue;
 
+import java.time.Instant;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -27,7 +27,7 @@ public class IdpUserJson {
     private List<MatchingDatasetValue<String>> middleNames;
     private List<MatchingDatasetValue<String>> surnames;
     private Optional<MatchingDatasetValue<Gender>> gender;
-    private List<MatchingDatasetValue<LocalDate>> dateOfBirths;
+    private List<MatchingDatasetValue<Instant>> dateOfBirths;
     private List<Address> addresses;
     private AuthnContext levelOfAssurance;
 
@@ -42,7 +42,7 @@ public class IdpUserJson {
         List<MatchingDatasetValue<String>> middleNames,
         List<MatchingDatasetValue<String>> surnames,
         Optional<MatchingDatasetValue<Gender>> gender,
-        List<MatchingDatasetValue<LocalDate>> dateOfBirths,
+        List<MatchingDatasetValue<Instant>> dateOfBirths,
         List<Address> addresses,
         AuthnContext levelOfAssurance
     ) {
@@ -86,7 +86,7 @@ public class IdpUserJson {
         return gender;
     }
 
-    public List<MatchingDatasetValue<LocalDate>> getDateOfBirths() {
+    public List<MatchingDatasetValue<Instant>> getDateOfBirths() {
         return dateOfBirths;
     }
 

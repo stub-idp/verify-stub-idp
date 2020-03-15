@@ -50,10 +50,11 @@ public class EidasAuthnRequest {
     }
 
     public static EidasAuthnRequest buildFromAuthnRequest(AuthnRequest request) {
+        //FIXME: add issueInstant
         String requestId = request.getID();
         String issuer = request.getIssuer().getValue();
         String destination = request.getDestination();
-        String requestLoa = request.getRequestedAuthnContext().getAuthnContextClassRefs().get(0).getAuthnContextClassRef();
+        String requestLoa = request.getRequestedAuthnContext().getAuthnContextClassRefs().get(0).getURI();
 
         return new EidasAuthnRequest(requestId, issuer, destination, requestLoa, getRequestAttributes(request));
     }

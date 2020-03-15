@@ -2,7 +2,6 @@ package stubidp.stubidp.domain;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import org.joda.time.LocalDate;
 import org.mindrot.jbcrypt.BCrypt;
 import stubidp.saml.utils.core.domain.Address;
 import stubidp.saml.utils.core.domain.AuthnContext;
@@ -11,6 +10,7 @@ import stubidp.stubidp.exceptions.UnHashedPasswordException;
 import stubidp.stubidp.security.BCryptHelper;
 
 import java.io.Serializable;
+import java.time.Instant;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -23,7 +23,7 @@ public class DatabaseIdpUser implements Serializable {
     private final List<MatchingDatasetValue<String>> middleNames;
     private final List<MatchingDatasetValue<String>> surnames;
     private final Optional<MatchingDatasetValue<Gender>> gender;
-    private final List<MatchingDatasetValue<LocalDate>> dateOfBirths;
+    private final List<MatchingDatasetValue<Instant>> dateOfBirths;
     private final List<Address> addresses;
     private final AuthnContext levelOfAssurance;
 
@@ -36,7 +36,7 @@ public class DatabaseIdpUser implements Serializable {
         @JsonProperty("middleNames") List<MatchingDatasetValue<String>> middleNames,
         @JsonProperty("surnames") List<MatchingDatasetValue<String>> surnames,
         @JsonProperty("gender") Optional<MatchingDatasetValue<Gender>> gender,
-        @JsonProperty("dateOfBirths") List<MatchingDatasetValue<LocalDate>> dateOfBirths,
+        @JsonProperty("dateOfBirths") List<MatchingDatasetValue<Instant>> dateOfBirths,
         @JsonProperty("addresses") List<Address> addresses,
         @JsonProperty("levelOfAssurance") AuthnContext levelOfAssurance) {
 
@@ -84,7 +84,7 @@ public class DatabaseIdpUser implements Serializable {
         return gender;
     }
 
-    public List<MatchingDatasetValue<LocalDate>> getDateOfBirths() {
+    public List<MatchingDatasetValue<Instant>> getDateOfBirths() {
         return dateOfBirths;
     }
 

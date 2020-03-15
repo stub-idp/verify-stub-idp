@@ -1,6 +1,5 @@
 package stubidp.stubidp.services;
 
-import org.joda.time.LocalDate;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -15,16 +14,19 @@ import stubidp.saml.extensions.extensions.eidas.CurrentFamilyName;
 import stubidp.saml.extensions.extensions.eidas.CurrentGivenName;
 import stubidp.saml.extensions.extensions.eidas.DateOfBirth;
 import stubidp.saml.extensions.extensions.eidas.PersonIdentifier;
+import stubidp.shared.repositories.MetadataRepository;
 import stubidp.stubidp.domain.EidasAuthnRequest;
 import stubidp.stubidp.domain.EidasUser;
 import stubidp.stubidp.domain.SamlResponseFromValue;
 import stubidp.stubidp.repositories.EidasSession;
-import stubidp.shared.repositories.MetadataRepository;
 import stubidp.stubidp.saml.transformers.EidasResponseTransformerProvider;
 import stubidp.utils.rest.common.SessionId;
 
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -49,7 +51,7 @@ class EidasAuthnResponseServiceTest {
     @Mock
     private MetadataRepository metadataRepository;
 
-    private final LocalDate dateOfBirth = new LocalDate(1980, 1, 1);
+    private final Instant dateOfBirth = LocalDate.of(1990, 1, 1).atStartOfDay().atZone(ZoneId.of("UTC")).toInstant();
 
     @BeforeEach
     void setUp() {

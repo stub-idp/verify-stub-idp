@@ -3,11 +3,11 @@ package stubidp.stubidp.repositories.jdbc.json;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import org.joda.time.LocalDate;
 import stubidp.saml.utils.core.domain.AuthnContext;
 import stubidp.stubidp.domain.MatchingDatasetValue;
 
 import java.io.Serializable;
+import java.time.Instant;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -24,7 +24,7 @@ public class EidasUserJson implements Serializable {
     private Optional<MatchingDatasetValue<String>> nonLatinFirstname;
     private MatchingDatasetValue<String> surname;
     private Optional<MatchingDatasetValue<String>> nonLatinSurname;
-    private MatchingDatasetValue<LocalDate> dateOfBirth;
+    private MatchingDatasetValue<Instant> dateOfBirth;
     private AuthnContext levelOfAssurance;
 
     private EidasUserJson() {
@@ -38,7 +38,7 @@ public class EidasUserJson implements Serializable {
         Optional<MatchingDatasetValue<String>> nonLatinFirstname,
         MatchingDatasetValue<String> surname,
         Optional<MatchingDatasetValue<String>> nonLatinSurname,
-        MatchingDatasetValue<LocalDate> dateOfBirth,
+        MatchingDatasetValue<Instant> dateOfBirth,
         AuthnContext levelOfAssurance) {
 
         this.username = username;
@@ -80,7 +80,7 @@ public class EidasUserJson implements Serializable {
         return nonLatinSurname;
     }
 
-    public MatchingDatasetValue<LocalDate> getDateOfBirth() {
+    public MatchingDatasetValue<Instant> getDateOfBirth() {
         return dateOfBirth;
     }
 

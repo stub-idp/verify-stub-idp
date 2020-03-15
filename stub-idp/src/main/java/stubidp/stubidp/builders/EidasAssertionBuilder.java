@@ -1,6 +1,5 @@
 package stubidp.stubidp.builders;
 
-import org.joda.time.DateTime;
 import org.opensaml.core.xml.XMLObject;
 import org.opensaml.core.xml.util.XMLObjectSupport;
 import org.opensaml.saml.saml2.core.Assertion;
@@ -19,12 +18,12 @@ import org.opensaml.saml.saml2.core.Subject;
 import org.opensaml.saml.saml2.core.SubjectConfirmation;
 import org.opensaml.saml.saml2.core.SubjectConfirmationData;
 
-
 import javax.xml.namespace.QName;
+import java.time.Instant;
+import java.time.ZoneId;
 import java.util.List;
 
 public class EidasAssertionBuilder {
-
     public static final String TEMPORARY_PID_TRANSLATION = "UK/EU/";
 
     private final Assertion assertion;
@@ -48,7 +47,7 @@ public class EidasAssertionBuilder {
         return this;
     }
 
-    public EidasAssertionBuilder withIssueInstant(DateTime issueInstant) {
+    public EidasAssertionBuilder withIssueInstant(Instant issueInstant) {
         assertion.setIssueInstant(issueInstant);
         return this;
     }
@@ -57,7 +56,7 @@ public class EidasAssertionBuilder {
         assertion.setConditions(createConditions(audienceUri));
         return this;
     }
-    public EidasAssertionBuilder addAuthnStatement(String loa, DateTime authnIssueInstant) {
+    public EidasAssertionBuilder addAuthnStatement(String loa, Instant authnIssueInstant) {
         assertion.getAuthnStatements().add(createAuthnStatement(loa, authnIssueInstant));
         return this;
     }
@@ -85,7 +84,7 @@ public class EidasAssertionBuilder {
     private SubjectConfirmation createSubjectConfirmation(String inResponseTo, String destinationUrl) {
         SubjectConfirmationData subjectConfirmationData = build(SubjectConfirmationData.DEFAULT_ELEMENT_NAME);
         subjectConfirmationData.setInResponseTo(inResponseTo);
-        subjectConfirmationData.setNotOnOrAfter(DateTime.now().plusMinutes(5));
+        subjectConfirmationData.setNotOnOrAfter(Instant.now().atZone(ZoneId.of("UTC")).plusMinutes(5).toInstant());
         subjectConfirmationData.setRecipient(destinationUrl);
 
         SubjectConfirmation subjectConfirmation = build(SubjectConfirmation.DEFAULT_ELEMENT_NAME);
@@ -97,15 +96,15 @@ public class EidasAssertionBuilder {
 
     private Conditions createConditions(String audienceUri) {
         Audience audience = build(Audience.DEFAULT_ELEMENT_NAME);
-        audience.setAudienceURI(audienceUri);
+        audience.setURI(audienceUri);
 
         AudienceRestriction audienceRestriction = build(AudienceRestriction.DEFAULT_ELEMENT_NAME);
         audienceRestriction.getAudiences().add(audience);
 
         Conditions conditions = build(Conditions.DEFAULT_ELEMENT_NAME);
-        DateTime now = DateTime.now();
+        Instant now = Instant.now();
         conditions.setNotBefore(now);
-        conditions.setNotOnOrAfter(now.plusMinutes(5));
+        conditions.setNotOnOrAfter(now.atZone(ZoneId.of("UTC")).plusMinutes(5).toInstant());
         conditions.getAudienceRestrictions().add(audienceRestriction);
         return conditions;
     }
@@ -116,11 +115,11 @@ public class EidasAssertionBuilder {
         return attributeStatement;
     }
 
-    private AuthnStatement createAuthnStatement(String loa, DateTime authnStatementAuthnInstant) {
+    private AuthnStatement createAuthnStatement(String loa, Instant authnStatementAuthnInstant) {
         AuthnStatement authnStatement = build(AuthnStatement.DEFAULT_ELEMENT_NAME);
         AuthnContext authnContext = build(AuthnContext.DEFAULT_ELEMENT_NAME);
         AuthnContextClassRef authnContextClassRef = build(AuthnContextClassRef.DEFAULT_ELEMENT_NAME);
-        authnContextClassRef.setAuthnContextClassRef(loa);
+        authnContextClassRef.setURI(loa);
         authnContext.setAuthnContextClassRef(authnContextClassRef);
         authnStatement.setAuthnContext(authnContext);
         authnStatement.setAuthnInstant(authnStatementAuthnInstant);

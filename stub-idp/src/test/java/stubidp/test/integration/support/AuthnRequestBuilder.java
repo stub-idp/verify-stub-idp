@@ -1,7 +1,6 @@
 package stubidp.test.integration.support;
 
 import com.google.common.base.Strings;
-import org.joda.time.DateTime;
 import org.opensaml.core.xml.config.XMLObjectProviderRegistrySupport;
 import org.opensaml.core.xml.io.MarshallingException;
 import org.opensaml.saml.common.xml.SAMLConstants;
@@ -23,6 +22,7 @@ import stubidp.saml.utils.core.test.AuthnRequestIdGenerator;
 import stubidp.saml.utils.core.test.builders.IssuerBuilder;
 import stubidp.saml.utils.core.test.builders.SignatureBuilder;
 
+import java.time.Instant;
 import java.util.Optional;
 
 public class AuthnRequestBuilder {
@@ -35,15 +35,15 @@ public class AuthnRequestBuilder {
     private Optional<Boolean> isPassive = Optional.empty();
 
     private Optional<Issuer> issuer = Optional.ofNullable(IssuerBuilder.anIssuer().build());
-    private Optional<String> id = Optional.ofNullable(AuthnRequestIdGenerator.generateRequestId());
-    private Optional<String> minimumLevelOfAssurance = Optional.ofNullable(IdaAuthnContext.LEVEL_1_AUTHN_CTX);
+    private Optional<String> id = Optional.of(AuthnRequestIdGenerator.generateRequestId());
+    private Optional<String> minimumLevelOfAssurance = Optional.of(IdaAuthnContext.LEVEL_1_AUTHN_CTX);
     private boolean shouldSign = true;
     private boolean shouldAddSignature = true;
-    private Optional<DateTime> issueInstant = Optional.ofNullable(DateTime.now());
+    private Optional<Instant> issueInstant = Optional.ofNullable(Instant.now());
 
-    private Optional<String> versionNumber = Optional.ofNullable(IdaConstants.SAML_VERSION_NUMBER);
+    private Optional<String> versionNumber = Optional.of(IdaConstants.SAML_VERSION_NUMBER);
     private Optional<String> destination = Optional.empty();
-    private Optional<String> requiredLevelOfAssurance = Optional.ofNullable(IdaAuthnContext.LEVEL_2_AUTHN_CTX);
+    private Optional<String> requiredLevelOfAssurance = Optional.of(IdaAuthnContext.LEVEL_2_AUTHN_CTX);
     private Optional<Credential> signingCredential = Optional.empty();
     private Optional<Boolean> forceAuthn = Optional.empty();
     private Optional<Integer> assertionConsumerServiceIndex = Optional.empty();
@@ -155,7 +155,7 @@ public class AuthnRequestBuilder {
         return this;
     }
 
-    public AuthnRequestBuilder withIssueInstant(DateTime dateTime) {
+    public AuthnRequestBuilder withIssueInstant(Instant dateTime) {
         this.issueInstant = Optional.ofNullable(dateTime);
         return this;
     }

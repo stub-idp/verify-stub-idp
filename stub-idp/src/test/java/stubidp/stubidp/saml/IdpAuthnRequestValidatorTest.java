@@ -3,7 +3,6 @@ package stubidp.stubidp.saml;
 import certificates.values.CACertificates;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import org.glassfish.jersey.client.JerseyClientBuilder;
-import org.joda.time.DateTime;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -43,6 +42,9 @@ import stubidp.utils.rest.jerseyclient.JerseyClientConfigurationBuilder;
 
 import javax.ws.rs.core.UriBuilder;
 import java.net.URI;
+import java.time.Duration;
+import java.time.Instant;
+import java.time.ZoneId;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -80,8 +82,8 @@ class IdpAuthnRequestValidatorTest {
         verifyMetadataServer.register(HUB_METADATA_PATH, 200, Constants.APPLICATION_SAMLMETADATA_XML, getMetadata());
 
         metadataConfiguration = new MultiTrustStoresBackedMetadataConfiguration(UriBuilder.fromUri("http://localhost:" + verifyMetadataServer.getPort() + HUB_METADATA_PATH).build(),
-                10L,
-                60L,
+                Duration.ofSeconds(10L),
+                Duration.ofSeconds(60L),
                 hubEntityId,
                 JerseyClientConfigurationBuilder.aJerseyClientConfiguration().build(),
                 IdpAuthnRequestValidatorTest.class.getName(),
@@ -121,7 +123,7 @@ class IdpAuthnRequestValidatorTest {
         String _authnRequest = IdpAuthnRequestBuilder.anAuthnRequest()
                 .withKeyInfo(true)
                 .withEntityId(hubEntityId)
-                .withIssueInstant(DateTime.now())
+                .withIssueInstant(Instant.now())
                 .withDestination(stubIdpDestination)
                 .build();
         InvalidAuthnRequestException exception = assertThrows(InvalidAuthnRequestException.class, () -> idpAuthnRequestValidator.transformAndValidate(IDP_NAME, _authnRequest));
@@ -132,7 +134,7 @@ class IdpAuthnRequestValidatorTest {
     public void shouldValidateAValidAuthnRequest() {
         String _authnRequest = IdpAuthnRequestBuilder.anAuthnRequest()
                 .withEntityId(hubEntityId)
-                .withIssueInstant(DateTime.now())
+                .withIssueInstant(Instant.now())
                 .withDestination(stubIdpDestination)
                 .build();
         idpAuthnRequestValidator.transformAndValidate(IDP_NAME, _authnRequest);
@@ -142,7 +144,7 @@ class IdpAuthnRequestValidatorTest {
     public void shouldFailDuplicateSubmissionsOfSameRequest() {
         String _authnRequest = IdpAuthnRequestBuilder.anAuthnRequest()
                 .withEntityId(hubEntityId)
-                .withIssueInstant(DateTime.now())
+                .withIssueInstant(Instant.now())
                 .withDestination(stubIdpDestination)
                 .build();
         idpAuthnRequestValidator.transformAndValidate(IDP_NAME, _authnRequest);
@@ -154,7 +156,7 @@ class IdpAuthnRequestValidatorTest {
     public void shouldNotValidateAValidAuthnRequestSignedWithWrongKey() {
         String _authnRequest = IdpAuthnRequestBuilder.anAuthnRequest()
                 .withEntityId(hubEntityId)
-                .withIssueInstant(DateTime.now())
+                .withIssueInstant(Instant.now())
                 .withDestination(stubIdpDestination)
                 .withInvalidKey(true)
                 .build();
@@ -166,7 +168,7 @@ class IdpAuthnRequestValidatorTest {
     public void shouldNotAllowAnIncorrectDestination() {
         String _authnRequest = IdpAuthnRequestBuilder.anAuthnRequest()
                 .withEntityId(hubEntityId)
-                .withIssueInstant(DateTime.now())
+                .withIssueInstant(Instant.now())
                 .withDestination(UriBuilder.fromUri(stubIdpBaseUri + Urls.IDP_SAML2_SSO_RESOURCE).build("foo").toASCIIString())
                 .build();
         SamlValidationException exception = assertThrows(SamlValidationException.class, () -> idpAuthnRequestValidator.transformAndValidate(IDP_NAME, _authnRequest));
@@ -177,7 +179,7 @@ class IdpAuthnRequestValidatorTest {
     public void shouldNotValidateRequestFromUnepectedIssuer() {
         String _authnRequest = IdpAuthnRequestBuilder.anAuthnRequest()
                 .withEntityId("something else")
-                .withIssueInstant(DateTime.now())
+                .withIssueInstant(Instant.now())
                 .withDestination(stubIdpDestination)
                 .build();
         InvalidAuthnRequestException exception = assertThrows(InvalidAuthnRequestException.class, () -> idpAuthnRequestValidator.transformAndValidate(IDP_NAME, _authnRequest));
@@ -188,7 +190,7 @@ class IdpAuthnRequestValidatorTest {
     public void shouldNotAcceptExpiredRequest() {
         String _authnRequest = IdpAuthnRequestBuilder.anAuthnRequest()
                 .withEntityId(hubEntityId)
-                .withIssueInstant(DateTime.now().minusHours(1))
+                .withIssueInstant(Instant.now().atZone(ZoneId.of("UTC")).minusHours(1).toInstant())
                 .withDestination(stubIdpDestination)
                 .build();
         SamlRequestTooOldException exception = assertThrows(SamlRequestTooOldException.class, () -> idpAuthnRequestValidator.transformAndValidate(IDP_NAME, _authnRequest));
