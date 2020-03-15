@@ -25,7 +25,7 @@ public class OutboundAssertionToSubjectTransformerTest extends OpenSAMLRunner {
     }
 
     @Test
-    public void transform_shouldAddSubjectConfirmationData() throws Exception {
+    public void transform_shouldAddSubjectConfirmationData() {
         HubAssertion assertion = HubAssertionBuilder.aHubAssertion().build();
 
         final Subject subject = transformer.transform(assertion);
@@ -34,12 +34,12 @@ public class OutboundAssertionToSubjectTransformerTest extends OpenSAMLRunner {
         Assertions.assertThat(subjectConfirmation.getMethod()).isEqualTo(SubjectConfirmation.METHOD_BEARER);
         final AssertionRestrictions assertionRestrictions = assertion.getAssertionRestrictions();
         Assertions.assertThat(subjectConfirmation.getSubjectConfirmationData().getRecipient()).isEqualTo(assertionRestrictions.getRecipient());
-        org.assertj.jodatime.api.Assertions.assertThat(subjectConfirmation.getSubjectConfirmationData().getNotOnOrAfter()).isEqualTo(assertionRestrictions.getNotOnOrAfter());
+        Assertions.assertThat(subjectConfirmation.getSubjectConfirmationData().getNotOnOrAfter()).isEqualTo(assertionRestrictions.getNotOnOrAfter());
         Assertions.assertThat(subjectConfirmation.getSubjectConfirmationData().getInResponseTo()).isEqualTo(assertionRestrictions.getInResponseTo());
     }
 
     @Test
-    public void transform_shouldTransformPersistentId() throws Exception {
+    public void transform_shouldTransformPersistentId() {
         PersistentId persistentId = PersistentIdBuilder.aPersistentId().build();
         HubAssertion assertion = HubAssertionBuilder.aHubAssertion().withPersistentId(persistentId).build();
 

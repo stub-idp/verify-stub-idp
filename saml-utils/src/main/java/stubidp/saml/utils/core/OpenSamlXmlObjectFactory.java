@@ -148,7 +148,7 @@ public class OpenSamlXmlObjectFactory {
 
     private Audience createAudience(String audienceId) {
         Audience audience = (Audience) openSamlBuilderFactory.getBuilder(Audience.DEFAULT_ELEMENT_NAME).buildObject(Audience.DEFAULT_ELEMENT_NAME);
-        audience.setAudienceURI(audienceId);
+        audience.setURI(audienceId);
 
         return audience;
     }
@@ -181,7 +181,7 @@ public class OpenSamlXmlObjectFactory {
 
     public AuthnContextClassRef createAuthnContextClassReference(String authnContextUrn) {
         AuthnContextClassRef authnContextClassRef = (AuthnContextClassRef) openSamlBuilderFactory.getBuilder(AuthnContextClassRef.DEFAULT_ELEMENT_NAME).buildObject(AuthnContextClassRef.DEFAULT_ELEMENT_NAME);
-        authnContextClassRef.setAuthnContextClassRef(authnContextUrn);
+        authnContextClassRef.setURI(authnContextUrn);
         return authnContextClassRef;
     }
 
@@ -306,7 +306,7 @@ public class OpenSamlXmlObjectFactory {
 
     public OrganizationURL createOrganizationUrl(String url) {
         OrganizationURL organizationUrl = (OrganizationURL) openSamlBuilderFactory.getBuilder(OrganizationURL.DEFAULT_ELEMENT_NAME).buildObject(OrganizationURL.DEFAULT_ELEMENT_NAME, OrganizationURL.TYPE_NAME);
-        organizationUrl.setValue(url);
+        organizationUrl.setURI(url);
         organizationUrl.setXMLLang(IdaConstants.IDA_LANGUAGE);
         return organizationUrl;
     }
@@ -391,31 +391,31 @@ public class OpenSamlXmlObjectFactory {
 
     public EmailAddress createEmailAddress(String address) {
         EmailAddress emailAddress = (EmailAddress) openSamlBuilderFactory.getBuilder(EmailAddress.DEFAULT_ELEMENT_NAME).buildObject(EmailAddress.DEFAULT_ELEMENT_NAME);
-        emailAddress.setAddress(address);
+        emailAddress.setURI(address);
         return emailAddress;
     }
 
     public TelephoneNumber createTelephoneNumber(String number) {
         TelephoneNumber telephoneNumber = (TelephoneNumber) openSamlBuilderFactory.getBuilder(TelephoneNumber.DEFAULT_ELEMENT_NAME).buildObject(TelephoneNumber.DEFAULT_ELEMENT_NAME);
-        telephoneNumber.setNumber(number);
+        telephoneNumber.setValue(number);
         return telephoneNumber;
     }
 
     public GivenName createGivenName(String name) {
         GivenName givenName = (GivenName) openSamlBuilderFactory.getBuilder(GivenName.DEFAULT_ELEMENT_NAME).buildObject(GivenName.DEFAULT_ELEMENT_NAME);
-        givenName.setName(name);
+        givenName.setValue(name);
         return givenName;
     }
 
     public SurName createSurName(String name) {
         SurName surName = (SurName) openSamlBuilderFactory.getBuilder(SurName.DEFAULT_ELEMENT_NAME).buildObject(SurName.DEFAULT_ELEMENT_NAME);
-        surName.setName(name);
+        surName.setValue(name);
         return surName;
     }
 
     public Company createCompany(String name) {
         Company company = (Company) openSamlBuilderFactory.getBuilder(Company.DEFAULT_ELEMENT_NAME).buildObject(Company.DEFAULT_ELEMENT_NAME);
-        company.setName(name);
+        company.setValue(name);
         return company;
     }
 

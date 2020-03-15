@@ -1,25 +1,21 @@
 package stubidp.saml.utils.core.domain;
 
-import org.joda.time.DateTime;
-
 import java.net.URI;
+import java.time.Instant;
 
 public abstract class IdaSamlResponse extends IdaSamlMessage implements IdaResponse {
 
     private String inResponseTo;
 
-    protected IdaSamlResponse() {
-    }
+    protected IdaSamlResponse() {}
 
     protected IdaSamlResponse(
             String responseId,
-            DateTime issueInstant,
+            Instant issueInstant,
             String inResponseTo,
             String issuer,
             URI destination) {
-
         super(responseId, issuer, issueInstant, destination);
-
         this.inResponseTo = inResponseTo;
     }
 

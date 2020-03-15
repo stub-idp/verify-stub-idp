@@ -1,6 +1,5 @@
 package stubidp.saml.utils.core.test.builders;
 
-import org.joda.time.DateTime;
 import org.opensaml.core.xml.XMLObjectBuilderFactory;
 import org.opensaml.core.xml.config.XMLObjectProviderRegistrySupport;
 import org.opensaml.core.xml.io.MarshallingException;
@@ -12,6 +11,7 @@ import org.opensaml.xmlsec.signature.Signature;
 import org.opensaml.xmlsec.signature.support.SignatureException;
 import org.opensaml.xmlsec.signature.support.Signer;
 
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -29,7 +29,7 @@ public class AttributeQueryBuilder {
     private Optional<Subject> subject = ofNullable(SubjectBuilder.aSubject().build());
     private Optional<Issuer> issuer = ofNullable(IssuerBuilder.anIssuer().build());
     private Optional<Signature> signature = ofNullable(SignatureBuilder.aSignature().build());
-    private Optional<DateTime> issueInstant = ofNullable(DateTime.now());
+    private Optional<Instant> issueInstant = ofNullable(Instant.now());
 
     public static AttributeQueryBuilder anAttributeQuery() {
         return new AttributeQueryBuilder();
@@ -82,7 +82,7 @@ public class AttributeQueryBuilder {
         return this;
     }
 
-    public AttributeQueryBuilder withIssueInstant(DateTime issueInstant) {
+    public AttributeQueryBuilder withIssueInstant(Instant issueInstant) {
         this.issueInstant = ofNullable(issueInstant);
         return this;
     }

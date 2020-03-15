@@ -25,7 +25,7 @@ public class IdentityProviderAuthnStatementUnmarshaller {
     public IdentityProviderAuthnStatement fromAssertion(Assertion assertion) {
 
         AuthnStatement authnStatement = assertion.getAuthnStatements().get(0);
-        String levelOfAssurance = authnStatement.getAuthnContext().getAuthnContextClassRef().getAuthnContextClassRef();
+        String levelOfAssurance = authnStatement.getAuthnContext().getAuthnContextClassRef().getURI();
         IpAddress ipAddress = null;
         for (AttributeStatement attributeStatement : assertion.getAttributeStatements()) {
             for (Attribute attribute : attributeStatement.getAttributes()) {

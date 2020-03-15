@@ -1,11 +1,11 @@
 package stubidp.saml.utils.core.test.builders;
 
-import org.joda.time.DateTime;
 import stubidp.saml.utils.core.domain.AssertionRestrictions;
 import stubidp.saml.utils.core.domain.Cycle3Dataset;
 import stubidp.saml.utils.core.domain.HubAssertion;
 import stubidp.saml.utils.core.domain.PersistentId;
 
+import java.time.Instant;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -13,7 +13,7 @@ public class HubAssertionBuilder {
 
     private String id = "assertion-id" + UUID.randomUUID();
     private String issuerId = "assertion issuer id";
-    private DateTime issueInstant = DateTime.now();
+    private Instant issueInstant = Instant.now();
     private PersistentId persistentId = PersistentIdBuilder.aPersistentId().build();
     private AssertionRestrictions assertionRestrictions = AssertionRestrictionsBuilder.anAssertionRestrictions().build();
     private Optional<Cycle3Dataset> cycle3Data = Optional.empty();
@@ -42,7 +42,7 @@ public class HubAssertionBuilder {
         return this;
     }
 
-    public HubAssertionBuilder withIssueInstant(DateTime issueInstant) {
+    public HubAssertionBuilder withIssueInstant(Instant issueInstant) {
         this.issueInstant = issueInstant;
         return this;
     }

@@ -5,7 +5,7 @@ import org.opensaml.saml.saml2.metadata.SurName;
 import java.util.Optional;
 
 public class SurNameBuilder {
-    private Optional<String> name = Optional.ofNullable("Flintstone");
+    private Optional<String> name = Optional.of("Flintstone");
 
     public static SurNameBuilder aSurName(){
         return new SurNameBuilder();
@@ -13,7 +13,7 @@ public class SurNameBuilder {
 
     public SurName build() {
         SurName name = new org.opensaml.saml.saml2.metadata.impl.SurNameBuilder().buildObject();
-        name.setName(this.name.get());
+        name.setValue(this.name.get());
         return name;
     }
 }

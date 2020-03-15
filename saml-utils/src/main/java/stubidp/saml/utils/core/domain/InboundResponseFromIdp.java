@@ -1,9 +1,9 @@
 package stubidp.saml.utils.core.domain;
 
-import org.joda.time.DateTime;
 import org.opensaml.xmlsec.signature.Signature;
 
 import java.net.URI;
+import java.time.Instant;
 import java.util.Optional;
 
 public class InboundResponseFromIdp extends IdaSamlResponse {
@@ -16,7 +16,7 @@ public class InboundResponseFromIdp extends IdaSamlResponse {
             String id,
             String inResponseTo,
             String issuer,
-            DateTime issueInstant,
+            Instant issueInstant,
             IdpIdaStatus status,
             Optional<Signature> signature,
             Optional<PassthroughAssertion> matchingDatasetAssertion,

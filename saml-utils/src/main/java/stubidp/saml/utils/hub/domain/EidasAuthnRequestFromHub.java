@@ -1,10 +1,10 @@
 package stubidp.saml.utils.hub.domain;
 
-import org.joda.time.DateTime;
 import stubidp.saml.utils.core.domain.AuthnContext;
 import stubidp.saml.utils.core.domain.IdaSamlMessage;
 
 import java.net.URI;
+import java.time.Instant;
 import java.util.List;
 
 public class EidasAuthnRequestFromHub extends IdaSamlMessage {
@@ -14,7 +14,7 @@ public class EidasAuthnRequestFromHub extends IdaSamlMessage {
     public EidasAuthnRequestFromHub(
         String id,
         String issuer,
-        DateTime issueInstant,
+        Instant issueInstant,
         List<AuthnContext> levelsOfAssurance,
         URI countryPostEndpoint,
         String providerName) {
@@ -24,7 +24,7 @@ public class EidasAuthnRequestFromHub extends IdaSamlMessage {
     }
 
     public static EidasAuthnRequestFromHub createRequestToSendFromHub(String id, List<AuthnContext> levelsOfAssurance, URI countryPostEndpoint, String providerName, String hubEntityId) {
-        return new EidasAuthnRequestFromHub(id, hubEntityId, DateTime.now(), levelsOfAssurance, countryPostEndpoint, providerName);
+        return new EidasAuthnRequestFromHub(id, hubEntityId, Instant.now(), levelsOfAssurance, countryPostEndpoint, providerName);
     }
 
 

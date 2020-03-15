@@ -1,19 +1,19 @@
 package stubidp.saml.utils.core.domain;
 
-import org.joda.time.DateTime;
+import java.time.Instant;
 
 public class OutboundAssertion {
 
     private String id;
     private String issuerId;
-    private DateTime issueInstant;
+    private Instant issueInstant;
     private PersistentId persistentId;
     private AssertionRestrictions assertionRestrictions;
 
     public OutboundAssertion(
             String id,
             String issuerId,
-            DateTime issueInstant,
+            Instant issueInstant,
             PersistentId persistentId,
             AssertionRestrictions assertionRestrictions) {
 
@@ -40,7 +40,7 @@ public class OutboundAssertion {
         return issuerId;
     }
 
-    public DateTime getIssueInstant() {
+    public Instant getIssueInstant() {
         return issueInstant;
     }
 }

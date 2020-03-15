@@ -47,7 +47,7 @@ public class OrganizationBuilder {
 
     private OrganizationURL createUrl(String url) { 
         OrganizationURL buildObject = new OrganizationURLBuilder().buildObject();
-        buildObject.setValue(url);
+        buildObject.setURI(url);
         buildObject.setXMLLang(DEFAULT_LANGUAGE);
         return buildObject;
     }

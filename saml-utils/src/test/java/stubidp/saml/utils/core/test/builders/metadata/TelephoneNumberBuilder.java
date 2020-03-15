@@ -13,7 +13,7 @@ public class TelephoneNumberBuilder {
 
     public TelephoneNumber build() {
         TelephoneNumber telephoneNumber = new org.opensaml.saml.saml2.metadata.impl.TelephoneNumberBuilder().buildObject();
-        telephoneNumber.setNumber(value.get());
+        telephoneNumber.setValue(value.get());
         return telephoneNumber;
     }
 

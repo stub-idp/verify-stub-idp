@@ -1,21 +1,21 @@
 package stubidp.saml.utils.core.domain;
 
-import org.joda.time.DateTime;
+import java.time.Instant;
 
 public class AssertionRestrictions {
     private String recipient;
-    private DateTime notOnOrAfter;
+    private Instant notOnOrAfter;
     private String inResponseTo;
 
     protected AssertionRestrictions() {}
 
-    public AssertionRestrictions(DateTime notOnOrAfter, String inResponseTo, String recipient) {
+    public AssertionRestrictions(Instant notOnOrAfter, String inResponseTo, String recipient) {
         this.notOnOrAfter = notOnOrAfter;
         this.inResponseTo = inResponseTo;
         this.recipient = recipient;
     }
 
-    public DateTime getNotOnOrAfter() {
+    public Instant getNotOnOrAfter() {
         return notOnOrAfter;
     }
 

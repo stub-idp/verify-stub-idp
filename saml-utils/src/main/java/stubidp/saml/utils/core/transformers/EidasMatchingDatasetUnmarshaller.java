@@ -1,20 +1,20 @@
 package stubidp.saml.utils.core.transformers;
 
-import org.joda.time.LocalDate;
 import org.opensaml.core.xml.XMLObject;
 import org.opensaml.saml.saml2.core.Assertion;
 import org.opensaml.saml.saml2.core.Attribute;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import stubidp.saml.extensions.IdaConstants;
-import stubidp.saml.utils.core.domain.SimpleMdsValue;
-import stubidp.saml.utils.core.domain.TransliterableMdsValue;
 import stubidp.saml.extensions.extensions.eidas.CurrentFamilyName;
 import stubidp.saml.extensions.extensions.eidas.CurrentGivenName;
 import stubidp.saml.extensions.extensions.eidas.DateOfBirth;
 import stubidp.saml.extensions.extensions.eidas.PersonIdentifier;
 import stubidp.saml.extensions.extensions.eidas.TransliterableString;
+import stubidp.saml.utils.core.domain.SimpleMdsValue;
+import stubidp.saml.utils.core.domain.TransliterableMdsValue;
 
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -104,8 +104,8 @@ public class EidasMatchingDatasetUnmarshaller extends MatchingDatasetUnmarshalle
                         .orElse(null)));
     }
 
-    private List<SimpleMdsValue<LocalDate>> transformEidasDateOfBirthAttribute(Attribute attribute) {
-        List<SimpleMdsValue<LocalDate>> datesOfBirth = new ArrayList<>();
+    private List<SimpleMdsValue<Instant>> transformEidasDateOfBirthAttribute(Attribute attribute) {
+        List<SimpleMdsValue<Instant>> datesOfBirth = new ArrayList<>();
 
         for (XMLObject xmlObject : attribute.getAttributeValues()) {
             DateOfBirth dateOfBirth = (DateOfBirth) xmlObject;

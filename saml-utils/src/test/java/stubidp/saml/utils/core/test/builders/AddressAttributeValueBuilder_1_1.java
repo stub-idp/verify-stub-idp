@@ -1,9 +1,9 @@
 package stubidp.saml.utils.core.test.builders;
 
-import org.joda.time.DateTime;
 import stubidp.saml.extensions.extensions.Address;
 import stubidp.saml.utils.core.test.OpenSamlXmlObjectFactory;
 
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -12,8 +12,8 @@ public class AddressAttributeValueBuilder_1_1 {
 
     private OpenSamlXmlObjectFactory openSamlXmlObjectFactory = new OpenSamlXmlObjectFactory();
 
-    private Optional<DateTime> from = Optional.empty();
-    private Optional<DateTime> to = Optional.empty();
+    private Optional<Instant> from = Optional.empty();
+    private Optional<Instant> to = Optional.empty();
 
     private List<String> lines = new ArrayList<>();
     private Optional<String> postCode = Optional.of("RG99 1YY");
@@ -27,39 +27,25 @@ public class AddressAttributeValueBuilder_1_1 {
     }
 
     public Address build() {
-
         Address addressAttributeValue = openSamlXmlObjectFactory.createAddressAttributeValue();
-
-        if (from.isPresent()) {
-            addressAttributeValue.setFrom(from.get());
-        }
-        if (to.isPresent()) {
-            addressAttributeValue.setTo(to.get());
-        }
+        from.ifPresent(addressAttributeValue::setFrom);
+        to.ifPresent(addressAttributeValue::setTo);
         addressAttributeValue.setVerified(verified);
-
         for (String line : lines) {
             addressAttributeValue.getLines().add(openSamlXmlObjectFactory.createLine(line));
         }
-        if (postCode.isPresent()) {
-            addressAttributeValue.setPostCode(openSamlXmlObjectFactory.createPostCode(postCode.get()));
-        }
-        if (internationalPostCode.isPresent()) {
-            addressAttributeValue.setInternationalPostCode(openSamlXmlObjectFactory.createInternationalPostCode(internationalPostCode.get()));
-        }
-        if (uprn.isPresent()) {
-            addressAttributeValue.setUPRN(openSamlXmlObjectFactory.createUPRN(uprn.get()));
-        }
-
+        postCode.ifPresent(s -> addressAttributeValue.setPostCode(openSamlXmlObjectFactory.createPostCode(s)));
+        internationalPostCode.ifPresent(s -> addressAttributeValue.setInternationalPostCode(openSamlXmlObjectFactory.createInternationalPostCode(s)));
+        uprn.ifPresent(s -> addressAttributeValue.setUPRN(openSamlXmlObjectFactory.createUPRN(s)));
         return addressAttributeValue;
     }
 
-    public AddressAttributeValueBuilder_1_1 withFrom(DateTime from) {
+    public AddressAttributeValueBuilder_1_1 withFrom(Instant from) {
         this.from = Optional.ofNullable(from);
         return this;
     }
 
-    public AddressAttributeValueBuilder_1_1 withTo(DateTime to) {
+    public AddressAttributeValueBuilder_1_1 withTo(Instant to) {
         this.to = Optional.ofNullable(to);
         return this;
     }

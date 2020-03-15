@@ -1,9 +1,5 @@
 package stubidp.saml.utils.hub.factories;
 
-import org.joda.time.DateTime;
-import org.joda.time.DateTimeZone;
-import org.joda.time.LocalDate;
-import org.joda.time.format.DateTimeFormat;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.opensaml.core.xml.XMLObject;
@@ -14,6 +10,7 @@ import stubidp.saml.extensions.extensions.IPAddress;
 import stubidp.saml.extensions.extensions.IdpFraudEventId;
 import stubidp.saml.extensions.extensions.PersonName;
 import stubidp.saml.extensions.extensions.StringBasedMdsAttributeValue;
+import stubidp.saml.extensions.extensions.impl.BaseMdsSamlObjectUnmarshaller;
 import stubidp.saml.utils.OpenSAMLRunner;
 import stubidp.saml.utils.core.OpenSamlXmlObjectFactory;
 import stubidp.saml.utils.core.domain.Address;
@@ -22,11 +19,12 @@ import stubidp.saml.utils.core.domain.SimpleMdsValue;
 import stubidp.saml.utils.core.test.builders.AddressBuilder;
 import stubidp.saml.utils.core.test.builders.SimpleMdsValueBuilder;
 
+import java.time.Instant;
+import java.util.Collections;
 import java.util.List;
 
 import static java.util.Arrays.asList;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.jodatime.api.Assertions.assertThat;
 
 public class AttributeFactory_1_1Test extends OpenSAMLRunner {
 
@@ -38,10 +36,13 @@ public class AttributeFactory_1_1Test extends OpenSAMLRunner {
     }
 
     @Test
-    public void createFirstNameAttribute_shouldSetUpTheAttribute() throws Exception {
-        SimpleMdsValue<String> firstName = new SimpleMdsValue<>("Bob", DateTime.parse("2012-03-02"), DateTime.parse("2013-09-4"), true);
+    public void createFirstNameAttribute_shouldSetUpTheAttribute() {
+        SimpleMdsValue<String> firstName = new SimpleMdsValue<>("Bob",
+                BaseMdsSamlObjectUnmarshaller.InstantFromDate.of("2012-03-02"),
+                BaseMdsSamlObjectUnmarshaller.InstantFromDate.of("2013-09-04"),
+                true);
 
-        Attribute createdAttribute = attributeFactory.createFirstnameAttribute(asList(firstName));
+        Attribute createdAttribute = attributeFactory.createFirstnameAttribute(Collections.singletonList(firstName));
 
         assertThat(createdAttribute.getName()).isEqualTo("MDS_firstname");
         assertThat(createdAttribute.getFriendlyName()).isEqualTo("Firstname");
@@ -55,7 +56,7 @@ public class AttributeFactory_1_1Test extends OpenSAMLRunner {
     }
 
     @Test
-    public void createFirstNameAttribute_shouldHandleMultipleValues() throws Exception {
+    public void createFirstNameAttribute_shouldHandleMultipleValues() {
         List<SimpleMdsValue<String>> firstNames = asList(
                 SimpleMdsValueBuilder.<String>aSimpleMdsValue().build(),
                 SimpleMdsValueBuilder.<String>aSimpleMdsValue().build());
@@ -66,10 +67,13 @@ public class AttributeFactory_1_1Test extends OpenSAMLRunner {
     }
 
     @Test
-    public void createMiddlenameAttribute_shouldSetUpTheAttribute() throws Exception {
-        SimpleMdsValue<String> middlename = new SimpleMdsValue<>("Robert", DateTime.parse("2012-03-02"), DateTime.parse("2013-09-4"), false);
+    public void createMiddlenameAttribute_shouldSetUpTheAttribute() {
+        SimpleMdsValue<String> middlename = new SimpleMdsValue<>("Robert",
+                BaseMdsSamlObjectUnmarshaller.InstantFromDate.of("2012-03-02"),
+                BaseMdsSamlObjectUnmarshaller.InstantFromDate.of("2013-09-04"),
+                false);
 
-        Attribute createdAttribute = attributeFactory.createMiddlenamesAttribute(asList(middlename));
+        Attribute createdAttribute = attributeFactory.createMiddlenamesAttribute(Collections.singletonList(middlename));
 
         assertThat(createdAttribute.getName()).isEqualTo("MDS_middlename");
         assertThat(createdAttribute.getFriendlyName()).isEqualTo("Middlename(s)");
@@ -83,10 +87,13 @@ public class AttributeFactory_1_1Test extends OpenSAMLRunner {
     }
 
     @Test
-    public void createSurnameAttribute_shouldSetUpTheAttribute() throws Exception {
-        SimpleMdsValue<String> surname = new SimpleMdsValue<>("McBoberson", DateTime.parse("2012-03-02"), DateTime.parse("2013-09-4"), false);
+    public void createSurnameAttribute_shouldSetUpTheAttribute() {
+        SimpleMdsValue<String> surname = new SimpleMdsValue<>("McBoberson",
+                BaseMdsSamlObjectUnmarshaller.InstantFromDate.of("2012-03-02"),
+                BaseMdsSamlObjectUnmarshaller.InstantFromDate.of("2013-09-04"),
+                false);
 
-        Attribute createdAttribute = attributeFactory.createSurnameAttribute(asList(surname));
+        Attribute createdAttribute = attributeFactory.createSurnameAttribute(Collections.singletonList(surname));
 
         assertThat(createdAttribute.getName()).isEqualTo("MDS_surname");
         assertThat(createdAttribute.getFriendlyName()).isEqualTo("Surname");
@@ -100,8 +107,11 @@ public class AttributeFactory_1_1Test extends OpenSAMLRunner {
     }
 
     @Test
-    public void createGenderAttribute_shouldSetUpTheAttribute() throws Exception {
-        SimpleMdsValue<Gender> genderSimpleMdsValue = new SimpleMdsValue<>(Gender.FEMALE, DateTime.parse("2012-03-02"), DateTime.parse("2013-09-4"), false);
+    public void createGenderAttribute_shouldSetUpTheAttribute() {
+        SimpleMdsValue<Gender> genderSimpleMdsValue = new SimpleMdsValue<>(Gender.FEMALE,
+                BaseMdsSamlObjectUnmarshaller.InstantFromDate.of("2012-03-02"),
+                BaseMdsSamlObjectUnmarshaller.InstantFromDate.of("2013-09-04"),
+                false);
 
         Attribute createdAttribute = attributeFactory.createGenderAttribute(genderSimpleMdsValue);
 
@@ -117,7 +127,7 @@ public class AttributeFactory_1_1Test extends OpenSAMLRunner {
     }
 
     @Test
-    public void createCycle3Attribute_shouldSetUpTheAttribute() throws Exception {
+    public void createCycle3Attribute_shouldSetUpTheAttribute() {
         String value = "some value";
         String attributeName = "someAttributeName";
         Attribute createdAttribute = attributeFactory.createCycle3DataAttribute(attributeName, value);
@@ -129,17 +139,20 @@ public class AttributeFactory_1_1Test extends OpenSAMLRunner {
     }
 
     @Test
-    public void createDateOfBirthAttribute_shouldSetUpTheAttribute() throws Exception {
-        SimpleMdsValue<LocalDate> dateOfBirth = new SimpleMdsValue<>(LocalDate.parse("1981-03-29"), DateTime.parse("2012-03-02"), DateTime.parse("2013-09-4"), true);
+    public void createDateOfBirthAttribute_shouldSetUpTheAttribute() {
+        SimpleMdsValue<Instant> dateOfBirth = new SimpleMdsValue<>(BaseMdsSamlObjectUnmarshaller.InstantFromDate.of("1981-03-29"),
+                BaseMdsSamlObjectUnmarshaller.InstantFromDate.of("2012-03-02"),
+                BaseMdsSamlObjectUnmarshaller.InstantFromDate.of("2013-09-04"),
+                true);
 
-        Attribute createdAttribute = attributeFactory.createDateOfBirthAttribute(asList(dateOfBirth));
+        Attribute createdAttribute = attributeFactory.createDateOfBirthAttribute(Collections.singletonList(dateOfBirth));
 
         assertThat(createdAttribute.getName()).isEqualTo("MDS_dateofbirth");
         assertThat(createdAttribute.getFriendlyName()).isEqualTo("Date of Birth");
         assertThat(createdAttribute.getNameFormat()).isEqualTo(Attribute.UNSPECIFIED);
         assertThat(createdAttribute.getAttributeValues().size()).isEqualTo(1);
         Date dateOfBirthAttributeValue = (Date) createdAttribute.getAttributeValues().get(0);
-        LocalDate dateOfBirthFromDom = LocalDate.parse(dateOfBirthAttributeValue.getValue());
+        Instant dateOfBirthFromDom = BaseMdsSamlObjectUnmarshaller.InstantFromDate.of(dateOfBirthAttributeValue.getValue());
         assertThat(dateOfBirthFromDom).isEqualTo(dateOfBirth.getValue());
         assertThat(dateOfBirthAttributeValue.getFrom()).isEqualTo(dateOfBirth.getFrom());
         assertThat(dateOfBirthAttributeValue.getTo()).isEqualTo(dateOfBirth.getTo());
@@ -147,15 +160,15 @@ public class AttributeFactory_1_1Test extends OpenSAMLRunner {
     }
 
     @Test
-    public void createCurrentAddressAttribute_shouldSetUpTheAttribute() throws Exception {
+    public void createCurrentAddressAttribute_shouldSetUpTheAttribute() {
         String line1Value = "1 Cherry Cottage";
         String line2Value = "Wurpel Lane";
         String postCodeValue = "RG99 1YY";
         String internationalPostCodeValue = "RG88 1ZZ";
         String uprnValue = "RG88 1ZZ";
-        DateTime fromDateValue = DateTime.parse("2012-09-09");
+        Instant fromDateValue = BaseMdsSamlObjectUnmarshaller.InstantFromDate.of("2012-09-09");
         boolean verified = true;
-        DateTime toDateValue = DateTime.parse("2012-10-11");
+        Instant toDateValue = BaseMdsSamlObjectUnmarshaller.InstantFromDate.of("2012-10-11");
         Address currentAddress = AddressBuilder.anAddress()
                 .withLines(asList(line1Value, line2Value))
                 .withPostCode(postCodeValue)
@@ -184,14 +197,14 @@ public class AttributeFactory_1_1Test extends OpenSAMLRunner {
     }
 
     @Test
-    public void createCurrentAddressAttribute_shouldHandleMissingToDate() throws Exception {
+    public void createCurrentAddressAttribute_shouldHandleMissingToDate() {
         Address currentAddress = AddressBuilder.anAddress().withLines(asList("Flat 15", "Dalton Tower")).withToDate(null).build();
 
         attributeFactory.createCurrentAddressesAttribute(List.of(currentAddress));
     }
 
     @Test
-    public void createCurrentAddressAttribute_shouldHandleMissingPostCode() throws Exception {
+    public void createCurrentAddressAttribute_shouldHandleMissingPostCode() {
         Address currentAddress = AddressBuilder.anAddress().withPostCode(null).build();
 
         final Attribute createdAttribute = attributeFactory.createCurrentAddressesAttribute(List.of(currentAddress));
@@ -201,7 +214,7 @@ public class AttributeFactory_1_1Test extends OpenSAMLRunner {
     }
 
     @Test
-    public void createCurrentAddressAttribute_shouldHandleMissingInternationalPostCode() throws Exception {
+    public void createCurrentAddressAttribute_shouldHandleMissingInternationalPostCode() {
         Address currentAddress = AddressBuilder.anAddress().withInternationalPostCode(null).build();
 
         final Attribute createdAttribute = attributeFactory.createCurrentAddressesAttribute(List.of(currentAddress));
@@ -211,7 +224,7 @@ public class AttributeFactory_1_1Test extends OpenSAMLRunner {
     }
 
     @Test
-    public void createCurrentAddressAttribute_shouldHandleMissingUPRN() throws Exception {
+    public void createCurrentAddressAttribute_shouldHandleMissingUPRN() {
         Address currentAddress = AddressBuilder.anAddress().withUPRN(null).build();
 
         final Attribute createdAttribute = attributeFactory.createCurrentAddressesAttribute(List.of(currentAddress));
@@ -221,13 +234,13 @@ public class AttributeFactory_1_1Test extends OpenSAMLRunner {
     }
 
     @Test
-    public void createPreviousAddressAttribute_shouldSetUpTheAttribute() throws Exception {
+    public void createPreviousAddressAttribute_shouldSetUpTheAttribute() {
         String line1Value = "1 Cherry Cottage";
         String line2Value = "Wurpel Lane";
         String postCodeValue = "RG99 1YY";
         String internationalPostCodeValue = "RG88 1ZZ";
-        DateTime fromDateValue = DateTime.parse("2012-11-12", DateTimeFormat.forPattern("yyyy-MM-dd").withZone(DateTimeZone.UTC));
-        DateTime toDateValue = DateTime.parse("2012-09-09", DateTimeFormat.forPattern("yyyy-MM-dd").withZone(DateTimeZone.UTC));
+        Instant fromDateValue = BaseMdsSamlObjectUnmarshaller.InstantFromDate.of("2012-11-12");
+        Instant toDateValue = BaseMdsSamlObjectUnmarshaller.InstantFromDate.of("2012-09-09");
         String uprnValue = "134279";
         Address previousAddress = AddressBuilder.anAddress()
                 .withLines(asList(line1Value, line2Value))
@@ -238,7 +251,7 @@ public class AttributeFactory_1_1Test extends OpenSAMLRunner {
                 .withFromDate(fromDateValue)
                 .build();
 
-        Attribute createdAttribute = attributeFactory.createPreviousAddressesAttribute(asList(previousAddress));
+        Attribute createdAttribute = attributeFactory.createPreviousAddressesAttribute(Collections.singletonList(previousAddress));
 
         assertThat(createdAttribute.getName()).isEqualTo("MDS_previousaddress");
         assertThat(createdAttribute.getFriendlyName()).isEqualTo("Previous Address");
@@ -255,7 +268,7 @@ public class AttributeFactory_1_1Test extends OpenSAMLRunner {
     }
 
     @Test
-    public void createPreviousAddressAttribute_shouldHandleMultipleValues() throws Exception {
+    public void createPreviousAddressAttribute_shouldHandleMultipleValues() {
         List<Address> previousAddresses = asList(AddressBuilder.anAddress().build(), AddressBuilder.anAddress().build());
 
         Attribute createdAttribute = attributeFactory.createPreviousAddressesAttribute(previousAddresses);
@@ -264,16 +277,16 @@ public class AttributeFactory_1_1Test extends OpenSAMLRunner {
     }
 
     @Test
-    public void createPreviousAddressAttribute_shouldHandleMissingToDate() throws Exception {
+    public void createPreviousAddressAttribute_shouldHandleMissingToDate() {
         Address previousAddress = AddressBuilder.anAddress().withLines(asList("Flat 15", "Dalton Tower")).withToDate(null).build();
 
-        attributeFactory.createPreviousAddressesAttribute(asList(previousAddress));
+        attributeFactory.createPreviousAddressesAttribute(Collections.singletonList(previousAddress));
     }
 
 
 
     @Test
-    public void createGpg45StatusAttribute_shouldSetUpTheAttribute() throws Exception {
+    public void createGpg45StatusAttribute_shouldSetUpTheAttribute() {
         String gpg45Status = "waiting";
         Attribute createdAttribute = attributeFactory.createGpg45StatusAttribute(gpg45Status);
 
@@ -288,7 +301,7 @@ public class AttributeFactory_1_1Test extends OpenSAMLRunner {
     }
 
     @Test
-    public void createIpAddressAttribute_shouldSetUpTheAttribute() throws Exception {
+    public void createIpAddressAttribute_shouldSetUpTheAttribute() {
         String ipAddressValue = "0.9.8.7";
         Attribute createdAttribute = attributeFactory.createUserIpAddressAttribute(ipAddressValue);
 
@@ -303,7 +316,7 @@ public class AttributeFactory_1_1Test extends OpenSAMLRunner {
     }
 
     @Test
-    public void createIdpFraudEventIdAttribute_shouldSetUpTheAttribute() throws Exception {
+    public void createIdpFraudEventIdAttribute_shouldSetUpTheAttribute() {
         String fraudEventId = "fraud-event";
         Attribute createdAttribute = attributeFactory.createIdpFraudEventIdAttribute(fraudEventId);
 

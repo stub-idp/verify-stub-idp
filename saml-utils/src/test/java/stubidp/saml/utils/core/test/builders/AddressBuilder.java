@@ -1,8 +1,9 @@
 package stubidp.saml.utils.core.test.builders;
 
-import org.joda.time.DateTime;
+import stubidp.saml.extensions.extensions.impl.BaseMdsSamlObjectUnmarshaller;
 import stubidp.saml.utils.core.domain.Address;
 
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -13,8 +14,8 @@ public class AddressBuilder {
     private Optional<String> postCode = Optional.empty();
     private Optional<String> internationalPostCode = Optional.empty();
     private Optional<String> uprn = Optional.empty();
-    private DateTime fromDate = DateTime.parse("2001-01-01");
-    private Optional<DateTime> toDate = Optional.empty();
+    private Instant fromDate = BaseMdsSamlObjectUnmarshaller.InstantFromDate.of("2001-01-01");
+    private Optional<Instant> toDate = Optional.empty();
     private boolean verified = false;
 
     public static AddressBuilder anAddress() {
@@ -52,12 +53,12 @@ public class AddressBuilder {
         return this;
     }
 
-    public AddressBuilder withFromDate(final DateTime fromDate) {
+    public AddressBuilder withFromDate(final Instant fromDate) {
         this.fromDate = fromDate;
         return this;
     }
 
-    public AddressBuilder withToDate(final DateTime toDate) {
+    public AddressBuilder withToDate(final Instant toDate) {
         this.toDate = Optional.ofNullable(toDate);
         return this;
     }

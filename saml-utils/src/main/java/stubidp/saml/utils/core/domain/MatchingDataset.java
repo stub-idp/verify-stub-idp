@@ -1,7 +1,6 @@
 package stubidp.saml.utils.core.domain;
 
-import org.joda.time.LocalDate;
-
+import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -13,7 +12,7 @@ public class MatchingDataset {
     private final List<SimpleMdsValue<String>> middleNames;
     private final List<TransliterableMdsValue> surnames;
     private final Optional<SimpleMdsValue<Gender>> gender;
-    private final List<SimpleMdsValue<LocalDate>> dateOfBirths;
+    private final List<SimpleMdsValue<Instant>> dateOfBirths;
     private final List<Address> currentAddresses;
     private final List<Address> previousAddresses;
     private final String personalId;
@@ -23,7 +22,7 @@ public class MatchingDataset {
             List<SimpleMdsValue<String>> middleNames,
             List<TransliterableMdsValue> surnames,
             Optional<SimpleMdsValue<Gender>> gender,
-            List<SimpleMdsValue<LocalDate>> dateOfBirths,
+            List<SimpleMdsValue<Instant>> dateOfBirths,
             List<Address> currentAddresses,
             List<Address> previousAddresses,
             String personalId) {
@@ -53,7 +52,7 @@ public class MatchingDataset {
         return gender;
     }
 
-    public List<SimpleMdsValue<LocalDate>> getDateOfBirths() {
+    public List<SimpleMdsValue<Instant>> getDateOfBirths() {
         return dateOfBirths;
     }
 

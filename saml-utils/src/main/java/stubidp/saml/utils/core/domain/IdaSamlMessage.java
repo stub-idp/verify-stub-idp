@@ -1,8 +1,7 @@
 package stubidp.saml.utils.core.domain;
 
-import org.joda.time.DateTime;
-
 import java.net.URI;
+import java.time.Instant;
 
 public abstract class IdaSamlMessage extends IdaMessage {
 
@@ -11,7 +10,7 @@ public abstract class IdaSamlMessage extends IdaMessage {
     protected IdaSamlMessage() {
     }
 
-    public IdaSamlMessage(String id, String issuer, DateTime issueInstant, URI destination) {
+    public IdaSamlMessage(String id, String issuer, Instant issueInstant, URI destination) {
         super(id, issuer, issueInstant);
         this.destination = destination;
     }

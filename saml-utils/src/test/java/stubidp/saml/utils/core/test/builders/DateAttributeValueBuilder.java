@@ -1,18 +1,18 @@
 package stubidp.saml.utils.core.test.builders;
 
-import org.joda.time.DateTime;
 import org.opensaml.saml.saml2.core.AttributeValue;
 import stubidp.saml.extensions.extensions.Date;
 import stubidp.saml.utils.core.test.OpenSamlXmlObjectFactory;
 
+import java.time.Instant;
 import java.util.Optional;
 
 public class DateAttributeValueBuilder {
 
     private OpenSamlXmlObjectFactory openSamlXmlObjectFactory = new OpenSamlXmlObjectFactory();
 
-    private Optional<DateTime> from = Optional.empty();
-    private Optional<DateTime> to = Optional.empty();
+    private Optional<Instant> from = Optional.empty();
+    private Optional<Instant> to = Optional.empty();
     private String value = "1991-04-12";
     private Optional<Boolean> verified = Optional.empty();
 
@@ -22,25 +22,18 @@ public class DateAttributeValueBuilder {
 
     public AttributeValue build() {
         Date dateAttributeValue = openSamlXmlObjectFactory.createDateAttributeValue(value);
-
-        if (from.isPresent()) {
-            dateAttributeValue.setFrom(from.get());
-        }
-        if (to.isPresent()) {
-            dateAttributeValue.setTo(to.get());
-        }
-        if (verified.isPresent()) {
-            dateAttributeValue.setVerified(verified.get());
-        }
+        from.ifPresent(dateAttributeValue::setFrom);
+        to.ifPresent(dateAttributeValue::setTo);
+        verified.ifPresent(dateAttributeValue::setVerified);
         return dateAttributeValue;
     }
 
-    public DateAttributeValueBuilder withFrom(DateTime from) {
+    public DateAttributeValueBuilder withFrom(Instant from) {
         this.from = Optional.ofNullable(from);
         return this;
     }
 
-    public DateAttributeValueBuilder withTo(DateTime to) {
+    public DateAttributeValueBuilder withTo(Instant to) {
         this.to = Optional.ofNullable(to);
         return this;
     }

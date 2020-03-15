@@ -1,16 +1,27 @@
 package stubidp.saml.utils.core.domain;
 
-import org.joda.time.DateTime;
 import org.opensaml.core.xml.XMLObject;
 import org.opensaml.saml.saml2.core.Attribute;
 import stubidp.saml.extensions.extensions.Line;
+import stubidp.saml.extensions.extensions.impl.BaseMdsSamlObjectUnmarshaller;
 
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 
 public class AddressFactory {
-    public Address create(List<String> lines, String postCode, String internationalPostCode, String uprn, DateTime from, DateTime to, boolean isVerified) {
+    public Address create(List<String> lines, String postCode, String internationalPostCode, String uprn, String from, String to, boolean isVerified) {
+        Instant fromInstant = BaseMdsSamlObjectUnmarshaller.InstantFromDate.of(from);
+        Instant toInstant = BaseMdsSamlObjectUnmarshaller.InstantFromDate.of(to);
+        return new Address(lines, postCode, internationalPostCode, uprn, fromInstant, toInstant, isVerified);
+    }
+
+    public Address create(List<String> lines, String postCode, String internationalPostCode, String uprn, Instant from, Instant to, boolean isVerified) {
         return new Address(lines, postCode, internationalPostCode, uprn, from, to, isVerified);
+    }
+
+    public Address createNoDates(List<String> lines, String postCode, String internationalPostCode, String uprn, boolean isVerified) {
+        return new Address(lines, postCode, internationalPostCode, uprn, null, null, isVerified);
     }
 
     public List<Address> create(Attribute attribute) {
@@ -28,9 +39,9 @@ public class AddressFactory {
             lines.add(originalLine.getValue());
         }
 
-        DateTime toDate = addressAttributeValue.getTo();
+        Instant toDate = addressAttributeValue.getTo();
 
-        DateTime fromDate = addressAttributeValue.getFrom();
+        Instant fromDate = addressAttributeValue.getFrom();
 
         String postCodeString = null;
         if (addressAttributeValue.getPostCode() != null) {

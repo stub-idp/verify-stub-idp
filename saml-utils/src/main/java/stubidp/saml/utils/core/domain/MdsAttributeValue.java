@@ -1,13 +1,12 @@
 package stubidp.saml.utils.core.domain;
 
-import org.joda.time.DateTime;
-
+import java.time.Instant;
 import java.util.Optional;
 
 public interface MdsAttributeValue {
-    DateTime getFrom();
+    Instant getFrom();
 
-    Optional<DateTime> getTo();
+    Optional<Instant> getTo();
 
     boolean isVerified();
 }

@@ -1,6 +1,5 @@
 package stubidp.saml.utils.hub.factories;
 
-import org.joda.time.LocalDate;
 import org.opensaml.saml.saml2.core.Attribute;
 import org.opensaml.saml.saml2.core.AttributeValue;
 import org.opensaml.saml.saml2.core.impl.AttributeBuilder;
@@ -20,6 +19,7 @@ import stubidp.saml.extensions.extensions.eidas.impl.DateOfBirthBuilder;
 import stubidp.saml.extensions.extensions.eidas.impl.EidasGenderBuilder;
 import stubidp.saml.extensions.extensions.eidas.impl.PersonIdentifierBuilder;
 
+import java.time.Instant;
 import java.util.Arrays;
 
 
@@ -46,7 +46,7 @@ public class EidasAttributeFactory {
         return buildAttribute(FamilyName.FRIENDLY_NAME, FamilyName.NAME, familyNameAttributeValue);
     }
 
-    public Attribute createDateOfBirth(LocalDate dateOfBirth) {
+    public Attribute createDateOfBirth(Instant dateOfBirth) {
         DateOfBirth dateOfBirthAttributeValue = new DateOfBirthBuilder().buildObject();
         dateOfBirthAttributeValue.setDateOfBirth(dateOfBirth);
         return buildAttribute(Eidas_Attributes.DateOfBirth.FRIENDLY_NAME, Eidas_Attributes.DateOfBirth.NAME, dateOfBirthAttributeValue);

@@ -1,14 +1,15 @@
 package stubidp.saml.utils.core.transformers;
 
-import org.joda.time.LocalDate;
 import org.opensaml.core.xml.XMLObject;
 import org.opensaml.saml.saml2.core.Assertion;
 import org.opensaml.saml.saml2.core.Attribute;
 import org.opensaml.saml.saml2.core.AttributeStatement;
+import stubidp.saml.extensions.extensions.StringBasedMdsAttributeValue;
+import stubidp.saml.extensions.extensions.impl.BaseMdsSamlObjectUnmarshaller;
 import stubidp.saml.utils.core.domain.MatchingDataset;
 import stubidp.saml.utils.core.domain.SimpleMdsValue;
-import stubidp.saml.extensions.extensions.StringBasedMdsAttributeValue;
 
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -40,14 +41,14 @@ public abstract class MatchingDatasetUnmarshaller {
 
     protected abstract String getPersonalIdentifier(Assertion assertion);
 
-    final List<SimpleMdsValue<LocalDate>> getBirthdates(Attribute attribute) {
-        List<SimpleMdsValue<LocalDate>> birthDates = new ArrayList<>();
+    final List<SimpleMdsValue<Instant>> getBirthdates(Attribute attribute) {
+        List<SimpleMdsValue<Instant>> birthDates = new ArrayList<>();
 
         for (XMLObject xmlObject : attribute.getAttributeValues()) {
             StringBasedMdsAttributeValue stringBasedMdsAttributeValue = (StringBasedMdsAttributeValue) xmlObject;
             String dateOfBirthString = stringBasedMdsAttributeValue.getValue();
             birthDates.add(new SimpleMdsValue<>(
-                    LocalDate.parse(dateOfBirthString),
+                    BaseMdsSamlObjectUnmarshaller.InstantFromDate.of(dateOfBirthString),
                     stringBasedMdsAttributeValue.getFrom(),
                     stringBasedMdsAttributeValue.getTo(),
                     stringBasedMdsAttributeValue.getVerified()));

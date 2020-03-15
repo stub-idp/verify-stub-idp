@@ -1,11 +1,10 @@
 package stubidp.saml.utils.core.domain;
 
-import org.joda.time.DateTime;
+import java.time.Instant;
 
 public interface IdaResponse {
-
     String getId();
     String getInResponseTo();
-    DateTime getIssueInstant();
+    Instant getIssueInstant();
     String getIssuer();
 }

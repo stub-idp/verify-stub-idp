@@ -1,6 +1,5 @@
 package stubidp.saml.utils.core.transformers;
 
-import org.joda.time.DateTime;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -9,6 +8,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.opensaml.saml.saml2.core.Assertion;
 import org.opensaml.saml.saml2.core.Attribute;
 import org.opensaml.saml.saml2.core.SubjectConfirmationData;
+import stubidp.saml.extensions.extensions.impl.BaseMdsSamlObjectUnmarshaller;
 import stubidp.saml.utils.OpenSAMLRunner;
 import stubidp.saml.utils.core.domain.AssertionRestrictions;
 import stubidp.saml.utils.core.domain.IdentityProviderAssertion;
@@ -24,6 +24,7 @@ import stubidp.saml.utils.core.test.builders.MatchingDatasetBuilder;
 import stubidp.saml.utils.core.test.builders.PersonNameAttributeBuilder_1_1;
 import stubidp.saml.utils.core.test.builders.PersonNameAttributeValueBuilder;
 
+import java.time.Instant;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -54,7 +55,7 @@ public class IdentityProviderAssertionUnmarshallerTest extends OpenSAMLRunner {
     }
 
     @Test
-    public void transform_shouldTransformResponseWhenNoMatchingDatasetIsPresent() throws Exception {
+    public void transform_shouldTransformResponseWhenNoMatchingDatasetIsPresent() {
         Assertion originalAssertion = AssertionBuilder.anAssertion().buildUnencrypted();
 
         IdentityProviderAssertion transformedAssertion = unmarshaller.fromVerifyAssertion(originalAssertion);
@@ -62,8 +63,8 @@ public class IdentityProviderAssertionUnmarshallerTest extends OpenSAMLRunner {
     }
 
     @Test
-    public void transform_shouldDelegateMatchingDatasetTransformationWhenAssertionContainsMatchingDataset() throws Exception {
-        Attribute firstName = PersonNameAttributeBuilder_1_1.aPersonName_1_1().addValue(PersonNameAttributeValueBuilder.aPersonNameValue().withTo(DateTime.parse("1066-01-05")).build()).buildAsFirstname();
+    public void transform_shouldDelegateMatchingDatasetTransformationWhenAssertionContainsMatchingDataset() {
+        Attribute firstName = PersonNameAttributeBuilder_1_1.aPersonName_1_1().addValue(PersonNameAttributeValueBuilder.aPersonNameValue().withTo(BaseMdsSamlObjectUnmarshaller.InstantFromDate.of("1066-01-05")).build()).buildAsFirstname();
         Assertion assertion = AssertionBuilder.aMatchingDatasetAssertion(
                 firstName,
                 PersonNameAttributeBuilder_1_1.aPersonName_1_1().buildAsMiddlename(),
@@ -84,7 +85,7 @@ public class IdentityProviderAssertionUnmarshallerTest extends OpenSAMLRunner {
     }
 
     @Test
-    public void transform_shouldDelegateAuthnStatementTransformationWhenAssertionContainsAuthnStatement() throws Exception {
+    public void transform_shouldDelegateAuthnStatementTransformationWhenAssertionContainsAuthnStatement() {
         Assertion assertion = AssertionBuilder.anAuthnStatementAssertion().buildUnencrypted();
         IdentityProviderAuthnStatement authnStatement = IdentityProviderAuthnStatementBuilder.anIdentityProviderAuthnStatement().build();
 
@@ -97,7 +98,7 @@ public class IdentityProviderAssertionUnmarshallerTest extends OpenSAMLRunner {
     }
 
     @Test
-    public void transform_shouldTransformSubjectConfirmationData() throws Exception {
+    public void transform_shouldTransformSubjectConfirmationData() {
         Assertion assertion = AssertionBuilder.anAssertion().buildUnencrypted();
         SubjectConfirmationData subjectConfirmationData = assertion.getSubject().getSubjectConfirmations().get(0).getSubjectConfirmationData();
 

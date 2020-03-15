@@ -1,27 +1,27 @@
 package stubidp.saml.utils.hub.domain;
 
-import org.joda.time.DateTime;
 import org.opensaml.saml.saml2.core.AuthnContextComparisonTypeEnumeration;
 import stubidp.saml.utils.core.domain.AuthnContext;
 import stubidp.saml.utils.core.domain.IdaSamlMessage;
 
 import java.net.URI;
+import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
 
 public class IdaAuthnRequestFromHub extends IdaSamlMessage {
     private List<AuthnContext> levelsOfAssurance;
     private Optional<Boolean> forceAuthentication;
-    private DateTime sessionExpiryTimestamp;
+    private Instant sessionExpiryTimestamp;
     private final AuthnContextComparisonTypeEnumeration comparisonType;
 
     public IdaAuthnRequestFromHub(
             String id,
             String issuer,
-            DateTime issueInstant,
+            Instant issueInstant,
             List<AuthnContext> levelsOfAssurance,
             Optional<Boolean> forceAuthentication,
-            DateTime sessionExpiryTimestamp,
+            Instant sessionExpiryTimestamp,
             URI idpPostEndpoint,
             AuthnContextComparisonTypeEnumeration comparisonType) {
         super(id, issuer, issueInstant, idpPostEndpoint);
@@ -35,22 +35,22 @@ public class IdaAuthnRequestFromHub extends IdaSamlMessage {
             String id,
             List<AuthnContext> levelsOfAssurance,
             Optional<Boolean> forceAuthentication,
-            DateTime sessionExpiryTimestamp,
+            Instant sessionExpiryTimestamp,
             URI idpPostEndpoint,
             AuthnContextComparisonTypeEnumeration comparisonType,
             String hubEntityId) {
-        return new IdaAuthnRequestFromHub(id, hubEntityId, DateTime.now(), levelsOfAssurance, forceAuthentication, sessionExpiryTimestamp, idpPostEndpoint, comparisonType);
+        return new IdaAuthnRequestFromHub(id, hubEntityId, Instant.now(), levelsOfAssurance, forceAuthentication, sessionExpiryTimestamp, idpPostEndpoint, comparisonType);
     }
 
-    public static IdaAuthnRequestFromHub createRequestReceivedFromHub(String id, String issuerId, List<AuthnContext> levelsOfAssurance, boolean forceAuthentication, DateTime notOnOrAfter, AuthnContextComparisonTypeEnumeration comparisonType) {
-        return new IdaAuthnRequestFromHub(id, issuerId, DateTime.now(), levelsOfAssurance, Optional.ofNullable(forceAuthentication), notOnOrAfter, null, comparisonType); // null because it was sent to the consumer of this message
+    public static IdaAuthnRequestFromHub createRequestReceivedFromHub(String id, String issuerId, List<AuthnContext> levelsOfAssurance, boolean forceAuthentication, Instant notOnOrAfter, AuthnContextComparisonTypeEnumeration comparisonType) {
+        return new IdaAuthnRequestFromHub(id, issuerId, Instant.now(), levelsOfAssurance, Optional.of(forceAuthentication), notOnOrAfter, null, comparisonType); // null because it was sent to the consumer of this message
     }
 
     public Optional<Boolean> getForceAuthentication() {
         return forceAuthentication;
     }
 
-    public DateTime getSessionExpiryTimestamp() {
+    public Instant getSessionExpiryTimestamp() {
         return sessionExpiryTimestamp;
     }
 

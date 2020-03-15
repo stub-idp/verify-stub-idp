@@ -1,7 +1,6 @@
 package stubidp.saml.utils.core.test.builders;
 
 import com.google.common.base.Strings;
-import org.joda.time.DateTime;
 import org.opensaml.core.xml.config.XMLObjectProviderRegistrySupport;
 import org.opensaml.core.xml.io.MarshallingException;
 import org.opensaml.saml.saml2.core.Assertion;
@@ -19,6 +18,7 @@ import org.opensaml.xmlsec.signature.support.Signer;
 import stubidp.saml.utils.core.test.OpenSamlXmlObjectFactory;
 
 import javax.validation.constraints.NotNull;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -43,12 +43,12 @@ public class ResponseBuilder {
     private List<EncryptedAssertion> encryptedAssertions = new ArrayList<>();
 
     private Optional<Issuer> issuer = ofNullable(IssuerBuilder.anIssuer().build());
-    private Optional<String> id = ofNullable(DEFAULT_RESPONSE_ID);
-    private Optional<DateTime> issueInstant = ofNullable(DateTime.now());
-    private Optional<String> inResponseTo = ofNullable(DEFAULT_REQUEST_ID);
+    private Optional<String> id = Optional.of(DEFAULT_RESPONSE_ID);
+    private Optional<Instant> issueInstant = ofNullable(Instant.now());
+    private Optional<String> inResponseTo = Optional.of(DEFAULT_REQUEST_ID);
     private Optional<Status> status = ofNullable(StatusBuilder.aStatus().build());
     private Optional<Credential> signingCredential = empty();
-    private Optional<String > destination = ofNullable("http://destination.com");
+    private Optional<String > destination = Optional.of("http://destination.local");
 
     public static ResponseBuilder aResponse() {
         ResponseBuilder responseBuilder = new ResponseBuilder();
@@ -64,43 +64,25 @@ public class ResponseBuilder {
     }
 
     public Response build() throws MarshallingException, SignatureException {
-
         Response response = openSamlXmlObjectFactory.createResponse();
-        if (id.isPresent()) {
-            response.setID(id.get());
-        }
-        if (inResponseTo.isPresent()) {
-            response.setInResponseTo(inResponseTo.get());
-        }
-        if (issueInstant.isPresent()) {
-            response.setIssueInstant(issueInstant.get());
-        }
-        if (status.isPresent()) {
-            response.setStatus(status.get());
-        }
-
-        if (destination.isPresent()) {
-            response.setDestination(destination.get());
-        }
-
+        id.ifPresent(response::setID);
+        inResponseTo.ifPresent(response::setInResponseTo);
+        issueInstant.ifPresent(response::setIssueInstant);
+        status.ifPresent(response::setStatus);
+        destination.ifPresent(response::setDestination);
         response.getAssertions().addAll(assertions);
         if (encryptedAssertions.isEmpty() && addDefaultEncryptedAssertionIfNoneIsAdded) {
             response.getEncryptedAssertions().add(defaultEncryptedAssertion);
         } else {
             response.getEncryptedAssertions().addAll(encryptedAssertions);
         }
-
         if (issuer.isPresent()) {
             response.setIssuer(issuer.get());
 
             if (!Strings.isNullOrEmpty(issuer.get().getValue()) && shouldAddSignature) {
                 SignatureBuilder signatureBuilder = SignatureBuilder.aSignature().withSignatureAlgorithm(signatureAlgorithm);
-                if (id.isPresent()) {
-                    signatureBuilder.withDigestAlgorithm(id.get(), digestAlgorithm);
-                }
-                if (signingCredential.isPresent()){
-                    signatureBuilder.withSigningCredential(signingCredential.get());
-                }
+                id.ifPresent(s -> signatureBuilder.withDigestAlgorithm(s, digestAlgorithm));
+                signingCredential.ifPresent(signatureBuilder::withSigningCredential);
                 response.setSignature(signatureBuilder.build());
                 XMLObjectProviderRegistrySupport.getMarshallerFactory().getMarshaller(response).marshall(response);
                 if (shouldSign) {
@@ -126,7 +108,7 @@ public class ResponseBuilder {
         return this;
     }
 
-    public ResponseBuilder withIssueInstant(DateTime issueInstant) {
+    public ResponseBuilder withIssueInstant(Instant issueInstant) {
         this.issueInstant = ofNullable(issueInstant);
         return this;
     }

@@ -1,7 +1,6 @@
 package stubidp.saml.utils.core.test.builders;
 
 import com.google.common.base.Strings;
-import org.joda.time.DateTime;
 import org.opensaml.core.xml.config.XMLObjectProviderRegistrySupport;
 import org.opensaml.core.xml.io.MarshallingException;
 import org.opensaml.saml.common.xml.SAMLConstants;
@@ -25,6 +24,7 @@ import stubidp.saml.utils.core.test.AuthnRequestIdGenerator;
 import stubidp.saml.utils.core.test.OpenSamlXmlObjectFactory;
 
 import javax.validation.constraints.NotNull;
+import java.time.Instant;
 import java.util.Optional;
 
 import static java.util.Optional.empty;
@@ -49,7 +49,7 @@ public class AuthnRequestBuilder {
     private Optional<Issuer> issuer = ofNullable(IssuerBuilder.anIssuer().build());
     private Optional<String> id = ofNullable(AuthnRequestIdGenerator.generateRequestId());
     private Optional<String> minimumLevelOfAssurance = ofNullable(IdaAuthnContext.LEVEL_1_AUTHN_CTX);
-    private Optional<DateTime> issueInstant = ofNullable(DateTime.now());
+    private Optional<Instant> issueInstant = ofNullable(Instant.now());
 
     private Optional<String> versionNumber = ofNullable(IdaConstants.SAML_VERSION_NUMBER);
     private Optional<String> destination = empty();
@@ -65,14 +65,8 @@ public class AuthnRequestBuilder {
     public AuthnRequest build() {
         AuthnRequest authnRequest = openSamlXmlObjectFactory.createAuthnRequest();
 
-        if (issuer.isPresent()) {
-            authnRequest.setIssuer(issuer.get());
-        }
-
-        if (id.isPresent()) {
-            authnRequest.setID(id.get());
-        }
-
+        issuer.ifPresent(authnRequest::setIssuer);
+        id.ifPresent(authnRequest::setID);
         if (versionNumber.isPresent()) {
             authnRequest.setVersion(openSamlXmlObjectFactory.createSamlVersion(versionNumber.get()));
         } else {
@@ -92,51 +86,21 @@ public class AuthnRequestBuilder {
             }
         }
 
-        if (nameIdPolicy.isPresent()) {
-            authnRequest.setNameIDPolicy(nameIdPolicy.get());
-        }
-
-        if (scoping.isPresent()) {
-            authnRequest.setScoping(scoping.get());
-        }
-
-        if (assertionConsumerServiceUrl.isPresent()) {
-            authnRequest.setAssertionConsumerServiceURL(assertionConsumerServiceUrl.get());
-        }
-
-        if (protocolBinding.isPresent()) {
-            authnRequest.setProtocolBinding(protocolBinding.get());
-        }
-
-        if (isPassive.isPresent()) {
-            authnRequest.setIsPassive(isPassive.get());
-        }
-
-        if (issueInstant.isPresent()) {
-            authnRequest.setIssueInstant(issueInstant.get());
-        }
-
-        if (destination.isPresent()) {
-            authnRequest.setDestination(destination.get());
-        }
-
-        if (forceAuthn.isPresent()) {
-            authnRequest.setForceAuthn(forceAuthn.get());
-        }
-
-        if(assertionConsumerServiceIndex.isPresent()) {
-            authnRequest.setAssertionConsumerServiceIndex(assertionConsumerServiceIndex.get());
-        }
+        nameIdPolicy.ifPresent(authnRequest::setNameIDPolicy);
+        scoping.ifPresent(authnRequest::setScoping);
+        assertionConsumerServiceUrl.ifPresent(authnRequest::setAssertionConsumerServiceURL);
+        protocolBinding.ifPresent(authnRequest::setProtocolBinding);
+        isPassive.ifPresent(authnRequest::setIsPassive);
+        issueInstant.ifPresent(authnRequest::setIssueInstant);
+        destination.ifPresent(authnRequest::setDestination);
+        forceAuthn.ifPresent(authnRequest::setForceAuthn);
+        assertionConsumerServiceIndex.ifPresent(authnRequest::setAssertionConsumerServiceIndex);
 
         //This must be the last thing done before returning; otherwise, the signature will be invalidated
         if (issuer.isPresent() && !Strings.isNullOrEmpty(issuer.get().getValue()) && shouldAddSignature) {
             final SignatureBuilder signatureBuilder = SignatureBuilder.aSignature().withSignatureAlgorithm(signatureAlgorithm);
-            if (id.isPresent()) {
-                signatureBuilder.withDigestAlgorithm(id.get(), digestAlgorithm);
-            }
-            if (signingCredential.isPresent()) {
-                signatureBuilder.withSigningCredential(signingCredential.get());
-            }
+            id.ifPresent(s -> signatureBuilder.withDigestAlgorithm(s, digestAlgorithm));
+            signingCredential.ifPresent(signatureBuilder::withSigningCredential);
             authnRequest.setSignature(signatureBuilder.build());
             try {
                 XMLObjectProviderRegistrySupport.getMarshallerFactory().getMarshaller(authnRequest).marshall(authnRequest);
@@ -192,12 +156,12 @@ public class AuthnRequestBuilder {
     }
 
     public AuthnRequestBuilder withIsPassive(boolean isPassive) {
-        this.isPassive = ofNullable(isPassive);
+        this.isPassive = Optional.of(isPassive);
         return this;
     }
 
-    public AuthnRequestBuilder withIssueInstant(DateTime dateTime) {
-        this.issueInstant = ofNullable(dateTime);
+    public AuthnRequestBuilder withIssueInstant(Instant instant) {
+        this.issueInstant = ofNullable(instant);
         return this;
     }
 

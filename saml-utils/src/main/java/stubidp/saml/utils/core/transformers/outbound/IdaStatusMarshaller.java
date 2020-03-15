@@ -43,7 +43,7 @@ public abstract class IdaStatusMarshaller<T extends IdaStatus> {
         Status transformedStatus = samlObjectFactory.createStatus();
         if (message.isPresent()) {
             StatusMessage statusMessage = samlObjectFactory.createStatusMessage();
-            statusMessage.setMessage(message.get());
+            statusMessage.setValue(message.get());
             transformedStatus.setStatusMessage(statusMessage);
         }
 
@@ -54,9 +54,7 @@ public abstract class IdaStatusMarshaller<T extends IdaStatus> {
             subStatusCode.setValue(detailedStatusCode.getSubStatus().get());
             topLevelStatusCode.setStatusCode(subStatusCode);
         }
-        if (statusDetail.isPresent()) {
-            transformedStatus.setStatusDetail(statusDetail.get());
-        }
+        statusDetail.ifPresent(transformedStatus::setStatusDetail);
         transformedStatus.setStatusCode(topLevelStatusCode);
         return transformedStatus;
     }

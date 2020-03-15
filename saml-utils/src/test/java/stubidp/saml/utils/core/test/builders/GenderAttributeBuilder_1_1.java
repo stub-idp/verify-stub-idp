@@ -1,20 +1,19 @@
 package stubidp.saml.utils.core.test.builders;
 
-import org.joda.time.DateTime;
 import org.opensaml.saml.saml2.core.Attribute;
 import stubidp.saml.extensions.IdaConstants;
 import stubidp.saml.extensions.extensions.Gender;
 import stubidp.saml.utils.core.test.OpenSamlXmlObjectFactory;
 
+import java.time.Instant;
 import java.util.Optional;
-
 
 public class GenderAttributeBuilder_1_1 {
 
     private OpenSamlXmlObjectFactory openSamlXmlObjectFactory = new OpenSamlXmlObjectFactory();
 
-    private Optional<DateTime> from = Optional.empty();
-    private Optional<DateTime> to = Optional.empty();
+    private Optional<Instant> from = Optional.empty();
+    private Optional<Instant> to = Optional.empty();
     private Optional<String> value = Optional.empty();
     private boolean verified = false;
 
@@ -44,23 +43,19 @@ public class GenderAttributeBuilder_1_1 {
 
     private Attribute buildAttribute(Attribute genderAttribute) {
         Gender genderAttributeValue = openSamlXmlObjectFactory.createGenderAttributeValue(value.orElse("Male"));
-
         from.ifPresent(genderAttributeValue::setFrom);
         to.ifPresent(genderAttributeValue::setTo);
-
         genderAttributeValue.setVerified(verified);
-
         genderAttribute.getAttributeValues().add(genderAttributeValue);
-
         return genderAttribute;
     }
 
-    public GenderAttributeBuilder_1_1 withFrom(DateTime from) {
+    public GenderAttributeBuilder_1_1 withFrom(Instant from) {
         this.from = Optional.ofNullable(from);
         return this;
     }
 
-    public GenderAttributeBuilder_1_1 withTo(DateTime to) {
+    public GenderAttributeBuilder_1_1 withTo(Instant to) {
         this.to = Optional.ofNullable(to);
         return this;
     }

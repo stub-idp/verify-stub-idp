@@ -1,6 +1,5 @@
 package stubidp.saml.utils.core.transformers.outbound;
 
-import org.joda.time.DateTime;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.opensaml.saml.saml2.core.Response;
@@ -10,6 +9,8 @@ import stubidp.saml.utils.core.OpenSamlXmlObjectFactory;
 import stubidp.saml.utils.core.domain.OutboundResponseFromHub;
 import stubidp.saml.utils.core.test.builders.ResponseForHubBuilder;
 import stubidp.test.devpki.TestEntityIds;
+
+import java.time.Instant;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -24,7 +25,7 @@ public class IdaResponseToSamlResponseTransformerTest extends OpenSAMLRunner {
     }
 
     @Test
-    public void transform_shouldTransformResponseId() throws Exception {
+    public void transform_shouldTransformResponseId() {
     	OutboundResponseFromHub idaResponse = ResponseForHubBuilder.anAuthnResponse().withResponseId("response-id").buildOutboundResponseFromHub();
 
         Response transformedResponse = systemUnderTest.apply(idaResponse);
@@ -33,16 +34,15 @@ public class IdaResponseToSamlResponseTransformerTest extends OpenSAMLRunner {
     }
 
     @Test
-    public void transform_shouldTransformIssueInstant() throws Exception {
-        DateTime issueInstant = new DateTime(2012, 1, 2, 3, 4);
+    public void transform_shouldTransformIssueInstant() {
+        Instant issueInstant = Instant.now();
         OutboundResponseFromHub idaResponse = ResponseForHubBuilder.anAuthnResponse().withIssueInstant(issueInstant).buildOutboundResponseFromHub();
         Response transformedResponse = systemUnderTest.apply(idaResponse);
-
-        assertThat(transformedResponse.getIssueInstant().isEqual(idaResponse.getIssueInstant())).isTrue();
+        assertThat(transformedResponse.getIssueInstant()).isEqualTo(idaResponse.getIssueInstant());
     }
 
     @Test
-    public void transform_shouldTransformInResponseToIfPresent() throws Exception {
+    public void transform_shouldTransformInResponseToIfPresent() {
         String inResponseTo = "id of original request";
         OutboundResponseFromHub idaResponse = ResponseForHubBuilder.anAuthnResponse().withInResponseTo(inResponseTo).buildOutboundResponseFromHub();
         Response transformedResponse = systemUnderTest.apply(idaResponse);
@@ -51,7 +51,7 @@ public class IdaResponseToSamlResponseTransformerTest extends OpenSAMLRunner {
     }
 
     @Test
-    public void transform_shouldNotTransformInResponseToIfMissing() throws Exception {
+    public void transform_shouldNotTransformInResponseToIfMissing() {
     	OutboundResponseFromHub idaResponse = ResponseForHubBuilder.anAuthnResponse().withInResponseTo(null).buildOutboundResponseFromHub();
         Response transformedResponse = systemUnderTest.apply(idaResponse);
 
@@ -59,7 +59,7 @@ public class IdaResponseToSamlResponseTransformerTest extends OpenSAMLRunner {
     }
 
     @Test
-    public void transform_shouldTransformIssuer() throws Exception {
+    public void transform_shouldTransformIssuer() {
         String issuer = "response issuer";
         OutboundResponseFromHub idaResponse = ResponseForHubBuilder.anAuthnResponse().withIssuerId(issuer).buildOutboundResponseFromHub();
         Response transformedResponse = systemUnderTest.apply(idaResponse);

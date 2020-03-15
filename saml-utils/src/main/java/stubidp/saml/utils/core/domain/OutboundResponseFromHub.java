@@ -1,8 +1,7 @@
 package stubidp.saml.utils.core.domain;
 
-import org.joda.time.DateTime;
-
 import java.net.URI;
+import java.time.Instant;
 import java.util.List;
 
 public class OutboundResponseFromHub extends IdaSamlResponse {
@@ -14,7 +13,7 @@ public class OutboundResponseFromHub extends IdaSamlResponse {
             String responseId,
             String inResponseTo,
             String issuer,
-            DateTime issueInstant,
+            Instant issueInstant,
             TransactionIdaStatus status,
             List<String> encryptedAssertions,
             URI destination) {

@@ -1,7 +1,5 @@
 package stubidp.saml.utils.core.test.builders;
 
-import org.joda.time.DateTime;
-import org.joda.time.Duration;
 import org.opensaml.core.xml.XMLObjectBuilderFactory;
 import org.opensaml.core.xml.config.XMLObjectProviderRegistrySupport;
 import org.opensaml.core.xml.io.MarshallingException;
@@ -27,6 +25,8 @@ import stubidp.saml.utils.core.test.TestCredentialFactory;
 import stubidp.test.devpki.TestCertificateStrings;
 import stubidp.test.devpki.TestEntityIds;
 
+import java.time.Duration;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -49,7 +49,7 @@ public class AssertionBuilder {
     private Optional<Issuer> issuer = Optional.ofNullable(IssuerBuilder.anIssuer().build());
     private Optional<Signature> signature = Optional.ofNullable(SignatureBuilder.aSignature().build());
     private Optional<Conditions> conditions = Optional.ofNullable(ConditionsBuilder.aConditions().build());
-    private Optional<DateTime> issueInstant = Optional.of(DateTime.now());
+    private Optional<Instant> issueInstant = Optional.of(Instant.now());
 
     public static AssertionBuilder anAssertion() {
         return new AssertionBuilder();
@@ -59,7 +59,7 @@ public class AssertionBuilder {
         return anAssertion()
             .withConditions(
                 new ConditionsBuilder()
-                .validFor(Duration.standardMinutes(10))
+                .validFor(Duration.ofMinutes(10))
                 .restrictedToAudience(HUB_CONNECTOR_ENTITY_ID)
                 .build())
             .withIssuer(
@@ -158,29 +158,14 @@ public class AssertionBuilder {
             .getBuilder(Assertion.DEFAULT_ELEMENT_NAME)
             .buildObject(Assertion.DEFAULT_ELEMENT_NAME, Assertion.TYPE_NAME);
 
-        if (id.isPresent()) {
-            assertion.setID(id.get());
-        }
-
+        id.ifPresent(assertion::setID);
         assertion.setVersion(version);
-
-        if (subject.isPresent()) {
-            assertion.setSubject(subject.get());
-        }
-
-        if (issueInstant.isPresent()) {
-            assertion.setIssueInstant(issueInstant.get());
-        }
-
+        subject.ifPresent(assertion::setSubject);
+        issueInstant.ifPresent(assertion::setIssueInstant);
         assertion.getAttributeStatements().addAll(attributeStatements);
         assertion.getAuthnStatements().addAll(authnStatements);
-
-        if (issuer.isPresent()) {
-            assertion.setIssuer(issuer.get());
-        }
-        if (conditions.isPresent()) {
-            assertion.setConditions(conditions.get());
-        }
+        issuer.ifPresent(assertion::setIssuer);
+        conditions.ifPresent(assertion::setConditions);
         try {
             if (signature.isPresent()) {
                 assertion.setSignature(signature.get());
@@ -293,7 +278,7 @@ public class AssertionBuilder {
         return this;
     }
 
-    public AssertionBuilder withIssueInstant(DateTime issueInstant) {
+    public AssertionBuilder withIssueInstant(Instant issueInstant) {
         this.issueInstant = Optional.ofNullable(issueInstant);
         return this;
     }

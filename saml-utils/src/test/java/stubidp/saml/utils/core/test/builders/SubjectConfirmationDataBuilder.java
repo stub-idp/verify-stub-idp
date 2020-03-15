@@ -1,24 +1,25 @@
 package stubidp.saml.utils.core.test.builders;
 
-import org.joda.time.DateTime;
 import org.opensaml.saml.saml2.core.Assertion;
 import org.opensaml.saml.saml2.core.EncryptedAssertion;
 import org.opensaml.saml.saml2.core.SubjectConfirmationData;
 import stubidp.saml.utils.core.test.OpenSamlXmlObjectFactory;
 import stubidp.test.devpki.TestEntityIds;
 
+import java.time.Instant;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 public class SubjectConfirmationDataBuilder {
 
-    public static final int NOT_ON_OR_AFTER_DEFAULT_PERIOD = 15;
+    public static final int NOT_ON_OR_AFTER_DEFAULT_PERIOD_MINS = 15;
 
     private OpenSamlXmlObjectFactory openSamlXmlObjectFactory = new OpenSamlXmlObjectFactory();
     private Optional<String> recipient = Optional.of(TestEntityIds.HUB_ENTITY_ID);
-    private Optional<DateTime> notOnOrAfter = Optional.of(DateTime.now().plusMinutes(NOT_ON_OR_AFTER_DEFAULT_PERIOD));
-    private Optional<DateTime> notBefore = Optional.empty();
+    private Optional<Instant> notOnOrAfter = Optional.of(Instant.now().atZone(ZoneId.of("UTC")).plusMinutes(NOT_ON_OR_AFTER_DEFAULT_PERIOD_MINS).toInstant());
+    private Optional<Instant> notBefore = Optional.empty();
     private Optional<String> address = Optional.empty();
     private Optional<String> inResponseTo = Optional.of(ResponseBuilder.DEFAULT_REQUEST_ID);
     private List<Assertion> assertions = new ArrayList<>();
@@ -30,25 +31,13 @@ public class SubjectConfirmationDataBuilder {
 
     public SubjectConfirmationData build() {
         SubjectConfirmationData subjectConfirmationData = openSamlXmlObjectFactory.createSubjectConfirmationData();
-
-        if (recipient.isPresent()) {
-            subjectConfirmationData.setRecipient(recipient.get());
-        }
-        if (notOnOrAfter.isPresent()) {
-            subjectConfirmationData.setNotOnOrAfter(notOnOrAfter.get());
-        }
-        if (notBefore.isPresent()) {
-            subjectConfirmationData.setNotBefore(notBefore.get());
-        }
-        if (inResponseTo.isPresent()) {
-            subjectConfirmationData.setInResponseTo(inResponseTo.get());
-        }
-        if (address.isPresent()) {
-            subjectConfirmationData.setAddress(address.get());
-        }
+        recipient.ifPresent(subjectConfirmationData::setRecipient);
+        notOnOrAfter.ifPresent(subjectConfirmationData::setNotOnOrAfter);
+        notBefore.ifPresent(subjectConfirmationData::setNotBefore);
+        inResponseTo.ifPresent(subjectConfirmationData::setInResponseTo);
+        address.ifPresent(subjectConfirmationData::setAddress);
         subjectConfirmationData.getUnknownXMLObjects().addAll(assertions);
         subjectConfirmationData.getUnknownXMLObjects().addAll(encryptedAssertions);
-
         return subjectConfirmationData;
     }
 
@@ -57,12 +46,12 @@ public class SubjectConfirmationDataBuilder {
         return this;
     }
 
-    public SubjectConfirmationDataBuilder withNotOnOrAfter(DateTime notOnOrAfter) {
+    public SubjectConfirmationDataBuilder withNotOnOrAfter(Instant notOnOrAfter) {
         this.notOnOrAfter = Optional.ofNullable(notOnOrAfter);
         return this;
     }
 
-    public SubjectConfirmationDataBuilder withNotBefore(DateTime notBefore) {
+    public SubjectConfirmationDataBuilder withNotBefore(Instant notBefore) {
         this.notBefore = Optional.ofNullable(notBefore);
         return this;
     }

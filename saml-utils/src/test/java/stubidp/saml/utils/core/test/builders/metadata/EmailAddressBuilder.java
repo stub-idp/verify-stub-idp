@@ -14,7 +14,7 @@ public class EmailAddressBuilder {
     public EmailAddress build() {
         EmailAddress emailAddress = new org.opensaml.saml.saml2.metadata.impl.EmailAddressBuilder().buildObject();
         if (value != null) {
-            emailAddress.setAddress(value.toString());
+            emailAddress.setURI(value.toString());
         }
         return emailAddress;
     }

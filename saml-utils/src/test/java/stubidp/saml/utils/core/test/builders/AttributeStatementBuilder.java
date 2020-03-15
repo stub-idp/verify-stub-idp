@@ -1,6 +1,5 @@
 package stubidp.saml.utils.core.test.builders;
 
-import org.joda.time.LocalDate;
 import org.opensaml.saml.saml2.core.Attribute;
 import org.opensaml.saml.saml2.core.AttributeStatement;
 import stubidp.saml.extensions.IdaConstants;
@@ -14,6 +13,7 @@ import stubidp.saml.extensions.extensions.eidas.impl.DateOfBirthBuilder;
 import stubidp.saml.extensions.extensions.eidas.impl.PersonIdentifierBuilder;
 import stubidp.saml.utils.core.test.OpenSamlXmlObjectFactory;
 
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -44,7 +44,7 @@ public class AttributeStatementBuilder {
 
         Attribute dateOfBirth =  anAttribute(IdaConstants.Eidas_Attributes.DateOfBirth.NAME);
         DateOfBirth dateOfBirthValue = new DateOfBirthBuilder().buildObject();
-        dateOfBirthValue.setDateOfBirth(LocalDate.now());
+        dateOfBirthValue.setDateOfBirth(Instant.now());
         dateOfBirth.getAttributeValues().add(dateOfBirthValue);
 
         return anAttributeStatement()

@@ -1,6 +1,5 @@
 package stubidp.saml.utils.hub.factories;
 
-import org.joda.time.LocalDate;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.opensaml.saml.saml2.core.Attribute;
@@ -13,11 +12,13 @@ import stubidp.saml.extensions.extensions.eidas.CurrentGivenName;
 import stubidp.saml.extensions.extensions.eidas.DateOfBirth;
 import stubidp.saml.extensions.extensions.eidas.EidasGender;
 import stubidp.saml.extensions.extensions.eidas.PersonIdentifier;
+import stubidp.saml.extensions.extensions.impl.BaseMdsSamlObjectUnmarshaller;
 import stubidp.saml.utils.OpenSAMLRunner;
+
+import java.time.Instant;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.opensaml.saml.saml2.core.Attribute.URI_REFERENCE;
-import static stubidp.saml.extensions.extensions.eidas.impl.DateOfBirthImpl.DATE_OF_BIRTH_FORMAT;
 
 public class EidasAttributeFactoryTest extends OpenSAMLRunner {
 
@@ -56,7 +57,7 @@ public class EidasAttributeFactoryTest extends OpenSAMLRunner {
 
     @Test
     public void createDateOfBirth() {
-        final LocalDate dateOfBirth = DATE_OF_BIRTH_FORMAT.parseLocalDate("1965-01-01");
+        final Instant dateOfBirth = BaseMdsSamlObjectUnmarshaller.InstantFromDate.of("1965-01-01");
 
         final Attribute attribute = eidasAttributeFactory.createDateOfBirth(dateOfBirth);
 

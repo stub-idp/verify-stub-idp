@@ -1,6 +1,5 @@
 package stubidp.saml.utils.core.transformers;
 
-import org.joda.time.LocalDate;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.opensaml.saml.saml2.core.Assertion;
@@ -17,6 +16,7 @@ import stubidp.saml.extensions.extensions.eidas.impl.CurrentGivenNameBuilder;
 import stubidp.saml.extensions.extensions.eidas.impl.DateOfBirthBuilder;
 import stubidp.saml.extensions.extensions.eidas.impl.EidasGenderBuilder;
 import stubidp.saml.extensions.extensions.eidas.impl.PersonIdentifierBuilder;
+import stubidp.saml.extensions.extensions.impl.BaseMdsSamlObjectUnmarshaller;
 import stubidp.saml.utils.OpenSAMLRunner;
 import stubidp.saml.utils.core.domain.Gender;
 import stubidp.saml.utils.core.domain.MatchingDataset;
@@ -24,6 +24,7 @@ import stubidp.saml.utils.core.test.OpenSamlXmlObjectFactory;
 import stubidp.saml.utils.core.test.builders.AssertionBuilder;
 import stubidp.saml.utils.core.test.builders.PersonIdentifierAttributeBuilder;
 
+import java.time.Instant;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -42,7 +43,7 @@ public class EidasMatchingDatasetUnmarshallerTest extends OpenSAMLRunner {
     public void transformShouldTransformAnAssertionIntoAMatchingDataset() {
         Attribute firstname = anEidasFirstName("Bob", true);
         Attribute surname = anEidasFamilyName("Bobbins", true);
-        LocalDate dob = new LocalDate(1986, 12, 05);
+        Instant dob = BaseMdsSamlObjectUnmarshaller.InstantFromDate.of("1986-12-05");
         Attribute dateOfBirth = anEidasDateOfBirth(dob);
 
         PersonIdentifier personIdentifier = new PersonIdentifierBuilder().buildObject();
@@ -69,7 +70,7 @@ public class EidasMatchingDatasetUnmarshallerTest extends OpenSAMLRunner {
         firstname.getAttributeValues().add(getCurrentGivenName("Βαρίδι", false));
         Attribute surname = anEidasFamilyName("Smith", true);
         surname.getAttributeValues().add(getCurrentFamilyName("Σιδηρουργός", false));
-        LocalDate dob = new LocalDate(1986, 12, 05);
+        Instant dob = BaseMdsSamlObjectUnmarshaller.InstantFromDate.of("1986-12-05");
         Attribute dateOfBirth = anEidasDateOfBirth(dob);
 
         // Ensure that the unmarshaller does not error when provided a gender
@@ -127,7 +128,7 @@ public class EidasMatchingDatasetUnmarshallerTest extends OpenSAMLRunner {
         return currentFamilyName;
     }
 
-    private Attribute anEidasDateOfBirth(LocalDate dob) {
+    private Attribute anEidasDateOfBirth(Instant dob) {
         DateOfBirth dateOfBirth = new DateOfBirthBuilder().buildObject();
         dateOfBirth.setDateOfBirth(dob);
         return anEidasAttribute(IdaConstants.Eidas_Attributes.DateOfBirth.NAME, dateOfBirth);

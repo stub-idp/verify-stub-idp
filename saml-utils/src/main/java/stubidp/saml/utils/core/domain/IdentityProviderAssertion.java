@@ -1,17 +1,16 @@
 package stubidp.saml.utils.core.domain;
 
-import org.joda.time.DateTime;
-
+import java.time.Instant;
 import java.util.Optional;
 
 public class IdentityProviderAssertion extends OutboundAssertion {
-    private Optional<MatchingDataset> matchingDataset = Optional.empty();
-    private Optional<IdentityProviderAuthnStatement> authnStatement = Optional.empty();
+    private Optional<MatchingDataset> matchingDataset;
+    private Optional<IdentityProviderAuthnStatement> authnStatement;
 
     public IdentityProviderAssertion(
             String id,
             String issuerId,
-            DateTime issueInstant,
+            Instant issueInstant,
             PersistentId persistentId,
             AssertionRestrictions assertionRestrictions,
             Optional<MatchingDataset> matchingDataset,

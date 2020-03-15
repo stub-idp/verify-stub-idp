@@ -2,19 +2,19 @@ package stubidp.saml.utils.core.domain;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import org.joda.time.DateTime;
 
 import java.io.Serializable;
+import java.time.Instant;
 
 public class SimpleMdsValue<T> implements Serializable {
 
     private T value;
-    private DateTime from;
-    private DateTime to;
+    private Instant from;
+    private Instant to;
     private boolean verified;
 
     @JsonCreator
-    public SimpleMdsValue(@JsonProperty("value") T value, @JsonProperty("from") DateTime from, @JsonProperty("to") DateTime to, @JsonProperty("verified") boolean verified) {
+    public SimpleMdsValue(@JsonProperty("value") T value, @JsonProperty("from") Instant from, @JsonProperty("to") Instant to, @JsonProperty("verified") boolean verified) {
         this.value = value;
         this.from = from;
         this.to = to;
@@ -25,11 +25,11 @@ public class SimpleMdsValue<T> implements Serializable {
         return value;
     }
 
-    public DateTime getFrom() {
+    public Instant getFrom() {
         return from;
     }
 
-    public DateTime getTo() {
+    public Instant getTo() {
         return to;
     }
 

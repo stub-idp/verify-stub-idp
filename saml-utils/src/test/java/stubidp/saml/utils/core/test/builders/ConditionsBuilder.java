@@ -1,12 +1,12 @@
 package stubidp.saml.utils.core.test.builders;
 
-import org.joda.time.DateTime;
-import org.joda.time.Duration;
 import org.opensaml.core.xml.XMLObjectBuilderFactory;
 import org.opensaml.core.xml.config.XMLObjectProviderRegistrySupport;
 import org.opensaml.saml.saml2.core.AudienceRestriction;
 import org.opensaml.saml.saml2.core.Conditions;
 
+import java.time.Duration;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,8 +16,8 @@ public class ConditionsBuilder {
     private List<AudienceRestriction> audienceRestrictions = new ArrayList<>();
     private AudienceRestriction defaultAudienceRestriction = AudienceRestrictionBuilder.anAudienceRestriction().build();
     private boolean shouldIncludeDefaultAudienceRestriction = true;
-    private DateTime notBefore = null;
-    private DateTime notOnOrAfter = null;
+    private Instant notBefore = null;
+    private Instant notOnOrAfter = null;
 
     public static ConditionsBuilder aConditions() {
         return new ConditionsBuilder();
@@ -49,19 +49,19 @@ public class ConditionsBuilder {
         return this;
     }
 
-    public ConditionsBuilder withNotBefore(DateTime notBefore){
+    public ConditionsBuilder withNotBefore(Instant notBefore){
         this.notBefore = notBefore;
         return this;
     }
 
-    public ConditionsBuilder withNotOnOrAfter(DateTime notOnOrAfter){
+    public ConditionsBuilder withNotOnOrAfter(Instant notOnOrAfter){
         this.notOnOrAfter = notOnOrAfter;
         return this;
     }
 
     public ConditionsBuilder validFor(Duration duration){
-        return withNotBefore(DateTime.now())
-              .withNotOnOrAfter(DateTime.now().plus(duration));
+        return withNotBefore(Instant.now())
+              .withNotOnOrAfter(Instant.now().plus(duration));
     }
 
     public ConditionsBuilder restrictedToAudience(String audienceUri){

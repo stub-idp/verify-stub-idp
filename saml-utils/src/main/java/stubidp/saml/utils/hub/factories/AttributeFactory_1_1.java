@@ -1,23 +1,23 @@
 package stubidp.saml.utils.hub.factories;
 
-import org.joda.time.LocalDate;
 import org.opensaml.core.xml.XMLObject;
 import org.opensaml.saml.saml2.core.Attribute;
 import org.opensaml.saml.saml2.core.AttributeValue;
 import stubidp.saml.extensions.IdaConstants;
+import stubidp.saml.extensions.extensions.Date;
+import stubidp.saml.extensions.extensions.Line;
+import stubidp.saml.extensions.extensions.PersonName;
+import stubidp.saml.extensions.extensions.impl.BaseMdsSamlObjectMarshaller;
 import stubidp.saml.utils.core.OpenSamlXmlObjectFactory;
 import stubidp.saml.utils.core.domain.Address;
 import stubidp.saml.utils.core.domain.Gender;
 import stubidp.saml.utils.core.domain.SimpleMdsValue;
-import stubidp.saml.extensions.extensions.Date;
-import stubidp.saml.extensions.extensions.Line;
-import stubidp.saml.extensions.extensions.PersonName;
 
 import javax.inject.Inject;
+import java.time.Instant;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
-
-import static java.util.Arrays.asList;
 
 public class AttributeFactory_1_1 implements AttributeFactory {
 
@@ -52,11 +52,11 @@ public class AttributeFactory_1_1 implements AttributeFactory {
         return createAttribute(
                 IdaConstants.Attributes_1_1.Gender.NAME,
                 IdaConstants.Attributes_1_1.Gender.FRIENDLY_NAME,
-                asList((AttributeValue) genderValue));
+                Collections.singletonList((AttributeValue) genderValue));
     }
 
     @Override
-    public Attribute createDateOfBirthAttribute(List<SimpleMdsValue<LocalDate>> dateOfBirths) {
+    public Attribute createDateOfBirthAttribute(List<SimpleMdsValue<Instant>> dateOfBirths) {
         return createAttribute(
                 IdaConstants.Attributes_1_1.DateOfBirth.NAME,
                 IdaConstants.Attributes_1_1.DateOfBirth.FRIENDLY_NAME,
@@ -98,7 +98,7 @@ public class AttributeFactory_1_1 implements AttributeFactory {
         return createAttribute(
                 attributeName,
                 null,
-                asList(stringBasedMdsAttributeValue)
+                Collections.singletonList(stringBasedMdsAttributeValue)
         );
     }
 
@@ -107,9 +107,9 @@ public class AttributeFactory_1_1 implements AttributeFactory {
         final AttributeValue idpFraudEventId = openSamlXmlObjectFactory.createIdpFraudEventAttributeValue(fraudEventId);
 
         return createAttribute(
-            IdaConstants.Attributes_1_1.IdpFraudEventId.NAME,
-            IdaConstants.Attributes_1_1.IdpFraudEventId.FRIENDLY_NAME,
-            asList(idpFraudEventId)
+                IdaConstants.Attributes_1_1.IdpFraudEventId.NAME,
+                IdaConstants.Attributes_1_1.IdpFraudEventId.FRIENDLY_NAME,
+                Collections.singletonList(idpFraudEventId)
         );
     }
 
@@ -118,9 +118,9 @@ public class AttributeFactory_1_1 implements AttributeFactory {
         final AttributeValue gpg45StatusAttributeValue = openSamlXmlObjectFactory.createGpg45StatusAttributeValue(indicator);
 
         return createAttribute(
-            IdaConstants.Attributes_1_1.GPG45Status.NAME,
-            IdaConstants.Attributes_1_1.GPG45Status.FRIENDLY_NAME,
-            asList(gpg45StatusAttributeValue)
+                IdaConstants.Attributes_1_1.GPG45Status.NAME,
+                IdaConstants.Attributes_1_1.GPG45Status.FRIENDLY_NAME,
+                Collections.singletonList(gpg45StatusAttributeValue)
         );
     }
 
@@ -131,7 +131,7 @@ public class AttributeFactory_1_1 implements AttributeFactory {
         return createAttribute(
                 IdaConstants.Attributes_1_1.IPAddress.NAME,
                 IdaConstants.Attributes_1_1.IPAddress.FRIENDLY_NAME,
-                asList(ipAddress)
+                Collections.singletonList(ipAddress)
         );
     }
 
@@ -195,10 +195,10 @@ public class AttributeFactory_1_1 implements AttributeFactory {
         return personNameAttributeValues;
     }
 
-    private List<AttributeValue> createAttributeValuesForDate(List<SimpleMdsValue<LocalDate>> dateValues) {
+    private List<AttributeValue> createAttributeValuesForDate(List<SimpleMdsValue<Instant>> dateValues) {
         List<AttributeValue> personNameAttributeValues = new ArrayList<>();
-        for (SimpleMdsValue<LocalDate> value : dateValues) {
-            final Date personNameAttributeValue = openSamlXmlObjectFactory.createDateAttributeValue(value.getValue().toString("yyyy-MM-dd"));
+        for (SimpleMdsValue<Instant> value : dateValues) {
+            final Date personNameAttributeValue = openSamlXmlObjectFactory.createDateAttributeValue(BaseMdsSamlObjectMarshaller.DateFromInstant.of(value.getValue()));
             personNameAttributeValue.setFrom(value.getFrom());
             personNameAttributeValue.setTo(value.getTo());
             personNameAttributeValue.setVerified(value.isVerified());

@@ -1,16 +1,15 @@
 package stubidp.saml.utils.core.domain;
 
-import org.joda.time.DateTime;
-
+import java.time.Instant;
 import java.util.Optional;
 
 public class HubAssertion extends OutboundAssertion {
-    private Optional<Cycle3Dataset> cycle3Data = Optional.empty();
+    private Optional<Cycle3Dataset> cycle3Data;
 
     public HubAssertion(
             String id,
             String issuerId,
-            DateTime issueInstant,
+            Instant issueInstant,
             PersistentId persistentId,
             AssertionRestrictions assertionRestrictions,
             Optional<Cycle3Dataset> cycle3Data) {

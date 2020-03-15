@@ -1,18 +1,18 @@
 package stubidp.saml.utils.core.test.builders;
 
-import org.joda.time.DateTime;
 import org.opensaml.saml.saml2.core.AttributeValue;
 import stubidp.saml.extensions.extensions.PersonName;
 import stubidp.saml.utils.core.test.OpenSamlXmlObjectFactory;
 
+import java.time.Instant;
 import java.util.Optional;
 
 public class PersonNameAttributeValueBuilder {
 
     private OpenSamlXmlObjectFactory openSamlXmlObjectFactory = new OpenSamlXmlObjectFactory();
 
-    private Optional<DateTime> from = Optional.empty();
-    private Optional<DateTime> to = Optional.empty();
+    private Optional<Instant> from = Optional.empty();
+    private Optional<Instant> to = Optional.empty();
     private String value = "John";
     private Optional<String> language = Optional.empty();
     private Optional<Boolean> verified = Optional.empty();
@@ -32,12 +32,12 @@ public class PersonNameAttributeValueBuilder {
         return personNameAttributeValue;
     }
 
-    public PersonNameAttributeValueBuilder withFrom(DateTime from) {
+    public PersonNameAttributeValueBuilder withFrom(Instant from) {
         this.from = Optional.ofNullable(from);
         return this;
     }
 
-    public PersonNameAttributeValueBuilder withTo(DateTime to) {
+    public PersonNameAttributeValueBuilder withTo(Instant to) {
         this.to = Optional.ofNullable(to);
         return this;
     }

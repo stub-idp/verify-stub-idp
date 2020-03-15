@@ -1,11 +1,11 @@
 package stubidp.saml.utils.hub.factories;
 
-import org.joda.time.LocalDate;
 import org.opensaml.saml.saml2.core.Attribute;
 import stubidp.saml.utils.core.domain.Address;
 import stubidp.saml.utils.core.domain.Gender;
 import stubidp.saml.utils.core.domain.SimpleMdsValue;
 
+import java.time.Instant;
 import java.util.List;
 
 public interface AttributeFactory {
@@ -17,7 +17,7 @@ public interface AttributeFactory {
 
     Attribute createGenderAttribute(SimpleMdsValue<Gender> gender);
 
-    Attribute createDateOfBirthAttribute(List<SimpleMdsValue<LocalDate>> dateOfBirths);
+    Attribute createDateOfBirthAttribute(List<SimpleMdsValue<Instant>> dateOfBirths);
 
     Attribute createCurrentAddressesAttribute(List<Address> currentAddresses);
 

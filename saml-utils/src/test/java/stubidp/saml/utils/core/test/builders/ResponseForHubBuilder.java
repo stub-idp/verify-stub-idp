@@ -1,6 +1,5 @@
 package stubidp.saml.utils.core.test.builders;
 
-import org.joda.time.DateTime;
 import org.opensaml.xmlsec.signature.Signature;
 import stubidp.saml.utils.core.domain.IdpIdaStatus;
 import stubidp.saml.utils.core.domain.InboundResponseFromIdp;
@@ -10,6 +9,7 @@ import stubidp.saml.utils.core.domain.TransactionIdaStatus;
 import stubidp.test.devpki.TestEntityIds;
 
 import java.net.URI;
+import java.time.Instant;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -22,10 +22,10 @@ public class ResponseForHubBuilder {
     private String responseId = "response-id";
     private String inResponseTo = "request-id";
     private String issuerId = "issuer-id";
-    private DateTime issueInstant = DateTime.now();
+    private Instant issueInstant = Instant.now();
     private TransactionIdaStatus transactionIdpStatus = TransactionIdaStatus.Success;
     private IdpIdaStatus idpIdaStatus = IdpIdaStatus.success();
-    private Optional<Signature> signature = null;
+    private Optional<Signature> signature = Optional.empty();
     private Optional<PassthroughAssertion> authnStatementAssertion = empty();
     private Optional<PassthroughAssertion> matchingDatasetAssertion = empty();
     private List<String> encryptedAssertions = Collections.emptyList();
@@ -90,7 +90,7 @@ public class ResponseForHubBuilder {
         return this;
     }
 
-    public ResponseForHubBuilder withIssueInstant(DateTime issueInstant) {
+    public ResponseForHubBuilder withIssueInstant(Instant issueInstant) {
         this.issueInstant = issueInstant;
         return this;
     }

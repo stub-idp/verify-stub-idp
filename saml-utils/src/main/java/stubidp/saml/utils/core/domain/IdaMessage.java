@@ -1,17 +1,17 @@
 package stubidp.saml.utils.core.domain;
 
-import org.joda.time.DateTime;
+import java.time.Instant;
 
 public abstract class IdaMessage {
 
     private String id;
     private String issuer;
-    private DateTime issueInstant;
+    private Instant issueInstant;
 
     protected IdaMessage() {
     }
 
-    public IdaMessage(String id, String issuer, DateTime issueInstant) {
+    public IdaMessage(String id, String issuer, Instant issueInstant) {
         this.id = id;
         this.issuer = issuer;
         this.issueInstant = issueInstant;
@@ -25,7 +25,7 @@ public abstract class IdaMessage {
         return issuer;
     }
 
-    public DateTime getIssueInstant() {
+    public Instant getIssueInstant() {
         return issueInstant;
     }
 }
