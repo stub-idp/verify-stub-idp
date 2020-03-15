@@ -12,9 +12,12 @@ This microservice is a stub IDP that can be white-labelled to simulate any IDP, 
 * Guava -> stdlib wherever possible
 * Dependabot updates
 * Dropwizard 2
+* OpenSAML 4
 * Junit 5 Jupiter
 * No guice, only hk2 for DI
+* No joda-time
 * No deprecated code and warnings-as-errors when compiling
+
 
 * More testing and security features
 * Prometheus metrics
@@ -26,6 +29,8 @@ This microservice is a stub IDP that can be white-labelled to simulate any IDP, 
 * Adding in changes from alphagov
 * All user passwords are hashed before they go into the database (no plaintext passwords) 
 * stub-sp service
+
+*Note* since the removal of joda-time any previously serialized data (to DB) is not compatible with current code. Compatibility could likely be added.
 
 ## Running
 
