@@ -5,13 +5,15 @@ import ch.qos.logback.classic.Logger;
 import ch.qos.logback.classic.spi.LoggingEvent;
 import ch.qos.logback.core.net.SyslogOutputStream;
 import net.logstash.logback.layout.LogstashLayout;
-import org.joda.time.DateTime;
-import org.joda.time.DateTimeUtils;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.slf4j.LoggerFactory;
 import stubidp.dropwizard.logstash.support.UdpServer;
+
+import java.time.Clock;
+import java.time.Instant;
+import java.time.ZoneId;
 
 import static io.dropwizard.logging.SyslogAppenderFactory.Facility.LOCAL7;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -21,7 +23,7 @@ public class LogstashSyslogAppenderIntegrationTest {
     private UdpServer udpServer = new UdpServer();
 
     @BeforeEach
-    public void startUdpInterceptor() throws Exception {
+    public void startUdpInterceptor() {
         udpServer.start();
     }
 
@@ -30,17 +32,13 @@ public class LogstashSyslogAppenderIntegrationTest {
         udpServer.stop();
     }
 
-    @AfterEach
-    public void resetTime() throws Exception {
-        DateTimeUtils.setCurrentMillisSystem();
-    }
-
     @Test
     public void shouldSendLoggingEventToSyslogUdpSocket() throws Exception {
-        DateTimeUtils.setCurrentMillisFixed(DateTime.parse("2014-04-01T00:00:00.000Z").getMillis());
+        String time = "2014-04-01T00:00:00.000Z";
+        Clock clock = Clock.fixed(Instant.parse(time).atZone(ZoneId.of("UTC")).toInstant(), ZoneId.of("UTC"));
 
         SyslogOutputStream syslogOutputStream = new SyslogOutputStream("localhost", udpServer.getLocalPort());
-        SyslogEventFormatter eventFormatter = new SyslogEventFormatter(LOCAL7, "source-host", "test-event-tag", new LogstashLayout());
+        SyslogEventFormatter eventFormatter = new SyslogEventFormatter(LOCAL7, "source-host", "test-event-tag", new LogstashLayout(), clock);
         SyslogAppender appender = new SyslogAppender(eventFormatter, syslogOutputStream);
 
         appender.start();

@@ -5,13 +5,16 @@ import ch.qos.logback.classic.spi.ILoggingEvent;
 import ch.qos.logback.classic.spi.LoggingEvent;
 import ch.qos.logback.core.Layout;
 import io.dropwizard.logging.SyslogAppenderFactory;
-import org.joda.time.DateTime;
-import org.joda.time.DateTimeUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+
+import java.time.Clock;
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
@@ -27,12 +30,12 @@ public class SyslogEventFormatterTest {
     private Layout<ILoggingEvent> layout;
 
     @BeforeEach
-    public void setUp() throws Exception {
+    public void setUp() {
         formatter = new SyslogEventFormatter(SyslogAppenderFactory.Facility.LOCAL1, hostname, tag, layout);
     }
 
     @Test
-    public void format_shouldPrefixWithExpectedPriorityWhenFacilityIsLocal1AndEventSeverityIsWarning() throws Exception {
+    public void format_shouldPrefixWithExpectedPriorityWhenFacilityIsLocal1AndEventSeverityIsWarning() {
         final LoggingEvent loggingEvent = createLoggingEvent(Level.WARN);
 
         final String formattedEvent = formatter.format(loggingEvent);
@@ -41,32 +44,33 @@ public class SyslogEventFormatterTest {
     }
 
     @Test
-    public void format_shouldIncludeTimestampInIso8601Format() throws Exception {
-        DateTimeUtils.setCurrentMillisFixed(DateTime.parse("2009-06-15T13:45:30.000Z").getMillis());
+    public void format_shouldIncludeTimestampInIso8601Format() {
+        final String time = "2009-06-15T13:45:30.000Z";
+        final Clock clock = Clock.fixed(Instant.parse(time).atZone(ZoneId.of("UTC")).toInstant(), ZoneId.of("UTC"));
         final ILoggingEvent event = createLoggingEvent();
 
+        formatter = new SyslogEventFormatter(SyslogAppenderFactory.Facility.LOCAL1, hostname, tag, layout, clock);
         final String formattedEvent = formatter.format(event);
 
-        assertThat(formattedEvent).contains("2009-06-15T13:45:30.000Z");
-        DateTimeUtils.setCurrentMillisSystem();
+        assertThat(formattedEvent).contains(time);
     }
 
     @Test
-    public void format_shouldIncludeHostname() throws Exception {
+    public void format_shouldIncludeHostname() {
         final String formattedEvent = formatter.format(createLoggingEvent());
 
         assertThat(formattedEvent).contains(hostname);
     }
 
     @Test
-    public void format_shouldIncludeTag() throws Exception {
+    public void format_shouldIncludeTag() {
         final String formattedEvent = formatter.format(createLoggingEvent());
 
         assertThat(formattedEvent).contains(tag);
     }
 
     @Test
-    public void format_shouldIncludeEventAsJson() throws Exception {
+    public void format_shouldIncludeEventAsJson() {
         final ILoggingEvent event = createLoggingEvent();
         when(layout.doLayout(event)).thenReturn("formatted event");
 
