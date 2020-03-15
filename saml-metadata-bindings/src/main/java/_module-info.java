@@ -20,7 +20,6 @@
 //    requires nimbus.jose.jwt;
 //    requires commons.collections;
 //    requires xmlsec;
-//    requires org.joda.time;
 //    requires dropwizard.servlets;
 //    requires java.xml.crypto; // only for MetadataSignatureTrustEngineFactoryTest
 //    requires java.ws.rs;

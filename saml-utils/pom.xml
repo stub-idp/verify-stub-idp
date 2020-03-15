@@ -81,12 +81,6 @@
             <scope>compile</scope>
         </dependency>
         <dependency>
-            <groupId>joda-time</groupId>
-            <artifactId>joda-time</artifactId>
-            <version>${joda_time.version}</version>
-            <scope>compile</scope>
-        </dependency>
-        <dependency>
             <groupId>commons-codec</groupId>
             <artifactId>commons-codec</artifactId>
             <version>${commons_codec.version}</version>
@@ -121,12 +115,6 @@
             <groupId>stub-idp</groupId>
             <artifactId>dev-pki</artifactId>
             <version>1.0-SNAPSHOT</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.assertj</groupId>
-            <artifactId>assertj-joda-time</artifactId>
-            <version>${assertj_jodatime.version}</version>
             <scope>test</scope>
         </dependency>
     </dependencies>

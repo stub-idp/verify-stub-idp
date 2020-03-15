@@ -6,7 +6,6 @@ module stubidp.common.utils {
 
     requires org.slf4j;
     requires java.xml;
-    requires org.joda.time;
     requires commons.validator;
     requires com.google.common;
     requires java.validation;

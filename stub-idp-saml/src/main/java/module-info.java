@@ -15,7 +15,6 @@ module stubidp.saml {
     opens stubidp.saml.stubidp.stub.transformers.outbound;
     opens stubidp.saml.stubidp;
 
-    requires org.joda.time;
     requires stubidp.saml.extensions;
     requires com.fasterxml.jackson.annotation;
     requires stubidp.saml.serializers; // compile dependency, but for tests

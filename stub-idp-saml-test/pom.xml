@@ -22,12 +22,6 @@
             <scope>compile</scope>
         </dependency>
         <dependency>
-            <groupId>org.assertj</groupId>
-            <artifactId>assertj-joda-time</artifactId>
-            <version>${assertj_jodatime.version}</version>
-            <scope>compile</scope>
-        </dependency>
-        <dependency>
             <groupId>stub-idp</groupId>
             <artifactId>common-utils</artifactId>
             <version>1.0-SNAPSHOT</version>
@@ -50,12 +44,6 @@
                     <artifactId>commons-codec</artifactId>
                 </exclusion>
             </exclusions>
-        </dependency>
-        <dependency>
-            <groupId>joda-time</groupId>
-            <artifactId>joda-time</artifactId>
-            <version>${joda_time.version}</version>
-            <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>org.glassfish.hk2.external</groupId>
@@ -103,6 +91,12 @@
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter</artifactId>
             <version>${junit.version}</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.assertj</groupId>
+            <artifactId>assertj-core</artifactId>
+            <version>${assertj.version}</version>
             <scope>compile</scope>
         </dependency>
         <dependency>

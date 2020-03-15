@@ -34,7 +34,6 @@ module stubidp.saml.utils {
     requires transitive org.opensaml.security;
     requires transitive stubidp.saml.extensions;
     requires transitive java.validation;
-    requires transitive org.joda.time;
     requires transitive org.opensaml.saml;
     requires transitive jakarta.inject;
 }

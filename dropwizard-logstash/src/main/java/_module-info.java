@@ -6,7 +6,6 @@
 //    requires dropwizard.core; // has package conflict with dropwizard.validation in io.dropwizard.validation
 //    requires dropwizard.logging;
 //    requires dropwizard.validation;
-//    requires org.joda.time;
 //    requires logback.access;
 //    requires jackson.annotations;
 //    requires com.fasterxml.jackson.core;

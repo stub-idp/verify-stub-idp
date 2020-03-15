@@ -21,7 +21,6 @@ module stubidp.saml.extensions {
     requires transitive org.slf4j;
     requires transitive org.checkerframework.checker.qual;
     requires transitive org.opensaml.core;
-    requires transitive org.joda.time;
     requires transitive java.xml;
     requires transitive org.opensaml.saml;
     requires transitive org.opensaml.saml.impl;

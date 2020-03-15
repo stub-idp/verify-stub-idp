@@ -31,7 +31,6 @@
 //    requires common.utils;
 //    requires com.fasterxml.jackson.annotation;
 //    requires com.fasterxml.jackson.datatype.jdk8;
-//    requires com.fasterxml.jackson.datatype.joda;
 //    requires dropwizard.lifecycle;
 //    requires dropwizard.util;
 //    requires jersey.common;

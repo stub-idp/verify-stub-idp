@@ -17,7 +17,6 @@ module stubidp.saml.security {
     requires org.opensaml.core;
 
     requires transitive org.opensaml.xmlsec.impl;
-    requires transitive org.joda.time;
     requires transitive org.opensaml.security;
     requires transitive org.opensaml.security.impl;
     requires transitive org.opensaml.xmlsec;
