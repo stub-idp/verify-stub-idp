@@ -348,7 +348,12 @@
             <version>${checker_qual.version}</version>
             <scope>compile</scope>
         </dependency>
-
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-text</artifactId>
+            <version>${commons_text.version}</version>
+            <scope>compile</scope>
+        </dependency>
         <!-- test dependencies -->
         <dependency>
             <groupId>io.dropwizard</groupId>

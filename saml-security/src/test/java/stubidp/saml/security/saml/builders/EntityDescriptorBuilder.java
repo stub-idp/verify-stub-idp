@@ -1,6 +1,5 @@
 package stubidp.saml.security.saml.builders;
 
-import org.apache.commons.lang3.StringUtils;
 import org.opensaml.core.xml.config.XMLObjectProviderRegistrySupport;
 import org.opensaml.core.xml.io.MarshallingException;
 import org.opensaml.saml.saml2.metadata.AttributeAuthorityDescriptor;
@@ -19,6 +18,7 @@ import java.time.Instant;
 import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -76,7 +76,7 @@ public class EntityDescriptorBuilder {
 
         entityDescriptor.setID(id);
 
-        if (signature.isPresent() && StringUtils.isNotEmpty(entityId)) {
+        if (signature.isPresent() && Objects.nonNull(entityId) && !entityId.isBlank()) {
             entityDescriptor.setSignature(signature.get());
 
             XMLObjectProviderRegistrySupport.getMarshallerFactory().getMarshaller(entityDescriptor).marshall(entityDescriptor);

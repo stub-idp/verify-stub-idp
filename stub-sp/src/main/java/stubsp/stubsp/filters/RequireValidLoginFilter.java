@@ -1,6 +1,5 @@
 package stubsp.stubsp.filters;
 
-import org.apache.commons.lang.StringUtils;
 import org.jboss.logging.MDC;
 import org.opensaml.security.credential.BasicCredential;
 import org.opensaml.security.credential.UsageType;
@@ -132,9 +131,9 @@ public class RequireValidLoginFilter implements ContainerRequestFilter {
 
         final Status status;
 
-        if (sessionCookie.isEmpty() || StringUtils.isEmpty(sessionCookie.get())) {
+        if (sessionCookie.isEmpty() || sessionCookie.get().isBlank()) {
             status = Status.ID_NOT_PRESENT;
-        } else if (isSecureCookieEnabled && (secureCookie.isEmpty() || StringUtils.isEmpty(secureCookie.get()))) {
+        } else if (isSecureCookieEnabled && (secureCookie.isEmpty() || secureCookie.get().isBlank())) {
             status = Status.HASH_NOT_PRESENT;
         } else if (isSecureCookieEnabled && NO_CURRENT_SESSION_COOKIE_VALUE.equals(secureCookie.get())) {
             status = Status.DELETED_SESSION;

@@ -33,7 +33,7 @@
         <jaxb.version>2.3.3</jaxb.version>
         <commons_codec.version>1.14</commons_codec.version>
         <commons_io.version>2.6</commons_io.version>
-        <commons_lang.version>2.6</commons_lang.version>
+        <commons_text.version>1.8</commons_text.version>
         <commons_validator.version>1.6</commons_validator.version>
         <commons_collections.version>3.2.2</commons_collections.version>
         <logstash_logback_encoder.version>6.3</logstash_logback_encoder.version>

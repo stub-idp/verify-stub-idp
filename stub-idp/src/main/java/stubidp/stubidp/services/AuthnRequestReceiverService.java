@@ -1,7 +1,7 @@
 package stubidp.stubidp.services;
 
 import io.prometheus.client.Counter;
-import org.apache.commons.lang.StringEscapeUtils;
+import org.apache.commons.text.StringEscapeUtils;
 import org.opensaml.saml.saml2.core.AuthnRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -126,7 +126,7 @@ public class AuthnRequestReceiverService {
                 } catch (IllegalArgumentException e) {
                     // this is a hint that stub-idp does not know about, and it should be able
                     // to deal with such hints.  Also sanitize string
-                    invalidHints.add(StringEscapeUtils.escapeHtml(hint));
+                    invalidHints.add(StringEscapeUtils.escapeHtml4(hint));
                 }
             }
             if (!validHints.isEmpty()) {

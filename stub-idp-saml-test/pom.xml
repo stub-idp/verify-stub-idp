@@ -70,12 +70,6 @@
             <scope>compile</scope>
         </dependency>
         <dependency>
-            <groupId>commons-lang</groupId>
-            <artifactId>commons-lang</artifactId>
-            <version>${commons_lang.version}</version>
-            <scope>compile</scope>
-        </dependency>
-        <dependency>
             <groupId>stub-idp</groupId>
             <artifactId>dev-pki</artifactId>
             <version>1.0-SNAPSHOT</version>

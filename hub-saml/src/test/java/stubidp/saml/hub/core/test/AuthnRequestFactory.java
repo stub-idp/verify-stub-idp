@@ -1,6 +1,5 @@
 package stubidp.saml.hub.core.test;
 
-import org.apache.commons.lang3.StringUtils;
 import org.opensaml.core.xml.XMLObject;
 import org.opensaml.saml.saml2.core.AuthnRequest;
 import stubidp.saml.serializers.serializers.XmlObjectToBase64EncodedStringTransformer;
@@ -79,7 +78,7 @@ public class AuthnRequestFactory {
             Optional<Instant> issueInstant) {
         // Pad ID to ensure request is long enough
         AuthnRequest authnRequest = getAuthnRequest(
-                StringUtils.rightPad(id, 1200, "x"),
+                id + "x".repeat(1200),
                 issuer,
                 forceAuthentication,
                 assertionConsumerServiceUrl,

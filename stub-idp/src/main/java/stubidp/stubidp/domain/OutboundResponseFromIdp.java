@@ -1,6 +1,5 @@
 package stubidp.stubidp.domain;
 
-import org.apache.commons.lang.StringUtils;
 import stubidp.saml.utils.core.domain.IdaSamlResponse;
 import stubidp.saml.utils.core.domain.IdentityProviderAssertion;
 import stubidp.utils.security.security.IdGenerator;
@@ -8,6 +7,7 @@ import stubidp.utils.security.security.IdGenerator;
 import java.io.Serializable;
 import java.net.URI;
 import java.time.Instant;
+import java.util.Objects;
 import java.util.Optional;
 
 public class OutboundResponseFromIdp extends IdaSamlResponse implements Serializable {
@@ -93,7 +93,7 @@ public class OutboundResponseFromIdp extends IdaSamlResponse implements Serializ
             String issuerId,
             URI destination, String requesterErrorMessage) {
 
-        String message = StringUtils.isEmpty(requesterErrorMessage) ? null : requesterErrorMessage;
+        String message = (Objects.isNull(requesterErrorMessage) || requesterErrorMessage.isBlank()) ? null : requesterErrorMessage;
         return getOutboundResponseFromIdpWithNoAssertions(
                 inResponseTo,
                 issuerId,

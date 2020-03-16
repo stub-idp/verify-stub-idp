@@ -1,6 +1,5 @@
 package stubidp.stubidp.filters;
 
-import org.apache.commons.lang.StringUtils;
 import org.jboss.logging.MDC;
 import stubidp.shared.cookies.CookieNames;
 import stubidp.shared.cookies.HmacValidator;
@@ -73,9 +72,9 @@ public class SessionCookieValueMustExistAsASessionFilter implements ContainerReq
 
         final Status status;
 
-        if (StringUtils.isEmpty(sessionCookie.get())) {
+        if (sessionCookie.get().isBlank()) {
             status = Status.ID_NOT_PRESENT;
-        } else if (isSecureCookieEnabled && (secureCookie.isEmpty() || StringUtils.isEmpty(secureCookie.get()))) {
+        } else if (isSecureCookieEnabled && (secureCookie.isEmpty() || secureCookie.get().isBlank())) {
             status = Status.HASH_NOT_PRESENT;
         } else if (isSecureCookieEnabled && NO_CURRENT_SESSION_COOKIE_VALUE.equals(secureCookie.get())) {
             status = Status.DELETED_SESSION;

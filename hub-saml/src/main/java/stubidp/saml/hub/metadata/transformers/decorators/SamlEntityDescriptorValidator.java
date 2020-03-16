@@ -1,7 +1,5 @@
 package stubidp.saml.hub.metadata.transformers.decorators;
 
-import com.google.common.base.Strings;
-import org.apache.commons.lang3.StringUtils;
 import org.opensaml.saml.saml2.metadata.EntityDescriptor;
 import org.opensaml.saml.saml2.metadata.RoleDescriptor;
 import org.opensaml.xmlsec.signature.KeyInfo;
@@ -11,15 +9,17 @@ import stubidp.saml.extensions.validation.SamlTransformationErrorException;
 import stubidp.saml.extensions.validation.SamlValidationSpecificationFailure;
 import stubidp.saml.hub.core.errors.SamlTransformationErrorFactory;
 
+import java.util.Objects;
+
 public class SamlEntityDescriptorValidator {
 
     public void validate(EntityDescriptor descriptor) {
-        if (Strings.isNullOrEmpty(descriptor.getEntityID())) {
+        if (Objects.isNull(descriptor.getEntityID()) || descriptor.getEntityID().isBlank()) {
             SamlValidationSpecificationFailure failure = SamlTransformationErrorFactory.missingOrEmptyEntityID();
             throw new SamlTransformationErrorException(failure.getErrorMessage(), failure.getLogLevel());
         }
 
-        if (descriptor.getCacheDuration() == null && descriptor.getValidUntil() == null) {
+        if (Objects.isNull(descriptor.getCacheDuration()) && Objects.isNull(descriptor.getValidUntil())) {
             SamlValidationSpecificationFailure failure = SamlTransformationErrorFactory.missingCacheDurationAndValidUntil();
             throw new SamlTransformationErrorException(failure.getErrorMessage(), failure.getLogLevel());
         }
@@ -41,7 +41,7 @@ public class SamlEntityDescriptorValidator {
         }
 
         KeyInfo keyInfo = roleDescriptor.getKeyDescriptors().get(0).getKeyInfo();
-        if (keyInfo == null) {
+        if (Objects.isNull(keyInfo)) {
             SamlValidationSpecificationFailure failure = SamlTransformationErrorFactory.missingKeyInfo();
             throw new SamlTransformationErrorException(failure.getErrorMessage(), failure.getLogLevel());
         }
@@ -56,7 +56,7 @@ public class SamlEntityDescriptorValidator {
         }
 
         X509Certificate x509Certificate = x509Data.getX509Certificates().get(0);
-        if (StringUtils.isEmpty(x509Certificate.getValue())) {
+        if (Objects.isNull(x509Certificate.getValue()) || x509Certificate.getValue().isBlank()) {
             SamlValidationSpecificationFailure failure = SamlTransformationErrorFactory.emptyX509Certificiate();
             throw new SamlTransformationErrorException(failure.getErrorMessage(), failure.getLogLevel());
         }
