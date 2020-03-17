@@ -113,14 +113,20 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>${maven_surefire_plugin.version}</version>
-<!--                <configuration>-->
+                <configuration>
+                    <!-- test order is different locally vs travis and leads to failures -->
+                    <runOrder>alphabetical</runOrder>
 <!--                    <forkCount>0</forkCount>-->
-<!--                </configuration>-->
+                </configuration>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-failsafe-plugin</artifactId>
                 <version>${maven_failsafe_plugin.version}</version>
+                <configuration>
+                    <!-- test order is different locally vs travis and leads to failures -->
+                    <runOrder>alphabetical</runOrder>
+                </configuration>
             </plugin>
         </plugins>
     </build>
