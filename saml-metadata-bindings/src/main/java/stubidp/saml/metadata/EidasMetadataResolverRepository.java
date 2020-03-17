@@ -170,7 +170,7 @@ public class EidasMetadataResolverRepository implements MetadataResolverReposito
     @Override
     public List<X509Certificate> sortCertsByDate(JWK trustAnchor) {
         return trustAnchor.getX509CertChain().stream()
-                .map(base64 -> X509CertUtils.parse(Base64.getDecoder().decode(String.valueOf(base64))))
+                .map(base64 -> X509CertUtils.parse(Base64.getMimeDecoder().decode(String.valueOf(base64))))
                 .sorted(Comparator.comparing(X509Certificate::getNotAfter))
                 .collect(toList());
     }

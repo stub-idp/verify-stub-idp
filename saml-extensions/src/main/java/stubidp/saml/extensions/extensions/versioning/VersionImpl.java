@@ -5,8 +5,8 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 import org.opensaml.core.xml.XMLObject;
 import org.opensaml.core.xml.io.Marshaller;
 import org.opensaml.core.xml.io.Unmarshaller;
-import org.opensaml.core.xml.schema.impl.XSAnyImpl;
 import org.opensaml.saml.common.xml.SAMLConstants;
+import org.opensaml.saml.saml2.core.impl.AttributeValueImpl;
 import stubidp.saml.extensions.extensions.versioning.application.ApplicationVersion;
 
 import java.util.List;
@@ -14,7 +14,7 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public class VersionImpl extends XSAnyImpl implements Version {
+public class VersionImpl extends AttributeValueImpl implements Version {
     public static final Marshaller MARSHALLER = new VersionMarshaller();
     public static final Unmarshaller UNMARSHALLER = new VersionUnMarshaller();
     private ApplicationVersion applicationVersion;

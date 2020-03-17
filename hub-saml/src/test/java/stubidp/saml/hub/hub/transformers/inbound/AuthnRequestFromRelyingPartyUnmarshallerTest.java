@@ -15,6 +15,7 @@ import org.opensaml.saml.saml2.encryption.Encrypter;
 import org.opensaml.security.credential.BasicCredential;
 import org.opensaml.xmlsec.signature.impl.SignatureBuilder;
 import org.opensaml.xmlsec.signature.impl.SignatureImpl;
+import stubidp.saml.extensions.IdaSamlBootstrap;
 import stubidp.saml.extensions.extensions.versioning.Version;
 import stubidp.saml.extensions.extensions.versioning.VersionImpl;
 import stubidp.saml.extensions.extensions.versioning.application.ApplicationVersion;
@@ -39,6 +40,10 @@ import static stubidp.test.devpki.TestCertificateStrings.HUB_TEST_PRIVATE_ENCRYP
 import static stubidp.test.devpki.TestCertificateStrings.HUB_TEST_PUBLIC_ENCRYPTION_CERT;
 
 public class AuthnRequestFromRelyingPartyUnmarshallerTest extends OpenSAMLRunner {
+
+    static {
+        IdaSamlBootstrap.bootstrap();
+    }
 
     private static Encrypter encrypter;
 
