@@ -1,7 +1,5 @@
 package stubidp.utils.rest.truststore;
 
-import com.google.common.base.Throwables;
-
 import javax.inject.Inject;
 import java.io.FileInputStream;
 import java.io.IOException;

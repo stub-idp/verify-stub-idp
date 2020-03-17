@@ -1,6 +1,5 @@
 package stubidp.saml.security;
 
-import com.google.common.base.Charsets;
 import com.google.common.io.Resources;
 import net.shibboleth.utilities.java.support.component.ComponentInitializationException;
 import net.shibboleth.utilities.java.support.xml.BasicParserPool;
@@ -49,6 +48,7 @@ import java.time.Instant;
 import java.time.ZoneId;
 import java.util.Collections;
 
+import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
@@ -221,7 +221,7 @@ public class MetadataBackedSignatureValidatorTest extends OpenSAMLRunner {
     @Test
     public void shouldNotValidateBadSignatureAlgorithm() throws Exception {
         URL authnRequestUrl = getClass().getClassLoader().getResource("authnRequestNormal.xml");//sha1 authnrequest
-        String input = StringEncoding.toBase64Encoded(Resources.toString(authnRequestUrl, Charsets.UTF_8));
+        String input = StringEncoding.toBase64Encoded(Resources.toString(authnRequestUrl, UTF_8));
         //md5 authnrequests throw an exception here as they are not allowed to be unmarshalled
         AuthnRequest request = getStringtoOpenSamlObjectTransformer().apply(input);
         assertThat(createMetadataBackedSignatureValidator().validate(request, issuerId, SPSSODescriptor.DEFAULT_ELEMENT_NAME)).isFalse();
@@ -317,7 +317,7 @@ public class MetadataBackedSignatureValidatorTest extends OpenSAMLRunner {
 
     private void validateAuthnRequestFile(String fileName) throws Exception {
         URL authnRequestUrl = getClass().getClassLoader().getResource(fileName);
-        String input = StringEncoding.toBase64Encoded(Resources.toString(authnRequestUrl, Charsets.UTF_8));
+        String input = StringEncoding.toBase64Encoded(Resources.toString(authnRequestUrl, UTF_8));
         AuthnRequest request = getStringtoOpenSamlObjectTransformer().apply(input);
         createMetadataBackedSignatureValidator().validate(request, issuerId, SPSSODescriptor.DEFAULT_ELEMENT_NAME);
     }

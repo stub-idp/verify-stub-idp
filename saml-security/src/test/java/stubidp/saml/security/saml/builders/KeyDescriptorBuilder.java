@@ -1,10 +1,10 @@
 package stubidp.saml.security.saml.builders;
 
-import com.google.common.base.Preconditions;
 import org.opensaml.saml.saml2.metadata.KeyDescriptor;
 import org.opensaml.security.credential.UsageType;
 import org.opensaml.xmlsec.signature.KeyInfo;
 
+import java.util.Objects;
 import java.util.Optional;
 
 public class KeyDescriptorBuilder {
@@ -18,15 +18,13 @@ public class KeyDescriptorBuilder {
 
     public KeyDescriptor build() {
         KeyDescriptor keyDescriptor = new org.opensaml.saml.saml2.metadata.impl.KeyDescriptorBuilder().buildObject();
-        if (keyInfo.isPresent()) {
-            keyDescriptor.setKeyInfo(keyInfo.get());
-        }
+        keyInfo.ifPresent(keyDescriptor::setKeyInfo);
         keyDescriptor.setUse(UsageType.valueOf(use));
         return keyDescriptor;
     }
 
     public KeyDescriptorBuilder withUse(String use) {
-        Preconditions.checkNotNull(use);
+        Objects.requireNonNull(use);
         this.use = use;
         return this;
     }

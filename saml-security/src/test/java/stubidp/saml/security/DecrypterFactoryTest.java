@@ -40,7 +40,7 @@ public class DecrypterFactoryTest extends OpenSAMLRunner {
 
 
     @BeforeEach
-    public void setup() throws Exception {
+    public void setup() {
         PublicKeyFactory publicKeyFactory = new PublicKeyFactory(new X509CertificateFactory());
         privateEncryptionKey = new PrivateKeyFactory().createPrivateKey(Base64.decodeBase64(OLD_HUB_PRIVATE_ENCRYPTION_KEY));
 

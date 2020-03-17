@@ -35,7 +35,7 @@ public class EntitiesDescriptorNamePredicateTest {
         EntitiesDescriptorNamePredicate entitiesDescriptorNamePredicate = new EntitiesDescriptorNamePredicate(
                 new EntitiesDescriptorNameCriterion(entitiesName));
 
-        assertThat(entitiesDescriptorNamePredicate.apply(entityDescriptor)).isTrue();
+        assertThat(entitiesDescriptorNamePredicate.test(entityDescriptor)).isTrue();
 
     }
 
@@ -50,17 +50,17 @@ public class EntitiesDescriptorNamePredicateTest {
         EntitiesDescriptorNamePredicate entitiesDescriptorNamePredicate = new EntitiesDescriptorNamePredicate(
                 new EntitiesDescriptorNameCriterion("some other parent"));
 
-        assertThat(entitiesDescriptorNamePredicate.apply(entityDescriptor)).isFalse();
+        assertThat(entitiesDescriptorNamePredicate.test(entityDescriptor)).isFalse();
     }
 
     @Test
-    public void shouldNotApplyForEntityWithNoParent() throws MarshallingException, SignatureException {
+    public void shouldNotApplyForEntityWithNoParent() {
         EntityDescriptor entityDescriptor = new EntityDescriptorFactory().idpEntityDescriptor("an idp");
 
         EntitiesDescriptorNamePredicate entitiesDescriptorNamePredicate = new EntitiesDescriptorNamePredicate(
                 new EntitiesDescriptorNameCriterion("some other parent"));
 
-        assertThat(entitiesDescriptorNamePredicate.apply(entityDescriptor)).isFalse();
+        assertThat(entitiesDescriptorNamePredicate.test(entityDescriptor)).isFalse();
     }
 
     @Test
@@ -74,18 +74,18 @@ public class EntitiesDescriptorNamePredicateTest {
         EntitiesDescriptorNamePredicate entitiesDescriptorNamePredicate = new EntitiesDescriptorNamePredicate(
                 new EntitiesDescriptorNameCriterion("some other parent"));
 
-        assertThat(entitiesDescriptorNamePredicate.apply(entityDescriptor)).isFalse();
+        assertThat(entitiesDescriptorNamePredicate.test(entityDescriptor)).isFalse();
     }
 
     @Test
-    public void shouldNotApplyForEntityWithWrongParentType() throws MarshallingException, SignatureException {
+    public void shouldNotApplyForEntityWithWrongParentType() {
         EntityDescriptor entityDescriptor = new EntityDescriptorFactory().idpEntityDescriptor("an idp");
         entityDescriptor.setParent(new AddressBuilder().buildObject("Some", "Other", "Type"));
 
         EntitiesDescriptorNamePredicate entitiesDescriptorNamePredicate = new EntitiesDescriptorNamePredicate(
                 new EntitiesDescriptorNameCriterion("some other parent"));
 
-        assertThat(entitiesDescriptorNamePredicate.apply(entityDescriptor)).isFalse();
+        assertThat(entitiesDescriptorNamePredicate.test(entityDescriptor)).isFalse();
     }
 
 }

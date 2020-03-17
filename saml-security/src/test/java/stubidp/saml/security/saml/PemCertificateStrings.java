@@ -1,6 +1,5 @@
 package stubidp.saml.security.saml;
 
-import com.google.common.base.Throwables;
 import com.google.common.io.Resources;
 
 import java.io.IOException;

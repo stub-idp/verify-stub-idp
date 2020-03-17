@@ -1,6 +1,5 @@
 package stubidp.saml.utils.core.test.builders;
 
-import com.google.common.base.Strings;
 import org.opensaml.core.xml.config.XMLObjectProviderRegistrySupport;
 import org.opensaml.core.xml.io.MarshallingException;
 import org.opensaml.saml.common.xml.SAMLConstants;
@@ -25,6 +24,7 @@ import stubidp.saml.utils.core.test.OpenSamlXmlObjectFactory;
 
 import javax.validation.constraints.NotNull;
 import java.time.Instant;
+import java.util.Objects;
 import java.util.Optional;
 
 import static java.util.Optional.empty;
@@ -97,7 +97,7 @@ public class AuthnRequestBuilder {
         assertionConsumerServiceIndex.ifPresent(authnRequest::setAssertionConsumerServiceIndex);
 
         //This must be the last thing done before returning; otherwise, the signature will be invalidated
-        if (issuer.isPresent() && !Strings.isNullOrEmpty(issuer.get().getValue()) && shouldAddSignature) {
+        if (issuer.isPresent() && Objects.nonNull(issuer.get().getValue()) && !issuer.get().getValue().isBlank() && shouldAddSignature) {
             final SignatureBuilder signatureBuilder = SignatureBuilder.aSignature().withSignatureAlgorithm(signatureAlgorithm);
             id.ifPresent(s -> signatureBuilder.withDigestAlgorithm(s, digestAlgorithm));
             signingCredential.ifPresent(signatureBuilder::withSigningCredential);

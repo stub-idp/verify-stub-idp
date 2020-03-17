@@ -1,7 +1,5 @@
 package stubidp.utils.rest.truststore;
 
-
-import com.google.common.base.Throwables;
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
 
@@ -13,9 +11,9 @@ import java.util.concurrent.ExecutionException;
 @Singleton
 public class KeyStoreCache {
 
-
     private final Cache<String, KeyStore> trustStoreCache;
     private final KeyStoreLoader keyStoreLoader;
+
     @Inject
     public KeyStoreCache(KeyStoreLoader keyStoreLoader) {
         this.keyStoreLoader = keyStoreLoader;
@@ -23,7 +21,6 @@ public class KeyStoreCache {
     }
 
     public KeyStore get(final ClientTrustStoreConfiguration configuration) {
-
         final String trustStorePath = configuration.getPath();
         final String password = configuration.getPassword();
 
@@ -33,5 +30,4 @@ public class KeyStoreCache {
             throw new RuntimeException(e);
         }
     }
-
 }

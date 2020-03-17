@@ -1,7 +1,8 @@
 package stubidp.saml.security.saml.builders;
 
-import com.google.common.base.Preconditions;
 import org.opensaml.saml.saml2.metadata.Company;
+
+import java.util.Objects;
 
 public class CompanyBuilder {
     private String name = "Slate Rock and Gravel Company";
@@ -17,7 +18,7 @@ public class CompanyBuilder {
     }
 
     public CompanyBuilder withName(String companyName) {
-        Preconditions.checkNotNull(companyName);
+        Objects.requireNonNull(companyName);
         this.name = companyName;
         return this;
     }

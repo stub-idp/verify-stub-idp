@@ -1,6 +1,6 @@
 package stubidp.shared.views;
 
-import com.google.common.net.HttpHeaders;
+import org.apache.http.HttpHeaders;
 import stubidp.shared.cookies.CookieNames;
 import stubidp.shared.cookies.HttpOnlyNewCookie;
 import stubidp.shared.domain.SamlRequest;

@@ -1,11 +1,7 @@
 package stubidp.utils.rest.truststore;
 
-
-import com.google.common.base.Throwables;
-
 import javax.inject.Inject;
 import javax.inject.Provider;
-
 import java.io.IOException;
 import java.security.KeyStore;
 import java.security.KeyStoreException;

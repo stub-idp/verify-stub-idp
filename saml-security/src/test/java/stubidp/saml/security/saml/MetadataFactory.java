@@ -1,6 +1,5 @@
 package stubidp.saml.security.saml;
 
-import com.google.common.base.Throwables;
 import org.opensaml.core.xml.config.XMLObjectProviderRegistrySupport;
 import org.opensaml.core.xml.io.Marshaller;
 import org.opensaml.core.xml.io.MarshallerFactory;
