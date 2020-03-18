@@ -4,7 +4,6 @@ import com.nimbusds.jose.jwk.JWK;
 import com.nimbusds.jose.util.X509CertUtils;
 import net.shibboleth.utilities.java.support.component.AbstractInitializableComponent;
 import net.shibboleth.utilities.java.support.component.ComponentInitializationException;
-import org.apache.commons.collections.ListUtils;
 import org.opensaml.saml.metadata.resolver.MetadataResolver;
 import org.opensaml.xmlsec.signature.support.impl.ExplicitKeySignatureTrustEngine;
 import org.slf4j.Logger;
@@ -15,7 +14,6 @@ import stubidp.saml.metadata.factories.MetadataSignatureTrustEngineFactory;
 
 import javax.inject.Inject;
 import javax.ws.rs.client.Client;
-import java.io.UnsupportedEncodingException;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
 import java.time.Duration;
@@ -69,7 +67,8 @@ public class EidasMetadataResolverRepository implements MetadataResolverReposito
 
     @Override
     public Optional<MetadataResolver> getMetadataResolver(String entityId) {
-        return Optional.ofNullable(metadataResolvers.get(entityId)).map(MetadataResolverContainer::getMetadataResolver);
+        return Optional.ofNullable(metadataResolvers.get(entityId))
+                .map(MetadataResolverContainer::getMetadataResolver);
     }
 
     @Override
@@ -79,7 +78,8 @@ public class EidasMetadataResolverRepository implements MetadataResolverReposito
 
     @Override
     public Optional<ExplicitKeySignatureTrustEngine> getSignatureTrustEngine(String entityId) {
-        return Optional.ofNullable(metadataResolvers.get(entityId)).map(MetadataResolverContainer::getSignatureTrustEngine);
+        return Optional.ofNullable(metadataResolvers.get(entityId))
+                .map(MetadataResolverContainer::getSignatureTrustEngine);
     }
 
     @Override
@@ -93,11 +93,16 @@ public class EidasMetadataResolverRepository implements MetadataResolverReposito
 
     @Override
     public List<String> getTrustAnchorsEntityIds() {
-        return trustAnchors.stream().map(JWK::getKeyID).collect(toList());
+        return trustAnchors.stream()
+                .map(JWK::getKeyID)
+                .collect(toList());
     }
 
     private JWK getTrustAnchorFromKeyId(String keyId) {
-        return trustAnchors.stream().filter(e -> e.getKeyID().equals(keyId)).findFirst().orElseThrow(() -> new IllegalArgumentException("Cannot find " + keyId + " in trust anchors"));
+        return trustAnchors.stream()
+                .filter(e -> e.getKeyID().equals(keyId))
+                .findFirst()
+                .orElseThrow(() -> new IllegalArgumentException("Cannot find " + keyId + " in trust anchors"));
     }
 
     @Override
@@ -120,13 +125,10 @@ public class EidasMetadataResolverRepository implements MetadataResolverReposito
         }
     }
 
-    @SuppressWarnings("unchecked")
     private void refreshMetadataResolvers() {
         List<String> trustAnchorsEntityIds = getTrustAnchorsEntityIds();
-        List<String> currentResolverEntityIds = getResolverEntityIds();
-
-        // the subtract is unchecked
-        List<String> resolversToRemove = ListUtils.subtract(currentResolverEntityIds, trustAnchorsEntityIds);
+        List<String> currentResolverEntityIds = new ArrayList<>(getResolverEntityIds());
+        currentResolverEntityIds.removeAll(trustAnchorsEntityIds);
         Map<String, MetadataResolverContainer> newMetadataResolvers = new HashMap<>();
 
         trustAnchorsEntityIds.forEach(trustAnchorsEntityId -> {
@@ -139,7 +141,7 @@ public class EidasMetadataResolverRepository implements MetadataResolverReposito
             }
         });
 
-        List<JerseyClientMetadataResolver> metadataResolversToRemove = resolversToRemove.stream()
+        List<JerseyClientMetadataResolver> metadataResolversToRemove = currentResolverEntityIds.stream()
                 .map(resolverToRemove -> metadataResolvers.get(resolverToRemove).getMetadataResolver())
                 .collect(toList());
 
@@ -148,7 +150,7 @@ public class EidasMetadataResolverRepository implements MetadataResolverReposito
         metadataResolversToRemove.forEach(AbstractInitializableComponent::destroy);
     }
 
-    private MetadataResolverContainer createMetadataResolverContainer(String resolverToAddEntityId) throws CertificateException, UnsupportedEncodingException, ComponentInitializationException {
+    private MetadataResolverContainer createMetadataResolverContainer(String resolverToAddEntityId) throws CertificateException, ComponentInitializationException {
         JWK trustAnchor = getTrustAnchorFromKeyId(resolverToAddEntityId);
 
         Collection<String> errors = CountryTrustAnchor.findErrors(trustAnchor);

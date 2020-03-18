@@ -74,12 +74,6 @@
             <scope>compile</scope>
         </dependency>
         <dependency>
-            <groupId>commons-collections</groupId>
-            <artifactId>commons-collections</artifactId>
-            <version>${commons_collections.version}</version>
-            <scope>compile</scope>
-        </dependency>
-        <dependency>
             <groupId>org.opensaml</groupId>
             <artifactId>opensaml-saml-api</artifactId>
             <version>${opensaml.version}</version>
