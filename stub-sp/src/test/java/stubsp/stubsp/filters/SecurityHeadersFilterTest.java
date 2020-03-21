@@ -30,7 +30,7 @@ class SecurityHeadersFilterTest {
 
         securityHeadersFilter.filter(containerRequestContext, containerResponseContext);
 
-        assertThat(headers.keySet().size()).isEqualTo(4);
+        assertThat(headers.keySet().size()).isEqualTo(5);
         checkSecurityHeaders(headers);
     }
 
@@ -44,6 +44,9 @@ class SecurityHeadersFilterTest {
         assertThat(headers.containsKey("X-Content-Type-Options")).isTrue();
         assertThat(headers.get("X-Content-Type-Options").get(0)).isEqualTo("nosniff");
         assertThat(headers.get("X-Content-Type-Options").size()).isEqualTo(1);
+        assertThat(headers.containsKey("Referrer-Policy")).isTrue();
+        assertThat(headers.get("Referrer-Policy").get(0)).isEqualTo("strict-origin-when-cross-origin");
+        assertThat(headers.get("Referrer-Policy").size()).isEqualTo(1);
         assertThat(headers.containsKey("Content-Security-Policy")).isTrue();
         assertThat(headers.get("Content-Security-Policy").size()).isEqualTo(1);
         assertThat(headers.get("Content-Security-Policy").get(0)).isEqualTo("default-src 'self'; font-src data:; img-src 'self'; object-src 'none'; style-src 'self' 'unsafe-inline'; script-src 'self';");
