@@ -181,7 +181,7 @@
         <dependency>
             <groupId>org.flywaydb</groupId>
             <artifactId>flyway-core</artifactId>
-            <version>6.3.1</version>
+            <version>${flyway.version}</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
@@ -193,7 +193,7 @@
         <dependency>
             <groupId>org.jdbi</groupId>
             <artifactId>jdbi3-core</artifactId>
-            <version>3.12.2</version>
+            <version>${jdbi.version}</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
@@ -205,7 +205,7 @@
         <dependency>
             <groupId>org.mindrot</groupId>
             <artifactId>jbcrypt</artifactId>
-            <version>0.4-atlassian-1</version>
+            <version>${jbcrypt.version}</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
@@ -228,7 +228,7 @@
         <dependency>
             <groupId>org.postgresql</groupId>
             <artifactId>postgresql</artifactId>
-            <version>42.2.11</version>
+            <version>${postgres.version}</version>
             <scope>compile</scope>
         </dependency>
         <!-- verify utils libs -->
@@ -291,13 +291,13 @@
         <dependency>
             <groupId>jakarta.activation</groupId>
             <artifactId>jakarta.activation-api</artifactId>
-            <version>${javax_activation.version}</version>
+            <version>${jakarta_activation.version}</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>jakarta.xml.bind</groupId>
             <artifactId>jakarta.xml.bind-api</artifactId>
-            <version>${jaxb.version}</version>
+            <version>${jakarta_xml_bind.version}</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
@@ -327,7 +327,7 @@
         <dependency>
             <groupId>org.yaml</groupId>
             <artifactId>snakeyaml</artifactId>
-            <version>1.26</version>
+            <version>${snakeyaml.version}</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
@@ -339,7 +339,7 @@
         <dependency>
             <groupId>com.h2database</groupId>
             <artifactId>h2</artifactId>
-            <version>1.4.200</version>
+            <version>${h2.version}</version>
             <scope>compile</scope>
         </dependency>
         <dependency>

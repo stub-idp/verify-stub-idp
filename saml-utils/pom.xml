@@ -65,13 +65,13 @@
         <dependency>
             <groupId>jakarta.validation</groupId>
             <artifactId>jakarta.validation-api</artifactId>
-            <version>${javax_validation.version}</version>
+            <version>${jakarta_validation.version}</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>org.glassfish.hk2.external</groupId>
             <artifactId>jakarta.inject</artifactId>
-            <version>${javax_inject.version}</version>
+            <version>${jakarta_inject.version}</version>
             <scope>compile</scope>
         </dependency>
         <dependency>

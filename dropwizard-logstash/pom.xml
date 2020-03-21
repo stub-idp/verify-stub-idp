@@ -93,13 +93,13 @@
         <dependency>
             <groupId>jakarta.activation</groupId>
             <artifactId>jakarta.activation-api</artifactId>
-            <version>${javax_activation.version}</version>
+            <version>${jakarta_activation.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>jakarta.xml.bind</groupId>
             <artifactId>jakarta.xml.bind-api</artifactId>
-            <version>${jaxb.version}</version>
+            <version>${jakarta_xml_bind.version}</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
