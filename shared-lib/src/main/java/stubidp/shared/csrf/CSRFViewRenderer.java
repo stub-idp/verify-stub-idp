@@ -1,5 +1,6 @@
 package stubidp.shared.csrf;
 
+import freemarker.template.Configuration;
 import io.dropwizard.views.View;
 import io.dropwizard.views.freemarker.FreemarkerViewRenderer;
 import org.jsoup.Jsoup;
@@ -20,7 +21,7 @@ import java.util.Locale;
 public class CSRFViewRenderer extends FreemarkerViewRenderer {
 
     public CSRFViewRenderer() {
-        super();
+        super(Configuration.DEFAULT_INCOMPATIBLE_IMPROVEMENTS);
     }
 
     @Override
