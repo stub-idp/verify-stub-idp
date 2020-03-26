@@ -1,6 +1,7 @@
 package stubidp.stubidp.repositories.reaper;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import stubidp.stubidp.repositories.IdpSessionRepository;
 
 import java.time.Duration;
@@ -9,7 +10,7 @@ import static java.text.MessageFormat.format;
 
 public class StaleSessionReaper implements Runnable {
 
-    private static final Logger LOGGER = Logger.getLogger(StaleSessionReaper.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(StaleSessionReaper.class);
 
     /**
      * this operates on all sessions in the database, both eidas and verify

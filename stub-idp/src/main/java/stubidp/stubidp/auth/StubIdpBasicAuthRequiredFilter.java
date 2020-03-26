@@ -1,8 +1,9 @@
 package stubidp.stubidp.auth;
 
 import com.google.common.base.Splitter;
-import org.apache.log4j.Logger;
 import org.mindrot.jbcrypt.BCrypt;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import stubidp.stubidp.Urls;
 import stubidp.stubidp.configuration.StubIdpConfiguration;
 import stubidp.stubidp.configuration.UserCredentials;
@@ -21,7 +22,7 @@ import static java.text.MessageFormat.format;
 
 public class StubIdpBasicAuthRequiredFilter implements ContainerRequestFilter {
 
-    private static final Logger LOG = Logger.getLogger(StubIdpBasicAuthRequiredFilter.class);
+    private static final Logger LOG = LoggerFactory.getLogger(StubIdpBasicAuthRequiredFilter.class);
 
     private final StubIdpConfiguration stubIdpConfiguration;
     private final IdpStubsRepository idpStubsRepository;

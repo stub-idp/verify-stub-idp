@@ -1,7 +1,8 @@
 package stubidp.stubidp.exceptions.mappers;
 
 import io.prometheus.client.Counter;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import stubidp.stubidp.exceptions.InvalidAuthnRequestException;
 import stubidp.stubidp.views.ErrorPageView;
 
@@ -17,11 +18,11 @@ public class InvalidAuthnRequestExceptionMapper implements ExceptionMapper<Inval
             .help("Number of invalid verify authn requests received.")
             .register();
 
-    private static final Logger LOG = Logger.getLogger(InvalidAuthnRequestException.class);
+    private static final Logger LOG = LoggerFactory.getLogger(InvalidAuthnRequestException.class);
 
     @Override
     public Response toResponse(InvalidAuthnRequestException exception) {
-        LOG.error(exception);
+        LOG.error(String.valueOf(exception));
         invalidVerifyAuthnRequests.inc();
         return Response
                 .status(Response.Status.INTERNAL_SERVER_ERROR)

@@ -1,7 +1,8 @@
 package stubidp.stubidp.exceptions.mappers;
 
 import io.prometheus.client.Counter;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import stubidp.stubidp.exceptions.InvalidEidasAuthnRequestException;
 import stubidp.stubidp.views.ErrorPageView;
 
@@ -17,11 +18,11 @@ public class InvalidEidasAuthnRequestExceptionMapper implements ExceptionMapper<
             .help("Number of invalid eidas authn requests received.")
             .register();
 
-    private static final Logger LOG = Logger.getLogger(InvalidEidasAuthnRequestException.class);
+    private static final Logger LOG = LoggerFactory.getLogger(InvalidEidasAuthnRequestException.class);
 
     @Override
     public Response toResponse(InvalidEidasAuthnRequestException exception) {
-        LOG.error(exception);
+        LOG.error(String.valueOf(exception));
         invalidEidasAuthnRequests.inc();
         return Response
                 .status(Response.Status.INTERNAL_SERVER_ERROR)

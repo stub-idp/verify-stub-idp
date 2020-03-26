@@ -3,7 +3,8 @@ package stubidp.stubidp.services;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import stubidp.stubidp.configuration.SingleIdpConfiguration;
 import stubidp.stubidp.domain.Service;
 import stubidp.stubidp.exceptions.FeatureNotEnabledException;
@@ -18,7 +19,7 @@ import java.util.List;
 
 public class ServiceListService {
 
-    private static final Logger LOG = Logger.getLogger(ServiceListService.class);
+    private static final Logger LOG = LoggerFactory.getLogger(ServiceListService.class);
     private enum Source { Hub }
 
     private final SingleIdpConfiguration singleIdpConfiguration;

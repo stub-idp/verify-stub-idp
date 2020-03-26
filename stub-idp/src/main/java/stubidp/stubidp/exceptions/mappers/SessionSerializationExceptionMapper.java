@@ -1,18 +1,19 @@
 package stubidp.stubidp.exceptions.mappers;
 
-import org.apache.log4j.Logger;
-import stubidp.stubidp.views.ErrorPageView;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import stubidp.stubidp.exceptions.SessionSerializationException;
+import stubidp.stubidp.views.ErrorPageView;
 
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.ExceptionMapper;
 
 public class SessionSerializationExceptionMapper implements ExceptionMapper<SessionSerializationException> {
-	private static final Logger LOG = Logger.getLogger(SessionSerializationExceptionMapper.class);
+	private static final Logger LOG = LoggerFactory.getLogger(SessionSerializationExceptionMapper.class);
 	@Override
 	public Response toResponse(SessionSerializationException exception) {
-		LOG.error(exception);
+		LOG.error(String.valueOf(exception));
 		return Response
 				.status(Response.Status.INTERNAL_SERVER_ERROR)
 				.entity(new ErrorPageView())

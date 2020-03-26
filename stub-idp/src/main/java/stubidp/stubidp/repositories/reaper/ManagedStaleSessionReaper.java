@@ -1,7 +1,8 @@
 package stubidp.stubidp.repositories.reaper;
 
 import io.dropwizard.lifecycle.Managed;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import stubidp.stubidp.configuration.StubIdpConfiguration;
 import stubidp.stubidp.repositories.IdpSessionRepository;
 
@@ -17,7 +18,7 @@ import java.util.concurrent.TimeUnit;
 @Singleton
 public class ManagedStaleSessionReaper implements Managed {
 
-    private static final Logger LOGGER = Logger.getLogger(ManagedStaleSessionReaper.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(ManagedStaleSessionReaper.class);
 
     private final ScheduledExecutorService scheduledExecutorService = new ScheduledThreadPoolExecutor(1);
     private final StaleSessionReaperConfiguration staleSessionReaperConfiguration;
