@@ -26,7 +26,6 @@ public class CSRFViewRenderer extends FreemarkerViewRenderer {
 
     @Override
     public void render(View view, Locale locale, OutputStream output) throws IOException {
-
         final ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
         super.render(view, locale, byteArrayOutputStream);
         byteArrayOutputStream.close();
@@ -34,9 +33,8 @@ public class CSRFViewRenderer extends FreemarkerViewRenderer {
         if(view instanceof CSRFView && ((CSRFView)view).getCsrfToken().isPresent()) {
             org.jsoup.nodes.Document document = Jsoup.parse(new String(byteArrayOutputStream.toByteArray()));
             final Elements nodeList = document.getElementsByTag("form");
-            for (int i = 0; i < nodeList.size(); i++) {
-                final Element item = nodeList.get(i);
-                if (item.children().stream().filter(it -> (it.tag().getName().equals("input") && it.hasAttr("name") && it.attr("name").equals(AbstractCSRFCheckProtectionFilter.CSRF_PROTECT_FORM_KEY))).count() > 0) {
+            for (final Element item : nodeList) {
+                if (item.children().stream().anyMatch(it -> (it.tag().getName().equals("input") && it.hasAttr("name") && it.attr("name").equals(AbstractCSRFCheckProtectionFilter.CSRF_PROTECT_FORM_KEY)))) {
                     throw new CSRFConflictingFormAttributeException();
                 } else {
                     item.appendChild(new Element(Tag.valueOf("input"), "", new Attributes() {{
@@ -51,7 +49,5 @@ public class CSRFViewRenderer extends FreemarkerViewRenderer {
         } else {
             output.write(byteArrayOutputStream.toByteArray());
         }
-
     }
-
 }
