@@ -1,6 +1,5 @@
 package stubidp.saml.hub.hub.transformers.inbound;
 
-import org.apache.commons.codec.binary.Base64;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.opensaml.saml.saml2.core.Attribute;
@@ -32,6 +31,7 @@ import java.net.URI;
 import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.time.Instant;
+import java.util.Base64;
 import java.util.List;
 import java.util.Optional;
 
@@ -133,7 +133,7 @@ public class AuthnRequestFromRelyingPartyUnmarshallerTest extends OpenSAMLRunner
 
     private BasicCredential createBasicCredential() {
         final PublicKey publicKey = new PublicKeyFactory(new X509CertificateFactory()).createPublicKey(HUB_TEST_PUBLIC_ENCRYPTION_CERT);
-        PrivateKey privateKey = new PrivateKeyFactory().createPrivateKey(Base64.decodeBase64(HUB_TEST_PRIVATE_ENCRYPTION_KEY));
+        PrivateKey privateKey = new PrivateKeyFactory().createPrivateKey(Base64.getMimeDecoder().decode(HUB_TEST_PRIVATE_ENCRYPTION_KEY));
         return new BasicCredential(publicKey, privateKey);
     }
 }

@@ -11,7 +11,6 @@ module stubidp.security.utils {
     requires com.fasterxml.jackson.annotation;
     requires org.slf4j;
 
-    requires transitive org.apache.commons.codec;
     requires transitive java.validation;
     requires transitive jakarta.inject;
     requires transitive com.google.common;

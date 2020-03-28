@@ -1,13 +1,11 @@
 package stubidp.saml.utils.core.test;
 
-import org.apache.commons.codec.binary.Base64;
 import org.opensaml.security.credential.BasicCredential;
 import org.opensaml.security.credential.Credential;
 import org.opensaml.security.credential.UsageType;
 
 import javax.inject.Inject;
 import java.io.ByteArrayInputStream;
-import java.io.UnsupportedEncodingException;
 import java.nio.charset.StandardCharsets;
 import java.security.KeyFactory;
 import java.security.NoSuchAlgorithmException;
@@ -19,6 +17,7 @@ import java.security.cert.CertificateFactory;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.PKCS8EncodedKeySpec;
 import java.text.MessageFormat;
+import java.util.Base64;
 
 public class TestCredentialFactory {
 
@@ -55,13 +54,13 @@ public class TestCredentialFactory {
     private PublicKey getPublicKey() {
         try {
             return createPublicKey(publicCert);
-        } catch (CertificateException | UnsupportedEncodingException e) {
+        } catch (CertificateException e) {
             throw new RuntimeException(e);
         }
     }
 
     private PrivateKey getPrivateKey() {
-        PKCS8EncodedKeySpec keySpec = new PKCS8EncodedKeySpec(Base64.decodeBase64(privateCert));
+        PKCS8EncodedKeySpec keySpec = new PKCS8EncodedKeySpec(Base64.getMimeDecoder().decode(privateCert));
         try {
             return KeyFactory.getInstance("RSA").generatePrivate(keySpec);
         } catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
@@ -69,7 +68,7 @@ public class TestCredentialFactory {
         }
     }
 
-    private PublicKey createPublicKey(String partialCert) throws CertificateException, UnsupportedEncodingException {
+    private PublicKey createPublicKey(String partialCert) throws CertificateException {
         CertificateFactory certificateFactory;
         certificateFactory = CertificateFactory.getInstance("X.509");
         String fullCert;

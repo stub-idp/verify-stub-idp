@@ -1,32 +1,32 @@
 package stubidp.utils.common.string;
 
-import org.apache.commons.codec.binary.Base64;
-
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
+import java.util.Base64;
 
-import static org.apache.commons.codec.binary.StringUtils.getBytesUtf8;
-import static org.apache.commons.codec.binary.StringUtils.newStringUtf8;
+import static java.nio.charset.StandardCharsets.UTF_8;
 
-public abstract class StringEncoding {
+public class StringEncoding {
+
+    private StringEncoding() {}
 
     public static final String ENCODING = "UTF-8";
 
     public static String toBase64Encoded(String unencodedString) {
-        return newStringUtf8(Base64.encodeBase64(getBytesUtf8(unencodedString)));
+        return Base64.getMimeEncoder().encodeToString(unencodedString.getBytes(UTF_8));
     }
 
     public static String toBase64Encoded(byte[] bytes) {
-        return newStringUtf8(Base64.encodeBase64(bytes));
+        return Base64.getMimeEncoder().encodeToString(bytes);
     }
 
     public static String fromBase64Encoded(String encodedString) {
-        return newStringUtf8(Base64.decodeBase64(encodedString));
+        return new String(Base64.getMimeDecoder().decode(encodedString), UTF_8);
     }
 
     public static byte[] fromBase64ToByteArrayEncoded(String encodedString) {
-        return Base64.decodeBase64(encodedString);
+        return Base64.getMimeDecoder().decode(encodedString);
     }
 
     public static String urlEncode(String input) {

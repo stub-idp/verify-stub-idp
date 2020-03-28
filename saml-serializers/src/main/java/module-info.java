@@ -6,7 +6,6 @@ module stubidp.saml.serializers {
     exports stubidp.saml.serializers.deserializers.parser;
 
     requires stubidp.saml.extensions;
-    requires org.apache.commons.codec;
 
     requires transitive org.opensaml.core;
     requires transitive net.shibboleth.utilities.java.support;

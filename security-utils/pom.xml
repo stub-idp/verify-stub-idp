@@ -54,12 +54,6 @@
             <version>${jakarta_inject.version}</version>
             <scope>compile</scope>
         </dependency>
-        <dependency>
-            <groupId>commons-codec</groupId>
-            <artifactId>commons-codec</artifactId>
-            <version>${commons_codec.version}</version>
-            <scope>compile</scope>
-        </dependency>
 
         <!-- test dependencies -->
         <dependency>

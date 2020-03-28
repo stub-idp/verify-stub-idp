@@ -5,7 +5,6 @@ import com.nimbusds.jose.JOSEException;
 import com.nimbusds.jose.JWSObject;
 import com.nimbusds.jose.crypto.RSASSAVerifier;
 import net.minidev.json.JSONObject;
-import org.apache.commons.codec.binary.Base64;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import stubidp.test.devpki.TestCertificateStrings;
@@ -19,6 +18,7 @@ import java.security.interfaces.RSAPublicKey;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Base64;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -27,6 +27,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import static java.util.Arrays.asList;
+import static org.apache.commons.codec.binary.Base64.encodeInteger;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 import static org.assertj.core.api.Assertions.catchThrowable;
@@ -40,14 +41,12 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 public class GeneratorTest {
 
     private Generator generator;
-
     private RSAPublicKey publicKeyForSigning;
-
     private X509Certificate certificateForSigning;
 
     @BeforeEach
     public void setUp() {
-        PrivateKey privateKeyForSigning = new PrivateKeyFactory().createPrivateKey(Base64.decodeBase64(TestCertificateStrings.METADATA_SIGNING_A_PRIVATE_KEY));
+        PrivateKey privateKeyForSigning = new PrivateKeyFactory().createPrivateKey(Base64.getMimeDecoder().decode(TestCertificateStrings.METADATA_SIGNING_A_PRIVATE_KEY));
         certificateForSigning = new X509CertificateFactory().createCertificate(TestCertificateStrings.METADATA_SIGNING_A_PUBLIC_CERT);
         generator = new Generator(privateKeyForSigning, certificateForSigning);
         publicKeyForSigning = (RSAPublicKey) certificateForSigning.getPublicKey();
@@ -133,7 +132,7 @@ public class GeneratorTest {
 
     @Test
     public void shouldThrowOnIncorrectKeyopsValues() {
-        List<Object> incorrectValues = Arrays.asList(Arrays.asList(), Arrays.asList("sign"), Arrays.asList("verify", "sign"), "verify");
+        List<Object> incorrectValues = Arrays.asList(Collections.emptyList(), Collections.singletonList("sign"), Arrays.asList("verify", "sign"), "verify");
 
         for (Object attribute: incorrectValues) {
             JSONObject jsonObject = createJsonObject();
@@ -168,8 +167,8 @@ public class GeneratorTest {
 
         JSONObject jsonObject = createJsonObject();
         jsonObject.replace("x5c", Collections.singletonList(expiredCert));
-        jsonObject.replace("e", new String (Base64.encodeInteger(rsaPublicKey.getPublicExponent())));
-        jsonObject.replace("n", new String (Base64.encodeInteger(rsaPublicKey.getModulus())));
+        jsonObject.replace("e", new String(encodeInteger(rsaPublicKey.getPublicExponent())));
+        jsonObject.replace("n", new String(encodeInteger(rsaPublicKey.getModulus())));
 
         assertThatExceptionOfType(ParseException.class)
                 .isThrownBy(() -> generator.generate(Collections.singletonList(jsonObject.toJSONString())))
@@ -223,8 +222,8 @@ public class GeneratorTest {
         jsonObject.put("key_ops", Collections.singletonList("verify"));
         jsonObject.put("kid", kid);
         jsonObject.put("alg", "RS256");
-        jsonObject.put("e", new String (Base64.encodeInteger(rsaPublicKey.getPublicExponent())));
-        jsonObject.put("n", new String (Base64.encodeInteger(rsaPublicKey.getModulus())));
+        jsonObject.put("e", new String(encodeInteger(rsaPublicKey.getPublicExponent())));
+        jsonObject.put("n", new String(encodeInteger(rsaPublicKey.getModulus())));
         jsonObject.put("x5c", Collections.singletonList(countryPublicCert));
 
         return jsonObject;

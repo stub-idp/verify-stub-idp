@@ -24,9 +24,9 @@ import java.security.cert.CertificateEncodingException;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.Arrays;
+import java.util.Base64;
 import java.util.List;
 
-import static org.apache.commons.codec.binary.Base64.encodeBase64String;
 import static stubidp.stubidp.StubIdpBinder.METADATA_VALIDITY_PERIOD;
 
 public class CountryMetadataBuilder {
@@ -89,10 +89,10 @@ public class CountryMetadataBuilder {
     }
 
     private Certificate getSigningCertificate(URI entityId, java.security.cert.Certificate signingCertificate) throws CertificateEncodingException {
-        return new Certificate(entityId.toString(), encodeBase64String(signingCertificate.getEncoded()), Certificate.KeyUse.Signing);
+        return new Certificate(entityId.toString(), Base64.getMimeEncoder().encodeToString(signingCertificate.getEncoded()), Certificate.KeyUse.Signing);
     }
 
     private Certificate getEncryptingCertificate(URI entityId, java.security.cert.Certificate encryptingCertificate) throws CertificateEncodingException {
-        return new Certificate(entityId.toString(), encodeBase64String(encryptingCertificate.getEncoded()), Certificate.KeyUse.Encryption);
+        return new Certificate(entityId.toString(), Base64.getMimeEncoder().encodeToString(encryptingCertificate.getEncoded()), Certificate.KeyUse.Encryption);
     }
 }

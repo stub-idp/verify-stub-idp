@@ -1,12 +1,10 @@
 package stubidp.saml.metadata.test.factories.metadata;
 
-import org.apache.commons.codec.binary.Base64;
 import org.opensaml.security.credential.BasicCredential;
 import org.opensaml.security.credential.Credential;
 import org.opensaml.security.credential.UsageType;
 
 import java.io.ByteArrayInputStream;
-import java.io.UnsupportedEncodingException;
 import java.nio.charset.StandardCharsets;
 import java.security.KeyFactory;
 import java.security.NoSuchAlgorithmException;
@@ -18,6 +16,7 @@ import java.security.cert.CertificateFactory;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.PKCS8EncodedKeySpec;
 import java.text.MessageFormat;
+import java.util.Base64;
 
 public class TestCredentialFactory {
 
@@ -31,7 +30,7 @@ public class TestCredentialFactory {
 
     public Credential getSigningCredential() {
 
-        PKCS8EncodedKeySpec keySpec = new PKCS8EncodedKeySpec(Base64.decodeBase64(privateCert));
+        PKCS8EncodedKeySpec keySpec = new PKCS8EncodedKeySpec(Base64.getMimeDecoder().decode(privateCert));
 
         PrivateKey privateKey;
         try {
@@ -57,13 +56,13 @@ public class TestCredentialFactory {
         PublicKey publicKey;
         try {
             publicKey = createPublicKey(publicCert);
-        } catch (CertificateException | UnsupportedEncodingException e) {
+        } catch (CertificateException e) {
             throw new RuntimeException(e);
         }
         return publicKey;
     }
 
-    public static PublicKey createPublicKey(String partialCert) throws CertificateException, UnsupportedEncodingException {
+    public static PublicKey createPublicKey(String partialCert) throws CertificateException {
         CertificateFactory certificateFactory;
         certificateFactory = CertificateFactory.getInstance("X.509");
         String fullCert;

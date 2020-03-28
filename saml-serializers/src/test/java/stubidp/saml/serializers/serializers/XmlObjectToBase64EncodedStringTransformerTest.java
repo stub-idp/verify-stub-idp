@@ -1,6 +1,5 @@
 package stubidp.saml.serializers.serializers;
 
-import org.apache.commons.codec.binary.StringUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.opensaml.core.config.InitializationException;
@@ -11,7 +10,6 @@ import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
-import stubidp.saml.serializers.serializers.XmlObjectToBase64EncodedStringTransformer;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -20,6 +18,7 @@ import java.io.IOException;
 import java.io.StringReader;
 import java.util.Base64;
 
+import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class XmlObjectToBase64EncodedStringTransformerTest {
@@ -48,7 +47,7 @@ public class XmlObjectToBase64EncodedStringTransformerTest {
     }
 
     private Document convertEncodedXmlStringToDoc(String encodedString) throws IOException, SAXException, ParserConfigurationException {
-        String decodedString = StringUtils.newStringUtf8(Base64.getDecoder().decode(StringUtils.getBytesUtf8(encodedString)));
+        String decodedString = new String(Base64.getDecoder().decode(encodedString.getBytes(UTF_8)), UTF_8);
         DocumentBuilder builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
         InputSource src = new InputSource();
         src.setCharacterStream(new StringReader(decodedString));

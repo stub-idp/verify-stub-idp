@@ -1,6 +1,5 @@
 package stubidp.stubidp;
 
-import org.apache.commons.codec.binary.Base64;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -24,6 +23,7 @@ import stubidp.utils.security.security.X509CertificateFactory;
 import java.security.KeyPair;
 import java.security.PrivateKey;
 import java.security.PublicKey;
+import java.util.Base64;
 import java.util.Collections;
 import java.util.Optional;
 
@@ -35,9 +35,9 @@ public class OutboundResponseFromIdpTransformerProviderTest {
 
     private static final HardCodedKeyStore ENC_KEYSTORE_DUMMY = new HardCodedKeyStore(TestEntityIds.STUB_IDP_ONE);
     private static final PublicKeyFactory publicKeyFactory = new PublicKeyFactory(new X509CertificateFactory());
-    private static final PrivateKey privateKey = new PrivateKeyFactory().createPrivateKey(Base64.decodeBase64(TestCertificateStrings.PRIVATE_SIGNING_KEYS.get(TestEntityIds.STUB_IDP_ONE)));
+    private static final PrivateKey privateKey = new PrivateKeyFactory().createPrivateKey(Base64.getMimeDecoder().decode(TestCertificateStrings.PRIVATE_SIGNING_KEYS.get(TestEntityIds.STUB_IDP_ONE)));
     private static final PublicKey publicKey = publicKeyFactory.createPublicKey(TestCertificateStrings.STUB_IDP_PUBLIC_PRIMARY_CERT);
-    private static final PrivateKey privateEncryptionKey = new PrivateKeyFactory().createPrivateKey(Base64.decodeBase64(TestCertificateStrings.STUB_IDP_PUBLIC_PRIMARY_PRIVATE_KEY));
+    private static final PrivateKey privateEncryptionKey = new PrivateKeyFactory().createPrivateKey(Base64.getMimeDecoder().decode(TestCertificateStrings.STUB_IDP_PUBLIC_PRIMARY_PRIVATE_KEY));
     private static final PublicKey publicEncryptionKey = publicKeyFactory.createPublicKey(TestCertificateStrings.STUB_IDP_PUBLIC_PRIMARY_CERT);
     private static final SignatureAlgorithm SIGNATURE_ALGORITHM = new SignatureRSASHA256();
     private static final DigestAlgorithm DIGEST_ALGORITHM = new DigestSHA256();
@@ -53,7 +53,7 @@ public class OutboundResponseFromIdpTransformerProviderTest {
     private OutboundResponseFromIdpTransformerProvider testTransformerProvider;
 
     @BeforeEach
-    public void setUp() throws Exception {
+    public void setUp() {
         mockStubTransformersFactory = mock(StubTransformersFactory.class);
 
         testTransformerProvider = new OutboundResponseFromIdpTransformerProvider(
@@ -68,7 +68,7 @@ public class OutboundResponseFromIdpTransformerProviderTest {
     }
 
     @Test
-    public void testGet_shouldReturnTransformerWhichAddsKeyInfoWhenConfiguredToSend() throws Exception {
+    public void testGet_shouldReturnTransformerWhichAddsKeyInfoWhenConfiguredToSend() {
         Idp idpSendingKeyInfo = new Idp("test-idp", "Test Idp", "test-idp-asset-id", true, ISSUER_ID, null);
 
         testTransformerProvider.get(idpSendingKeyInfo);
@@ -85,7 +85,7 @@ public class OutboundResponseFromIdpTransformerProviderTest {
     }
 
     @Test
-    public void testGet_shouldReturnTransformerWithoutKeyInfoWhenConfiguredNotToSend() throws Exception {
+    public void testGet_shouldReturnTransformerWithoutKeyInfoWhenConfiguredNotToSend() {
         Idp idpNotSendingKeyInfo = new Idp("test-idp", "Test Idp", "test-idp-asset-id", false, ISSUER_ID, null);
 
         testTransformerProvider.get(idpNotSendingKeyInfo);
@@ -100,7 +100,7 @@ public class OutboundResponseFromIdpTransformerProviderTest {
     }
 
     @Test
-    public void testGet_shouldReturnTransformerWithoutKeyInfoWhenSigningKeyIsAbsent() throws Exception {
+    public void testGet_shouldReturnTransformerWithoutKeyInfoWhenSigningKeyIsAbsent() {
         Idp idpNotSendingKeyInfo = new Idp("test-idp", "Test Idp", "test-idp-asset-id", false, ISSUER_ID, null);
         OutboundResponseFromIdpTransformerProvider nullPublicKeyTransformerProvider = new OutboundResponseFromIdpTransformerProvider(
                 ENC_KEYSTORE_DUMMY,

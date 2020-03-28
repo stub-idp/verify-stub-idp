@@ -3,7 +3,6 @@ package stubidp.saml.metadata;
 import certificates.values.CACertificates;
 import com.nimbusds.jose.JOSEException;
 import com.nimbusds.jose.jwk.JWK;
-import org.apache.commons.codec.binary.Base64;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -31,6 +30,7 @@ import java.security.cert.CertificateEncodingException;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
 import java.text.ParseException;
+import java.util.Base64;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -66,7 +66,7 @@ public class EidasTrustAnchorResolverTest {
     @BeforeEach
     public void setUp() throws URISyntaxException, KeyStoreException, CertificateException, NoSuchAlgorithmException, IOException {
         URI uri = new URI("https://govukverify-trust-anchor-dev.s3.amazonaws.com/devTrustAnchor");
-        privateSigningKey = new PrivateKeyFactory().createPrivateKey(Base64.decodeBase64(TestCertificateStrings.METADATA_SIGNING_A_PRIVATE_KEY));
+        privateSigningKey = new PrivateKeyFactory().createPrivateKey(Base64.getMimeDecoder().decode(TestCertificateStrings.METADATA_SIGNING_A_PRIVATE_KEY));
         publicSigningCert = new X509CertificateFactory().createCertificate(TestCertificateStrings.METADATA_SIGNING_A_PUBLIC_CERT);
 
         trustStore = KeyStore.getInstance(KeyStore.getDefaultType());
@@ -92,7 +92,7 @@ public class EidasTrustAnchorResolverTest {
 
     @Test
     public void shouldThrowSignatureExceptionIfResponseIsNotSignedWithExpectedKey() throws ParseException, JOSEException, CertificateEncodingException {
-        PrivateKey unexpectedPrivateKey = new PrivateKeyFactory().createPrivateKey(Base64.decodeBase64(TestCertificateStrings.TEST_PRIVATE_KEY));
+        PrivateKey unexpectedPrivateKey = new PrivateKeyFactory().createPrivateKey(Base64.getMimeDecoder().decode(TestCertificateStrings.TEST_PRIVATE_KEY));
         when(trustAnchorResponse.readEntity(String.class)).thenReturn(createJwsWithACountryTrustAnchor(unexpectedPrivateKey));
 
         assertThatThrownBy(() -> eidasTrustAnchorResolver.getTrustAnchors()).isInstanceOf(SignatureException.class);

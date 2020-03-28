@@ -1,11 +1,13 @@
 package stubidp.saml.metadata;
 
-import org.apache.commons.codec.binary.Hex;
-
+import javax.xml.bind.DatatypeConverter;
 import java.nio.charset.StandardCharsets;
 
-public class ResourceEncoder {
+class ResourceEncoder {
+
+    private ResourceEncoder() {}
+
     public static String entityIdAsResource(String entityId) {
-        return Hex.encodeHexString(entityId.getBytes(StandardCharsets.UTF_8));
+        return DatatypeConverter.printHexBinary(entityId.getBytes(StandardCharsets.UTF_8)).toLowerCase();
     }
 }

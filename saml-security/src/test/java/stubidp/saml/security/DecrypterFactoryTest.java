@@ -1,8 +1,6 @@
 package stubidp.saml.security;
 
-import com.google.common.io.CharStreams;
-import net.shibboleth.utilities.java.support.xml.XMLParserException;
-import org.apache.commons.codec.binary.Base64;
+import io.dropwizard.util.CharStreams;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.opensaml.core.xml.io.UnmarshallingException;
@@ -23,9 +21,11 @@ import stubidp.utils.security.security.X509CertificateFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 import java.security.PrivateKey;
 import java.security.PublicKey;
-import java.util.Arrays;
+import java.util.Base64;
+import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
@@ -38,11 +38,10 @@ public class DecrypterFactoryTest extends OpenSAMLRunner {
     private PrivateKey privateEncryptionKey;
     private PublicKey unusedPublicKey;
 
-
     @BeforeEach
     public void setup() {
         PublicKeyFactory publicKeyFactory = new PublicKeyFactory(new X509CertificateFactory());
-        privateEncryptionKey = new PrivateKeyFactory().createPrivateKey(Base64.decodeBase64(OLD_HUB_PRIVATE_ENCRYPTION_KEY));
+        privateEncryptionKey = new PrivateKeyFactory().createPrivateKey(Base64.getMimeDecoder().decode(OLD_HUB_PRIVATE_ENCRYPTION_KEY));
 
         //We don't have the corresponding public key here. We intend to re-encrypt the test data and put both keys in this file.
         unusedPublicKey = publicKeyFactory.createPublicKey(TestCertificateStrings.STUB_IDP_PUBLIC_PRIMARY_CERT);
@@ -50,17 +49,17 @@ public class DecrypterFactoryTest extends OpenSAMLRunner {
 
 
     @Test
-    public void createDecrypter_shouldCreateDecrypterWhichWorksWithInline() throws IOException, UnmarshallingException, XMLParserException, DecryptionException, ParserConfigurationException, SAXException {
+    public void createDecrypter_shouldCreateDecrypterWhichWorksWithInline() throws IOException, UnmarshallingException, DecryptionException, ParserConfigurationException, SAXException {
         testDecrypt("encryptedAssertionRetrievalMethod.xml");
     }
 
     @Test
-    public void createDecrypter_shouldCreateDecrypterWhichWorksWithRetrievalMethod() throws IOException, UnmarshallingException, XMLParserException, DecryptionException, ParserConfigurationException, SAXException {
+    public void createDecrypter_shouldCreateDecrypterWhichWorksWithRetrievalMethod() throws IOException, UnmarshallingException, DecryptionException, ParserConfigurationException, SAXException {
         testDecrypt("encryptedAssertionInline.xml");
     }
 
     @Test
-    public void createDecrpyter_shouldCreateDecrypterWhichReadsMultipleEncryptionKeys() throws DecryptionException {
+    public void createDecrpyter_shouldCreateDecrypterWhichReadsMultipleEncryptionKeys() {
         Credential primaryPrivateEncryptionKey = getPrivateKeyFor(TestEntityIds.HUB_ENTITY_ID);
         Credential secondaryPrivateEncryptionKey = getPrivateKeyFor(TestEntityIds.TEST_RP);
         Credential publicKeyForPrimaryPrivateEncryptionKey = getCredential(TestEntityIds.HUB_ENTITY_ID);
@@ -90,20 +89,19 @@ public class DecrypterFactoryTest extends OpenSAMLRunner {
 
     private BasicCredential getPrivateKeyFor(final String entityId) {
         List<String> encryptionKeyStrings = TestCertificateStrings.PRIVATE_ENCRYPTION_KEYS.get(entityId);
-        PrivateKey privateKey = new PrivateKeyFactory().createPrivateKey(Base64.decodeBase64(encryptionKeyStrings.get(0)));
-        BasicCredential credential1 = new BasicCredential(unusedPublicKey, privateKey);
-        return credential1;
+        PrivateKey privateKey = new PrivateKeyFactory().createPrivateKey(Base64.getMimeDecoder().decode(encryptionKeyStrings.get(0)));
+        return new BasicCredential(unusedPublicKey, privateKey);
     }
 
-    private void testDecrypt(String fileName) throws IOException, UnmarshallingException, XMLParserException, DecryptionException, ParserConfigurationException, SAXException {
+    private void testDecrypt(String fileName) throws IOException, UnmarshallingException, DecryptionException, ParserConfigurationException, SAXException {
         DecrypterFactory decrypterFactory = new DecrypterFactory();
 
-        String xml = CharStreams.toString(new InputStreamReader(getClass().getClassLoader().getResourceAsStream(fileName), "UTF-8"));
+        String xml = CharStreams.toString(new InputStreamReader(getClass().getClassLoader().getResourceAsStream(fileName), StandardCharsets.UTF_8));
 
         EncryptedElementType xmlObject  = new SamlObjectParser().getSamlObject(xml);
         Credential basicCredential = new BasicCredential(unusedPublicKey, privateEncryptionKey);
 
-        Decrypter decrypter = decrypterFactory.createDecrypter(Arrays.asList(basicCredential));
+        Decrypter decrypter = decrypterFactory.createDecrypter(Collections.singletonList(basicCredential));
 
         decrypter.decryptData(xmlObject.getEncryptedData());
     }

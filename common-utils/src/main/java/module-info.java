@@ -11,6 +11,5 @@ module stubidp.common.utils {
     requires commons.validator;
     requires dropwizard.configuration;
     requires java.validation;
-    requires org.apache.commons.codec;
     requires org.slf4j;
 }
