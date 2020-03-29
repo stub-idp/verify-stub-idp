@@ -1,9 +1,8 @@
-package stubidp.dropwizard.logstash.support;
+package stubidp.dropwizard.logstash;
 
 import io.dropwizard.Application;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
-import stubidp.dropwizard.logstash.LogstashBundle;
 
 public class TestApplication extends Application<TestConfiguration> {
     @Override

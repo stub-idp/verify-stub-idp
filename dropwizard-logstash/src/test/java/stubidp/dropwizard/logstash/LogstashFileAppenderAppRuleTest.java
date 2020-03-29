@@ -9,9 +9,9 @@ import org.glassfish.jersey.client.JerseyClientBuilder;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import stubidp.dropwizard.logstash.support.LoggingEventFormat;
-import stubidp.dropwizard.logstash.support.TestApplication;
-import stubidp.dropwizard.logstash.support.TestConfiguration;
+import stubidp.dropwizard.logstash.LoggingEventFormat;
+import stubidp.dropwizard.logstash.TestApplication;
+import stubidp.dropwizard.logstash.TestConfiguration;
 
 import javax.ws.rs.client.Client;
 import javax.ws.rs.core.Response;
@@ -24,7 +24,7 @@ import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.fail;
-import static stubidp.dropwizard.logstash.support.RootResource.TEST_LOG_LINE;
+import static stubidp.dropwizard.logstash.RootResource.TEST_LOG_LINE;
 
 @ExtendWith(DropwizardExtensionsSupport.class)
 public class LogstashFileAppenderAppRuleTest {

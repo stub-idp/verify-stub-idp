@@ -38,7 +38,7 @@
     </#if>
     <button class='verify-button' id="continue-button">Continue</button>
 </form>
-<script type="text/javascript" src="/assets/scripts/saml-redirect-auto-submit.js"></script>
+<script type="text/javascript" src="/assets/shared/scripts/saml-redirect-auto-submit.js"></script>
 </body>
 </html>
 

@@ -1,4 +1,4 @@
-package stubidp.metrics.prometheus.support;
+package stubidp.metrics.prometheus.config;
 
 import io.dropwizard.Application;
 import io.dropwizard.setup.Bootstrap;

@@ -1,4 +1,4 @@
-package stubidp.metrics.prometheus.bundle;
+package stubidp.metrics.prometheus.test;
 
 import io.dropwizard.testing.ConfigOverride;
 import io.dropwizard.testing.junit5.DropwizardAppExtension;
@@ -6,14 +6,15 @@ import io.dropwizard.testing.junit5.DropwizardExtensionsSupport;
 import org.glassfish.jersey.client.JerseyClientBuilder;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import stubidp.metrics.prometheus.support.TestApplication;
-import stubidp.metrics.prometheus.support.TestConfiguration;
+import stubidp.metrics.prometheus.config.TestApplication;
+import stubidp.metrics.prometheus.config.TestConfiguration;
+import stubidp.metrics.prometheus.bundle.PrometheusBundle;
 
 import javax.ws.rs.client.Client;
 import javax.ws.rs.core.Response;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static stubidp.metrics.prometheus.support.TestResource.TEST_RESOURCE_PATH;
+import static stubidp.metrics.prometheus.config.TestResource.TEST_RESOURCE_PATH;
 
 @ExtendWith(DropwizardExtensionsSupport.class)
 public class PrometheusBundleTest {
@@ -36,7 +37,7 @@ public class PrometheusBundleTest {
                 .request()
                 .get();
         assertThat(response.getStatus()).isEqualTo(200);
-        assertThat(response.readEntity(String.class)).contains("stubidp_metrics_prometheus_support_TestResource_get_count 0");
+        assertThat(response.readEntity(String.class)).contains("stubidp_metrics_prometheus_config_TestResource_get_count 0");
 
         response = client.target("http://localhost:" + appRuleWithMetrics.getLocalPort() + TEST_RESOURCE_PATH)
                 .request()
@@ -48,7 +49,7 @@ public class PrometheusBundleTest {
                 .request()
                 .get();
         assertThat(response.getStatus()).isEqualTo(200);
-        assertThat(response.readEntity(String.class)).contains("stubidp_metrics_prometheus_support_TestResource_get_count 1.0");
+        assertThat(response.readEntity(String.class)).contains("stubidp_metrics_prometheus_config_TestResource_get_count 1.0");
     }
 
     @Test

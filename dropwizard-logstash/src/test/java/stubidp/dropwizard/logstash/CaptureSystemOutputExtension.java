@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 
-package junit5.extensions;
+package stubidp.dropwizard.logstash;
 
-import junit5.extensions.CaptureSystemOutput.OutputCapture;
+import stubidp.dropwizard.logstash.CaptureSystemOutput.OutputCapture;
 import org.junit.jupiter.api.extension.AfterEachCallback;
 import org.junit.jupiter.api.extension.BeforeEachCallback;
 import org.junit.jupiter.api.extension.ExtensionContext;

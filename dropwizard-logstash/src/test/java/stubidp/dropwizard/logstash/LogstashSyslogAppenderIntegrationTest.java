@@ -9,7 +9,9 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.slf4j.LoggerFactory;
-import stubidp.dropwizard.logstash.support.UdpServer;
+import stubidp.dropwizard.logstash.SyslogAppender;
+import stubidp.dropwizard.logstash.SyslogEventFormatter;
+import stubidp.dropwizard.logstash.UdpServer;
 
 import java.time.Clock;
 import java.time.Instant;

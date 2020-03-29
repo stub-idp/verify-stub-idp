@@ -1,4 +1,4 @@
-package stubsp.stubsp.integration;
+package stubsp.stubsp;
 
 import io.dropwizard.testing.junit5.DropwizardExtensionsSupport;
 import org.glassfish.jersey.client.ClientProperties;
@@ -46,7 +46,7 @@ public class StubSpApplicationIntegrationTest {
         Response response = get(Urls.SECURE_RESOURCE);
         assertThat(response.getStatus()).isEqualTo(200);
         assertThat(response.readEntity(String.class)).contains("Saml Processing...");
-        response = get("/assets/scripts/saml-redirect-auto-submit.js");
+        response = get("/assets/shared/scripts/saml-redirect-auto-submit.js");
         assertThat(response.getStatus()).isEqualTo(200);
         assertThat(response.readEntity(String.class)).contains("submit()");
     }

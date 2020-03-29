@@ -1,4 +1,4 @@
-package stubidp.metrics.prometheus.mock;
+package stubidp.metrics.prometheus.config;
 
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.Cookie;

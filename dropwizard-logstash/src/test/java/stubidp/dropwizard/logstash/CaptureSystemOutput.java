@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package junit5.extensions;
+package stubidp.dropwizard.logstash;
 
 import static java.lang.annotation.ElementType.METHOD;
 import static java.lang.annotation.ElementType.TYPE;
@@ -27,8 +27,6 @@ import java.io.PrintStream;
 import java.lang.annotation.Documented;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
-import java.util.ArrayList;
-import java.util.List;
 
 import org.junit.jupiter.api.extension.ExtendWith;
 
@@ -87,7 +85,7 @@ public @interface CaptureSystemOutput {
      * @author Andy Wilkinson
      * @author Sam Brannen
      */
-    static class OutputCapture {
+    class OutputCapture {
 
         private CaptureOutputStream captureOut;
 
@@ -109,7 +107,7 @@ public @interface CaptureSystemOutput {
             this.copy = null;
         }
 
-        private void flush() {
+        void flush() {
             try {
                 this.captureOut.flush();
                 this.captureErr.flush();

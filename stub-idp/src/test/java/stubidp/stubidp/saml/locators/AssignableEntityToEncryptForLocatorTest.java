@@ -1,8 +1,7 @@
-package stubidp.stubidp.locators;
+package stubidp.stubidp.saml.locators;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import stubidp.stubidp.saml.locators.AssignableEntityToEncryptForLocator;
 
 import static org.assertj.core.api.Assertions.assertThat;
 

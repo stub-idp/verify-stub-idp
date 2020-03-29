@@ -1,4 +1,4 @@
-package stubidp.dropwizard.logstash.support;
+package stubidp.dropwizard.logstash;
 
 import java.io.IOException;
 import java.net.DatagramPacket;

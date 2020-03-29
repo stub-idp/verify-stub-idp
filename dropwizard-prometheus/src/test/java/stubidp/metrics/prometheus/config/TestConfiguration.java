@@ -1,4 +1,4 @@
-package stubidp.metrics.prometheus.support;
+package stubidp.metrics.prometheus.config;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.dropwizard.Configuration;

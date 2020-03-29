@@ -1,4 +1,4 @@
-package stubidp.dropwizard.logstash.support;
+package stubidp.dropwizard.logstash;
 
 import org.apache.log4j.Logger;
 

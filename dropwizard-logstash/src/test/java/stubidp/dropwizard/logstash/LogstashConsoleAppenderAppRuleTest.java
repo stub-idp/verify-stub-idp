@@ -5,14 +5,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import io.dropwizard.testing.ResourceHelpers;
 import io.dropwizard.testing.junit5.DropwizardAppExtension;
 import io.dropwizard.testing.junit5.DropwizardExtensionsSupport;
-import junit5.extensions.CaptureSystemOutput;
 import org.glassfish.jersey.client.JerseyClientBuilder;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import stubidp.dropwizard.logstash.support.AccessEventFormat;
-import stubidp.dropwizard.logstash.support.LoggingEventFormat;
-import stubidp.dropwizard.logstash.support.TestApplication;
-import stubidp.dropwizard.logstash.support.TestConfiguration;
 
 import javax.ws.rs.client.Client;
 import javax.ws.rs.core.Response;
@@ -22,8 +17,8 @@ import java.util.StringTokenizer;
 
 import static java.util.stream.Collectors.toList;
 import static org.assertj.core.api.Assertions.assertThat;
-import static stubidp.dropwizard.logstash.support.RootResource.HELLO_MESSAGE;
-import static stubidp.dropwizard.logstash.support.RootResource.TEST_LOG_LINE;
+import static stubidp.dropwizard.logstash.RootResource.HELLO_MESSAGE;
+import static stubidp.dropwizard.logstash.RootResource.TEST_LOG_LINE;
 
 @ExtendWith(DropwizardExtensionsSupport.class)
 public class LogstashConsoleAppenderAppRuleTest {

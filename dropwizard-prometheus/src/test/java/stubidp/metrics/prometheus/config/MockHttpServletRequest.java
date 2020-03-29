@@ -1,4 +1,4 @@
-package stubidp.metrics.prometheus.mock;
+package stubidp.metrics.prometheus.config;
 
 import javax.servlet.AsyncContext;
 import javax.servlet.DispatcherType;
