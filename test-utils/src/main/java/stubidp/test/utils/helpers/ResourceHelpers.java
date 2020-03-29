@@ -1,6 +1,6 @@
 package stubidp.test.utils.helpers;
 
-import com.google.common.io.Resources;
+import io.dropwizard.util.Resources;
 
 import java.io.File;
 

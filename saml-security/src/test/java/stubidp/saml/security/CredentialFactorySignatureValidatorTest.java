@@ -1,6 +1,6 @@
 package stubidp.saml.security;
 
-import com.google.common.io.Resources;
+import io.dropwizard.util.Resources;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.opensaml.saml.saml2.core.Assertion;
@@ -86,7 +86,7 @@ public class CredentialFactorySignatureValidatorTest extends OpenSAMLRunner {
      * Signature object should exist.
      */
     @Test
-    public void shouldNotValidateMissingSignature() throws Exception {
+    public void shouldNotValidateMissingSignature() {
         Assertions.assertThrows(SignatureException.class, () -> validateAuthnRequestFile("authnRequestNoSignature.xml"));
     }
 
@@ -94,7 +94,7 @@ public class CredentialFactorySignatureValidatorTest extends OpenSAMLRunner {
      * Signature must be an immediate child of the SAML object.
      */
     @Test
-    public void shouldNotValidateSignatureNotImmediateChild() throws Exception {
+    public void shouldNotValidateSignatureNotImmediateChild() {
         Assertions.assertThrows(SignatureException.class, () -> validateAuthnRequestFile("authnRequestNotImmediateChild.xml"));
     }
 
@@ -102,7 +102,7 @@ public class CredentialFactorySignatureValidatorTest extends OpenSAMLRunner {
      * Signature should not contain more than one Reference.
      */
     @Test
-    public void shouldNotValidateSignatureTooManyReferences() throws Exception {
+    public void shouldNotValidateSignatureTooManyReferences() {
         Assertions.assertThrows(SignatureException.class, () -> validateAuthnRequestFile("authnRequestTooManyRefs.xml"));
     }
 
@@ -110,7 +110,7 @@ public class CredentialFactorySignatureValidatorTest extends OpenSAMLRunner {
      * Reference requires a valid URI pointing to a fragment ID.
      */
     @Test
-    public void shouldNotValidateSignatureBadReferenceURI() throws Exception {
+    public void shouldNotValidateSignatureBadReferenceURI() {
         Assertions.assertThrows(SignatureException.class, () -> validateAuthnRequestFile("authnRequestBadRefURI.xml"));
     }
 
@@ -118,7 +118,7 @@ public class CredentialFactorySignatureValidatorTest extends OpenSAMLRunner {
      * Reference URI should point to parent SAML object.
      */
     @Test
-    public void shouldNotValidateSignatureReferenceURINotParentID() throws Exception {
+    public void shouldNotValidateSignatureReferenceURINotParentID() {
         Assertions.assertThrows(SignatureException.class, () -> validateAuthnRequestFile("authnRequestRefURINotParentID.xml"));
     }
 
@@ -126,7 +126,7 @@ public class CredentialFactorySignatureValidatorTest extends OpenSAMLRunner {
      * Root SAML object should have an ID.
      */
     @Test
-    public void shouldNotValidateSignatureNoParentID() throws Exception {
+    public void shouldNotValidateSignatureNoParentID() {
         Assertions.assertThrows(SignatureException.class, () -> validateAuthnRequestFile("authnRequestNoParentID.xml"));
     }
 
@@ -134,7 +134,7 @@ public class CredentialFactorySignatureValidatorTest extends OpenSAMLRunner {
      * Signature must have Transforms defined.
      */
     @Test
-    public void shouldNotValidateSignatureNoTransforms() throws Exception {
+    public void shouldNotValidateSignatureNoTransforms() {
         Assertions.assertThrows(SignatureException.class, () -> validateAuthnRequestFile("authnRequestNoTransforms.xml"));
     }
 
@@ -142,7 +142,7 @@ public class CredentialFactorySignatureValidatorTest extends OpenSAMLRunner {
      * Signature should not have more than two Transforms.
      */
     @Test
-    public void shouldNotValidateSignatureTooManyTransforms() throws Exception {
+    public void shouldNotValidateSignatureTooManyTransforms() {
         Assertions.assertThrows(SignatureException.class, () -> validateAuthnRequestFile("authnRequestTooManyTransforms.xml"));
     }
 
@@ -150,7 +150,7 @@ public class CredentialFactorySignatureValidatorTest extends OpenSAMLRunner {
      * Signature must have enveloped-signature Transform.
      */
     @Test
-    public void shouldNotValidateSignatureNoEnvelopeTransform() throws Exception {
+    public void shouldNotValidateSignatureNoEnvelopeTransform() {
         Assertions.assertThrows(SignatureException.class, () -> validateAuthnRequestFile("authnRequestNoEnvTransform.xml"));
     }
 
@@ -158,7 +158,7 @@ public class CredentialFactorySignatureValidatorTest extends OpenSAMLRunner {
      * Signature must have a valid enveloped-signature Transform.
      */
     @Test
-    public void shouldNotValidateSignatureInvalidEnvelopeTransform() throws Exception {
+    public void shouldNotValidateSignatureInvalidEnvelopeTransform() {
         Assertions.assertThrows(SignatureException.class, () -> validateAuthnRequestFile("authnRequestInvalidEnvTransform.xml"));
     }
 
@@ -166,7 +166,7 @@ public class CredentialFactorySignatureValidatorTest extends OpenSAMLRunner {
      * Signature should not contain any Object children.
      */
     @Test
-    public void shouldNotValidateSignatureContainingObject() throws Exception {
+    public void shouldNotValidateSignatureContainingObject() {
         Assertions.assertThrows(SignatureException.class, () -> validateAuthnRequestFile("authnRequestSigContainsChildren.xml"));
     }
 

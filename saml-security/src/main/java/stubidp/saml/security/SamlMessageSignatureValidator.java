@@ -1,6 +1,5 @@
 package stubidp.saml.security;
 
-import com.google.common.base.Strings;
 import org.opensaml.saml.common.SignableSAMLObject;
 import org.opensaml.saml.saml2.core.Assertion;
 import org.opensaml.saml.saml2.core.Issuer;
@@ -14,6 +13,7 @@ import stubidp.saml.security.errors.SamlTransformationErrorFactory;
 import stubidp.saml.security.validators.signature.SamlSignatureUtil;
 
 import javax.xml.namespace.QName;
+import java.util.Objects;
 
 import static stubidp.saml.security.errors.SamlTransformationErrorFactory.invalidMessageSignature;
 import static stubidp.saml.security.errors.SamlTransformationErrorFactory.unableToValidateMessageSignature;
@@ -21,8 +21,8 @@ import static stubidp.saml.security.errors.SamlTransformationErrorFactory.unable
 public class SamlMessageSignatureValidator {
 
     private static final Logger LOG = LoggerFactory.getLogger(SamlMessageSignatureValidator.class);
-    private final SignatureValidator signatureValidator;
 
+    private final SignatureValidator signatureValidator;
 
     public SamlMessageSignatureValidator(SignatureValidator signatureValidator) {
         this.signatureValidator = signatureValidator;
@@ -45,18 +45,18 @@ public class SamlMessageSignatureValidator {
     }
 
     private SamlValidationResponse validateWithIssuer(SignableSAMLObject request, Issuer issuer, QName role) {
-        if (issuer == null) {
+        if (Objects.isNull(issuer)) {
             return SamlValidationResponse.anInvalidResponse(SamlTransformationErrorFactory.missingIssuer());
         }
         String issuerString = issuer.getValue();
-        if (Strings.isNullOrEmpty(issuerString)) {
+        if (Objects.isNull(issuerString) || issuerString.isBlank()) {
             return SamlValidationResponse.anInvalidResponse(SamlTransformationErrorFactory.emptyIssuer());
         }
         return validateWithIssuer(request, issuerString, role);
     }
 
     private SamlValidationResponse validateWithIssuer(SignableSAMLObject signableSAMLObject, String issuerId, QName role) {
-        if (signableSAMLObject.getSignature() == null){
+        if (Objects.isNull(signableSAMLObject.getSignature())) {
             return SamlValidationResponse.anInvalidResponse(SamlTransformationErrorFactory.missingSignature());
         }
         if (!SamlSignatureUtil.isSignaturePresent(signableSAMLObject.getSignature())) {

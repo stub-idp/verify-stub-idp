@@ -1,6 +1,5 @@
 package stubsp.stubsp.saml.request;
 
-import com.google.common.base.Strings;
 import org.opensaml.core.xml.config.XMLObjectProviderRegistrySupport;
 import org.opensaml.core.xml.io.MarshallingException;
 import org.opensaml.saml.common.xml.SAMLConstants;
@@ -20,6 +19,7 @@ import stubidp.saml.extensions.extensions.IdaAuthnContext;
 import stubidp.saml.utils.core.OpenSamlXmlObjectFactory;
 
 import java.time.Instant;
+import java.util.Objects;
 import java.util.Optional;
 
 public class AuthnRequestBuilder {
@@ -80,7 +80,7 @@ public class AuthnRequestBuilder {
         authnRequest.setConditions(ConditionsBuilder.aConditions().build());
 
         //This must be the last thing done before returning; otherwise, the signature will be invalidated
-        if (issuer.isPresent() && !Strings.isNullOrEmpty(issuer.get().getValue()) && shouldAddSignature) {
+        if (shouldAddSignature && issuer.isPresent() && Objects.nonNull(issuer.get().getValue()) && !issuer.get().getValue().isBlank()) {
             final SignatureBuilder signatureBuilder = SignatureBuilder.aSignature();
             id.ifPresent(signatureBuilder::withId);
             x509Certificate.ifPresent(signatureBuilder::withX509Data);

@@ -1,6 +1,5 @@
 package stubidp.saml.security.saml.builders;
 
-import com.google.common.base.Strings;
 import org.opensaml.core.xml.config.XMLObjectProviderRegistrySupport;
 import org.opensaml.core.xml.io.MarshallingException;
 import org.opensaml.saml.saml2.core.Assertion;
@@ -21,6 +20,7 @@ import stubidp.saml.security.saml.TestSamlObjectFactory;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 import static java.util.Optional.empty;
@@ -43,12 +43,12 @@ public class ResponseBuilder {
     private List<EncryptedAssertion> encryptedAssertions = new ArrayList<>();
 
     private Optional<Issuer> issuer = ofNullable(IssuerBuilder.anIssuer().build());
-    private Optional<String> id = ofNullable(DEFAULT_RESPONSE_ID);
+    private Optional<String> id = Optional.of(DEFAULT_RESPONSE_ID);
     private Optional<Instant> issueInstant = ofNullable(Instant.now());
-    private Optional<String> inResponseTo = ofNullable(DEFAULT_REQUEST_ID);
-    private Optional<Status> status = ofNullable(getStatus());
+    private Optional<String> inResponseTo = Optional.of(DEFAULT_REQUEST_ID);
+    private Optional<Status> status = Optional.of(getStatus());
     private Optional<Credential> signingCredential = empty();
-    private Optional<String > destination = ofNullable("http://destination.com");
+    private Optional<String > destination = Optional.of("http://destination.com");
 
     public static ResponseBuilder aResponse() {
         ResponseBuilder responseBuilder = new ResponseBuilder();
@@ -76,7 +76,7 @@ public class ResponseBuilder {
         if (issuer.isPresent()) {
             response.setIssuer(issuer.get());
 
-            if (!Strings.isNullOrEmpty(issuer.get().getValue()) && shouldAddSignature) {
+            if (shouldAddSignature && Objects.nonNull(issuer.get().getValue()) && !issuer.get().getValue().isBlank()) {
                 SignatureBuilder signatureBuilder = SignatureBuilder.aSignature().withSignatureAlgorithm(signatureAlgorithm);
                 id.ifPresent(s -> signatureBuilder.withDigestAlgorithm(s, digestAlgorithm));
                 signingCredential.ifPresent(signatureBuilder::withSigningCredential);

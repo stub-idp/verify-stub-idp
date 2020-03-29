@@ -1,6 +1,5 @@
 package stubidp.saml.hub.hub.validators.response.matchingservice;
 
-import com.google.common.base.Strings;
 import org.opensaml.saml.saml2.core.Response;
 import org.opensaml.saml.saml2.core.StatusCode;
 import org.opensaml.xmlsec.signature.Signature;
@@ -11,6 +10,7 @@ import stubidp.saml.hub.hub.validators.response.common.IssuerValidator;
 import stubidp.saml.hub.hub.validators.response.common.RequestIdValidator;
 
 import java.util.List;
+import java.util.Objects;
 
 import static stubidp.saml.security.validators.signature.SamlSignatureUtil.isSignaturePresent;
 
@@ -23,11 +23,17 @@ public class EncryptedResponseFromMatchingServiceValidator {
     }
 
     private void validateResponse(Response response) {
-        if (Strings.isNullOrEmpty(response.getID())) throw new SamlValidationException(SamlTransformationErrorFactory.missingId());
+        if (Objects.isNull(response.getID()) || response.getID().isBlank()) {
+            throw new SamlValidationException(SamlTransformationErrorFactory.missingId());
+        }
 
         Signature signature = response.getSignature();
-        if (signature == null) throw new SamlValidationException(SamlTransformationErrorFactory.missingSignature());
-        if (!isSignaturePresent(signature)) throw new SamlValidationException(SamlTransformationErrorFactory.signatureNotSigned());
+        if (Objects.isNull(signature)) {
+            throw new SamlValidationException(SamlTransformationErrorFactory.missingSignature());
+        }
+        if (!isSignaturePresent(signature)) {
+            throw new SamlValidationException(SamlTransformationErrorFactory.signatureNotSigned());
+        }
 
         validateStatusAndSubStatus(response);
         validateAssertionPresence(response);
@@ -39,9 +45,13 @@ public class EncryptedResponseFromMatchingServiceValidator {
 
         StatusCode subStatusCode = statusCode.getStatusCode();
 
-        if (StatusCode.REQUESTER.equals(statusCodeValue)) return;
+        if (StatusCode.REQUESTER.equals(statusCodeValue)) {
+            return;
+        }
 
-        if (subStatusCode == null) throw new SamlValidationException(SamlTransformationErrorFactory.missingSubStatus());
+        if (Objects.isNull(subStatusCode)) {
+            throw new SamlValidationException(SamlTransformationErrorFactory.missingSubStatus());
+        }
 
         String subStatusCodeValue = subStatusCode.getValue();
 

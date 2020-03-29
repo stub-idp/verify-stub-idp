@@ -13,7 +13,6 @@ module stubidp.security.utils {
 
     requires transitive java.validation;
     requires transitive jakarta.inject;
-    requires transitive com.google.common;
     requires transitive com.fasterxml.jackson.core;
     requires transitive com.fasterxml.jackson.databind;
 }

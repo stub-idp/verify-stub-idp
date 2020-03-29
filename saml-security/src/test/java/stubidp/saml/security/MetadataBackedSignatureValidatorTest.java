@@ -1,6 +1,6 @@
 package stubidp.saml.security;
 
-import com.google.common.io.Resources;
+import io.dropwizard.util.Resources;
 import net.shibboleth.utilities.java.support.component.ComponentInitializationException;
 import net.shibboleth.utilities.java.support.xml.BasicParserPool;
 import org.junit.jupiter.api.Assertions;

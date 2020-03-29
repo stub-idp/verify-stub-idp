@@ -1,6 +1,5 @@
 package stubidp.utils.security.security;
 
-import com.google.common.base.Strings;
 import stubidp.utils.security.configuration.KeyConfiguration;
 import stubidp.utils.security.configuration.SecureCookieConfiguration;
 import stubidp.utils.security.configuration.SecureCookieKeyStore;
@@ -13,6 +12,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.security.Key;
 import java.util.Base64;
+import java.util.Objects;
 
 public class SecureCookieKeyConfigurationKeyStore implements SecureCookieKeyStore {
 
@@ -26,7 +26,7 @@ public class SecureCookieKeyConfigurationKeyStore implements SecureCookieKeyStor
     @Override
     public Key getKey() {
         try {
-            if(Strings.isNullOrEmpty(keyConfiguration.getBase64EncodedKey())) {
+            if(Objects.isNull(keyConfiguration.getBase64EncodedKey()) || keyConfiguration.getBase64EncodedKey().isBlank()) {
                 String keyUri = keyConfiguration.getKeyUri();
                 return getSecureCookieKey(keyUri);
             } else {

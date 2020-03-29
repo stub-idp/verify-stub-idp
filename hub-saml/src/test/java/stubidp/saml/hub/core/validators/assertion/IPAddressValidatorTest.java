@@ -4,8 +4,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.opensaml.saml.saml2.core.Assertion;
 import stubidp.saml.extensions.validation.SamlValidationSpecificationFailure;
-import stubidp.saml.hub.core.errors.SamlTransformationErrorFactory;
 import stubidp.saml.hub.core.OpenSAMLRunner;
+import stubidp.saml.hub.core.errors.SamlTransformationErrorFactory;
 import stubidp.saml.utils.core.test.SamlTransformationErrorManagerTestHelper;
 import stubidp.saml.utils.core.test.builders.IPAddressAttributeBuilder;
 
@@ -23,13 +23,13 @@ public class IPAddressValidatorTest extends OpenSAMLRunner {
     }
 
     @Test
-    public void validate_shouldThrowWhenAssertionDoesNotContainAnAttributeStatement() throws Exception {
+    public void validate_shouldThrowWhenAssertionDoesNotContainAnAttributeStatement() {
         Assertion assertion = anAssertion().buildUnencrypted();
         validateException(SamlTransformationErrorFactory.missingIPAddress(assertion.getID()), assertion);
     }
 
     @Test
-    public void validate_shouldNotThrowWhenFirstAttributeStatementContainsAnIPAddressAttribute() throws Exception {
+    public void validate_shouldNotThrowWhenFirstAttributeStatementContainsAnIPAddressAttribute() {
         Assertion assertion = anAssertion()
                 .addAttributeStatement(anAttributeStatement().addAttribute(IPAddressAttributeBuilder.anIPAddress().build()).build())
                 .buildUnencrypted();
@@ -38,7 +38,7 @@ public class IPAddressValidatorTest extends OpenSAMLRunner {
     }
 
     @Test
-    public void validate_shouldNotThrowWhenSecondAttributeStatementContainsAnIPAddressAttribute() throws Exception {
+    public void validate_shouldNotThrowWhenSecondAttributeStatementContainsAnIPAddressAttribute() {
         Assertion assertion = anAssertion()
                 .addAttributeStatement(anAttributeStatement().build())
                 .addAttributeStatement(anAttributeStatement().addAttribute(IPAddressAttributeBuilder.anIPAddress().build()).build())
@@ -48,7 +48,7 @@ public class IPAddressValidatorTest extends OpenSAMLRunner {
     }
 
     @Test
-    public void validate_shouldNotThrowWhenFirstAttributeStatementContainsMultipleAttributesIncludingIPAddressAttribute() throws Exception {
+    public void validate_shouldNotThrowWhenFirstAttributeStatementContainsMultipleAttributesIncludingIPAddressAttribute() {
         Assertion assertion = anAssertion()
                 .addAttributeStatement(anAttributeStatement()
                         .addAttribute(aPersonName_1_1().buildAsFirstname())
@@ -60,7 +60,7 @@ public class IPAddressValidatorTest extends OpenSAMLRunner {
     }
 
     @Test
-    public void validate_shouldThrowWhenAssertionContainsAttributeStatementsButNoIPAddressAttribute() throws Exception {
+    public void validate_shouldThrowWhenAssertionContainsAttributeStatementsButNoIPAddressAttribute() {
         Assertion assertion = anAssertion()
                 .addAttributeStatement(anAttributeStatement().build())
                 .buildUnencrypted();
@@ -68,7 +68,7 @@ public class IPAddressValidatorTest extends OpenSAMLRunner {
     }
 
     @Test
-    public void validate_shouldThrowWhenAssertionContainsIPAddressAttributeWithNoValue() throws Exception {
+    public void validate_shouldThrowWhenAssertionContainsIPAddressAttributeWithNoValue() {
         Assertion assertion = anAssertion()
                 .addAttributeStatement(anAttributeStatement().addAttribute(IPAddressAttributeBuilder.anIPAddress().withValue(null).build()).build())
                 .buildUnencrypted();
@@ -77,7 +77,7 @@ public class IPAddressValidatorTest extends OpenSAMLRunner {
     }
 
     @Test
-    public void validate_shouldNotWarnWhenAssertionContainsAnInvalidIPAddress() throws Exception {
+    public void validate_shouldNotWarnWhenAssertionContainsAnInvalidIPAddress() {
         final String ipAddress = "10.10.10.1a";
         final Assertion assertion = anAssertion()
                 .addAttributeStatement(anAttributeStatement().addAttribute(IPAddressAttributeBuilder.anIPAddress().withValue(ipAddress).build()).build())

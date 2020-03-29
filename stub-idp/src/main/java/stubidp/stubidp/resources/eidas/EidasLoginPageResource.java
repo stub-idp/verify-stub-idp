@@ -1,6 +1,5 @@
 package stubidp.stubidp.resources.eidas;
 
-import com.google.common.base.Strings;
 import stubidp.shared.csrf.CSRFCheckProtection;
 import stubidp.shared.domain.SamlResponse;
 import stubidp.shared.views.SamlMessageRedirectViewFactory;
@@ -38,6 +37,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriBuilder;
 import java.net.URI;
+import java.util.Objects;
 import java.util.Optional;
 
 import static java.text.MessageFormat.format;
@@ -70,7 +70,7 @@ public class EidasLoginPageResource {
     @GET
     public Response get(
             @PathParam(Urls.SCHEME_ID_PARAM) @NotNull String schemeName,
-            @QueryParam(Urls.ERROR_MESSAGE_PARAM) java.util.Optional<ErrorMessageType> errorMessage,
+            @QueryParam(Urls.ERROR_MESSAGE_PARAM) Optional<ErrorMessageType> errorMessage,
             @CookieParam(StubIdpCookieNames.SESSION_COOKIE_NAME) @NotNull SessionId sessionCookie) {
 
         final Optional<EidasScheme> eidasScheme = EidasScheme.fromString(schemeName);
@@ -139,7 +139,7 @@ public class EidasLoginPageResource {
     }
 
     private EidasSession checkSession(String schemeId, SessionId sessionCookie) {
-        if (sessionCookie == null || Strings.isNullOrEmpty(sessionCookie.toString())) {
+        if (Objects.isNull(sessionCookie) || Objects.isNull(sessionCookie.toString()) || sessionCookie.toString().isBlank()) {
             throw new GenericStubIdpException(format("Unable to locate session cookie for " + schemeId), Response.Status.BAD_REQUEST);
         }
 
@@ -153,7 +153,7 @@ public class EidasLoginPageResource {
     }
 
     private EidasSession checkAndDeleteAndGetSession(String schemeId, SessionId sessionCookie) {
-        if (Strings.isNullOrEmpty(sessionCookie.toString())) {
+        if (Objects.isNull(sessionCookie) || Objects.isNull(sessionCookie.toString()) || sessionCookie.toString().isBlank()) {
             throw new GenericStubIdpException(format("Unable to locate session cookie for " + schemeId), Response.Status.BAD_REQUEST);
         }
 

@@ -1,6 +1,5 @@
 package stubidp.stubidp.resources.eidas;
 
-import com.google.common.base.Strings;
 import stubidp.saml.utils.core.domain.AuthnContext;
 import stubidp.shared.csrf.CSRFCheckProtection;
 import stubidp.shared.domain.SamlResponse;
@@ -43,6 +42,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriBuilder;
 import java.net.URI;
+import java.util.Objects;
 import java.util.Optional;
 
 import static java.text.MessageFormat.format;
@@ -84,7 +84,7 @@ public class EidasRegistrationPageResource {
             throw new InvalidEidasSchemeException();
         }
 
-        if (Strings.isNullOrEmpty(sessionCookie.toString())) {
+        if (Objects.isNull(sessionCookie.toString()) || sessionCookie.toString().isBlank()) {
             throw new GenericStubIdpException(format(("Unable to locate session cookie for " + schemeId)), Response.Status.BAD_REQUEST);
         }
 
@@ -123,7 +123,7 @@ public class EidasRegistrationPageResource {
             throw new InvalidEidasSchemeException();
         }
 
-        if (Strings.isNullOrEmpty(sessionCookie.toString())) {
+        if (Objects.isNull(sessionCookie.toString()) || sessionCookie.toString().isBlank()) {
             throw new GenericStubIdpException(format(("Unable to locate session cookie for " + schemeId)), Response.Status.BAD_REQUEST);
         }
 

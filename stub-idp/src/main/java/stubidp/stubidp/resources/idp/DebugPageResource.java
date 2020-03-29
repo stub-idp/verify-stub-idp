@@ -1,6 +1,5 @@
 package stubidp.stubidp.resources.idp;
 
-import com.google.common.base.Strings;
 import stubidp.stubidp.Urls;
 import stubidp.stubidp.cookies.StubIdpCookieNames;
 import stubidp.stubidp.exceptions.GenericStubIdpException;
@@ -21,6 +20,7 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import java.util.Objects;
 import java.util.Optional;
 
 import static java.text.MessageFormat.format;
@@ -46,7 +46,7 @@ public class DebugPageResource {
             @PathParam(Urls.IDP_ID_PARAM) @NotNull String idpName,
             @CookieParam(StubIdpCookieNames.SESSION_COOKIE_NAME) @NotNull SessionId sessionCookie) {
 
-        if (Strings.isNullOrEmpty(sessionCookie.toString())) {
+        if (Objects.isNull(sessionCookie.toString()) || sessionCookie.toString().isBlank()) {
             throw new GenericStubIdpException(format("Unable to locate session cookie for " + idpName), Response.Status.BAD_REQUEST);
         }
 

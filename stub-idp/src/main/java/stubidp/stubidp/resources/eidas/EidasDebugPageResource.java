@@ -1,6 +1,5 @@
 package stubidp.stubidp.resources.eidas;
 
-import com.google.common.base.Strings;
 import stubidp.stubidp.Urls;
 import stubidp.stubidp.cookies.StubIdpCookieNames;
 import stubidp.stubidp.domain.EidasScheme;
@@ -23,6 +22,7 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import java.util.Objects;
 import java.util.Optional;
 
 import static java.text.MessageFormat.format;
@@ -49,17 +49,17 @@ public class EidasDebugPageResource {
             @CookieParam(StubIdpCookieNames.SESSION_COOKIE_NAME) @NotNull SessionId sessionCookie) {
 
         final Optional<EidasScheme> eidasScheme = EidasScheme.fromString(schemeId);
-        if(!eidasScheme.isPresent()) {
+        if(eidasScheme.isEmpty()) {
             throw new InvalidEidasSchemeException();
         }
 
-        if (Strings.isNullOrEmpty(sessionCookie.toString())) {
+        if (Objects.isNull(sessionCookie.toString()) || sessionCookie.toString().isBlank()) {
             throw new GenericStubIdpException(format(("Unable to locate session cookie for " + schemeId)), Response.Status.BAD_REQUEST);
         }
 
         Optional<EidasSession> session = sessionRepository.get(sessionCookie);
 
-        if (!session.isPresent()) {
+        if (session.isEmpty()) {
             throw new GenericStubIdpException(format(("Session is invalid for " + schemeId)), Response.Status.BAD_REQUEST);
         }
 

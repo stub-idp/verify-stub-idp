@@ -1,6 +1,5 @@
 package stubidp.stubidp.resources.idp;
 
-import com.google.common.base.Strings;
 import stubidp.saml.utils.core.domain.AuthnContext;
 import stubidp.shared.csrf.CSRFCheckProtection;
 import stubidp.shared.views.SamlMessageRedirectViewFactory;
@@ -32,6 +31,7 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Path(Urls.IDP_CONSENT_RESOURCE)
@@ -108,7 +108,7 @@ public class ConsentResource {
     }
 
     private IdpSession getAndValidateSession(String idpName, SessionId sessionCookie) {
-        if (Strings.isNullOrEmpty(sessionCookie.toString())) {
+        if (Objects.isNull(sessionCookie.toString()) || sessionCookie.toString().isBlank()) {
             throw errorResponse("Unable to locate session cookie for " + idpName);
         }
 

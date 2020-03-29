@@ -1,6 +1,5 @@
 package stubidp.stubidp.resources.eidas;
 
-import com.google.common.base.Strings;
 import stubidp.shared.csrf.CSRFCheckProtection;
 import stubidp.shared.domain.SamlResponse;
 import stubidp.shared.views.SamlMessageRedirectViewFactory;
@@ -32,6 +31,7 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import java.util.Objects;
 import java.util.Optional;
 
 import static stubidp.stubidp.StubIdpEidasBinder.RSASHA256_EIDAS_AUTHN_RESPONSE_SERVICE;
@@ -113,13 +113,13 @@ public class EidasConsentResource {
     }
 
     private EidasSession getAndValidateSession(String schemeId, SessionId sessionCookie, boolean shouldDelete) {
-        if (sessionCookie == null || Strings.isNullOrEmpty(sessionCookie.toString())) {
+        if (Objects.isNull(sessionCookie) || Objects.isNull(sessionCookie.toString()) || sessionCookie.toString().isBlank()) {
             throw errorResponse("Unable to locate session cookie for " + schemeId);
         }
 
         Optional<EidasSession> session = shouldDelete ? sessionRepository.deleteAndGet(sessionCookie) : sessionRepository.get(sessionCookie);
 
-        if (session.isEmpty() || session.get().getEidasUser().isEmpty() || session.get().getEidasAuthnRequest() == null) {
+        if (session.isEmpty() || session.get().getEidasUser().isEmpty() || Objects.isNull(session.get().getEidasAuthnRequest())) {
             throw errorResponse("Session is invalid for " + schemeId);
         }
 

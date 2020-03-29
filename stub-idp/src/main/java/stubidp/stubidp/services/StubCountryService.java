@@ -1,6 +1,5 @@
 package stubidp.stubidp.services;
 
-import com.google.common.base.Strings;
 import stubidp.saml.extensions.extensions.impl.BaseMdsSamlObjectUnmarshaller;
 import stubidp.saml.utils.core.domain.AuthnContext;
 import stubidp.stubidp.domain.DatabaseEidasUser;
@@ -19,6 +18,7 @@ import stubidp.stubidp.repositories.StubCountryRepository;
 
 import javax.inject.Inject;
 import java.time.Instant;
+import java.util.Objects;
 import java.util.Optional;
 
 public class StubCountryService {
@@ -65,7 +65,7 @@ public class StubCountryService {
                                                            String nonLatinSurname,
                                                            String dob,
                                                            AuthnContext levelOfAssurance)
-            throws InvalidDateException, IncompleteRegistrationException, UsernameAlreadyTakenException {
+            throws IncompleteRegistrationException, UsernameAlreadyTakenException {
 
         if (!isMandatoryDataPresent(firstName, surname, dob, username, password)) {
             throw new IncompleteRegistrationException();
@@ -126,7 +126,7 @@ public class StubCountryService {
     }
 
     private Optional<MatchingDatasetValue<String>> createOptionalMdsValue(String value) {
-        if (Strings.isNullOrEmpty(value)) {
+        if (Objects.isNull(value) || value.isBlank()) {
             return Optional.empty();
         }
         return Optional.of(new MatchingDatasetValue<>(value, null, null, true));

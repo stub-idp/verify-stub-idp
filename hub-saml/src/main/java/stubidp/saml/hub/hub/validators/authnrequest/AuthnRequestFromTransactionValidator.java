@@ -1,6 +1,5 @@
 package stubidp.saml.hub.hub.validators.authnrequest;
 
-import com.google.common.base.Strings;
 import org.opensaml.saml.common.SAMLVersion;
 import org.opensaml.saml.common.xml.SAMLConstants;
 import org.opensaml.saml.saml2.core.AuthnRequest;
@@ -18,6 +17,7 @@ import stubidp.saml.security.validators.issuer.IssuerValidator;
 import stubidp.saml.security.validators.signature.SamlSignatureUtil;
 
 import java.time.Instant;
+import java.util.Objects;
 
 public class AuthnRequestFromTransactionValidator implements SamlValidator<AuthnRequest> {
 
@@ -63,7 +63,7 @@ public class AuthnRequestFromTransactionValidator implements SamlValidator<Authn
 
     private void validateRequestId(final AuthnRequest request) {
         final String requestId = request.getID();
-        if (Strings.isNullOrEmpty(requestId)) {
+        if (Objects.isNull(requestId) || requestId.isBlank()) {
             SamlValidationSpecificationFailure failure = SamlTransformationErrorFactory.missingRequestId();
             throw new SamlTransformationErrorException(failure.getErrorMessage(), failure.getLogLevel());
         }

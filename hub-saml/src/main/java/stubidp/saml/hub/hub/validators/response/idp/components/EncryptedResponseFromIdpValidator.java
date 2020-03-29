@@ -1,6 +1,5 @@
 package stubidp.saml.hub.hub.validators.response.idp.components;
 
-import com.google.common.base.Strings;
 import org.opensaml.saml.saml2.core.EncryptedAssertion;
 import org.opensaml.saml.saml2.core.Response;
 import org.opensaml.saml.saml2.core.Status;
@@ -8,12 +7,13 @@ import org.opensaml.saml.saml2.core.StatusCode;
 import org.opensaml.xmlsec.signature.Signature;
 import stubidp.saml.extensions.validation.SamlValidationSpecificationFailure;
 import stubidp.saml.hub.core.errors.SamlTransformationErrorFactory;
+import stubidp.saml.hub.hub.exception.SamlValidationException;
 import stubidp.saml.hub.hub.transformers.inbound.SamlStatusToAuthenticationStatusCodeMapper;
 import stubidp.saml.hub.hub.validators.response.common.IssuerValidator;
 import stubidp.saml.hub.hub.validators.response.common.RequestIdValidator;
-import stubidp.saml.hub.hub.exception.SamlValidationException;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 import static stubidp.saml.security.validators.signature.SamlSignatureUtil.isSignaturePresent;
@@ -28,7 +28,9 @@ public class EncryptedResponseFromIdpValidator<T extends Enum> {
     }
 
     protected void validateAssertionPresence(Response response) {
-        if (!response.getAssertions().isEmpty()) throw new SamlValidationException(SamlTransformationErrorFactory.unencryptedAssertion());
+        if (!response.getAssertions().isEmpty()) {
+            throw new SamlValidationException(SamlTransformationErrorFactory.unencryptedAssertion());
+        }
 
         boolean responseWasSuccessful = response.getStatus().getStatusCode().getValue().equals(StatusCode.SUCCESS);
         List<EncryptedAssertion> encryptedAssertions = response.getEncryptedAssertions();
@@ -53,12 +55,20 @@ public class EncryptedResponseFromIdpValidator<T extends Enum> {
     }
 
     private void validateResponse(Response response) {
-        if (Strings.isNullOrEmpty(response.getID())) throw new SamlValidationException(SamlTransformationErrorFactory.missingId());
-        if (response.getIssueInstant() == null) throw new SamlValidationException(SamlTransformationErrorFactory.missingIssueInstant(response.getID()));
+        if (Objects.isNull(response.getID()) || response.getID().isBlank()) {
+            throw new SamlValidationException(SamlTransformationErrorFactory.missingId());
+        }
+        if (Objects.isNull(response.getIssueInstant())) {
+            throw new SamlValidationException(SamlTransformationErrorFactory.missingIssueInstant(response.getID()));
+        }
 
         Signature signature = response.getSignature();
-        if (signature == null) throw new SamlValidationException(SamlTransformationErrorFactory.missingSignature());
-        if (!isSignaturePresent(signature)) throw new SamlValidationException(SamlTransformationErrorFactory.signatureNotSigned());
+        if (Objects.isNull(signature)) {
+            throw new SamlValidationException(SamlTransformationErrorFactory.missingSignature());
+        }
+        if (!isSignaturePresent(signature)) {
+            throw new SamlValidationException(SamlTransformationErrorFactory.signatureNotSigned());
+        }
 
         validateStatus(response.getStatus());
         validateAssertionPresence(response);
@@ -68,14 +78,18 @@ public class EncryptedResponseFromIdpValidator<T extends Enum> {
         validateStatusCode(status.getStatusCode(), 0);
 
         Optional<T> mappedStatus = statusCodeMapper.map(status);
-        if (!mappedStatus.isPresent()) fail(status);
+        if (mappedStatus.isEmpty()) {
+            fail(status);
+        }
     }
 
     private void fail(Status status) {
         StatusCode statusCode = status.getStatusCode();
         StatusCode subStatusCode = statusCode.getStatusCode();
 
-        if (subStatusCode == null) throw new SamlValidationException(SamlTransformationErrorFactory.invalidStatusCode(statusCode.getValue()));
+        if (Objects.isNull(subStatusCode)) {
+            throw new SamlValidationException(SamlTransformationErrorFactory.invalidStatusCode(statusCode.getValue()));
+        }
 
         SamlValidationSpecificationFailure failure = SamlTransformationErrorFactory.invalidSubStatusCode(
                 subStatusCode.getValue(),
@@ -90,6 +104,8 @@ public class EncryptedResponseFromIdpValidator<T extends Enum> {
         }
 
         StatusCode subStatus = statusCode.getStatusCode();
-        if (subStatus != null) validateStatusCode(subStatus, subStatusCount + 1);
+        if (Objects.nonNull(subStatus)) {
+            validateStatusCode(subStatus, subStatusCount + 1);
+        }
     }
 }

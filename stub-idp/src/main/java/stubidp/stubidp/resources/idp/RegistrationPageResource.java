@@ -1,6 +1,5 @@
 package stubidp.stubidp.resources.idp;
 
-import com.google.common.base.Strings;
 import stubidp.saml.utils.core.domain.AuthnContext;
 import stubidp.saml.utils.core.domain.Gender;
 import stubidp.shared.csrf.CSRFCheckProtection;
@@ -41,6 +40,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriBuilder;
 import java.net.URI;
+import java.util.Objects;
 import java.util.Optional;
 
 import static java.text.MessageFormat.format;
@@ -105,11 +105,11 @@ public class RegistrationPageResource {
             @FormParam(Urls.SUBMIT_PARAM) @NotNull SubmitButtonValue submitButtonValue,
             @CookieParam(StubIdpCookieNames.SESSION_COOKIE_NAME) SessionId sessionCookie) {
 
-        if(sessionCookie == null) {
+        if(Objects.isNull(sessionCookie)) {
             return createErrorResponse(ErrorMessageType.INVALID_SESSION_ID, idpName);
         }
 
-        if (Strings.isNullOrEmpty(sessionCookie.toString())) {
+        if (Objects.isNull(sessionCookie.toString()) || sessionCookie.toString().isBlank()) {
             throw new GenericStubIdpException(format("Unable to locate session cookie for " + idpName), Response.Status.BAD_REQUEST);
         }
 
@@ -224,7 +224,7 @@ public class RegistrationPageResource {
     }
 
     private IdpSession checkAndGetSession(String idpName, SessionId sessionCookie) {
-        if (Strings.isNullOrEmpty(sessionCookie.toString())) {
+        if (Objects.isNull(sessionCookie.toString()) || sessionCookie.toString().isBlank()) {
             throw new GenericStubIdpException(format("Unable to locate session cookie for " + idpName), Response.Status.BAD_REQUEST);
         }
 

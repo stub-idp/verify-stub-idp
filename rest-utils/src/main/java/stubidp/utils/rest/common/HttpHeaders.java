@@ -6,6 +6,6 @@ public interface HttpHeaders {
     String PRAGMA_KEY = org.apache.http.HttpHeaders.PRAGMA;
     String PRAGMA_NO_CACHE_VALUE = "no-cache";
     String MAX_AGE = "max-age";
-    String REFERER = com.google.common.net.HttpHeaders.REFERER;
-    String X_FORWARDED_FOR = com.google.common.net.HttpHeaders.X_FORWARDED_FOR;
+    String REFERER = org.apache.http.HttpHeaders.REFERER;
+    String X_FORWARDED_FOR = "X-Forwarded-For";
 }

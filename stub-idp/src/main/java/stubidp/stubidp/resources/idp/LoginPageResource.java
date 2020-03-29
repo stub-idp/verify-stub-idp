@@ -1,6 +1,5 @@
 package stubidp.stubidp.resources.idp;
 
-import com.google.common.base.Strings;
 import stubidp.shared.cookies.CookieFactory;
 import stubidp.shared.csrf.CSRFCheckProtection;
 import stubidp.shared.domain.SamlResponse;
@@ -41,6 +40,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriBuilder;
 import java.net.URI;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -78,7 +78,7 @@ public class LoginPageResource {
     @GET
     public Response get(
             @PathParam(Urls.IDP_ID_PARAM) @NotNull String idpName,
-            @QueryParam(Urls.ERROR_MESSAGE_PARAM) java.util.Optional<ErrorMessageType> errorMessage,
+            @QueryParam(Urls.ERROR_MESSAGE_PARAM) Optional<ErrorMessageType> errorMessage,
             @CookieParam(StubIdpCookieNames.SESSION_COOKIE_NAME) SessionId sessionCookie) {
 
         Idp idp = idpStubsRepository.getIdpWithFriendlyId(idpName);
@@ -131,32 +131,26 @@ public class LoginPageResource {
                     return samlMessageRedirectViewFactory.sendSamlResponse(cancelResponse);
 
                 } else {
-
                     return redirectToHomePage(idpName);
-
                 }
             }
 
-            case SignIn:
-                Optional<IdpSession> session = Optional.empty();
-
-                if(sessionCookie == null) {
-
-                    return createSessionAttachUserAndRedirectToHomePage(idpName, username, password, session);
+            case SignIn: {
+                if (Objects.isNull(sessionCookie)) {
+                    return createSessionAttachUserAndRedirectToHomePage(idpName, username, password, Optional.empty());
                 }
 
-                session = sessionRepository.get(sessionCookie);
+                Optional<IdpSession> session = sessionRepository.get(sessionCookie);
 
-                if(sessionHasIdaAuthnRequestFromHub(session)) {
-
+                if (sessionHasIdaAuthnRequestFromHub(session)) {
                     return attachUserToSessionAndRedirectToConsent(idpName, username, password, session);
                 } else {
-
                     return createSessionAttachUserAndRedirectToHomePage(idpName, username, password, session);
                 }
-
-            default:
+            }
+            default: {
                 throw new GenericStubIdpException("unknown submit button value", Response.Status.BAD_REQUEST);
+            }
         }
     }
 
@@ -307,7 +301,7 @@ public class LoginPageResource {
     }
 
     private IdpSession checkAndGetSession(String idpName, SessionId sessionCookie) {
-        if (Strings.isNullOrEmpty(sessionCookie.toString())) {
+        if (Objects.isNull(sessionCookie.toString()) || sessionCookie.toString().isBlank()) {
             throw new GenericStubIdpException(format("Unable to locate session cookie for " + idpName), Response.Status.BAD_REQUEST);
         }
 
@@ -320,7 +314,7 @@ public class LoginPageResource {
     }
 
     private IdpSession checkAndDeleteAndGetSession(String idpName, SessionId sessionCookie) {
-        if (Strings.isNullOrEmpty(sessionCookie.toString())) {
+        if (Objects.isNull(sessionCookie.toString()) || sessionCookie.toString().isBlank()) {
             throw new GenericStubIdpException(format("Unable to locate session cookie for " + idpName), Response.Status.BAD_REQUEST);
         }
 
@@ -353,7 +347,7 @@ public class LoginPageResource {
     private Response createSessionAttachUserAndRedirectToHomePage(String idpName, String username, String password, Optional<IdpSession> session) {
         final SessionId sessionId;
 
-        if (!session.isPresent()) {
+        if (session.isEmpty()) {
             IdpSession idpSession = new IdpSession(
                     new SessionId(UUID.randomUUID().toString()));
             sessionId = sessionRepository.createSession(idpSession);

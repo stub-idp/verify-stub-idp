@@ -1,6 +1,5 @@
 package stubidp.saml.hub.core.validators.assertion;
 
-import com.google.common.base.Strings;
 import org.opensaml.saml.saml2.core.Assertion;
 import org.opensaml.saml.saml2.core.Attribute;
 import org.opensaml.saml.saml2.core.AttributeStatement;
@@ -10,6 +9,8 @@ import stubidp.saml.extensions.validation.SamlTransformationErrorException;
 import stubidp.saml.extensions.validation.SamlValidationSpecificationFailure;
 import stubidp.saml.hub.core.errors.SamlTransformationErrorFactory;
 
+import java.util.Objects;
+
 public class IPAddressValidator {
     public void validate(Assertion assertion) {
         for (AttributeStatement attributeStatement : assertion.getAttributeStatements()) {
@@ -17,7 +18,7 @@ public class IPAddressValidator {
                 if (attribute.getName().equals(IdaConstants.Attributes_1_1.IPAddress.NAME)) {
                     IPAddress ipAddressAttributeValue = (IPAddress) attribute.getAttributeValues().get(0);
                     String addressValue = ipAddressAttributeValue.getValue();
-                    if (!Strings.isNullOrEmpty(addressValue)) {
+                    if (Objects.nonNull(addressValue) && !addressValue.isBlank()) {
                         return;
                     }
 

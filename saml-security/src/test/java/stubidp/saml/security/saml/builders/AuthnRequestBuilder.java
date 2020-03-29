@@ -1,6 +1,5 @@
 package stubidp.saml.security.saml.builders;
 
-import com.google.common.base.Strings;
 import org.opensaml.core.xml.config.XMLObjectProviderRegistrySupport;
 import org.opensaml.core.xml.io.MarshallingException;
 import org.opensaml.saml.common.xml.SAMLConstants;
@@ -20,12 +19,12 @@ import stubidp.saml.extensions.extensions.IdaAuthnContext;
 import stubidp.saml.security.saml.TestSamlObjectFactory;
 
 import java.time.Instant;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
 
 import static java.util.Optional.empty;
 import static java.util.Optional.ofNullable;
-
 
 public class AuthnRequestBuilder {
 
@@ -43,7 +42,7 @@ public class AuthnRequestBuilder {
     private Optional<NameIDPolicy> nameIdPolicy = empty();
     private Optional<Scoping> scoping = empty();
     private Optional<String> assertionConsumerServiceUrl = empty();
-    private Optional<String> protocolBinding = ofNullable(SAMLConstants.SAML2_POST_BINDING_URI);
+    private Optional<String> protocolBinding = Optional.of(SAMLConstants.SAML2_POST_BINDING_URI);
     private Optional<Boolean> isPassive = empty();
 
     private Optional<Issuer> issuer = ofNullable(IssuerBuilder.anIssuer().build());
@@ -81,7 +80,7 @@ public class AuthnRequestBuilder {
         assertionConsumerServiceIndex.ifPresent(authnRequest::setAssertionConsumerServiceIndex);
 
         //This must be the last thing done before returning; otherwise, the signature will be invalidated
-        if (issuer.isPresent() && !Strings.isNullOrEmpty(issuer.get().getValue()) && shouldAddSignature) {
+        if (shouldAddSignature && issuer.isPresent() && Objects.nonNull(issuer.get().getValue()) && !issuer.get().getValue().isBlank()) {
             final SignatureBuilder signatureBuilder = SignatureBuilder.aSignature().withSignatureAlgorithm(signatureAlgorithm);
             id.ifPresent(s -> signatureBuilder.withDigestAlgorithm(s, digestAlgorithm));
             signingCredential.ifPresent(signatureBuilder::withSigningCredential);

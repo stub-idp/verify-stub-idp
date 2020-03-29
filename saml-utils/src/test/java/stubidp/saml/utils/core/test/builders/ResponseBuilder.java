@@ -1,6 +1,5 @@
 package stubidp.saml.utils.core.test.builders;
 
-import com.google.common.base.Strings;
 import org.opensaml.core.xml.config.XMLObjectProviderRegistrySupport;
 import org.opensaml.core.xml.io.MarshallingException;
 import org.opensaml.saml.saml2.core.Assertion;
@@ -21,6 +20,7 @@ import javax.validation.constraints.NotNull;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 import static java.util.Optional.empty;
@@ -79,7 +79,7 @@ public class ResponseBuilder {
         if (issuer.isPresent()) {
             response.setIssuer(issuer.get());
 
-            if (!Strings.isNullOrEmpty(issuer.get().getValue()) && shouldAddSignature) {
+            if (shouldAddSignature && Objects.nonNull(issuer.get().getValue()) && !issuer.get().getValue().isBlank()) {
                 SignatureBuilder signatureBuilder = SignatureBuilder.aSignature().withSignatureAlgorithm(signatureAlgorithm);
                 id.ifPresent(s -> signatureBuilder.withDigestAlgorithm(s, digestAlgorithm));
                 signingCredential.ifPresent(signatureBuilder::withSigningCredential);

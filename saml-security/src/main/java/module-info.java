@@ -10,7 +10,6 @@ module stubidp.saml.security {
     opens stubidp.saml.security;
     opens stubidp.saml.security.validators.signature;
 
-    requires com.google.common;
     requires org.slf4j;
     requires org.apache.santuario.xmlsec;
     requires org.checkerframework.checker.qual;

@@ -1,12 +1,14 @@
 package stubidp.saml.security.saml;
 
-import com.google.common.io.Resources;
+import io.dropwizard.util.Resources;
 
 import java.io.IOException;
 import java.net.URL;
 import java.nio.charset.Charset;
 
-public abstract class PemCertificateStrings {
+public class PemCertificateStrings {
+
+    private PemCertificateStrings() {}
 
     private static String readFile(String name) {
         try {
