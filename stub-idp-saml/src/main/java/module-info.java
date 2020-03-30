@@ -1,5 +1,11 @@
 @SuppressWarnings({"requires-automatic", "requires-transitive-automatic"})
 module stubidp.saml {
+    opens stubidp.saml.stubidp;
+    opens stubidp.saml.stubidp.configuration;
+    opens stubidp.saml.stubidp.stub.transformers.inbound;
+    opens stubidp.saml.stubidp.stub.transformers.outbound;
+
+    exports stubidp.saml.stubidp;
     exports stubidp.saml.stubidp.configuration;
     exports stubidp.saml.stubidp.stub.transformers.outbound;
     exports stubidp.saml.stubidp.stub.transformers.inbound;
@@ -9,11 +15,6 @@ module stubidp.saml {
     requires transitive stubidp.saml.utils;
     requires transitive stubidp.saml.security;
     requires transitive java.validation;
-
-    // only for tests
-    opens stubidp.saml.stubidp.stub.transformers.inbound;
-    opens stubidp.saml.stubidp.stub.transformers.outbound;
-    opens stubidp.saml.stubidp;
 
     requires stubidp.saml.extensions;
     requires com.fasterxml.jackson.annotation;

@@ -1,15 +1,16 @@
-@SuppressWarnings("requires-automatic")
+@SuppressWarnings({"requires-automatic", "requires-transitive-automatic"})
 module stubidp.common.utils {
+    opens stubidp.utils.common.logging;
+
     exports stubidp.utils.common.string;
+    exports stubidp.utils.common.xml;
 
-    opens stubidp.utils.common.logging; // for LevelLoggerTest
+    requires transitive java.xml;
 
-    requires org.slf4j;
-    requires java.xml;
+    requires com.fasterxml.jackson.databind;
     requires commons.validator;
-    requires com.google.common;
+    requires dropwizard.configuration;
     requires java.validation;
     requires org.apache.commons.codec;
-    requires com.fasterxml.jackson.databind;
-    requires dropwizard.configuration;
+    requires org.slf4j;
 }

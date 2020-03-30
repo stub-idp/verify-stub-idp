@@ -6,18 +6,17 @@ module stubidp.trust.anchor {
 
     requires transitive nimbus.jose.jwt;
 
-    requires org.opensaml.core;
-    requires org.opensaml.saml;
-    requires org.opensaml.security;
-    requires org.opensaml.xmlsec;
     requires java.xml;
+    requires net.shibboleth.utilities.java.support;
     requires org.apache.santuario.xmlsec;
     requires org.bouncycastle.provider;
-    requires net.shibboleth.utilities.java.support;
+    requires org.opensaml.core;
+    requires org.opensaml.saml.impl;
+    requires org.opensaml.saml;
+    requires org.opensaml.security.impl;
+    requires org.opensaml.security;
+    requires org.opensaml.xmlsec.impl;
+    requires org.opensaml.xmlsec;
     requires stubidp.saml.extensions;
     requires stubidp.saml.serializers;
-    requires org.opensaml.security.impl;
-    requires org.opensaml.xmlsec.impl;
-    requires org.opensaml.saml.impl;
-    requires com.google.common;
 }
