@@ -127,7 +127,7 @@ public class EidasAuthnRequestFromHubToAuthnRequestTransformerTest extends OpenS
         assertThat(requestedAttributes.isPresent()).isTrue().withFailMessage("There should be at least one eidas:RequestedAttributes");
 
         List<XMLObject> requestedAttributeList = requestedAttributes.get().getOrderedChildren();
-        assertThat(requestedAttributeList.size() > 0).isTrue().withFailMessage("There should be at least one eidas:RequestedAttribute");
+        assertThat(requestedAttributeList.size()).isGreaterThan(0).withFailMessage("There should be at least one eidas:RequestedAttribute");
 
         Map<String, RequestedAttributeImpl> reqAttrMap = getRequestedAttributesByFriendlyName(requestedAttributeList);
 

@@ -15,8 +15,8 @@ import java.util.concurrent.ConcurrentMap;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class DuplicateAuthnRequestValidatorTest extends OpenSAMLRunner {
-    private final int EXPIRATION_HOURS = 2;
+class DuplicateAuthnRequestValidatorTest extends OpenSAMLRunner {
+    private static final int EXPIRATION_HOURS = 2;
     private final SamlDuplicateRequestValidationConfiguration samlEngineConfiguration = () -> Duration.hours(EXPIRATION_HOURS);
     private Clock clock = Clock.systemUTC();
     private IdExpirationCache<AuthnRequestIdKey> idExpirationCache;

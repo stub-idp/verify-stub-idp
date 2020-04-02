@@ -1,6 +1,5 @@
 package stubidp.saml.security;
 
-
 import net.shibboleth.utilities.java.support.resolver.Criterion;
 import org.opensaml.security.credential.Credential;
 import org.opensaml.security.credential.CredentialResolver;
@@ -13,11 +12,11 @@ import org.opensaml.xmlsec.signature.support.impl.ExplicitKeySignatureTrustEngin
 
 import javax.xml.namespace.QName;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 public class CredentialFactorySignatureValidator extends SignatureValidator {
     private final SigningCredentialFactory credentialFactory;
-
 
     public CredentialFactorySignatureValidator(SigningCredentialFactory credentialFactory) {
         this.credentialFactory = credentialFactory;
@@ -25,7 +24,7 @@ public class CredentialFactorySignatureValidator extends SignatureValidator {
 
     @Override
     protected List<Criterion> getAdditionalCriteria(String entityId, QName role) {
-        return Arrays.asList(new Criterion() {});
+        return Collections.singletonList(new Criterion() {});
     }
 
     @Override

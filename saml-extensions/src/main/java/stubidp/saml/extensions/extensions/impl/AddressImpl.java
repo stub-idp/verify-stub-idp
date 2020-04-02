@@ -99,9 +99,8 @@ public class AddressImpl extends XSAnyImpl implements Address {
 
     @Override
     public List<XMLObject> getOrderedChildren() {
-        List<XMLObject> children = new ArrayList<>();
 
-        children.addAll(lines);
+        List<XMLObject> children = new ArrayList<>(lines);
         if (postCode != null) {
             children.add(postCode);
         }

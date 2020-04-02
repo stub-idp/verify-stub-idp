@@ -84,6 +84,6 @@ public class EidasAuthnRequestReceiverResource {
         }
         cookies.add(cookieFactory.createSessionIdCookie(sessionCreated.getIdpSessionId()));
 
-        return cookies.toArray(new NewCookie[cookies.size()]);
+        return cookies.toArray(new NewCookie[0]);
     }
 }

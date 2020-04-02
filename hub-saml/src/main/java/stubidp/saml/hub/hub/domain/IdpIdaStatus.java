@@ -84,7 +84,7 @@ public final class IdpIdaStatus implements IdaStatus {
                 final IdpIdaStatus.Status statusCode,
                 final String message) {
 
-            if (!statusCode.equals(Status.RequesterError)) {
+            if (statusCode != Status.RequesterError) {
                 return new IdpIdaStatus(statusCode);
             }
 

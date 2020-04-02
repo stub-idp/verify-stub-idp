@@ -11,6 +11,7 @@ import org.opensaml.xmlsec.impl.BasicSignatureValidationConfiguration;
 import java.security.Security;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -20,7 +21,7 @@ public class EidasSecurityConfigurationInitializer implements Initializer {
         Security.addProvider(new BouncyCastleProvider());
         BasicSignatureValidationConfiguration signatureValidationConfiguration = DefaultSecurityConfigurationBootstrap.buildDefaultSignatureValidationConfiguration();
         Collection<String> defaultAlgos = signatureValidationConfiguration.getWhitelistedAlgorithms();
-        Collection<String> customAlgos = Arrays.asList(
+        Collection<String> customAlgos = Collections.singletonList(
                 XMLSignature.ALGO_ID_SIGNATURE_RSA_SHA256_MGF1
         );
         signatureValidationConfiguration.setWhitelistedAlgorithms(Stream.concat(defaultAlgos.stream(), customAlgos.stream()).collect(Collectors.toList()));

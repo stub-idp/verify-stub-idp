@@ -18,7 +18,7 @@ public class X509DataBuilder {
         X509Data x509Data = new org.opensaml.xmlsec.signature.impl.X509DataBuilder().buildObject();
 
         List<X509Certificate> certificateList = x509Data.getX509Certificates();
-        x509Certificates.forEach(certificateList::add);
+        certificateList.addAll(x509Certificates);
 
         return x509Data;
     }

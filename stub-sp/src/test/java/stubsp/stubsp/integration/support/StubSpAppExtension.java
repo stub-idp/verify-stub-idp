@@ -123,7 +123,6 @@ public class StubSpAppExtension extends DropwizardAppExtension<StubSpConfigurati
                 .build());
         EntitiesDescriptor entitiesDescriptor = new EntitiesDescriptorFactory()
                 .signedEntitiesDescriptor(entityDescriptors, METADATA_SIGNING_A_PUBLIC_CERT, METADATA_SIGNING_A_PRIVATE_KEY);
-        final String metadata = new MetadataFactory().metadata(entitiesDescriptor);
-        return metadata;
+        return new MetadataFactory().metadata(entitiesDescriptor);
     }
 }

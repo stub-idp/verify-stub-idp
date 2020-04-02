@@ -17,6 +17,6 @@ public class FileReader {
     }
 
     public static String readFileContent(Path path) throws IOException {
-        return new String(Files.readAllBytes(path), StandardCharsets.UTF_8);
+        return Files.readString(path);
     }
 }

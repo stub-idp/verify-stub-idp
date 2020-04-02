@@ -62,7 +62,7 @@ public final class CountryAuthenticationStatus implements IdaStatus {
     public static class CountryAuthenticationStatusFactory implements AuthenticationStatusFactory<Status, CountryAuthenticationStatus> {
         public CountryAuthenticationStatus create(final CountryAuthenticationStatus.Status statusCode, final String message) {
 
-            if (!statusCode.equals(Status.Failure)) {
+            if (statusCode != Status.Failure) {
                 return new CountryAuthenticationStatus(statusCode);
             }
 

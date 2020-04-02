@@ -106,7 +106,7 @@ public class JDBIIdpSessionRepositoryTest {
 	@Test
 	public void get_shouldReturnPopulatedIdpSession_whenSessionExists() {
 		Instant authnRequestIssueTime = getLocalDateTime(2018, 4, 25, 11, 24, 0);
-		IdaAuthnRequestFromHub authnRequest = new IdaAuthnRequestFromHub("155a37d3-5a9d-4cd0-b68a-158717b85202", "test-issuer", authnRequestIssueTime, Arrays.asList(), Optional.empty(), null, null, AuthnContextComparisonTypeEnumeration.EXACT);
+		IdaAuthnRequestFromHub authnRequest = new IdaAuthnRequestFromHub("155a37d3-5a9d-4cd0-b68a-158717b85202", "test-issuer", authnRequestIssueTime, Collections.emptyList(), Optional.empty(), null, null, AuthnContextComparisonTypeEnumeration.EXACT);
 		IdpSession expectedSession = createSession(authnRequest);
 		SessionId insertedSessionId = repository.createSession(expectedSession);
 		
@@ -120,7 +120,7 @@ public class JDBIIdpSessionRepositoryTest {
 	@Test
 	public void updateSession_shouldNotThrowException_whenSessionDoesNotExist() {
 		Instant authnRequestIssueTime = getLocalDateTime(2018, 4, 25, 11, 24, 0);
-		IdaAuthnRequestFromHub authnRequest = new IdaAuthnRequestFromHub("155a37d3-5a9d-4cd0-b68a-158717b85202", "test-issuer", authnRequestIssueTime, Arrays.asList(), Optional.empty(), null, null, AuthnContextComparisonTypeEnumeration.EXACT);
+		IdaAuthnRequestFromHub authnRequest = new IdaAuthnRequestFromHub("155a37d3-5a9d-4cd0-b68a-158717b85202", "test-issuer", authnRequestIssueTime, Collections.emptyList(), Optional.empty(), null, null, AuthnContextComparisonTypeEnumeration.EXACT);
 		IdpSession session = createSession(authnRequest);
 		SessionId insertedSessionId = repository.createSession(session);
 		session = repository.get(insertedSessionId).get();

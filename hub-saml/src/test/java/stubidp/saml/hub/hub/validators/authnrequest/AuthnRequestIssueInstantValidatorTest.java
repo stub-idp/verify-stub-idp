@@ -11,10 +11,10 @@ import java.time.ZoneId;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class AuthnRequestIssueInstantValidatorTest {
+class AuthnRequestIssueInstantValidatorTest {
 
-    private AuthnRequestIssueInstantValidator authnRequestIssueInstantValidator = null;
-    private final int AUTHN_REQUEST_VALIDITY_MINS = 5;
+    private AuthnRequestIssueInstantValidator authnRequestIssueInstantValidator;
+    private static final int AUTHN_REQUEST_VALIDITY_MINS = 5;
     private final Clock clock = Clock.fixed(Instant.now(), ZoneId.of("UTC"));
 
     @BeforeEach

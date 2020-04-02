@@ -17,7 +17,7 @@ public class KeyDescriptorFinder {
             String entityId) {
 
         return keyDescriptors.stream()
-                .filter(keyDescriptor -> keyDescriptor.getUse().equals(usageType))
+                .filter(keyDescriptor -> keyDescriptor.getUse() == usageType)
                 .filter(keyDescriptor -> (keyDescriptor.getKeyInfo().getKeyNames().isEmpty() || entityId == null || keyDescriptor.getKeyInfo().getKeyNames().get(0).getValue().equals(entityId)))
                 .findFirst()
                 .orElseThrow(() -> throwError(usageType, entityId));

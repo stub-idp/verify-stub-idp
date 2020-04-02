@@ -28,7 +28,7 @@ public class ManifestReader {
     private String getManifestFilePath(Class clazz) throws IOException {
         String simpleName = clazz.getSimpleName() + ".class";
         String pathToClass = clazz.getResource(simpleName).toString();
-        String pathToJar = pathToClass.substring(0, pathToClass.lastIndexOf("!") + 1);
+        String pathToJar = pathToClass.substring(0, pathToClass.lastIndexOf('!') + 1);
 
         if (pathToJar.isEmpty()) {
             throw new IOException("Manifest file not found for the given class.");

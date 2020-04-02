@@ -53,7 +53,7 @@ public class PassthroughAssertionUnmarshaller {
         String underlyingAssertion = assertionStringTransformer.apply(assertion);
 
         Optional<FraudDetectedDetails> fraudDetectedDetails = Optional.empty();
-        if (levelOfAssurance.isPresent() && levelOfAssurance.get().equals(AuthnContext.LEVEL_X)) {
+        if (levelOfAssurance.isPresent() && levelOfAssurance.get() == AuthnContext.LEVEL_X) {
             String idpFraudEventId = getIdpFraudEventId(assertion.getAttributeStatements());
             fraudDetectedDetails = Optional.of(new FraudDetectedDetails(idpFraudEventId, gpg45Status(assertion.getAttributeStatements())));
         }

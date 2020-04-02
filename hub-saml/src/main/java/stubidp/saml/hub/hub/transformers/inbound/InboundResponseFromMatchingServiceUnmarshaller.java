@@ -19,7 +19,7 @@ public class InboundResponseFromMatchingServiceUnmarshaller {
 
     public InboundResponseFromMatchingService fromSaml(ValidatedResponse validatedResponse, ValidatedAssertions validatedAssertions) {
         Optional<PassthroughAssertion> idaAssertion = null;
-        if (validatedAssertions.getAssertions().size() > 0){
+        if (!validatedAssertions.getAssertions().isEmpty()){
             idaAssertion = Optional.ofNullable(passthroughAssertionUnmarshaller.fromAssertion(validatedAssertions.getAssertions().get(0)));
         }
 

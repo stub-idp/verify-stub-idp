@@ -57,7 +57,7 @@ public final class TestCertificateStrings {
     public static final String HUB_CONNECTOR_TEST_PRIVATE_SIGNING_KEY = readPrivateKey("hub_connector_signing_primary.pk8");
 
     // TODO generate a new one of these
-    public final static String HUB_TEST_PRIVATE_SECONDARY_SIGNING_KEY = readPrivateKey("hub_signing_secondary.pk8");
+    public static final String HUB_TEST_PRIVATE_SECONDARY_SIGNING_KEY = readPrivateKey("hub_signing_secondary.pk8");
 
     public static final String HUB_TEST_PUBLIC_ENCRYPTION_CERT = createInlineCertificate(PemCertificateStrings.HUB_TEST_PUBLIC_ENCRYPTION_CERT);
 

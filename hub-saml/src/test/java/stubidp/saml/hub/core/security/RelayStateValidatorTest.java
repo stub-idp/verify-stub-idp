@@ -66,7 +66,7 @@ public class RelayStateValidatorTest extends OpenSAMLRunner {
     private String generateLongString() {
         String longString = "";
         for (int i = 0; i < 82; i++) {
-            longString = longString + "a";
+            longString += "a";
         }
         return longString;
     }

@@ -18,9 +18,11 @@ import stubidp.saml.security.validators.signature.SamlSignatureUtil;
 
 import java.time.Instant;
 import java.util.Objects;
+import java.util.regex.Pattern;
 
 public class AuthnRequestFromTransactionValidator implements SamlValidator<AuthnRequest> {
 
+    private static final Pattern LETTERS_PATTERN = Pattern.compile("[a-zA-Z]");
     private final IssuerValidator issuerValidator;
     private final DuplicateAuthnRequestValidator duplicateAuthnRequestValidator;
     private final AuthnRequestIssueInstantValidator issueInstantValidator;
@@ -81,7 +83,7 @@ public class AuthnRequestFromTransactionValidator implements SamlValidator<Authn
 
     private boolean requestIdStartsWithUnderscoreOrLetter(final String requestId) {
         String firstCharacter = requestId.substring(0, 1);
-        return firstCharacter.equals("_") || firstCharacter.matches("[a-zA-Z]");
+        return "_".equals(firstCharacter) || LETTERS_PATTERN.matcher(firstCharacter).matches();
     }
 
     private void validateSignaturePresence(final AuthnRequest request) {

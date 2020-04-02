@@ -15,6 +15,7 @@ import java.security.PrivateKey;
 import java.security.cert.CertificateEncodingException;
 import java.security.cert.X509Certificate;
 import java.util.Arrays;
+import java.util.Collections;
 
 class JWKSetSigner {
 
@@ -33,7 +34,7 @@ class JWKSetSigner {
   public JWSObject sign(JWKSet tokenSet) throws JOSEException, CertificateEncodingException {
     final JWSHeader header = new JWSHeader.Builder(JWSAlgorithm.RS256)
                   .x509CertThumbprint(thumbprint)
-                  .x509CertChain(Arrays.asList(Base64.encode(publicCert.getEncoded())))
+                  .x509CertChain(Collections.singletonList(Base64.encode(publicCert.getEncoded())))
                   .build();
 
     final JWSObject jwsObject = new JWSObject(header, new Payload(tokenSet.toJSONObject()));

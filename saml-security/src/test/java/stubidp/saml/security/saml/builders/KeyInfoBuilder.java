@@ -7,6 +7,7 @@ import org.opensaml.xmlsec.signature.impl.KeyNameBuilder;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -31,7 +32,7 @@ public class KeyInfoBuilder {
     }
 
     public KeyInfoBuilder withX509Data(X509Data x509Data) {
-        this.x509Datas = Arrays.asList(x509Data);
+        x509Datas = Collections.singletonList(x509Data);
         return this;
     }
 

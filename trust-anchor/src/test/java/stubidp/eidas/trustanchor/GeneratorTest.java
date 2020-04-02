@@ -118,13 +118,13 @@ public class GeneratorTest {
 
     @Test
     public void shouldThrowOnIncorrectValue() {
-        Map<String, Object> incorrectValues = new HashMap<>();
+        final Map<String, Object> incorrectValues = new HashMap<>(2);
         incorrectValues.put("alg","A128KW");
         incorrectValues.put("kty", "oct");
 
-        for (String attribute: incorrectValues.keySet()) {
+        for (final Map.Entry<String, Object> entry : incorrectValues.entrySet()) {
             JSONObject jsonObject = createJsonObject();
-            jsonObject.replace(attribute, incorrectValues.get(attribute));
+            jsonObject.replace(entry.getKey(), entry.getValue());
             final Throwable throwable = catchThrowable(() -> generator.generate(Collections.singletonList(jsonObject.toJSONString())));
             assertThat(throwable).isInstanceOfAny(IllegalArgumentException.class, ParseException.class);
         }

@@ -7,7 +7,9 @@ import java.io.InputStream;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
 
-public abstract class PemCertificateStrings {
+public class PemCertificateStrings {
+
+    private PemCertificateStrings() {}
 
     private static String readFile(String name) {
         try {

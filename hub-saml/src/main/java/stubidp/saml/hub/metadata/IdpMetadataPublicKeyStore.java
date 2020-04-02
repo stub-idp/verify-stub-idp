@@ -59,7 +59,7 @@ public class IdpMetadataPublicKeyStore implements SigningKeyStore {
 
     private List<PublicKey> getPublicKeys(IDPSSODescriptor descriptor, UsageType keyType) {
         return descriptor.getKeyDescriptors().stream()
-                .filter(keyDescriptor -> keyDescriptor.getUse().equals(keyType))
+                .filter(keyDescriptor -> keyDescriptor.getUse() == keyType)
                 .flatMap(this::getPublicKeys)
                 .collect(Collectors.collectingAndThen(Collectors.toList(), List::copyOf));
     }

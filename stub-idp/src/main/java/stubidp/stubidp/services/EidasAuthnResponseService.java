@@ -214,7 +214,7 @@ public class EidasAuthnResponseService {
 
         currentAddress.setCurrentAddress(address.toBase64EncodedSaml());
 
-        return buildAttribute(IdaConstants.Eidas_Attributes.CurrentAddress.NAME, IdaConstants.Eidas_Attributes.CurrentAddress.FRIENDLY_NAME, (XMLObject) currentAddress);
+        return buildAttribute(IdaConstants.Eidas_Attributes.CurrentAddress.NAME, IdaConstants.Eidas_Attributes.CurrentAddress.FRIENDLY_NAME, currentAddress);
     }
 
     private Attribute buildAttribute(String attributeName, String attributeFriendlyName, XMLObject... attributeValue) {
