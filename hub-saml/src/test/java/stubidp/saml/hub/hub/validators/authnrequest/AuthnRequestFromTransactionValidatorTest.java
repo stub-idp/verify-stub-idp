@@ -1,6 +1,5 @@
 package stubidp.saml.hub.hub.validators.authnrequest;
 
-import io.dropwizard.util.Duration;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -19,6 +18,7 @@ import stubidp.saml.hub.hub.exception.SamlDuplicateRequestIdException;
 import stubidp.saml.hub.hub.exception.SamlRequestTooOldException;
 import stubidp.saml.security.validators.issuer.IssuerValidator;
 
+import java.time.Duration;
 import java.time.Instant;
 import java.time.ZoneId;
 import java.util.concurrent.ConcurrentHashMap;
@@ -35,8 +35,8 @@ public class AuthnRequestFromTransactionValidatorTest extends OpenSAMLRunner {
 
     @BeforeEach
     public void setup() {
-        SamlDuplicateRequestValidationConfiguration samlDuplicateRequestValidationConfiguration = () -> Duration.hours(2);
-        SamlAuthnRequestValidityDurationConfiguration samlAuthnRequestValidityDurationConfiguration = () -> Duration.minutes(5);
+        SamlDuplicateRequestValidationConfiguration samlDuplicateRequestValidationConfiguration = () -> Duration.ofHours(2);
+        SamlAuthnRequestValidityDurationConfiguration samlAuthnRequestValidityDurationConfiguration = () -> Duration.ofMinutes(5);
         IdExpirationCache<AuthnRequestIdKey> idExpirationCache = new ConcurrentMapIdExpirationCache<>(new ConcurrentHashMap<>());
         validator = new AuthnRequestFromTransactionValidator(
                 new IssuerValidator(),

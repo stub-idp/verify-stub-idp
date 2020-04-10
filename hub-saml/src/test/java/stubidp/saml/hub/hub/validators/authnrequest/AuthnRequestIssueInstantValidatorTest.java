@@ -1,11 +1,11 @@
 package stubidp.saml.hub.hub.validators.authnrequest;
 
-import io.dropwizard.util.Duration;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import stubidp.saml.hub.hub.configuration.SamlAuthnRequestValidityDurationConfiguration;
 
 import java.time.Clock;
+import java.time.Duration;
 import java.time.Instant;
 import java.time.ZoneId;
 
@@ -19,7 +19,7 @@ class AuthnRequestIssueInstantValidatorTest {
 
     @BeforeEach
     public void setup() {
-        SamlAuthnRequestValidityDurationConfiguration samlAuthnRequestValidityDurationConfiguration = () -> Duration.minutes(AUTHN_REQUEST_VALIDITY_MINS);
+        SamlAuthnRequestValidityDurationConfiguration samlAuthnRequestValidityDurationConfiguration = () -> Duration.ofMinutes(AUTHN_REQUEST_VALIDITY_MINS);
         authnRequestIssueInstantValidator = new AuthnRequestIssueInstantValidator(samlAuthnRequestValidityDurationConfiguration, clock);
     }
 

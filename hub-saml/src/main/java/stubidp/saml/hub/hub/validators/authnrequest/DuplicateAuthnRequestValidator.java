@@ -22,7 +22,7 @@ public class DuplicateAuthnRequestValidator {
                                           SamlDuplicateRequestValidationConfiguration samlDuplicateRequestValidationConfiguration,
                                           Clock clock) {
         this.previousRequests = previousRequests;
-        this.expirationDuration = Duration.ofMillis(samlDuplicateRequestValidationConfiguration.getAuthnRequestIdExpirationDuration().toMilliseconds());
+        this.expirationDuration = samlDuplicateRequestValidationConfiguration.getAuthnRequestIdExpirationDuration();
         this.clock = clock;
     }
 

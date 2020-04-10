@@ -1,6 +1,6 @@
 package stubidp.saml.hub.hub.configuration;
 
-import io.dropwizard.util.Duration;
+import java.time.Duration;
 
 public interface SamlDuplicateRequestValidationConfiguration {
     Duration getAuthnRequestIdExpirationDuration();

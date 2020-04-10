@@ -1,10 +1,10 @@
 package stubidp.saml.hub.hub.validators.authnrequest;
 
-import io.dropwizard.util.Duration;
 import stubidp.saml.hub.hub.configuration.SamlAuthnRequestValidityDurationConfiguration;
 
 import javax.inject.Inject;
 import java.time.Clock;
+import java.time.Duration;
 import java.time.Instant;
 
 public class AuthnRequestIssueInstantValidator {
@@ -24,6 +24,6 @@ public class AuthnRequestIssueInstantValidator {
 
     public boolean isValid(Instant issueInstant) {
         final Duration authnRequestValidityDuration = samlAuthnRequestValidityDurationConfiguration.getAuthnRequestValidityDuration();
-        return !issueInstant.isBefore(Instant.now(clock).minusMillis(authnRequestValidityDuration.toMilliseconds()));
+        return !issueInstant.isBefore(Instant.now(clock).minus(authnRequestValidityDuration));
     }
 }

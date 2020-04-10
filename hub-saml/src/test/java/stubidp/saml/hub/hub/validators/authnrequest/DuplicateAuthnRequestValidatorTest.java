@@ -1,6 +1,5 @@
 package stubidp.saml.hub.hub.validators.authnrequest;
 
-import io.dropwizard.util.Duration;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -8,6 +7,7 @@ import stubidp.saml.hub.core.OpenSAMLRunner;
 import stubidp.saml.hub.hub.configuration.SamlDuplicateRequestValidationConfiguration;
 
 import java.time.Clock;
+import java.time.Duration;
 import java.time.Instant;
 import java.time.ZoneId;
 import java.util.concurrent.ConcurrentHashMap;
@@ -17,7 +17,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 class DuplicateAuthnRequestValidatorTest extends OpenSAMLRunner {
     private static final int EXPIRATION_HOURS = 2;
-    private final SamlDuplicateRequestValidationConfiguration samlEngineConfiguration = () -> Duration.hours(EXPIRATION_HOURS);
+    private final SamlDuplicateRequestValidationConfiguration samlEngineConfiguration = () -> Duration.ofHours(EXPIRATION_HOURS);
     private Clock clock = Clock.systemUTC();
     private IdExpirationCache<AuthnRequestIdKey> idExpirationCache;
     private ConcurrentMap<AuthnRequestIdKey, Instant> duplicateIds;
