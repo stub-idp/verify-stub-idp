@@ -6,7 +6,7 @@ import io.dropwizard.util.Duration;
 
 import java.util.List;
 
-public class JerseyClientWithRetryBackoffConfiguration extends JerseyClientConfiguration{
+public class JerseyClientWithRetryBackoffConfiguration extends JerseyClientConfiguration {
 
     @JsonProperty
     private Duration retryBackoffPeriod = Duration.seconds(0);

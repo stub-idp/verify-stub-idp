@@ -1,11 +1,11 @@
 package stubidp.stubidp.domain.factories;
 
-import io.dropwizard.util.Duration;
 import stubidp.saml.utils.core.domain.AssertionRestrictions;
 import stubidp.stubidp.configuration.AssertionLifetimeConfiguration;
 
 import javax.inject.Inject;
 import javax.inject.Named;
+import java.time.Duration;
 import java.time.Instant;
 
 import static stubidp.stubidp.StubIdpIdpBinder.SP_ENTITY_ID;
@@ -17,15 +17,15 @@ public class AssertionRestrictionsFactory {
     @Inject
     public AssertionRestrictionsFactory(AssertionLifetimeConfiguration assertionTimeoutConfig,
                                         @Named(SP_ENTITY_ID) String hubEntityId) {
-        assertionLifetime = assertionTimeoutConfig.getAssertionLifetime();
+        this.assertionLifetime = Duration.ofMillis(assertionTimeoutConfig.getAssertionLifetime().toMilliseconds());
         this.hubEntityId = hubEntityId;
     }
 
     public AssertionRestrictions createRestrictionsForSendingToHub(String inResponseTo) {
-        return new AssertionRestrictions(Instant.now().plusMillis(assertionLifetime.toMilliseconds()), inResponseTo, hubEntityId);
+        return new AssertionRestrictions(Instant.now().plus(assertionLifetime), inResponseTo, hubEntityId);
     }
 
     public AssertionRestrictions create(String inResponseTo, String recipient) {
-        return new AssertionRestrictions(Instant.now().plusMillis(assertionLifetime.toMilliseconds()), inResponseTo, recipient);
+        return new AssertionRestrictions(Instant.now().plus(assertionLifetime), inResponseTo, recipient);
     }
 }
