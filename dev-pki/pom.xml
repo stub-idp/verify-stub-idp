@@ -14,12 +14,6 @@
     </parent>
 
     <dependencies>
-        <dependency>
-            <groupId>commons-io</groupId>
-            <artifactId>commons-io</artifactId>
-            <version>${commons_io.version}</version>
-            <scope>compile</scope>
-        </dependency>
 
         <!-- test deps -->
         <dependency>

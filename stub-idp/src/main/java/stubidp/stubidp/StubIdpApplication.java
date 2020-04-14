@@ -39,7 +39,7 @@ import stubidp.stubidp.filters.SessionCookieValueMustExistAsASessionFeature;
 import stubidp.stubidp.filters.StubIdpCacheControlFilter;
 import stubidp.stubidp.healthcheck.DatabaseHealthCheck;
 import stubidp.stubidp.healthcheck.StubIdpHealthCheck;
-import stubidp.stubidp.listeners.StubIdpsFileListener;
+import stubidp.stubidp.listeners.ManagedStubIdpsFileListener;
 import stubidp.stubidp.repositories.AllIdpsUserRepository;
 import stubidp.stubidp.repositories.IdpStubsRepository;
 import stubidp.stubidp.repositories.jdbc.JDBIIdpSessionRepository;
@@ -232,7 +232,7 @@ public class StubIdpApplication extends Application<StubIdpConfiguration> {
             final ConfigurationFactory<IdpStubsConfiguration> configurationFactory = new DefaultConfigurationFactoryFactory<IdpStubsConfiguration>()
                     .create(IdpStubsConfiguration.class, environment.getValidator(), environment.getObjectMapper(), "");
             final IdpStubsRepository idpStubsRepository = new IdpStubsRepository(allIdpsUserRepository, configuration, configurationFactory);
-            environment.lifecycle().manage(new StubIdpsFileListener(configuration, idpStubsRepository));
+            environment.lifecycle().manage(new ManagedStubIdpsFileListener(configuration, idpStubsRepository));
         }
         environment.lifecycle().manage(new ManagedStaleSessionReaper(configuration, new JDBIIdpSessionRepository(jdbi, false)));
     }

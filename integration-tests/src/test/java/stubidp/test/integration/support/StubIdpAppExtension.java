@@ -7,7 +7,6 @@ import io.dropwizard.testing.ConfigOverride;
 import io.dropwizard.testing.junit5.DropwizardAppExtension;
 import io.prometheus.client.CollectorRegistry;
 import io.prometheus.client.Counter;
-import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
 import org.opensaml.core.config.InitializationService;
 import org.opensaml.core.xml.io.MarshallingException;
@@ -48,6 +47,7 @@ import stubidp.utils.security.security.X509CertificateFactory;
 import javax.ws.rs.core.UriBuilder;
 import java.io.File;
 import java.net.URI;
+import java.nio.file.Files;
 import java.security.KeyPair;
 import java.security.PrivateKey;
 import java.security.PublicKey;
@@ -162,7 +162,7 @@ public class StubIdpAppExtension extends DropwizardAppExtension<StubIdpConfigura
 
         IdpStubsConfiguration idpStubsConfiguration = new TestIdpStubsConfiguration(stubIdps);
         try {
-            FileUtils.write(STUB_IDPS_FILE, Jackson.newObjectMapper().writeValueAsString(idpStubsConfiguration), UTF_8);
+            Files.writeString(STUB_IDPS_FILE.toPath(), Jackson.newObjectMapper().writeValueAsString(idpStubsConfiguration), UTF_8);
             STUB_IDPS_FILE.deleteOnExit();
 
             InitializationService.initialize();

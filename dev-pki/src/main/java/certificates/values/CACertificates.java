@@ -1,7 +1,5 @@
 package certificates.values;
 
-import org.apache.commons.io.IOUtils;
-
 import java.io.IOException;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
@@ -9,7 +7,7 @@ import static java.nio.charset.StandardCharsets.UTF_8;
 public class CACertificates {
     private static String readCertificateFile(String name) {
         try {
-            return IOUtils.toString(CACertificates.class.getResourceAsStream("/ca-certificates/" + name), UTF_8);
+            return new String(CACertificates.class.getResourceAsStream("/ca-certificates/" + name).readAllBytes(), UTF_8);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

@@ -2,7 +2,6 @@ package stubidp.saml.metadata;
 
 import certificates.values.CACertificates;
 import net.shibboleth.utilities.java.support.xml.BasicParserPool;
-import org.apache.commons.io.IOUtils;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.RegisterExtension;
 import org.opensaml.core.xml.XMLObject;
@@ -21,6 +20,7 @@ import stubidp.utils.security.security.verification.CertificateChainValidator;
 import stubidp.utils.security.security.verification.PKIXParametersProvider;
 
 import javax.xml.namespace.QName;
+import java.io.ByteArrayInputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -143,7 +143,7 @@ class CertificateChainValidationFilterTest extends OpenSAMLRunner {
     private XMLObject validateMetadata(final CertificateChainValidationFilter certificateChainValidationFilter, String metadataContent) throws Exception {
         BasicParserPool parserPool = new BasicParserPool();
         parserPool.initialize();
-        XMLObject metadata = XMLObjectSupport.unmarshallFromInputStream(parserPool, IOUtils.toInputStream(metadataContent, UTF_8));
+        XMLObject metadata = XMLObjectSupport.unmarshallFromInputStream(parserPool, new ByteArrayInputStream(metadataContent.getBytes(UTF_8)));
         return certificateChainValidationFilter.filter(metadata, null);
     }
 

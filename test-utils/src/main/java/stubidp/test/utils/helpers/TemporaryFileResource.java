@@ -1,9 +1,8 @@
 package stubidp.test.utils.helpers;
 
-import org.apache.commons.io.FileUtils;
-
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
 
 public class TemporaryFileResource implements ManagedFileResource {
     private final File tempFile;
@@ -17,7 +16,6 @@ public class TemporaryFileResource implements ManagedFileResource {
         return tempFile.getAbsolutePath();
     }
 
-
     public TemporaryFileResource(File tempFile, byte[] content) {
         this.tempFile = tempFile;
         this.content = content;
@@ -26,7 +24,7 @@ public class TemporaryFileResource implements ManagedFileResource {
     @Override
     public void create() {
         try {
-            FileUtils.writeByteArrayToFile(tempFile, content);
+            Files.write(tempFile.toPath(), content);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

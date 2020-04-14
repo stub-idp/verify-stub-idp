@@ -1,7 +1,6 @@
 package stubidp.shared.csrf;
 
 import io.dropwizard.util.Strings;
-import org.apache.commons.io.IOUtils;
 import org.jboss.logging.MDC;
 import stubidp.shared.cookies.CookieNames;
 import stubidp.shared.cookies.HmacValidator;
@@ -22,6 +21,8 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.util.Map;
 import java.util.Optional;
+
+import static java.nio.charset.StandardCharsets.UTF_8;
 
 /**
  * Use the "Synchronizer Token Pattern" to implement CSRF
@@ -56,7 +57,7 @@ public abstract class AbstractCSRFCheckProtectionFilter implements ContainerRequ
         }
 
         // slurp the request entity - treat it as an opaque string
-        final String requestBody = new String(IOUtils.toByteArray(requestContext.getEntityStream()));
+        final String requestBody = new String(requestContext.getEntityStream().readAllBytes(), UTF_8);
 
         // validate the csrf token
         for(String keyValue: requestBody.split("&")) {

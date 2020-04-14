@@ -1,7 +1,5 @@
 package stubidp.test.utils.httpstub;
 
-import org.apache.commons.io.IOUtils;
-
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.io.InputStream;
@@ -31,7 +29,7 @@ public class ReceivedRequest {
 
     protected static byte[] readEntity(HttpServletRequest request) {
         try (InputStream in = request.getInputStream()) {
-            return IOUtils.toByteArray(in);
+            return in.readAllBytes();
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

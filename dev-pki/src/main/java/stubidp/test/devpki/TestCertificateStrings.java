@@ -1,9 +1,6 @@
 package stubidp.test.devpki;
 
-import org.apache.commons.io.IOUtils;
-
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.Base64;
 import java.util.List;
 import java.util.Map;
@@ -21,8 +18,7 @@ public final class TestCertificateStrings {
 
     private static String readPrivateKey(String name){
         try {
-            final InputStream inputStream = TestCertificateStrings.class.getClassLoader().getResourceAsStream("dev-keys/" + name);
-            final byte[] byteArray = IOUtils.toByteArray(inputStream);
+            byte[] byteArray = TestCertificateStrings.class.getResourceAsStream("/dev-keys/" + name).readAllBytes();
             return Base64.getEncoder().encodeToString(byteArray);
         } catch (IOException e) {
             throw new RuntimeException(e);

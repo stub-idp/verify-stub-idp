@@ -24,12 +24,6 @@
             <version>${dropwizard.version}</version>
             <scope>compile</scope>
         </dependency>
-        <dependency>
-            <groupId>commons-io</groupId>
-            <artifactId>commons-io</artifactId>
-            <version>${commons_io.version}</version>
-            <scope>compile</scope>
-        </dependency>
         <!-- need junit -->
         <dependency>
             <groupId>org.junit.jupiter</groupId>

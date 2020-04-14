@@ -4,7 +4,6 @@ import certificates.values.CACertificates;
 import net.shibboleth.utilities.java.support.component.ComponentInitializationException;
 import net.shibboleth.utilities.java.support.xml.BasicParserPool;
 import net.shibboleth.utilities.java.support.xml.XMLParserException;
-import org.apache.commons.io.IOUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.opensaml.core.xml.XMLObject;
@@ -25,6 +24,7 @@ import stubidp.saml.metadata.test.factories.metadata.TestCredentialFactory;
 import stubidp.saml.utils.core.test.builders.metadata.SignatureBuilder;
 import stubidp.test.devpki.TestCertificateStrings;
 
+import java.io.ByteArrayInputStream;
 import java.security.KeyStore;
 import java.security.cert.Certificate;
 import java.security.cert.CertificateFactory;
@@ -52,7 +52,7 @@ public class PKIXSignatureValidationFilterProviderTest {
         List<Certificate> certificateList = new ArrayList<>();
         CertificateFactory certificateFactory = CertificateFactory.getInstance("X.509");
         for (String certificate : certificates) {
-            Certificate cert = certificateFactory.generateCertificate(IOUtils.toInputStream(certificate, UTF_8));
+            Certificate cert = certificateFactory.generateCertificate(new ByteArrayInputStream(certificate.getBytes(UTF_8)));
             certificateList.add(cert);
         }
 
@@ -166,7 +166,7 @@ public class PKIXSignatureValidationFilterProviderTest {
     private XMLObject validateMetadata(String metadataContent) throws XMLParserException, UnmarshallingException, FilterException, ComponentInitializationException {
         BasicParserPool parserPool = new BasicParserPool();
         parserPool.initialize();
-        XMLObject metadata = XMLObjectSupport.unmarshallFromInputStream(parserPool, IOUtils.toInputStream(metadataContent, UTF_8));
+        XMLObject metadata = XMLObjectSupport.unmarshallFromInputStream(parserPool, new ByteArrayInputStream(metadataContent.getBytes(UTF_8)));
         return signatureValidationFilter.filter(metadata, mock(MetadataFilterContext.class));
     }
 

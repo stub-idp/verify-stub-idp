@@ -1,6 +1,5 @@
 package stubidp.shared.csrf;
 
-import org.apache.commons.io.IOUtils;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -129,6 +128,6 @@ class AbstractCSRFCheckProtectionFilterTest {
         abstractCSRFCheckProtectionFilter.filter(containerRequestContext);
         ArgumentCaptor<InputStream> argumentCaptor = ArgumentCaptor.forClass(InputStream.class);
         verify(containerRequestContext, times(1)).setEntityStream(argumentCaptor.capture());
-        assertThat(IOUtils.toByteArray(argumentCaptor.getValue())).isEqualTo(entity.getBytes());
+        assertThat(argumentCaptor.getValue().readAllBytes()).isEqualTo(entity.getBytes());
     }
 }
