@@ -12,5 +12,7 @@ install:
 matrix:
   fast_finish: true
   allow_failures:
+# openjdk11 from install-jdk is 11.0.2 and not the latest
+    - jdk: openjdk11
     - jdk: openjdk15
     - jdk: openjdk-ea
