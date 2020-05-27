@@ -25,7 +25,7 @@
         <checker_qual.version>3.4.0</checker_qual.version>
         <commons_text.version>1.8</commons_text.version>
         <commons_validator.version>1.6</commons_validator.version>
-        <dropwizard.version>2.0.9</dropwizard.version>
+        <dropwizard.version>2.0.10</dropwizard.version>
         <flyway.version>6.4.2</flyway.version>
         <freemarker.version>2.3.30</freemarker.version>
         <guava.version>29.0-jre</guava.version>
