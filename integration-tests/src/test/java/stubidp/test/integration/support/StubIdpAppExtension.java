@@ -230,9 +230,6 @@ public class StubIdpAppExtension extends DropwizardAppExtension<StubIdpConfigura
     }
 
     private void resetStaticMetrics() {
-        // this wipes _all_ metrics from the app, which unfortunately means that
-        // static metrics aren't re-initialised.
-        CollectorRegistry.defaultRegistry.clear();
         List<Counter> countersToReset = List.of(AuthnRequestReceiverService.successfulEidasAuthnRequests,
                 AuthnRequestReceiverService.successfulVerifyAuthnRequests,
                 SuccessAuthnResponseService.sentVerifyAuthnResponses,
@@ -245,11 +242,19 @@ public class StubIdpAppExtension extends DropwizardAppExtension<StubIdpConfigura
                 InvalidEidasAuthnRequestExceptionMapper.invalidEidasAuthnRequests,
                 HeadlessIdpResource.receivedHeadlessAuthnRequests,
                 HeadlessIdpResource.successfulHeadlessAuthnRequests);
+        // this wipes _all_ metrics from the app, which unfortunately means that
+        // static metrics aren't re-initialised.
+        CollectorRegistry.defaultRegistry.clear();
+        try {
+            CollectorRegistry.defaultRegistry.unregister(BaseAuthnRequestValidator.replayCacheCollector);
+        } catch(NullPointerException e) {
+            // unregistering may fail in this way but if it does we can continue
+        }
+        BaseAuthnRequestValidator.replayCacheCollector.register();
         countersToReset.forEach(c -> {
             c.clear();
             CollectorRegistry.defaultRegistry.register(c);
         });
-        BaseAuthnRequestValidator.replayCacheCollector.register();
     }
 
     public StubIdpAppExtension withStubIdp(StubIdp stubIdp) {
