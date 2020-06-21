@@ -58,26 +58,26 @@
     </properties>
 
     <modules>
-        <module>stub-idp</module>
-        <module>stub-sp</module>
-        <module>shared-lib</module>
+        <module>common-utils</module>
+        <module>dev-pki</module>
+        <module>dropwizard-logstash</module>
+        <module>dropwizard-prometheus</module>
         <module>hub-saml</module>
+        <module>integration-tests</module>
+        <module>rest-utils</module>
         <module>saml-extensions</module>
         <module>saml-metadata-bindings</module>
         <module>saml-security</module>
         <module>saml-serializers</module>
         <module>saml-utils</module>
-        <module>trust-anchor</module>
-        <module>stub-idp-saml</module>
-        <module>stub-idp-saml-test</module>
-        <module>integration-tests</module>
-        <module>test-utils</module>
-        <module>common-utils</module>
-        <module>rest-utils</module>
         <module>security-utils</module>
-        <module>dropwizard-logstash</module>
-        <module>dropwizard-prometheus</module>
-        <module>dev-pki</module>
+        <module>shared-lib</module>
+        <module>stub-idp-saml-test</module>
+        <module>stub-idp-saml</module>
+        <module>stub-idp</module>
+        <module>stub-sp</module>
+        <module>test-utils</module>
+        <module>trust-anchor</module>
     </modules>
 
     <repositories>
