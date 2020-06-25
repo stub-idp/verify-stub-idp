@@ -55,7 +55,7 @@
         <cryptacular.version>1.2.4</cryptacular.version>
         <httpclient.version>4.5.12</httpclient.version>
         <spring.version>5.2.7.RELEASE</spring.version>
-        <xmlsec.version>2.1.4</xmlsec.version>
+        <xmlsec.version>2.2.0</xmlsec.version>
 
         <!-- test dependencies -->
         <assertj.version>3.16.1</assertj.version>
