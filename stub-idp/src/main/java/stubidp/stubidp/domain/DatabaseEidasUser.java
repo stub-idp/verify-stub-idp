@@ -1,7 +1,10 @@
 package stubidp.stubidp.domain;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import org.mindrot.jbcrypt.BCrypt;
 import stubidp.saml.utils.core.domain.AuthnContext;
 import stubidp.stubidp.exceptions.UnHashedPasswordException;
@@ -12,6 +15,11 @@ import java.time.Instant;
 import java.util.Objects;
 import java.util.Optional;
 
+import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_NULL;
+
+@JsonSerialize
+@JsonInclude(value=NON_NULL)
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class DatabaseEidasUser implements Serializable {
     private final String username;
     private final String persistentId;

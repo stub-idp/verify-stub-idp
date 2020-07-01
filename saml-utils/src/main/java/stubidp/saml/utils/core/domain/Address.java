@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import java.io.Serializable;
 import java.time.Instant;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 public class Address implements MdsAttributeValue, Serializable {
@@ -79,5 +80,24 @@ public class Address implements MdsAttributeValue, Serializable {
 
     public boolean isVerified() {
         return verified;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Address address = (Address) o;
+        return verified == address.verified &&
+                Objects.equals(from, address.from) &&
+                Objects.equals(to, address.to) &&
+                Objects.equals(postCode, address.postCode) &&
+                Objects.equals(lines, address.lines) &&
+                Objects.equals(internationalPostCode, address.internationalPostCode) &&
+                Objects.equals(uprn, address.uprn);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(verified, from, to, postCode, lines, internationalPostCode, uprn);
     }
 }

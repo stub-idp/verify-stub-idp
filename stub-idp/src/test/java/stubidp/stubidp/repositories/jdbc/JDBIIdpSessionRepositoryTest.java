@@ -9,6 +9,7 @@ import org.opensaml.saml.saml2.core.AuthnContextComparisonTypeEnumeration;
 import stubidp.saml.utils.core.domain.AuthnContext;
 import stubidp.saml.utils.core.domain.Gender;
 import stubidp.saml.utils.hub.domain.IdaAuthnRequestFromHub;
+import stubidp.stubidp.builders.AddressBuilder;
 import stubidp.stubidp.domain.DatabaseIdpUser;
 import stubidp.stubidp.domain.MatchingDatasetValue;
 import stubidp.stubidp.repositories.IdpSession;
@@ -21,7 +22,6 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.ZoneId;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Optional;
 
@@ -79,7 +79,7 @@ public class JDBIIdpSessionRepositoryTest {
 		IdpSession session = createSession(authnRequest);
 		SessionId insertedSessionId = repository.createSession(session);
 		String expectedSerializedSessionStart = "{{\"sessionId\":\""+ insertedSessionId.getSessionId() +"\",\"idaAuthnRequestFromHub\":{\"id\":\"155a37d3-5a9d-4cd0-b68a-158717b85202\",\"issuer\":\"test-issuer\",\"issueInstant\":1524655440.000000000,\"levelsOfAssurance\":[],\"forceAuthentication\":null,\"sessionExpiryTimestamp\":null,\"comparisonType\":\"EXACT\",\"destination\":null},\"relayState\":\"test-relay-state\",\"validHints\":[],\"invalidHints\":[],\"languageHint\":null,\"registration\":null,\"singleIdpJourneyId\":null,\"csrfToken\":null,\"idpUser\":{\"username\":\"jobloggs\",\"persistentId\":\"persistentId\",\"password\":";
-		String expectedSerializedSessionEnd = ",\"firstnames\":[{\"value\":\"Joe\",\"from\":null,\"to\":null,\"verified\":true}],\"middleNames\":[],\"surnames\":[{\"value\":\"Bloggs\",\"from\":null,\"to\":null,\"verified\":true}],\"gender\":{\"value\":\"MALE\",\"from\":null,\"to\":null,\"verified\":true},\"dateOfBirths\":[{\"value\":1524655440.000000000,\"from\":null,\"to\":null,\"verified\":true}],\"addresses\":[],\"levelOfAssurance\":\"LEVEL_1\",\"currentAddress\":null}}}";
+		String expectedSerializedSessionEnd = ",\"firstnames\":[{\"value\":\"Joe\",\"from\":null,\"to\":null,\"verified\":true}],\"middleNames\":[],\"surnames\":[{\"value\":\"Bloggs\",\"from\":null,\"to\":null,\"verified\":true}],\"gender\":{\"value\":\"MALE\",\"from\":null,\"to\":null,\"verified\":true},\"dateOfBirths\":[{\"value\":1524655440.000000000,\"from\":null,\"to\":null,\"verified\":true}],\"addresses\":[{\"lines\":[],\"postCode\":null,\"internationalPostCode\":null,\"uprn\":null,\"from\":978307200.000000000,\"to\":null,\"verified\":false}],\"levelOfAssurance\":\"LEVEL_1\"}}}";
 
 		jdbi.useHandle(handle -> {
 			Optional<String> result = handle.select("select session_data from stub_idp_session where session_id = ?", insertedSessionId.toString())
@@ -164,7 +164,7 @@ public class JDBIIdpSessionRepositoryTest {
 				Collections.singletonList(new MatchingDatasetValue<>("Bloggs", null, null, true)),
 				Optional.of(new MatchingDatasetValue<>(Gender.MALE, null, null, true)),
 				Collections.singletonList(new MatchingDatasetValue<>(authnRequestFromHub.getIssueInstant(), null, null, true)),
-				Collections.emptyList(),
+				Collections.singletonList(AddressBuilder.anAddress().build()),
 				AuthnContext.LEVEL_1)));
 		return session;
 	}

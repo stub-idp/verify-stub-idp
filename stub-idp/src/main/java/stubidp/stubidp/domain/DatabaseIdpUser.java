@@ -1,7 +1,11 @@
 package stubidp.stubidp.domain;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import org.mindrot.jbcrypt.BCrypt;
 import stubidp.saml.utils.core.domain.Address;
 import stubidp.saml.utils.core.domain.AuthnContext;
@@ -15,6 +19,11 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
+import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_NULL;
+
+@JsonSerialize
+@JsonInclude(value=NON_NULL)
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class DatabaseIdpUser implements Serializable {
     private final String username;
     private final String persistentId;
@@ -92,7 +101,8 @@ public class DatabaseIdpUser implements Serializable {
         return addresses;
     }
 
-    // Basing this on the implementation in IdpAssertionToAssertionTransformer
+    // Based on the implementation in IdpAssertionToAssertionTransformer
+    @JsonIgnore
     public Address getCurrentAddress() {
         if (addresses.isEmpty()) {
             return null;
