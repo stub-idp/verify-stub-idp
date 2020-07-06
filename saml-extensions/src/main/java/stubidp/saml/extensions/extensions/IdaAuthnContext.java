@@ -1,6 +1,5 @@
 package stubidp.saml.extensions.extensions;
 
-
 import org.opensaml.saml.saml2.core.AuthnContext;
 
 public interface IdaAuthnContext extends AuthnContext {

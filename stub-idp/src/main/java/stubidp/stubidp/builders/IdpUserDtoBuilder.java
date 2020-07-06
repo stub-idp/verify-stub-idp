@@ -1,7 +1,7 @@
 package stubidp.stubidp.builders;
 
-import stubidp.saml.utils.core.domain.Address;
-import stubidp.saml.utils.core.domain.Gender;
+import stubidp.saml.domain.assertions.Address;
+import stubidp.saml.domain.assertions.Gender;
 import stubidp.stubidp.domain.MatchingDatasetValue;
 import stubidp.stubidp.dtos.IdpUserDto;
 

@@ -1,9 +1,10 @@
 package stubidp.stubidp.services;
 
 import io.prometheus.client.Counter;
-import stubidp.saml.utils.core.domain.IdentityProviderAssertion;
-import stubidp.saml.utils.core.domain.IpAddress;
+import stubidp.saml.domain.assertions.IdentityProviderAssertion;
+import stubidp.saml.domain.assertions.IpAddress;
 import stubidp.shared.domain.SamlResponse;
+import stubidp.shared.repositories.MetadataRepository;
 import stubidp.stubidp.StubIdpIdpBinder;
 import stubidp.stubidp.domain.DatabaseIdpUser;
 import stubidp.stubidp.domain.FraudIndicator;
@@ -13,7 +14,6 @@ import stubidp.stubidp.domain.factories.AssertionFactory;
 import stubidp.stubidp.repositories.Idp;
 import stubidp.stubidp.repositories.IdpSession;
 import stubidp.stubidp.repositories.IdpStubsRepository;
-import stubidp.shared.repositories.MetadataRepository;
 import stubidp.stubidp.saml.transformers.OutboundResponseFromIdpTransformerProvider;
 
 import javax.inject.Inject;

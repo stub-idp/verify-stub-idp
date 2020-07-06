@@ -5,9 +5,9 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import io.dropwizard.jackson.Jackson;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
-import stubidp.saml.utils.core.domain.Address;
-import stubidp.saml.utils.core.domain.Gender;
-import stubidp.stubidp.builders.AddressBuilder;
+import stubidp.saml.domain.assertions.Address;
+import stubidp.saml.domain.assertions.Gender;
+import stubidp.saml.test.AddressBuilder;
 import stubidp.stubidp.builders.SimpleMdsValueBuilder;
 import stubidp.stubidp.domain.MatchingDatasetValue;
 

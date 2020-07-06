@@ -1,6 +1,6 @@
 package stubidp.saml.utils.core.test.builders;
 
-import stubidp.saml.utils.core.domain.Cycle3Dataset;
+import stubidp.saml.domain.assertions.Cycle3Dataset;
 
 import java.util.HashMap;
 import java.util.Map;

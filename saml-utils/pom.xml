@@ -40,6 +40,12 @@
         </dependency>
         <dependency>
             <groupId>stub-idp</groupId>
+            <artifactId>saml-domain</artifactId>
+            <version>1.0-SNAPSHOT</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>stub-idp</groupId>
             <artifactId>saml-serializers</artifactId>
             <version>1.0-SNAPSHOT</version>
             <scope>compile</scope>
@@ -104,6 +110,12 @@
             <artifactId>dev-pki</artifactId>
             <version>1.0-SNAPSHOT</version>
             <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>stub-idp</groupId>
+            <artifactId>saml-test</artifactId>
+            <version>1.0-SNAPSHOT</version>
+            <scope>compile</scope>
         </dependency>
     </dependencies>
 </project>

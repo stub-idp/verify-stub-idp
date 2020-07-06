@@ -5,10 +5,10 @@ import org.opensaml.saml.saml2.core.Response;
 import org.opensaml.saml.saml2.core.Status;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import stubidp.saml.utils.core.OpenSamlXmlObjectFactory;
-import stubidp.saml.utils.core.domain.IdentityProviderAssertion;
-import stubidp.saml.utils.core.transformers.outbound.IdaResponseToSamlResponseTransformer;
+import stubidp.saml.domain.assertions.IdentityProviderAssertion;
 import stubidp.saml.stubidp.stub.transformers.outbound.IdentityProviderAssertionToAssertionTransformer;
+import stubidp.saml.utils.core.OpenSamlXmlObjectFactory;
+import stubidp.saml.utils.core.transformers.outbound.IdaResponseToSamlResponseTransformer;
 import stubidp.stubidp.domain.IdpIdaStatusMarshaller;
 import stubidp.stubidp.domain.OutboundResponseFromIdp;
 

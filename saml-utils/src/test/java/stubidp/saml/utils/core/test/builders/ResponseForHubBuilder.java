@@ -4,7 +4,7 @@ import org.opensaml.xmlsec.signature.Signature;
 import stubidp.saml.utils.core.domain.IdpIdaStatus;
 import stubidp.saml.utils.core.domain.InboundResponseFromIdp;
 import stubidp.saml.utils.core.domain.OutboundResponseFromHub;
-import stubidp.saml.utils.core.domain.PassthroughAssertion;
+import stubidp.saml.domain.assertions.PassthroughAssertion;
 import stubidp.saml.utils.core.domain.TransactionIdaStatus;
 import stubidp.test.devpki.TestEntityIds;
 

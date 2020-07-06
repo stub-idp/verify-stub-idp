@@ -5,9 +5,9 @@ import org.opensaml.saml.saml2.core.NameIDType;
 import org.opensaml.saml.saml2.core.Subject;
 import org.opensaml.saml.saml2.core.SubjectConfirmation;
 import org.opensaml.saml.saml2.core.SubjectConfirmationData;
+import stubidp.saml.domain.assertions.AssertionRestrictions;
+import stubidp.saml.domain.assertions.OutboundAssertion;
 import stubidp.saml.utils.core.OpenSamlXmlObjectFactory;
-import stubidp.saml.utils.core.domain.AssertionRestrictions;
-import stubidp.saml.utils.core.domain.OutboundAssertion;
 
 import javax.inject.Inject;
 

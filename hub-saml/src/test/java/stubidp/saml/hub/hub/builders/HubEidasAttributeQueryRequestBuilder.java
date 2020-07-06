@@ -1,10 +1,10 @@
 package stubidp.saml.hub.hub.builders;
 
-import stubidp.saml.hub.hub.domain.HubEidasAttributeQueryRequest;
-import stubidp.saml.hub.hub.domain.UserAccountCreationAttribute;
-import stubidp.saml.utils.core.domain.AuthnContext;
-import stubidp.saml.utils.core.domain.HubAssertion;
-import stubidp.saml.utils.core.domain.PersistentId;
+import stubidp.saml.domain.assertions.AuthnContext;
+import stubidp.saml.domain.assertions.HubAssertion;
+import stubidp.saml.domain.matching.HubEidasAttributeQueryRequest;
+import stubidp.saml.domain.assertions.PersistentId;
+import stubidp.saml.domain.assertions.UserAccountCreationAttribute;
 
 import java.net.URI;
 import java.time.Instant;

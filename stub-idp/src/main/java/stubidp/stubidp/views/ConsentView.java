@@ -1,7 +1,7 @@
 package stubidp.stubidp.views;
 
-import stubidp.saml.utils.core.domain.Address;
-import stubidp.saml.utils.core.domain.AuthnContext;
+import stubidp.saml.domain.assertions.Address;
+import stubidp.saml.domain.assertions.AuthnContext;
 import stubidp.stubidp.Urls;
 import stubidp.stubidp.domain.DatabaseIdpUser;
 import stubidp.stubidp.views.helpers.IdpUserHelper;

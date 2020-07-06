@@ -1,8 +1,8 @@
 package stubidp.stubidp.builders;
 
-import stubidp.saml.utils.core.domain.Address;
-import stubidp.saml.utils.core.domain.AuthnContext;
-import stubidp.saml.utils.core.domain.Gender;
+import stubidp.saml.domain.assertions.Address;
+import stubidp.saml.domain.assertions.AuthnContext;
+import stubidp.saml.domain.assertions.Gender;
 import stubidp.stubidp.domain.DatabaseIdpUser;
 import stubidp.stubidp.domain.MatchingDatasetValue;
 
@@ -14,7 +14,7 @@ import java.util.UUID;
 
 import static java.util.Collections.emptyList;
 import static java.util.Collections.singletonList;
-import static stubidp.saml.utils.core.domain.AuthnContext.LEVEL_1;
+import static stubidp.saml.domain.assertions.AuthnContext.LEVEL_1;
 
 public class IdpUserBuilder {
 

@@ -1,6 +1,6 @@
 package stubidp.saml.utils.core.test.builders;
 
-import stubidp.saml.utils.core.domain.IpAddress;
+import stubidp.saml.domain.assertions.IpAddress;
 
 public class IpAddressBuilder {
 

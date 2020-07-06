@@ -1,16 +1,16 @@
 package stubidp.stubidp.domain.factories;
 
-import stubidp.saml.utils.core.domain.FraudAuthnDetails;
-import stubidp.saml.utils.core.domain.IdentityProviderAssertion;
-import stubidp.saml.utils.core.domain.IpAddress;
-import stubidp.saml.utils.core.domain.MatchingDataset;
-import stubidp.saml.utils.core.domain.PersistentId;
+import stubidp.saml.domain.assertions.FraudAuthnDetails;
+import stubidp.saml.domain.assertions.IdentityProviderAssertion;
+import stubidp.saml.domain.assertions.IpAddress;
+import stubidp.saml.domain.assertions.MatchingDataset;
+import stubidp.saml.domain.assertions.PersistentId;
 import stubidp.stubidp.domain.DatabaseIdpUser;
 
 import javax.inject.Inject;
 import java.time.Instant;
 
-import static stubidp.saml.utils.core.domain.IdentityProviderAuthnStatement.createIdentityProviderFraudAuthnStatement;
+import static stubidp.saml.domain.assertions.IdentityProviderAuthnStatement.createIdentityProviderFraudAuthnStatement;
 
 public class AssertionFactory {
 

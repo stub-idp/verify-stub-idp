@@ -1,11 +1,11 @@
 package stubidp.saml.hub.core.test.builders;
 
-import java.util.Optional;
+import stubidp.saml.domain.assertions.AuthnContext;
+import stubidp.saml.domain.assertions.FraudDetectedDetails;
+import stubidp.saml.domain.assertions.PassthroughAssertion;
+import stubidp.saml.domain.assertions.PersistentId;
 
-import stubidp.saml.utils.core.domain.AuthnContext;
-import stubidp.saml.utils.core.domain.FraudDetectedDetails;
-import stubidp.saml.utils.core.domain.PassthroughAssertion;
-import stubidp.saml.utils.core.domain.PersistentId;
+import java.util.Optional;
 
 public class PassthroughAssertionBuilder {
 

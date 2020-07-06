@@ -7,9 +7,9 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import org.mindrot.jbcrypt.BCrypt;
-import stubidp.saml.utils.core.domain.Address;
-import stubidp.saml.utils.core.domain.AuthnContext;
-import stubidp.saml.utils.core.domain.Gender;
+import stubidp.saml.domain.assertions.Address;
+import stubidp.saml.domain.assertions.AuthnContext;
+import stubidp.saml.domain.assertions.Gender;
 import stubidp.stubidp.exceptions.UnHashedPasswordException;
 import stubidp.stubidp.security.BCryptHelper;
 

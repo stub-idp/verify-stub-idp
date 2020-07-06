@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.opensaml.saml.saml2.core.AuthnContextComparisonTypeEnumeration;
-import stubidp.saml.utils.core.domain.AuthnContext;
+import stubidp.saml.domain.assertions.AuthnContext;
 
 import java.net.URI;
 import java.time.Instant;

@@ -1,12 +1,12 @@
 package stubidp.stubidp.services;
 
-import stubidp.saml.utils.core.domain.AuthnContext;
+import stubidp.saml.domain.assertions.AuthnContext;
+import stubidp.stubidp.Urls;
 import stubidp.stubidp.domain.DatabaseIdpUser;
 import stubidp.stubidp.dtos.IdpUserDto;
 import stubidp.stubidp.repositories.Idp;
 import stubidp.stubidp.repositories.IdpStubsRepository;
 import stubidp.stubidp.validation.ValidationResponse;
-import stubidp.stubidp.Urls;
 
 import javax.inject.Inject;
 import javax.validation.constraints.NotNull;

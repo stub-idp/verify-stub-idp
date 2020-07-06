@@ -1,5 +1,7 @@
 package stubidp.saml.utils.core.domain;
 
+import stubidp.saml.domain.IdaStatus;
+
 import java.util.Optional;
 
 import static java.util.Optional.empty;

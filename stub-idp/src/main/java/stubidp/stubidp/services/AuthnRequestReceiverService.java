@@ -6,7 +6,7 @@ import org.opensaml.saml.saml2.core.AuthnRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import stubidp.saml.stubidp.stub.transformers.inbound.AuthnRequestToIdaRequestFromHubTransformer;
-import stubidp.saml.utils.hub.domain.IdaAuthnRequestFromHub;
+import stubidp.saml.domain.request.IdaAuthnRequestFromHub;
 import stubidp.stubidp.Urls;
 import stubidp.stubidp.domain.EidasAuthnRequest;
 import stubidp.stubidp.domain.IdpHint;

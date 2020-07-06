@@ -1,6 +1,6 @@
 package stubidp.saml.utils.core.transformers;
 
-import stubidp.saml.utils.core.domain.AuthnContext;
+import stubidp.saml.domain.assertions.AuthnContext;
 import stubidp.saml.extensions.extensions.IdaAuthnContext;
 
 import javax.inject.Inject;

@@ -4,7 +4,7 @@ import org.opensaml.saml.saml2.core.Issuer;
 import org.opensaml.saml.saml2.core.Response;
 import org.opensaml.saml.saml2.core.Status;
 import stubidp.saml.utils.core.OpenSamlXmlObjectFactory;
-import stubidp.saml.utils.core.domain.IdaResponse;
+import stubidp.saml.domain.IdaResponse;
 
 import javax.inject.Inject;
 import java.util.function.Function;

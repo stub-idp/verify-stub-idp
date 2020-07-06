@@ -1,6 +1,6 @@
 package stubidp.stubidp.resources.idp;
 
-import stubidp.saml.utils.core.domain.AuthnContext;
+import stubidp.saml.domain.assertions.AuthnContext;
 import stubidp.shared.csrf.CSRFCheckProtection;
 import stubidp.shared.views.SamlMessageRedirectViewFactory;
 import stubidp.stubidp.Urls;

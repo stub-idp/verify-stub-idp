@@ -5,7 +5,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import stubidp.saml.utils.hub.domain.IdaAuthnRequestFromHub;
+import stubidp.saml.domain.request.IdaAuthnRequestFromHub;
 import stubidp.shared.cookies.CookieNames;
 import stubidp.shared.views.SamlMessageRedirectViewFactory;
 import stubidp.stubidp.domain.SamlResponseFromValue;
@@ -32,7 +32,7 @@ import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import static stubidp.saml.utils.core.domain.AuthnContext.LEVEL_2;
+import static stubidp.saml.domain.assertions.AuthnContext.LEVEL_2;
 import static stubidp.stubidp.domain.SubmitButtonValue.Cancel;
 import static stubidp.stubidp.domain.SubmitButtonValue.Register;
 

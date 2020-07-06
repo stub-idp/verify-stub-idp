@@ -1,7 +1,7 @@
 package stubidp.stubidp.services;
 
+import stubidp.saml.domain.assertions.AuthnContext;
 import stubidp.saml.extensions.extensions.impl.BaseMdsSamlObjectUnmarshaller;
-import stubidp.saml.utils.core.domain.AuthnContext;
 import stubidp.stubidp.domain.DatabaseEidasUser;
 import stubidp.stubidp.domain.EidasScheme;
 import stubidp.stubidp.domain.EidasUser;

@@ -5,8 +5,8 @@ import org.opensaml.saml.saml2.core.Attribute;
 import org.opensaml.saml.saml2.core.AttributeStatement;
 import org.opensaml.saml.saml2.core.Issuer;
 import stubidp.saml.utils.core.OpenSamlXmlObjectFactory;
-import stubidp.saml.utils.core.domain.Cycle3Dataset;
-import stubidp.saml.utils.core.domain.HubAssertion;
+import stubidp.saml.domain.assertions.Cycle3Dataset;
+import stubidp.saml.domain.assertions.HubAssertion;
 import stubidp.saml.utils.core.transformers.outbound.OutboundAssertionToSubjectTransformer;
 import stubidp.saml.utils.hub.factories.AttributeFactory;
 

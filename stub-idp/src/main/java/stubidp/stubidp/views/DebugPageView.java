@@ -1,6 +1,6 @@
 package stubidp.stubidp.views;
 
-import stubidp.saml.utils.hub.domain.IdaAuthnRequestFromHub;
+import stubidp.saml.domain.request.IdaAuthnRequestFromHub;
 import stubidp.stubidp.domain.IdpHint;
 import stubidp.stubidp.domain.IdpLanguageHint;
 import stubidp.stubidp.repositories.IdpSession;

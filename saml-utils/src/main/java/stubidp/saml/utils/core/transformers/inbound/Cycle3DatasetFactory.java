@@ -3,7 +3,7 @@ package stubidp.saml.utils.core.transformers.inbound;
 import org.opensaml.saml.saml2.core.Assertion;
 import org.opensaml.saml.saml2.core.Attribute;
 import org.opensaml.saml.saml2.core.AttributeStatement;
-import stubidp.saml.utils.core.domain.Cycle3Dataset;
+import stubidp.saml.domain.assertions.Cycle3Dataset;
 import stubidp.saml.extensions.extensions.StringBasedMdsAttributeValue;
 import stubidp.saml.extensions.validation.SamlTransformationErrorException;
 import stubidp.saml.extensions.validation.SamlValidationSpecificationFailure;

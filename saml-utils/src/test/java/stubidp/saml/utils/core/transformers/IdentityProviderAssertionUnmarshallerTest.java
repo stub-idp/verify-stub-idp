@@ -8,12 +8,12 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.opensaml.saml.saml2.core.Assertion;
 import org.opensaml.saml.saml2.core.Attribute;
 import org.opensaml.saml.saml2.core.SubjectConfirmationData;
+import stubidp.saml.domain.assertions.AssertionRestrictions;
+import stubidp.saml.domain.assertions.IdentityProviderAssertion;
+import stubidp.saml.domain.assertions.IdentityProviderAuthnStatement;
+import stubidp.saml.domain.assertions.MatchingDataset;
 import stubidp.saml.extensions.extensions.impl.BaseMdsSamlObjectUnmarshaller;
 import stubidp.saml.utils.OpenSAMLRunner;
-import stubidp.saml.utils.core.domain.AssertionRestrictions;
-import stubidp.saml.utils.core.domain.IdentityProviderAssertion;
-import stubidp.saml.utils.core.domain.IdentityProviderAuthnStatement;
-import stubidp.saml.utils.core.domain.MatchingDataset;
 import stubidp.saml.utils.core.test.builders.AddressAttributeBuilder_1_1;
 import stubidp.saml.utils.core.test.builders.AddressAttributeValueBuilder_1_1;
 import stubidp.saml.utils.core.test.builders.AssertionBuilder;
@@ -24,7 +24,6 @@ import stubidp.saml.utils.core.test.builders.MatchingDatasetBuilder;
 import stubidp.saml.utils.core.test.builders.PersonNameAttributeBuilder_1_1;
 import stubidp.saml.utils.core.test.builders.PersonNameAttributeValueBuilder;
 
-import java.time.Instant;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;

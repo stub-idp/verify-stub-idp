@@ -2,7 +2,7 @@ package stubidp.saml.hub.hub.domain;
 
 import org.opensaml.xmlsec.signature.Signature;
 import stubidp.saml.utils.core.domain.IdaSamlResponse;
-import stubidp.saml.utils.core.domain.PassthroughAssertion;
+import stubidp.saml.domain.assertions.PassthroughAssertion;
 
 import java.net.URI;
 import java.time.Instant;

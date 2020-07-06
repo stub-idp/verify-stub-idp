@@ -2,6 +2,7 @@ package stubidp.saml.utils.core.domain;
 
 import org.opensaml.core.xml.XMLObject;
 import org.opensaml.saml.saml2.core.Attribute;
+import stubidp.saml.domain.assertions.Address;
 import stubidp.saml.extensions.extensions.Line;
 import stubidp.saml.extensions.extensions.impl.BaseMdsSamlObjectUnmarshaller;
 

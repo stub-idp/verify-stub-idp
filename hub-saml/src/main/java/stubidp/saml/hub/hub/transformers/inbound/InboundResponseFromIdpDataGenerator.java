@@ -1,7 +1,7 @@
 package stubidp.saml.hub.hub.transformers.inbound;
 
 import stubidp.saml.hub.core.domain.InboundResponseFromIdpData;
-import stubidp.saml.utils.core.domain.PassthroughAssertion;
+import stubidp.saml.domain.assertions.PassthroughAssertion;
 import stubidp.saml.hub.core.transformers.outbound.decorators.AssertionBlobEncrypter;
 import stubidp.saml.hub.hub.domain.InboundResponseFromIdp;
 

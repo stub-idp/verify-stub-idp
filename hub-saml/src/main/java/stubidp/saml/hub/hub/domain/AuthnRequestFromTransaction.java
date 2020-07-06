@@ -1,7 +1,7 @@
 package stubidp.saml.hub.hub.domain;
 
 import org.opensaml.xmlsec.signature.Signature;
-import stubidp.saml.utils.core.domain.IdaSamlMessage;
+import stubidp.saml.domain.IdaSamlMessage;
 import stubidp.utils.security.security.IdGenerator;
 
 import java.net.URI;

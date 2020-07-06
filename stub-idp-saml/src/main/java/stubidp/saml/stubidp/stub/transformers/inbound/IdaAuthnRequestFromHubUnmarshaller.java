@@ -2,9 +2,9 @@ package stubidp.saml.stubidp.stub.transformers.inbound;
 
 import org.opensaml.saml.saml2.core.AuthnContextClassRef;
 import org.opensaml.saml.saml2.core.AuthnRequest;
-import stubidp.saml.utils.core.domain.AuthnContext;
+import stubidp.saml.domain.assertions.AuthnContext;
 import stubidp.saml.extensions.extensions.IdaAuthnContext;
-import stubidp.saml.utils.hub.domain.IdaAuthnRequestFromHub;
+import stubidp.saml.domain.request.IdaAuthnRequestFromHub;
 
 import java.util.ArrayList;
 import java.util.Collections;

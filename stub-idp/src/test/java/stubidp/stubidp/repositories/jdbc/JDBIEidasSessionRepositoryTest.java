@@ -3,7 +3,7 @@ package stubidp.stubidp.repositories.jdbc;
 import org.jdbi.v3.core.Jdbi;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import stubidp.saml.utils.core.domain.Gender;
+import stubidp.saml.domain.assertions.Gender;
 import stubidp.stubidp.domain.EidasAddress;
 import stubidp.stubidp.domain.EidasAuthnRequest;
 import stubidp.stubidp.domain.EidasUser;

@@ -1,8 +1,10 @@
 package stubidp.saml.hub.hub.domain;
 
-import stubidp.saml.utils.core.domain.AuthnContext;
-import stubidp.saml.utils.core.domain.HubAssertion;
-import stubidp.saml.utils.core.domain.PersistentId;
+import stubidp.saml.domain.assertions.AuthnContext;
+import stubidp.saml.domain.matching.BaseHubAttributeQueryRequest;
+import stubidp.saml.domain.assertions.HubAssertion;
+import stubidp.saml.domain.assertions.PersistentId;
+import stubidp.saml.domain.assertions.UserAccountCreationAttribute;
 
 import javax.validation.constraints.NotNull;
 import java.net.URI;

@@ -1,7 +1,7 @@
 package stubidp.stubidp.views.helpers;
 
+import stubidp.saml.domain.assertions.Address;
 import stubidp.saml.extensions.extensions.impl.BaseMdsSamlObjectMarshaller;
-import stubidp.saml.utils.core.domain.Address;
 import stubidp.stubidp.domain.DatabaseIdpUser;
 import stubidp.stubidp.domain.MatchingDatasetValue;
 

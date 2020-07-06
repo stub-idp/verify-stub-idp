@@ -1,10 +1,10 @@
 package stubidp.saml.utils.core.transformers;
 
-import stubidp.saml.utils.core.domain.Address;
-import stubidp.saml.utils.core.domain.Gender;
-import stubidp.saml.utils.core.domain.MatchingDataset;
-import stubidp.saml.utils.core.domain.SimpleMdsValue;
-import stubidp.saml.utils.core.domain.TransliterableMdsValue;
+import stubidp.saml.domain.assertions.Address;
+import stubidp.saml.domain.assertions.Gender;
+import stubidp.saml.domain.assertions.MatchingDataset;
+import stubidp.saml.domain.assertions.SimpleMdsValue;
+import stubidp.saml.domain.assertions.TransliterableMdsValue;
 
 import java.time.Instant;
 import java.util.ArrayList;

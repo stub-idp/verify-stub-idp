@@ -14,7 +14,7 @@ import stubidp.saml.hub.hub.domain.InboundResponseFromIdp;
 import stubidp.saml.hub.core.OpenSAMLRunner;
 import stubidp.saml.security.validators.ValidatedAssertions;
 import stubidp.saml.security.validators.ValidatedResponse;
-import stubidp.saml.utils.core.domain.PassthroughAssertion;
+import stubidp.saml.domain.assertions.PassthroughAssertion;
 import stubidp.saml.utils.core.test.builders.SignatureBuilder;
 
 import java.util.List;

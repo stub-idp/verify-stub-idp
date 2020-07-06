@@ -9,11 +9,11 @@ import org.opensaml.saml.saml2.core.NameID;
 import org.opensaml.saml.saml2.core.Subject;
 import org.opensaml.saml.saml2.core.SubjectConfirmation;
 import org.opensaml.saml.saml2.core.SubjectConfirmationData;
-import stubidp.saml.hub.hub.domain.HubEidasAttributeQueryRequest;
-import stubidp.saml.hub.hub.domain.UserAccountCreationAttribute;
+import stubidp.saml.domain.matching.HubEidasAttributeQueryRequest;
+import stubidp.saml.domain.assertions.UserAccountCreationAttribute;
 import stubidp.saml.hub.hub.factories.AttributeQueryAttributeFactory;
 import stubidp.saml.utils.core.OpenSamlXmlObjectFactory;
-import stubidp.saml.utils.core.domain.HubAssertion;
+import stubidp.saml.domain.assertions.HubAssertion;
 
 import java.time.Instant;
 import java.util.List;

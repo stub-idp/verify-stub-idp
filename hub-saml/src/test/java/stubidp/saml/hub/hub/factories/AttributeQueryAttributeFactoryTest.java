@@ -3,7 +3,7 @@ package stubidp.saml.hub.hub.factories;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.opensaml.saml.saml2.core.Attribute;
-import stubidp.saml.hub.hub.domain.UserAccountCreationAttribute;
+import stubidp.saml.domain.assertions.UserAccountCreationAttribute;
 import stubidp.saml.hub.core.OpenSAMLRunner;
 import stubidp.saml.utils.core.OpenSamlXmlObjectFactory;
 

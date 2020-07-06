@@ -34,7 +34,7 @@ import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import static stubidp.saml.utils.core.domain.AuthnContext.LEVEL_2;
+import static stubidp.saml.domain.assertions.AuthnContext.LEVEL_2;
 import static stubidp.stubidp.domain.SubmitButtonValue.Cancel;
 import static stubidp.stubidp.domain.SubmitButtonValue.Register;
 

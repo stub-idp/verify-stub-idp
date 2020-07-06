@@ -4,13 +4,12 @@ import org.opensaml.saml.saml2.core.Assertion;
 import org.opensaml.saml.saml2.core.Attribute;
 import org.opensaml.saml.saml2.core.AttributeStatement;
 import org.opensaml.saml.saml2.core.AuthnStatement;
+import stubidp.saml.domain.assertions.IdentityProviderAuthnStatement;
+import stubidp.saml.domain.assertions.IpAddress;
 import stubidp.saml.extensions.IdaConstants;
-import stubidp.saml.utils.core.domain.IdentityProviderAuthnStatement;
-import stubidp.saml.utils.core.domain.IpAddress;
 import stubidp.saml.extensions.extensions.IPAddress;
 
-import static stubidp.saml.utils.core.domain.IdentityProviderAuthnStatement.createIdentityProviderAuthnStatement;
-
+import static stubidp.saml.domain.assertions.IdentityProviderAuthnStatement.createIdentityProviderAuthnStatement;
 
 public class IdentityProviderAuthnStatementUnmarshaller {
 

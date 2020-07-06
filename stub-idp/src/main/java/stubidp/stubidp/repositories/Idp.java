@@ -1,9 +1,9 @@
 package stubidp.stubidp.repositories;
 
 import org.mindrot.jbcrypt.BCrypt;
-import stubidp.saml.utils.core.domain.Address;
-import stubidp.saml.utils.core.domain.AuthnContext;
-import stubidp.saml.utils.core.domain.Gender;
+import stubidp.saml.domain.assertions.Address;
+import stubidp.saml.domain.assertions.AuthnContext;
+import stubidp.saml.domain.assertions.Gender;
 import stubidp.stubidp.domain.DatabaseIdpUser;
 import stubidp.stubidp.domain.MatchingDatasetValue;
 

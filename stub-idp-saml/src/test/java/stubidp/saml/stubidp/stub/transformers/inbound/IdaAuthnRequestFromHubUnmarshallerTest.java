@@ -10,17 +10,17 @@ import org.opensaml.saml.saml2.core.AuthnRequest;
 import org.opensaml.saml.saml2.core.Conditions;
 import org.opensaml.saml.saml2.core.Issuer;
 import org.opensaml.saml.saml2.core.RequestedAuthnContext;
+import stubidp.saml.domain.request.IdaAuthnRequestFromHub;
 import stubidp.saml.extensions.extensions.IdaAuthnContext;
 import stubidp.saml.stubidp.OpenSAMLRunner;
-import stubidp.saml.utils.hub.domain.IdaAuthnRequestFromHub;
 
 import java.util.Arrays;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 import static org.opensaml.saml.saml2.core.AuthnContextComparisonTypeEnumeration.EXACT;
-import static stubidp.saml.utils.core.domain.AuthnContext.LEVEL_1;
-import static stubidp.saml.utils.core.domain.AuthnContext.LEVEL_2;
+import static stubidp.saml.domain.assertions.AuthnContext.LEVEL_1;
+import static stubidp.saml.domain.assertions.AuthnContext.LEVEL_2;
 
 @ExtendWith(MockitoExtension.class)
 public class IdaAuthnRequestFromHubUnmarshallerTest extends OpenSAMLRunner {

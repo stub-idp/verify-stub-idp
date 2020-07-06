@@ -1,10 +1,10 @@
 package stubidp.stubidp.services;
 
 import org.mindrot.jbcrypt.BCrypt;
+import stubidp.saml.domain.assertions.Address;
+import stubidp.saml.domain.assertions.AuthnContext;
+import stubidp.saml.domain.assertions.Gender;
 import stubidp.saml.extensions.extensions.impl.BaseMdsSamlObjectUnmarshaller;
-import stubidp.saml.utils.core.domain.Address;
-import stubidp.saml.utils.core.domain.AuthnContext;
-import stubidp.saml.utils.core.domain.Gender;
 import stubidp.stubidp.domain.DatabaseIdpUser;
 import stubidp.stubidp.domain.MatchingDatasetValue;
 import stubidp.stubidp.exceptions.IncompleteRegistrationException;

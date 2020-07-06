@@ -3,7 +3,7 @@ package stubidp.stubidp.domain;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import stubidp.saml.utils.core.domain.Gender;
+import stubidp.saml.domain.assertions.Gender;
 
 import java.time.Instant;
 import java.util.Objects;

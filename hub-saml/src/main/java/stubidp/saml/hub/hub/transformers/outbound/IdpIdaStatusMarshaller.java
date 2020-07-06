@@ -7,7 +7,6 @@ import stubidp.saml.utils.core.OpenSamlXmlObjectFactory;
 import stubidp.saml.utils.core.domain.DetailedStatusCode;
 import stubidp.saml.utils.core.transformers.outbound.IdaStatusMarshaller;
 
-import java.util.AbstractMap;
 import java.util.Map;
 import java.util.Optional;
 

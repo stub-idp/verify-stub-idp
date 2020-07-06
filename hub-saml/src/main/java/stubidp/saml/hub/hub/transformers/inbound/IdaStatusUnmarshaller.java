@@ -2,7 +2,7 @@ package stubidp.saml.hub.hub.transformers.inbound;
 
 import org.opensaml.saml.saml2.core.Status;
 import org.opensaml.saml.saml2.core.StatusCode;
-import stubidp.saml.utils.core.domain.IdaStatus;
+import stubidp.saml.domain.IdaStatus;
 import stubidp.saml.extensions.domain.SamlStatusCode;
 
 import java.text.MessageFormat;

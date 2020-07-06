@@ -13,13 +13,13 @@ import org.opensaml.saml.saml2.core.AttributeQuery;
 import org.opensaml.saml.saml2.core.EncryptedAssertion;
 import org.opensaml.saml.saml2.core.NameID;
 import org.opensaml.saml.saml2.core.impl.EncryptedAssertionBuilder;
+import stubidp.saml.domain.assertions.HubAssertion;
+import stubidp.saml.domain.assertions.PersistentId;
+import stubidp.saml.hub.core.OpenSAMLRunner;
 import stubidp.saml.hub.core.test.builders.PassthroughAssertionBuilder;
 import stubidp.saml.hub.hub.domain.HubAttributeQueryRequest;
 import stubidp.saml.hub.hub.factories.AttributeQueryAttributeFactory;
-import stubidp.saml.hub.core.OpenSAMLRunner;
 import stubidp.saml.utils.core.OpenSamlXmlObjectFactory;
-import stubidp.saml.utils.core.domain.HubAssertion;
-import stubidp.saml.utils.core.domain.PersistentId;
 import stubidp.saml.utils.core.transformers.outbound.OutboundAssertionToSubjectTransformer;
 import stubidp.saml.utils.hub.factories.AttributeFactory_1_1;
 
@@ -28,8 +28,8 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
-import static stubidp.saml.hub.hub.domain.UserAccountCreationAttribute.CURRENT_ADDRESS;
-import static stubidp.saml.hub.hub.domain.UserAccountCreationAttribute.DATE_OF_BIRTH;
+import static stubidp.saml.domain.assertions.UserAccountCreationAttribute.CURRENT_ADDRESS;
+import static stubidp.saml.domain.assertions.UserAccountCreationAttribute.DATE_OF_BIRTH;
 import static stubidp.saml.hub.hub.test.builders.HubAttributeQueryRequestBuilder.aHubAttributeQueryRequest;
 import static stubidp.saml.utils.core.test.builders.HubAssertionBuilder.aHubAssertion;
 

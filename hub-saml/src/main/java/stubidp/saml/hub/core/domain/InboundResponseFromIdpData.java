@@ -89,5 +89,4 @@ public class InboundResponseFromIdpData {
     public Optional<Instant> getNotOnOrAfter() {
         return notOnOrAfter;
     }
-
 }

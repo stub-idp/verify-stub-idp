@@ -8,7 +8,7 @@ import stubidp.saml.utils.core.api.CoreTransformersFactory;
 import stubidp.saml.utils.core.transformers.outbound.OutboundAssertionToSubjectTransformer;
 import stubidp.saml.utils.core.transformers.outbound.ResponseToSignedStringTransformer;
 import stubidp.saml.serializers.deserializers.StringToOpenSamlObjectTransformer;
-import stubidp.saml.utils.hub.domain.IdaAuthnRequestFromHub;
+import stubidp.saml.domain.request.IdaAuthnRequestFromHub;
 import stubidp.saml.utils.hub.factories.AttributeFactory_1_1;
 import stubidp.saml.utils.hub.transformers.inbound.decorators.AuthnRequestSizeValidator;
 import stubidp.saml.utils.hub.validators.StringSizeValidator;

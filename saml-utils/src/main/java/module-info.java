@@ -5,7 +5,6 @@ module stubidp.saml.utils {
     opens stubidp.saml.utils.core.transformers.outbound.decorators;
     opens stubidp.saml.utils.core.transformers;
     opens stubidp.saml.utils;
-    opens stubidp.saml.utils.hub.domain to com.fasterxml.jackson.databind;
 
     exports stubidp.saml.utils.core.api;
     exports stubidp.saml.utils.core.domain;
@@ -14,7 +13,6 @@ module stubidp.saml.utils {
     exports stubidp.saml.utils.core.transformers.outbound;
     exports stubidp.saml.utils.core.transformers;
     exports stubidp.saml.utils.core;
-    exports stubidp.saml.utils.hub.domain;
     exports stubidp.saml.utils.hub.factories;
     exports stubidp.saml.utils.hub.transformers.inbound.decorators;
     exports stubidp.saml.utils.hub.transformers.outbound;
@@ -27,6 +25,7 @@ module stubidp.saml.utils {
     requires transitive org.opensaml.saml;
     requires transitive org.opensaml.security;
     requires transitive org.opensaml.xmlsec;
+    requires transitive stubidp.saml.domain;
     requires transitive stubidp.saml.extensions;
     requires transitive stubidp.saml.security;
     requires transitive stubidp.saml.serializers;

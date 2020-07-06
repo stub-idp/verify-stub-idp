@@ -10,9 +10,8 @@ import org.opensaml.saml.saml2.core.Response;
 import stubidp.saml.hub.core.test.builders.PassthroughAssertionBuilder;
 import stubidp.saml.hub.core.OpenSAMLRunner;
 import stubidp.saml.utils.core.OpenSamlXmlObjectFactory;
-import stubidp.saml.utils.core.domain.PassthroughAssertion;
+import stubidp.saml.domain.assertions.PassthroughAssertion;
 
-import java.util.Arrays;
 import java.util.Collections;
 
 import static org.assertj.core.api.Assertions.assertThat;

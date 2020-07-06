@@ -1,6 +1,6 @@
 package stubidp.saml.stubidp.test.builders;
 
-import stubidp.saml.utils.core.domain.PersistentId;
+import stubidp.saml.domain.assertions.PersistentId;
 
 public class PersistentIdBuilder {
 

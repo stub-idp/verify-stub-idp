@@ -7,10 +7,10 @@ import org.opensaml.saml.saml2.core.NameIDPolicy;
 import org.opensaml.saml.saml2.core.NameIDType;
 import org.opensaml.saml.saml2.core.RequestedAuthnContext;
 import org.opensaml.saml.saml2.core.Scoping;
-import stubidp.saml.utils.core.OpenSamlXmlObjectFactory;
-import stubidp.saml.utils.core.domain.AuthnContext;
+import stubidp.saml.domain.assertions.AuthnContext;
+import stubidp.saml.domain.request.IdaAuthnRequestFromHub;
 import stubidp.saml.hub.hub.HubConstants;
-import stubidp.saml.utils.hub.domain.IdaAuthnRequestFromHub;
+import stubidp.saml.utils.core.OpenSamlXmlObjectFactory;
 
 import javax.inject.Inject;
 

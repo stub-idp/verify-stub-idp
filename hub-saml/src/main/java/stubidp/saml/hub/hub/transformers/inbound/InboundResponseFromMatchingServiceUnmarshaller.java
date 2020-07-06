@@ -1,7 +1,7 @@
 package stubidp.saml.hub.hub.transformers.inbound;
 
 import java.util.Optional;
-import stubidp.saml.utils.core.domain.PassthroughAssertion;
+import stubidp.saml.domain.assertions.PassthroughAssertion;
 import stubidp.saml.hub.hub.domain.InboundResponseFromMatchingService;
 import stubidp.saml.security.validators.ValidatedAssertions;
 import stubidp.saml.security.validators.ValidatedResponse;

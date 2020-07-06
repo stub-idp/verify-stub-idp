@@ -5,7 +5,7 @@ import org.junit.jupiter.api.Test;
 import org.opensaml.saml.saml2.core.Assertion;
 import org.opensaml.saml.saml2.core.Attribute;
 import stubidp.saml.utils.OpenSAMLRunner;
-import stubidp.saml.utils.core.domain.Cycle3Dataset;
+import stubidp.saml.domain.assertions.Cycle3Dataset;
 import stubidp.saml.utils.core.test.SamlTransformationErrorManagerTestHelper;
 import stubidp.saml.utils.core.test.builders.AssertionBuilder;
 import stubidp.saml.utils.core.test.builders.AttributeStatementBuilder;

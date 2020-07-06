@@ -1,14 +1,14 @@
 package stubidp.saml.stubidp.builders;
 
-import static stubidp.saml.utils.core.domain.IdentityProviderAuthnStatement.createIdentityProviderAuthnStatement;
-import static stubidp.saml.utils.core.domain.IdentityProviderAuthnStatement.createIdentityProviderFraudAuthnStatement;
+import stubidp.saml.domain.assertions.AuthnContext;
+import stubidp.saml.domain.assertions.FraudAuthnDetails;
+import stubidp.saml.domain.assertions.IdentityProviderAuthnStatement;
+import stubidp.saml.domain.assertions.IpAddress;
 
 import java.util.Optional;
 
-import stubidp.saml.utils.core.domain.AuthnContext;
-import stubidp.saml.utils.core.domain.FraudAuthnDetails;
-import stubidp.saml.utils.core.domain.IdentityProviderAuthnStatement;
-import stubidp.saml.utils.core.domain.IpAddress;
+import static stubidp.saml.domain.assertions.IdentityProviderAuthnStatement.createIdentityProviderAuthnStatement;
+import static stubidp.saml.domain.assertions.IdentityProviderAuthnStatement.createIdentityProviderFraudAuthnStatement;
 
 public class IdentityProviderAuthnStatementBuilder {
 

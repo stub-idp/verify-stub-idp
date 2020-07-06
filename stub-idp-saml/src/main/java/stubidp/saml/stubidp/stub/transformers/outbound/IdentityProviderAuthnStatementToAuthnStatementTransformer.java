@@ -2,8 +2,8 @@ package stubidp.saml.stubidp.stub.transformers.outbound;
 
 import org.opensaml.saml.saml2.core.AuthnContext;
 import org.opensaml.saml.saml2.core.AuthnStatement;
+import stubidp.saml.domain.assertions.IdentityProviderAuthnStatement;
 import stubidp.saml.utils.core.OpenSamlXmlObjectFactory;
-import stubidp.saml.utils.core.domain.IdentityProviderAuthnStatement;
 
 import javax.inject.Inject;
 import java.time.Instant;

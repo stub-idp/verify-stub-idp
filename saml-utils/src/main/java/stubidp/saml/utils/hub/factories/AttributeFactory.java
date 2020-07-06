@@ -1,9 +1,9 @@
 package stubidp.saml.utils.hub.factories;
 
 import org.opensaml.saml.saml2.core.Attribute;
-import stubidp.saml.utils.core.domain.Address;
-import stubidp.saml.utils.core.domain.Gender;
-import stubidp.saml.utils.core.domain.SimpleMdsValue;
+import stubidp.saml.domain.assertions.Address;
+import stubidp.saml.domain.assertions.Gender;
+import stubidp.saml.domain.assertions.SimpleMdsValue;
 
 import java.time.Instant;
 import java.util.List;

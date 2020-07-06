@@ -2,18 +2,18 @@ package stubidp.stubidp.domain;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import stubidp.saml.utils.core.domain.SimpleMdsValue;
+import stubidp.saml.domain.assertions.SimpleMdsValue;
 
 import java.io.Serializable;
 import java.time.Instant;
 import java.util.Objects;
 
+// Migrate to SimpleMdsValue
 public class MatchingDatasetValue<T> implements Serializable {
-
-    private T value;
-    private Instant from;
-    private Instant to;
-    private boolean verified;
+    private final T value;
+    private final Instant from;
+    private final Instant to;
+    private final boolean verified;
 
     @JsonCreator
     public MatchingDatasetValue(@JsonProperty("value") T value,

@@ -6,7 +6,7 @@ import org.glassfish.jersey.client.JerseyClientBuilder;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import stubidp.saml.utils.core.domain.AuthnContext;
+import stubidp.saml.domain.assertions.AuthnContext;
 import stubidp.saml.utils.core.test.TestCredentialFactory;
 import stubidp.stubidp.Urls;
 import stubidp.stubidp.domain.SubmitButtonValue;

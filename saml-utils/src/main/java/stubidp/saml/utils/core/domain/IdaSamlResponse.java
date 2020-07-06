@@ -1,5 +1,8 @@
 package stubidp.saml.utils.core.domain;
 
+import stubidp.saml.domain.IdaResponse;
+import stubidp.saml.domain.IdaSamlMessage;
+
 import java.net.URI;
 import java.time.Instant;
 

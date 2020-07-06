@@ -6,7 +6,7 @@ import stubidp.stubidp.domain.DatabaseIdpUser;
 import stubidp.stubidp.domain.IdpHint;
 import stubidp.stubidp.domain.IdpLanguageHint;
 import stubidp.utils.rest.common.SessionId;
-import stubidp.saml.utils.hub.domain.IdaAuthnRequestFromHub;
+import stubidp.saml.domain.request.IdaAuthnRequestFromHub;
 
 import java.util.List;
 import java.util.Optional;

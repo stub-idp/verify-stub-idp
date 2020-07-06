@@ -1,6 +1,6 @@
 package stubidp.stubidp.domain;
 
-import stubidp.saml.utils.core.domain.IdaStatus;
+import stubidp.saml.domain.IdaStatus;
 
 import java.util.Optional;
 

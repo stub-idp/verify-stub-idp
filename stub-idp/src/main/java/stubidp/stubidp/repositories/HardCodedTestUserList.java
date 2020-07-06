@@ -1,9 +1,9 @@
 package stubidp.stubidp.repositories;
 
+import stubidp.saml.domain.assertions.AuthnContext;
+import stubidp.saml.domain.assertions.Gender;
 import stubidp.saml.extensions.extensions.impl.BaseMdsSamlObjectUnmarshaller;
 import stubidp.saml.utils.core.domain.AddressFactory;
-import stubidp.saml.utils.core.domain.AuthnContext;
-import stubidp.saml.utils.core.domain.Gender;
 import stubidp.stubidp.domain.DatabaseEidasUser;
 import stubidp.stubidp.domain.DatabaseIdpUser;
 import stubidp.stubidp.domain.MatchingDatasetValue;

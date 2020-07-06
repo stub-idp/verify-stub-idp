@@ -11,9 +11,9 @@ import org.opensaml.saml.saml2.core.Issuer;
 import org.opensaml.saml.saml2.core.Subject;
 import org.opensaml.saml.saml2.core.impl.AttributeStatementBuilder;
 import stubidp.saml.utils.core.OpenSamlXmlObjectFactory;
-import stubidp.saml.hub.core.domain.MatchingServiceAuthnStatement;
+import stubidp.saml.domain.matching.assertions.MatchingServiceAuthnStatement;
 import stubidp.saml.utils.core.transformers.outbound.OutboundAssertionToSubjectTransformer;
-import stubidp.saml.hub.test.domain.MatchingServiceAssertion;
+import stubidp.saml.domain.matching.assertions.MatchingServiceAssertion;
 
 import javax.inject.Inject;
 import java.util.List;

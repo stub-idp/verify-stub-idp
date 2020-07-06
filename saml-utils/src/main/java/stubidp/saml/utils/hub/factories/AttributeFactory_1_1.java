@@ -3,15 +3,15 @@ package stubidp.saml.utils.hub.factories;
 import org.opensaml.core.xml.XMLObject;
 import org.opensaml.saml.saml2.core.Attribute;
 import org.opensaml.saml.saml2.core.AttributeValue;
+import stubidp.saml.domain.assertions.Address;
+import stubidp.saml.domain.assertions.Gender;
+import stubidp.saml.domain.assertions.SimpleMdsValue;
 import stubidp.saml.extensions.IdaConstants;
 import stubidp.saml.extensions.extensions.Date;
 import stubidp.saml.extensions.extensions.Line;
 import stubidp.saml.extensions.extensions.PersonName;
 import stubidp.saml.extensions.extensions.impl.BaseMdsSamlObjectMarshaller;
 import stubidp.saml.utils.core.OpenSamlXmlObjectFactory;
-import stubidp.saml.utils.core.domain.Address;
-import stubidp.saml.utils.core.domain.Gender;
-import stubidp.saml.utils.core.domain.SimpleMdsValue;
 
 import javax.inject.Inject;
 import java.time.Instant;
@@ -145,12 +145,9 @@ public class AttributeFactory_1_1 implements AttributeFactory {
     }
 
     private AttributeValue createAddressAttributeValue(Address address) {
-
         stubidp.saml.extensions.extensions.Address addressAttributeValue = openSamlXmlObjectFactory.createAddressAttributeValue();
         addressAttributeValue.setFrom(address.getFrom());
-        if (address.getTo().isPresent()) {
-            addressAttributeValue.setTo(address.getTo().get());
-        }
+        addressAttributeValue.setTo(address.getTo());
         for (String lineValue : address.getLines()) {
             Line line = openSamlXmlObjectFactory.createLine(lineValue);
             addressAttributeValue.getLines().add(line);

@@ -2,7 +2,7 @@ package stubidp.saml.hub.test.outbound.transformers;
 
 import org.opensaml.saml.saml2.core.AuthnContext;
 import org.opensaml.saml.saml2.core.AuthnStatement;
-import stubidp.saml.hub.core.domain.MatchingServiceAuthnStatement;
+import stubidp.saml.domain.matching.assertions.MatchingServiceAuthnStatement;
 import stubidp.saml.utils.core.OpenSamlXmlObjectFactory;
 
 import javax.inject.Inject;

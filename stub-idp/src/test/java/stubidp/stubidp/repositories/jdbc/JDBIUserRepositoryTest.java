@@ -6,7 +6,7 @@ import org.jdbi.v3.core.Jdbi;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import stubidp.saml.utils.core.domain.AuthnContext;
+import stubidp.saml.domain.assertions.AuthnContext;
 import stubidp.stubidp.builders.IdpUserBuilder;
 import stubidp.stubidp.domain.DatabaseEidasUser;
 import stubidp.stubidp.domain.DatabaseIdpUser;

@@ -1,9 +1,9 @@
 package stubidp.saml.utils.core.test.builders;
 
-import stubidp.saml.utils.core.domain.AssertionRestrictions;
-import stubidp.saml.utils.core.domain.Cycle3Dataset;
-import stubidp.saml.utils.core.domain.HubAssertion;
-import stubidp.saml.utils.core.domain.PersistentId;
+import stubidp.saml.domain.assertions.AssertionRestrictions;
+import stubidp.saml.domain.assertions.Cycle3Dataset;
+import stubidp.saml.domain.assertions.HubAssertion;
+import stubidp.saml.domain.assertions.PersistentId;
 
 import java.time.Instant;
 import java.util.Optional;

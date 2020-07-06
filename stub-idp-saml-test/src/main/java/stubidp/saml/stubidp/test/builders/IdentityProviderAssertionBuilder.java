@@ -1,10 +1,10 @@
 package stubidp.saml.stubidp.test.builders;
 
-import stubidp.saml.utils.core.domain.AssertionRestrictions;
-import stubidp.saml.utils.core.domain.IdentityProviderAssertion;
-import stubidp.saml.utils.core.domain.IdentityProviderAuthnStatement;
-import stubidp.saml.utils.core.domain.MatchingDataset;
-import stubidp.saml.utils.core.domain.PersistentId;
+import stubidp.saml.domain.assertions.AssertionRestrictions;
+import stubidp.saml.domain.assertions.IdentityProviderAssertion;
+import stubidp.saml.domain.assertions.IdentityProviderAuthnStatement;
+import stubidp.saml.domain.assertions.MatchingDataset;
+import stubidp.saml.domain.assertions.PersistentId;
 
 import java.time.Instant;
 import java.util.Optional;

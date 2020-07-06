@@ -1,6 +1,6 @@
 package stubidp.saml.stubidp.test.builders;
 
-import stubidp.saml.utils.core.domain.FraudDetectedDetails;
+import stubidp.saml.domain.assertions.FraudDetectedDetails;
 
 public class FraudDetectedDetailsBuilder {
 

@@ -7,11 +7,11 @@ import org.opensaml.saml.saml2.core.NameID;
 import org.opensaml.saml.saml2.core.NameIDType;
 import org.opensaml.saml.saml2.core.Subject;
 import org.opensaml.saml.saml2.core.SubjectConfirmation;
+import stubidp.saml.domain.assertions.AssertionRestrictions;
+import stubidp.saml.domain.assertions.PersistentId;
 import stubidp.saml.utils.OpenSAMLRunner;
 import stubidp.saml.utils.core.OpenSamlXmlObjectFactory;
-import stubidp.saml.utils.core.domain.AssertionRestrictions;
-import stubidp.saml.utils.core.domain.HubAssertion;
-import stubidp.saml.utils.core.domain.PersistentId;
+import stubidp.saml.domain.assertions.HubAssertion;
 import stubidp.saml.utils.core.test.builders.HubAssertionBuilder;
 import stubidp.saml.utils.core.test.builders.PersistentIdBuilder;
 

@@ -4,7 +4,7 @@ import stubidp.saml.hub.hub.domain.IdpIdaStatus;
 import stubidp.saml.hub.hub.domain.InboundResponseFromIdp;
 import stubidp.saml.security.validators.ValidatedAssertions;
 import stubidp.saml.security.validators.ValidatedResponse;
-import stubidp.saml.utils.core.domain.PassthroughAssertion;
+import stubidp.saml.domain.assertions.PassthroughAssertion;
 
 import java.net.URI;
 import java.time.Instant;

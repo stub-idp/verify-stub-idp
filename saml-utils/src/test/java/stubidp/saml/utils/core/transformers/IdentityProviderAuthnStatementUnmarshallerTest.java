@@ -9,10 +9,8 @@ import org.opensaml.saml.saml2.core.Assertion;
 import org.opensaml.saml.saml2.core.AuthnContext;
 import org.opensaml.saml.saml2.core.AuthnContextClassRef;
 import org.opensaml.saml.saml2.core.AuthnStatement;
+import stubidp.saml.domain.assertions.IdentityProviderAuthnStatement;
 import stubidp.saml.extensions.extensions.IdaAuthnContext;
-import stubidp.saml.utils.core.domain.IdentityProviderAuthnStatement;
-import stubidp.saml.utils.core.transformers.AuthnContextFactory;
-import stubidp.saml.utils.core.transformers.IdentityProviderAuthnStatementUnmarshaller;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.verify;

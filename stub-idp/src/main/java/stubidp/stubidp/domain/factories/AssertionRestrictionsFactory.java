@@ -1,6 +1,6 @@
 package stubidp.stubidp.domain.factories;
 
-import stubidp.saml.utils.core.domain.AssertionRestrictions;
+import stubidp.saml.domain.assertions.AssertionRestrictions;
 import stubidp.stubidp.configuration.AssertionLifetimeConfiguration;
 
 import javax.inject.Inject;

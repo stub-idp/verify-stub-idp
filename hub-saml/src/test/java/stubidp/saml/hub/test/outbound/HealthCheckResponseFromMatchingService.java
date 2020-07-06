@@ -1,6 +1,6 @@
 package stubidp.saml.hub.test.outbound;
 
-import stubidp.saml.hub.core.domain.IdaMatchingServiceResponse;
+import stubidp.saml.domain.matching.IdaMatchingServiceResponse;
 
 import java.time.Instant;
 

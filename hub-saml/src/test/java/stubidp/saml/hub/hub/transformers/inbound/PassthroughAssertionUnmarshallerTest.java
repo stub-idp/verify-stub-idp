@@ -8,14 +8,14 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.opensaml.saml.saml2.core.Assertion;
 import org.opensaml.saml.saml2.core.AuthnContextClassRef;
+import stubidp.saml.domain.assertions.AuthnContext;
+import stubidp.saml.domain.assertions.FraudDetectedDetails;
+import stubidp.saml.domain.assertions.PassthroughAssertion;
 import stubidp.saml.extensions.extensions.EidasAuthnContext;
 import stubidp.saml.extensions.extensions.IdaAuthnContext;
-import stubidp.saml.hub.core.test.builders.IdpFraudEventIdAttributeBuilder;
 import stubidp.saml.hub.core.OpenSAMLRunner;
+import stubidp.saml.hub.core.test.builders.IdpFraudEventIdAttributeBuilder;
 import stubidp.saml.serializers.serializers.XmlObjectToBase64EncodedStringTransformer;
-import stubidp.saml.utils.core.domain.AuthnContext;
-import stubidp.saml.utils.core.domain.FraudDetectedDetails;
-import stubidp.saml.utils.core.domain.PassthroughAssertion;
 import stubidp.saml.utils.core.transformers.AuthnContextFactory;
 
 import static org.assertj.core.api.Assertions.assertThat;

@@ -1,8 +1,8 @@
 package stubidp.saml.hub.hub.domain;
 
-import stubidp.saml.hub.core.domain.IdaMatchingServiceResponse;
+import stubidp.saml.domain.matching.IdaMatchingServiceResponse;
+import stubidp.saml.domain.assertions.PassthroughAssertion;
 import stubidp.saml.hub.hub.transformers.inbound.MatchingServiceIdaStatus;
-import stubidp.saml.utils.core.domain.PassthroughAssertion;
 
 import java.time.Instant;
 import java.util.Optional;

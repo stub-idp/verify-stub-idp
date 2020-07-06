@@ -1,7 +1,7 @@
 package stubidp.stubidp.repositories;
 
 import org.mindrot.jbcrypt.BCrypt;
-import stubidp.saml.utils.core.domain.AuthnContext;
+import stubidp.saml.domain.assertions.AuthnContext;
 import stubidp.stubidp.domain.DatabaseEidasUser;
 import stubidp.stubidp.domain.MatchingDatasetValue;
 

@@ -6,7 +6,7 @@ import org.opensaml.saml.saml2.core.NameID;
 import org.opensaml.saml.saml2.core.Subject;
 import org.opensaml.saml.saml2.core.SubjectConfirmation;
 import org.opensaml.saml.saml2.core.SubjectConfirmationData;
-import stubidp.saml.hub.hub.domain.MatchingServiceHealthCheckRequest;
+import stubidp.saml.domain.matching.MatchingServiceHealthCheckRequest;
 import stubidp.saml.utils.core.OpenSamlXmlObjectFactory;
 
 import javax.inject.Inject;

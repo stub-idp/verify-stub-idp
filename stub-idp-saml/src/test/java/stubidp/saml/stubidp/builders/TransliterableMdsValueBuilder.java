@@ -1,6 +1,6 @@
 package stubidp.saml.stubidp.builders;
 
-import stubidp.saml.utils.core.domain.TransliterableMdsValue;
+import stubidp.saml.domain.assertions.TransliterableMdsValue;
 
 import java.time.Instant;
 import java.time.ZoneId;

@@ -6,7 +6,7 @@ import org.opensaml.saml.saml2.core.StatusDetail;
 import org.opensaml.saml.saml2.core.StatusMessage;
 import stubidp.saml.utils.core.OpenSamlXmlObjectFactory;
 import stubidp.saml.utils.core.domain.DetailedStatusCode;
-import stubidp.saml.utils.core.domain.IdaStatus;
+import stubidp.saml.domain.IdaStatus;
 
 import java.text.MessageFormat;
 import java.util.Optional;

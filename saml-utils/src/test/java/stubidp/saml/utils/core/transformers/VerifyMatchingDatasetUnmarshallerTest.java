@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Test;
 import org.opensaml.saml.saml2.core.Assertion;
 import org.opensaml.saml.saml2.core.Attribute;
 import org.opensaml.saml.saml2.core.AttributeStatement;
+import stubidp.saml.domain.assertions.MatchingDataset;
 import stubidp.saml.extensions.extensions.Address;
 import stubidp.saml.extensions.extensions.Date;
 import stubidp.saml.extensions.extensions.Gender;
@@ -12,7 +13,6 @@ import stubidp.saml.extensions.extensions.PersonName;
 import stubidp.saml.extensions.extensions.impl.BaseMdsSamlObjectUnmarshaller;
 import stubidp.saml.utils.OpenSAMLRunner;
 import stubidp.saml.utils.core.domain.AddressFactory;
-import stubidp.saml.utils.core.domain.MatchingDataset;
 import stubidp.saml.utils.core.test.builders.AddressAttributeBuilder_1_1;
 import stubidp.saml.utils.core.test.builders.AddressAttributeValueBuilder_1_1;
 import stubidp.saml.utils.core.test.builders.AssertionBuilder;
@@ -25,7 +25,6 @@ import stubidp.saml.utils.core.test.builders.PersonNameAttributeBuilder_1_1;
 import stubidp.saml.utils.core.test.builders.PersonNameAttributeValueBuilder;
 import stubidp.saml.utils.core.test.builders.SubjectBuilder;
 
-import java.time.Instant;
 import java.util.Collections;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -86,17 +85,17 @@ public class VerifyMatchingDatasetUnmarshallerTest extends OpenSAMLRunner {
 
         assertThat(matchingDataset.getAddresses().size()).isEqualTo(3);
 
-        stubidp.saml.utils.core.domain.Address transformedCurrentAddress = matchingDataset.getAddresses().get(0);
+        stubidp.saml.domain.assertions.Address transformedCurrentAddress = matchingDataset.getAddresses().get(0);
         assertThat(transformedCurrentAddress.getLines().get(0)).isEqualTo(currentAddressAttributeValue.getLines().get(0).getValue());
         assertThat(transformedCurrentAddress.getPostCode().get()).isEqualTo(currentAddressAttributeValue.getPostCode().getValue());
         assertThat(transformedCurrentAddress.getInternationalPostCode().get()).isEqualTo(currentAddressAttributeValue.getInternationalPostCode().getValue());
         assertThat(transformedCurrentAddress.getUPRN().get()).isEqualTo(currentAddressAttributeValue.getUPRN().getValue());
         assertThat(transformedCurrentAddress.getFrom()).isEqualTo(currentAddressAttributeValue.getFrom());
-        assertThat(transformedCurrentAddress.getTo().get()).isEqualTo(currentAddressAttributeValue.getTo());
+        assertThat(transformedCurrentAddress.getTo()).isEqualTo(currentAddressAttributeValue.getTo());
 
-        stubidp.saml.utils.core.domain.Address transformedPreviousAddress1 = matchingDataset.getAddresses().get(1);
+        stubidp.saml.domain.assertions.Address transformedPreviousAddress1 = matchingDataset.getAddresses().get(1);
         assertThat(transformedPreviousAddress1.getLines().get(0)).isEqualTo(previousAddress1.getLines().get(0).getValue());
-        stubidp.saml.utils.core.domain.Address transformedPreviousAddress2 = matchingDataset.getAddresses().get(2);
+        stubidp.saml.domain.assertions.Address transformedPreviousAddress2 = matchingDataset.getAddresses().get(2);
         assertThat(transformedPreviousAddress2.getLines().get(0)).isEqualTo(previousAddress2.getLines().get(0).getValue());
 
         assertThat(matchingDataset.getPersonalId()).isEqualTo(pid);

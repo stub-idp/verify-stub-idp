@@ -1,6 +1,6 @@
 package stubidp.saml.stubidp.builders;
 
-import stubidp.saml.utils.core.domain.SimpleMdsValue;
+import stubidp.saml.domain.assertions.SimpleMdsValue;
 
 import java.time.Instant;
 import java.time.ZoneId;

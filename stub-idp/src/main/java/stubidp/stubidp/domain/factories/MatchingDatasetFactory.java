@@ -1,14 +1,15 @@
 package stubidp.stubidp.domain.factories;
 
-import stubidp.saml.utils.core.domain.Address;
-import stubidp.saml.utils.core.domain.MatchingDataset;
-import stubidp.saml.utils.core.domain.SimpleMdsValue;
-import stubidp.saml.utils.core.domain.TransliterableMdsValue;
+import stubidp.saml.domain.assertions.Address;
+import stubidp.saml.domain.assertions.MatchingDataset;
+import stubidp.saml.domain.assertions.SimpleMdsValue;
+import stubidp.saml.domain.assertions.TransliterableMdsValue;
 import stubidp.stubidp.domain.DatabaseIdpUser;
 import stubidp.stubidp.domain.MatchingDatasetValue;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 public final class MatchingDatasetFactory {
@@ -44,7 +45,7 @@ public final class MatchingDatasetFactory {
     private static List<Address> getPreviousAddresses(List<Address> addresses) {
         List<Address> previousAddresses = new ArrayList<>();
         for (Address address : addresses) {
-            if (address.getTo().isPresent()) {
+            if (Objects.nonNull(address.getTo())) {
                 previousAddresses.add(address);
             }
         }
@@ -54,7 +55,7 @@ public final class MatchingDatasetFactory {
     private static List<Address> getCurrentAddresses(List<Address> addresses) {
         List<Address> currentAddresses = new ArrayList<>();
         for (Address address : addresses) {
-            if (address.getTo().isEmpty()) {
+            if (Objects.isNull(address.getTo())) {
                 currentAddresses.add(address);
             }
         }

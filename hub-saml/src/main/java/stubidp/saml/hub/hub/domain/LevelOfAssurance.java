@@ -1,6 +1,6 @@
 package stubidp.saml.hub.hub.domain;
 
-import stubidp.saml.utils.core.domain.AuthnContext;
+import stubidp.saml.domain.assertions.AuthnContext;
 
 import java.util.Arrays;
 

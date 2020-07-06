@@ -1,7 +1,7 @@
 package stubidp.saml.hub.hub.test.builders;
 
-import stubidp.saml.utils.core.domain.AuthnContext;
-import stubidp.saml.utils.hub.domain.EidasAuthnRequestFromHub;
+import stubidp.saml.domain.assertions.AuthnContext;
+import stubidp.saml.domain.request.EidasAuthnRequestFromHub;
 
 import java.net.URI;
 import java.time.Instant;

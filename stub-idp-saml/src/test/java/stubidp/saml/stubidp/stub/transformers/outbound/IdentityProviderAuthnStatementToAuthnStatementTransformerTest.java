@@ -2,11 +2,11 @@ package stubidp.saml.stubidp.stub.transformers.outbound;
 
 import org.junit.jupiter.api.Test;
 import org.opensaml.saml.saml2.core.AuthnStatement;
+import stubidp.saml.domain.assertions.AuthnContext;
+import stubidp.saml.domain.assertions.IdentityProviderAuthnStatement;
 import stubidp.saml.extensions.extensions.IdaAuthnContext;
 import stubidp.saml.stubidp.OpenSAMLRunner;
 import stubidp.saml.utils.core.OpenSamlXmlObjectFactory;
-import stubidp.saml.utils.core.domain.AuthnContext;
-import stubidp.saml.utils.core.domain.IdentityProviderAuthnStatement;
 
 import java.time.Instant;
 

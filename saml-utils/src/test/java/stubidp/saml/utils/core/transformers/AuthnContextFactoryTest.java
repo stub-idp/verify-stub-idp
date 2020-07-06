@@ -1,10 +1,9 @@
 package stubidp.saml.utils.core.transformers;
 
 import org.junit.jupiter.api.Test;
-import stubidp.saml.utils.core.domain.AuthnContext;
+import stubidp.saml.domain.assertions.AuthnContext;
 import stubidp.saml.extensions.extensions.EidasAuthnContext;
 import stubidp.saml.extensions.extensions.IdaAuthnContext;
-import stubidp.saml.utils.core.transformers.AuthnContextFactory;
 
 import static java.text.MessageFormat.format;
 import static org.assertj.core.api.Assertions.assertThat;

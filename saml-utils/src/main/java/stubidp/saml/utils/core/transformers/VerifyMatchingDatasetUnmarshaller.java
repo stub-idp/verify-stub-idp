@@ -5,12 +5,12 @@ import org.opensaml.saml.saml2.core.Assertion;
 import org.opensaml.saml.saml2.core.Attribute;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import stubidp.saml.domain.assertions.Address;
+import stubidp.saml.domain.assertions.Gender;
+import stubidp.saml.domain.assertions.SimpleMdsValue;
+import stubidp.saml.domain.assertions.TransliterableMdsValue;
 import stubidp.saml.extensions.IdaConstants;
-import stubidp.saml.utils.core.domain.Address;
 import stubidp.saml.utils.core.domain.AddressFactory;
-import stubidp.saml.utils.core.domain.Gender;
-import stubidp.saml.utils.core.domain.SimpleMdsValue;
-import stubidp.saml.utils.core.domain.TransliterableMdsValue;
 import stubidp.saml.extensions.extensions.PersonName;
 
 import java.util.ArrayList;

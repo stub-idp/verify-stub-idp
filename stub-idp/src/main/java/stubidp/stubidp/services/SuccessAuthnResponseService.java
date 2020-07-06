@@ -1,9 +1,10 @@
 package stubidp.stubidp.services;
 
 import io.prometheus.client.Counter;
-import stubidp.saml.utils.core.domain.IdentityProviderAssertion;
-import stubidp.saml.utils.core.domain.IpAddress;
-import stubidp.saml.utils.core.domain.PersistentId;
+import stubidp.saml.domain.assertions.IdentityProviderAssertion;
+import stubidp.saml.domain.assertions.IpAddress;
+import stubidp.saml.domain.assertions.PersistentId;
+import stubidp.shared.repositories.MetadataRepository;
 import stubidp.stubidp.StubIdpIdpBinder;
 import stubidp.stubidp.domain.DatabaseIdpUser;
 import stubidp.stubidp.domain.OutboundResponseFromIdp;
@@ -14,7 +15,6 @@ import stubidp.stubidp.domain.factories.MatchingDatasetFactory;
 import stubidp.stubidp.repositories.Idp;
 import stubidp.stubidp.repositories.IdpSession;
 import stubidp.stubidp.repositories.IdpStubsRepository;
-import stubidp.shared.repositories.MetadataRepository;
 import stubidp.stubidp.resources.idp.HeadlessIdpResource;
 import stubidp.stubidp.saml.transformers.OutboundResponseFromIdpTransformerProvider;
 
@@ -23,7 +23,7 @@ import javax.inject.Named;
 import java.net.URI;
 import java.util.UUID;
 
-import static stubidp.saml.utils.core.domain.IdentityProviderAuthnStatement.createIdentityProviderAuthnStatement;
+import static stubidp.saml.domain.assertions.IdentityProviderAuthnStatement.createIdentityProviderAuthnStatement;
 
 public class SuccessAuthnResponseService {
 

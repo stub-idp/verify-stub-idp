@@ -1,6 +1,6 @@
 package stubidp.stubidp.resources.eidas;
 
-import stubidp.saml.utils.core.domain.AuthnContext;
+import stubidp.saml.domain.assertions.AuthnContext;
 import stubidp.shared.csrf.CSRFCheckProtection;
 import stubidp.shared.domain.SamlResponse;
 import stubidp.shared.views.SamlMessageRedirectViewFactory;

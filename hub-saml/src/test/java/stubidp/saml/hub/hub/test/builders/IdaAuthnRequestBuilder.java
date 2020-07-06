@@ -2,9 +2,9 @@ package stubidp.saml.hub.hub.test.builders;
 
 import org.opensaml.saml.saml2.core.AuthnContextComparisonTypeEnumeration;
 import org.opensaml.xmlsec.signature.Signature;
+import stubidp.saml.domain.assertions.AuthnContext;
+import stubidp.saml.domain.request.IdaAuthnRequestFromHub;
 import stubidp.saml.hub.hub.domain.AuthnRequestFromTransaction;
-import stubidp.saml.utils.core.domain.AuthnContext;
-import stubidp.saml.utils.hub.domain.IdaAuthnRequestFromHub;
 
 import java.net.URI;
 import java.time.Instant;
@@ -16,7 +16,6 @@ import java.util.UUID;
 
 import static java.util.Optional.empty;
 import static java.util.Optional.ofNullable;
-
 
 public class IdaAuthnRequestBuilder {
 

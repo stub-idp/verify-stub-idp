@@ -1,6 +1,6 @@
 package stubidp.saml.utils.core.test.builders;
 
-import stubidp.saml.utils.core.domain.AssertionRestrictions;
+import stubidp.saml.domain.assertions.AssertionRestrictions;
 
 import java.time.Instant;
 import java.time.ZoneId;

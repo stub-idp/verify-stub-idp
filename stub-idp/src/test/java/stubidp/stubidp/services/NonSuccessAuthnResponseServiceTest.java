@@ -8,7 +8,7 @@ import org.mockito.Captor;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.opensaml.saml.saml2.core.AuthnContextComparisonTypeEnumeration;
-import stubidp.saml.utils.hub.domain.IdaAuthnRequestFromHub;
+import stubidp.saml.domain.request.IdaAuthnRequestFromHub;
 import stubidp.shared.repositories.MetadataRepository;
 import stubidp.stubidp.domain.FraudIndicator;
 import stubidp.stubidp.domain.IdpIdaStatus;
@@ -29,7 +29,7 @@ import java.util.function.Function;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import static stubidp.saml.utils.core.domain.AuthnContext.LEVEL_2;
+import static stubidp.saml.domain.assertions.AuthnContext.LEVEL_2;
 
 @ExtendWith(MockitoExtension.class)
 public class NonSuccessAuthnResponseServiceTest {

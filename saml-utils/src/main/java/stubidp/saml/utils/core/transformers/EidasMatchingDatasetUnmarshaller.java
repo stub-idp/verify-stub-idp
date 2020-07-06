@@ -5,14 +5,14 @@ import org.opensaml.saml.saml2.core.Assertion;
 import org.opensaml.saml.saml2.core.Attribute;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import stubidp.saml.domain.assertions.SimpleMdsValue;
+import stubidp.saml.domain.assertions.TransliterableMdsValue;
 import stubidp.saml.extensions.IdaConstants;
 import stubidp.saml.extensions.extensions.eidas.CurrentFamilyName;
 import stubidp.saml.extensions.extensions.eidas.CurrentGivenName;
 import stubidp.saml.extensions.extensions.eidas.DateOfBirth;
 import stubidp.saml.extensions.extensions.eidas.PersonIdentifier;
 import stubidp.saml.extensions.extensions.eidas.TransliterableString;
-import stubidp.saml.utils.core.domain.SimpleMdsValue;
-import stubidp.saml.utils.core.domain.TransliterableMdsValue;
 
 import java.time.Instant;
 import java.util.ArrayList;

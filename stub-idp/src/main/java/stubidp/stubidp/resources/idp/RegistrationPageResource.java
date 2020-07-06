@@ -1,7 +1,7 @@
 package stubidp.stubidp.resources.idp;
 
-import stubidp.saml.utils.core.domain.AuthnContext;
-import stubidp.saml.utils.core.domain.Gender;
+import stubidp.saml.domain.assertions.AuthnContext;
+import stubidp.saml.domain.assertions.Gender;
 import stubidp.shared.csrf.CSRFCheckProtection;
 import stubidp.shared.domain.SamlResponse;
 import stubidp.shared.views.SamlMessageRedirectViewFactory;

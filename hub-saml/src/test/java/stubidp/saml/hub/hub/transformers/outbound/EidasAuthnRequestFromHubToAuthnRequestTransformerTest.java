@@ -15,6 +15,8 @@ import org.opensaml.saml.saml2.core.NameIDType;
 import org.opensaml.saml.saml2.core.RequestedAuthnContext;
 import org.opensaml.saml.saml2.core.StatusResponseType;
 import org.opensaml.saml.saml2.core.impl.AttributeImpl;
+import stubidp.saml.domain.assertions.AuthnContext;
+import stubidp.saml.domain.request.EidasAuthnRequestFromHub;
 import stubidp.saml.extensions.extensions.RequestedAttribute;
 import stubidp.saml.extensions.extensions.RequestedAttributes;
 import stubidp.saml.extensions.extensions.SPType;
@@ -23,9 +25,7 @@ import stubidp.saml.extensions.extensions.impl.SPTypeImpl;
 import stubidp.saml.hub.core.OpenSAMLRunner;
 import stubidp.saml.hub.hub.domain.LevelOfAssurance;
 import stubidp.saml.utils.core.OpenSamlXmlObjectFactory;
-import stubidp.saml.utils.core.domain.AuthnContext;
 import stubidp.saml.utils.core.transformers.AuthnContextFactory;
-import stubidp.saml.utils.hub.domain.EidasAuthnRequestFromHub;
 
 import javax.xml.namespace.QName;
 import java.net.URI;
