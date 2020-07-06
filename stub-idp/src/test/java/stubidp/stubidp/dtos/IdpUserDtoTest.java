@@ -7,9 +7,9 @@ import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import stubidp.saml.domain.assertions.Address;
 import stubidp.saml.domain.assertions.Gender;
+import stubidp.saml.domain.assertions.SimpleMdsValue;
 import stubidp.saml.test.AddressBuilder;
 import stubidp.stubidp.builders.SimpleMdsValueBuilder;
-import stubidp.stubidp.domain.MatchingDatasetValue;
 
 import java.io.IOException;
 import java.time.Instant;
@@ -48,36 +48,36 @@ public class IdpUserDtoTest {
 
         assertThat(idpuserDto.getFirstName().isPresent()).isTrue();
         assertThat(idpUserDtoFromJson.getFirstName().isPresent()).isTrue();
-        MatchingDatasetValue<String> idpuserDtoFirstname = idpuserDto.getFirstName().get();
-        MatchingDatasetValue<String> idpUserDtoFromJsonFirstname = idpUserDtoFromJson.getFirstName().get();
+        SimpleMdsValue<String> idpuserDtoFirstname = idpuserDto.getFirstName().get();
+        SimpleMdsValue<String> idpUserDtoFromJsonFirstname = idpUserDtoFromJson.getFirstName().get();
         compareSimpleMdsObjects(idpuserDtoFirstname,idpUserDtoFromJsonFirstname);
 
         assertThat(idpuserDto.getMiddleNames().isPresent()).isTrue();
         assertThat(idpUserDtoFromJson.getMiddleNames().isPresent()).isTrue();
-        MatchingDatasetValue<String> idpUserDtoMiddleNames = idpuserDto.getMiddleNames().get();
-        MatchingDatasetValue<String> idpUserDtoFromJsonMiddleNames = idpUserDtoFromJson.getMiddleNames().get();
+        SimpleMdsValue<String> idpUserDtoMiddleNames = idpuserDto.getMiddleNames().get();
+        SimpleMdsValue<String> idpUserDtoFromJsonMiddleNames = idpUserDtoFromJson.getMiddleNames().get();
         compareSimpleMdsObjects(idpUserDtoMiddleNames,idpUserDtoFromJsonMiddleNames);
 
         assertThat(idpuserDto.getSurnames().size()).isEqualTo(2);
         assertThat(idpUserDtoFromJson.getSurnames().size()).isEqualTo(2);
-        MatchingDatasetValue<String> idpUserDtoFirstSurname = idpuserDto.getSurnames().get(0);
-        MatchingDatasetValue<String> idpUserDtoFromJsonFirstSurname = idpUserDtoFromJson.getSurnames().get(0);
+        SimpleMdsValue<String> idpUserDtoFirstSurname = idpuserDto.getSurnames().get(0);
+        SimpleMdsValue<String> idpUserDtoFromJsonFirstSurname = idpUserDtoFromJson.getSurnames().get(0);
         compareSimpleMdsObjects(idpUserDtoFirstSurname,idpUserDtoFromJsonFirstSurname);
 
-        MatchingDatasetValue<String> idpUserDtoSecondSurname = idpuserDto.getSurnames().get(1);
-        MatchingDatasetValue<String> idpUserFromJsonDtoSecondSurname = idpUserDtoFromJson.getSurnames().get(1);
+        SimpleMdsValue<String> idpUserDtoSecondSurname = idpuserDto.getSurnames().get(1);
+        SimpleMdsValue<String> idpUserFromJsonDtoSecondSurname = idpUserDtoFromJson.getSurnames().get(1);
         compareSimpleMdsObjects(idpUserDtoSecondSurname,idpUserFromJsonDtoSecondSurname);
 
         assertThat(idpuserDto.getGender().isPresent()).isTrue();
         assertThat(idpUserDtoFromJson.getGender().isPresent()).isTrue();
-        MatchingDatasetValue<Gender> idpuserDtoGender = idpuserDto.getGender().get();
-        MatchingDatasetValue<Gender> idpUserDtoFromJsonGender = idpUserDtoFromJson.getGender().get();
+        SimpleMdsValue<Gender> idpuserDtoGender = idpuserDto.getGender().get();
+        SimpleMdsValue<Gender> idpUserDtoFromJsonGender = idpUserDtoFromJson.getGender().get();
         compareSimpleMdsObjects(idpuserDtoGender,idpUserDtoFromJsonGender);
 
         assertThat(idpuserDto.getDateOfBirth().isPresent()).isTrue();
         assertThat(idpUserDtoFromJson.getDateOfBirth().isPresent()).isTrue();
-        MatchingDatasetValue<Instant> idpuserDtoDateOfBirth = idpuserDto.getDateOfBirth().get();
-        MatchingDatasetValue<Instant> idpUserDtoFromJsonDateOfBirth = idpUserDtoFromJson.getDateOfBirth().get();
+        SimpleMdsValue<Instant> idpuserDtoDateOfBirth = idpuserDto.getDateOfBirth().get();
+        SimpleMdsValue<Instant> idpUserDtoFromJsonDateOfBirth = idpUserDtoFromJson.getDateOfBirth().get();
         compareSimpleMdsObjects(idpuserDtoDateOfBirth, idpUserDtoFromJsonDateOfBirth);
 
 
@@ -141,7 +141,7 @@ public class IdpUserDtoTest {
                 .build();
     }
 
-    private <T> void compareSimpleMdsObjects(final MatchingDatasetValue<T> firstSimpleMdsValue, final MatchingDatasetValue<T> secondSimpleMdsValue) {
+    private <T> void compareSimpleMdsObjects(final SimpleMdsValue<T> firstSimpleMdsValue, final SimpleMdsValue<T> secondSimpleMdsValue) {
         assertThat(firstSimpleMdsValue.getValue()).isEqualTo(secondSimpleMdsValue.getValue());
         assertThat(firstSimpleMdsValue.getFrom()).isEqualTo(secondSimpleMdsValue.getFrom());
         assertThat(firstSimpleMdsValue.getTo()).isEqualTo(secondSimpleMdsValue.getTo());
@@ -149,7 +149,7 @@ public class IdpUserDtoTest {
     }
 
 
-    private MatchingDatasetValue<String> createSimpleMdsValue(String value) {
+    private SimpleMdsValue<String> createSimpleMdsValue(String value) {
         return SimpleMdsValueBuilder.<String>aSimpleMdsValue()
                 .withValue(value)
                 .withFrom(getLocalDateTime(1980, 1, 1, 0, 0, 0))

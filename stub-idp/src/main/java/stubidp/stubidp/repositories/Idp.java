@@ -4,8 +4,8 @@ import org.mindrot.jbcrypt.BCrypt;
 import stubidp.saml.domain.assertions.Address;
 import stubidp.saml.domain.assertions.AuthnContext;
 import stubidp.saml.domain.assertions.Gender;
+import stubidp.saml.domain.assertions.SimpleMdsValue;
 import stubidp.stubidp.domain.DatabaseIdpUser;
-import stubidp.stubidp.domain.MatchingDatasetValue;
 
 import java.time.Instant;
 import java.util.Collection;
@@ -58,11 +58,11 @@ public class Idp {
 
     public DatabaseIdpUser createUser(
             Optional<String> pid,
-            List<MatchingDatasetValue<String>> firstnames,
-            List<MatchingDatasetValue<String>> middleNames,
-            List<MatchingDatasetValue<String>> surnames,
-            Optional<MatchingDatasetValue<Gender>> gender,
-            List<MatchingDatasetValue<Instant>> dateOfBirths,
+            List<SimpleMdsValue<String>> firstnames,
+            List<SimpleMdsValue<String>> middleNames,
+            List<SimpleMdsValue<String>> surnames,
+            Optional<SimpleMdsValue<Gender>> gender,
+            List<SimpleMdsValue<Instant>> dateOfBirths,
             List<Address> addresses,
             String username,
             String password,

@@ -2,7 +2,7 @@ package stubidp.stubidp.builders;
 
 import stubidp.saml.domain.assertions.Address;
 import stubidp.saml.domain.assertions.Gender;
-import stubidp.stubidp.domain.MatchingDatasetValue;
+import stubidp.saml.domain.assertions.SimpleMdsValue;
 import stubidp.stubidp.dtos.IdpUserDto;
 
 import java.time.Instant;
@@ -13,11 +13,11 @@ import java.util.Optional;
 public class IdpUserDtoBuilder {
 
     private Optional<String> pid = Optional.empty();
-    private Optional<MatchingDatasetValue<String>> firstName = Optional.empty();
-    private Optional<MatchingDatasetValue<String>> middleNames = Optional.empty();
-    private List<MatchingDatasetValue<String>> surnames = new ArrayList<>();
-    private Optional<MatchingDatasetValue<Gender>> gender = Optional.empty();
-    private Optional<MatchingDatasetValue<Instant>> dateOfBirth = Optional.empty();
+    private Optional<SimpleMdsValue<String>> firstName = Optional.empty();
+    private Optional<SimpleMdsValue<String>> middleNames = Optional.empty();
+    private List<SimpleMdsValue<String>> surnames = new ArrayList<>();
+    private Optional<SimpleMdsValue<Gender>> gender = Optional.empty();
+    private Optional<SimpleMdsValue<Instant>> dateOfBirth = Optional.empty();
     private Optional<Address> address = Optional.empty();
     private String userName;
     private String password;
@@ -57,27 +57,27 @@ public class IdpUserDtoBuilder {
         return this;
     }
 
-    public IdpUserDtoBuilder withFirsName(final MatchingDatasetValue<String> firstName) {
+    public IdpUserDtoBuilder withFirsName(final SimpleMdsValue<String> firstName) {
         this.firstName = Optional.ofNullable(firstName);
         return this;
     }
 
-    public IdpUserDtoBuilder withMiddleNames(final MatchingDatasetValue<String> middleNames) {
+    public IdpUserDtoBuilder withMiddleNames(final SimpleMdsValue<String> middleNames) {
         this.middleNames = Optional.ofNullable(middleNames);
         return this;
     }
 
-    public IdpUserDtoBuilder addSurname(final MatchingDatasetValue<String> surname) {
+    public IdpUserDtoBuilder addSurname(final SimpleMdsValue<String> surname) {
         this.surnames.add(surname);
         return this;
     }
 
-    public IdpUserDtoBuilder withGender(final MatchingDatasetValue<Gender> gender) {
+    public IdpUserDtoBuilder withGender(final SimpleMdsValue<Gender> gender) {
         this.gender = Optional.ofNullable(gender);
         return this;
     }
 
-    public IdpUserDtoBuilder withDateOfBirth(final MatchingDatasetValue<Instant> dateOfBirth) {
+    public IdpUserDtoBuilder withDateOfBirth(final SimpleMdsValue<Instant> dateOfBirth) {
         this.dateOfBirth = Optional.ofNullable(dateOfBirth);
         return this;
     }

@@ -13,13 +13,13 @@ import stubidp.saml.domain.assertions.Gender
 import stubidp.stubidp.Urls
 import stubidp.stubidp.builders.SimpleMdsValueBuilder
 import stubidp.stubidp.builders.StubIdpBuilder
-import stubidp.stubidp.domain.MatchingDatasetValue
 import stubidp.stubidp.dtos.IdpUserDto
 import stubidp.stubidp.security.BCryptHelper
 import stubidp.stubidp.utils.TestUserCredentials
 import stubidp.kotlin.test.integration.support.IntegrationTestHelper
 import stubidp.kotlin.test.integration.support.StubIdpAppExtension
 import stubidp.saml.domain.assertions.AuthnContext
+import stubidp.saml.domain.assertions.SimpleMdsValue
 import stubidp.utils.rest.common.HttpHeaders
 import java.io.IOException
 import java.text.MessageFormat
@@ -281,8 +281,8 @@ class UserRepositoryIntegrationTests : IntegrationTestHelper() {
                         .addUserCredentials(TestUserCredentials(USERNAME, PASSWORD))
                         .build())
 
-        private fun <T> createOptionalMdsValue(value: Optional<T>): Optional<MatchingDatasetValue<T>> {
-            return value.map { t: T -> MatchingDatasetValue(t, null, null, true) }
+        private fun <T> createOptionalMdsValue(value: Optional<T>): Optional<SimpleMdsValue<T>> {
+            return value.map { t: T -> SimpleMdsValue(t, null, null, true) }
         }
     }
 }

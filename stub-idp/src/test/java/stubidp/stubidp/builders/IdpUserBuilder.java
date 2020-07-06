@@ -3,8 +3,8 @@ package stubidp.stubidp.builders;
 import stubidp.saml.domain.assertions.Address;
 import stubidp.saml.domain.assertions.AuthnContext;
 import stubidp.saml.domain.assertions.Gender;
+import stubidp.saml.domain.assertions.SimpleMdsValue;
 import stubidp.stubidp.domain.DatabaseIdpUser;
-import stubidp.stubidp.domain.MatchingDatasetValue;
 
 import java.time.Instant;
 import java.time.ZoneId;
@@ -21,26 +21,26 @@ public class IdpUserBuilder {
     private String username = "default-username";
     private String persistentId = UUID.randomUUID().toString();
     private String password = "default-password";
-    private List<MatchingDatasetValue<String>> firstnames = singletonList(new MatchingDatasetValue<>(
+    private List<SimpleMdsValue<String>> firstnames = singletonList(new SimpleMdsValue<>(
             "default-first-name",
             Instant.now().atZone(ZoneId.of("UTC")).minusYears(20).toInstant(),
             null,
             true
     ));
-    private List<MatchingDatasetValue<String>> middleNames = singletonList(new MatchingDatasetValue<>(
+    private List<SimpleMdsValue<String>> middleNames = singletonList(new SimpleMdsValue<>(
             "default-middle-name",
             Instant.now().atZone(ZoneId.of("UTC")).minusYears(20).toInstant(),
             null,
             true
     ));
-    private List<MatchingDatasetValue<String>> surnames = singletonList(new MatchingDatasetValue<>(
+    private List<SimpleMdsValue<String>> surnames = singletonList(new SimpleMdsValue<>(
             "default-surname",
             Instant.now().atZone(ZoneId.of("UTC")).minusYears(20).toInstant(),
             null,
             true
     ));
-    private Optional<MatchingDatasetValue<Gender>> gender = Optional.empty();
-    private List<MatchingDatasetValue<Instant>> dateOfBirths = singletonList(new MatchingDatasetValue<>(
+    private Optional<SimpleMdsValue<Gender>> gender = Optional.empty();
+    private List<SimpleMdsValue<Instant>> dateOfBirths = singletonList(new SimpleMdsValue<>(
             Instant.now().atZone(ZoneId.of("UTC")).minusYears(20).toInstant(),
             Instant.now().atZone(ZoneId.of("UTC")).minusYears(20).toInstant(),
             null,

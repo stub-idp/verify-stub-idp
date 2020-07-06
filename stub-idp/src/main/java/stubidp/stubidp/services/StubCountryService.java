@@ -1,11 +1,11 @@
 package stubidp.stubidp.services;
 
 import stubidp.saml.domain.assertions.AuthnContext;
+import stubidp.saml.domain.assertions.SimpleMdsValue;
 import stubidp.saml.extensions.extensions.impl.BaseMdsSamlObjectUnmarshaller;
 import stubidp.stubidp.domain.DatabaseEidasUser;
 import stubidp.stubidp.domain.EidasScheme;
 import stubidp.stubidp.domain.EidasUser;
-import stubidp.stubidp.domain.MatchingDatasetValue;
 import stubidp.stubidp.exceptions.IncompleteRegistrationException;
 import stubidp.stubidp.exceptions.InvalidDateException;
 import stubidp.stubidp.exceptions.InvalidSessionIdException;
@@ -117,19 +117,19 @@ public class StubCountryService {
         return eidasUser;
     }
 
-    private Optional<String> getOptionalValue(Optional<MatchingDatasetValue<String>> fieldValue) {
-        return fieldValue.map(MatchingDatasetValue::getValue);
+    private Optional<String> getOptionalValue(Optional<SimpleMdsValue<String>> fieldValue) {
+        return fieldValue.map(SimpleMdsValue::getValue);
     }
 
-    private <T> MatchingDatasetValue<T> createMdsValue(T value) {
-        return new MatchingDatasetValue<>(value, null, null, true);
+    private <T> SimpleMdsValue<T> createMdsValue(T value) {
+        return new SimpleMdsValue<>(value, null, null, true);
     }
 
-    private Optional<MatchingDatasetValue<String>> createOptionalMdsValue(String value) {
+    private Optional<SimpleMdsValue<String>> createOptionalMdsValue(String value) {
         if (Objects.isNull(value) || value.isBlank()) {
             return Optional.empty();
         }
-        return Optional.of(new MatchingDatasetValue<>(value, null, null, true));
+        return Optional.of(new SimpleMdsValue<>(value, null, null, true));
     }
 
     private boolean isMandatoryDataPresent(String... args) {

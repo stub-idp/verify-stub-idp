@@ -5,7 +5,6 @@ import stubidp.saml.domain.assertions.MatchingDataset;
 import stubidp.saml.domain.assertions.SimpleMdsValue;
 import stubidp.saml.domain.assertions.TransliterableMdsValue;
 import stubidp.stubidp.domain.DatabaseIdpUser;
-import stubidp.stubidp.domain.MatchingDatasetValue;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,15 +29,15 @@ public final class MatchingDatasetFactory {
         );
     }
 
-    private static List<TransliterableMdsValue> fromTransliterable(List<MatchingDatasetValue<String>> input) {
+    private static List<TransliterableMdsValue> fromTransliterable(List<SimpleMdsValue<String>> input) {
         return from(input).stream().map(TransliterableMdsValue::new).collect(Collectors.toList());
     }
 
-    private static <T> List<SimpleMdsValue<T>> from(List<MatchingDatasetValue<T>> input) {
+    private static <T> List<SimpleMdsValue<T>> from(List<SimpleMdsValue<T>> input) {
         return input.stream().map(MatchingDatasetFactory::from).collect(Collectors.toList());
     }
 
-    private static <T> SimpleMdsValue<T> from(MatchingDatasetValue<T> input) {
+    private static <T> SimpleMdsValue<T> from(SimpleMdsValue<T> input) {
         return new SimpleMdsValue<>(input.getValue(), input.getFrom(), input.getTo(), input.isVerified());
     }
 

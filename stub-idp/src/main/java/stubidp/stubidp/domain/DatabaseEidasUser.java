@@ -7,6 +7,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import org.mindrot.jbcrypt.BCrypt;
 import stubidp.saml.domain.assertions.AuthnContext;
+import stubidp.saml.domain.assertions.SimpleMdsValue;
 import stubidp.stubidp.exceptions.UnHashedPasswordException;
 import stubidp.stubidp.security.BCryptHelper;
 
@@ -24,11 +25,11 @@ public class DatabaseEidasUser implements Serializable {
     private final String username;
     private final String persistentId;
     private String password;
-    private final MatchingDatasetValue<String> firstname;
-    private final Optional<MatchingDatasetValue<String>> nonLatinFirstname;
-    private final MatchingDatasetValue<String> surname;
-    private final Optional<MatchingDatasetValue<String>> nonLatinSurname;
-    private final MatchingDatasetValue<Instant> dateOfBirth;
+    private final SimpleMdsValue<String> firstname;
+    private final Optional<SimpleMdsValue<String>> nonLatinFirstname;
+    private final SimpleMdsValue<String> surname;
+    private final Optional<SimpleMdsValue<String>> nonLatinSurname;
+    private final SimpleMdsValue<Instant> dateOfBirth;
     private final AuthnContext levelOfAssurance;
 
     @JsonCreator
@@ -36,11 +37,11 @@ public class DatabaseEidasUser implements Serializable {
         @JsonProperty("username") String username,
         @JsonProperty("persistentId") String persistentId,
         @JsonProperty("password") String password,
-        @JsonProperty("firstname") MatchingDatasetValue<String> firstname,
-        @JsonProperty("firstnameNonLatin") Optional<MatchingDatasetValue<String>> nonLatinFirstname,
-        @JsonProperty("surname") MatchingDatasetValue<String> surname,
-        @JsonProperty("surnameNonLatin") Optional<MatchingDatasetValue<String>> nonLatinSurname,
-        @JsonProperty("dateOfBirth") MatchingDatasetValue<Instant> dateOfBirth,
+        @JsonProperty("firstname") SimpleMdsValue<String> firstname,
+        @JsonProperty("firstnameNonLatin") Optional<SimpleMdsValue<String>> nonLatinFirstname,
+        @JsonProperty("surname") SimpleMdsValue<String> surname,
+        @JsonProperty("surnameNonLatin") Optional<SimpleMdsValue<String>> nonLatinSurname,
+        @JsonProperty("dateOfBirth") SimpleMdsValue<Instant> dateOfBirth,
         @JsonProperty("levelOfAssurance") AuthnContext levelOfAssurance) {
 
         this.username = username;
@@ -70,23 +71,23 @@ public class DatabaseEidasUser implements Serializable {
         throw new UnHashedPasswordException(this.getUsername());
     }
 
-    public MatchingDatasetValue<String> getFirstname() {
+    public SimpleMdsValue<String> getFirstname() {
         return firstname;
     }
 
-    public Optional<MatchingDatasetValue<String>> getNonLatinFirstname() {
+    public Optional<SimpleMdsValue<String>> getNonLatinFirstname() {
         return nonLatinFirstname;
     }
 
-    public MatchingDatasetValue<String> getSurname() {
+    public SimpleMdsValue<String> getSurname() {
         return surname;
     }
 
-    public Optional<MatchingDatasetValue<String>> getNonLatinSurname() {
+    public Optional<SimpleMdsValue<String>> getNonLatinSurname() {
         return nonLatinSurname;
     }
 
-    public MatchingDatasetValue<Instant> getDateOfBirth() {
+    public SimpleMdsValue<Instant> getDateOfBirth() {
         return dateOfBirth;
     }
 

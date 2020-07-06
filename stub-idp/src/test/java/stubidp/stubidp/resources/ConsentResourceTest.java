@@ -7,13 +7,13 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import stubidp.saml.domain.assertions.AuthnContext;
 import stubidp.saml.domain.assertions.Gender;
+import stubidp.saml.domain.assertions.SimpleMdsValue;
 import stubidp.saml.domain.request.IdaAuthnRequestFromHub;
 import stubidp.saml.extensions.extensions.impl.BaseMdsSamlObjectUnmarshaller;
 import stubidp.saml.utils.core.domain.AddressFactory;
 import stubidp.shared.cookies.CookieNames;
 import stubidp.shared.views.SamlMessageRedirectViewFactory;
 import stubidp.stubidp.domain.DatabaseIdpUser;
-import stubidp.stubidp.domain.MatchingDatasetValue;
 import stubidp.stubidp.repositories.Idp;
 import stubidp.stubidp.repositories.IdpSession;
 import stubidp.stubidp.repositories.IdpSessionRepository;
@@ -127,7 +127,7 @@ public class ConsentResourceTest {
                 levelOfAssurance));
     }
 
-    private static <T> MatchingDatasetValue<T> createMdsValue(T value) {
-        return (value == null) ? null : new MatchingDatasetValue<>(value, null, null, true);
+    private static <T> SimpleMdsValue<T> createMdsValue(T value) {
+        return (value == null) ? null : new SimpleMdsValue<>(value, null, null, true);
     }
 }

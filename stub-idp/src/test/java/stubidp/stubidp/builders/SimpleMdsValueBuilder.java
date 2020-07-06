@@ -1,12 +1,11 @@
 package stubidp.stubidp.builders;
 
-import stubidp.stubidp.domain.MatchingDatasetValue;
+import stubidp.saml.domain.assertions.SimpleMdsValue;
 
 import java.time.Instant;
 import java.time.ZoneId;
 
 public class SimpleMdsValueBuilder<T> {
-
     private T value = null;
     private Instant from = Instant.now().atZone(ZoneId.of("UTC")).minusDays(5).toInstant();
     private Instant to = Instant.now();
@@ -16,8 +15,8 @@ public class SimpleMdsValueBuilder<T> {
         return new SimpleMdsValueBuilder<>();
     }
 
-    public MatchingDatasetValue<T> build() {
-        return new MatchingDatasetValue<>(value, from, to, verified);
+    public SimpleMdsValue<T> build() {
+        return new SimpleMdsValue<>(value, from, to, verified);
     }
 
     public SimpleMdsValueBuilder<T> withValue(T value) {

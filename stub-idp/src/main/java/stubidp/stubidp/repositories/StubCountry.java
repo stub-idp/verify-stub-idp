@@ -2,8 +2,8 @@ package stubidp.stubidp.repositories;
 
 import org.mindrot.jbcrypt.BCrypt;
 import stubidp.saml.domain.assertions.AuthnContext;
+import stubidp.saml.domain.assertions.SimpleMdsValue;
 import stubidp.stubidp.domain.DatabaseEidasUser;
-import stubidp.stubidp.domain.MatchingDatasetValue;
 
 import java.time.Instant;
 import java.util.Optional;
@@ -35,11 +35,11 @@ public class StubCountry {
     }
 
     public DatabaseEidasUser createUser(String username, String password,
-                                        MatchingDatasetValue<String> firstName,
-                                        Optional<MatchingDatasetValue<String>> nonLatinFirstName,
-                                        MatchingDatasetValue<String> surname,
-                                        Optional<MatchingDatasetValue<String>> nonLatinSurname,
-                                        MatchingDatasetValue<Instant> dateOfBirth,
+                                        SimpleMdsValue<String> firstName,
+                                        Optional<SimpleMdsValue<String>> nonLatinFirstName,
+                                        SimpleMdsValue<String> surname,
+                                        Optional<SimpleMdsValue<String>> nonLatinSurname,
+                                        SimpleMdsValue<Instant> dateOfBirth,
                                         AuthnContext levelOfAssurance){
         return allIdpsUserRepository.createUserForStubCountry(
                 friendlyId, UUID.randomUUID().toString(),

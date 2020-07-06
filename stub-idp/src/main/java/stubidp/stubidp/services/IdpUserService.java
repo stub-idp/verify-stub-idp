@@ -4,9 +4,9 @@ import org.mindrot.jbcrypt.BCrypt;
 import stubidp.saml.domain.assertions.Address;
 import stubidp.saml.domain.assertions.AuthnContext;
 import stubidp.saml.domain.assertions.Gender;
+import stubidp.saml.domain.assertions.SimpleMdsValue;
 import stubidp.saml.extensions.extensions.impl.BaseMdsSamlObjectUnmarshaller;
 import stubidp.stubidp.domain.DatabaseIdpUser;
-import stubidp.stubidp.domain.MatchingDatasetValue;
 import stubidp.stubidp.exceptions.IncompleteRegistrationException;
 import stubidp.stubidp.exceptions.InvalidDateException;
 import stubidp.stubidp.exceptions.InvalidSessionIdException;
@@ -126,8 +126,8 @@ public class IdpUserService {
         return true;
     }
 
-    private static <T> MatchingDatasetValue<T> createMdsValue(Optional<T> value) {
-        return new MatchingDatasetValue<>(value.get(), null, null, true);
+    private static <T> SimpleMdsValue<T> createMdsValue(Optional<T> value) {
+        return new SimpleMdsValue<>(value.get(), null, null, true);
     }
 
     public static DatabaseIdpUser createRandomUser() {
@@ -146,8 +146,8 @@ public class IdpUserService {
                 AuthnContext.LEVEL_2);
     }
 
-    private static <T> MatchingDatasetValue<T> createSimpleMdsValue2(T value) {
-        return new MatchingDatasetValue<>(value, BaseMdsSamlObjectUnmarshaller.InstantFromDate.of("2000-01-01"), BaseMdsSamlObjectUnmarshaller.InstantFromDate.of("2013-01-03"), false);
+    private static <T> SimpleMdsValue<T> createSimpleMdsValue2(T value) {
+        return new SimpleMdsValue<>(value, BaseMdsSamlObjectUnmarshaller.InstantFromDate.of("2000-01-01"), BaseMdsSamlObjectUnmarshaller.InstantFromDate.of("2013-01-03"), false);
     }
 
 }

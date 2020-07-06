@@ -5,9 +5,9 @@ import org.slf4j.LoggerFactory;
 import stubidp.saml.domain.assertions.Address;
 import stubidp.saml.domain.assertions.AuthnContext;
 import stubidp.saml.domain.assertions.Gender;
+import stubidp.saml.domain.assertions.SimpleMdsValue;
 import stubidp.stubidp.domain.DatabaseEidasUser;
 import stubidp.stubidp.domain.DatabaseIdpUser;
-import stubidp.stubidp.domain.MatchingDatasetValue;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -49,11 +49,11 @@ public class AllIdpsUserRepository {
 
     DatabaseIdpUser createUserForIdp(String idpFriendlyName,
                                      String persistentId,
-                                     List<MatchingDatasetValue<String>> firstnames,
-                                     List<MatchingDatasetValue<String>> middleNames,
-                                     List<MatchingDatasetValue<String>> surnames,
-                                     Optional<MatchingDatasetValue<Gender>> gender,
-                                     List<MatchingDatasetValue<Instant>> dateOfBirths,
+                                     List<SimpleMdsValue<String>> firstnames,
+                                     List<SimpleMdsValue<String>> middleNames,
+                                     List<SimpleMdsValue<String>> surnames,
+                                     Optional<SimpleMdsValue<Gender>> gender,
+                                     List<SimpleMdsValue<Instant>> dateOfBirths,
                                      List<Address> addresses,
                                      String username,
                                      String password,
@@ -82,11 +82,11 @@ public class AllIdpsUserRepository {
                                                String persistentId,
                                                String username,
                                                String password,
-                                               MatchingDatasetValue<String> firstName,
-                                               Optional<MatchingDatasetValue<String>> nonLatinFirstName,
-                                               MatchingDatasetValue<String> surname,
-                                               Optional<MatchingDatasetValue<String>> nonLatinSurname,
-                                               MatchingDatasetValue<Instant> dob,
+                                               SimpleMdsValue<String> firstName,
+                                               Optional<SimpleMdsValue<String>> nonLatinFirstName,
+                                               SimpleMdsValue<String> surname,
+                                               Optional<SimpleMdsValue<String>> nonLatinSurname,
+                                               SimpleMdsValue<Instant> dob,
                                                AuthnContext levelOfAssurance){
         DatabaseEidasUser user = new DatabaseEidasUser(
                 username, persistentId, password,

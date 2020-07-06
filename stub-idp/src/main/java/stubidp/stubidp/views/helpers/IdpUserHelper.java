@@ -1,9 +1,9 @@
 package stubidp.stubidp.views.helpers;
 
 import stubidp.saml.domain.assertions.Address;
+import stubidp.saml.domain.assertions.SimpleMdsValue;
 import stubidp.saml.extensions.extensions.impl.BaseMdsSamlObjectMarshaller;
 import stubidp.stubidp.domain.DatabaseIdpUser;
-import stubidp.stubidp.domain.MatchingDatasetValue;
 
 import static java.util.stream.Collectors.joining;
 
@@ -23,8 +23,8 @@ public class IdpUserHelper {
                 .getValue();
     }
 
-    private MatchingDatasetValue<String> createEmptySimpleMdsStringValue() {
-        return new MatchingDatasetValue<>("", null, null, true);
+    private SimpleMdsValue<String> createEmptySimpleMdsStringValue() {
+        return new SimpleMdsValue<>("", null, null, true);
     }
 
     public String getSurname() {
@@ -39,7 +39,7 @@ public class IdpUserHelper {
         return this.idpUser
                 .getSurnames()
                 .stream()
-                .map(MatchingDatasetValue::getValue)
+                .map(SimpleMdsValue::getValue)
                 .collect(joining(","));
     }
 
@@ -47,7 +47,7 @@ public class IdpUserHelper {
         return idpUser.getDateOfBirths()
                 .stream()
                 .findFirst()
-                .map(MatchingDatasetValue::getValue)
+                .map(SimpleMdsValue::getValue)
                 .map(BaseMdsSamlObjectMarshaller.DateFromInstant::of)
                 .orElse("");
     }

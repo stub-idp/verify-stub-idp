@@ -5,8 +5,8 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import org.mindrot.jbcrypt.BCrypt;
 import stubidp.saml.domain.assertions.Address;
 import stubidp.saml.domain.assertions.Gender;
+import stubidp.saml.domain.assertions.SimpleMdsValue;
 import stubidp.stubidp.domain.DatabaseIdpUser;
-import stubidp.stubidp.domain.MatchingDatasetValue;
 import stubidp.stubidp.security.BCryptHelper;
 
 import java.time.Instant;
@@ -23,11 +23,11 @@ public class IdpUserDto {
     private Optional<String> pid = Optional.empty();
     private String username;
     private String password;
-    private Optional<MatchingDatasetValue<String>> firstName = Optional.empty();
-    private Optional<MatchingDatasetValue<String>> middleNames = Optional.empty();
-    private List<MatchingDatasetValue<String>> surname = new ArrayList<>();
-    private Optional<MatchingDatasetValue<Gender>> gender = Optional.empty();
-    private Optional<MatchingDatasetValue<Instant>> dateOfBirth = Optional.empty();
+    private Optional<SimpleMdsValue<String>> firstName = Optional.empty();
+    private Optional<SimpleMdsValue<String>> middleNames = Optional.empty();
+    private List<SimpleMdsValue<String>> surname = new ArrayList<>();
+    private Optional<SimpleMdsValue<Gender>> gender = Optional.empty();
+    private Optional<SimpleMdsValue<Instant>> dateOfBirth = Optional.empty();
     private Optional<Address> address = Optional.empty();
     private String levelOfAssurance;
 
@@ -38,11 +38,11 @@ public class IdpUserDto {
             Optional<String> pid,
             String username,
             String password,
-            Optional<MatchingDatasetValue<String>> firstName,
-            Optional<MatchingDatasetValue<String>> middleNames,
-            List<MatchingDatasetValue<String>> surnames,
-            Optional<MatchingDatasetValue<Gender>> gender,
-            Optional<MatchingDatasetValue<Instant>> dateOfBirth,
+            Optional<SimpleMdsValue<String>> firstName,
+            Optional<SimpleMdsValue<String>> middleNames,
+            List<SimpleMdsValue<String>> surnames,
+            Optional<SimpleMdsValue<Gender>> gender,
+            Optional<SimpleMdsValue<Instant>> dateOfBirth,
             Optional<Address> address,
             String levelOfAssurance) {
 
@@ -70,15 +70,15 @@ public class IdpUserDto {
         return this.password;
     }
 
-    public Optional<MatchingDatasetValue<String>> getFirstName() {
+    public Optional<SimpleMdsValue<String>> getFirstName() {
         return firstName;
     }
 
-    public List<MatchingDatasetValue<String>> getSurnames() {
+    public List<SimpleMdsValue<String>> getSurnames() {
         return surname;
     }
 
-    public Optional<MatchingDatasetValue<Instant>> getDateOfBirth() {
+    public Optional<SimpleMdsValue<Instant>> getDateOfBirth() {
         return dateOfBirth;
     }
 
@@ -90,11 +90,11 @@ public class IdpUserDto {
         return levelOfAssurance;
     }
 
-    public Optional<MatchingDatasetValue<String>> getMiddleNames() {
+    public Optional<SimpleMdsValue<String>> getMiddleNames() {
         return middleNames;
     }
 
-    public Optional<MatchingDatasetValue<Gender>> getGender() {
+    public Optional<SimpleMdsValue<Gender>> getGender() {
         return gender;
     }
 
@@ -113,7 +113,7 @@ public class IdpUserDto {
         );
     }
 
-    private static <T> Optional<MatchingDatasetValue<T>> getFirstValue(List<MatchingDatasetValue<T>> values) {
+    private static <T> Optional<SimpleMdsValue<T>> getFirstValue(List<SimpleMdsValue<T>> values) {
         if (values.isEmpty()) {
             return Optional.empty();
         }

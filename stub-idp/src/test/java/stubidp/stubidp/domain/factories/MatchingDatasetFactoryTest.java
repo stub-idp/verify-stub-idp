@@ -5,10 +5,10 @@ import stubidp.saml.domain.assertions.Address;
 import stubidp.saml.domain.assertions.AuthnContext;
 import stubidp.saml.domain.assertions.Gender;
 import stubidp.saml.domain.assertions.MatchingDataset;
+import stubidp.saml.domain.assertions.SimpleMdsValue;
 import stubidp.saml.extensions.extensions.impl.BaseMdsSamlObjectUnmarshaller;
 import stubidp.saml.utils.core.domain.AddressFactory;
 import stubidp.stubidp.domain.DatabaseIdpUser;
-import stubidp.stubidp.domain.MatchingDatasetValue;
 
 import java.time.Instant;
 import java.time.ZoneId;
@@ -27,11 +27,11 @@ public class MatchingDatasetFactoryTest {
             "idpuser-complete",
             UUID.randomUUID().toString(),
             "bar",
-            asList(new MatchingDatasetValue<>("Jack", Instant.now(), Instant.now(), true), new MatchingDatasetValue<>("Spud", Instant.now(), Instant.now(), true)),
-            asList(new MatchingDatasetValue<>("Cornelius", Instant.now(), Instant.now(), true), new MatchingDatasetValue<>("Aurelius", Instant.now(), Instant.now(), true)),
-            asList(new MatchingDatasetValue<>("Bauer", Instant.now(), Instant.now(), true), new MatchingDatasetValue<>("Superman", Instant.now().atZone(ZoneId.of("UTC")).minusDays(5).toInstant(), Instant.now().atZone(ZoneId.of("UTC")).minusDays(3).toInstant(), true)),
-            Optional.of(new MatchingDatasetValue<>(Gender.MALE, Instant.now(), Instant.now(), true)),
-            asList(new MatchingDatasetValue<>(BaseMdsSamlObjectUnmarshaller.InstantFromDate.of("1984-02-29"), Instant.now(), Instant.now(), true), new MatchingDatasetValue<>(BaseMdsSamlObjectUnmarshaller.InstantFromDate.of("1984-03-01"), Instant.now(), Instant.now(), true)),
+            asList(new SimpleMdsValue<>("Jack", Instant.now(), Instant.now(), true), new SimpleMdsValue<>("Spud", Instant.now(), Instant.now(), true)),
+            asList(new SimpleMdsValue<>("Cornelius", Instant.now(), Instant.now(), true), new SimpleMdsValue<>("Aurelius", Instant.now(), Instant.now(), true)),
+            asList(new SimpleMdsValue<>("Bauer", Instant.now(), Instant.now(), true), new SimpleMdsValue<>("Superman", Instant.now().atZone(ZoneId.of("UTC")).minusDays(5).toInstant(), Instant.now().atZone(ZoneId.of("UTC")).minusDays(3).toInstant(), true)),
+            Optional.of(new SimpleMdsValue<>(Gender.MALE, Instant.now(), Instant.now(), true)),
+            asList(new SimpleMdsValue<>(BaseMdsSamlObjectUnmarshaller.InstantFromDate.of("1984-02-29"), Instant.now(), Instant.now(), true), new SimpleMdsValue<>(BaseMdsSamlObjectUnmarshaller.InstantFromDate.of("1984-03-01"), Instant.now(), Instant.now(), true)),
             asList(previousAddress, currentAddress),
             AuthnContext.LEVEL_2);
 

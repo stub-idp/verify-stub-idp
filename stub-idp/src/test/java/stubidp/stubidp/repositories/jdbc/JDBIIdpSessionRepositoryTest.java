@@ -8,10 +8,10 @@ import org.junit.jupiter.api.Test;
 import org.opensaml.saml.saml2.core.AuthnContextComparisonTypeEnumeration;
 import stubidp.saml.domain.assertions.AuthnContext;
 import stubidp.saml.domain.assertions.Gender;
+import stubidp.saml.domain.assertions.SimpleMdsValue;
 import stubidp.saml.domain.request.IdaAuthnRequestFromHub;
 import stubidp.saml.test.AddressBuilder;
 import stubidp.stubidp.domain.DatabaseIdpUser;
-import stubidp.stubidp.domain.MatchingDatasetValue;
 import stubidp.stubidp.repositories.IdpSession;
 import stubidp.stubidp.repositories.jdbc.migrations.DatabaseMigrationRunner;
 import stubidp.utils.rest.common.SessionId;
@@ -159,11 +159,11 @@ public class JDBIIdpSessionRepositoryTest {
 		IdpSession session = new IdpSession(SessionId.createNewSessionId(), authnRequestFromHub, "test-relay-state", Collections.emptyList(), Collections.emptyList(), Optional.empty(), Optional.empty(), Optional.empty(), null);
 		// TODO: add addresses to IdpUser below once Address has a equals() method implemented.
 		session.setIdpUser(Optional.of(new DatabaseIdpUser("jobloggs", "persistentId", "12345678",
-				Collections.singletonList(new MatchingDatasetValue<>("Joe", null, null, true)),
+				Collections.singletonList(new SimpleMdsValue<>("Joe", null, null, true)),
 				Collections.emptyList(),
-				Collections.singletonList(new MatchingDatasetValue<>("Bloggs", null, null, true)),
-				Optional.of(new MatchingDatasetValue<>(Gender.MALE, null, null, true)),
-				Collections.singletonList(new MatchingDatasetValue<>(authnRequestFromHub.getIssueInstant(), null, null, true)),
+				Collections.singletonList(new SimpleMdsValue<>("Bloggs", null, null, true)),
+				Optional.of(new SimpleMdsValue<>(Gender.MALE, null, null, true)),
+				Collections.singletonList(new SimpleMdsValue<>(authnRequestFromHub.getIssueInstant(), null, null, true)),
 				Collections.singletonList(AddressBuilder.anAddress().build()),
 				AuthnContext.LEVEL_1)));
 		return session;

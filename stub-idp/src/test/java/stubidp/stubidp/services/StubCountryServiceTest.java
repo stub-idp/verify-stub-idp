@@ -7,11 +7,11 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import stubidp.saml.domain.assertions.AuthnContext;
+import stubidp.saml.domain.assertions.SimpleMdsValue;
 import stubidp.saml.extensions.extensions.impl.BaseMdsSamlObjectUnmarshaller;
 import stubidp.stubidp.domain.DatabaseEidasUser;
 import stubidp.stubidp.domain.EidasAuthnRequest;
 import stubidp.stubidp.domain.EidasScheme;
-import stubidp.stubidp.domain.MatchingDatasetValue;
 import stubidp.stubidp.exceptions.IncompleteRegistrationException;
 import stubidp.stubidp.exceptions.InvalidDateException;
 import stubidp.stubidp.exceptions.InvalidSessionIdException;
@@ -102,7 +102,7 @@ class StubCountryServiceTest {
         return Optional.of(new DatabaseEidasUser("stub-country", UUID.randomUUID().toString(), "bar", createMdsValue("Jack"), Optional.of(createMdsValue("JackNonLatin")), createMdsValue("Griffin"), Optional.of(createMdsValue("GriffinNonLatin")), createMdsValue(BaseMdsSamlObjectUnmarshaller.InstantFromDate.of("1983-06-21")), AuthnContext.LEVEL_2));
     }
 
-    private static <T> MatchingDatasetValue<T> createMdsValue(T value) {
-        return (value == null) ? null : new MatchingDatasetValue<>(value, null, null, true);
+    private static <T> SimpleMdsValue<T> createMdsValue(T value) {
+        return (value == null) ? null : new SimpleMdsValue<>(value, null, null, true);
     }
 }

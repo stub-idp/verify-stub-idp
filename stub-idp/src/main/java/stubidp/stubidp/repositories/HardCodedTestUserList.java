@@ -2,11 +2,11 @@ package stubidp.stubidp.repositories;
 
 import stubidp.saml.domain.assertions.AuthnContext;
 import stubidp.saml.domain.assertions.Gender;
+import stubidp.saml.domain.assertions.SimpleMdsValue;
 import stubidp.saml.extensions.extensions.impl.BaseMdsSamlObjectUnmarshaller;
 import stubidp.saml.utils.core.domain.AddressFactory;
 import stubidp.stubidp.domain.DatabaseEidasUser;
 import stubidp.stubidp.domain.DatabaseIdpUser;
-import stubidp.stubidp.domain.MatchingDatasetValue;
 
 import java.time.Instant;
 import java.time.ZoneId;
@@ -72,7 +72,7 @@ final class HardCodedTestUserList {
                 "bar",
                 Collections.singletonList(createMdsValue("J")),
                 Collections.emptyList(),   //No middle names that we could find. :)
-                List.of(createMdsValue("Moriarti"), new MatchingDatasetValue<>("Barnes", dateToInstant("2006-09-29"), dateToInstant("2006-09-08"), true)),
+                List.of(createMdsValue("Moriarti"), new SimpleMdsValue<>("Barnes", dateToInstant("2006-09-29"), dateToInstant("2006-09-08"), true)),
                 Optional.of(createMdsValue(Gender.NOT_SPECIFIED)),
                 Collections.singletonList(createMdsValue(dateToInstant("1822-11-27"))),
                 Collections.singletonList(new AddressFactory().createNoDates(Collections.singletonList("10 Two St"), "1A 2BC", null, null, true)),
@@ -94,15 +94,15 @@ final class HardCodedTestUserList {
                 idpFriendlyId + "-complete",
                 UUID.randomUUID().toString(),
                 "bar",
-                List.of(new MatchingDatasetValue<>("Jack", Instant.now(), Instant.now(), true),
-                        new MatchingDatasetValue<>("Spud", Instant.now(), Instant.now(), true)),
-                List.of(new MatchingDatasetValue<>("Cornelius", Instant.now(), Instant.now(), true),
-                        new MatchingDatasetValue<>("Aurelius", Instant.now(), Instant.now(), true)),
-                List.of(new MatchingDatasetValue<>("Bauer", Instant.now(), Instant.now(), true),
-                        new MatchingDatasetValue<>("Superman", Instant.now().atZone(ZoneId.of("UTC")).minusDays(5).toInstant(), Instant.now().atZone(ZoneId.of("UTC")).minusDays(3).toInstant(), true)),
-                Optional.of(new MatchingDatasetValue<>(Gender.MALE, Instant.now(), Instant.now(), true)),
-                List.of(new MatchingDatasetValue<>(dateToInstant("1984-02-29"), Instant.now(), Instant.now(), true),
-                        new MatchingDatasetValue<>(dateToInstant("1984-03-01"), Instant.now(), Instant.now(), true)),
+                List.of(new SimpleMdsValue<>("Jack", Instant.now(), Instant.now(), true),
+                        new SimpleMdsValue<>("Spud", Instant.now(), Instant.now(), true)),
+                List.of(new SimpleMdsValue<>("Cornelius", Instant.now(), Instant.now(), true),
+                        new SimpleMdsValue<>("Aurelius", Instant.now(), Instant.now(), true)),
+                List.of(new SimpleMdsValue<>("Bauer", Instant.now(), Instant.now(), true),
+                        new SimpleMdsValue<>("Superman", Instant.now().atZone(ZoneId.of("UTC")).minusDays(5).toInstant(), Instant.now().atZone(ZoneId.of("UTC")).minusDays(3).toInstant(), true)),
+                Optional.of(new SimpleMdsValue<>(Gender.MALE, Instant.now(), Instant.now(), true)),
+                List.of(new SimpleMdsValue<>(dateToInstant("1984-02-29"), Instant.now(), Instant.now(), true),
+                        new SimpleMdsValue<>(dateToInstant("1984-03-01"), Instant.now(), Instant.now(), true)),
                 List.of(new AddressFactory().create(Collections.singletonList("1 Two St"), "1A 2BC", "Something", "dummy uprn", Instant.now(), Instant.now(), true),
                         new AddressFactory().create(Collections.singletonList("2 Three St"), "1B 2CD", "Something else", "dummy second uprn", Instant.now(), Instant.now(), true)),
                 AuthnContext.LEVEL_2));
@@ -111,11 +111,11 @@ final class HardCodedTestUserList {
                 idpFriendlyId + "-loa1",
                 UUID.randomUUID().toString(),
                 "bar",
-                Collections.singletonList(new MatchingDatasetValue<>("Jessica", Instant.now(), null, false)),
-                Collections.singletonList(new MatchingDatasetValue<>("", Instant.now(), null, false)),
-                Collections.singletonList(new MatchingDatasetValue<>("Rabbit", Instant.now(), null, false)),
-                Optional.of(new MatchingDatasetValue<>(Gender.FEMALE, Instant.now(), null, false)),
-                Collections.singletonList(new MatchingDatasetValue<>(dateToInstant("1960-03-23"), Instant.now(), null, false)),
+                Collections.singletonList(new SimpleMdsValue<>("Jessica", Instant.now(), null, false)),
+                Collections.singletonList(new SimpleMdsValue<>("", Instant.now(), null, false)),
+                Collections.singletonList(new SimpleMdsValue<>("Rabbit", Instant.now(), null, false)),
+                Optional.of(new SimpleMdsValue<>(Gender.FEMALE, Instant.now(), null, false)),
+                Collections.singletonList(new SimpleMdsValue<>(dateToInstant("1960-03-23"), Instant.now(), null, false)),
 
                 List.of(new AddressFactory().create(Collections.singletonList("1 Two St"), "1A 2BC", "Something", "dummy uprn", Instant.now(), null, false),
                         new AddressFactory().create(Collections.singletonList("2 Three St"), "1B 2CD", "Something else", "dummy second uprn", Instant.now(), Instant.now(), false)),
@@ -125,11 +125,11 @@ final class HardCodedTestUserList {
                 idpFriendlyId + "-loa2",
                 UUID.randomUUID().toString(),
                 "bar",
-                Collections.singletonList(new MatchingDatasetValue<>("Roger", Instant.now(), Instant.now(), true)),
-                Collections.singletonList(new MatchingDatasetValue<>("", Instant.now(), Instant.now(), true)),
-                Collections.singletonList(new MatchingDatasetValue<>("Rabbit", Instant.now(), Instant.now(), true)),
-                Optional.of(new MatchingDatasetValue<>(Gender.MALE, Instant.now(), Instant.now(), true)),
-                Collections.singletonList(new MatchingDatasetValue<>(dateToInstant("1958-04-09"), Instant.now(), Instant.now(), true)),
+                Collections.singletonList(new SimpleMdsValue<>("Roger", Instant.now(), Instant.now(), true)),
+                Collections.singletonList(new SimpleMdsValue<>("", Instant.now(), Instant.now(), true)),
+                Collections.singletonList(new SimpleMdsValue<>("Rabbit", Instant.now(), Instant.now(), true)),
+                Optional.of(new SimpleMdsValue<>(Gender.MALE, Instant.now(), Instant.now(), true)),
+                Collections.singletonList(new SimpleMdsValue<>(dateToInstant("1958-04-09"), Instant.now(), Instant.now(), true)),
 
                 List.of(new AddressFactory().create(Collections.singletonList("1 Two St"), "1A 2BC", "Something", "dummy uprn", Instant.now(), Instant.now(), true),
                         new AddressFactory().create(Collections.singletonList("2 Three St"), "1B 2CD", "Something else", "dummy second uprn", Instant.now(), Instant.now(), true)),
@@ -139,11 +139,11 @@ final class HardCodedTestUserList {
                 idpFriendlyId + "-loa3",
                 UUID.randomUUID().toString(),
                 "bar",
-                Collections.singletonList(new MatchingDatasetValue<>("Apollo", Instant.now(), null, true)),
-                Collections.singletonList(new MatchingDatasetValue<>("", Instant.now(), null, true)),
-                Collections.singletonList(new MatchingDatasetValue<>("Eagle", Instant.now(), null, true)),
-                Optional.of(new MatchingDatasetValue<>(Gender.FEMALE, Instant.now(), null, true)),
-                Collections.singletonList(new MatchingDatasetValue<>(dateToInstant("1969-07-20"), Instant.now(), null, true)),
+                Collections.singletonList(new SimpleMdsValue<>("Apollo", Instant.now(), null, true)),
+                Collections.singletonList(new SimpleMdsValue<>("", Instant.now(), null, true)),
+                Collections.singletonList(new SimpleMdsValue<>("Eagle", Instant.now(), null, true)),
+                Optional.of(new SimpleMdsValue<>(Gender.FEMALE, Instant.now(), null, true)),
+                Collections.singletonList(new SimpleMdsValue<>(dateToInstant("1969-07-20"), Instant.now(), null, true)),
 
                 List.of(new AddressFactory().create(Collections.singletonList("1 Four St"), "1A 2BD", "Something", "dummy uprn", Instant.now(), null, true),
                         new AddressFactory().create(Collections.singletonList("2 Five St"), "1B 2RD", "Something else", "dummy second uprn", Instant.now(), Instant.now(), true)),
@@ -153,11 +153,11 @@ final class HardCodedTestUserList {
                 idpFriendlyId + "-loax",
                 UUID.randomUUID().toString(),
                 "bar",
-                Collections.singletonList(new MatchingDatasetValue<>("Bugs", Instant.now(), Instant.now(), true)),
-                Collections.singletonList(new MatchingDatasetValue<>("", Instant.now(), Instant.now(), true)),
-                Collections.singletonList(new MatchingDatasetValue<>("Nummy", Instant.now(), Instant.now(), true)),
-                Optional.of(new MatchingDatasetValue<>(Gender.MALE, Instant.now(), Instant.now(), true)),
-                Collections.singletonList(new MatchingDatasetValue<>(dateToInstant("1958-04-09"), Instant.now(), Instant.now(), true)),
+                Collections.singletonList(new SimpleMdsValue<>("Bugs", Instant.now(), Instant.now(), true)),
+                Collections.singletonList(new SimpleMdsValue<>("", Instant.now(), Instant.now(), true)),
+                Collections.singletonList(new SimpleMdsValue<>("Nummy", Instant.now(), Instant.now(), true)),
+                Optional.of(new SimpleMdsValue<>(Gender.MALE, Instant.now(), Instant.now(), true)),
+                Collections.singletonList(new SimpleMdsValue<>(dateToInstant("1958-04-09"), Instant.now(), Instant.now(), true)),
 
                 List.of(new AddressFactory().create(Collections.singletonList("1 Two St"), "1A 2BC", "Something", "dummy uprn", Instant.now(), Instant.now(), true),
                         new AddressFactory().create(Collections.singletonList("2 Three St"), "1B 2CD", "Something else", "dummy second uprn", Instant.now(), Instant.now(), true)),
@@ -279,55 +279,55 @@ final class HardCodedTestUserList {
                 idpFriendlyId + "-complete",
                 UUID.randomUUID().toString(),
                 "bar",
-                new MatchingDatasetValue<>("Jack", Instant.now(), Instant.now(), true),
+                new SimpleMdsValue<>("Jack", Instant.now(), Instant.now(), true),
                 Optional.empty(),
-                new MatchingDatasetValue<>("Bauer", Instant.now(), Instant.now(), true),
+                new SimpleMdsValue<>("Bauer", Instant.now(), Instant.now(), true),
                 Optional.empty(),
-                new MatchingDatasetValue<>(dateToInstant("1984-02-29"), Instant.now(), Instant.now(), true),
+                new SimpleMdsValue<>(dateToInstant("1984-02-29"), Instant.now(), Instant.now(), true),
                 AuthnContext.LEVEL_2));
 
         sacredUsers.add(new DatabaseEidasUser(
                 idpFriendlyId + "-loa1",
                 UUID.randomUUID().toString(),
                 "bar",
-                new MatchingDatasetValue<>("Jessica", Instant.now(), null, false),
+                new SimpleMdsValue<>("Jessica", Instant.now(), null, false),
                 Optional.empty(),
-                new MatchingDatasetValue<>("Rabbit", Instant.now(), null, false),
+                new SimpleMdsValue<>("Rabbit", Instant.now(), null, false),
                 Optional.empty(),
-                new MatchingDatasetValue<>(dateToInstant("1960-03-23"), Instant.now(), null, false),
+                new SimpleMdsValue<>(dateToInstant("1960-03-23"), Instant.now(), null, false),
                 AuthnContext.LEVEL_1));
 
         sacredUsers.add(new DatabaseEidasUser(
                 idpFriendlyId + "-loa2",
                 UUID.randomUUID().toString(),
                 "bar",
-                new MatchingDatasetValue<>("Roger", Instant.now(), Instant.now(), true),
+                new SimpleMdsValue<>("Roger", Instant.now(), Instant.now(), true),
                 Optional.empty(),
-                new MatchingDatasetValue<>("Rabbit", Instant.now(), Instant.now(), true),
+                new SimpleMdsValue<>("Rabbit", Instant.now(), Instant.now(), true),
                 Optional.empty(),
-                new MatchingDatasetValue<>(dateToInstant("1958-04-09"), Instant.now(), Instant.now(), true),
+                new SimpleMdsValue<>(dateToInstant("1958-04-09"), Instant.now(), Instant.now(), true),
                 AuthnContext.LEVEL_2));
 
         sacredUsers.add(new DatabaseEidasUser(
                 idpFriendlyId + "-loa3",
                 UUID.randomUUID().toString(),
                 "bar",
-                new MatchingDatasetValue<>("Apollo", Instant.now(), null, true),
+                new SimpleMdsValue<>("Apollo", Instant.now(), null, true),
                 Optional.empty(),
-                new MatchingDatasetValue<>("Eagle", Instant.now(), null, true),
+                new SimpleMdsValue<>("Eagle", Instant.now(), null, true),
                 Optional.empty(),
-                new MatchingDatasetValue<>(dateToInstant("1969-07-20"), Instant.now(), null, true),
+                new SimpleMdsValue<>(dateToInstant("1969-07-20"), Instant.now(), null, true),
                 AuthnContext.LEVEL_3));
 
         sacredUsers.add(new DatabaseEidasUser(
                 idpFriendlyId + "-loax",
                 UUID.randomUUID().toString(),
                 "bar",
-                new MatchingDatasetValue<>("Bugs", Instant.now(), Instant.now(), true),
+                new SimpleMdsValue<>("Bugs", Instant.now(), Instant.now(), true),
                 Optional.empty(),
-                new MatchingDatasetValue<>("Nummy", Instant.now(), Instant.now(), true),
+                new SimpleMdsValue<>("Nummy", Instant.now(), Instant.now(), true),
                 Optional.empty(),
-                new MatchingDatasetValue<>(dateToInstant("1958-04-09"), Instant.now(), Instant.now(), true),
+                new SimpleMdsValue<>(dateToInstant("1958-04-09"), Instant.now(), Instant.now(), true),
                 AuthnContext.LEVEL_X));
 
         sacredUsers.add(new DatabaseEidasUser(idpFriendlyId + "-emoji",
@@ -348,11 +348,11 @@ final class HardCodedTestUserList {
         return BaseMdsSamlObjectUnmarshaller.InstantFromDate.of(date);
     }
 
-    private static <T> MatchingDatasetValue<T> createMdsValue(T value) {
+    private static <T> SimpleMdsValue<T> createMdsValue(T value) {
         if (value == null) {
             return null;
         }
 
-        return new MatchingDatasetValue<>(value, Instant.now().atZone(ZoneId.of("UTC")).minusDays(1).toInstant(), null, true);
+        return new SimpleMdsValue<>(value, Instant.now().atZone(ZoneId.of("UTC")).minusDays(1).toInstant(), null, true);
     }
 }

@@ -11,9 +11,9 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import stubidp.saml.domain.assertions.Address;
 import stubidp.saml.domain.assertions.AuthnContext;
 import stubidp.saml.domain.assertions.Gender;
+import stubidp.saml.domain.assertions.SimpleMdsValue;
 import stubidp.stubidp.Urls;
 import stubidp.stubidp.builders.SimpleMdsValueBuilder;
-import stubidp.stubidp.domain.MatchingDatasetValue;
 import stubidp.stubidp.dtos.IdpUserDto;
 import stubidp.stubidp.security.BCryptHelper;
 import stubidp.stubidp.utils.TestUserCredentials;
@@ -208,8 +208,8 @@ public class UserRepositoryIntegrationTests extends IntegrationTestHelper {
         return applicationRule.getObjectMapper().readValue(response.readEntity(String.class), IdpUserDto.class);
     }
 
-    private static <T> Optional<MatchingDatasetValue<T>> createOptionalMdsValue(Optional<T> value) {
-        return value.map(t -> new MatchingDatasetValue<>(t, null, null, true));
+    private static <T> Optional<SimpleMdsValue<T>> createOptionalMdsValue(Optional<T> value) {
+        return value.map(t -> new SimpleMdsValue<>(t, null, null, true));
     }
 
     protected static class UserBuilder {
@@ -228,11 +228,11 @@ public class UserRepositoryIntegrationTests extends IntegrationTestHelper {
                     pid,
                     username.orElse(null),
                     password.orElse(null),
-                    Optional.<MatchingDatasetValue<String>>empty(),
-                    Optional.<MatchingDatasetValue<String>>empty(),
-                    Collections.<MatchingDatasetValue<String>>emptyList(),
-                    Optional.<MatchingDatasetValue<Gender>>empty(),
-                    Optional.<MatchingDatasetValue<Instant>>empty(),
+                    Optional.<SimpleMdsValue<String>>empty(),
+                    Optional.<SimpleMdsValue<String>>empty(),
+                    Collections.<SimpleMdsValue<String>>emptyList(),
+                    Optional.<SimpleMdsValue<Gender>>empty(),
+                    Optional.<SimpleMdsValue<Instant>>empty(),
                     address,
                     levelOfAssurance.orElse(null));
         }

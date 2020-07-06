@@ -7,10 +7,10 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import stubidp.saml.domain.assertions.AuthnContext;
+import stubidp.saml.domain.assertions.SimpleMdsValue;
 import stubidp.stubidp.builders.IdpUserBuilder;
 import stubidp.stubidp.domain.DatabaseEidasUser;
 import stubidp.stubidp.domain.DatabaseIdpUser;
-import stubidp.stubidp.domain.MatchingDatasetValue;
 import stubidp.stubidp.repositories.jdbc.migrations.DatabaseMigrationRunner;
 
 import java.time.Instant;
@@ -152,8 +152,7 @@ public class JDBIUserRepositoryTest {
         );
     }
 
-    private <T> MatchingDatasetValue<T> createMdsValue(T value) {
-        return new MatchingDatasetValue<>(value, null, null, true);
+    private <T> SimpleMdsValue<T> createMdsValue(T value) {
+        return new SimpleMdsValue<>(value, null, null, true);
     }
-
 }

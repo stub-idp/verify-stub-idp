@@ -10,6 +10,7 @@ import org.mindrot.jbcrypt.BCrypt;
 import stubidp.saml.domain.assertions.Address;
 import stubidp.saml.domain.assertions.AuthnContext;
 import stubidp.saml.domain.assertions.Gender;
+import stubidp.saml.domain.assertions.SimpleMdsValue;
 import stubidp.stubidp.exceptions.UnHashedPasswordException;
 import stubidp.stubidp.security.BCryptHelper;
 
@@ -28,11 +29,11 @@ public class DatabaseIdpUser implements Serializable {
     private final String username;
     private final String persistentId;
     private String password;
-    private final List<MatchingDatasetValue<String>> firstnames;
-    private final List<MatchingDatasetValue<String>> middleNames;
-    private final List<MatchingDatasetValue<String>> surnames;
-    private final Optional<MatchingDatasetValue<Gender>> gender;
-    private final List<MatchingDatasetValue<Instant>> dateOfBirths;
+    private final List<SimpleMdsValue<String>> firstnames;
+    private final List<SimpleMdsValue<String>> middleNames;
+    private final List<SimpleMdsValue<String>> surnames;
+    private final Optional<SimpleMdsValue<Gender>> gender;
+    private final List<SimpleMdsValue<Instant>> dateOfBirths;
     private final List<Address> addresses;
     private final AuthnContext levelOfAssurance;
 
@@ -41,11 +42,11 @@ public class DatabaseIdpUser implements Serializable {
         @JsonProperty("username") String username,
         @JsonProperty("persistentId") String persistentId,
         @JsonProperty("password") String password,
-        @JsonProperty("firstnames") List<MatchingDatasetValue<String>> firstnames,
-        @JsonProperty("middleNames") List<MatchingDatasetValue<String>> middleNames,
-        @JsonProperty("surnames") List<MatchingDatasetValue<String>> surnames,
-        @JsonProperty("gender") Optional<MatchingDatasetValue<Gender>> gender,
-        @JsonProperty("dateOfBirths") List<MatchingDatasetValue<Instant>> dateOfBirths,
+        @JsonProperty("firstnames") List<SimpleMdsValue<String>> firstnames,
+        @JsonProperty("middleNames") List<SimpleMdsValue<String>> middleNames,
+        @JsonProperty("surnames") List<SimpleMdsValue<String>> surnames,
+        @JsonProperty("gender") Optional<SimpleMdsValue<Gender>> gender,
+        @JsonProperty("dateOfBirths") List<SimpleMdsValue<Instant>> dateOfBirths,
         @JsonProperty("addresses") List<Address> addresses,
         @JsonProperty("levelOfAssurance") AuthnContext levelOfAssurance) {
 
@@ -77,23 +78,23 @@ public class DatabaseIdpUser implements Serializable {
         throw new UnHashedPasswordException(this.getUsername());
     }
 
-    public List<MatchingDatasetValue<String>> getFirstnames() {
+    public List<SimpleMdsValue<String>> getFirstnames() {
         return firstnames;
     }
 
-    public List<MatchingDatasetValue<String>> getMiddleNames() {
+    public List<SimpleMdsValue<String>> getMiddleNames() {
         return middleNames;
     }
 
-    public List<MatchingDatasetValue<String>> getSurnames() {
+    public List<SimpleMdsValue<String>> getSurnames() {
         return surnames;
     }
 
-    public Optional<MatchingDatasetValue<Gender>> getGender() {
+    public Optional<SimpleMdsValue<Gender>> getGender() {
         return gender;
     }
 
-    public List<MatchingDatasetValue<Instant>> getDateOfBirths() {
+    public List<SimpleMdsValue<Instant>> getDateOfBirths() {
         return dateOfBirths;
     }
 
