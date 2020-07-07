@@ -4,6 +4,7 @@ import org.junit.jupiter.api.Test;
 import org.opensaml.saml.saml2.core.Assertion;
 import org.opensaml.xmlsec.algorithm.descriptors.DigestSHA256;
 import org.opensaml.xmlsec.algorithm.descriptors.SignatureRSASHA256;
+import stubidp.saml.test.OpenSAMLRunner;
 import stubidp.test.devpki.TestCertificateStrings;
 import stubidp.test.devpki.TestEntityIds;
 import stubidp.utils.security.security.PrivateKeyFactory;
@@ -18,7 +19,7 @@ import java.util.Collections;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static stubidp.saml.security.saml.builders.AssertionBuilder.anAssertion;
+import static stubidp.saml.test.builders.AssertionBuilder.anAssertion;
 
 public class SignatureWithKeyInfoFactoryTest extends OpenSAMLRunner {
 
@@ -42,8 +43,8 @@ public class SignatureWithKeyInfoFactoryTest extends OpenSAMLRunner {
 		IdaKeyStoreCredentialRetriever keyStoreCredentialRetriever = new IdaKeyStoreCredentialRetriever(keystore);
 		SignatureWithKeyInfoFactory keyInfoFactory = new SignatureWithKeyInfoFactory(keyStoreCredentialRetriever, new SignatureRSASHA256(), new DigestSHA256(), "", "");
 
-		Assertion assertion1 = anAssertion().withSignature(keyInfoFactory.createSignature()).build();
-        Assertion assertion2 = anAssertion().withId(id).withSignature(keyInfoFactory.createSignature(id)).build();
+		Assertion assertion1 = anAssertion().withSignature(keyInfoFactory.createSignature()).buildUnencrypted();
+        Assertion assertion2 = anAssertion().withId(id).withSignature(keyInfoFactory.createSignature(id)).buildUnencrypted();
 
         assertThat(assertion1.getSignature()).isNotNull();
         assertThat(assertion2.getSignature()).isNotNull();

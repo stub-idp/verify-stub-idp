@@ -20,6 +20,7 @@ import stubidp.kotlin.test.integration.support.IntegrationTestHelper
 import stubidp.kotlin.test.integration.support.StubIdpAppExtension
 import stubidp.saml.domain.assertions.AuthnContext
 import stubidp.saml.domain.assertions.SimpleMdsValue
+import stubidp.saml.test.builders.AddressBuilder
 import stubidp.utils.rest.common.HttpHeaders
 import java.io.IOException
 import java.text.MessageFormat
@@ -74,7 +75,7 @@ class UserRepositoryIntegrationTests : IntegrationTestHelper() {
                 createOptionalMdsValue(Optional.of("some user middlename")), listOf(SimpleMdsValueBuilder.aSimpleMdsValue<String>().withValue("some user addSurname").build()),
                 createOptionalMdsValue(Optional.of(Gender.FEMALE)),
                 createOptionalMdsValue(Optional.of(Instant.now())),
-                Optional.ofNullable(stubidp.saml.test.AddressBuilder.anAddress().withLines(Arrays.asList("blah", "blah2")).withPostCode("WC1V7AA").withVerified(true).build()),
+                Optional.ofNullable(AddressBuilder.anAddress().withLines(Arrays.asList("blah", "blah2")).withPostCode("WC1V7AA").withVerified(true).build()),
                 AuthnContext.LEVEL_4.toString()
         )
         aUserIsCreatedForIdp(IDP_NAME, user)
@@ -176,7 +177,7 @@ class UserRepositoryIntegrationTests : IntegrationTestHelper() {
     class UserBuilder {
         private var levelOfAssurance: Optional<String> = Optional.ofNullable(AuthnContext.LEVEL_1.toString())
         private var username: Optional<String> = Optional.of("default-username")
-        private val address = Optional.ofNullable(stubidp.saml.test.AddressBuilder.anAddress().withLines(Arrays.asList("line-1", "line-2")).build())
+        private val address = Optional.ofNullable(AddressBuilder.anAddress().withLines(Arrays.asList("line-1", "line-2")).build())
         private var password: Optional<String> = Optional.of("default-password")
         private var pid = Optional.of("default-pid")
         fun build(): IdpUserDto {

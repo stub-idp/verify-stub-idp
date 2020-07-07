@@ -9,7 +9,7 @@ import org.jsoup.nodes.Element;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import stubidp.saml.utils.core.test.TestCredentialFactory;
+import stubidp.saml.test.TestCredentialFactory;
 import stubidp.stubidp.Urls;
 import stubidp.stubidp.cookies.StubIdpCookieNames;
 import stubidp.stubidp.filters.SecurityHeadersFilterTest;

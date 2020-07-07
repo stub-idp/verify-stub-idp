@@ -8,7 +8,7 @@ import org.jsoup.Jsoup
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
-import stubidp.saml.utils.core.test.TestCredentialFactory
+import stubidp.saml.test.TestCredentialFactory
 import stubidp.shared.csrf.AbstractCSRFCheckProtectionFilter
 import stubidp.stubidp.Urls
 import stubidp.stubidp.builders.StubIdpBuilder

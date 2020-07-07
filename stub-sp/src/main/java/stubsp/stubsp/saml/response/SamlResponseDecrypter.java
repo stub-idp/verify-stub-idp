@@ -10,6 +10,7 @@ import org.opensaml.saml.saml2.encryption.Decrypter;
 import org.opensaml.saml.saml2.metadata.IDPSSODescriptor;
 import org.opensaml.xmlsec.encryption.support.EncryptionConstants;
 import org.slf4j.event.Level;
+import stubidp.saml.domain.response.InboundResponseFromIdp;
 import stubidp.saml.extensions.validation.SamlTransformationErrorException;
 import stubidp.saml.extensions.validation.SamlValidationSpecificationFailure;
 import stubidp.saml.hub.core.errors.SamlTransformationErrorFactory;
@@ -22,7 +23,6 @@ import stubidp.saml.hub.core.validators.assertion.IdentityProviderAssertionValid
 import stubidp.saml.hub.core.validators.assertion.MatchingDatasetAssertionValidator;
 import stubidp.saml.hub.core.validators.subject.AssertionSubjectValidator;
 import stubidp.saml.hub.core.validators.subjectconfirmation.AssertionSubjectConfirmationValidator;
-import stubidp.saml.hub.hub.domain.InboundResponseFromIdp;
 import stubidp.saml.hub.hub.transformers.inbound.IdaResponseFromIdpUnmarshaller;
 import stubidp.saml.hub.hub.transformers.inbound.IdpIdaStatusUnmarshaller;
 import stubidp.saml.hub.hub.transformers.inbound.PassthroughAssertionUnmarshaller;

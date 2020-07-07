@@ -90,6 +90,12 @@
         </dependency>
         <dependency>
             <groupId>stub-idp</groupId>
+            <artifactId>saml-test</artifactId>
+            <version>1.0-SNAPSHOT</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>stub-idp</groupId>
             <artifactId>security-utils</artifactId>
             <version>1.0-SNAPSHOT</version>
             <scope>test</scope>

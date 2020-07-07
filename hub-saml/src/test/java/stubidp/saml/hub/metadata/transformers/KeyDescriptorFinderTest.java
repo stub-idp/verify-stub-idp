@@ -6,15 +6,15 @@ import org.junit.jupiter.api.Test;
 import org.opensaml.saml.saml2.metadata.KeyDescriptor;
 import org.opensaml.security.credential.UsageType;
 import stubidp.saml.hub.core.errors.SamlTransformationErrorFactory;
-import stubidp.saml.hub.core.OpenSAMLRunner;
-import stubidp.saml.utils.core.test.SamlTransformationErrorManagerTestHelper;
-import stubidp.saml.utils.core.test.builders.metadata.KeyDescriptorBuilder;
+import stubidp.saml.test.OpenSAMLRunner;
+import stubidp.saml.test.builders.KeyDescriptorBuilder;
+import stubidp.saml.test.support.SamlTransformationErrorManagerTestHelper;
 
 import java.util.UUID;
 
 import static java.util.Arrays.asList;
 import static java.util.Collections.singletonList;
-import static stubidp.saml.utils.core.test.builders.metadata.KeyInfoBuilder.aKeyInfo;
+import static stubidp.saml.test.builders.KeyInfoBuilder.aKeyInfo;
 
 public class KeyDescriptorFinderTest extends OpenSAMLRunner {
 

@@ -1,6 +1,5 @@
 package stubidp.saml.hub.core.test.builders;
 
-
 import stubidp.saml.hub.metadata.domain.ContactPersonDto;
 
 import java.net.URI;

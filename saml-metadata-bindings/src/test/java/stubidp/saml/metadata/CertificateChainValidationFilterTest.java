@@ -9,9 +9,9 @@ import org.opensaml.core.xml.util.XMLObjectSupport;
 import org.opensaml.saml.saml2.metadata.EntitiesDescriptor;
 import org.opensaml.saml.saml2.metadata.IDPSSODescriptor;
 import org.opensaml.saml.saml2.metadata.SPSSODescriptor;
-import stubidp.saml.metadata.test.factories.metadata.EntityDescriptorFactory;
-import stubidp.saml.metadata.test.factories.metadata.MetadataFactory;
-import stubidp.saml.utils.OpenSAMLRunner;
+import stubidp.saml.test.metadata.EntityDescriptorFactory;
+import stubidp.saml.test.metadata.MetadataFactory;
+import stubidp.saml.test.OpenSAMLRunner;
 import stubidp.test.devpki.TestEntityIds;
 import stubidp.test.utils.keystore.KeyStoreRule;
 import stubidp.test.utils.keystore.builders.KeyStoreRuleBuilder;
@@ -30,7 +30,6 @@ import static java.util.Arrays.asList;
 import static org.assertj.core.api.Assertions.assertThat;
 
 class CertificateChainValidationFilterTest extends OpenSAMLRunner {
-
     private static final List<String> IDP_ENTITY_IDS = asList(TestEntityIds.STUB_IDP_ONE, TestEntityIds.STUB_IDP_TWO, TestEntityIds.STUB_IDP_THREE, TestEntityIds.STUB_IDP_FOUR);
     private static final List<String> HUB_ENTITY_IDS = Collections.singletonList(TestEntityIds.HUB_ENTITY_ID);
     private static final List<String> HUB_KEY_NAMES = asList(EntityDescriptorFactory.SIGNING_ONE, EntityDescriptorFactory.SIGNING_TWO, EntityDescriptorFactory.ENCRYPTION);

@@ -7,11 +7,11 @@ import org.opensaml.saml.saml2.core.Subject;
 import stubidp.saml.extensions.validation.SamlValidationSpecificationFailure;
 import stubidp.saml.extensions.validation.errors.ResponseProcessingValidationSpecification;
 import stubidp.saml.hub.core.errors.SamlTransformationErrorFactory;
-import stubidp.saml.hub.core.OpenSAMLRunner;
-import stubidp.saml.utils.core.test.SamlTransformationErrorManagerTestHelper;
-import stubidp.saml.utils.core.test.builders.NameIdBuilder;
+import stubidp.saml.test.OpenSAMLRunner;
+import stubidp.saml.test.support.SamlTransformationErrorManagerTestHelper;
+import stubidp.saml.test.builders.NameIdBuilder;
 
-import static stubidp.saml.utils.core.test.builders.SubjectBuilder.aSubject;
+import static stubidp.saml.test.builders.SubjectBuilder.aSubject;
 
 public class AssertionSubjectValidatorTest extends OpenSAMLRunner {
 

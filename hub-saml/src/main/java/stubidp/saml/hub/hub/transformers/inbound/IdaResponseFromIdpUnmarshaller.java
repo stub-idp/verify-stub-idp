@@ -1,7 +1,7 @@
 package stubidp.saml.hub.hub.transformers.inbound;
 
-import stubidp.saml.hub.hub.domain.IdpIdaStatus;
-import stubidp.saml.hub.hub.domain.InboundResponseFromIdp;
+import stubidp.saml.domain.assertions.IdpIdaStatus;
+import stubidp.saml.domain.response.InboundResponseFromIdp;
 import stubidp.saml.security.validators.ValidatedAssertions;
 import stubidp.saml.security.validators.ValidatedResponse;
 import stubidp.saml.domain.assertions.PassthroughAssertion;

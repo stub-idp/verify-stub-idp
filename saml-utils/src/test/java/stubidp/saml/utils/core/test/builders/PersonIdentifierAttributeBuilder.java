@@ -3,7 +3,7 @@ package stubidp.saml.utils.core.test.builders;
 import org.opensaml.saml.saml2.core.Attribute;
 import stubidp.saml.extensions.IdaConstants;
 import stubidp.saml.extensions.extensions.eidas.PersonIdentifier;
-import stubidp.saml.utils.core.test.OpenSamlXmlObjectFactory;
+import stubidp.saml.test.OpenSamlXmlObjectFactory;
 
 public class PersonIdentifierAttributeBuilder {
     private PersonIdentifier pid = null;

@@ -25,9 +25,9 @@ import org.opensaml.xmlsec.signature.Signature;
 import org.opensaml.xmlsec.signature.support.SignatureException;
 import org.opensaml.xmlsec.signature.support.impl.ExplicitKeySignatureTrustEngine;
 import stubidp.eidas.metadata.support.HardCodedKeyStore;
-import stubidp.eidas.metadata.support.OpenSAMLRunner;
 import stubidp.eidas.metadata.support.SigningCredentialFactory;
-import stubidp.eidas.metadata.support.builders.ResponseBuilder;
+import stubidp.saml.test.OpenSAMLRunner;
+import stubidp.saml.test.builders.ResponseBuilder;
 import stubidp.test.devpki.TestEntityIds;
 
 import javax.xml.namespace.QName;

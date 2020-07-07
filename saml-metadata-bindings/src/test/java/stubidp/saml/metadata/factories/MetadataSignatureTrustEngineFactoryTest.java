@@ -23,7 +23,7 @@ import org.opensaml.xmlsec.signature.support.SignatureException;
 import org.opensaml.xmlsec.signature.support.SignatureTrustEngine;
 import org.opensaml.xmlsec.signature.support.Signer;
 import org.w3c.dom.Element;
-import stubidp.saml.metadata.test.factories.metadata.EntityDescriptorFactory;
+import stubidp.saml.test.metadata.EntityDescriptorFactory;
 import stubidp.test.devpki.TestCertificateStrings;
 import stubidp.test.devpki.TestEntityIds;
 

@@ -5,7 +5,7 @@ import org.opensaml.saml.saml2.core.AuthnStatement;
 import stubidp.saml.domain.assertions.AuthnContext;
 import stubidp.saml.domain.assertions.IdentityProviderAuthnStatement;
 import stubidp.saml.extensions.extensions.IdaAuthnContext;
-import stubidp.saml.stubidp.OpenSAMLRunner;
+import stubidp.saml.test.OpenSAMLRunner;
 import stubidp.saml.utils.core.OpenSamlXmlObjectFactory;
 
 import java.time.Instant;

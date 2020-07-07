@@ -6,7 +6,7 @@ import stubidp.saml.hub.metadata.domain.ContactPersonDto;
 import stubidp.saml.hub.metadata.domain.HubIdentityProviderMetadataDto;
 import stubidp.saml.hub.metadata.domain.OrganisationDto;
 import stubidp.saml.hub.metadata.domain.SamlEndpointDto;
-import stubidp.saml.utils.core.test.builders.CertificateBuilder;
+import stubidp.saml.test.builders.CertificateBuilder;
 import stubidp.test.devpki.TestEntityIds;
 import stubidp.utils.security.security.Certificate;
 
@@ -29,6 +29,8 @@ public class IdentityProviderMetadataDtoBuilder {
 
     private boolean useDefaultSingleSignOnServiceEndpoints = true;
     private boolean useDefaultContactPerson = true;
+
+    private IdentityProviderMetadataDtoBuilder() {}
 
     public static IdentityProviderMetadataDtoBuilder anIdentityProviderMetadataDto() {
         return new IdentityProviderMetadataDtoBuilder();

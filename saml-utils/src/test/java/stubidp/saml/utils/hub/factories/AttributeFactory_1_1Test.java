@@ -14,10 +14,10 @@ import stubidp.saml.extensions.extensions.IdpFraudEventId;
 import stubidp.saml.extensions.extensions.PersonName;
 import stubidp.saml.extensions.extensions.StringBasedMdsAttributeValue;
 import stubidp.saml.extensions.extensions.impl.BaseMdsSamlObjectUnmarshaller;
-import stubidp.saml.test.AddressBuilder;
-import stubidp.saml.utils.OpenSAMLRunner;
+import stubidp.saml.test.builders.AddressBuilder;
+import stubidp.saml.test.OpenSAMLRunner;
 import stubidp.saml.utils.core.OpenSamlXmlObjectFactory;
-import stubidp.saml.utils.core.test.builders.SimpleMdsValueBuilder;
+import stubidp.saml.test.builders.SimpleMdsValueBuilder;
 
 import java.time.Instant;
 import java.util.Collections;

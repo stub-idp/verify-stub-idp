@@ -1,7 +1,7 @@
 package stubidp.saml.hub.hub.transformers.inbound;
 
+import stubidp.saml.domain.assertions.IdpIdaStatus;
 import stubidp.saml.extensions.extensions.StatusValue;
-import stubidp.saml.hub.hub.domain.IdpIdaStatus;
 import stubidp.saml.utils.core.domain.DetailedStatusCode;
 
 import java.util.Collections;

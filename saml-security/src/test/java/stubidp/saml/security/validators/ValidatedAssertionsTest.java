@@ -2,9 +2,9 @@ package stubidp.saml.security.validators;
 
 import org.junit.jupiter.api.Test;
 import org.opensaml.saml.saml2.core.Assertion;
-import stubidp.saml.security.OpenSAMLRunner;
-import stubidp.saml.security.saml.builders.AssertionBuilder;
-import stubidp.saml.security.saml.builders.AttributeStatementBuilder;
+import stubidp.saml.test.OpenSAMLRunner;
+import stubidp.saml.test.builders.AssertionBuilder;
+import stubidp.saml.test.builders.AttributeStatementBuilder;
 
 import java.util.List;
 
@@ -16,8 +16,8 @@ public class ValidatedAssertionsTest extends OpenSAMLRunner {
 
     @Test
     public void should_returnMatchingDatasetAssertion() {
-        Assertion mdsAssertion = AssertionBuilder.anAssertion().addAttributeStatement(AttributeStatementBuilder.anAttributeStatement().build()).build();
-        List<Assertion> assertions = asList(AssertionBuilder.anAssertion().build(), mdsAssertion);
+        Assertion mdsAssertion = AssertionBuilder.anAssertion().addAttributeStatement(AttributeStatementBuilder.anAttributeStatement().build()).buildUnencrypted();
+        List<Assertion> assertions = asList(AssertionBuilder.anAssertion().buildUnencrypted(), mdsAssertion);
 
         ValidatedAssertions validatedAssertions = new ValidatedAssertions(assertions);
 
@@ -26,8 +26,8 @@ public class ValidatedAssertionsTest extends OpenSAMLRunner {
 
     @Test
     public void should_returnAuthnStatementAssertion() {
-        Assertion mdsAssertion = AssertionBuilder.anAssertion().addAttributeStatement(AttributeStatementBuilder.anAttributeStatement().build()).build();
-        Assertion authnStatementAssertion = AssertionBuilder.anAssertion().build();
+        Assertion mdsAssertion = AssertionBuilder.anAssertion().addAttributeStatement(AttributeStatementBuilder.anAttributeStatement().build()).buildUnencrypted();
+        Assertion authnStatementAssertion = AssertionBuilder.anAssertion().buildUnencrypted();
         List<Assertion> assertions = asList(mdsAssertion, authnStatementAssertion);
 
         ValidatedAssertions validatedAssertions = new ValidatedAssertions(assertions);

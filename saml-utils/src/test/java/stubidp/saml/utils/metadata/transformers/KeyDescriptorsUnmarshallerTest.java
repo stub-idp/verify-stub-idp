@@ -2,14 +2,14 @@ package stubidp.saml.utils.metadata.transformers;
 
 import org.junit.jupiter.api.Test;
 import org.opensaml.saml.saml2.metadata.KeyDescriptor;
-import stubidp.saml.utils.OpenSAMLRunner;
+import stubidp.saml.test.OpenSAMLRunner;
 import stubidp.saml.utils.core.OpenSamlXmlObjectFactory;
 import stubidp.utils.security.security.Certificate;
 
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static stubidp.saml.utils.core.test.builders.CertificateBuilder.aCertificate;
+import static stubidp.saml.test.builders.CertificateBuilder.aCertificate;
 
 public class KeyDescriptorsUnmarshallerTest extends OpenSAMLRunner {
 

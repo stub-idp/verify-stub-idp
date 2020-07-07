@@ -6,8 +6,7 @@ import stubidp.saml.utils.core.OpenSamlXmlObjectFactory;
 import java.util.Optional;
 
 public class IssuerBuilder {
-
-    private OpenSamlXmlObjectFactory openSamlXmlObjectFactory = new OpenSamlXmlObjectFactory();
+    private static final OpenSamlXmlObjectFactory openSamlXmlObjectFactory = new OpenSamlXmlObjectFactory();
     private Optional<String> issuerId = Optional.empty();
     private String format = null;
 

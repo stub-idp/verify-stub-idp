@@ -10,23 +10,23 @@ import org.opensaml.saml.saml2.metadata.SPSSODescriptor;
 import org.opensaml.security.credential.Credential;
 import stubidp.saml.extensions.validation.SamlValidationResponse;
 import stubidp.saml.security.errors.SamlTransformationErrorFactory;
-import stubidp.saml.security.saml.TestCredentialFactory;
-import stubidp.saml.security.saml.builders.AttributeQueryBuilder;
-import stubidp.saml.security.saml.builders.ResponseBuilder;
+import stubidp.saml.test.OpenSAMLRunner;
+import stubidp.saml.test.TestCredentialFactory;
+import stubidp.saml.test.builders.AttributeQueryBuilder;
+import stubidp.saml.test.builders.ResponseBuilder;
 import stubidp.test.devpki.TestCertificateStrings;
 import stubidp.test.devpki.TestEntityIds;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static stubidp.saml.security.saml.builders.AssertionBuilder.anAssertion;
-import static stubidp.saml.security.saml.builders.AuthnRequestBuilder.anAuthnRequest;
-import static stubidp.saml.security.saml.builders.IssuerBuilder.anIssuer;
+import static stubidp.saml.test.builders.AssertionBuilder.anAssertion;
+import static stubidp.saml.test.builders.AuthnRequestBuilder.anAuthnRequest;
+import static stubidp.saml.test.builders.IssuerBuilder.anIssuer;
 
 public class SamlMessageSignatureValidatorTest extends OpenSAMLRunner {
-
-    private final String issuerId = TestEntityIds.HUB_ENTITY_ID;
-    private final SigningCredentialFactory credentialFactory = new SigningCredentialFactory(new HardCodedKeyStore(issuerId));
-    private final CredentialFactorySignatureValidator signatureValidator = new CredentialFactorySignatureValidator(credentialFactory);
-    private final SamlMessageSignatureValidator samlMessageSignatureValidator = new SamlMessageSignatureValidator(signatureValidator);
+    private static final String issuerId = TestEntityIds.HUB_ENTITY_ID;
+    private static final SigningCredentialFactory credentialFactory = new SigningCredentialFactory(new HardCodedKeyStore(issuerId));
+    private static final CredentialFactorySignatureValidator signatureValidator = new CredentialFactorySignatureValidator(credentialFactory);
+    private static final SamlMessageSignatureValidator samlMessageSignatureValidator = new SamlMessageSignatureValidator(signatureValidator);
 
     @Test
     public void validateWithIssue_shouldReturnBadResponseIfRequestSignatureIsMissing() {
@@ -79,7 +79,7 @@ public class SamlMessageSignatureValidatorTest extends OpenSAMLRunner {
 
     @Test
     public void validate_shouldAcceptSignedAssertion() {
-        final Assertion signedAssertion = anAssertion().build();
+        final Assertion signedAssertion = anAssertion().buildUnencrypted();
 
         SamlValidationResponse signatureValidationResponse = samlMessageSignatureValidator.validate(signedAssertion, IDPSSODescriptor.DEFAULT_ELEMENT_NAME);
 

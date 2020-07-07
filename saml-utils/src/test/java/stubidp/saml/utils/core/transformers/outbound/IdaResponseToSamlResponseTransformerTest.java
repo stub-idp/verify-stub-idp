@@ -4,10 +4,10 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.opensaml.saml.saml2.core.Response;
 import org.opensaml.saml.saml2.core.Status;
-import stubidp.saml.utils.OpenSAMLRunner;
+import stubidp.saml.test.OpenSAMLRunner;
 import stubidp.saml.utils.core.OpenSamlXmlObjectFactory;
-import stubidp.saml.utils.core.domain.OutboundResponseFromHub;
-import stubidp.saml.utils.core.test.builders.ResponseForHubBuilder;
+import stubidp.saml.domain.response.OutboundResponseFromHub;
+import stubidp.saml.test.builders.ResponseForHubBuilder;
 import stubidp.test.devpki.TestEntityIds;
 
 import java.time.Instant;

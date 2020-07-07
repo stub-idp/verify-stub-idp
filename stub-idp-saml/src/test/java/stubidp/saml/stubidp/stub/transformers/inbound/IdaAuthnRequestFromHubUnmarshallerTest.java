@@ -12,7 +12,7 @@ import org.opensaml.saml.saml2.core.Issuer;
 import org.opensaml.saml.saml2.core.RequestedAuthnContext;
 import stubidp.saml.domain.request.IdaAuthnRequestFromHub;
 import stubidp.saml.extensions.extensions.IdaAuthnContext;
-import stubidp.saml.stubidp.OpenSAMLRunner;
+import stubidp.saml.test.OpenSAMLRunner;
 
 import java.util.Arrays;
 

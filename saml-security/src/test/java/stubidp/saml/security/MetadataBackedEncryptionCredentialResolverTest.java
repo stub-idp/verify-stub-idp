@@ -12,12 +12,12 @@ import org.opensaml.saml.saml2.metadata.SPSSODescriptor;
 import org.opensaml.saml.security.impl.MetadataCredentialResolver;
 import org.opensaml.xmlsec.config.impl.DefaultSecurityConfigurationBootstrap;
 import org.opensaml.xmlsec.signature.support.SignatureException;
-import stubidp.saml.security.saml.MetadataFactory;
-import stubidp.saml.security.saml.TestCredentialFactory;
-import stubidp.saml.security.saml.builders.EntitiesDescriptorBuilder;
-import stubidp.saml.security.saml.builders.EntityDescriptorBuilder;
-import stubidp.saml.security.saml.builders.KeyDescriptorBuilder;
-import stubidp.saml.security.saml.builders.SPSSODescriptorBuilder;
+import stubidp.saml.test.TestCredentialFactory;
+import stubidp.saml.test.builders.EntitiesDescriptorBuilder;
+import stubidp.saml.test.builders.EntityDescriptorBuilder;
+import stubidp.saml.test.builders.KeyDescriptorBuilder;
+import stubidp.saml.test.builders.SPSSODescriptorBuilder;
+import stubidp.saml.test.metadata.MetadataFactory;
 import stubidp.test.devpki.TestCertificateStrings;
 
 import java.security.PublicKey;

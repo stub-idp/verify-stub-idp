@@ -9,11 +9,11 @@ import org.opensaml.saml.saml2.core.Assertion;
 import org.opensaml.saml.saml2.core.AuthnContext;
 import org.opensaml.saml.saml2.core.AuthnContextClassRef;
 import org.opensaml.saml.saml2.core.AuthnStatement;
-import stubidp.saml.hub.core.OpenSAMLRunner;
-import stubidp.saml.utils.core.test.builders.AssertionBuilder;
-import stubidp.saml.utils.core.test.builders.AuthnContextBuilder;
-import stubidp.saml.utils.core.test.builders.AuthnContextClassRefBuilder;
-import stubidp.saml.utils.core.test.builders.AuthnStatementBuilder;
+import stubidp.saml.test.OpenSAMLRunner;
+import stubidp.saml.test.builders.AssertionBuilder;
+import stubidp.saml.test.builders.AuthnContextBuilder;
+import stubidp.saml.test.builders.AuthnContextClassRefBuilder;
+import stubidp.saml.test.builders.AuthnStatementBuilder;
 
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -21,7 +21,7 @@ import static stubidp.saml.hub.core.errors.SamlTransformationErrorFactory.authnC
 import static stubidp.saml.hub.core.errors.SamlTransformationErrorFactory.authnContextClassRefValueMissing;
 import static stubidp.saml.hub.core.errors.SamlTransformationErrorFactory.authnContextMissingError;
 import static stubidp.saml.hub.core.errors.SamlTransformationErrorFactory.authnInstantMissing;
-import static stubidp.saml.utils.core.test.SamlTransformationErrorManagerTestHelper.validateFail;
+import static stubidp.saml.test.support.SamlTransformationErrorManagerTestHelper.validateFail;
 
 @ExtendWith(MockitoExtension.class)
 public class AuthnStatementAssertionValidatorTest extends OpenSAMLRunner {

@@ -8,16 +8,16 @@ import org.opensaml.saml.saml2.core.Assertion;
 import org.opensaml.saml.saml2.core.Attribute;
 import stubidp.saml.extensions.extensions.PersonName;
 import stubidp.saml.hub.core.test.builders.IdpFraudEventIdAttributeBuilder;
-import stubidp.saml.hub.core.OpenSAMLRunner;
+import stubidp.saml.test.OpenSAMLRunner;
 import stubidp.saml.utils.core.OpenSamlXmlObjectFactory;
-import stubidp.saml.utils.core.test.SamlTransformationErrorManagerTestHelper;
-import stubidp.saml.utils.core.test.builders.AssertionBuilder;
+import stubidp.saml.test.support.SamlTransformationErrorManagerTestHelper;
+import stubidp.saml.test.builders.AssertionBuilder;
 
 import static java.util.Arrays.asList;
 import static stubidp.saml.hub.core.errors.SamlTransformationErrorFactory.invalidAttributeLanguageInAssertion;
 import static stubidp.saml.hub.core.errors.SamlTransformationErrorFactory.invalidFraudAttribute;
-import static stubidp.saml.utils.core.test.builders.AttributeStatementBuilder.anAttributeStatement;
-import static stubidp.saml.utils.core.test.builders.SimpleStringAttributeBuilder.aSimpleStringAttribute;
+import static stubidp.saml.test.builders.AttributeStatementBuilder.anAttributeStatement;
+import static stubidp.saml.test.builders.SimpleStringAttributeBuilder.aSimpleStringAttribute;
 
 @ExtendWith(MockitoExtension.class)
 public class AssertionAttributeStatementValidatorTest extends OpenSAMLRunner {

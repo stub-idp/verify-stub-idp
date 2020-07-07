@@ -18,10 +18,10 @@ import org.opensaml.xmlsec.algorithm.descriptors.SignatureRSASHA1;
 import org.opensaml.xmlsec.algorithm.descriptors.SignatureRSASHA256;
 import org.opensaml.xmlsec.signature.Signature;
 import stubidp.saml.extensions.IdaSamlBootstrap;
-import stubidp.saml.metadata.test.factories.metadata.EntitiesDescriptorFactory;
-import stubidp.saml.metadata.test.factories.metadata.MetadataFactory;
-import stubidp.saml.metadata.test.factories.metadata.TestCredentialFactory;
-import stubidp.saml.utils.core.test.builders.metadata.SignatureBuilder;
+import stubidp.saml.test.metadata.EntitiesDescriptorFactory;
+import stubidp.saml.test.metadata.MetadataFactory;
+import stubidp.saml.test.TestCredentialFactory;
+import stubidp.saml.test.builders.SignatureBuilder;
 import stubidp.test.devpki.TestCertificateStrings;
 
 import java.io.ByteArrayInputStream;

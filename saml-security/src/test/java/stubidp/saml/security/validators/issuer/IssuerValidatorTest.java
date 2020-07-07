@@ -6,9 +6,9 @@ import org.opensaml.saml.saml2.core.Issuer;
 import org.opensaml.saml.saml2.core.NameIDType;
 import stubidp.saml.extensions.validation.SamlValidationSpecificationFailure;
 import stubidp.saml.security.errors.SamlTransformationErrorFactory;
-import stubidp.saml.security.OpenSAMLRunner;
-import stubidp.saml.security.saml.SamlTransformationErrorManagerTestHelper;
-import stubidp.saml.security.saml.builders.IssuerBuilder;
+import stubidp.saml.test.OpenSAMLRunner;
+import stubidp.saml.test.builders.IssuerBuilder;
+import stubidp.saml.test.support.SamlTransformationErrorManagerTestHelper;
 
 public class IssuerValidatorTest extends OpenSAMLRunner {
 

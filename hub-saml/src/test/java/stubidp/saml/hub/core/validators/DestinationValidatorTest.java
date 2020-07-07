@@ -3,17 +3,16 @@ package stubidp.saml.hub.core.validators;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import stubidp.saml.extensions.validation.SamlValidationSpecificationFailure;
-import stubidp.saml.hub.core.OpenSAMLRunner;
+import stubidp.saml.test.OpenSAMLRunner;
 
 import java.net.URI;
 import java.net.URISyntaxException;
 
 import static stubidp.saml.hub.core.errors.SamlTransformationErrorFactory.destinationEmpty;
 import static stubidp.saml.hub.core.errors.SamlTransformationErrorFactory.destinationMissing;
-import static stubidp.saml.utils.core.test.SamlTransformationErrorManagerTestHelper.validateFail;
+import static stubidp.saml.test.support.SamlTransformationErrorManagerTestHelper.validateFail;
 
 public class DestinationValidatorTest extends OpenSAMLRunner {
-
     private static final String EXPECTED_DESTINATION = "http://correct.destination.com";
     private static final String EXPECTED_ENDPOINT = "/foo/bar";
 

@@ -4,15 +4,15 @@ import org.junit.jupiter.api.Test;
 import org.opensaml.saml.saml2.core.SubjectConfirmation;
 import org.opensaml.saml.saml2.core.SubjectConfirmationData;
 import stubidp.saml.extensions.validation.SamlValidationSpecificationFailure;
-import stubidp.saml.hub.core.OpenSAMLRunner;
 import stubidp.saml.hub.core.errors.SamlTransformationErrorFactory;
-import stubidp.saml.utils.core.test.SamlTransformationErrorManagerTestHelper;
-import stubidp.saml.utils.core.test.builders.SubjectConfirmationDataBuilder;
+import stubidp.saml.test.OpenSAMLRunner;
+import stubidp.saml.test.support.SamlTransformationErrorManagerTestHelper;
+import stubidp.saml.test.builders.SubjectConfirmationDataBuilder;
 
 import java.time.Instant;
 import java.time.ZoneId;
 
-import static stubidp.saml.utils.core.test.builders.SubjectConfirmationBuilder.aSubjectConfirmation;
+import static stubidp.saml.test.builders.SubjectConfirmationBuilder.aSubjectConfirmation;
 
 public class BasicAssertionSubjectConfirmationValidatorTest extends OpenSAMLRunner {
 

@@ -11,10 +11,11 @@ import org.opensaml.saml.saml2.encryption.Decrypter;
 import org.opensaml.security.credential.Credential;
 import org.opensaml.xmlsec.signature.support.SignatureException;
 import stubidp.saml.security.exception.SamlFailedToDecryptException;
-import stubidp.saml.security.saml.TestCredentialFactory;
-import stubidp.saml.security.saml.builders.EncryptedAssertionBuilder;
 import stubidp.saml.security.validators.ValidatedResponse;
 import stubidp.saml.security.validators.encryptedelementtype.EncryptionAlgorithmValidator;
+import stubidp.saml.test.OpenSAMLRunner;
+import stubidp.saml.test.TestCredentialFactory;
+import stubidp.saml.test.builders.EncryptedAssertionBuilder;
 import stubidp.test.devpki.TestCertificateStrings;
 import stubidp.test.devpki.TestEntityIds;
 import stubidp.utils.security.security.PrivateKeyFactory;
@@ -29,9 +30,9 @@ import java.util.Collections;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static stubidp.saml.security.saml.builders.EncryptedAssertionBuilder.anEncryptedAssertionBuilder;
-import static stubidp.saml.security.saml.builders.IssuerBuilder.anIssuer;
-import static stubidp.saml.security.saml.builders.ResponseBuilder.aResponse;
+import static stubidp.saml.test.builders.EncryptedAssertionBuilder.anEncryptedAssertionBuilder;
+import static stubidp.saml.test.builders.IssuerBuilder.anIssuer;
+import static stubidp.saml.test.builders.ResponseBuilder.aResponse;
 
 public class AssertionDecrypterTest extends OpenSAMLRunner {
 

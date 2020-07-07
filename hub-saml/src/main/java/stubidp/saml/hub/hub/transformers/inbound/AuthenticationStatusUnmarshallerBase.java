@@ -4,7 +4,7 @@ import net.shibboleth.utilities.java.support.xml.SerializeSupport;
 import org.opensaml.saml.saml2.core.Status;
 import org.opensaml.saml.saml2.core.StatusMessage;
 import stubidp.saml.domain.IdaStatus;
-import stubidp.saml.hub.hub.domain.AuthenticationStatusFactory;
+import stubidp.saml.domain.AuthenticationStatusFactory;
 
 import java.util.Optional;
 

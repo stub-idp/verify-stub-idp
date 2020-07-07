@@ -1,7 +1,8 @@
 package stubidp.stubidp.domain;
 
 import stubidp.saml.domain.assertions.IdentityProviderAssertion;
-import stubidp.saml.utils.core.domain.IdaSamlResponse;
+import stubidp.saml.domain.assertions.IdpIdaStatus;
+import stubidp.saml.domain.response.IdaSamlResponse;
 import stubidp.utils.security.security.IdGenerator;
 
 import java.io.Serializable;

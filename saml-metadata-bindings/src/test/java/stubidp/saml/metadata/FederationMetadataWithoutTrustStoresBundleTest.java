@@ -21,7 +21,7 @@ import org.junit.jupiter.api.extension.RegisterExtension;
 import org.opensaml.core.criterion.EntityIdCriterion;
 import org.opensaml.saml.metadata.resolver.MetadataResolver;
 import stubidp.saml.metadata.bundle.MetadataResolverBundle;
-import stubidp.saml.metadata.test.factories.metadata.MetadataFactory;
+import stubidp.saml.test.metadata.MetadataFactory;
 import stubidp.test.devpki.TestEntityIds;
 import stubidp.test.utils.httpstub.HttpStubRule;
 import stubidp.test.utils.keystore.KeyStoreRule;

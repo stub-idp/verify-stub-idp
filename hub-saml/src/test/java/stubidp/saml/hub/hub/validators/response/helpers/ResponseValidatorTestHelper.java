@@ -3,13 +3,13 @@ package stubidp.saml.hub.hub.validators.response.helpers;
 import org.assertj.core.util.Strings;
 import org.opensaml.saml.saml2.core.Status;
 import org.opensaml.saml.saml2.core.StatusCode;
-import stubidp.saml.utils.core.test.builders.ResponseBuilder;
-import stubidp.saml.utils.core.test.builders.StatusCodeBuilder;
+import stubidp.saml.test.builders.ResponseBuilder;
+import stubidp.saml.test.builders.StatusCodeBuilder;
 
-import static stubidp.saml.utils.core.test.builders.AssertionBuilder.anAssertion;
-import static stubidp.saml.utils.core.test.builders.ResponseBuilder.aResponse;
-import static stubidp.saml.utils.core.test.builders.StatusBuilder.aStatus;
-import static stubidp.saml.utils.core.test.builders.StatusCodeBuilder.aStatusCode;
+import static stubidp.saml.test.builders.AssertionBuilder.anAssertion;
+import static stubidp.saml.test.builders.ResponseBuilder.aResponse;
+import static stubidp.saml.test.builders.StatusBuilder.aStatus;
+import static stubidp.saml.test.builders.StatusCodeBuilder.aStatusCode;
 
 public class ResponseValidatorTestHelper {
     public static StatusCode createSubStatusCode() {

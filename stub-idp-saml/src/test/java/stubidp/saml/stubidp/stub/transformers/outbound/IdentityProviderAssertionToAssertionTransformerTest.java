@@ -19,10 +19,10 @@ import stubidp.saml.domain.assertions.MatchingDataset;
 import stubidp.saml.domain.assertions.SimpleMdsValue;
 import stubidp.saml.domain.assertions.TransliterableMdsValue;
 import stubidp.saml.extensions.extensions.impl.BaseMdsSamlObjectUnmarshaller;
-import stubidp.saml.stubidp.OpenSAMLRunner;
-import stubidp.saml.stubidp.builders.MatchingDatasetBuilder;
-import stubidp.saml.stubidp.builders.SimpleMdsValueBuilder;
-import stubidp.saml.stubidp.builders.TransliterableMdsValueBuilder;
+import stubidp.saml.test.OpenSAMLRunner;
+import stubidp.saml.test.builders.MatchingDatasetBuilder;
+import stubidp.saml.test.builders.SimpleMdsValueBuilder;
+import stubidp.saml.test.builders.TransliterableMdsValueBuilder;
 import stubidp.saml.utils.core.OpenSamlXmlObjectFactory;
 import stubidp.saml.utils.core.domain.AddressFactory;
 import stubidp.saml.utils.core.transformers.outbound.OutboundAssertionToSubjectTransformer;
@@ -40,8 +40,8 @@ import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static stubidp.saml.stubidp.builders.IdentityProviderAuthnStatementBuilder.anIdentityProviderAuthnStatement;
-import static stubidp.saml.stubidp.test.builders.IPAddressAttributeBuilder.anIPAddress;
-import static stubidp.saml.stubidp.test.builders.IdentityProviderAssertionBuilder.anIdentityProviderAssertion;
+import static stubidp.saml.test.builders.IPAddressAttributeBuilder.anIPAddress;
+import static stubidp.saml.test.builders.IdentityProviderAssertionBuilder.anIdentityProviderAssertion;
 
 @ExtendWith(MockitoExtension.class)
 public class IdentityProviderAssertionToAssertionTransformerTest extends OpenSAMLRunner {
@@ -82,7 +82,7 @@ public class IdentityProviderAssertionToAssertionTransformerTest extends OpenSAM
     public void shouldTransformAssertionSubjectsFirstName() {
         TransliterableMdsValue firstname = TransliterableMdsValueBuilder.asTransliterableMdsValue().withValue("Bob").build();
         IdentityProviderAssertion assertion = anIdentityProviderAssertion().withMatchingDataset(
-                MatchingDatasetBuilder.aMatchingDataset().addFirstName(firstname).build()).build();
+                MatchingDatasetBuilder.aMatchingDataset().addFirstname(firstname).build()).build();
 
         transformer.transform(assertion);
 
@@ -120,7 +120,7 @@ public class IdentityProviderAssertionToAssertionTransformerTest extends OpenSAM
     @Test
     public void shouldHandleMissingAssertionSubjectsMiddleNames() {
         MatchingDataset matchingDataset = MatchingDatasetBuilder.aMatchingDataset()
-                .addFirstName(TransliterableMdsValueBuilder.asTransliterableMdsValue().withValue("subject-firstname").withVerifiedStatus(true).build())
+                .addFirstname(TransliterableMdsValueBuilder.asTransliterableMdsValue().withValue("subject-firstname").withVerifiedStatus(true).build())
                 .withSurnameHistory(asList(previousSurname, currentSurname))
                 .withGender(SimpleMdsValueBuilder.<Gender>aSimpleMdsValue().withValue(Gender.FEMALE).withVerifiedStatus(true).build())
                 .addDateOfBirth(SimpleMdsValueBuilder.<Instant>aSimpleMdsValue().withValue(BaseMdsSamlObjectUnmarshaller.InstantFromDate.of("2000-02-09")).withVerifiedStatus(true).build())
@@ -185,7 +185,7 @@ public class IdentityProviderAssertionToAssertionTransformerTest extends OpenSAM
     @Test
     public void shouldHandleMissingAssertionSubjectsDateOfBirth() {
         MatchingDataset matchingDataset = MatchingDatasetBuilder.aMatchingDataset()
-                .addFirstName(TransliterableMdsValueBuilder.asTransliterableMdsValue().withValue("subject-firstname").withVerifiedStatus(true).build())
+                .addFirstname(TransliterableMdsValueBuilder.asTransliterableMdsValue().withValue("subject-firstname").withVerifiedStatus(true).build())
                 .addMiddleNames(SimpleMdsValueBuilder.<String>aSimpleMdsValue().withValue("subject-middlename").withVerifiedStatus(true).build())
                 .withSurnameHistory(asList(previousSurname, currentSurname))
                 .withGender(SimpleMdsValueBuilder.<Gender>aSimpleMdsValue().withValue(Gender.FEMALE).withVerifiedStatus(true).build())

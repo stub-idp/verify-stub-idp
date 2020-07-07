@@ -5,16 +5,16 @@ import org.junit.jupiter.api.Test;
 import org.opensaml.saml.saml2.metadata.EntityDescriptor;
 import stubidp.saml.extensions.validation.SamlValidationSpecificationFailure;
 import stubidp.saml.hub.core.errors.SamlTransformationErrorFactory;
-import stubidp.saml.hub.core.OpenSAMLRunner;
-import stubidp.saml.utils.core.test.SamlTransformationErrorManagerTestHelper;
-import stubidp.saml.utils.core.test.builders.metadata.IdpSsoDescriptorBuilder;
-import stubidp.saml.utils.core.test.builders.metadata.KeyDescriptorBuilder;
-import stubidp.saml.utils.core.test.builders.metadata.KeyInfoBuilder;
-import stubidp.saml.utils.core.test.builders.metadata.X509CertificateBuilder;
+import stubidp.saml.test.OpenSAMLRunner;
+import stubidp.saml.test.builders.IdpSsoDescriptorBuilder;
+import stubidp.saml.test.builders.KeyDescriptorBuilder;
+import stubidp.saml.test.builders.KeyInfoBuilder;
+import stubidp.saml.test.builders.X509CertificateBuilder;
+import stubidp.saml.test.support.SamlTransformationErrorManagerTestHelper;
 
-import static stubidp.saml.utils.core.test.builders.metadata.EndpointBuilder.anEndpoint;
-import static stubidp.saml.utils.core.test.builders.metadata.EntityDescriptorBuilder.anEntityDescriptor;
-import static stubidp.saml.utils.core.test.builders.metadata.X509DataBuilder.aX509Data;
+import static stubidp.saml.test.builders.EndpointBuilder.anEndpoint;
+import static stubidp.saml.test.builders.EntityDescriptorBuilder.anEntityDescriptor;
+import static stubidp.saml.test.builders.X509DataBuilder.aX509Data;
 
 public class SamlEntityDescriptorValidatorTest extends OpenSAMLRunner {
 
@@ -78,7 +78,6 @@ public class SamlEntityDescriptorValidatorTest extends OpenSAMLRunner {
         EntityDescriptor entityDescriptor = anEntityDescriptor().withIdpSsoDescriptor(IdpSsoDescriptorBuilder.anIdpSsoDescriptor().withoutDefaultSigningKey().addKeyDescriptor(KeyDescriptorBuilder.aKeyDescriptor().withKeyInfo(KeyInfoBuilder.aKeyInfo().withX509Data(aX509Data().withX509Certificate(X509CertificateBuilder.aX509Certificate().withCertForEntityId(null).withCert(null).build()).build()).build()).build()).build()).build();
 
         assertExceptionMessage(entityDescriptor, SamlTransformationErrorFactory.emptyX509Certificiate());
-
     }
 
     @Test

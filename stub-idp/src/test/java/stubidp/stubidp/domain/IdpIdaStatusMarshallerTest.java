@@ -4,10 +4,11 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.opensaml.saml.saml2.core.Status;
 import org.opensaml.saml.saml2.core.StatusCode;
+import stubidp.saml.domain.assertions.IdpIdaStatus;
 import stubidp.saml.extensions.IdaSamlBootstrap;
 import stubidp.saml.extensions.extensions.StatusValue;
+import stubidp.saml.test.OpenSAMLRunner;
 import stubidp.saml.utils.core.OpenSamlXmlObjectFactory;
-import stubidp.stubidp.OpenSAMLRunner;
 
 import java.util.Optional;
 

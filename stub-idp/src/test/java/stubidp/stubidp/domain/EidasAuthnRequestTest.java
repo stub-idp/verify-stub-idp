@@ -18,10 +18,10 @@ import stubidp.saml.extensions.extensions.impl.RequestedAttributesBuilder;
 import stubidp.saml.extensions.extensions.impl.RequestedAttributesImpl;
 import stubidp.saml.extensions.extensions.impl.SPTypeBuilder;
 import stubidp.saml.hub.hub.domain.LevelOfAssurance;
-import stubidp.saml.utils.core.test.builders.AuthnContextClassRefBuilder;
-import stubidp.saml.utils.core.test.builders.AuthnRequestBuilder;
-import stubidp.saml.utils.core.test.builders.IssuerBuilder;
-import stubidp.stubidp.OpenSAMLRunner;
+import stubidp.saml.test.OpenSAMLRunner;
+import stubidp.saml.test.builders.AuthnContextClassRefBuilder;
+import stubidp.saml.test.builders.AuthnRequestBuilder;
+import stubidp.saml.test.builders.IssuerBuilder;
 
 import static org.assertj.core.api.Assertions.assertThat;
 

@@ -39,7 +39,7 @@ import static javax.ws.rs.client.Entity.entity;
 import static javax.ws.rs.core.MediaType.APPLICATION_JSON_TYPE;
 import static javax.ws.rs.core.Response.Status.UNAUTHORIZED;
 import static org.assertj.core.api.Assertions.assertThat;
-import static stubidp.saml.test.AddressBuilder.anAddress;
+import static stubidp.saml.test.builders.AddressBuilder.anAddress;
 import static stubidp.stubidp.builders.StubIdpBuilder.aStubIdp;
 import static stubidp.test.integration.UserRepositoryIntegrationTests.UserBuilder.aUser;
 import static stubidp.utils.rest.common.HttpHeaders.CACHE_CONTROL_KEY;

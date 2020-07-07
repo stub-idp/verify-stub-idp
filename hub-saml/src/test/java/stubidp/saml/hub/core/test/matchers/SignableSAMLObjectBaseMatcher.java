@@ -8,7 +8,7 @@ import org.opensaml.saml.saml2.core.Response;
 import org.opensaml.saml.saml2.metadata.IDPSSODescriptor;
 import org.opensaml.saml.saml2.metadata.SPSSODescriptor;
 import stubidp.saml.hub.core.test.validators.SingleCertificateSignatureValidator;
-import stubidp.saml.utils.core.test.TestCredentialFactory;
+import stubidp.saml.test.TestCredentialFactory;
 import stubidp.saml.security.SamlMessageSignatureValidator;
 import stubidp.saml.security.SignatureValidator;
 

@@ -8,7 +8,7 @@ import org.opensaml.saml.saml2.core.AuthnRequest;
 import org.opensaml.saml.saml2.core.NameIDType;
 import stubidp.saml.extensions.validation.SamlTransformationErrorException;
 import stubidp.saml.extensions.validation.SamlValidationSpecificationFailure;
-import stubidp.saml.hub.core.OpenSAMLRunner;
+import stubidp.saml.test.OpenSAMLRunner;
 import stubidp.saml.hub.core.errors.SamlTransformationErrorFactory;
 import stubidp.saml.hub.core.test.builders.NameIdPolicyBuilder;
 import stubidp.saml.hub.core.test.builders.ScopingBuilder;
@@ -25,9 +25,9 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static stubidp.saml.extensions.IdaConstants.SAML_VERSION_NUMBER;
-import static stubidp.saml.utils.core.test.AuthnRequestIdGenerator.generateRequestId;
-import static stubidp.saml.utils.core.test.builders.AuthnRequestBuilder.anAuthnRequest;
-import static stubidp.saml.utils.core.test.builders.IssuerBuilder.anIssuer;
+import static stubidp.saml.test.builders.IssuerBuilder.anIssuer;
+import static stubidp.saml.test.support.AuthnRequestIdGenerator.generateRequestId;
+import static stubidp.saml.test.builders.AuthnRequestBuilder.anAuthnRequest;
 
 public class AuthnRequestFromTransactionValidatorTest extends OpenSAMLRunner {
 

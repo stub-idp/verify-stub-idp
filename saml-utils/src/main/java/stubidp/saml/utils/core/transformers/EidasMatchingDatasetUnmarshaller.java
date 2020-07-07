@@ -7,6 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import stubidp.saml.domain.assertions.SimpleMdsValue;
 import stubidp.saml.domain.assertions.TransliterableMdsValue;
+import stubidp.saml.domain.matching.MatchingDatasetBuilder;
 import stubidp.saml.extensions.IdaConstants;
 import stubidp.saml.extensions.extensions.eidas.CurrentFamilyName;
 import stubidp.saml.extensions.extensions.eidas.CurrentGivenName;

@@ -13,7 +13,7 @@ import stubidp.saml.extensions.extensions.eidas.DateOfBirth;
 import stubidp.saml.extensions.extensions.eidas.EidasGender;
 import stubidp.saml.extensions.extensions.eidas.PersonIdentifier;
 import stubidp.saml.extensions.extensions.impl.BaseMdsSamlObjectUnmarshaller;
-import stubidp.saml.utils.OpenSAMLRunner;
+import stubidp.saml.test.OpenSAMLRunner;
 
 import java.time.Instant;
 

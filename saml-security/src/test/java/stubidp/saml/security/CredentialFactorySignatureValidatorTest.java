@@ -8,12 +8,13 @@ import org.opensaml.saml.saml2.core.AuthnRequest;
 import org.opensaml.security.credential.Credential;
 import org.opensaml.xmlsec.signature.support.SignatureException;
 import stubidp.saml.security.saml.StringEncoding;
-import stubidp.saml.security.saml.TestCredentialFactory;
-import stubidp.saml.security.saml.builders.AssertionBuilder;
-import stubidp.saml.security.saml.builders.SignatureBuilder;
 import stubidp.saml.security.saml.deserializers.AuthnRequestUnmarshaller;
 import stubidp.saml.security.saml.deserializers.SamlObjectParser;
 import stubidp.saml.security.saml.deserializers.StringToOpenSamlObjectTransformer;
+import stubidp.saml.test.OpenSAMLRunner;
+import stubidp.saml.test.TestCredentialFactory;
+import stubidp.saml.test.builders.AssertionBuilder;
+import stubidp.saml.test.builders.SignatureBuilder;
 import stubidp.test.devpki.TestCertificateStrings;
 import stubidp.test.devpki.TestEntityIds;
 
@@ -26,7 +27,6 @@ import static java.util.Arrays.asList;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class CredentialFactorySignatureValidatorTest extends OpenSAMLRunner {
-    
     private final String issuerId = TestEntityIds.HUB_ENTITY_ID;
     private final SigningCredentialFactory credentialFactory = new SigningCredentialFactory(new HardCodedKeyStore(issuerId));
     private final CredentialFactorySignatureValidator credentialFactorySignatureValidator = new CredentialFactorySignatureValidator(credentialFactory);
@@ -34,19 +34,19 @@ public class CredentialFactorySignatureValidatorTest extends OpenSAMLRunner {
     @Test
     public void shouldAcceptSignedAssertions() throws Exception {
         Credential signingCredential = new TestCredentialFactory(TestCertificateStrings.HUB_TEST_PUBLIC_SIGNING_CERT, TestCertificateStrings.HUB_TEST_PRIVATE_SIGNING_KEY).getSigningCredential();
-        final Assertion assertion = AssertionBuilder.anAssertion().withSignature(SignatureBuilder.aSignature().withSigningCredential(signingCredential).build()).build();
+        final Assertion assertion = AssertionBuilder.anAssertion().withSignature(SignatureBuilder.aSignature().withSigningCredential(signingCredential).build()).buildUnencrypted();
         assertThat(credentialFactorySignatureValidator.validate(assertion, issuerId, null)).isEqualTo(true);
     }
 
     @Test
     public void shouldNotAcceptUnsignedAssertions() throws Exception {
-        assertThat(credentialFactorySignatureValidator.validate(AssertionBuilder.anAssertion().withoutSigning().build(), issuerId, null)).isEqualTo(false);
+        assertThat(credentialFactorySignatureValidator.validate(AssertionBuilder.anAssertion().withoutSigning().buildUnencrypted(), issuerId, null)).isEqualTo(false);
     }
 
     @Test
     public void shouldNotAcceptMissignedAssertions() throws Exception {
         Credential badSigningCredential = new TestCredentialFactory(TestCertificateStrings.UNCHAINED_PUBLIC_CERT, TestCertificateStrings.UNCHAINED_PRIVATE_KEY).getSigningCredential();
-        final Assertion assertion = AssertionBuilder.anAssertion().withSignature(SignatureBuilder.aSignature().withSigningCredential(badSigningCredential).build()).build();
+        final Assertion assertion = AssertionBuilder.anAssertion().withSignature(SignatureBuilder.aSignature().withSigningCredential(badSigningCredential).build()).buildUnencrypted();
         assertThat(credentialFactorySignatureValidator.validate(assertion, issuerId, null)).isEqualTo(false);
     }
 
@@ -58,15 +58,15 @@ public class CredentialFactorySignatureValidatorTest extends OpenSAMLRunner {
         final CredentialFactorySignatureValidator credentialFactorySignatureValidator = new CredentialFactorySignatureValidator(new SigningCredentialFactory(injectableSigningKeyStore));
 
         Credential firstSigningCredential = new TestCredentialFactory(TestCertificateStrings.HUB_TEST_PUBLIC_SIGNING_CERT, TestCertificateStrings.HUB_TEST_PRIVATE_SIGNING_KEY).getSigningCredential();
-        boolean validate = credentialFactorySignatureValidator.validate(AssertionBuilder.anAssertion().withSignature(SignatureBuilder.aSignature().withSigningCredential(firstSigningCredential).build()).build(), issuerId, null);
+        boolean validate = credentialFactorySignatureValidator.validate(AssertionBuilder.anAssertion().withSignature(SignatureBuilder.aSignature().withSigningCredential(firstSigningCredential).build()).buildUnencrypted(), issuerId, null);
         assertThat(validate).isEqualTo(true);
 
         Credential secondSigningCredential = new TestCredentialFactory(TestCertificateStrings.HUB_TEST_SECONDARY_PUBLIC_SIGNING_CERT, TestCertificateStrings.HUB_TEST_PRIVATE_SECONDARY_SIGNING_KEY).getSigningCredential();
-        validate = credentialFactorySignatureValidator.validate(AssertionBuilder.anAssertion().withSignature(SignatureBuilder.aSignature().withSigningCredential(secondSigningCredential).build()).build(), issuerId, null);
+        validate = credentialFactorySignatureValidator.validate(AssertionBuilder.anAssertion().withSignature(SignatureBuilder.aSignature().withSigningCredential(secondSigningCredential).build()).buildUnencrypted(), issuerId, null);
         assertThat(validate).isEqualTo(true);
 
         Credential thirdSigningCredential = new TestCredentialFactory(TestCertificateStrings.UNCHAINED_PUBLIC_CERT, TestCertificateStrings.UNCHAINED_PRIVATE_KEY).getSigningCredential();
-        validate = credentialFactorySignatureValidator.validate(AssertionBuilder.anAssertion().withSignature(SignatureBuilder.aSignature().withSigningCredential(thirdSigningCredential).build()).build(), issuerId, null);
+        validate = credentialFactorySignatureValidator.validate(AssertionBuilder.anAssertion().withSignature(SignatureBuilder.aSignature().withSigningCredential(thirdSigningCredential).build()).buildUnencrypted(), issuerId, null);
         assertThat(validate).isEqualTo(false);
     }
 

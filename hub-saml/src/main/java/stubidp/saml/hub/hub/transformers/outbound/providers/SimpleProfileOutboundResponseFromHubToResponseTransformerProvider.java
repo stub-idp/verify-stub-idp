@@ -1,6 +1,6 @@
 package stubidp.saml.hub.hub.transformers.outbound.providers;
 
-import stubidp.saml.utils.core.domain.OutboundResponseFromHub;
+import stubidp.saml.domain.response.OutboundResponseFromHub;
 import stubidp.saml.hub.hub.transformers.outbound.SimpleProfileOutboundResponseFromHubToSamlResponseTransformer;
 
 import javax.inject.Inject;

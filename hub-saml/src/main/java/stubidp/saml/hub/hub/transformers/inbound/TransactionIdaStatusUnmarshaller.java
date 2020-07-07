@@ -1,8 +1,7 @@
 package stubidp.saml.hub.hub.transformers.inbound;
 
-import stubidp.saml.utils.core.domain.TransactionIdaStatus;
+import stubidp.saml.domain.assertions.TransactionIdaStatus;
 
-import java.util.AbstractMap;
 import java.util.Map;
 
 public class TransactionIdaStatusUnmarshaller extends IdaStatusUnmarshaller<TransactionIdaStatus> {

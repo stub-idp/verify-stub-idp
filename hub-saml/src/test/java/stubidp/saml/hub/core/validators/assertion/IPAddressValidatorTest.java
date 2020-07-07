@@ -4,14 +4,14 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.opensaml.saml.saml2.core.Assertion;
 import stubidp.saml.extensions.validation.SamlValidationSpecificationFailure;
-import stubidp.saml.hub.core.OpenSAMLRunner;
 import stubidp.saml.hub.core.errors.SamlTransformationErrorFactory;
-import stubidp.saml.utils.core.test.SamlTransformationErrorManagerTestHelper;
-import stubidp.saml.utils.core.test.builders.IPAddressAttributeBuilder;
+import stubidp.saml.test.OpenSAMLRunner;
+import stubidp.saml.test.support.SamlTransformationErrorManagerTestHelper;
+import stubidp.saml.test.builders.IPAddressAttributeBuilder;
 
-import static stubidp.saml.utils.core.test.builders.AssertionBuilder.anAssertion;
-import static stubidp.saml.utils.core.test.builders.AttributeStatementBuilder.anAttributeStatement;
-import static stubidp.saml.utils.core.test.builders.PersonNameAttributeBuilder_1_1.aPersonName_1_1;
+import static stubidp.saml.test.builders.AssertionBuilder.anAssertion;
+import static stubidp.saml.test.builders.AttributeStatementBuilder.anAttributeStatement;
+import static stubidp.saml.test.builders.PersonNameAttributeBuilder_1_1.aPersonName_1_1;
 
 public class IPAddressValidatorTest extends OpenSAMLRunner {
 

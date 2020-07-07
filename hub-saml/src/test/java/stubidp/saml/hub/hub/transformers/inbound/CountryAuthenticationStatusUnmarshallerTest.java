@@ -8,7 +8,7 @@ import org.opensaml.saml.saml2.core.StatusCode;
 import org.opensaml.saml.saml2.core.StatusMessage;
 import stubidp.saml.hub.core.test.builders.StatusMessageBuilder;
 import stubidp.saml.hub.hub.domain.CountryAuthenticationStatus;
-import stubidp.saml.hub.core.OpenSAMLRunner;
+import stubidp.saml.test.OpenSAMLRunner;
 import stubidp.saml.serializers.deserializers.StringToOpenSamlObjectTransformer;
 import stubidp.saml.utils.core.OpenSamlXmlObjectFactory;
 import stubidp.saml.utils.core.api.CoreTransformersFactory;
@@ -21,8 +21,8 @@ import java.nio.file.Paths;
 import java.util.Base64;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static stubidp.saml.utils.core.test.builders.StatusBuilder.aStatus;
-import static stubidp.saml.utils.core.test.builders.StatusCodeBuilder.aStatusCode;
+import static stubidp.saml.test.builders.StatusBuilder.aStatus;
+import static stubidp.saml.test.builders.StatusCodeBuilder.aStatusCode;
 
 public class CountryAuthenticationStatusUnmarshallerTest extends OpenSAMLRunner {
 

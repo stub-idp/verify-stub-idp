@@ -22,7 +22,7 @@ import org.opensaml.xmlsec.signature.support.SignatureException;
 import org.w3c.dom.Document;
 import stubidp.saml.extensions.IdaSamlBootstrap;
 import stubidp.saml.serializers.serializers.XmlObjectToElementTransformer;
-import stubidp.stubidp.OpenSAMLRunner;
+import stubidp.saml.test.OpenSAMLRunner;
 import stubidp.test.devpki.TestCertificateStrings;
 import stubidp.utils.security.security.X509CertificateFactory;
 

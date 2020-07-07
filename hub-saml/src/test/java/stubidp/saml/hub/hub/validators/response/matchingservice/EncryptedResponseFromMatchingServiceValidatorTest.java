@@ -11,7 +11,7 @@ import org.opensaml.saml.saml2.core.StatusCode;
 import stubidp.saml.extensions.domain.SamlStatusCode;
 import stubidp.saml.extensions.validation.SamlValidationSpecificationFailure;
 import stubidp.saml.hub.core.errors.SamlTransformationErrorFactory;
-import stubidp.saml.hub.core.OpenSAMLRunner;
+import stubidp.saml.test.OpenSAMLRunner;
 
 import static stubidp.saml.hub.core.errors.SamlTransformationErrorFactory.emptyIssuer;
 import static stubidp.saml.hub.core.errors.SamlTransformationErrorFactory.illegalIssuerFormat;
@@ -27,10 +27,10 @@ import static stubidp.saml.hub.core.errors.SamlTransformationErrorFactory.unencr
 import static stubidp.saml.hub.core.errors.SamlTransformationErrorFactory.unexpectedNumberOfAssertions;
 import static stubidp.saml.hub.hub.validators.response.helpers.ResponseValidatorTestHelper.createStatus;
 import static stubidp.saml.hub.hub.validators.response.helpers.ResponseValidatorTestHelper.createSubStatusCode;
-import static stubidp.saml.utils.core.test.SamlTransformationErrorManagerTestHelper.validateFail;
-import static stubidp.saml.utils.core.test.builders.AssertionBuilder.anAssertion;
-import static stubidp.saml.utils.core.test.builders.IssuerBuilder.anIssuer;
-import static stubidp.saml.utils.core.test.builders.ResponseBuilder.aResponse;
+import static stubidp.saml.test.builders.AssertionBuilder.anAssertion;
+import static stubidp.saml.test.builders.IssuerBuilder.anIssuer;
+import static stubidp.saml.test.builders.ResponseBuilder.aResponse;
+import static stubidp.saml.test.support.SamlTransformationErrorManagerTestHelper.validateFail;
 
 public class EncryptedResponseFromMatchingServiceValidatorTest extends OpenSAMLRunner {
 

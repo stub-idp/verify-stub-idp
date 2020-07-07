@@ -6,9 +6,9 @@ import org.opensaml.saml.saml2.core.Assertion;
 import org.opensaml.saml.saml2.core.Subject;
 import org.opensaml.saml.saml2.core.SubjectConfirmation;
 import org.opensaml.saml.saml2.core.SubjectConfirmationData;
-import stubidp.saml.hub.core.OpenSAMLRunner;
 import stubidp.saml.hub.hub.validators.authnrequest.ConcurrentMapIdExpirationCache;
 import stubidp.saml.hub.hub.validators.authnrequest.IdExpirationCache;
+import stubidp.saml.test.OpenSAMLRunner;
 
 import java.time.Instant;
 import java.time.ZoneId;
@@ -18,11 +18,11 @@ import java.util.concurrent.ConcurrentMap;
 import static org.assertj.core.api.Assertions.assertThat;
 import static stubidp.saml.hub.core.errors.SamlTransformationErrorFactory.authnStatementAlreadyReceived;
 import static stubidp.saml.hub.core.errors.SamlTransformationErrorFactory.duplicateMatchingDataset;
-import static stubidp.saml.utils.core.test.SamlTransformationErrorManagerTestHelper.validateFail;
-import static stubidp.saml.utils.core.test.builders.AssertionBuilder.anAssertion;
-import static stubidp.saml.utils.core.test.builders.SubjectBuilder.aSubject;
-import static stubidp.saml.utils.core.test.builders.SubjectConfirmationBuilder.aSubjectConfirmation;
-import static stubidp.saml.utils.core.test.builders.SubjectConfirmationDataBuilder.aSubjectConfirmationData;
+import static stubidp.saml.test.support.SamlTransformationErrorManagerTestHelper.validateFail;
+import static stubidp.saml.test.builders.AssertionBuilder.anAssertion;
+import static stubidp.saml.test.builders.SubjectBuilder.aSubject;
+import static stubidp.saml.test.builders.SubjectConfirmationBuilder.aSubjectConfirmation;
+import static stubidp.saml.test.builders.SubjectConfirmationDataBuilder.aSubjectConfirmationData;
 
 public class DuplicateAssertionValidatorTest extends OpenSAMLRunner {
 

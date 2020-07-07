@@ -2,8 +2,9 @@ package stubidp.test.integration.support;
 
 import org.opensaml.saml.saml2.core.AuthnRequest;
 import stubidp.saml.serializers.serializers.XmlObjectToBase64EncodedStringTransformer;
-import stubidp.saml.utils.core.test.TestCredentialFactory;
-import stubidp.saml.utils.core.test.builders.IssuerBuilder;
+import stubidp.saml.test.TestCredentialFactory;
+import stubidp.saml.test.builders.IssuerBuilder;
+import stubsp.stubsp.saml.request.AuthnRequestBuilder;
 
 import java.time.Instant;
 import java.util.Optional;

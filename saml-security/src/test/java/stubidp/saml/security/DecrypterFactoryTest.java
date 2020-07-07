@@ -12,6 +12,7 @@ import org.opensaml.security.credential.Credential;
 import org.opensaml.xmlsec.encryption.support.DecryptionException;
 import org.xml.sax.SAXException;
 import stubidp.saml.security.saml.deserializers.SamlObjectParser;
+import stubidp.saml.test.OpenSAMLRunner;
 import stubidp.test.devpki.TestCertificateStrings;
 import stubidp.test.devpki.TestEntityIds;
 import stubidp.utils.security.security.PrivateKeyFactory;
@@ -30,10 +31,9 @@ import java.util.List;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.fail;
-import static stubidp.saml.security.saml.builders.EncryptedAssertionBuilder.anEncryptedAssertionBuilder;
+import static stubidp.saml.test.builders.EncryptedAssertionBuilder.anEncryptedAssertionBuilder;
 
 public class DecrypterFactoryTest extends OpenSAMLRunner {
-
     private static final String OLD_HUB_PRIVATE_ENCRYPTION_KEY = "MIICeAIBADANBgkqhkiG9w0BAQEFAASCAmIwggJeAgEAAoGBALyiEYiZvtPimmxUK8Vdl6GvaPqLPhSjeI/lk0mQbXQgmzqyb+vUTHO6Y2u5eusfPFsX6FSftdi1y7/k5aKVCBVQBewh6bzl/PcvOvDe/H99qvsrfTA25y1d2sdSqZBN/eFLEhJ8OT7+GuYVrSlNASxsNzngp7hJjfCKWKgEheHnAgMBAAECgYEAnXSnMCAt8w4XGs/TzaaHONaDyYdLZcziiTL4FBLz2liRWpix5efLfVqbPMORwAvNxLgbHfBGycNOdTqrGGBQYpKfLKB2xkAzDzQxe1XvpiKDF+6gnfaq4c6FNhMaS+llv3PVic3gVgWn+QnKG1k6eRL4oqyalp66rZp/RfLx6GkCQQDm2pm44T9xJ3+HFOVnLD1BnRXgCRAal9sJoR6PUtoQjuSKELrs4/e+UwItI7Ol/jLOFYrIDnpahES4O1snJHOFAkEA0S4iGp+zOcLgwq8FLTchi+gcMpjyYTfl0ypLDTqEVnFzE3ce/FhE4s4/JNHIaQydHPJXdsQQdv5+n7mAAyQtewJBAMw0yo4UEf6SJejjvxlItNb5kYQgADLF6WfXMiUt8N98xwSqT++EqH2fB+nODvfiqCZMP/s/c1PmdLNTLgqt39ECQFPxq4X7qLT5W7FFA1LN2QyILSiw8DPLdtNzGYNJhGocRQ3+s9SYp6xNEFH6Te66PSKsriTfMaxPHQmEK7cXAZkCQQCvxq4J2Qdc7Snt3RgUocLioQM8bjM7VePxO94rx5WN+yjYr9c2W5OgY3mKBUw7FbcCo7WzQ4rK1a2o/sknAfuY";
     private PrivateKey privateEncryptionKey;
     private PublicKey unusedPublicKey;
@@ -46,7 +46,6 @@ public class DecrypterFactoryTest extends OpenSAMLRunner {
         //We don't have the corresponding public key here. We intend to re-encrypt the test data and put both keys in this file.
         unusedPublicKey = publicKeyFactory.createPublicKey(TestCertificateStrings.STUB_IDP_PUBLIC_PRIMARY_CERT);
     }
-
 
     @Test
     public void createDecrypter_shouldCreateDecrypterWhichWorksWithInline() throws IOException, UnmarshallingException, DecryptionException, ParserConfigurationException, SAXException {

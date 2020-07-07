@@ -10,8 +10,8 @@ import org.opensaml.saml.saml2.metadata.SPSSODescriptor;
 import stubidp.saml.extensions.validation.SamlTransformationErrorException;
 import stubidp.saml.extensions.validation.SamlValidationResponse;
 import stubidp.saml.security.SamlMessageSignatureValidator;
-import stubidp.saml.security.OpenSAMLRunner;
 import stubidp.saml.security.validators.ValidatedResponse;
+import stubidp.saml.test.OpenSAMLRunner;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;

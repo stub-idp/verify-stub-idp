@@ -9,6 +9,7 @@ import stubidp.saml.domain.assertions.Address;
 import stubidp.saml.domain.assertions.Gender;
 import stubidp.saml.domain.assertions.SimpleMdsValue;
 import stubidp.saml.domain.assertions.TransliterableMdsValue;
+import stubidp.saml.domain.matching.MatchingDatasetBuilder;
 import stubidp.saml.extensions.IdaConstants;
 import stubidp.saml.utils.core.domain.AddressFactory;
 import stubidp.saml.extensions.extensions.PersonName;

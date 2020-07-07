@@ -16,7 +16,7 @@ import org.opensaml.saml.saml2.core.impl.EncryptedAssertionBuilder;
 import stubidp.saml.domain.assertions.HubAssertion;
 import stubidp.saml.domain.matching.HubEidasAttributeQueryRequest;
 import stubidp.saml.domain.assertions.PersistentId;
-import stubidp.saml.hub.core.OpenSAMLRunner;
+import stubidp.saml.test.OpenSAMLRunner;
 import stubidp.saml.hub.hub.factories.AttributeQueryAttributeFactory;
 import stubidp.saml.serializers.deserializers.StringToOpenSamlObjectTransformer;
 import stubidp.saml.utils.core.OpenSamlXmlObjectFactory;
@@ -31,7 +31,7 @@ import static org.mockito.Mockito.when;
 import static stubidp.saml.domain.assertions.UserAccountCreationAttribute.CURRENT_ADDRESS;
 import static stubidp.saml.domain.assertions.UserAccountCreationAttribute.DATE_OF_BIRTH;
 import static stubidp.saml.hub.hub.builders.HubEidasAttributeQueryRequestBuilder.aHubEidasAttributeQueryRequest;
-import static stubidp.saml.utils.core.test.builders.HubAssertionBuilder.aHubAssertion;
+import static stubidp.saml.test.builders.HubAssertionBuilder.aHubAssertion;
 
 @ExtendWith(MockitoExtension.class)
 public class HubEidasAttributeQueryRequestToSamlAttributeQueryTransformerTest extends OpenSAMLRunner {

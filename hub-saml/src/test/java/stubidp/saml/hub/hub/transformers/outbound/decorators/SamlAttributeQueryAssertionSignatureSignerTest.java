@@ -9,11 +9,11 @@ import org.opensaml.saml.saml2.core.Assertion;
 import org.opensaml.saml.saml2.core.AttributeQuery;
 import org.opensaml.saml.saml2.core.Issuer;
 import org.opensaml.security.credential.Credential;
-import stubidp.saml.hub.core.OpenSAMLRunner;
+import stubidp.saml.hub.core.test.PrivateKeyStoreFactory;
 import stubidp.saml.security.IdaKeyStoreCredentialRetriever;
+import stubidp.saml.test.OpenSAMLRunner;
+import stubidp.saml.test.TestCredentialFactory;
 import stubidp.saml.utils.core.OpenSamlXmlObjectFactory;
-import stubidp.saml.utils.core.test.PrivateKeyStoreFactory;
-import stubidp.saml.utils.core.test.TestCredentialFactory;
 import stubidp.test.devpki.TestCertificateStrings;
 import stubidp.test.devpki.TestEntityIds;
 
@@ -22,14 +22,14 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
-import static stubidp.saml.utils.core.test.builders.AssertionBuilder.anAssertion;
-import static stubidp.saml.utils.core.test.builders.AttributeQueryBuilder.anAttributeQuery;
-import static stubidp.saml.utils.core.test.builders.AttributeStatementBuilder.anAttributeStatement;
-import static stubidp.saml.utils.core.test.builders.IssuerBuilder.anIssuer;
-import static stubidp.saml.utils.core.test.builders.SimpleStringAttributeBuilder.aSimpleStringAttribute;
-import static stubidp.saml.utils.core.test.builders.SubjectBuilder.aSubject;
-import static stubidp.saml.utils.core.test.builders.SubjectConfirmationBuilder.aSubjectConfirmation;
-import static stubidp.saml.utils.core.test.builders.SubjectConfirmationDataBuilder.aSubjectConfirmationData;
+import static stubidp.saml.test.builders.AssertionBuilder.anAssertion;
+import static stubidp.saml.test.builders.AttributeQueryBuilder.anAttributeQuery;
+import static stubidp.saml.test.builders.AttributeStatementBuilder.anAttributeStatement;
+import static stubidp.saml.test.builders.IssuerBuilder.anIssuer;
+import static stubidp.saml.test.builders.SimpleStringAttributeBuilder.aSimpleStringAttribute;
+import static stubidp.saml.test.builders.SubjectBuilder.aSubject;
+import static stubidp.saml.test.builders.SubjectConfirmationBuilder.aSubjectConfirmation;
+import static stubidp.saml.test.builders.SubjectConfirmationDataBuilder.aSubjectConfirmationData;
 
 @ExtendWith(MockitoExtension.class)
 public class SamlAttributeQueryAssertionSignatureSignerTest extends OpenSAMLRunner {

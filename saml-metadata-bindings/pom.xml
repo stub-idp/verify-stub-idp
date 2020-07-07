@@ -135,6 +135,12 @@
         </dependency>
         <dependency>
             <groupId>stub-idp</groupId>
+            <artifactId>saml-security</artifactId>
+            <version>1.0-SNAPSHOT</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>stub-idp</groupId>
             <artifactId>common-utils</artifactId>
             <version>1.0-SNAPSHOT</version>
             <scope>compile</scope>
@@ -182,16 +188,22 @@
             <version>${assertj.version}</version>
             <scope>test</scope>
         </dependency>
+<!--        <dependency>-->
+<!--            <groupId>stub-idp</groupId>-->
+<!--            <artifactId>saml-utils</artifactId>-->
+<!--            <version>1.0-SNAPSHOT</version>-->
+<!--            <type>test-jar</type>-->
+<!--            <scope>test</scope>-->
+<!--        </dependency>-->
         <dependency>
             <groupId>stub-idp</groupId>
-            <artifactId>saml-utils</artifactId>
+            <artifactId>test-utils</artifactId>
             <version>1.0-SNAPSHOT</version>
-            <type>test-jar</type>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>stub-idp</groupId>
-            <artifactId>test-utils</artifactId>
+            <artifactId>saml-test</artifactId>
             <version>1.0-SNAPSHOT</version>
             <scope>test</scope>
         </dependency>

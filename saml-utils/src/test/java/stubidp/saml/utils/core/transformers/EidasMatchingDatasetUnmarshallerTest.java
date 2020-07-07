@@ -19,9 +19,9 @@ import stubidp.saml.extensions.extensions.eidas.impl.DateOfBirthBuilder;
 import stubidp.saml.extensions.extensions.eidas.impl.EidasGenderBuilder;
 import stubidp.saml.extensions.extensions.eidas.impl.PersonIdentifierBuilder;
 import stubidp.saml.extensions.extensions.impl.BaseMdsSamlObjectUnmarshaller;
-import stubidp.saml.utils.OpenSAMLRunner;
-import stubidp.saml.utils.core.test.OpenSamlXmlObjectFactory;
-import stubidp.saml.utils.core.test.builders.AssertionBuilder;
+import stubidp.saml.test.OpenSAMLRunner;
+import stubidp.saml.test.OpenSamlXmlObjectFactory;
+import stubidp.saml.test.builders.AssertionBuilder;
 import stubidp.saml.utils.core.test.builders.PersonIdentifierAttributeBuilder;
 
 import java.time.Instant;

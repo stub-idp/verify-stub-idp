@@ -1,6 +1,6 @@
 package stubidp.saml.hub.core.domain;
 
-import stubidp.saml.hub.hub.domain.IdpIdaStatus;
+import stubidp.saml.domain.assertions.IdpIdaStatus;
 
 import java.time.Instant;
 import java.util.Optional;

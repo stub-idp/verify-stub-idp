@@ -8,7 +8,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.opensaml.saml.saml2.core.Assertion;
 import org.opensaml.saml.saml2.core.Attribute;
 import org.opensaml.saml.saml2.core.AttributeStatement;
-import stubidp.saml.hub.core.OpenSAMLRunner;
+import stubidp.saml.test.OpenSAMLRunner;
 import stubidp.saml.utils.core.OpenSamlXmlObjectFactory;
 import stubidp.saml.domain.assertions.HubAssertion;
 import stubidp.saml.utils.core.transformers.outbound.OutboundAssertionToSubjectTransformer;
@@ -20,9 +20,9 @@ import java.util.List;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import static stubidp.saml.utils.core.test.builders.Cycle3DatasetBuilder.aCycle3Dataset;
-import static stubidp.saml.utils.core.test.builders.HubAssertionBuilder.aHubAssertion;
-import static stubidp.saml.utils.core.test.builders.SimpleStringAttributeBuilder.aSimpleStringAttribute;
+import static stubidp.saml.test.builders.Cycle3DatasetBuilder.aCycle3Dataset;
+import static stubidp.saml.test.builders.HubAssertionBuilder.aHubAssertion;
+import static stubidp.saml.test.builders.SimpleStringAttributeBuilder.aSimpleStringAttribute;
 
 @ExtendWith(MockitoExtension.class)
 public class HubAssertionMarshallerTest extends OpenSAMLRunner {

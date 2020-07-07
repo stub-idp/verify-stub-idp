@@ -1,8 +1,8 @@
 package stubidp.saml.hub.hub.transformers.outbound;
 
 import org.opensaml.saml.saml2.core.StatusDetail;
+import stubidp.saml.domain.assertions.IdpIdaStatus;
 import stubidp.saml.extensions.extensions.StatusValue;
-import stubidp.saml.hub.hub.domain.IdpIdaStatus;
 import stubidp.saml.utils.core.OpenSamlXmlObjectFactory;
 import stubidp.saml.utils.core.domain.DetailedStatusCode;
 import stubidp.saml.utils.core.transformers.outbound.IdaStatusMarshaller;

@@ -15,8 +15,8 @@ import org.opensaml.saml.security.impl.MetadataCredentialResolver;
 import org.opensaml.security.credential.UsageType;
 import org.opensaml.security.criteria.UsageCriterion;
 import org.w3c.dom.Element;
-import stubidp.saml.metadata.test.factories.metadata.EntityDescriptorFactory;
-import stubidp.saml.metadata.test.factories.metadata.TestCredentialFactory;
+import stubidp.saml.test.metadata.EntityDescriptorFactory;
+import stubidp.saml.test.TestCredentialFactory;
 import stubidp.test.devpki.TestCertificateStrings;
 import stubidp.test.devpki.TestEntityIds;
 

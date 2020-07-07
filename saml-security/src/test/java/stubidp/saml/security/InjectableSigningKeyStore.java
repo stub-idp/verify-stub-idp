@@ -1,6 +1,5 @@
 package stubidp.saml.security;
 
-import stubidp.saml.security.SigningKeyStore;
 import stubidp.utils.security.security.PublicKeyFactory;
 import stubidp.utils.security.security.X509CertificateFactory;
 

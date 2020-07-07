@@ -7,7 +7,7 @@ import org.opensaml.core.config.InitializationService;
 import org.opensaml.core.xml.XMLObject;
 import org.opensaml.saml.metadata.resolver.filter.FilterException;
 import org.opensaml.saml.metadata.resolver.filter.MetadataFilter;
-import stubidp.saml.metadata.test.factories.metadata.MetadataFactory;
+import stubidp.saml.test.metadata.MetadataFactory;
 import stubidp.saml.serializers.deserializers.OpenSamlXMLObjectUnmarshaller;
 import stubidp.saml.serializers.deserializers.parser.SamlObjectParser;
 import stubidp.test.devpki.TestCertificateStrings;

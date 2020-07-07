@@ -3,8 +3,8 @@ package stubidp.saml.hub.hub.transformers.inbound;
 import org.opensaml.saml.saml2.core.Status;
 import org.opensaml.saml.saml2.core.StatusCode;
 import org.opensaml.saml.saml2.core.StatusDetail;
+import stubidp.saml.domain.assertions.IdpIdaStatus;
 import stubidp.saml.extensions.extensions.StatusValue;
-import stubidp.saml.hub.hub.domain.IdpIdaStatus;
 
 import java.util.Collections;
 import java.util.List;

@@ -7,7 +7,8 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.opensaml.core.config.InitializationException;
 import org.opensaml.core.config.InitializationService;
-import stubidp.saml.metadata.test.factories.metadata.MetadataFactory;
+import stubidp.saml.security.StringBackedMetadataResolver;
+import stubidp.saml.test.metadata.MetadataFactory;
 
 import static org.assertj.core.api.Assertions.assertThat;
 

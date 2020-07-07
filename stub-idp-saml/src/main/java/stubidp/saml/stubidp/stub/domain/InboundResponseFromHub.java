@@ -3,8 +3,8 @@ package stubidp.saml.stubidp.stub.domain;
 import org.opensaml.saml.saml2.core.Attribute;
 import stubidp.saml.domain.assertions.AuthnContext;
 import stubidp.saml.domain.assertions.PersistentId;
-import stubidp.saml.utils.core.domain.IdaSamlResponse;
-import stubidp.saml.utils.core.domain.TransactionIdaStatus;
+import stubidp.saml.domain.assertions.TransactionIdaStatus;
+import stubidp.saml.domain.response.IdaSamlResponse;
 
 import java.net.URI;
 import java.time.Instant;

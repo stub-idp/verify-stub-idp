@@ -7,14 +7,14 @@ import org.opensaml.saml.saml2.core.Response;
 import org.opensaml.saml.saml2.core.StatusCode;
 import stubidp.saml.extensions.domain.SamlStatusCode;
 import stubidp.saml.hub.core.errors.SamlTransformationErrorFactory;
-import stubidp.saml.hub.core.OpenSAMLRunner;
-import stubidp.saml.utils.core.test.SamlTransformationErrorManagerTestHelper;
+import stubidp.saml.test.OpenSAMLRunner;
+import stubidp.saml.test.support.SamlTransformationErrorManagerTestHelper;
 import stubidp.saml.extensions.validation.SamlValidationSpecificationFailure;
 
-import static stubidp.saml.utils.core.test.builders.IssuerBuilder.anIssuer;
-import static stubidp.saml.utils.core.test.builders.ResponseBuilder.aResponse;
-import static stubidp.saml.utils.core.test.builders.StatusBuilder.aStatus;
-import static stubidp.saml.utils.core.test.builders.StatusCodeBuilder.aStatusCode;
+import static stubidp.saml.test.builders.IssuerBuilder.anIssuer;
+import static stubidp.saml.test.builders.ResponseBuilder.aResponse;
+import static stubidp.saml.test.builders.StatusBuilder.aStatus;
+import static stubidp.saml.test.builders.StatusCodeBuilder.aStatusCode;
 
 public class HealthCheckResponseFromMatchingServiceValidatorTest extends OpenSAMLRunner {
 

@@ -13,16 +13,16 @@ import stubidp.saml.domain.assertions.IdentityProviderAssertion;
 import stubidp.saml.domain.assertions.IdentityProviderAuthnStatement;
 import stubidp.saml.domain.assertions.MatchingDataset;
 import stubidp.saml.extensions.extensions.impl.BaseMdsSamlObjectUnmarshaller;
-import stubidp.saml.utils.OpenSAMLRunner;
-import stubidp.saml.utils.core.test.builders.AddressAttributeBuilder_1_1;
-import stubidp.saml.utils.core.test.builders.AddressAttributeValueBuilder_1_1;
-import stubidp.saml.utils.core.test.builders.AssertionBuilder;
-import stubidp.saml.utils.core.test.builders.DateAttributeBuilder_1_1;
-import stubidp.saml.utils.core.test.builders.GenderAttributeBuilder_1_1;
+import stubidp.saml.test.OpenSAMLRunner;
+import stubidp.saml.test.builders.AddressAttributeBuilder_1_1;
+import stubidp.saml.test.builders.AddressAttributeValueBuilder_1_1;
+import stubidp.saml.test.builders.AssertionBuilder;
+import stubidp.saml.test.builders.DateAttributeBuilder_1_1;
+import stubidp.saml.test.builders.GenderAttributeBuilder_1_1;
 import stubidp.saml.utils.core.test.builders.IdentityProviderAuthnStatementBuilder;
-import stubidp.saml.utils.core.test.builders.MatchingDatasetBuilder;
-import stubidp.saml.utils.core.test.builders.PersonNameAttributeBuilder_1_1;
-import stubidp.saml.utils.core.test.builders.PersonNameAttributeValueBuilder;
+import stubidp.saml.test.builders.MatchingDatasetBuilder;
+import stubidp.saml.test.builders.PersonNameAttributeBuilder_1_1;
+import stubidp.saml.test.builders.PersonNameAttributeValueBuilder;
 
 import java.util.Optional;
 

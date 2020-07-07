@@ -24,10 +24,10 @@ import java.util.List;
 import static java.util.Arrays.asList;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.verify;
-import static stubidp.saml.utils.core.test.builders.AssertionBuilder.anAssertion;
-import static stubidp.saml.utils.core.test.builders.AuthnStatementBuilder.anAuthnStatement;
-import static stubidp.saml.utils.core.test.builders.MatchingDatasetAttributeStatementBuilder_1_1.aMatchingDatasetAttributeStatement_1_1;
-import static stubidp.saml.utils.core.test.builders.ResponseBuilder.aResponse;
+import static stubidp.saml.test.builders.AssertionBuilder.anAssertion;
+import static stubidp.saml.test.builders.AuthnStatementBuilder.anAuthnStatement;
+import static stubidp.saml.test.builders.MatchingDatasetAttributeStatementBuilder_1_1.aMatchingDatasetAttributeStatement_1_1;
+import static stubidp.saml.test.builders.ResponseBuilder.aResponse;
 
 @ExtendWith(MockitoExtension.class)
 public class ResponseAssertionsFromIdpValidatorTest {

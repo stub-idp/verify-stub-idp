@@ -3,7 +3,7 @@ package stubidp.saml.hub.hub.transformers.outbound;
 import org.opensaml.saml.saml2.core.Response;
 import org.opensaml.saml.saml2.core.Status;
 import stubidp.saml.utils.core.OpenSamlXmlObjectFactory;
-import stubidp.saml.utils.core.domain.OutboundResponseFromHub;
+import stubidp.saml.domain.response.OutboundResponseFromHub;
 import stubidp.saml.utils.core.transformers.outbound.IdaResponseToSamlResponseTransformer;
 
 import javax.inject.Inject;

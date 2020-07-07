@@ -4,12 +4,12 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.opensaml.saml.saml2.core.Assertion;
 import org.opensaml.saml.saml2.core.Attribute;
-import stubidp.saml.utils.OpenSAMLRunner;
+import stubidp.saml.test.OpenSAMLRunner;
 import stubidp.saml.domain.assertions.Cycle3Dataset;
-import stubidp.saml.utils.core.test.SamlTransformationErrorManagerTestHelper;
-import stubidp.saml.utils.core.test.builders.AssertionBuilder;
-import stubidp.saml.utils.core.test.builders.AttributeStatementBuilder;
-import stubidp.saml.utils.core.test.builders.SimpleStringAttributeBuilder;
+import stubidp.saml.test.support.SamlTransformationErrorManagerTestHelper;
+import stubidp.saml.test.builders.AssertionBuilder;
+import stubidp.saml.test.builders.AttributeStatementBuilder;
+import stubidp.saml.test.builders.SimpleStringAttributeBuilder;
 
 import java.util.ArrayList;
 import java.util.List;

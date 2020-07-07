@@ -6,8 +6,9 @@ import org.opensaml.saml.saml2.core.Response;
 import stubidp.saml.domain.assertions.IdentityProviderAssertion;
 import stubidp.saml.stubidp.stub.transformers.outbound.IdentityProviderAssertionToAssertionTransformer;
 import stubidp.saml.stubidp.stub.transformers.outbound.IdentityProviderAuthnStatementToAuthnStatementTransformer;
+import stubidp.saml.test.OpenSAMLRunner;
+import stubidp.saml.test.builders.MatchingDatasetBuilder;
 import stubidp.saml.utils.core.OpenSamlXmlObjectFactory;
-import stubidp.saml.utils.core.test.builders.MatchingDatasetBuilder;
 import stubidp.saml.utils.core.transformers.outbound.OutboundAssertionToSubjectTransformer;
 import stubidp.saml.utils.hub.factories.AttributeFactory_1_1;
 import stubidp.stubidp.domain.IdpIdaStatusMarshaller;
@@ -15,7 +16,7 @@ import stubidp.stubidp.domain.OutboundResponseFromIdp;
 import stubidp.stubidp.saml.transformers.OutboundResponseFromIdpToSamlResponseTransformer;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static stubidp.saml.stubidp.test.builders.IdentityProviderAssertionBuilder.anIdentityProviderAssertion;
+import static stubidp.saml.test.builders.IdentityProviderAssertionBuilder.anIdentityProviderAssertion;
 
 public class OutboundResponseFromIdpToSamlResponseTransformerTest extends OpenSAMLRunner {
 

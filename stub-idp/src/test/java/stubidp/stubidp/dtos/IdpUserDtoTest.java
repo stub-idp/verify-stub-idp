@@ -8,8 +8,8 @@ import org.junit.jupiter.api.Test;
 import stubidp.saml.domain.assertions.Address;
 import stubidp.saml.domain.assertions.Gender;
 import stubidp.saml.domain.assertions.SimpleMdsValue;
-import stubidp.saml.test.AddressBuilder;
-import stubidp.stubidp.builders.SimpleMdsValueBuilder;
+import stubidp.saml.test.builders.AddressBuilder;
+import stubidp.saml.test.builders.SimpleMdsValueBuilder;
 
 import java.io.IOException;
 import java.time.Instant;

@@ -10,7 +10,7 @@ import stubidp.saml.domain.assertions.AuthnContext;
 import stubidp.saml.domain.assertions.Gender;
 import stubidp.saml.domain.assertions.SimpleMdsValue;
 import stubidp.saml.domain.request.IdaAuthnRequestFromHub;
-import stubidp.saml.test.AddressBuilder;
+import stubidp.saml.test.builders.AddressBuilder;
 import stubidp.stubidp.domain.DatabaseIdpUser;
 import stubidp.stubidp.repositories.IdpSession;
 import stubidp.stubidp.repositories.jdbc.migrations.DatabaseMigrationRunner;

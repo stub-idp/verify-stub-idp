@@ -1,6 +1,5 @@
 package stubidp.saml.hub.metadata.domain;
 
-
 import java.net.URI;
 
 public class AssertionConsumerServiceEndpointDto extends SamlEndpointDto {

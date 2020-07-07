@@ -15,8 +15,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class HardCodedKeyStore implements SigningKeyStore, EncryptionKeyStore, InternalPublicKeyStore, PublicKeyInputStreamFactory {
-
-    private final PublicKeyFactory publicKeyFactory = new PublicKeyFactory(new X509CertificateFactory());
+    private static final PublicKeyFactory publicKeyFactory = new PublicKeyFactory(new X509CertificateFactory());
     private final String entityId;
 
     public HardCodedKeyStore(String entityId) {

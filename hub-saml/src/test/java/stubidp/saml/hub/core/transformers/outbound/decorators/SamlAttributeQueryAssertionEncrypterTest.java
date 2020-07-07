@@ -14,10 +14,10 @@ import org.opensaml.saml.saml2.core.SubjectConfirmationData;
 import org.opensaml.saml.saml2.encryption.Encrypter;
 import org.opensaml.security.credential.Credential;
 import org.opensaml.xmlsec.encryption.support.EncryptionException;
-import stubidp.saml.hub.core.OpenSAMLRunner;
 import stubidp.saml.security.EncrypterFactory;
 import stubidp.saml.security.EntityToEncryptForLocator;
 import stubidp.saml.security.KeyStoreBackedEncryptionCredentialResolver;
+import stubidp.saml.test.OpenSAMLRunner;
 
 import java.util.List;
 
@@ -26,11 +26,11 @@ import static org.assertj.core.api.Assertions.fail;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
-import static stubidp.saml.utils.core.test.builders.AssertionBuilder.anAssertion;
-import static stubidp.saml.utils.core.test.builders.AttributeQueryBuilder.anAttributeQuery;
-import static stubidp.saml.utils.core.test.builders.SubjectBuilder.aSubject;
-import static stubidp.saml.utils.core.test.builders.SubjectConfirmationBuilder.aSubjectConfirmation;
-import static stubidp.saml.utils.core.test.builders.SubjectConfirmationDataBuilder.aSubjectConfirmationData;
+import static stubidp.saml.test.builders.AssertionBuilder.anAssertion;
+import static stubidp.saml.test.builders.AttributeQueryBuilder.anAttributeQuery;
+import static stubidp.saml.test.builders.SubjectBuilder.aSubject;
+import static stubidp.saml.test.builders.SubjectConfirmationBuilder.aSubjectConfirmation;
+import static stubidp.saml.test.builders.SubjectConfirmationDataBuilder.aSubjectConfirmationData;
 
 @ExtendWith(MockitoExtension.class)
 public class SamlAttributeQueryAssertionEncrypterTest extends OpenSAMLRunner {

@@ -14,12 +14,12 @@ import stubidp.saml.extensions.extensions.IdaAuthnContext;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.verify;
-import static stubidp.saml.utils.core.test.builders.AssertionBuilder.anAssertion;
-import static stubidp.saml.utils.core.test.builders.AttributeStatementBuilder.anAttributeStatement;
-import static stubidp.saml.utils.core.test.builders.AuthnContextBuilder.anAuthnContext;
-import static stubidp.saml.utils.core.test.builders.AuthnContextClassRefBuilder.anAuthnContextClassRef;
-import static stubidp.saml.utils.core.test.builders.AuthnStatementBuilder.anAuthnStatement;
-import static stubidp.saml.utils.core.test.builders.IPAddressAttributeBuilder.anIPAddress;
+import static stubidp.saml.test.builders.AssertionBuilder.anAssertion;
+import static stubidp.saml.test.builders.AttributeStatementBuilder.anAttributeStatement;
+import static stubidp.saml.test.builders.AuthnContextBuilder.anAuthnContext;
+import static stubidp.saml.test.builders.AuthnContextClassRefBuilder.anAuthnContextClassRef;
+import static stubidp.saml.test.builders.AuthnStatementBuilder.anAuthnStatement;
+import static stubidp.saml.test.builders.IPAddressAttributeBuilder.anIPAddress;
 
 @ExtendWith(MockitoExtension.class)
 public class IdentityProviderAuthnStatementUnmarshallerTest {

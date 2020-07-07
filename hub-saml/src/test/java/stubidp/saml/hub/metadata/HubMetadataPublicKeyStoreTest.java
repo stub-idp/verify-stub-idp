@@ -7,11 +7,11 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.opensaml.saml.metadata.resolver.MetadataResolver;
 import org.opensaml.saml.metadata.resolver.impl.AbstractReloadingMetadataResolver;
-import stubidp.saml.hub.core.OpenSAMLRunner;
 import stubidp.saml.hub.metadata.exceptions.HubEntityMissingException;
-import stubidp.saml.metadata.StringBackedMetadataResolver;
-import stubidp.saml.metadata.test.factories.metadata.MetadataFactory;
 import stubidp.saml.security.PublicKeyFactory;
+import stubidp.saml.security.StringBackedMetadataResolver;
+import stubidp.saml.test.OpenSAMLRunner;
+import stubidp.saml.test.metadata.MetadataFactory;
 import stubidp.test.devpki.TestCertificateStrings;
 import stubidp.test.devpki.TestEntityIds;
 

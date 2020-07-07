@@ -3,7 +3,7 @@ package stubidp.saml.hub.hub.validators.authnrequest;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import stubidp.saml.hub.core.OpenSAMLRunner;
+import stubidp.saml.test.OpenSAMLRunner;
 import stubidp.saml.hub.hub.configuration.SamlDuplicateRequestValidationConfiguration;
 
 import java.time.Clock;

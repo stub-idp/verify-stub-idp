@@ -1,6 +1,6 @@
 package stubidp.saml.hub.hub.transformers.outbound;
 
-import stubidp.saml.utils.core.domain.OutboundResponseFromHub;
+import stubidp.saml.domain.response.OutboundResponseFromHub;
 
 import java.util.function.Function;
 

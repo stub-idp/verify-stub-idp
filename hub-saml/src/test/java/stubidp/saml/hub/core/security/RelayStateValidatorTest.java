@@ -3,8 +3,8 @@ package stubidp.saml.hub.core.security;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import stubidp.saml.hub.core.errors.SamlTransformationErrorFactory;
-import stubidp.saml.hub.core.OpenSAMLRunner;
-import stubidp.saml.utils.core.test.SamlTransformationErrorManagerTestHelper;
+import stubidp.saml.test.OpenSAMLRunner;
+import stubidp.saml.test.support.SamlTransformationErrorManagerTestHelper;
 
 import static java.util.Arrays.asList;
 
@@ -20,17 +20,10 @@ public class RelayStateValidatorTest extends OpenSAMLRunner {
     @Test
     public void validate_shouldCheckRelayStateLengthIsLessThanEightyOneCharactersOrRaiseException() {
         final String aStringMoreThanEightyCharacters = generateLongString();
-
         SamlTransformationErrorManagerTestHelper.validateFail(
-                new SamlTransformationErrorManagerTestHelper.Action() {
-                    @Override
-                    public void execute() {
-                        relayStateValidator.validate(aStringMoreThanEightyCharacters);
-                    }
-                },
+                () -> relayStateValidator.validate(aStringMoreThanEightyCharacters),
                 SamlTransformationErrorFactory.invalidRelayState(aStringMoreThanEightyCharacters)
         );
-
     }
 
     @Test
@@ -61,7 +54,6 @@ public class RelayStateValidatorTest extends OpenSAMLRunner {
     private String generateShortString() {
         return "short string";
     }
-
 
     private String generateLongString() {
         String longString = "";

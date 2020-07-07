@@ -1,9 +1,9 @@
 package stubidp.saml.hub.hub.transformers.inbound;
 
+import stubidp.saml.domain.response.InboundResponseFromIdp;
 import stubidp.saml.hub.core.domain.InboundResponseFromIdpData;
 import stubidp.saml.domain.assertions.PassthroughAssertion;
 import stubidp.saml.hub.core.transformers.outbound.decorators.AssertionBlobEncrypter;
-import stubidp.saml.hub.hub.domain.InboundResponseFromIdp;
 
 import javax.inject.Inject;
 import java.util.Optional;

@@ -2,11 +2,10 @@ package stubidp.saml.hub.hub.transformers.outbound;
 
 import stubidp.saml.utils.core.OpenSamlXmlObjectFactory;
 import stubidp.saml.utils.core.domain.DetailedStatusCode;
-import stubidp.saml.utils.core.domain.TransactionIdaStatus;
+import stubidp.saml.domain.assertions.TransactionIdaStatus;
 import stubidp.saml.utils.core.transformers.outbound.IdaStatusMarshaller;
 
 import javax.inject.Inject;
-import java.util.AbstractMap;
 import java.util.Map;
 
 public class SimpleProfileTransactionIdaStatusMarshaller extends IdaStatusMarshaller<TransactionIdaStatus> {

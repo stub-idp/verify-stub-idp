@@ -15,16 +15,16 @@ import stubidp.saml.hub.core.errors.SamlTransformationErrorFactory;
 import stubidp.saml.hub.core.validators.assertion.IdentityProviderAssertionValidator;
 import stubidp.saml.security.validators.ValidatedAssertions;
 import stubidp.saml.security.validators.ValidatedResponse;
-import stubidp.saml.hub.core.OpenSAMLRunner;
+import stubidp.saml.test.OpenSAMLRunner;
 import stubidp.test.devpki.TestEntityIds;
 
 import static java.util.Collections.singletonList;
 import static org.assertj.core.api.Assertions.assertThat;
-import static stubidp.saml.utils.core.test.builders.AssertionBuilder.anAssertion;
-import static stubidp.saml.utils.core.test.builders.AuthnStatementBuilder.anAuthnStatement;
-import static stubidp.saml.utils.core.test.builders.ResponseBuilder.aResponse;
-import static stubidp.saml.utils.core.test.builders.StatusBuilder.aStatus;
-import static stubidp.saml.utils.core.test.builders.StatusCodeBuilder.aStatusCode;
+import static stubidp.saml.test.builders.AssertionBuilder.anAssertion;
+import static stubidp.saml.test.builders.AuthnStatementBuilder.anAuthnStatement;
+import static stubidp.saml.test.builders.ResponseBuilder.aResponse;
+import static stubidp.saml.test.builders.StatusBuilder.aStatus;
+import static stubidp.saml.test.builders.StatusCodeBuilder.aStatusCode;
 
 @ExtendWith(MockitoExtension.class)
 public class ResponseAssertionsFromMatchingServiceValidatorTest extends OpenSAMLRunner {

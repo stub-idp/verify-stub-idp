@@ -1,8 +1,8 @@
 package stubidp.saml.hub.hub.transformers.inbound.providers;
 
 import org.opensaml.saml.saml2.core.Response;
+import stubidp.saml.domain.response.InboundResponseFromIdp;
 import stubidp.saml.hub.core.validators.DestinationValidator;
-import stubidp.saml.hub.hub.domain.InboundResponseFromIdp;
 import stubidp.saml.hub.hub.transformers.inbound.IdaResponseFromIdpUnmarshaller;
 import stubidp.saml.hub.hub.validators.response.idp.IdpResponseValidator;
 import stubidp.saml.hub.hub.validators.response.idp.components.EncryptedResponseFromIdpValidator;

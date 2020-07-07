@@ -6,7 +6,7 @@ import org.jsoup.nodes.Element;
 import org.opensaml.security.credential.Credential;
 import stubidp.saml.extensions.IdaConstants;
 import stubidp.saml.security.IdaKeyStore;
-import stubidp.saml.utils.core.test.TestCredentialFactory;
+import stubidp.saml.test.TestCredentialFactory;
 import stubidp.stubidp.Urls;
 import stubidp.stubidp.cookies.StubIdpCookieNames;
 import stubidp.stubidp.domain.FraudIndicator;

@@ -12,7 +12,7 @@ import stubidp.saml.extensions.IdaConstants;
 import stubidp.saml.extensions.extensions.Date;
 import stubidp.saml.extensions.extensions.PersonName;
 import stubidp.saml.extensions.extensions.StringBasedMdsAttributeValue;
-import stubidp.saml.hub.core.OpenSAMLRunner;
+import stubidp.saml.test.OpenSAMLRunner;
 
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -22,13 +22,13 @@ import static stubidp.saml.hub.core.errors.SamlTransformationErrorFactory.emptyA
 import static stubidp.saml.hub.core.errors.SamlTransformationErrorFactory.mdsAttributeNotRecognised;
 import static stubidp.saml.hub.core.errors.SamlTransformationErrorFactory.mdsMultipleStatements;
 import static stubidp.saml.hub.core.errors.SamlTransformationErrorFactory.mdsStatementMissing;
-import static stubidp.saml.utils.core.test.SamlTransformationErrorManagerTestHelper.validateFail;
-import static stubidp.saml.utils.core.test.builders.AssertionBuilder.anAssertion;
-import static stubidp.saml.utils.core.test.builders.MatchingDatasetAttributeStatementBuilder_1_1.aMatchingDatasetAttributeStatement_1_1;
-import static stubidp.saml.utils.core.test.builders.MatchingDatasetAttributeStatementBuilder_1_1.anEmptyMatchingDatasetAttributeStatement_1_1;
-import static stubidp.saml.utils.core.test.builders.PersonNameAttributeBuilder_1_1.aPersonName_1_1;
-import static stubidp.saml.utils.core.test.builders.PersonNameAttributeValueBuilder.aPersonNameValue;
-import static stubidp.saml.utils.core.test.builders.SimpleStringAttributeBuilder.aSimpleStringAttribute;
+import static stubidp.saml.test.builders.AssertionBuilder.anAssertion;
+import static stubidp.saml.test.builders.MatchingDatasetAttributeStatementBuilder_1_1.aMatchingDatasetAttributeStatement_1_1;
+import static stubidp.saml.test.builders.MatchingDatasetAttributeStatementBuilder_1_1.anEmptyMatchingDatasetAttributeStatement_1_1;
+import static stubidp.saml.test.builders.PersonNameAttributeBuilder_1_1.aPersonName_1_1;
+import static stubidp.saml.test.builders.PersonNameAttributeValueBuilder.aPersonNameValue;
+import static stubidp.saml.test.builders.SimpleStringAttributeBuilder.aSimpleStringAttribute;
+import static stubidp.saml.test.support.SamlTransformationErrorManagerTestHelper.validateFail;
 
 @ExtendWith(MockitoExtension.class)
 public class MatchingDatasetAssertionValidatorTest extends OpenSAMLRunner {

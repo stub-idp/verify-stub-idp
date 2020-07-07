@@ -8,12 +8,12 @@ import org.opensaml.core.xml.io.MarshallingException;
 import org.opensaml.saml.saml2.metadata.EntityDescriptor;
 import org.opensaml.soap.wsaddressing.impl.AddressBuilder;
 import org.opensaml.xmlsec.signature.support.SignatureException;
-import stubidp.saml.metadata.test.factories.metadata.EntityDescriptorFactory;
+import stubidp.saml.test.metadata.EntityDescriptorFactory;
 
 import java.util.Collections;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static stubidp.saml.utils.core.test.builders.metadata.EntitiesDescriptorBuilder.anEntitiesDescriptor;
+import static stubidp.saml.test.builders.EntitiesDescriptorBuilder.anEntitiesDescriptor;
 
 public class EntitiesDescriptorNamePredicateTest {
 

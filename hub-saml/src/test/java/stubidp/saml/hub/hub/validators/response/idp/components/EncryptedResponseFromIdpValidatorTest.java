@@ -8,12 +8,12 @@ import org.opensaml.saml.saml2.core.NameIDType;
 import org.opensaml.saml.saml2.core.Response;
 import org.opensaml.saml.saml2.core.Status;
 import org.opensaml.saml.saml2.core.StatusCode;
+import stubidp.saml.domain.assertions.IdpIdaStatus;
 import stubidp.saml.extensions.validation.SamlValidationSpecificationFailure;
 import stubidp.saml.hub.core.errors.SamlTransformationErrorFactory;
-import stubidp.saml.hub.hub.domain.IdpIdaStatus;
 import stubidp.saml.hub.hub.transformers.inbound.SamlStatusToIdaStatusCodeMapper;
 import stubidp.saml.hub.hub.validators.response.helpers.ResponseValidatorTestHelper;
-import stubidp.saml.hub.core.OpenSAMLRunner;
+import stubidp.saml.test.OpenSAMLRunner;
 
 import static stubidp.saml.hub.core.errors.SamlTransformationErrorFactory.emptyIssuer;
 import static stubidp.saml.hub.core.errors.SamlTransformationErrorFactory.illegalIssuerFormat;
@@ -27,11 +27,11 @@ import static stubidp.saml.hub.core.errors.SamlTransformationErrorFactory.nested
 import static stubidp.saml.hub.core.errors.SamlTransformationErrorFactory.nonSuccessHasUnEncryptedAssertions;
 import static stubidp.saml.hub.core.errors.SamlTransformationErrorFactory.signatureNotSigned;
 import static stubidp.saml.hub.core.errors.SamlTransformationErrorFactory.unexpectedNumberOfAssertions;
-import static stubidp.saml.utils.core.test.SamlTransformationErrorManagerTestHelper.validateFail;
-import static stubidp.saml.utils.core.test.builders.AssertionBuilder.anAssertion;
-import static stubidp.saml.utils.core.test.builders.IssuerBuilder.anIssuer;
-import static stubidp.saml.utils.core.test.builders.ResponseBuilder.aResponse;
-import static stubidp.saml.utils.core.test.builders.StatusCodeBuilder.aStatusCode;
+import static stubidp.saml.test.builders.IssuerBuilder.anIssuer;
+import static stubidp.saml.test.support.SamlTransformationErrorManagerTestHelper.validateFail;
+import static stubidp.saml.test.builders.AssertionBuilder.anAssertion;
+import static stubidp.saml.test.builders.ResponseBuilder.aResponse;
+import static stubidp.saml.test.builders.StatusCodeBuilder.aStatusCode;
 
 public class EncryptedResponseFromIdpValidatorTest extends OpenSAMLRunner {
 

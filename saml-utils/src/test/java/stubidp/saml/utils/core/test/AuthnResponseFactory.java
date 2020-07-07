@@ -7,21 +7,22 @@ import org.opensaml.security.credential.Credential;
 import org.opensaml.xmlsec.algorithm.DigestAlgorithm;
 import org.opensaml.xmlsec.algorithm.SignatureAlgorithm;
 import org.opensaml.xmlsec.encryption.support.EncryptionConstants;
-import stubidp.saml.utils.core.test.builders.AuthnStatementBuilder;
-import stubidp.saml.utils.core.test.builders.IssuerBuilder;
-import stubidp.saml.utils.core.test.builders.SubjectBuilder;
-import stubidp.saml.utils.core.test.builders.SubjectConfirmationBuilder;
+import stubidp.saml.test.TestCredentialFactory;
+import stubidp.saml.test.builders.AuthnStatementBuilder;
+import stubidp.saml.test.builders.IssuerBuilder;
+import stubidp.saml.test.builders.SubjectBuilder;
+import stubidp.saml.test.builders.SubjectConfirmationBuilder;
 import stubidp.test.devpki.TestCertificateStrings;
-import stubidp.saml.utils.core.test.builders.AssertionBuilder;
-import stubidp.saml.utils.core.test.builders.IPAddressAttributeBuilder;
-import stubidp.saml.utils.core.test.builders.MatchingDatasetAttributeStatementBuilder_1_1;
-import stubidp.saml.utils.core.test.builders.ResponseBuilder;
-import stubidp.saml.utils.core.test.builders.SignatureBuilder;
-import stubidp.saml.utils.core.test.builders.SubjectConfirmationDataBuilder;
+import stubidp.saml.test.builders.AssertionBuilder;
+import stubidp.saml.test.builders.IPAddressAttributeBuilder;
+import stubidp.saml.test.builders.MatchingDatasetAttributeStatementBuilder_1_1;
+import stubidp.saml.test.builders.ResponseBuilder;
+import stubidp.saml.test.builders.SignatureBuilder;
+import stubidp.saml.test.builders.SubjectConfirmationDataBuilder;
 
 import java.util.UUID;
 
-import static stubidp.saml.utils.core.test.builders.AttributeStatementBuilder.anAttributeStatement;
+import static stubidp.saml.test.builders.AttributeStatementBuilder.anAttributeStatement;
 
 public class AuthnResponseFactory {
 

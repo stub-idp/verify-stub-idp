@@ -19,22 +19,23 @@ import org.opensaml.xmlsec.signature.Signature;
 import org.opensaml.xmlsec.signature.X509Data;
 import org.opensaml.xmlsec.signature.support.SignatureException;
 import org.opensaml.xmlsec.signature.support.impl.ExplicitKeySignatureTrustEngine;
-import stubidp.saml.security.saml.EntityDescriptorFactory;
-import stubidp.saml.security.saml.MetadataFactory;
 import stubidp.saml.security.saml.StringEncoding;
-import stubidp.saml.security.saml.TestCredentialFactory;
-import stubidp.saml.security.saml.builders.AssertionBuilder;
-import stubidp.saml.security.saml.builders.EntitiesDescriptorBuilder;
-import stubidp.saml.security.saml.builders.EntityDescriptorBuilder;
-import stubidp.saml.security.saml.builders.KeyDescriptorBuilder;
-import stubidp.saml.security.saml.builders.KeyInfoBuilder;
-import stubidp.saml.security.saml.builders.SPSSODescriptorBuilder;
-import stubidp.saml.security.saml.builders.SignatureBuilder;
-import stubidp.saml.security.saml.builders.X509CertificateBuilder;
-import stubidp.saml.security.saml.builders.X509DataBuilder;
 import stubidp.saml.security.saml.deserializers.AuthnRequestUnmarshaller;
 import stubidp.saml.security.saml.deserializers.SamlObjectParser;
 import stubidp.saml.security.saml.deserializers.StringToOpenSamlObjectTransformer;
+import stubidp.saml.test.OpenSAMLRunner;
+import stubidp.saml.test.TestCredentialFactory;
+import stubidp.saml.test.builders.AssertionBuilder;
+import stubidp.saml.test.builders.EntitiesDescriptorBuilder;
+import stubidp.saml.test.builders.EntityDescriptorBuilder;
+import stubidp.saml.test.builders.KeyDescriptorBuilder;
+import stubidp.saml.test.builders.KeyInfoBuilder;
+import stubidp.saml.test.builders.SPSSODescriptorBuilder;
+import stubidp.saml.test.builders.SignatureBuilder;
+import stubidp.saml.test.builders.X509CertificateBuilder;
+import stubidp.saml.test.builders.X509DataBuilder;
+import stubidp.saml.test.metadata.EntityDescriptorFactory;
+import stubidp.saml.test.metadata.MetadataFactory;
 import stubidp.test.devpki.TestCertificateStrings;
 import stubidp.test.devpki.TestEntityIds;
 import stubidp.utils.security.security.verification.CertificateChainValidator;
@@ -56,16 +57,14 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 public class MetadataBackedSignatureValidatorTest extends OpenSAMLRunner {
-
-    private final String issuerId = TestEntityIds.HUB_ENTITY_ID;
-
-    private KeyInfoCredentialResolver keyInfoResolver = DefaultSecurityConfigurationBootstrap.buildBasicInlineKeyInfoCredentialResolver();
+    private static final String issuerId = TestEntityIds.HUB_ENTITY_ID;
+    private static final KeyInfoCredentialResolver keyInfoResolver = DefaultSecurityConfigurationBootstrap.buildBasicInlineKeyInfoCredentialResolver();
 
     @Test
     public void shouldValidateSignatureUsingTrustedCredentials() throws Exception {
         MetadataBackedSignatureValidator metadataBackedSignatureValidator = createMetadataBackedSignatureValidator();
         Credential signingCredential = new TestCredentialFactory(TestCertificateStrings.HUB_TEST_PUBLIC_SIGNING_CERT, TestCertificateStrings.HUB_TEST_PRIVATE_SIGNING_KEY).getSigningCredential();
-        final Assertion assertion = AssertionBuilder.anAssertion().withSignature(SignatureBuilder.aSignature().withSigningCredential(signingCredential).build()).build();
+        final Assertion assertion = AssertionBuilder.anAssertion().withSignature(SignatureBuilder.aSignature().withSigningCredential(signingCredential).build()).buildUnencrypted();
         assertThat(metadataBackedSignatureValidator.validate(assertion, issuerId, SPSSODescriptor.DEFAULT_ELEMENT_NAME)).isEqualTo(true);
     }
 
@@ -73,7 +72,7 @@ public class MetadataBackedSignatureValidatorTest extends OpenSAMLRunner {
     public void shouldFailIfCertificatesHaveTheWrongUsage() throws Exception {
         MetadataBackedSignatureValidator metadataBackedSignatureValidator = createMetadataBackedSignatureValidatorWithWrongUsageCertificates();
         Credential signingCredential = new TestCredentialFactory(TestCertificateStrings.HUB_TEST_PUBLIC_SIGNING_CERT, TestCertificateStrings.HUB_TEST_PRIVATE_SIGNING_KEY).getSigningCredential();
-        final Assertion assertion = AssertionBuilder.anAssertion().withSignature(SignatureBuilder.aSignature().withSigningCredential(signingCredential).build()).build();
+        final Assertion assertion = AssertionBuilder.anAssertion().withSignature(SignatureBuilder.aSignature().withSigningCredential(signingCredential).build()).buildUnencrypted();
         assertThat(metadataBackedSignatureValidator.validate(assertion, issuerId, SPSSODescriptor.DEFAULT_ELEMENT_NAME)).isEqualTo(false);
     }
 
@@ -82,7 +81,7 @@ public class MetadataBackedSignatureValidatorTest extends OpenSAMLRunner {
         MetadataBackedSignatureValidator metadataBackedSignatureValidator = createMetadataBackedSignatureValidator();
         Credential signingCredential = new TestCredentialFactory(TestCertificateStrings.TEST_RP_MS_PUBLIC_SIGNING_CERT, TestCertificateStrings.TEST_RP_PRIVATE_SIGNING_KEY).getSigningCredential();
         Signature signature = createSignatureWithKeyInfo(signingCredential, TestCertificateStrings.TEST_RP_MS_PUBLIC_SIGNING_CERT);
-        final Assertion assertion = AssertionBuilder.anAssertion().withSignature(signature).build();
+        final Assertion assertion = AssertionBuilder.anAssertion().withSignature(signature).buildUnencrypted();
         assertThat(metadataBackedSignatureValidator.validate(assertion, issuerId, SPSSODescriptor.DEFAULT_ELEMENT_NAME)).isEqualTo(false);
     }
 
@@ -91,7 +90,7 @@ public class MetadataBackedSignatureValidatorTest extends OpenSAMLRunner {
         CertificateChainValidator invalidCertificateChainMockValidator = createCertificateChainValidator(CertificateValidity.invalid(new CertPathValidatorException()));
         MetadataBackedSignatureValidator metadataBackedSignatureValidator = createMetadataBackedSignatureValidatorWithChainValidation(invalidCertificateChainMockValidator);
         Credential signingCredential = new TestCredentialFactory(TestCertificateStrings.HUB_TEST_PUBLIC_SIGNING_CERT, TestCertificateStrings.HUB_TEST_PRIVATE_SIGNING_KEY).getSigningCredential();
-        final Assertion assertion = AssertionBuilder.anAssertion().withSignature(SignatureBuilder.aSignature().withSigningCredential(signingCredential).build()).build();
+        final Assertion assertion = AssertionBuilder.anAssertion().withSignature(SignatureBuilder.aSignature().withSigningCredential(signingCredential).build()).buildUnencrypted();
 
         boolean validationResult = metadataBackedSignatureValidator.validate(assertion, issuerId, SPSSODescriptor.DEFAULT_ELEMENT_NAME);
 
@@ -199,19 +198,19 @@ public class MetadataBackedSignatureValidatorTest extends OpenSAMLRunner {
     @Test
     public void shouldAcceptSignedAssertions() throws Exception {
         Credential signingCredential = new TestCredentialFactory(TestCertificateStrings.HUB_TEST_PUBLIC_SIGNING_CERT, TestCertificateStrings.HUB_TEST_PRIVATE_SIGNING_KEY).getSigningCredential();
-        final Assertion assertion = AssertionBuilder.anAssertion().withSignature(SignatureBuilder.aSignature().withSigningCredential(signingCredential).build()).build();
+        final Assertion assertion = AssertionBuilder.anAssertion().withSignature(SignatureBuilder.aSignature().withSigningCredential(signingCredential).build()).buildUnencrypted();
         assertThat(createMetadataBackedSignatureValidator().validate(assertion, issuerId, SPSSODescriptor.DEFAULT_ELEMENT_NAME)).isEqualTo(true);
     }
 
     @Test
     public void shouldNotAcceptUnsignedAssertions() throws Exception {
-        assertThat(createMetadataBackedSignatureValidator().validate(AssertionBuilder.anAssertion().withoutSigning().build(), issuerId, SPSSODescriptor.DEFAULT_ELEMENT_NAME)).isEqualTo(false);
+        assertThat(createMetadataBackedSignatureValidator().validate(AssertionBuilder.anAssertion().withoutSigning().buildUnencrypted(), issuerId, SPSSODescriptor.DEFAULT_ELEMENT_NAME)).isEqualTo(false);
     }
 
     @Test
     public void shouldNotAcceptMissignedAssertions() throws Exception {
         Credential badSigningCredential = new TestCredentialFactory(TestCertificateStrings.UNCHAINED_PUBLIC_CERT, TestCertificateStrings.UNCHAINED_PRIVATE_KEY).getSigningCredential();
-        final Assertion assertion = AssertionBuilder.anAssertion().withSignature(SignatureBuilder.aSignature().withSigningCredential(badSigningCredential).build()).build();
+        final Assertion assertion = AssertionBuilder.anAssertion().withSignature(SignatureBuilder.aSignature().withSigningCredential(badSigningCredential).build()).buildUnencrypted();
         assertThat(createMetadataBackedSignatureValidator().validate(assertion, issuerId, SPSSODescriptor.DEFAULT_ELEMENT_NAME)).isEqualTo(false);
     }
 

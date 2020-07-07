@@ -7,10 +7,10 @@ import org.opensaml.saml.saml2.core.EncryptedAssertion;
 import org.opensaml.xmlsec.encryption.support.EncryptionConstants;
 import org.w3c.dom.Element;
 import stubidp.saml.extensions.validation.SamlValidationSpecificationFailure;
-import stubidp.saml.security.OpenSAMLRunner;
 import stubidp.saml.security.errors.SamlTransformationErrorFactory;
-import stubidp.saml.security.saml.SamlTransformationErrorManagerTestHelper;
-import stubidp.saml.security.saml.deserializers.XmlUtils;
+import stubidp.saml.test.OpenSAMLRunner;
+import stubidp.saml.test.support.SamlTransformationErrorManagerTestHelper;
+import stubidp.utils.common.xml.XmlUtils;
 
 import java.util.Set;
 

@@ -8,24 +8,24 @@ import org.opensaml.saml.saml2.core.Assertion;
 import org.opensaml.saml.saml2.core.AuthnContextClassRef;
 import org.opensaml.saml.saml2.core.SubjectConfirmation;
 import stubidp.saml.domain.assertions.AuthnContext;
-import stubidp.saml.hub.core.OpenSAMLRunner;
 import stubidp.saml.hub.core.errors.SamlTransformationErrorFactory;
 import stubidp.saml.hub.core.test.builders.IdpFraudEventIdAttributeBuilder;
 import stubidp.saml.hub.core.validators.subject.AssertionSubjectValidator;
 import stubidp.saml.hub.core.validators.subjectconfirmation.AssertionSubjectConfirmationValidator;
 import stubidp.saml.security.validators.issuer.IssuerValidator;
-import stubidp.saml.utils.core.test.SamlTransformationErrorManagerTestHelper;
-import stubidp.saml.utils.core.test.builders.AttributeStatementBuilder;
-import stubidp.saml.utils.core.test.builders.SubjectBuilder;
+import stubidp.saml.test.OpenSAMLRunner;
+import stubidp.saml.test.support.SamlTransformationErrorManagerTestHelper;
+import stubidp.saml.test.builders.AttributeStatementBuilder;
+import stubidp.saml.test.builders.SubjectBuilder;
 
 import java.util.UUID;
 
 import static org.mockito.Mockito.verify;
-import static stubidp.saml.utils.core.test.builders.AssertionBuilder.anAssertion;
-import static stubidp.saml.utils.core.test.builders.AuthnContextBuilder.anAuthnContext;
-import static stubidp.saml.utils.core.test.builders.AuthnContextClassRefBuilder.anAuthnContextClassRef;
-import static stubidp.saml.utils.core.test.builders.AuthnStatementBuilder.anAuthnStatement;
-import static stubidp.saml.utils.core.test.builders.SubjectConfirmationBuilder.aSubjectConfirmation;
+import static stubidp.saml.test.builders.AssertionBuilder.anAssertion;
+import static stubidp.saml.test.builders.AuthnContextBuilder.anAuthnContext;
+import static stubidp.saml.test.builders.AuthnContextClassRefBuilder.anAuthnContextClassRef;
+import static stubidp.saml.test.builders.AuthnStatementBuilder.anAuthnStatement;
+import static stubidp.saml.test.builders.SubjectConfirmationBuilder.aSubjectConfirmation;
 
 @ExtendWith(MockitoExtension.class)
 public class IdentityProviderAssertionValidatorTest extends OpenSAMLRunner {

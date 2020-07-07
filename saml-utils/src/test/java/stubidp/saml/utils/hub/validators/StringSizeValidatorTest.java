@@ -1,8 +1,8 @@
 package stubidp.saml.utils.hub.validators;
 
 import org.junit.jupiter.api.Test;
-import stubidp.saml.utils.OpenSAMLRunner;
-import stubidp.saml.utils.core.test.SamlTransformationErrorManagerTestHelper;
+import stubidp.saml.test.OpenSAMLRunner;
+import stubidp.saml.test.support.SamlTransformationErrorManagerTestHelper;
 import stubidp.saml.utils.hub.errors.SamlTransformationErrorFactory;
 
 public class StringSizeValidatorTest extends OpenSAMLRunner {

@@ -8,6 +8,7 @@ import org.opensaml.core.xml.io.UnmarshallerFactory;
 import org.opensaml.core.xml.io.UnmarshallingException;
 import org.w3c.dom.Element;
 import org.xml.sax.SAXException;
+import stubidp.utils.common.xml.XmlUtils;
 
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.IOException;

@@ -8,7 +8,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.opensaml.saml.saml2.core.Response;
 import org.opensaml.xmlsec.signature.Signature;
 import stubidp.saml.security.SignatureFactory;
-import stubidp.saml.utils.OpenSAMLRunner;
+import stubidp.saml.test.OpenSAMLRunner;
 
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;

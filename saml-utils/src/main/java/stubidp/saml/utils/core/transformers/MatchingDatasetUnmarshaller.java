@@ -6,6 +6,7 @@ import org.opensaml.saml.saml2.core.Attribute;
 import org.opensaml.saml.saml2.core.AttributeStatement;
 import stubidp.saml.domain.assertions.MatchingDataset;
 import stubidp.saml.domain.assertions.SimpleMdsValue;
+import stubidp.saml.domain.matching.MatchingDatasetBuilder;
 import stubidp.saml.extensions.extensions.StringBasedMdsAttributeValue;
 import stubidp.saml.extensions.extensions.impl.BaseMdsSamlObjectUnmarshaller;
 

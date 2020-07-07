@@ -15,7 +15,7 @@ import org.opensaml.xmlsec.encryption.support.EncryptionException;
 import stubidp.saml.security.EncrypterFactory;
 import stubidp.saml.security.EntityToEncryptForLocator;
 import stubidp.saml.security.KeyStoreBackedEncryptionCredentialResolver;
-import stubidp.saml.utils.OpenSAMLRunner;
+import stubidp.saml.test.OpenSAMLRunner;
 
 import java.util.ArrayList;
 import java.util.List;

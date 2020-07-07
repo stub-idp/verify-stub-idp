@@ -9,13 +9,13 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.opensaml.saml.saml2.core.Assertion;
 import org.opensaml.saml.saml2.core.SubjectConfirmationData;
 import stubidp.saml.domain.assertions.AssertionRestrictions;
-import stubidp.saml.utils.OpenSAMLRunner;
+import stubidp.saml.test.OpenSAMLRunner;
 import stubidp.saml.domain.assertions.Cycle3Dataset;
 import stubidp.saml.domain.assertions.HubAssertion;
-import stubidp.saml.utils.core.test.builders.AssertionBuilder;
-import stubidp.saml.utils.core.test.builders.AttributeStatementBuilder;
-import stubidp.saml.utils.core.test.builders.Cycle3DatasetBuilder;
-import stubidp.saml.utils.core.test.builders.IssuerBuilder;
+import stubidp.saml.test.builders.AssertionBuilder;
+import stubidp.saml.test.builders.AttributeStatementBuilder;
+import stubidp.saml.test.builders.IssuerBuilder;
+import stubidp.saml.test.builders.Cycle3DatasetBuilder;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static stubidp.test.devpki.TestEntityIds.HUB_ENTITY_ID;
