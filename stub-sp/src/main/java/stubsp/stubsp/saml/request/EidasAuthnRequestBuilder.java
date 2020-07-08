@@ -30,7 +30,7 @@ import stubidp.saml.extensions.extensions.impl.RequestedAttributeBuilder;
 import stubidp.saml.extensions.extensions.impl.RequestedAttributesBuilder;
 import stubidp.saml.extensions.extensions.impl.RequestedAttributesImpl;
 import stubidp.saml.extensions.extensions.impl.SPTypeBuilder;
-import stubidp.saml.hub.hub.domain.LevelOfAssurance;
+import stubidp.saml.hub.domain.LevelOfAssurance;
 import stubidp.saml.security.IdaKeyStore;
 import stubidp.saml.security.IdaKeyStoreCredentialRetriever;
 import stubidp.saml.security.SignatureFactory;

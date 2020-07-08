@@ -9,7 +9,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.opensaml.saml.saml2.core.Attribute;
 import org.opensaml.saml.saml2.core.StatusCode;
 import stubidp.saml.extensions.IdaConstants;
-import stubidp.saml.hub.hub.domain.LevelOfAssurance;
+import stubidp.saml.hub.domain.LevelOfAssurance;
 import stubidp.stubidp.Urls;
 import stubidp.stubidp.domain.EidasScheme;
 import stubidp.test.integration.steps.AuthnRequestSteps;

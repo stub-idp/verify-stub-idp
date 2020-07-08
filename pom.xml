@@ -70,11 +70,11 @@
         <module>dev-pki</module>
         <module>dropwizard-logstash</module>
         <module>dropwizard-prometheus</module>
-        <module>hub-saml</module>
         <module>integration-tests</module>
         <module>rest-utils</module>
 	<module>saml-domain</module>
         <module>saml-extensions</module>
+	<module>saml-hub</module>
         <module>saml-metadata-bindings</module>
         <module>saml-security</module>
         <module>saml-serializers</module>
