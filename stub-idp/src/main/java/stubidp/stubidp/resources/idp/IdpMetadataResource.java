@@ -3,7 +3,7 @@ package stubidp.stubidp.resources.idp;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
-import stubidp.saml.utils.Constants;
+import stubidp.saml.constants.Constants;
 import stubidp.stubidp.Urls;
 import stubidp.stubidp.builders.IdpMetadataBuilder;
 import stubidp.stubidp.repositories.Idp;

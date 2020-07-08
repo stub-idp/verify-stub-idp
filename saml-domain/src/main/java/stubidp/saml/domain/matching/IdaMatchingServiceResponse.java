@@ -1,7 +1,7 @@
 package stubidp.saml.domain.matching;
 
 import stubidp.saml.domain.IdaMessage;
-import stubidp.saml.domain.IdaResponse;
+import stubidp.saml.domain.response.IdaResponse;
 
 import java.time.Instant;
 

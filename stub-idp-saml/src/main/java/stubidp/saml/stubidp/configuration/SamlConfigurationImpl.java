@@ -1,6 +1,7 @@
 package stubidp.saml.stubidp.configuration;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import stubidp.saml.domain.configuration.SamlConfiguration;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;

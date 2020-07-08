@@ -1,7 +1,7 @@
 package stubidp.saml.hub.hub.transformers.outbound;
 
 import stubidp.saml.utils.core.OpenSamlXmlObjectFactory;
-import stubidp.saml.utils.core.domain.DetailedStatusCode;
+import stubidp.saml.domain.DetailedStatusCode;
 import stubidp.saml.domain.assertions.TransactionIdaStatus;
 import stubidp.saml.utils.core.transformers.outbound.IdaStatusMarshaller;
 

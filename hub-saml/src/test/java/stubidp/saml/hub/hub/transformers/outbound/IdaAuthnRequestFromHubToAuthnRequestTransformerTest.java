@@ -24,7 +24,7 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static stubidp.saml.hub.hub.test.builders.IdaAuthnRequestBuilder.anIdaAuthnRequest;
+import static stubidp.saml.test.builders.IdaAuthnRequestBuilder.anIdaAuthnRequest;
 
 public class IdaAuthnRequestFromHubToAuthnRequestTransformerTest extends OpenSAMLRunner {
 

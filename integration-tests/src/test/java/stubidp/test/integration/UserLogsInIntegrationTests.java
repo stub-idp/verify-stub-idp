@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import stubidp.saml.domain.response.InboundResponseFromIdp;
-import stubidp.saml.utils.Constants;
+import stubidp.saml.constants.Constants;
 import stubidp.stubidp.Urls;
 import stubidp.stubidp.cookies.StubIdpCookieNames;
 import stubidp.test.integration.steps.AuthnRequestSteps;

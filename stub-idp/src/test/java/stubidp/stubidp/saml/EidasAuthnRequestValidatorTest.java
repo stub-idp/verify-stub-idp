@@ -27,7 +27,7 @@ import stubidp.saml.test.OpenSAMLRunner;
 import stubidp.saml.test.metadata.EntitiesDescriptorFactory;
 import stubidp.saml.test.metadata.MetadataFactory;
 import stubidp.saml.security.IdaKeyStore;
-import stubidp.saml.utils.Constants;
+import stubidp.saml.constants.Constants;
 import stubidp.saml.test.builders.EntityDescriptorBuilder;
 import stubidp.saml.test.builders.KeyDescriptorBuilder;
 import stubidp.saml.test.builders.SPSSODescriptorBuilder;

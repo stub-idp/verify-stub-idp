@@ -1,11 +1,10 @@
 package stubidp.saml.utils.hub.transformers.outbound;
 
+import stubidp.saml.domain.matching.UnknownUserCreationIdaStatus;
 import stubidp.saml.utils.core.OpenSamlXmlObjectFactory;
-import stubidp.saml.utils.core.domain.DetailedStatusCode;
-import stubidp.saml.utils.core.domain.UnknownUserCreationIdaStatus;
+import stubidp.saml.domain.DetailedStatusCode;
 import stubidp.saml.utils.core.transformers.outbound.IdaStatusMarshaller;
 
-import java.util.AbstractMap;
 import java.util.Map;
 
 public class UnknownUserCreationIdaStatusMarshaller extends IdaStatusMarshaller<UnknownUserCreationIdaStatus> {

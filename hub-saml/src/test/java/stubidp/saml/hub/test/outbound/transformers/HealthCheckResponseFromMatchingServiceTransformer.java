@@ -3,7 +3,7 @@ package stubidp.saml.hub.test.outbound.transformers;
 import org.opensaml.saml.saml2.core.Response;
 import org.opensaml.saml.saml2.core.Status;
 import stubidp.saml.utils.core.OpenSamlXmlObjectFactory;
-import stubidp.saml.utils.core.domain.MatchingServiceIdaStatus;
+import stubidp.saml.domain.matching.MatchingServiceIdaStatus;
 import stubidp.saml.utils.core.transformers.outbound.IdaResponseToSamlResponseTransformer;
 import stubidp.saml.utils.hub.transformers.outbound.MatchingServiceIdaStatusMarshaller;
 import stubidp.saml.hub.test.outbound.HealthCheckResponseFromMatchingService;

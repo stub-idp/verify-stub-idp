@@ -7,7 +7,7 @@ import org.opensaml.saml.saml2.core.Assertion;
 import org.opensaml.saml.saml2.core.AuthnRequest;
 import org.opensaml.security.credential.Credential;
 import org.opensaml.xmlsec.signature.support.SignatureException;
-import stubidp.saml.security.saml.StringEncoding;
+import stubidp.saml.test.support.StringEncoding;
 import stubidp.saml.security.saml.deserializers.AuthnRequestUnmarshaller;
 import stubidp.saml.security.saml.deserializers.SamlObjectParser;
 import stubidp.saml.security.saml.deserializers.StringToOpenSamlObjectTransformer;

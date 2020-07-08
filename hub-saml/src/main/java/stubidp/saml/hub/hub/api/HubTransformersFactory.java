@@ -34,7 +34,7 @@ import stubidp.saml.hub.hub.configuration.SamlAuthnRequestValidityDurationConfig
 import stubidp.saml.hub.hub.configuration.SamlDuplicateRequestValidationConfiguration;
 import stubidp.saml.hub.hub.domain.AuthnRequestFromRelyingParty;
 import stubidp.saml.hub.hub.domain.Endpoints;
-import stubidp.saml.hub.hub.domain.HubAttributeQueryRequest;
+import stubidp.saml.domain.matching.HubAttributeQueryRequest;
 import stubidp.saml.hub.hub.domain.InboundResponseFromMatchingService;
 import stubidp.saml.hub.hub.factories.AttributeQueryAttributeFactory;
 import stubidp.saml.hub.hub.transformers.inbound.AuthnRequestFromRelyingPartyUnmarshaller;

@@ -37,7 +37,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static stubidp.saml.hub.hub.test.builders.EidasAuthnRequestBuilder.anEidasAuthnRequest;
+import static stubidp.saml.test.builders.EidasAuthnRequestBuilder.anEidasAuthnRequest;
 
 public class EidasAuthnRequestFromHubToAuthnRequestTransformerTest extends OpenSAMLRunner {
 

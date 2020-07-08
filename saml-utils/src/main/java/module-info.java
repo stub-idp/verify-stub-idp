@@ -4,7 +4,6 @@ module stubidp.saml.utils {
     opens stubidp.saml.utils.core.transformers.inbound;
     opens stubidp.saml.utils.core.transformers.outbound.decorators;
     opens stubidp.saml.utils.core.transformers;
-    opens stubidp.saml.utils;
 
     exports stubidp.saml.utils.core.api;
     exports stubidp.saml.utils.core.domain;
@@ -18,7 +17,6 @@ module stubidp.saml.utils {
     exports stubidp.saml.utils.hub.transformers.outbound;
     exports stubidp.saml.utils.hub.validators;
     exports stubidp.saml.utils.metadata.transformers;
-    exports stubidp.saml.utils;
 
     requires transitive jakarta.inject;
     requires transitive java.validation;

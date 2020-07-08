@@ -1,7 +1,7 @@
 package stubsp.stubsp.resources;
 
 import org.w3c.dom.Document;
-import stubidp.saml.utils.Constants;
+import stubidp.saml.constants.Constants;
 import stubsp.stubsp.Urls;
 import stubsp.stubsp.builders.SpMetadataBuilder;
 

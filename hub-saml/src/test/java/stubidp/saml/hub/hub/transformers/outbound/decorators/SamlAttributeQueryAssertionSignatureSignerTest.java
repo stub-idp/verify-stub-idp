@@ -9,13 +9,14 @@ import org.opensaml.saml.saml2.core.Assertion;
 import org.opensaml.saml.saml2.core.AttributeQuery;
 import org.opensaml.saml.saml2.core.Issuer;
 import org.opensaml.security.credential.Credential;
-import stubidp.saml.hub.core.test.PrivateKeyStoreFactory;
 import stubidp.saml.security.IdaKeyStoreCredentialRetriever;
 import stubidp.saml.test.OpenSAMLRunner;
 import stubidp.saml.test.TestCredentialFactory;
+import stubidp.saml.test.support.PrivateKeyStoreFactory;
 import stubidp.saml.utils.core.OpenSamlXmlObjectFactory;
 import stubidp.test.devpki.TestCertificateStrings;
 import stubidp.test.devpki.TestEntityIds;
+import stubidp.utils.common.string.StringEncoding;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.times;

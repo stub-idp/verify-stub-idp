@@ -77,12 +77,9 @@ import javax.validation.constraints.NotNull;
 import javax.xml.namespace.QName;
 
 public class OpenSamlXmlObjectFactory {
+    private static final XMLObjectBuilderFactory openSamlBuilderFactory = XMLObjectProviderRegistrySupport.getBuilderFactory();
 
-    private XMLObjectBuilderFactory openSamlBuilderFactory;
-
-    public OpenSamlXmlObjectFactory() {
-        openSamlBuilderFactory = XMLObjectProviderRegistrySupport.getBuilderFactory();
-    }
+    public OpenSamlXmlObjectFactory() {}
 
     public Subject createSubject() {
         return (Subject) openSamlBuilderFactory.getBuilder(Subject.DEFAULT_ELEMENT_NAME).buildObject(Subject.DEFAULT_ELEMENT_NAME, Subject.TYPE_NAME);

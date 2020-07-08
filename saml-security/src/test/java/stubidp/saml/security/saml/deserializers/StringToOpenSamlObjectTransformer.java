@@ -1,7 +1,7 @@
 package stubidp.saml.security.saml.deserializers;
 
 import org.opensaml.saml.saml2.core.AuthnRequest;
-import stubidp.saml.security.saml.StringEncoding;
+import stubidp.saml.test.support.StringEncoding;
 
 import java.util.Objects;
 import java.util.function.Function;

@@ -19,7 +19,7 @@ import org.opensaml.xmlsec.signature.Signature;
 import org.opensaml.xmlsec.signature.X509Data;
 import org.opensaml.xmlsec.signature.support.SignatureException;
 import org.opensaml.xmlsec.signature.support.impl.ExplicitKeySignatureTrustEngine;
-import stubidp.saml.security.saml.StringEncoding;
+import stubidp.saml.test.support.StringEncoding;
 import stubidp.saml.security.saml.deserializers.AuthnRequestUnmarshaller;
 import stubidp.saml.security.saml.deserializers.SamlObjectParser;
 import stubidp.saml.security.saml.deserializers.StringToOpenSamlObjectTransformer;

@@ -25,7 +25,6 @@ import org.opensaml.xmlsec.signature.Signature;
 import org.opensaml.xmlsec.signature.support.SignatureException;
 import org.opensaml.xmlsec.signature.support.impl.ExplicitKeySignatureTrustEngine;
 import stubidp.eidas.metadata.support.HardCodedKeyStore;
-import stubidp.eidas.metadata.support.SigningCredentialFactory;
 import stubidp.saml.test.OpenSAMLRunner;
 import stubidp.saml.test.builders.ResponseBuilder;
 import stubidp.test.devpki.TestEntityIds;
@@ -37,10 +36,8 @@ import java.util.List;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class SignatureValidatorTest extends OpenSAMLRunner {
-
     private final String issuerId = TestEntityIds.HUB_ENTITY_ID;
-
-    private final SigningCredentialFactory credentialFactory = new SigningCredentialFactory(new HardCodedKeyStore(issuerId));
+    private final HardCodedKeyStore credentialFactory = new HardCodedKeyStore(issuerId);
 
     private SignatureValidator signatureValidator;
 

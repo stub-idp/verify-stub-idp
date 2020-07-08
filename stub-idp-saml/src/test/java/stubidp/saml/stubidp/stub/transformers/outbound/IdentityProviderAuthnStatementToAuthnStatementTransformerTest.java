@@ -11,7 +11,7 @@ import stubidp.saml.utils.core.OpenSamlXmlObjectFactory;
 import java.time.Instant;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static stubidp.saml.stubidp.builders.IdentityProviderAuthnStatementBuilder.anIdentityProviderAuthnStatement;
+import static stubidp.saml.test.builders.IdentityProviderAuthnStatementBuilder.anIdentityProviderAuthnStatement;
 
 public class IdentityProviderAuthnStatementToAuthnStatementTransformerTest extends OpenSAMLRunner {
 

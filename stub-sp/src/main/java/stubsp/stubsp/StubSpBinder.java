@@ -13,7 +13,7 @@ import stubidp.saml.security.EntityToEncryptForLocator;
 import stubidp.saml.security.IdaKeyStore;
 import stubidp.saml.security.IdaKeyStoreCredentialRetriever;
 import stubidp.saml.security.SignatureFactory;
-import stubidp.saml.stubidp.configuration.SamlConfiguration;
+import stubidp.saml.domain.configuration.SamlConfiguration;
 import stubidp.shared.configuration.SigningKeyPairConfiguration;
 import stubidp.shared.cookies.CookieNames;
 import stubidp.shared.cookies.HmacValidator;

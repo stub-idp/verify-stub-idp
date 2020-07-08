@@ -2,7 +2,7 @@ package stubidp.saml.hub.hub.transformers.inbound;
 
 import stubidp.saml.domain.assertions.IdpIdaStatus;
 import stubidp.saml.extensions.extensions.StatusValue;
-import stubidp.saml.utils.core.domain.DetailedStatusCode;
+import stubidp.saml.domain.DetailedStatusCode;
 
 import java.util.Collections;
 import java.util.LinkedHashMap;

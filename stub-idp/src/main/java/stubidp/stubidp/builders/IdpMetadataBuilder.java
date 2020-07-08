@@ -24,7 +24,7 @@ import org.opensaml.xmlsec.signature.support.Signer;
 import org.w3c.dom.Document;
 import stubidp.saml.security.SignatureFactory;
 import stubidp.saml.serializers.serializers.XmlObjectToElementTransformer;
-import stubidp.saml.stubidp.configuration.SamlConfiguration;
+import stubidp.saml.domain.configuration.SamlConfiguration;
 import stubidp.saml.utils.core.api.CoreTransformersFactory;
 import stubidp.saml.utils.metadata.transformers.KeyDescriptorsUnmarshaller;
 import stubidp.stubidp.Urls;

@@ -9,7 +9,7 @@ import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 import stubidp.saml.security.IdaKeyStore;
 import stubidp.saml.serializers.serializers.XmlObjectToElementTransformer;
-import stubidp.saml.utils.Constants;
+import stubidp.saml.constants.Constants;
 import stubidp.stubidp.Urls;
 import stubidp.stubidp.builders.CountryMetadataBuilder;
 import stubidp.stubidp.domain.EidasScheme;

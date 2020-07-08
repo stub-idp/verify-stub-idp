@@ -17,7 +17,7 @@ import stubidp.saml.domain.assertions.HubAssertion;
 import stubidp.saml.domain.assertions.PersistentId;
 import stubidp.saml.test.OpenSAMLRunner;
 import stubidp.saml.hub.core.test.builders.PassthroughAssertionBuilder;
-import stubidp.saml.hub.hub.domain.HubAttributeQueryRequest;
+import stubidp.saml.domain.matching.HubAttributeQueryRequest;
 import stubidp.saml.hub.hub.factories.AttributeQueryAttributeFactory;
 import stubidp.saml.utils.core.OpenSamlXmlObjectFactory;
 import stubidp.saml.utils.core.transformers.outbound.OutboundAssertionToSubjectTransformer;
@@ -30,7 +30,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 import static stubidp.saml.domain.assertions.UserAccountCreationAttribute.CURRENT_ADDRESS;
 import static stubidp.saml.domain.assertions.UserAccountCreationAttribute.DATE_OF_BIRTH;
-import static stubidp.saml.hub.hub.test.builders.HubAttributeQueryRequestBuilder.aHubAttributeQueryRequest;
+import static stubidp.saml.test.builders.HubAttributeQueryRequestBuilder.aHubAttributeQueryRequest;
 import static stubidp.saml.test.builders.HubAssertionBuilder.aHubAssertion;
 
 @ExtendWith(MockitoExtension.class)

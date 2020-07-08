@@ -14,7 +14,7 @@ import stubidp.saml.security.IdaKeyStore;
 import stubidp.saml.security.IdaKeyStoreCredentialRetriever;
 import stubidp.saml.security.SignatureFactory;
 import stubidp.saml.security.SigningKeyStore;
-import stubidp.saml.stubidp.configuration.SamlConfiguration;
+import stubidp.saml.domain.configuration.SamlConfiguration;
 import stubidp.saml.stubidp.stub.transformers.inbound.AuthnRequestToIdaRequestFromHubTransformer;
 import stubidp.shared.configuration.SigningKeyPairConfiguration;
 import stubidp.shared.repositories.MetadataRepository;

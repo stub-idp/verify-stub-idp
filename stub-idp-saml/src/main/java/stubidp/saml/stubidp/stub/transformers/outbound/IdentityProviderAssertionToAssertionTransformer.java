@@ -22,7 +22,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class IdentityProviderAssertionToAssertionTransformer {
-
     private final OpenSamlXmlObjectFactory openSamlXmlObjectFactory;
     private final AttributeFactory attributeFactory;
     private final IdentityProviderAuthnStatementToAuthnStatementTransformer identityProviderAuthnStatementToAuthnStatementTransformer;

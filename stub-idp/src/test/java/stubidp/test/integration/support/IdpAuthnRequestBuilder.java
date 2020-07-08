@@ -17,8 +17,7 @@ import static stubidp.test.devpki.TestCertificateStrings.TEST_RP_MS_PUBLIC_SIGNI
 import static stubidp.test.devpki.TestEntityIds.HUB_ENTITY_ID;
 
 public class IdpAuthnRequestBuilder {
-
-    private static XmlObjectToBase64EncodedStringTransformer<AuthnRequest> toBase64EncodedStringTransformer = new XmlObjectToBase64EncodedStringTransformer<>();
+    private static final XmlObjectToBase64EncodedStringTransformer<AuthnRequest> toBase64EncodedStringTransformer = new XmlObjectToBase64EncodedStringTransformer<>();
 
     private String destination = "destination";
     private String entityId = HUB_ENTITY_ID;
@@ -106,5 +105,4 @@ public class IdpAuthnRequestBuilder {
 
         return authnRequestBuilder.build();
     }
-
 }

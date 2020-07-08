@@ -7,7 +7,7 @@ import org.opensaml.saml.saml2.core.StatusCode;
 import stubidp.saml.extensions.domain.SamlStatusCode;
 import stubidp.saml.test.OpenSAMLRunner;
 import stubidp.saml.utils.core.OpenSamlXmlObjectFactory;
-import stubidp.saml.utils.core.domain.MatchingServiceIdaStatus;
+import stubidp.saml.domain.matching.MatchingServiceIdaStatus;
 import stubidp.saml.utils.hub.transformers.outbound.MatchingServiceIdaStatusMarshaller;
 
 import static org.assertj.core.api.Assertions.assertThat;

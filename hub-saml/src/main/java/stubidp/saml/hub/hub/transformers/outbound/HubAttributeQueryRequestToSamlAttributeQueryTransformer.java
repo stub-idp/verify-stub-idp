@@ -9,7 +9,7 @@ import org.opensaml.saml.saml2.core.NameID;
 import org.opensaml.saml.saml2.core.Subject;
 import org.opensaml.saml.saml2.core.SubjectConfirmation;
 import org.opensaml.saml.saml2.core.SubjectConfirmationData;
-import stubidp.saml.hub.hub.domain.HubAttributeQueryRequest;
+import stubidp.saml.domain.matching.HubAttributeQueryRequest;
 import stubidp.saml.domain.assertions.UserAccountCreationAttribute;
 import stubidp.saml.hub.hub.factories.AttributeQueryAttributeFactory;
 import stubidp.saml.utils.core.OpenSamlXmlObjectFactory;

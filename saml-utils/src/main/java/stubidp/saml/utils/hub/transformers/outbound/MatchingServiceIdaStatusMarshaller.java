@@ -1,12 +1,11 @@
 package stubidp.saml.utils.hub.transformers.outbound;
 
 import stubidp.saml.utils.core.OpenSamlXmlObjectFactory;
-import stubidp.saml.utils.core.domain.DetailedStatusCode;
-import stubidp.saml.utils.core.domain.MatchingServiceIdaStatus;
+import stubidp.saml.domain.DetailedStatusCode;
+import stubidp.saml.domain.matching.MatchingServiceIdaStatus;
 import stubidp.saml.utils.core.transformers.outbound.IdaStatusMarshaller;
 
 import javax.inject.Inject;
-import java.util.AbstractMap;
 import java.util.Map;
 
 public class MatchingServiceIdaStatusMarshaller extends IdaStatusMarshaller<MatchingServiceIdaStatus> {

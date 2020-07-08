@@ -12,7 +12,7 @@ import org.opensaml.xmlsec.signature.support.SignatureException;
 import stubidp.saml.extensions.IdaSamlBootstrap;
 import stubidp.saml.test.metadata.EntitiesDescriptorFactory;
 import stubidp.saml.test.metadata.MetadataFactory;
-import stubidp.saml.utils.Constants;
+import stubidp.saml.constants.Constants;
 import stubidp.saml.test.builders.EntityDescriptorBuilder;
 import stubidp.saml.test.builders.IdpSsoDescriptorBuilder;
 import stubidp.saml.test.builders.KeyDescriptorBuilder;

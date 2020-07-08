@@ -10,7 +10,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import stubidp.saml.hub.core.validators.DestinationValidator;
 import stubidp.saml.metadata.MetadataConfiguration;
-import stubidp.saml.stubidp.configuration.SamlConfiguration;
+import stubidp.saml.domain.configuration.SamlConfiguration;
 import stubidp.stubidp.Urls;
 import stubidp.stubidp.exceptions.InvalidAuthnRequestException;
 import stubidp.stubidp.resources.idp.HeadlessIdpResource;
