@@ -373,13 +373,13 @@
         </dependency>
         <dependency>
             <groupId>stub-idp</groupId>
-            <artifactId>stub-idp-saml-test</artifactId>
+            <artifactId>stub-sp</artifactId>
             <version>1.0-SNAPSHOT</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>stub-idp</groupId>
-            <artifactId>stub-sp</artifactId>
+            <artifactId>test-utils</artifactId>
             <version>1.0-SNAPSHOT</version>
             <scope>test</scope>
         </dependency>

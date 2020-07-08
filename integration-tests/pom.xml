@@ -85,12 +85,6 @@
         </dependency>
         <dependency>
             <groupId>stub-idp</groupId>
-            <artifactId>stub-idp-saml-test</artifactId>
-            <version>1.0-SNAPSHOT</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>stub-idp</groupId>
             <artifactId>hub-saml</artifactId>
             <version>1.0-SNAPSHOT</version>
             <scope>test</scope>
