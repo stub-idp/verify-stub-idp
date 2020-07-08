@@ -11,7 +11,6 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import stubidp.saml.domain.assertions.Gender
 import stubidp.stubidp.Urls
-import stubidp.stubidp.builders.SimpleMdsValueBuilder
 import stubidp.stubidp.builders.StubIdpBuilder
 import stubidp.stubidp.dtos.IdpUserDto
 import stubidp.stubidp.security.BCryptHelper
@@ -21,6 +20,7 @@ import stubidp.kotlin.test.integration.support.StubIdpAppExtension
 import stubidp.saml.domain.assertions.AuthnContext
 import stubidp.saml.domain.assertions.SimpleMdsValue
 import stubidp.saml.test.builders.AddressBuilder
+import stubidp.saml.test.builders.SimpleMdsValueBuilder
 import stubidp.utils.rest.common.HttpHeaders
 import java.io.IOException
 import java.text.MessageFormat

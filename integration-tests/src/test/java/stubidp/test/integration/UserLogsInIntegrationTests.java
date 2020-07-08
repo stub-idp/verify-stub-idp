@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import stubidp.saml.hub.hub.domain.InboundResponseFromIdp;
+import stubidp.saml.domain.response.InboundResponseFromIdp;
 import stubidp.saml.utils.Constants;
 import stubidp.stubidp.Urls;
 import stubidp.stubidp.cookies.StubIdpCookieNames;
