@@ -17,7 +17,7 @@ import stubidp.stubidp.domain.factories.AssertionFactory;
 import stubidp.stubidp.repositories.Idp;
 import stubidp.stubidp.repositories.IdpSession;
 import stubidp.stubidp.repositories.IdpStubsRepository;
-import stubidp.stubidp.saml.transformers.OutboundResponseFromIdpTransformerProvider;
+import stubidp.stubidp.saml.transformers.outbound.OutboundResponseFromIdpTransformerProvider;
 import stubidp.utils.rest.common.SessionId;
 
 import java.net.URI;

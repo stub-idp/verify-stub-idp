@@ -1,4 +1,4 @@
-package stubidp.saml.stubidp.stub.transformers.inbound;
+package stubidp.stubidp.saml.transformers.inbound;
 
 import org.opensaml.saml.saml2.core.AuthnRequest;
 import org.opensaml.saml.saml2.metadata.SPSSODescriptor;

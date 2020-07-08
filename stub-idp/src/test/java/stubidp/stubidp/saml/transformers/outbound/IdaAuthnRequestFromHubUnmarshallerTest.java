@@ -1,4 +1,4 @@
-package stubidp.saml.stubidp.stub.transformers.inbound;
+package stubidp.stubidp.saml.transformers.outbound;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -13,6 +13,7 @@ import org.opensaml.saml.saml2.core.RequestedAuthnContext;
 import stubidp.saml.domain.request.IdaAuthnRequestFromHub;
 import stubidp.saml.extensions.extensions.IdaAuthnContext;
 import stubidp.saml.test.OpenSAMLRunner;
+import stubidp.stubidp.saml.transformers.inbound.IdaAuthnRequestFromHubUnmarshaller;
 
 import java.util.Arrays;
 

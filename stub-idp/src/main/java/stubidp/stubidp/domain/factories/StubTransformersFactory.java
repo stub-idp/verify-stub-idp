@@ -12,17 +12,17 @@ import stubidp.saml.domain.request.IdaAuthnRequestFromHub;
 import stubidp.saml.utils.hub.factories.AttributeFactory_1_1;
 import stubidp.saml.utils.hub.transformers.inbound.decorators.AuthnRequestSizeValidator;
 import stubidp.saml.utils.hub.validators.StringSizeValidator;
-import stubidp.saml.stubidp.stub.transformers.inbound.AuthnRequestToIdaRequestFromHubTransformer;
-import stubidp.saml.stubidp.stub.transformers.inbound.IdaAuthnRequestFromHubUnmarshaller;
-import stubidp.saml.stubidp.stub.transformers.outbound.IdentityProviderAssertionToAssertionTransformer;
-import stubidp.saml.stubidp.stub.transformers.outbound.IdentityProviderAuthnStatementToAuthnStatementTransformer;
+import stubidp.stubidp.saml.transformers.inbound.AuthnRequestToIdaRequestFromHubTransformer;
+import stubidp.stubidp.saml.transformers.inbound.IdaAuthnRequestFromHubUnmarshaller;
+import stubidp.stubidp.saml.transformers.outbound.IdentityProviderAssertionToAssertionTransformer;
+import stubidp.stubidp.saml.transformers.outbound.IdentityProviderAuthnStatementToAuthnStatementTransformer;
 import stubidp.saml.security.EncryptionKeyStore;
 import stubidp.saml.security.EntityToEncryptForLocator;
 import stubidp.saml.security.IdaKeyStore;
 import stubidp.saml.security.SigningKeyStore;
 import stubidp.stubidp.domain.IdpIdaStatusMarshaller;
 import stubidp.stubidp.domain.OutboundResponseFromIdp;
-import stubidp.stubidp.saml.transformers.OutboundResponseFromIdpToSamlResponseTransformer;
+import stubidp.stubidp.saml.transformers.outbound.OutboundResponseFromIdpToSamlResponseTransformer;
 
 import java.util.function.Function;
 

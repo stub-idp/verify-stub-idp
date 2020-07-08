@@ -1,4 +1,4 @@
-package stubidp.stubidp.saml.transformers;
+package stubidp.stubidp.saml.transformers.outbound;
 
 import org.opensaml.saml.saml2.core.Response;
 import org.opensaml.xmlsec.algorithm.DigestAlgorithm;
@@ -13,7 +13,6 @@ import stubidp.saml.security.IdaKeyStore;
 import java.util.function.Function;
 
 public class EidasResponseTransformerProvider {
-
     private final CoreTransformersFactory coreTransformersFactory;
     private final EncryptionKeyStore encryptionKeyStore;
     private final IdaKeyStore keyStore;

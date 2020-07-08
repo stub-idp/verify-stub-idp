@@ -2,7 +2,7 @@ package stubidp.stubidp.resources.idp;
 
 import io.prometheus.client.Counter;
 import org.opensaml.saml.saml2.core.AuthnRequest;
-import stubidp.saml.stubidp.stub.transformers.inbound.AuthnRequestToIdaRequestFromHubTransformer;
+import stubidp.stubidp.saml.transformers.inbound.AuthnRequestToIdaRequestFromHubTransformer;
 import stubidp.saml.domain.request.IdaAuthnRequestFromHub;
 import stubidp.shared.domain.SamlResponse;
 import stubidp.shared.views.SamlMessageRedirectViewFactory;

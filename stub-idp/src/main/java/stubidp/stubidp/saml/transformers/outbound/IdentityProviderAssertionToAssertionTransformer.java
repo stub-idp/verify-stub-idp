@@ -1,4 +1,4 @@
-package stubidp.saml.stubidp.stub.transformers.outbound;
+package stubidp.stubidp.saml.transformers.outbound;
 
 import org.opensaml.saml.saml2.core.Assertion;
 import org.opensaml.saml.saml2.core.Attribute;

@@ -4,8 +4,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.opensaml.saml.saml2.core.Response;
 import stubidp.saml.domain.assertions.IdentityProviderAssertion;
-import stubidp.saml.stubidp.stub.transformers.outbound.IdentityProviderAssertionToAssertionTransformer;
-import stubidp.saml.stubidp.stub.transformers.outbound.IdentityProviderAuthnStatementToAuthnStatementTransformer;
+import stubidp.stubidp.saml.transformers.outbound.IdentityProviderAssertionToAssertionTransformer;
+import stubidp.stubidp.saml.transformers.outbound.IdentityProviderAuthnStatementToAuthnStatementTransformer;
 import stubidp.saml.test.OpenSAMLRunner;
 import stubidp.saml.test.builders.MatchingDatasetBuilder;
 import stubidp.saml.utils.core.OpenSamlXmlObjectFactory;
@@ -13,7 +13,7 @@ import stubidp.saml.utils.core.transformers.outbound.OutboundAssertionToSubjectT
 import stubidp.saml.utils.hub.factories.AttributeFactory_1_1;
 import stubidp.stubidp.domain.IdpIdaStatusMarshaller;
 import stubidp.stubidp.domain.OutboundResponseFromIdp;
-import stubidp.stubidp.saml.transformers.OutboundResponseFromIdpToSamlResponseTransformer;
+import stubidp.stubidp.saml.transformers.outbound.OutboundResponseFromIdpToSamlResponseTransformer;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static stubidp.saml.test.builders.IdentityProviderAssertionBuilder.anIdentityProviderAssertion;

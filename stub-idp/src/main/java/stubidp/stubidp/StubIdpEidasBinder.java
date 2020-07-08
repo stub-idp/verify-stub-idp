@@ -26,7 +26,7 @@ import stubidp.stubidp.repositories.StubCountryRepository;
 import stubidp.stubidp.repositories.jdbc.JDBIEidasSessionRepository;
 import stubidp.stubidp.saml.EidasAuthnRequestValidator;
 import stubidp.stubidp.saml.locators.IdpHardCodedEntityToEncryptForLocator;
-import stubidp.stubidp.saml.transformers.EidasResponseTransformerProvider;
+import stubidp.stubidp.saml.transformers.outbound.EidasResponseTransformerProvider;
 import stubidp.stubidp.security.HubEncryptionKeyStore;
 import stubidp.stubidp.services.EidasAuthnResponseService;
 import stubidp.stubidp.services.StubCountryService;

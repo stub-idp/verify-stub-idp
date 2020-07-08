@@ -1,4 +1,4 @@
-package stubidp.saml.stubidp.configuration;
+package stubsp.stubsp.configuration;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import stubidp.saml.domain.configuration.SamlConfiguration;
@@ -8,8 +8,7 @@ import javax.validation.constraints.NotNull;
 import java.net.URI;
 
 public class SamlConfigurationImpl implements SamlConfiguration {
-    protected SamlConfigurationImpl() {
-    }
+    protected SamlConfigurationImpl() {}
 
     public SamlConfigurationImpl(String entityId, URI expectedDestination) {
         this.entityId = entityId;

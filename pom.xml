@@ -82,7 +82,6 @@
         <module>saml-utils</module>
         <module>security-utils</module>
         <module>shared-lib</module>
-        <module>stub-idp-saml</module>
         <module>stub-idp</module>
         <module>stub-sp</module>
         <module>test-utils</module>

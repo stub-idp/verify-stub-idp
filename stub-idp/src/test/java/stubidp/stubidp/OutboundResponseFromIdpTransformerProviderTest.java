@@ -12,7 +12,7 @@ import stubidp.saml.security.IdaKeyStore;
 import stubidp.stubidp.domain.factories.StubTransformersFactory;
 import stubidp.stubidp.repositories.Idp;
 import stubidp.stubidp.saml.locators.AssignableEntityToEncryptForLocator;
-import stubidp.stubidp.saml.transformers.OutboundResponseFromIdpTransformerProvider;
+import stubidp.stubidp.saml.transformers.outbound.OutboundResponseFromIdpTransformerProvider;
 import stubidp.stubidp.security.HardCodedKeyStore;
 import stubidp.test.devpki.TestCertificateStrings;
 import stubidp.test.devpki.TestEntityIds;

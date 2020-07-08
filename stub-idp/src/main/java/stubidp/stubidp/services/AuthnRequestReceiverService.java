@@ -5,7 +5,7 @@ import org.apache.commons.text.StringEscapeUtils;
 import org.opensaml.saml.saml2.core.AuthnRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import stubidp.saml.stubidp.stub.transformers.inbound.AuthnRequestToIdaRequestFromHubTransformer;
+import stubidp.stubidp.saml.transformers.inbound.AuthnRequestToIdaRequestFromHubTransformer;
 import stubidp.saml.domain.request.IdaAuthnRequestFromHub;
 import stubidp.stubidp.Urls;
 import stubidp.stubidp.domain.EidasAuthnRequest;

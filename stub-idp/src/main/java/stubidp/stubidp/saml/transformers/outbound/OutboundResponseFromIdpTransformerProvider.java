@@ -1,4 +1,4 @@
-package stubidp.stubidp.saml.transformers;
+package stubidp.stubidp.saml.transformers.outbound;
 
 import org.opensaml.xmlsec.algorithm.DigestAlgorithm;
 import org.opensaml.xmlsec.algorithm.SignatureAlgorithm;

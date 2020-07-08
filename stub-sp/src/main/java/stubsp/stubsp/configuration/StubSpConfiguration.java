@@ -6,12 +6,10 @@ import io.dropwizard.util.Duration;
 import stubidp.metrics.prometheus.config.PrometheusConfiguration;
 import stubidp.saml.metadata.MetadataResolverConfiguration;
 import stubidp.saml.metadata.MultiTrustStoresBackedMetadataConfiguration;
-import stubidp.saml.stubidp.configuration.SamlConfigurationImpl;
 import stubidp.shared.configuration.SigningKeyPairConfiguration;
 import stubidp.utils.rest.cache.AssetCacheConfiguration;
 import stubidp.utils.rest.common.ServiceInfoConfiguration;
 import stubidp.utils.rest.configuration.ServiceNameConfiguration;
-import stubidp.utils.security.configuration.KeyConfiguration;
 import stubidp.utils.security.configuration.SecureCookieConfiguration;
 
 import javax.validation.Valid;

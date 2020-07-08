@@ -1,4 +1,4 @@
-package stubidp.saml.stubidp.stub.transformers.outbound;
+package stubidp.stubidp.saml.transformers.outbound;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
