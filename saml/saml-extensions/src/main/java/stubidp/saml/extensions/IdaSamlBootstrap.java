@@ -87,9 +87,12 @@ import stubidp.saml.extensions.extensions.impl.VerifiedBuilder;
 import stubidp.saml.extensions.extensions.impl.VerifiedImpl;
 import stubidp.saml.extensions.extensions.versioning.Version;
 import stubidp.saml.extensions.extensions.versioning.VersionBuilder;
-import stubidp.saml.extensions.extensions.versioning.VersionImpl;
+import stubidp.saml.extensions.extensions.versioning.VersionMarshaller;
+import stubidp.saml.extensions.extensions.versioning.VersionUnmarshaller;
 import stubidp.saml.extensions.extensions.versioning.application.ApplicationVersion;
 import stubidp.saml.extensions.extensions.versioning.application.ApplicationVersionBuilder;
+import stubidp.saml.extensions.extensions.versioning.application.ApplicationVersionMarshaller;
+import stubidp.saml.extensions.extensions.versioning.application.ApplicationVersionUnmarshaller;
 
 public abstract class IdaSamlBootstrap {
 
@@ -150,7 +153,7 @@ public abstract class IdaSamlBootstrap {
         XMLObjectProviderRegistrySupport.registerObjectProvider(BirthName.TYPE_NAME, new BirthNameBuilder(), BirthNameMarshaller.MARSHALLER, BirthNameUnmarshaller.UNMARSHALLER);
         XMLObjectProviderRegistrySupport.registerObjectProvider(PlaceOfBirth.TYPE_NAME, new PlaceOfBirthBuilder(), PlaceOfBirthMarshaller.MARSHALLER, PlaceOfBirthUnmarshaller.UNMARSHALLER);
 
-        XMLObjectProviderRegistrySupport.registerObjectProvider(Version.DEFAULT_ELEMENT_NAME, new VersionBuilder(), VersionImpl.MARSHALLER, VersionImpl.UNMARSHALLER);
-        XMLObjectProviderRegistrySupport.registerObjectProvider(ApplicationVersion.DEFAULT_ELEMENT_NAME, new ApplicationVersionBuilder(), StringValueSamlObjectImpl.MARSHALLER, StringValueSamlObjectImpl.UNMARSHALLER);
+        XMLObjectProviderRegistrySupport.registerObjectProvider(Version.TYPE_NAME, new VersionBuilder(), VersionMarshaller.MARSHALLER, VersionUnmarshaller.UNMARSHALLER);
+        XMLObjectProviderRegistrySupport.registerObjectProvider(ApplicationVersion.DEFAULT_ELEMENT_NAME, new ApplicationVersionBuilder(), ApplicationVersionMarshaller.MARSHALLER, ApplicationVersionUnmarshaller.UNMARSHALLER);
     }
 }

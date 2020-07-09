@@ -2,12 +2,9 @@ package stubidp.saml.extensions.extensions.versioning;
 
 import net.shibboleth.utilities.java.support.xml.XMLConstants;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.w3c.dom.Element;
-import stubidp.saml.extensions.extensions.versioning.Version;
-import stubidp.saml.extensions.extensions.versioning.VersionBuilder;
-import stubidp.saml.extensions.extensions.versioning.VersionMarshaller;
-import stubidp.saml.extensions.extensions.versioning.application.ApplicationVersionImpl;
+import stubidp.saml.extensions.extensions.versioning.application.ApplicationVersion;
+import stubidp.saml.extensions.extensions.versioning.application.ApplicationVersionBuilder;
 import stubidp.saml.test.OpenSAMLRunner;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -19,7 +16,7 @@ public class VersionMarshallerTest extends OpenSAMLRunner {
     @Test
     public void shouldMarshallVersion() throws Exception {
         Version version = new VersionBuilder().buildObject();
-        ApplicationVersionImpl applicationVersion = new ApplicationVersionImpl();
+        ApplicationVersion applicationVersion = new ApplicationVersionBuilder().buildObject();
         applicationVersion.setValue("some-version-value");
         version.setApplicationVersion(applicationVersion);
 

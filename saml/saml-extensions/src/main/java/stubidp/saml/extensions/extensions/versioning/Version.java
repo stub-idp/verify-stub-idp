@@ -6,7 +6,6 @@ import stubidp.saml.extensions.extensions.versioning.application.ApplicationVers
 import javax.xml.namespace.QName;
 
 public interface Version extends AttributeValue {
-
     String TYPE_LOCAL_NAME = "VersionType";
     String NAMESPACE_URI = "http://www.cabinetoffice.gov.uk/resource-library/ida/metrics";
     String NAMESPACE_PREFIX = "metric";

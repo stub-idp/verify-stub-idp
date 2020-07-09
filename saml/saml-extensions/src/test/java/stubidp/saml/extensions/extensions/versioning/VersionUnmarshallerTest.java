@@ -8,7 +8,7 @@ import stubidp.saml.test.OpenSAMLRunner;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class VersionUnMarshallerTest extends OpenSAMLRunner {
+public class VersionUnmarshallerTest extends OpenSAMLRunner {
 
     @Test
     public void shouldUnMarshallVersion() throws Exception {

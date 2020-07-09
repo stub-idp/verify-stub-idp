@@ -39,27 +39,27 @@ public class AuthnRequestFromRelyingPartyUnmarshaller {
         final Optional<String> verifyServiceProviderVersion = extractVerifyServiceProviderVersion(authnRequest.getExtensions(), issuerId);
 
         return new AuthnRequestFromRelyingParty(
-            id,
-            issuerId,
-            issueInstant,
-            URI.create(authnRequest.getDestination()),
-            Optional.ofNullable(forceAuthn),
-            assertionConsumerServiceURL.map(URI::create),
-            ofNullable(assertionConsumerServiceIndex),
-            ofNullable(signature),
-            verifyServiceProviderVersion
+                id,
+                issuerId,
+                issueInstant,
+                URI.create(authnRequest.getDestination()),
+                Optional.ofNullable(forceAuthn),
+                assertionConsumerServiceURL.map(URI::create),
+                ofNullable(assertionConsumerServiceIndex),
+                ofNullable(signature),
+                verifyServiceProviderVersion
         );
     }
 
     private Optional<String> extractVerifyServiceProviderVersion(Extensions extensions, String issuerId) {
         return Optional.ofNullable(extensions).flatMap(item -> {
             try {
-                return extensions.getUnknownXMLObjects().stream()
-                    .filter(EncryptedAttribute.class::isInstance)
-                    .findFirst()
-                    .map(EncryptedAttribute.class::cast)
-                    .map(this::decrypt)
-                    .map(this::extractVersion);
+                return item.getUnknownXMLObjects().stream()
+                        .filter(EncryptedAttribute.class::isInstance)
+                        .findFirst()
+                        .map(EncryptedAttribute.class::cast)
+                        .map(this::decrypt)
+                        .map(this::extractVersion);
             } catch (Exception e) {
                 LOG.error("Error while processing the VSP version for issuer " + issuerId, e);
                 return Optional.empty();
@@ -69,11 +69,11 @@ public class AuthnRequestFromRelyingPartyUnmarshaller {
 
     private String extractVersion(Attribute attribute) {
         return attribute.getAttributeValues().stream()
-            .filter(Version.class::isInstance)
-            .findFirst()
-            .map(Version.class::cast)
-            .map(version -> version.getApplicationVersion().getValue())
-            .orElseThrow(() -> new RuntimeException("Attribute does not contain VSP Version"));
+                .filter(Version.class::isInstance)
+                .findFirst()
+                .map(Version.class::cast)
+                .map(version -> version.getApplicationVersion().getValue())
+                .orElseThrow(() -> new RuntimeException("Attribute does not contain VSP Version"));
     }
 
     private Attribute decrypt(EncryptedAttribute encryptedAttribute) {

@@ -1,6 +1,5 @@
 package stubidp.saml.hub.transformers.inbound;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.opensaml.saml.saml2.core.Attribute;
 import org.opensaml.saml.saml2.core.AuthnRequest;
@@ -14,15 +13,14 @@ import org.opensaml.saml.saml2.encryption.Encrypter;
 import org.opensaml.security.credential.BasicCredential;
 import org.opensaml.xmlsec.signature.impl.SignatureBuilder;
 import org.opensaml.xmlsec.signature.impl.SignatureImpl;
-import stubidp.saml.extensions.IdaSamlBootstrap;
 import stubidp.saml.extensions.extensions.versioning.Version;
-import stubidp.saml.extensions.extensions.versioning.VersionImpl;
+import stubidp.saml.extensions.extensions.versioning.VersionBuilder;
 import stubidp.saml.extensions.extensions.versioning.application.ApplicationVersion;
-import stubidp.saml.extensions.extensions.versioning.application.ApplicationVersionImpl;
-import stubidp.saml.test.OpenSAMLRunner;
+import stubidp.saml.extensions.extensions.versioning.application.ApplicationVersionBuilder;
 import stubidp.saml.hub.domain.AuthnRequestFromRelyingParty;
 import stubidp.saml.security.DecrypterFactory;
 import stubidp.saml.security.EncrypterFactory;
+import stubidp.saml.test.OpenSAMLRunner;
 import stubidp.utils.security.security.PrivateKeyFactory;
 import stubidp.utils.security.security.PublicKeyFactory;
 import stubidp.utils.security.security.X509CertificateFactory;
@@ -41,21 +39,9 @@ import static stubidp.test.devpki.TestCertificateStrings.HUB_TEST_PUBLIC_ENCRYPT
 
 public class AuthnRequestFromRelyingPartyUnmarshallerTest extends OpenSAMLRunner {
 
-    static {
-        IdaSamlBootstrap.bootstrap();
-    }
-
-    private static Encrypter encrypter;
-
-    private AuthnRequestFromRelyingPartyUnmarshaller unmarshaller;
-
-    @BeforeEach
-    public void setUp() {
-        final BasicCredential basicCredential = createBasicCredential();
-        encrypter = new EncrypterFactory().createEncrypter(basicCredential);
-
-        unmarshaller = new AuthnRequestFromRelyingPartyUnmarshaller(new DecrypterFactory().createDecrypter(List.of(basicCredential)));
-    }
+    private final BasicCredential basicCredential = createBasicCredential();
+    private final Encrypter encrypter = new EncrypterFactory().createEncrypter(basicCredential);
+    private final AuthnRequestFromRelyingPartyUnmarshaller unmarshaller = new AuthnRequestFromRelyingPartyUnmarshaller(new DecrypterFactory().createDecrypter(List.of(basicCredential)));;
 
     @Test
     public void fromSamlMessage_shouldMapAuthnRequestToAuthnRequestFromRelyingParty() throws Exception {
@@ -124,11 +110,11 @@ public class AuthnRequestFromRelyingPartyUnmarshallerTest extends OpenSAMLRunner
     }
 
     private Version createApplicationVersion(String versionNumber) {
-        ApplicationVersion applicationVersion = new ApplicationVersionImpl();
+        final ApplicationVersion applicationVersion = new ApplicationVersionBuilder().buildObject();
         applicationVersion.setValue(versionNumber);
-        return new VersionImpl() {{
-            setApplicationVersion(applicationVersion);
-        }};
+        final Version version = new VersionBuilder().buildObject();
+        version.setApplicationVersion(applicationVersion);
+        return version;
     }
 
     private BasicCredential createBasicCredential() {

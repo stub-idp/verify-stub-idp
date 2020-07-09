@@ -3,8 +3,6 @@ package stubidp.saml.extensions.extensions.versioning;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.opensaml.core.xml.XMLObject;
-import org.opensaml.core.xml.io.Marshaller;
-import org.opensaml.core.xml.io.Unmarshaller;
 import org.opensaml.saml.common.xml.SAMLConstants;
 import org.opensaml.saml.saml2.core.impl.AttributeValueImpl;
 import stubidp.saml.extensions.extensions.versioning.application.ApplicationVersion;
@@ -15,8 +13,6 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class VersionImpl extends AttributeValueImpl implements Version {
-    public static final Marshaller MARSHALLER = new VersionMarshaller();
-    public static final Unmarshaller UNMARSHALLER = new VersionUnMarshaller();
     private ApplicationVersion applicationVersion;
 
     public VersionImpl() {
@@ -42,5 +38,12 @@ public class VersionImpl extends AttributeValueImpl implements Version {
     @Override
     public List<XMLObject> getOrderedChildren() {
         return Stream.of(applicationVersion).filter(Objects::nonNull).collect(Collectors.toList());
+    }
+
+    @Override
+    public String toString() {
+        return "VersionImpl{" +
+                "applicationVersion=" + applicationVersion +
+                '}';
     }
 }

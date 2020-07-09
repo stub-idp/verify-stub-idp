@@ -7,6 +7,7 @@ import javax.xml.namespace.QName;
 
 public interface ApplicationVersion extends StringValueSamlObject {
     String DEFAULT_ELEMENT_LOCAL_NAME = "ApplicationVersion";
+    String NAMESPACE_PREFIX = "metric";
 
-    QName DEFAULT_ELEMENT_NAME = new QName(Version.NAMESPACE_URI, DEFAULT_ELEMENT_LOCAL_NAME, Version.NAMESPACE_PREFIX);
+    QName DEFAULT_ELEMENT_NAME = new QName(Version.NAMESPACE_URI, DEFAULT_ELEMENT_LOCAL_NAME, NAMESPACE_PREFIX);
 }
