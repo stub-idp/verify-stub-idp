@@ -8,6 +8,8 @@ import io.dropwizard.configuration.DefaultConfigurationFactoryFactory;
 import io.dropwizard.jackson.Jackson;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.condition.DisabledOnOs;
+import org.junit.jupiter.api.condition.OS;
 import stubidp.saml.stubidp.configuration.SamlConfigurationImpl;
 import stubidp.stubidp.configuration.IdpStubsConfiguration;
 import stubidp.stubidp.configuration.StubIdp;
@@ -35,6 +37,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+// "work around" https://bugs.openjdk.java.net/browse/JDK-7133447
+@DisabledOnOs(OS.MAC)
 public class StubIdpsFileListenerTest {
 
     private final File YML_FILE;
