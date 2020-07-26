@@ -25,7 +25,7 @@
 
         <!-- runtime dependencies -->
         <checker_qual.version>3.5.0</checker_qual.version>
-        <commons_text.version>1.8</commons_text.version>
+        <commons_text.version>1.9</commons_text.version>
         <commons_validator.version>1.6</commons_validator.version>
         <dropwizard.version>2.0.12</dropwizard.version>
         <flyway.version>6.5.1</flyway.version>
