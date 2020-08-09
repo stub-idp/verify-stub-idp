@@ -4,7 +4,7 @@ module stubidp.trust.anchor {
 
     opens stubidp.eidas.trustanchor;
 
-    requires transitive nimbus.jose.jwt;
+    requires transitive com.nimbusds.jose.jwt;
 
     requires java.xml;
     requires net.shibboleth.utilities.java.support;
