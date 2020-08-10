@@ -26,7 +26,13 @@
             <includes>
                 <include>README.md</include>
                 <include>LICENCE</include>
-                <include>startup-idp.sh</include>
+            </includes>
+        </fileSet>
+        <fileSet>
+            <directory>${project.basedir}/src/main/assembly/</directory>
+            <outputDirectory>/</outputDirectory>
+            <includes>
+                <include>startup.sh</include>
             </includes>
         </fileSet>
         <fileSet>
