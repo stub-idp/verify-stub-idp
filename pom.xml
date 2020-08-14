@@ -37,7 +37,7 @@
         <jakarta_validation.version>2.0.2</jakarta_validation.version>
         <jakarta_xml_bind.version>2.3.3</jakarta_xml_bind.version>
         <jbcrypt.version>0.4-atlassian-1</jbcrypt.version>
-        <jdbi.version>3.14.1</jdbi.version>
+        <jdbi.version>3.14.3</jdbi.version>
         <jsoup.version>1.13.1</jsoup.version>
         <logback.version>1.2.3</logback.version>
         <logstash_logback_encoder.version>6.4</logstash_logback_encoder.version>
