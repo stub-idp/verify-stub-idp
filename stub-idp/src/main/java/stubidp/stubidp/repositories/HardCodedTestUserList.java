@@ -16,182 +16,167 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
+import static stubidp.stubidp.domain.DatabaseIdpUserBuilder.aDatabaseIdpUser;
+
 final class HardCodedTestUserList {
 
-    private HardCodedTestUserList() {
-    }
+    private HardCodedTestUserList() {}
 
     static List<DatabaseIdpUser> getHardCodedTestUsers(String idpFriendlyId) {
+        return List.of(
+                aDatabaseIdpUser()
+                        .withUsername(idpFriendlyId)
+                        .withPassword("bar")
+                        .withFirstname("Jack")
+                        .withMiddlename("Cornelius")
+                        .withSurname("Bauer")
+                        .withGender(Gender.MALE)
+                        .withDateOfBirth("1984-02-29")
+                        .withAddresses(List.of(new AddressFactory().createNoDates(Collections.singletonList("1 Two St"), "1A 2BC", null, null, true),
+                                new AddressFactory().create(Collections.singletonList("221b Baker St."), "W4 1SH", null, null, dateToInstant("2007-09-27"), dateToInstant("2007-09-28"), true),
+                                new AddressFactory().create(Collections.singletonList("1 Goose Lane"), "M1 2FG", null, null, dateToInstant("2006-09-29"), dateToInstant("2006-09-08"), false)))
+                        .withAuthnContext(AuthnContext.LEVEL_2)
+                        .build(),
 
-        List<DatabaseIdpUser> sacredUsers = new ArrayList<>();
+                aDatabaseIdpUser()
+                        .withUsername(idpFriendlyId + "-other")
+                        .withPassword("bar")
+                        .withFirstname("Martin")
+                        .withMiddlename("Seamus")
+                        .withSurname("McFly")
+                        .withGender(Gender.FEMALE)
+                        .withDateOfBirth("1968-06-12")
+                        .withAddress(new AddressFactory().createNoDates(Collections.singletonList("1 Two St"), "1A 2BC", null, null, true))
+                        .withAuthnContext(AuthnContext.LEVEL_2)
+                        .build(),
 
-        sacredUsers.add(new DatabaseIdpUser(
-                idpFriendlyId,
-                UUID.randomUUID().toString(),
-                "bar",
-                Collections.singletonList(createMdsValue("Jack")),
-                Collections.singletonList(createMdsValue("Cornelius")),
-                Collections.singletonList(createMdsValue("Bauer")),
-                Optional.of(createMdsValue(Gender.MALE)),
-                Collections.singletonList(createMdsValue(dateToInstant("1984-02-29"))),
-                List.of(new AddressFactory().createNoDates(Collections.singletonList("1 Two St"), "1A 2BC", null, null, true),
-                        new AddressFactory().create(Collections.singletonList("221b Baker St."), "W4 1SH", null, null, dateToInstant("2007-09-27"), dateToInstant("2007-09-28"), true),
-                        new AddressFactory().create(Collections.singletonList("1 Goose Lane"), "M1 2FG", null, null, dateToInstant("2006-09-29"), dateToInstant("2006-09-08"), false)
-                ),
-                AuthnContext.LEVEL_2));
+                aDatabaseIdpUser()
+                        .withUsername(idpFriendlyId + "-new")
+                        .withPassword("bar")
+                        .withFirstname("Jack")
+                        .withSurname("Griffin")
+                        .withGender(Gender.NOT_SPECIFIED)
+                        .withDateOfBirth("1983-06-21")
+                        .withAddresses(List.of(new AddressFactory().create(Collections.singletonList("Lion's Head Inn"), "1A 2BC", null, null, Instant.now().atZone(ZoneId.of("UTC")).minusYears(1).toInstant(), null, true),
+                                new AddressFactory().create(Collections.singletonList("Ye Olde Inn"), "1A 2BB", null, null, Instant.now().atZone(ZoneId.of("UTC")).minusYears(3).toInstant(), Instant.now().atZone(ZoneId.of("UTC")).minusYears(1).toInstant(), false)))
+                        .withAuthnContext(AuthnContext.LEVEL_2)
+                        .build(),
 
-        sacredUsers.add(new DatabaseIdpUser(
-                idpFriendlyId + "-other",
-                UUID.randomUUID().toString(),
-                "bar",
-                Collections.singletonList(createMdsValue("Martin")),
-                Collections.singletonList(createMdsValue("Seamus")),
-                Collections.singletonList(createMdsValue("McFly")),
-                Optional.of(createMdsValue(Gender.FEMALE)),
-                Collections.singletonList(createMdsValue(dateToInstant("1968-06-12"))),
-                Collections.singletonList(new AddressFactory().createNoDates(Collections.singletonList("1 Two St"), "1A 2BC", null, null, true)),
-                AuthnContext.LEVEL_2));
+                aDatabaseIdpUser()
+                        .withUsername(idpFriendlyId + "-c3")
+                        .withPassword("bar")
+                        .withFirstname("J")
+                        .withSurnames(List.of(createCurrentMdsValue("Moriarti", true),
+                                new SimpleMdsValue<>("Barnes", dateToInstant("2006-09-29"), dateToInstant("2006-09-08"), true)))
+                        .withGender(Gender.NOT_SPECIFIED)
+                        .withDateOfBirth("1822-11-27")
+                        .withAddress(new AddressFactory().createNoDates(Collections.singletonList("10 Two St"), "1A 2BC", null, null, true))
+                        .withAuthnContext(AuthnContext.LEVEL_2)
+                        .build(),
 
+                aDatabaseIdpUser()
+                        .withUsername(idpFriendlyId + "-ec3")
+                        .withPassword("bar")
+                        .withFirstname("Martin")
+                        .withSurname("Riggs")
+                        .withDateOfBirth("1970-04-12")
+                        .withAuthnContext(AuthnContext.LEVEL_2)
+                        .build(),
 
-        sacredUsers.add(new DatabaseIdpUser(
-                idpFriendlyId + "-new",
-                UUID.randomUUID().toString(),
-                "bar",
-                Collections.singletonList(createMdsValue("Jack")),
-                Collections.emptyList(),
-                Collections.singletonList(createMdsValue("Griffin")),
-                Optional.of(createMdsValue(Gender.NOT_SPECIFIED)),
-                Collections.singletonList(createMdsValue(dateToInstant("1983-06-21"))),
-                List.of(new AddressFactory().create(Collections.singletonList("Lion's Head Inn"), "1A 2BC", null, null, Instant.now().atZone(ZoneId.of("UTC")).minusYears(1).toInstant(), null, true),
-                        new AddressFactory().create(Collections.singletonList("Ye Olde Inn"), "1A 2BB", null, null, Instant.now().atZone(ZoneId.of("UTC")).minusYears(3).toInstant(), Instant.now().atZone(ZoneId.of("UTC")).minusYears(1).toInstant(), false)),
-                AuthnContext.LEVEL_2));
+                aDatabaseIdpUser()
+                        .withUsername(idpFriendlyId + "-complete")
+                        .withPassword("bar")
+                        .withFirstnames(List.of(createCurrentMdsValue("Jack", true),
+                                createOldMdsValue("Spud", true)))
+                        .withMiddlenames(List.of(createCurrentMdsValue("Cornelius", true),
+                                createOldMdsValue("Aurelius", true)))
+                        .withSurnames(List.of(createCurrentMdsValue("Bauer", true),
+                                createOldMdsValue("Superman", true)))
+                        .withGender(Gender.MALE)
+                        .withDatesOfBirth(List.of(createCurrentMdsValue(dateToInstant("1984-02-29"), true),
+                                createOldMdsValue(dateToInstant("1984-03-01"), true)))
+                        .withAddresses(List.of(new AddressFactory().create(Collections.singletonList("1 Two St"), "1A 2BC", "Something", "dummy uprn", Instant.now(), Instant.now(), true),
+                                new AddressFactory().create(Collections.singletonList("2 Three St"), "1B 2CD", "Something else", "dummy second uprn", Instant.now(), Instant.now(), true)))
+                        .withAuthnContext(AuthnContext.LEVEL_2)
+                        .build(),
 
-        sacredUsers.add(new DatabaseIdpUser(
-                idpFriendlyId + "-c3",
-                UUID.randomUUID().toString(),
-                "bar",
-                Collections.singletonList(createMdsValue("J")),
-                Collections.emptyList(),   //No middle names that we could find. :)
-                List.of(createMdsValue("Moriarti"), new SimpleMdsValue<>("Barnes", dateToInstant("2006-09-29"), dateToInstant("2006-09-08"), true)),
-                Optional.of(createMdsValue(Gender.NOT_SPECIFIED)),
-                Collections.singletonList(createMdsValue(dateToInstant("1822-11-27"))),
-                Collections.singletonList(new AddressFactory().createNoDates(Collections.singletonList("10 Two St"), "1A 2BC", null, null, true)),
-                AuthnContext.LEVEL_2));
+                aDatabaseIdpUser()
+                        .withUsername(idpFriendlyId + "-loa1")
+                        .withPassword("bar")
+                        .withFirstname("Jessica", false)
+                        .withMiddlename("", false)
+                        .withSurname("Rabbit", false)
+                        .withGender(Gender.FEMALE, false)
+                        .withDateOfBirth("1960-03-23", false)
+                        .withAddresses(List.of(new AddressFactory().create(Collections.singletonList("1 Two St"), "1A 2BC", "Something", "dummy uprn", Instant.now(), null, false),
+                                new AddressFactory().create(Collections.singletonList("2 Three St"), "1B 2CD", "Something else", "dummy second uprn", Instant.now(), Instant.now(), false)))
+                        .withAuthnContext(AuthnContext.LEVEL_1)
+                        .build(),
 
-        sacredUsers.add(new DatabaseIdpUser(
-                idpFriendlyId + "-ec3",
-                UUID.randomUUID().toString(),
-                "bar",
-                Collections.singletonList(createMdsValue("Martin")),
-                Collections.emptyList(),
-                Collections.singletonList(createMdsValue("Riggs")),
-                Optional.empty(),
-                Collections.singletonList(createMdsValue(dateToInstant("1970-04-12"))),
-                Collections.emptyList(),
-                AuthnContext.LEVEL_2));
+                aDatabaseIdpUser()
+                        .withUsername(idpFriendlyId + "-loa2")
+                        .withPassword("bar")
+                        .withFirstname("Roger")
+                        .withMiddlename("")
+                        .withSurname("Rabbit")
+                        .withGender(Gender.MALE)
+                        .withDateOfBirth("1958-04-09")
+                        .withAddresses(List.of(new AddressFactory().create(Collections.singletonList("1 Two St"), "1A 2BC", "Something", "dummy uprn", Instant.now(), Instant.now(), true),
+                                new AddressFactory().create(Collections.singletonList("2 Three St"), "1B 2CD", "Something else", "dummy second uprn", Instant.now(), Instant.now(), true)))
+                        .withAuthnContext(AuthnContext.LEVEL_2)
+                        .build(),
 
-        sacredUsers.add(new DatabaseIdpUser(
-                idpFriendlyId + "-complete",
-                UUID.randomUUID().toString(),
-                "bar",
-                List.of(new SimpleMdsValue<>("Jack", Instant.now(), Instant.now(), true),
-                        new SimpleMdsValue<>("Spud", Instant.now(), Instant.now(), true)),
-                List.of(new SimpleMdsValue<>("Cornelius", Instant.now(), Instant.now(), true),
-                        new SimpleMdsValue<>("Aurelius", Instant.now(), Instant.now(), true)),
-                List.of(new SimpleMdsValue<>("Bauer", Instant.now(), Instant.now(), true),
-                        new SimpleMdsValue<>("Superman", Instant.now().atZone(ZoneId.of("UTC")).minusDays(5).toInstant(), Instant.now().atZone(ZoneId.of("UTC")).minusDays(3).toInstant(), true)),
-                Optional.of(new SimpleMdsValue<>(Gender.MALE, Instant.now(), Instant.now(), true)),
-                List.of(new SimpleMdsValue<>(dateToInstant("1984-02-29"), Instant.now(), Instant.now(), true),
-                        new SimpleMdsValue<>(dateToInstant("1984-03-01"), Instant.now(), Instant.now(), true)),
-                List.of(new AddressFactory().create(Collections.singletonList("1 Two St"), "1A 2BC", "Something", "dummy uprn", Instant.now(), Instant.now(), true),
-                        new AddressFactory().create(Collections.singletonList("2 Three St"), "1B 2CD", "Something else", "dummy second uprn", Instant.now(), Instant.now(), true)),
-                AuthnContext.LEVEL_2));
+                aDatabaseIdpUser()
+                        .withUsername(idpFriendlyId + "-loa3")
+                        .withPassword("bar")
+                        .withFirstname("Apollo")
+                        .withMiddlename("")
+                        .withSurname("Eagle")
+                        .withGender(Gender.FEMALE)
+                        .withDateOfBirth("1969-07-20")
+                        .withAddresses(List.of(new AddressFactory().create(Collections.singletonList("1 Four St"), "1A 2BD", "Something", "dummy uprn", Instant.now(), null, true),
+                                new AddressFactory().create(Collections.singletonList("2 Five St"), "1B 2RD", "Something else", "dummy second uprn", Instant.now(), Instant.now(), true)))
+                        .withAuthnContext(AuthnContext.LEVEL_3)
+                        .build(),
 
-        sacredUsers.add(new DatabaseIdpUser(
-                idpFriendlyId + "-loa1",
-                UUID.randomUUID().toString(),
-                "bar",
-                Collections.singletonList(new SimpleMdsValue<>("Jessica", Instant.now(), null, false)),
-                Collections.singletonList(new SimpleMdsValue<>("", Instant.now(), null, false)),
-                Collections.singletonList(new SimpleMdsValue<>("Rabbit", Instant.now(), null, false)),
-                Optional.of(new SimpleMdsValue<>(Gender.FEMALE, Instant.now(), null, false)),
-                Collections.singletonList(new SimpleMdsValue<>(dateToInstant("1960-03-23"), Instant.now(), null, false)),
+                aDatabaseIdpUser()
+                        .withUsername(idpFriendlyId + "-loax")
+                        .withPassword("bar")
+                        .withFirstname("Bugs")
+                        .withMiddlename("")
+                        .withSurname("Nummy")
+                        .withGender(Gender.MALE)
+                        .withDateOfBirth("1958-04-09")
+                        .withAddresses(List.of(new AddressFactory().create(Collections.singletonList("1 Two St"), "1A 2BC", "Something", "dummy uprn", Instant.now(), Instant.now(), true),
+                                new AddressFactory().create(Collections.singletonList("2 Three St"), "1B 2CD", "Something else", "dummy second uprn", Instant.now(), Instant.now(), true)))
+                        .withAuthnContext(AuthnContext.LEVEL_X)
+                        .build(),
 
-                List.of(new AddressFactory().create(Collections.singletonList("1 Two St"), "1A 2BC", "Something", "dummy uprn", Instant.now(), null, false),
-                        new AddressFactory().create(Collections.singletonList("2 Three St"), "1B 2CD", "Something else", "dummy second uprn", Instant.now(), Instant.now(), false)),
-                AuthnContext.LEVEL_1));
+                aDatabaseIdpUser()
+                        .withUsername(idpFriendlyId + "-emoji")
+                        .withPassword("bar")
+                        .withFirstname("😀")
+                        .withMiddlename("😎")
+                        .withSurname("🙃")
+                        .withGender(Gender.FEMALE)
+                        .withDateOfBirth("1968-06-12")
+                        .withAddresses(Collections.singletonList(new AddressFactory().createNoDates(List.of("🏠"), "🏘", null, null, true)))
+                        .withAuthnContext(AuthnContext.LEVEL_2)
+                        .build(),
 
-        sacredUsers.add(new DatabaseIdpUser(
-                idpFriendlyId + "-loa2",
-                UUID.randomUUID().toString(),
-                "bar",
-                Collections.singletonList(new SimpleMdsValue<>("Roger", Instant.now(), Instant.now(), true)),
-                Collections.singletonList(new SimpleMdsValue<>("", Instant.now(), Instant.now(), true)),
-                Collections.singletonList(new SimpleMdsValue<>("Rabbit", Instant.now(), Instant.now(), true)),
-                Optional.of(new SimpleMdsValue<>(Gender.MALE, Instant.now(), Instant.now(), true)),
-                Collections.singletonList(new SimpleMdsValue<>(dateToInstant("1958-04-09"), Instant.now(), Instant.now(), true)),
-
-                List.of(new AddressFactory().create(Collections.singletonList("1 Two St"), "1A 2BC", "Something", "dummy uprn", Instant.now(), Instant.now(), true),
-                        new AddressFactory().create(Collections.singletonList("2 Three St"), "1B 2CD", "Something else", "dummy second uprn", Instant.now(), Instant.now(), true)),
-                AuthnContext.LEVEL_2));
-
-        sacredUsers.add(new DatabaseIdpUser(
-                idpFriendlyId + "-loa3",
-                UUID.randomUUID().toString(),
-                "bar",
-                Collections.singletonList(new SimpleMdsValue<>("Apollo", Instant.now(), null, true)),
-                Collections.singletonList(new SimpleMdsValue<>("", Instant.now(), null, true)),
-                Collections.singletonList(new SimpleMdsValue<>("Eagle", Instant.now(), null, true)),
-                Optional.of(new SimpleMdsValue<>(Gender.FEMALE, Instant.now(), null, true)),
-                Collections.singletonList(new SimpleMdsValue<>(dateToInstant("1969-07-20"), Instant.now(), null, true)),
-
-                List.of(new AddressFactory().create(Collections.singletonList("1 Four St"), "1A 2BD", "Something", "dummy uprn", Instant.now(), null, true),
-                        new AddressFactory().create(Collections.singletonList("2 Five St"), "1B 2RD", "Something else", "dummy second uprn", Instant.now(), Instant.now(), true)),
-                AuthnContext.LEVEL_3));
-
-        sacredUsers.add(new DatabaseIdpUser(
-                idpFriendlyId + "-loax",
-                UUID.randomUUID().toString(),
-                "bar",
-                Collections.singletonList(new SimpleMdsValue<>("Bugs", Instant.now(), Instant.now(), true)),
-                Collections.singletonList(new SimpleMdsValue<>("", Instant.now(), Instant.now(), true)),
-                Collections.singletonList(new SimpleMdsValue<>("Nummy", Instant.now(), Instant.now(), true)),
-                Optional.of(new SimpleMdsValue<>(Gender.MALE, Instant.now(), Instant.now(), true)),
-                Collections.singletonList(new SimpleMdsValue<>(dateToInstant("1958-04-09"), Instant.now(), Instant.now(), true)),
-
-                List.of(new AddressFactory().create(Collections.singletonList("1 Two St"), "1A 2BC", "Something", "dummy uprn", Instant.now(), Instant.now(), true),
-                        new AddressFactory().create(Collections.singletonList("2 Three St"), "1B 2CD", "Something else", "dummy second uprn", Instant.now(), Instant.now(), true)),
-                AuthnContext.LEVEL_X));
-
-        sacredUsers.add(new DatabaseIdpUser(
-                idpFriendlyId + "-emoji",
-                UUID.randomUUID().toString(),
-                "bar",
-                Collections.singletonList(createMdsValue("😀")),
-                Collections.singletonList(createMdsValue("😎")),
-                Collections.singletonList(createMdsValue("🙃")),
-                Optional.of(createMdsValue(Gender.FEMALE)),
-                Collections.singletonList(createMdsValue(dateToInstant("1968-06-12"))),
-                Collections.singletonList(new AddressFactory().createNoDates(List.of("🏠"), "🏘", null, null, true)),
-                AuthnContext.LEVEL_2));
-
-        // this user matches one user in the example local matching service
-        // https://github.com/alphagov/verify-local-matching-service-example/blob/b135523be4c156b5f6e4fc0b3b3f94bcfbef9f75/src/main/resources/db/migration/V2__Populate_With_Test_Data.sql#L31
-        sacredUsers.add(new DatabaseIdpUser(
-                idpFriendlyId + "-elms",
-                UUID.randomUUID().toString(),
-                "bar",
-                Collections.singletonList(createMdsValue("Joe")),
-                Collections.emptyList(),
-                Collections.singletonList(createMdsValue("Bloggs")),
-                Optional.of(createMdsValue(Gender.NOT_SPECIFIED)),
-                Collections.singletonList(createMdsValue(dateToInstant("1970-01-01"))),
-                List.of(new AddressFactory().create(List.of("The White Chapel Building, 10 Whitechapel High St", "London", "United Kingdom"), "E1 8DX",
-                        null, null, Instant.now().atZone(ZoneId.of("UTC")).minusYears(1).toInstant(), null, true)),
-                AuthnContext.LEVEL_2));
-
-        sacredUsers.forEach(DatabaseIdpUser::hashPassword);
-        return sacredUsers;
+                // this user matches one user in the example local matching service
+                // https://github.com/alphagov/verify-local-matching-service-example/blob/b135523be4c156b5f6e4fc0b3b3f94bcfbef9f75/src/main/resources/db/migration/V2__Populate_With_Test_Data.sql#L31
+                aDatabaseIdpUser()
+                        .withUsername(idpFriendlyId + "-elms")
+                        .withPassword("bar")
+                        .withFirstname("Joe")
+                        .withSurname("Bloggs")
+                        .withGender(Gender.NOT_SPECIFIED)
+                        .withDateOfBirth("1970-01-01")
+                        .withAddresses(List.of(new AddressFactory().create(List.of("The White Chapel Building, 10 Whitechapel High St", "London", "United Kingdom"), "E1 8DX",
+                                null, null, Instant.now().atZone(ZoneId.of("UTC")).minusYears(1).toInstant(), null, true)))
+                        .withAuthnContext(AuthnContext.LEVEL_2)
+                        .build());
     }
 
     static List<DatabaseEidasUser> getHardCodedCountryTestUsers(String idpFriendlyId) {
@@ -202,22 +187,22 @@ final class HardCodedTestUserList {
                 idpFriendlyId,
                 UUID.randomUUID().toString(),
                 "bar",
-                createMdsValue("Jack"),
+                createCurrentMdsValue("Jack", true),
                 Optional.empty(),
-                createMdsValue("Bauer"),
+                createCurrentMdsValue("Bauer", true),
                 Optional.empty(),
-                createMdsValue(dateToInstant("1984-02-29")),
+                createCurrentMdsValue(dateToInstant("1984-02-29"), true),
                 AuthnContext.LEVEL_2));
 
         sacredUsers.add(new DatabaseEidasUser(
                 idpFriendlyId + "-other",
                 UUID.randomUUID().toString(),
                 "bar",
-                createMdsValue("Martin"),
+                createCurrentMdsValue("Martin", true),
                 Optional.empty(),
-                createMdsValue("McFly"),
+                createCurrentMdsValue("McFly", true),
                 Optional.empty(),
-                createMdsValue(dateToInstant("1968-06-12")),
+                createCurrentMdsValue(dateToInstant("1968-06-12"), true),
                 AuthnContext.LEVEL_2));
 
         // These names contain characters from ISO/IEC 8859-15 which we regard as Latin.
@@ -225,54 +210,54 @@ final class HardCodedTestUserList {
                 idpFriendlyId + "-accents",
                 UUID.randomUUID().toString(),
                 "bar",
-                createMdsValue("Šarlota"),
+                createCurrentMdsValue("Šarlota", true),
                 Optional.empty(),
-                createMdsValue("Snježana"),
+                createCurrentMdsValue("Snježana", true),
                 Optional.empty(),
-                createMdsValue(dateToInstant("1978-06-12")),
+                createCurrentMdsValue(dateToInstant("1978-06-12"), true),
                 AuthnContext.LEVEL_2));
 
         sacredUsers.add(new DatabaseEidasUser(
                 idpFriendlyId + "-nonlatin",
                 UUID.randomUUID().toString(),
                 "bar",
-                createMdsValue("Georgios"),
-                Optional.of(createMdsValue("Γεώργιος")),
-                createMdsValue("Panathinaikos"),
-                Optional.of(createMdsValue("Παναθηναϊκός")),
-                createMdsValue(dateToInstant("1967-06-12")),
+                createCurrentMdsValue("Georgios", true),
+                Optional.of(createCurrentMdsValue("Γεώργιος", true)),
+                createCurrentMdsValue("Panathinaikos", true),
+                Optional.of(createCurrentMdsValue("Παναθηναϊκός", true)),
+                createCurrentMdsValue(dateToInstant("1967-06-12"), true),
                 AuthnContext.LEVEL_2));
 
         sacredUsers.add(new DatabaseEidasUser(
                 idpFriendlyId + "-new",
                 UUID.randomUUID().toString(),
                 "bar",
-                createMdsValue("Jack"),
+                createCurrentMdsValue("Jack", true),
                 Optional.empty(),
-                createMdsValue("Griffin"),
+                createCurrentMdsValue("Griffin", true),
                 Optional.empty(),
-                createMdsValue(dateToInstant("1983-06-21")),
+                createCurrentMdsValue(dateToInstant("1983-06-21"), true),
                 AuthnContext.LEVEL_2));
 
         sacredUsers.add(new DatabaseEidasUser(
                 idpFriendlyId + "-c3",
                 UUID.randomUUID().toString(), "bar",
-                createMdsValue("J"),
+                createCurrentMdsValue("J", true),
                 Optional.empty(),
-                createMdsValue("Surname"),
+                createCurrentMdsValue("Surname", true),
                 Optional.empty(),
-                createMdsValue(dateToInstant("1822-11-27")),
+                createCurrentMdsValue(dateToInstant("1822-11-27"), true),
                 AuthnContext.LEVEL_2));
 
         sacredUsers.add(new DatabaseEidasUser(
                 idpFriendlyId + "-ec3",
-                 UUID.randomUUID().toString(),
+                UUID.randomUUID().toString(),
                 "bar",
-                createMdsValue("Martin"),
+                createCurrentMdsValue("Martin", true),
                 Optional.empty(),
-                createMdsValue("Riggs"),
+                createCurrentMdsValue("Riggs", true),
                 Optional.empty(),
-                createMdsValue(dateToInstant("1970-04-12")),
+                createCurrentMdsValue(dateToInstant("1970-04-12"), true),
                 AuthnContext.LEVEL_2));
 
         sacredUsers.add(new DatabaseEidasUser(
@@ -333,11 +318,11 @@ final class HardCodedTestUserList {
         sacredUsers.add(new DatabaseEidasUser(idpFriendlyId + "-emoji",
                 UUID.randomUUID().toString(),
                 "bar",
-                createMdsValue("😀"),
-                Optional.of(createMdsValue("GRINNING FACE")),
-                createMdsValue("🙃"),
-                Optional.of(createMdsValue("UPSIDE-DOWN FACE")),
-                createMdsValue(dateToInstant("1968-06-12")),
+                createCurrentMdsValue("😀", true),
+                Optional.of(createCurrentMdsValue("GRINNING FACE", true)),
+                createCurrentMdsValue("🙃", true),
+                Optional.of(createCurrentMdsValue("UPSIDE-DOWN FACE", true)),
+                createCurrentMdsValue(dateToInstant("1968-06-12"), true),
                 AuthnContext.LEVEL_2));
 
         sacredUsers.forEach(DatabaseEidasUser::hashPassword);
@@ -348,11 +333,11 @@ final class HardCodedTestUserList {
         return BaseMdsSamlObjectUnmarshaller.InstantFromDate.of(date);
     }
 
-    private static <T> SimpleMdsValue<T> createMdsValue(T value) {
-        if (value == null) {
-            return null;
-        }
+    private static <T> SimpleMdsValue<T> createCurrentMdsValue(T value, boolean verified) {
+        return new SimpleMdsValue<>(value, Instant.now().atZone(ZoneId.of("UTC")).minusDays(1).toInstant(), null, verified);
+    }
 
-        return new SimpleMdsValue<>(value, Instant.now().atZone(ZoneId.of("UTC")).minusDays(1).toInstant(), null, true);
+    private static <T> SimpleMdsValue<T> createOldMdsValue(T value, boolean verified) {
+        return new SimpleMdsValue<>(value, Instant.now().atZone(ZoneId.of("UTC")).minusDays(5).toInstant(), Instant.now().atZone(ZoneId.of("UTC")).minusDays(1).toInstant(), verified);
     }
 }
