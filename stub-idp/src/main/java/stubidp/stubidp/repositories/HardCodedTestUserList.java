@@ -10,12 +10,10 @@ import stubidp.stubidp.domain.DatabaseIdpUser;
 
 import java.time.Instant;
 import java.time.ZoneId;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
 
+import static stubidp.stubidp.domain.DatabaseEidasUserBuilder.aDatabaseEidasUser;
 import static stubidp.stubidp.domain.DatabaseIdpUserBuilder.aDatabaseIdpUser;
 
 final class HardCodedTestUserList {
@@ -176,157 +174,133 @@ final class HardCodedTestUserList {
                         .withAddresses(List.of(new AddressFactory().create(List.of("The White Chapel Building, 10 Whitechapel High St", "London", "United Kingdom"), "E1 8DX",
                                 null, null, Instant.now().atZone(ZoneId.of("UTC")).minusYears(1).toInstant(), null, true)))
                         .withAuthnContext(AuthnContext.LEVEL_2)
-                        .build());
+                        .build()
+        );
     }
 
     static List<DatabaseEidasUser> getHardCodedCountryTestUsers(String idpFriendlyId) {
+        return List.of(aDatabaseEidasUser()
+                        .withUsername(idpFriendlyId)
+                        .withPassword("bar")
+                        .withFirstname("Jack")
+                        .withSurname("Bauer")
+                        .withDateOfBirth("1984-02-29")
+                        .withAuthnContext(AuthnContext.LEVEL_2)
+                        .build(),
 
-        List<DatabaseEidasUser> sacredUsers = new ArrayList<>();
+                aDatabaseEidasUser()
+                        .withUsername(idpFriendlyId + "-other")
+                        .withPassword("bar")
+                        .withFirstname("Martin")
+                        .withSurname("McFly")
+                        .withDateOfBirth("1968-06-12")
+                        .withAuthnContext(AuthnContext.LEVEL_2)
+                        .build(),
 
-        sacredUsers.add(new DatabaseEidasUser(
-                idpFriendlyId,
-                UUID.randomUUID().toString(),
-                "bar",
-                createCurrentMdsValue("Jack", true),
-                Optional.empty(),
-                createCurrentMdsValue("Bauer", true),
-                Optional.empty(),
-                createCurrentMdsValue(dateToInstant("1984-02-29"), true),
-                AuthnContext.LEVEL_2));
+                // These names contain characters from ISO/IEC 8859-15 which we regard as Latin.
+                aDatabaseEidasUser()
+                        .withUsername(idpFriendlyId + "-accents")
+                        .withPassword("bar")
+                        .withFirstname("Šarlota")
+                        .withSurname("Snježana")
+                        .withDateOfBirth("1978-06-12")
+                        .withAuthnContext(AuthnContext.LEVEL_2)
+                        .build(),
 
-        sacredUsers.add(new DatabaseEidasUser(
-                idpFriendlyId + "-other",
-                UUID.randomUUID().toString(),
-                "bar",
-                createCurrentMdsValue("Martin", true),
-                Optional.empty(),
-                createCurrentMdsValue("McFly", true),
-                Optional.empty(),
-                createCurrentMdsValue(dateToInstant("1968-06-12"), true),
-                AuthnContext.LEVEL_2));
+                aDatabaseEidasUser()
+                        .withUsername(idpFriendlyId + "-nonlatin")
+                        .withPassword("bar")
+                        .withFirstname("Georgios")
+                        .withNonLatinFirstname("Γεώργιος")
+                        .withSurname("Panathinaikos")
+                        .withNonLatinSurname("Παναθηναϊκός")
+                        .withDateOfBirth("1967-06-12")
+                        .withAuthnContext(AuthnContext.LEVEL_2)
+                        .build(),
 
-        // These names contain characters from ISO/IEC 8859-15 which we regard as Latin.
-        sacredUsers.add(new DatabaseEidasUser(
-                idpFriendlyId + "-accents",
-                UUID.randomUUID().toString(),
-                "bar",
-                createCurrentMdsValue("Šarlota", true),
-                Optional.empty(),
-                createCurrentMdsValue("Snježana", true),
-                Optional.empty(),
-                createCurrentMdsValue(dateToInstant("1978-06-12"), true),
-                AuthnContext.LEVEL_2));
+                aDatabaseEidasUser()
+                        .withUsername(idpFriendlyId + "-new")
+                        .withPassword("bar")
+                        .withFirstname("Jack")
+                        .withSurname("Griffin")
+                        .withDateOfBirth("1983-06-21")
+                        .withAuthnContext(AuthnContext.LEVEL_2)
+                        .build(),
 
-        sacredUsers.add(new DatabaseEidasUser(
-                idpFriendlyId + "-nonlatin",
-                UUID.randomUUID().toString(),
-                "bar",
-                createCurrentMdsValue("Georgios", true),
-                Optional.of(createCurrentMdsValue("Γεώργιος", true)),
-                createCurrentMdsValue("Panathinaikos", true),
-                Optional.of(createCurrentMdsValue("Παναθηναϊκός", true)),
-                createCurrentMdsValue(dateToInstant("1967-06-12"), true),
-                AuthnContext.LEVEL_2));
+                aDatabaseEidasUser()
+                        .withUsername(idpFriendlyId + "-c3")
+                        .withPassword("bar")
+                        .withFirstname("J")
+                        .withSurname("Surname")
+                        .withDateOfBirth("1822-11-27")
+                        .withAuthnContext(AuthnContext.LEVEL_2)
+                        .build(),
 
-        sacredUsers.add(new DatabaseEidasUser(
-                idpFriendlyId + "-new",
-                UUID.randomUUID().toString(),
-                "bar",
-                createCurrentMdsValue("Jack", true),
-                Optional.empty(),
-                createCurrentMdsValue("Griffin", true),
-                Optional.empty(),
-                createCurrentMdsValue(dateToInstant("1983-06-21"), true),
-                AuthnContext.LEVEL_2));
+                aDatabaseEidasUser()
+                        .withUsername(idpFriendlyId + "-ec3")
+                        .withPassword("bar")
+                        .withFirstname("Martin")
+                        .withSurname("Riggs")
+                        .withDateOfBirth("1970-04-12")
+                        .withAuthnContext(AuthnContext.LEVEL_2)
+                        .build(),
 
-        sacredUsers.add(new DatabaseEidasUser(
-                idpFriendlyId + "-c3",
-                UUID.randomUUID().toString(), "bar",
-                createCurrentMdsValue("J", true),
-                Optional.empty(),
-                createCurrentMdsValue("Surname", true),
-                Optional.empty(),
-                createCurrentMdsValue(dateToInstant("1822-11-27"), true),
-                AuthnContext.LEVEL_2));
+                aDatabaseEidasUser()
+                        .withUsername(idpFriendlyId + "-complete")
+                        .withPassword("bar")
+                        .withFirstname("Jack")
+                        .withSurname("Bauer")
+                        .withDateOfBirth("1984-02-29")
+                        .withAuthnContext(AuthnContext.LEVEL_2)
+                        .build(),
 
-        sacredUsers.add(new DatabaseEidasUser(
-                idpFriendlyId + "-ec3",
-                UUID.randomUUID().toString(),
-                "bar",
-                createCurrentMdsValue("Martin", true),
-                Optional.empty(),
-                createCurrentMdsValue("Riggs", true),
-                Optional.empty(),
-                createCurrentMdsValue(dateToInstant("1970-04-12"), true),
-                AuthnContext.LEVEL_2));
+                aDatabaseEidasUser()
+                        .withUsername(idpFriendlyId + "-loa1")
+                        .withPassword("bar")
+                        .withFirstname("Jessica", false)
+                        .withSurname("Rabbit", false)
+                        .withDateOfBirth("1960-03-23", false)
+                        .withAuthnContext(AuthnContext.LEVEL_1)
+                        .build(),
 
-        sacredUsers.add(new DatabaseEidasUser(
-                idpFriendlyId + "-complete",
-                UUID.randomUUID().toString(),
-                "bar",
-                new SimpleMdsValue<>("Jack", Instant.now(), Instant.now(), true),
-                Optional.empty(),
-                new SimpleMdsValue<>("Bauer", Instant.now(), Instant.now(), true),
-                Optional.empty(),
-                new SimpleMdsValue<>(dateToInstant("1984-02-29"), Instant.now(), Instant.now(), true),
-                AuthnContext.LEVEL_2));
+                aDatabaseEidasUser()
+                        .withUsername(idpFriendlyId + "-loa2")
+                        .withPassword("bar")
+                        .withFirstname("Roger")
+                        .withSurname("Rabbit")
+                        .withDateOfBirth("1958-04-09")
+                        .withAuthnContext(AuthnContext.LEVEL_2)
+                        .build(),
 
-        sacredUsers.add(new DatabaseEidasUser(
-                idpFriendlyId + "-loa1",
-                UUID.randomUUID().toString(),
-                "bar",
-                new SimpleMdsValue<>("Jessica", Instant.now(), null, false),
-                Optional.empty(),
-                new SimpleMdsValue<>("Rabbit", Instant.now(), null, false),
-                Optional.empty(),
-                new SimpleMdsValue<>(dateToInstant("1960-03-23"), Instant.now(), null, false),
-                AuthnContext.LEVEL_1));
+                aDatabaseEidasUser()
+                        .withUsername(idpFriendlyId + "-loa3")
+                        .withPassword("bar")
+                        .withFirstname("Apollo")
+                        .withSurname("Eagle")
+                        .withDateOfBirth("1969-07-20")
+                        .withAuthnContext(AuthnContext.LEVEL_3)
+                        .build(),
 
-        sacredUsers.add(new DatabaseEidasUser(
-                idpFriendlyId + "-loa2",
-                UUID.randomUUID().toString(),
-                "bar",
-                new SimpleMdsValue<>("Roger", Instant.now(), Instant.now(), true),
-                Optional.empty(),
-                new SimpleMdsValue<>("Rabbit", Instant.now(), Instant.now(), true),
-                Optional.empty(),
-                new SimpleMdsValue<>(dateToInstant("1958-04-09"), Instant.now(), Instant.now(), true),
-                AuthnContext.LEVEL_2));
+                aDatabaseEidasUser()
+                        .withUsername(idpFriendlyId + "-loax")
+                        .withPassword("bar")
+                        .withFirstname("Bugs")
+                        .withSurname("Nummy")
+                        .withDateOfBirth("1958-04-09")
+                        .withAuthnContext(AuthnContext.LEVEL_X)
+                        .build(),
 
-        sacredUsers.add(new DatabaseEidasUser(
-                idpFriendlyId + "-loa3",
-                UUID.randomUUID().toString(),
-                "bar",
-                new SimpleMdsValue<>("Apollo", Instant.now(), null, true),
-                Optional.empty(),
-                new SimpleMdsValue<>("Eagle", Instant.now(), null, true),
-                Optional.empty(),
-                new SimpleMdsValue<>(dateToInstant("1969-07-20"), Instant.now(), null, true),
-                AuthnContext.LEVEL_3));
-
-        sacredUsers.add(new DatabaseEidasUser(
-                idpFriendlyId + "-loax",
-                UUID.randomUUID().toString(),
-                "bar",
-                new SimpleMdsValue<>("Bugs", Instant.now(), Instant.now(), true),
-                Optional.empty(),
-                new SimpleMdsValue<>("Nummy", Instant.now(), Instant.now(), true),
-                Optional.empty(),
-                new SimpleMdsValue<>(dateToInstant("1958-04-09"), Instant.now(), Instant.now(), true),
-                AuthnContext.LEVEL_X));
-
-        sacredUsers.add(new DatabaseEidasUser(idpFriendlyId + "-emoji",
-                UUID.randomUUID().toString(),
-                "bar",
-                createCurrentMdsValue("😀", true),
-                Optional.of(createCurrentMdsValue("GRINNING FACE", true)),
-                createCurrentMdsValue("🙃", true),
-                Optional.of(createCurrentMdsValue("UPSIDE-DOWN FACE", true)),
-                createCurrentMdsValue(dateToInstant("1968-06-12"), true),
-                AuthnContext.LEVEL_2));
-
-        sacredUsers.forEach(DatabaseEidasUser::hashPassword);
-        return sacredUsers;
+                aDatabaseEidasUser()
+                        .withUsername(idpFriendlyId + "-emoji")
+                        .withPassword("bar")
+                        .withFirstname("😀")
+                        .withNonLatinFirstname("GRINNING FACE")
+                        .withSurname("🙃")
+                        .withNonLatinSurname("UPSIDE-DOWN FACE")
+                        .withDateOfBirth("1968-06-12")
+                        .withAuthnContext(AuthnContext.LEVEL_2)
+                        .build()
+        );
     }
 
     private static Instant dateToInstant(String date) {
