@@ -11,16 +11,25 @@ import stubidp.stubidp.domain.DatabaseIdpUser;
 import java.time.Instant;
 import java.time.ZoneId;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static stubidp.stubidp.domain.DatabaseEidasUserBuilder.aDatabaseEidasUser;
 import static stubidp.stubidp.domain.DatabaseIdpUserBuilder.aDatabaseIdpUser;
 
 final class HardCodedTestUserList {
 
+    private static final Map<String, List<DatabaseIdpUser>> idpUsers = Collections.synchronizedMap(new HashMap<>());
+    private static final Map<String, List<DatabaseEidasUser>> eidasUsers = Collections.synchronizedMap(new HashMap<>());
+
     private HardCodedTestUserList() {}
 
     static List<DatabaseIdpUser> getHardCodedTestUsers(String idpFriendlyId) {
+        return idpUsers.computeIfAbsent(idpFriendlyId, id -> _getHardCodedTestUsers(id));
+    }
+
+    private static List<DatabaseIdpUser> _getHardCodedTestUsers(String idpFriendlyId) {
         return List.of(
                 aDatabaseIdpUser()
                         .withUsername(idpFriendlyId)
@@ -179,6 +188,10 @@ final class HardCodedTestUserList {
     }
 
     static List<DatabaseEidasUser> getHardCodedCountryTestUsers(String idpFriendlyId) {
+        return eidasUsers.computeIfAbsent(idpFriendlyId, id -> _getHardCodedCountryTestUsers(id));
+    }
+
+    private static List<DatabaseEidasUser> _getHardCodedCountryTestUsers(String idpFriendlyId) {
         return List.of(aDatabaseEidasUser()
                         .withUsername(idpFriendlyId)
                         .withPassword("bar")
