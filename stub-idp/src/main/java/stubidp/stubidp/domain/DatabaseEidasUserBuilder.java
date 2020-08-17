@@ -64,7 +64,7 @@ public class DatabaseEidasUserBuilder {
     }
 
     public DatabaseEidasUserBuilder withSurname(String surname, boolean verified) {
-        this.surname = createCurrentMdsValue(surname, true);
+        this.surname = createCurrentMdsValue(surname, verified);
         return this;
     }
 
