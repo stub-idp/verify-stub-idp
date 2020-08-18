@@ -24,7 +24,7 @@ import static java.text.MessageFormat.format;
 import static java.util.Optional.empty;
 import static org.assertj.core.api.Assertions.assertThat;
 import static stubidp.metrics.prometheus.bundle.PrometheusBundle.PROMETHEUS_METRICS_RESOURCE;
-import static stubidp.stubidp.builders.StubIdpBuilder.aStubIdp;
+import static stubidp.test.integration.support.StubIdpBuilder.aStubIdp;
 
 @ExtendWith(DropwizardExtensionsSupport.class)
 public class HeadlessIntegrationTests extends IntegrationTestHelper {

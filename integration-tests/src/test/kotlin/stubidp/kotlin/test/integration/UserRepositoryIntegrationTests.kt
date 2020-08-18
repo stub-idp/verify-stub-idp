@@ -9,18 +9,18 @@ import org.glassfish.jersey.client.authentication.HttpAuthenticationFeature
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
-import stubidp.saml.domain.assertions.Gender
-import stubidp.stubidp.Urls
-import stubidp.stubidp.builders.StubIdpBuilder
-import stubidp.stubidp.dtos.IdpUserDto
-import stubidp.stubidp.security.BCryptHelper
-import stubidp.stubidp.utils.TestUserCredentials
 import stubidp.kotlin.test.integration.support.IntegrationTestHelper
 import stubidp.kotlin.test.integration.support.StubIdpAppExtension
+import stubidp.kotlin.test.integration.support.StubIdpBuilder
+import stubidp.kotlin.test.integration.support.TestUserCredentials
 import stubidp.saml.domain.assertions.AuthnContext
+import stubidp.saml.domain.assertions.Gender
 import stubidp.saml.domain.assertions.SimpleMdsValue
 import stubidp.saml.test.builders.AddressBuilder
 import stubidp.saml.test.builders.SimpleMdsValueBuilder
+import stubidp.stubidp.Urls
+import stubidp.stubidp.dtos.IdpUserDto
+import stubidp.stubidp.security.BCryptHelper
 import stubidp.utils.rest.common.HttpHeaders
 import java.io.IOException
 import java.text.MessageFormat
@@ -34,6 +34,7 @@ import javax.ws.rs.core.GenericType
 import javax.ws.rs.core.MediaType
 import javax.ws.rs.core.Response
 import javax.ws.rs.core.UriBuilder
+import kotlin.jvm.Throws
 
 @ExtendWith(DropwizardExtensionsSupport::class)
 class UserRepositoryIntegrationTests : IntegrationTestHelper() {

@@ -12,7 +12,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import stubidp.saml.test.TestCredentialFactory;
 import stubidp.stubidp.Urls;
 import stubidp.stubidp.cookies.StubIdpCookieNames;
-import stubidp.stubidp.filters.SecurityHeadersFilterTest;
 import stubidp.test.devpki.TestCertificateStrings;
 import stubidp.test.integration.steps.AuthnRequestSteps;
 import stubidp.test.integration.support.IntegrationTestHelper;
@@ -22,6 +21,7 @@ import stubsp.stubsp.saml.request.IdpAuthnRequestBuilder;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.Form;
+import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriBuilder;
 import java.util.List;
@@ -30,8 +30,8 @@ import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static stubidp.shared.csrf.AbstractCSRFCheckProtectionFilter.CSRF_PROTECT_FORM_KEY;
-import static stubidp.stubidp.builders.StubIdpBuilder.aStubIdp;
 import static stubidp.test.integration.support.StubIdpAppExtension.SP_ENTITY_ID;
+import static stubidp.test.integration.support.StubIdpBuilder.aStubIdp;
 
 @ExtendWith(DropwizardExtensionsSupport.class)
 public class SecurityIntegrationTests extends IntegrationTestHelper {
@@ -61,7 +61,7 @@ public class SecurityIntegrationTests extends IntegrationTestHelper {
                 .get();
 
         assertThat(response.getStatus()).isEqualTo(404);
-        SecurityHeadersFilterTest.checkSecurityHeaders(response.getHeaders());
+        checkSecurityHeaders(response.getHeaders());
     }
 
     @Test
@@ -146,4 +146,21 @@ public class SecurityIntegrationTests extends IntegrationTestHelper {
         return null;
     }
 
+    private void checkSecurityHeaders(MultivaluedMap<String, Object> headers) {
+        assertThat(headers.containsKey("X-Frame-Options")).isTrue();
+        assertThat(headers.get("X-Frame-Options").size()).isEqualTo(1);
+        assertThat(headers.get("X-Frame-Options").get(0)).isEqualTo("DENY");
+        assertThat(headers.containsKey("X-XSS-Protection")).isTrue();
+        assertThat(headers.get("X-XSS-Protection").size()).isEqualTo(1);
+        assertThat(headers.get("X-XSS-Protection").get(0)).isEqualTo("1; mode=block");
+        assertThat(headers.containsKey("X-Content-Type-Options")).isTrue();
+        assertThat(headers.get("X-Content-Type-Options").get(0)).isEqualTo("nosniff");
+        assertThat(headers.get("X-Content-Type-Options").size()).isEqualTo(1);
+        assertThat(headers.containsKey("Referrer-Policy")).isTrue();
+        assertThat(headers.get("Referrer-Policy").get(0)).isEqualTo("strict-origin-when-cross-origin");
+        assertThat(headers.get("Referrer-Policy").size()).isEqualTo(1);
+        assertThat(headers.containsKey("Content-Security-Policy")).isTrue();
+        assertThat(headers.get("Content-Security-Policy").size()).isEqualTo(1);
+        assertThat(headers.get("Content-Security-Policy").get(0)).isEqualTo("default-src 'self'; font-src data:; img-src 'self'; object-src 'none'; style-src 'self' 'unsafe-inline'; script-src 'self';");
+    }
 }

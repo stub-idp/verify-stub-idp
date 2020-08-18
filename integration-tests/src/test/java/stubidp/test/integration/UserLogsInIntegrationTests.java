@@ -8,8 +8,8 @@ import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import stubidp.saml.domain.response.InboundResponseFromIdp;
 import stubidp.saml.constants.Constants;
+import stubidp.saml.domain.response.InboundResponseFromIdp;
 import stubidp.stubidp.Urls;
 import stubidp.stubidp.cookies.StubIdpCookieNames;
 import stubidp.test.integration.steps.AuthnRequestSteps;
@@ -31,7 +31,7 @@ import static java.text.MessageFormat.format;
 import static java.util.Optional.empty;
 import static org.assertj.core.api.Assertions.assertThat;
 import static stubidp.metrics.prometheus.bundle.PrometheusBundle.PROMETHEUS_METRICS_RESOURCE;
-import static stubidp.stubidp.builders.StubIdpBuilder.aStubIdp;
+import static stubidp.test.integration.support.StubIdpBuilder.aStubIdp;
 import static stubidp.utils.rest.common.HttpHeaders.CACHE_CONTROL_KEY;
 import static stubidp.utils.rest.common.HttpHeaders.PRAGMA_KEY;
 

@@ -23,7 +23,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static stubidp.stubidp.builders.StubIdpBuilder.aStubIdp;
+import static stubidp.test.integration.support.StubIdpBuilder.aStubIdp;
 
 @ExtendWith(DropwizardExtensionsSupport.class)
 public class LevelOfAssuranceIntegrationTests extends IntegrationTestHelper {

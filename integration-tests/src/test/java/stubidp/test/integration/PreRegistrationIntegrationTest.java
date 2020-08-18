@@ -24,8 +24,8 @@ import javax.ws.rs.core.UriBuilder;
 import java.util.Map;
 
 import static stubidp.shared.csrf.AbstractCSRFCheckProtectionFilter.CSRF_PROTECT_FORM_KEY;
-import static stubidp.stubidp.builders.StubIdpBuilder.aStubIdp;
 import static stubidp.test.integration.support.StubIdpAppExtension.SP_ENTITY_ID;
+import static stubidp.test.integration.support.StubIdpBuilder.aStubIdp;
 
 @ExtendWith(DropwizardExtensionsSupport.class)
 public class PreRegistrationIntegrationTest extends IntegrationTestHelper {

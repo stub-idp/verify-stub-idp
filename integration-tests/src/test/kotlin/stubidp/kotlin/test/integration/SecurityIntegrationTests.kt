@@ -8,22 +8,22 @@ import org.jsoup.Jsoup
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
-import stubidp.saml.test.TestCredentialFactory
-import stubidp.shared.csrf.AbstractCSRFCheckProtectionFilter
-import stubidp.stubidp.Urls
-import stubidp.stubidp.builders.StubIdpBuilder
-import stubidp.stubidp.cookies.StubIdpCookieNames
-import stubidp.stubidp.filters.SecurityHeadersFilterTest
-import stubidp.test.devpki.TestCertificateStrings
 import stubidp.kotlin.test.integration.steps.AuthnRequestSteps
 import stubidp.kotlin.test.integration.support.IntegrationTestHelper
 import stubidp.kotlin.test.integration.support.StubIdpAppExtension
+import stubidp.kotlin.test.integration.support.StubIdpBuilder
+import stubidp.saml.test.TestCredentialFactory
+import stubidp.shared.csrf.AbstractCSRFCheckProtectionFilter
+import stubidp.stubidp.Urls
+import stubidp.stubidp.cookies.StubIdpCookieNames
+import stubidp.test.devpki.TestCertificateStrings
 import stubsp.stubsp.saml.request.IdpAuthnRequestBuilder
 import java.util.Objects
 import java.util.Optional
 import javax.ws.rs.client.Client
 import javax.ws.rs.client.Entity
 import javax.ws.rs.core.Form
+import javax.ws.rs.core.MultivaluedMap
 import javax.ws.rs.core.UriBuilder
 
 @ExtendWith(DropwizardExtensionsSupport::class)
@@ -47,7 +47,7 @@ class SecurityIntegrationTests : IntegrationTestHelper() {
                 .request()
                 .get()
         Assertions.assertThat(response.status).isEqualTo(404)
-        SecurityHeadersFilterTest.checkSecurityHeaders(response.headers)
+        checkSecurityHeaders(response.headers)
     }
 
     @Test
@@ -118,6 +118,24 @@ class SecurityIntegrationTests : IntegrationTestHelper() {
         return if (!Objects.isNull(csrfElement)) {
             csrfElement.`val`()
         } else null
+    }
+    
+    private fun checkSecurityHeaders(headers: MultivaluedMap<String, Any>) {
+        Assertions.assertThat(headers.containsKey("X-Frame-Options")).isTrue()
+        Assertions.assertThat(headers.get("X-Frame-Options")!!.size).isEqualTo(1)
+        Assertions.assertThat(headers.get("X-Frame-Options")!!.get(0)).isEqualTo("DENY")
+        Assertions.assertThat(headers.containsKey("X-XSS-Protection")).isTrue()
+        Assertions.assertThat(headers.get("X-XSS-Protection")!!.size).isEqualTo(1)
+        Assertions.assertThat(headers.get("X-XSS-Protection")!!.get(0)).isEqualTo("1; mode=block")
+        Assertions.assertThat(headers.containsKey("X-Content-Type-Options")).isTrue()
+        Assertions.assertThat(headers.get("X-Content-Type-Options")!!.get(0)).isEqualTo("nosniff")
+        Assertions.assertThat(headers.get("X-Content-Type-Options")!!.size).isEqualTo(1)
+        Assertions.assertThat(headers.containsKey("Referrer-Policy")).isTrue()
+        Assertions.assertThat(headers.get("Referrer-Policy")!!.get(0)).isEqualTo("strict-origin-when-cross-origin")
+        Assertions.assertThat(headers.get("Referrer-Policy")!!.size).isEqualTo(1)
+        Assertions.assertThat(headers.containsKey("Content-Security-Policy")).isTrue()
+        Assertions.assertThat(headers.get("Content-Security-Policy")!!.size).isEqualTo(1)
+        Assertions.assertThat(headers.get("Content-Security-Policy")!!.get(0)).isEqualTo("default-src 'self'; font-src data:; img-src 'self'; object-src 'none'; style-src 'self' 'unsafe-inline'; script-src 'self';")
     }
 
     companion object {

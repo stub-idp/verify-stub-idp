@@ -9,14 +9,14 @@ import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Order
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
-import stubidp.metrics.prometheus.bundle.PrometheusBundle
-import stubidp.saml.constants.Constants
-import stubidp.stubidp.Urls
-import stubidp.stubidp.builders.StubIdpBuilder
-import stubidp.stubidp.cookies.StubIdpCookieNames
 import stubidp.kotlin.test.integration.steps.AuthnRequestSteps
 import stubidp.kotlin.test.integration.support.IntegrationTestHelper
 import stubidp.kotlin.test.integration.support.StubIdpAppExtension
+import stubidp.kotlin.test.integration.support.StubIdpBuilder
+import stubidp.metrics.prometheus.bundle.PrometheusBundle
+import stubidp.saml.constants.Constants
+import stubidp.stubidp.Urls
+import stubidp.stubidp.cookies.StubIdpCookieNames
 import stubidp.utils.rest.common.HttpHeaders
 import stubsp.stubsp.saml.response.SamlResponseDecrypter
 import java.text.MessageFormat
@@ -26,6 +26,7 @@ import java.util.stream.Collectors
 import javax.ws.rs.client.Client
 import javax.ws.rs.client.Entity
 import javax.ws.rs.core.UriBuilder
+import kotlin.jvm.Throws
 
 @ExtendWith(DropwizardExtensionsSupport::class)
 class UserLogsInIntegrationTests : IntegrationTestHelper() {

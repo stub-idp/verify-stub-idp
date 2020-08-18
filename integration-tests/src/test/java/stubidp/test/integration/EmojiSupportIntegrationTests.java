@@ -21,7 +21,7 @@ import javax.ws.rs.core.Response;
 
 import static java.text.MessageFormat.format;
 import static org.assertj.core.api.Assertions.assertThat;
-import static stubidp.stubidp.builders.StubIdpBuilder.aStubIdp;
+import static stubidp.test.integration.support.StubIdpBuilder.aStubIdp;
 
 @ExtendWith(DropwizardExtensionsSupport.class)
 public class EmojiSupportIntegrationTests extends IntegrationTestHelper {

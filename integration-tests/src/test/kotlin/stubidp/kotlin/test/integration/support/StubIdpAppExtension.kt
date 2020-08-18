@@ -13,15 +13,15 @@ import org.opensaml.core.config.InitializationService
 import org.opensaml.core.xml.io.MarshallingException
 import org.opensaml.saml.saml2.metadata.EntityDescriptor
 import org.opensaml.xmlsec.signature.support.SignatureException
-import stubidp.saml.test.metadata.EntitiesDescriptorFactory
-import stubidp.saml.test.metadata.MetadataFactory
-import stubidp.saml.security.IdaKeyStore
 import stubidp.saml.constants.Constants
+import stubidp.saml.security.IdaKeyStore
 import stubidp.saml.test.builders.AssertionConsumerServiceBuilder
 import stubidp.saml.test.builders.EntityDescriptorBuilder
 import stubidp.saml.test.builders.IdpSsoDescriptorBuilder
 import stubidp.saml.test.builders.KeyDescriptorBuilder
 import stubidp.saml.test.builders.SPSSODescriptorBuilder
+import stubidp.saml.test.metadata.EntitiesDescriptorFactory
+import stubidp.saml.test.metadata.MetadataFactory
 import stubidp.stubidp.StubIdpApplication
 import stubidp.stubidp.configuration.IdpStubsConfiguration
 import stubidp.stubidp.configuration.StubIdp
@@ -55,6 +55,7 @@ import java.util.UUID
 import java.util.function.Consumer
 import java.util.stream.Collectors
 import javax.ws.rs.core.UriBuilder
+import kotlin.jvm.Throws
 
 class StubIdpAppExtension @JvmOverloads constructor(configOverrides: Map<String?, String?> = java.util.Map.of()) : DropwizardAppExtension<StubIdpConfiguration?>(StubIdpApplication::class.java, "../configuration/stub-idp.yml", *withDefaultOverrides(configOverrides)) {
     private val stubIdps: MutableList<StubIdp> = ArrayList()

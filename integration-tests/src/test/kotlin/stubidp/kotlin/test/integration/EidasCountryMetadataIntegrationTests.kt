@@ -9,10 +9,10 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import org.w3c.dom.Document
 import org.w3c.dom.Node
-import stubidp.stubidp.Urls
-import stubidp.stubidp.builders.StubIdpBuilder
 import stubidp.kotlin.test.integration.support.IntegrationTestHelper
 import stubidp.kotlin.test.integration.support.StubIdpAppExtension
+import stubidp.kotlin.test.integration.support.StubIdpBuilder
+import stubidp.stubidp.Urls
 import javax.ws.rs.client.Client
 import javax.ws.rs.client.Entity
 import javax.ws.rs.core.UriBuilder

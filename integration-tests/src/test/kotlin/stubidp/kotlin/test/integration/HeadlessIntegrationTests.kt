@@ -7,12 +7,12 @@ import org.glassfish.jersey.client.JerseyClientBuilder
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
-import stubidp.metrics.prometheus.bundle.PrometheusBundle
-import stubidp.stubidp.builders.StubIdpBuilder
-import stubidp.stubidp.resources.idp.HeadlessIdpResource
 import stubidp.kotlin.test.integration.steps.AuthnRequestSteps
 import stubidp.kotlin.test.integration.support.IntegrationTestHelper
 import stubidp.kotlin.test.integration.support.StubIdpAppExtension
+import stubidp.kotlin.test.integration.support.StubIdpBuilder
+import stubidp.metrics.prometheus.bundle.PrometheusBundle
+import stubidp.stubidp.resources.idp.HeadlessIdpResource
 import stubsp.stubsp.saml.response.SamlResponseDecrypter
 import java.text.MessageFormat
 import java.util.Optional
