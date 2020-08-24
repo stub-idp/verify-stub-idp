@@ -9,13 +9,11 @@ import stubidp.utils.rest.resources.VersionInfoResource;
 
 public class MonitoringBundle implements ConfiguredBundle<ServiceNameConfiguration> {
     @Override
-    public void initialize(Bootstrap<?> bootstrap) {
-
-    }
+    public void initialize(Bootstrap<?> bootstrap) {}
 
     @Override
     public void run(ServiceNameConfiguration configuration, Environment environment) throws Exception {
         environment.jersey().register(new ServiceNameResource(configuration.getServiceName()));
-        environment.jersey().register(new VersionInfoResource());
+        environment.jersey().register(new VersionInfoResource(configuration.getClass()));
     }
 }

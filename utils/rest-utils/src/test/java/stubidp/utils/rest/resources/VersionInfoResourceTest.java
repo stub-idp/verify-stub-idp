@@ -2,16 +2,29 @@ package stubidp.utils.rest.resources;
 
 import org.junit.jupiter.api.Test;
 import stubidp.utils.rest.common.VersionInfoDto;
-import stubidp.utils.rest.resources.VersionInfoResource;
+import stubidp.utils.rest.configuration.ServiceNameConfiguration;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class VersionInfoResourceTest {
 
-    @Test
-    public void shouldLoadDataFromManifest() throws Exception {
-        VersionInfoResource versionInfoResource = new VersionInfoResource();
+    private static class TestVersionInfoResource extends VersionInfoResource {
+        public TestVersionInfoResource() {
+            super(ServiceNameConfiguration.class);
+        }
 
-        VersionInfoDto versionInfo = versionInfoResource.getVersionInfo();
-        // note this should not throw an exception... but setting it up to test is hard :-(
+        @Override
+        protected String getManifestFilePath() {
+             return "/TESTMANIFEST.MF";
+        }
     }
 
+    @Test
+    public void shouldLoadDataFromManifest() throws Exception {
+        VersionInfoResource versionInfoResource = new TestVersionInfoResource();
+        VersionInfoDto versionInfo = versionInfoResource.getVersionInfo();
+        assertThat(versionInfo.getBuildNumber()).isEqualTo("1");
+        assertThat(versionInfo.getGitCommit()).isEqualTo("f00");
+        assertThat(versionInfo.getCreatedDate()).isEqualTo("2020-08-24T20:04:45+00:00");
+    }
 }
