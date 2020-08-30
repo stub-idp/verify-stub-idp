@@ -5,7 +5,7 @@ import org.opensaml.xmlsec.algorithm.SignatureAlgorithm;
 import stubidp.saml.security.EncryptionKeyStore;
 import stubidp.saml.security.EntityToEncryptForLocator;
 import stubidp.saml.security.IdaKeyStore;
-import stubidp.stubidp.domain.OutboundResponseFromIdp;
+import stubidp.saml.domain.response.OutboundResponseFromIdp;
 import stubidp.stubidp.domain.factories.StubTransformersFactory;
 import stubidp.stubidp.repositories.Idp;
 

@@ -31,6 +31,6 @@ public class SecureResource {
 
     @GET
     public SecureView getSecureView() {
-        return null;
+        return new SecureView();
     }
 }

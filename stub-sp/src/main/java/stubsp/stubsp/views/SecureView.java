@@ -1,7 +1,13 @@
 package stubsp.stubsp.views;
 
+import stubsp.stubsp.Urls;
+
 public class SecureView extends StubSpView {
-    protected SecureView(String pageTitle, String subTemplateName) {
-        super(pageTitle, subTemplateName);
+    public SecureView() {
+        super("Secure!!!!1!!1!", "secureView.ftl");
+    }
+
+    public String getRootResource() {
+        return Urls.ROOT_RESOURCE;
     }
 }

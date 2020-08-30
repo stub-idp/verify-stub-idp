@@ -13,6 +13,7 @@ import java.util.Optional;
 import static java.util.Optional.empty;
 import static java.util.Optional.of;
 
+// DUPLICATE CLASS
 public class IdpIdaStatusMarshaller extends IdaStatusMarshaller<IdpIdaStatus> {
 
     private static final Map<IdpIdaStatus, DetailedStatusCode> REST_TO_SAML_CODES =

@@ -4,12 +4,14 @@ import net.shibboleth.utilities.java.support.component.ComponentInitializationEx
 import net.shibboleth.utilities.java.support.resolver.ResolverException;
 import net.shibboleth.utilities.java.support.xml.BasicParserPool;
 import org.opensaml.saml.common.SignableSAMLObject;
+import org.opensaml.saml.metadata.resolver.MetadataResolver;
 import org.opensaml.saml.saml2.core.Assertion;
 import org.opensaml.saml.saml2.core.Response;
 import org.opensaml.saml.saml2.encryption.Decrypter;
 import org.opensaml.saml.saml2.metadata.IDPSSODescriptor;
 import org.opensaml.xmlsec.encryption.support.EncryptionConstants;
 import org.slf4j.event.Level;
+import stubidp.saml.domain.configuration.SamlConfiguration;
 import stubidp.saml.domain.response.InboundResponseFromIdp;
 import stubidp.saml.extensions.validation.SamlTransformationErrorException;
 import stubidp.saml.extensions.validation.SamlValidationSpecificationFailure;
@@ -23,6 +25,7 @@ import stubidp.saml.hub.core.validators.assertion.IdentityProviderAssertionValid
 import stubidp.saml.hub.core.validators.assertion.MatchingDatasetAssertionValidator;
 import stubidp.saml.hub.core.validators.subject.AssertionSubjectValidator;
 import stubidp.saml.hub.core.validators.subjectconfirmation.AssertionSubjectConfirmationValidator;
+import stubidp.saml.hub.metadata.IdpMetadataPublicKeyStore;
 import stubidp.saml.hub.transformers.inbound.IdaResponseFromIdpUnmarshaller;
 import stubidp.saml.hub.transformers.inbound.IdpIdaStatusUnmarshaller;
 import stubidp.saml.hub.transformers.inbound.PassthroughAssertionUnmarshaller;
@@ -32,7 +35,6 @@ import stubidp.saml.hub.validators.authnrequest.ConcurrentMapIdExpirationCache;
 import stubidp.saml.hub.validators.response.common.ResponseSizeValidator;
 import stubidp.saml.hub.validators.response.idp.components.EncryptedResponseFromIdpValidator;
 import stubidp.saml.hub.validators.response.idp.components.ResponseAssertionsFromIdpValidator;
-import stubidp.saml.hub.metadata.IdpMetadataPublicKeyStore;
 import stubidp.saml.metadata.JerseyClientMetadataResolver;
 import stubidp.saml.metadata.factories.MetadataSignatureTrustEngineFactory;
 import stubidp.saml.security.AssertionDecrypter;
@@ -56,10 +58,13 @@ import stubidp.saml.serializers.deserializers.validators.NotNullSamlStringValida
 import stubidp.saml.serializers.serializers.XmlObjectToBase64EncodedStringTransformer;
 import stubidp.saml.utils.core.transformers.AuthnContextFactory;
 import stubidp.saml.utils.hub.validators.StringSizeValidator;
+import stubsp.stubsp.Urls;
 import stubsp.stubsp.saml.response.eidas.EidasAttributeStatementAssertionValidator;
 import stubsp.stubsp.saml.response.eidas.EidasAuthnResponseIssuerValidator;
 import stubsp.stubsp.saml.response.eidas.InboundResponseFromCountry;
 
+import javax.inject.Inject;
+import javax.inject.Named;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.core.UriBuilder;
 import java.net.URI;
@@ -71,6 +76,11 @@ import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
 import static java.text.MessageFormat.format;
+import static stubsp.stubsp.StubSpBinder.EIDAS_KEY_STORE;
+import static stubsp.stubsp.StubSpBinder.EIDAS_METADATA_RESOLVER;
+import static stubsp.stubsp.StubSpBinder.SP_CHECK_KEY_INFO;
+import static stubsp.stubsp.StubSpBinder.SP_KEY_STORE;
+import static stubsp.stubsp.StubSpBinder.SP_METADATA_RESOLVER;
 
 /**
  * Be warned that this class does little to no validation and is just for testing the contents of a response
@@ -83,27 +93,48 @@ public class SamlResponseDecrypter {
             new ResponseSizeValidator(new StringSizeValidator()),
             new OpenSamlXMLObjectUnmarshaller<>(new SamlObjectParser()));
 
-    private final Client client;
-    private final URI assertionConsumerServices;
+    private final URI spAssertionConsumerServices;
+    private final String spEntityId;
     private final boolean checkKeyInfo;
 
-    private final URI idpMetadataUri;
-    private final String spEntityId;
     private final IdaKeyStore spKeyStore;
-
     private final IdaKeyStore eidasKeyStore;
-    private final Optional<URI> eidasMetadataUri;
 
-    public SamlResponseDecrypter(Client client, URI idpMetadataUri, String spEntityId, Optional<URI> eidasMetadataUri, URI assertionConsumerServices, IdaKeyStore spKeyStore, IdaKeyStore eidasKeyStore) {
-        this(client, idpMetadataUri, spEntityId, eidasMetadataUri, assertionConsumerServices, spKeyStore, eidasKeyStore, false);
+    private final MetadataResolver idpMetadataResolver;
+    private final Optional<MetadataResolver> eidasMetadataResolver;
+
+
+    public SamlResponseDecrypter(Client client, URI idpMetadataUri, String spEntityId, Optional<URI> eidasMetadataUri, URI spAssertionConsumerServices, IdaKeyStore spKeyStore, IdaKeyStore eidasKeyStore) {
+        this(client, idpMetadataUri, spEntityId, eidasMetadataUri, spAssertionConsumerServices, spKeyStore, eidasKeyStore, false);
     }
 
-    public SamlResponseDecrypter(Client client, URI idpMetadataUri, String spEntityId, Optional<URI> eidasMetadataUri, URI assertionConsumerServices, IdaKeyStore spKeyStore, IdaKeyStore eidasKeyStore, boolean checkKeyInfo) {
-        this.client = client;
-        this.idpMetadataUri = idpMetadataUri;
+    public SamlResponseDecrypter(Client client, URI idpMetadataUri, String spEntityId, Optional<URI> eidasMetadataUri, URI spAssertionConsumerServices, IdaKeyStore spKeyStore, IdaKeyStore eidasKeyStore, boolean checkKeyInfo) {
+        this(getMetadataResolver(client, idpMetadataUri), eidasMetadataUri.map(uri -> getMetadataResolver(client, uri)), spEntityId, spAssertionConsumerServices, spKeyStore, eidasKeyStore, checkKeyInfo);
+    }
+
+    @Inject
+    public SamlResponseDecrypter(@Named(SP_METADATA_RESOLVER) MetadataResolver idpMetadataResolver,
+                                 @Named(EIDAS_METADATA_RESOLVER) Optional<MetadataResolver> eidasMetadataResolver,
+                                 SamlConfiguration samlConfiguration,
+                                 @Named(SP_KEY_STORE) IdaKeyStore spKeyStore,
+                                 @Named(EIDAS_KEY_STORE) Optional<IdaKeyStore> eidasKeyStore,
+                                 @Named(SP_CHECK_KEY_INFO) Boolean checkKeyInfo) {
+        this(idpMetadataResolver, eidasMetadataResolver, samlConfiguration.getEntityId(),
+        UriBuilder.fromUri(samlConfiguration.getExpectedDestinationHost() + Urls.SAML_SSO_RESPONSE_RESOURCE).build(),
+        spKeyStore, eidasKeyStore.orElse(null), checkKeyInfo);
+    }
+
+    public SamlResponseDecrypter(MetadataResolver idpMetadataResolver,
+                                 Optional<MetadataResolver> eidasMetadataResolver,
+                                 String spEntityId,
+                                 URI spAssertionConsumerServices,
+                                 IdaKeyStore spKeyStore,
+                                 IdaKeyStore eidasKeyStore,
+                                 boolean checkKeyInfo) {
+        this.idpMetadataResolver = idpMetadataResolver;
+        this.eidasMetadataResolver = eidasMetadataResolver;
         this.spEntityId = spEntityId;
-        this.eidasMetadataUri = eidasMetadataUri;
-        this.assertionConsumerServices = assertionConsumerServices;
+        this.spAssertionConsumerServices = spAssertionConsumerServices;
         this.spKeyStore = spKeyStore;
         this.eidasKeyStore = eidasKeyStore;
         this.checkKeyInfo = checkKeyInfo;
@@ -113,8 +144,7 @@ public class SamlResponseDecrypter {
      * Be warned that this method does little to no validation and is just for testing the contents of a response
      */
     public InboundResponseFromIdp decryptSaml(String samlResponse) {
-        final JerseyClientMetadataResolver jerseyClientMetadataResolver = getMetadataResolver(idpMetadataUri);
-        final SigningCredentialFactory credentialFactory = new SigningCredentialFactory(new AuthnResponseKeyStore(new IdpMetadataPublicKeyStore(jerseyClientMetadataResolver)));
+        final SigningCredentialFactory credentialFactory = new SigningCredentialFactory(new AuthnResponseKeyStore(new IdpMetadataPublicKeyStore(idpMetadataResolver)));
         DecoratedSamlResponseToIdaResponseIssuedByIdpTransformer decoratedSamlResponseToIdaResponseIssuedByIdpTransformer
                 = buildDecoratedSamlResponseToIdaResponseIssuedByIdpTransformer(credentialFactory, spKeyStore);
 
@@ -148,7 +178,7 @@ public class SamlResponseDecrypter {
         }
     }
 
-    private JerseyClientMetadataResolver getMetadataResolver(URI metadataUri) {
+    private static JerseyClientMetadataResolver getMetadataResolver(Client client, URI metadataUri) {
         final JerseyClientMetadataResolver jerseyClientMetadataResolver = new JerseyClientMetadataResolver(null,  client, metadataUri);
         try {
             // a parser pool needs to be provided
@@ -203,7 +233,7 @@ public class SamlResponseDecrypter {
     private ValidatedResponse validateResponse(Response response) {
         SamlResponseSignatureValidator samlResponseSignatureValidator = new SamlResponseSignatureValidator(getSamlMessageSignatureValidator(spEntityId));
         final ValidatedResponse validatedResponse = samlResponseSignatureValidator.validate(response, IDPSSODescriptor.DEFAULT_ELEMENT_NAME);
-        new DestinationValidator(UriBuilder.fromUri(assertionConsumerServices).replacePath(null).build(), assertionConsumerServices.getPath()).validate(response.getDestination());
+        new DestinationValidator(UriBuilder.fromUri(spAssertionConsumerServices).replacePath(null).build(), spAssertionConsumerServices.getPath()).validate(response.getDestination());
         return validatedResponse;
     }
 
@@ -229,7 +259,7 @@ public class SamlResponseDecrypter {
                 new AssertionAttributeStatementValidator(),
                 new AssertionSubjectConfirmationValidator(),
                 signedAssertions
-        ).validate(validatedIdentityAssertion, validatedResponse.getInResponseTo(), assertionConsumerServices.toASCIIString());
+        ).validate(validatedIdentityAssertion, validatedResponse.getInResponseTo(), spAssertionConsumerServices.toASCIIString());
 
         if (validatedResponse.isSuccess()) {
 
@@ -247,8 +277,7 @@ public class SamlResponseDecrypter {
     }
 
     private SamlMessageSignatureValidator getSamlMessageSignatureValidator(String entityId) {
-        return Optional.of(getMetadataResolver(eidasMetadataUri.get()))
-                .map(m -> {
+        return eidasMetadataResolver.map(m -> {
                     try {
                         return new MetadataSignatureTrustEngineFactory().createSignatureTrustEngine(m);
                     } catch (ComponentInitializationException e) {
@@ -277,7 +306,7 @@ public class SamlResponseDecrypter {
                 new AssertionDecrypter(new EncryptionAlgorithmValidator(), new DecrypterFactory().createDecrypter(storeCredentialRetriever.getDecryptingCredentials())),
                 new SamlAssertionsSignatureValidator(new SamlMessageSignatureValidator(new CredentialFactorySignatureValidator(credentialFactory))),
                 new EncryptedResponseFromIdpValidator<>(new SamlStatusToCountryAuthenticationStatusCodeMapper()),
-                new DestinationValidator(UriBuilder.fromUri(assertionConsumerServices).replacePath(null).build(), assertionConsumerServices.getPath()),
+                new DestinationValidator(UriBuilder.fromUri(spAssertionConsumerServices).replacePath(null).build(), spAssertionConsumerServices.getPath()),
                 new ResponseAssertionsFromIdpValidator(
                         new IdentityProviderAssertionValidator(
                                 new IssuerValidator(),

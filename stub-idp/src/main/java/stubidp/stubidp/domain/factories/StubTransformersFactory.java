@@ -21,42 +21,37 @@ import stubidp.saml.security.EntityToEncryptForLocator;
 import stubidp.saml.security.IdaKeyStore;
 import stubidp.saml.security.SigningKeyStore;
 import stubidp.stubidp.domain.IdpIdaStatusMarshaller;
-import stubidp.stubidp.domain.OutboundResponseFromIdp;
+import stubidp.saml.domain.response.OutboundResponseFromIdp;
 import stubidp.stubidp.saml.transformers.outbound.OutboundResponseFromIdpToSamlResponseTransformer;
 
 import java.util.function.Function;
 
 public class StubTransformersFactory {
 
-    private CoreTransformersFactory coreTransformersFactory;
+    private static final CoreTransformersFactory coreTransformersFactory = new CoreTransformersFactory();
+    private static final OpenSamlXmlObjectFactory openSamlXmlObjectFactory = new OpenSamlXmlObjectFactory();
 
-
-    public StubTransformersFactory() {
-        this.coreTransformersFactory = new CoreTransformersFactory();
-    }
+    public StubTransformersFactory() {}
 
     public Function<String, IdaAuthnRequestFromHub> getStringToIdaAuthnRequestFromHub(
             final SigningKeyStore signingKeyStore){
         AuthnRequestSizeValidator sizeValidator = new AuthnRequestSizeValidator(new StringSizeValidator());
-
 
         StringToOpenSamlObjectTransformer<AuthnRequest> stringtoOpenSamlObjectTransformer = coreTransformersFactory.<AuthnRequest>getStringtoOpenSamlObjectTransformer(sizeValidator);
 
         return getAuthnRequestToIdaRequestFromHubTransformer(signingKeyStore).compose(stringtoOpenSamlObjectTransformer);
     }
 
-    public Function<String, AuthnRequest> getStringToAuthnRequest(){
+    public Function<String, AuthnRequest> getStringToAuthnRequest() {
         AuthnRequestSizeValidator sizeValidator = new AuthnRequestSizeValidator(new StringSizeValidator());
 
-        StringToOpenSamlObjectTransformer<AuthnRequest> stringtoOpenSamlObjectTransformer = coreTransformersFactory.<AuthnRequest>getStringtoOpenSamlObjectTransformer(sizeValidator);
-
-        return stringtoOpenSamlObjectTransformer;
+        return coreTransformersFactory.getStringtoOpenSamlObjectTransformer(sizeValidator);
     }
 
     public AuthnRequestToIdaRequestFromHubTransformer getAuthnRequestToIdaRequestFromHubTransformer(SigningKeyStore signingKeyStore) {
         return new AuthnRequestToIdaRequestFromHubTransformer(
                 new IdaAuthnRequestFromHubUnmarshaller(),
-                coreTransformersFactory.<AuthnRequest>getSamlRequestSignatureValidator(signingKeyStore)
+                coreTransformersFactory.getSamlRequestSignatureValidator(signingKeyStore)
         );
     }
 
@@ -98,7 +93,6 @@ public class StubTransformersFactory {
     }
 
     public OutboundResponseFromIdpToSamlResponseTransformer getOutboundResponseFromIdpToSamlResponseTransformer() {
-        OpenSamlXmlObjectFactory openSamlXmlObjectFactory = new OpenSamlXmlObjectFactory();
         return new OutboundResponseFromIdpToSamlResponseTransformer(
                 new IdpIdaStatusMarshaller(openSamlXmlObjectFactory),
                 openSamlXmlObjectFactory,
@@ -107,7 +101,6 @@ public class StubTransformersFactory {
     }
 
     private IdentityProviderAssertionToAssertionTransformer getIdpAssertionToAssertionTransformer() {
-        OpenSamlXmlObjectFactory openSamlXmlObjectFactory = new OpenSamlXmlObjectFactory();
         return new IdentityProviderAssertionToAssertionTransformer(
                 openSamlXmlObjectFactory,
                 new AttributeFactory_1_1(openSamlXmlObjectFactory),
@@ -115,5 +108,4 @@ public class StubTransformersFactory {
                 new OutboundAssertionToSubjectTransformer(openSamlXmlObjectFactory)
         );
     }
-
 }

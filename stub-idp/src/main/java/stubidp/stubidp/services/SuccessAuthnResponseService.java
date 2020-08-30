@@ -7,7 +7,7 @@ import stubidp.saml.domain.assertions.PersistentId;
 import stubidp.shared.repositories.MetadataRepository;
 import stubidp.stubidp.StubIdpIdpBinder;
 import stubidp.stubidp.domain.DatabaseIdpUser;
-import stubidp.stubidp.domain.OutboundResponseFromIdp;
+import stubidp.saml.domain.response.OutboundResponseFromIdp;
 import stubidp.stubidp.domain.SamlResponseFromValue;
 import stubidp.stubidp.domain.factories.AssertionRestrictionsFactory;
 import stubidp.stubidp.domain.factories.IdentityProviderAssertionFactory;
@@ -17,6 +17,7 @@ import stubidp.stubidp.repositories.IdpSession;
 import stubidp.stubidp.repositories.IdpStubsRepository;
 import stubidp.stubidp.resources.idp.HeadlessIdpResource;
 import stubidp.stubidp.saml.transformers.outbound.OutboundResponseFromIdpTransformerProvider;
+import stubidp.utils.security.security.IdGenerator;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -33,6 +34,7 @@ public class SuccessAuthnResponseService {
             .help("Number of sent verify authn responses.")
             .register();
 
+    private final IdGenerator idGenerator;
     private final IdentityProviderAssertionFactory identityProviderAssertionFactory;
     private final IdpStubsRepository idpStubsRepository;
     private final MetadataRepository metadataProvider;
@@ -41,11 +43,13 @@ public class SuccessAuthnResponseService {
 
     @Inject
     public SuccessAuthnResponseService(
+            IdGenerator idGenerator,
             IdentityProviderAssertionFactory identityProviderAssertionFactory,
             IdpStubsRepository idpStubsRepository,
             @Named(StubIdpIdpBinder.HUB_METADATA_REPOSITORY) MetadataRepository metadataProvider,
             AssertionRestrictionsFactory assertionRestrictionsFactory,
             OutboundResponseFromIdpTransformerProvider outboundResponseFromIdpTransformerProvider) {
+        this.idGenerator = idGenerator;
 
         this.identityProviderAssertionFactory = identityProviderAssertionFactory;
         this.idpStubsRepository = idpStubsRepository;
@@ -79,6 +83,7 @@ public class SuccessAuthnResponseService {
                 assertionRestrictionsFactory.createRestrictionsForSendingToHub(requestId));
 
         OutboundResponseFromIdp idaResponse = OutboundResponseFromIdp.createSuccessResponseFromIdp(
+                idGenerator.getId(),
                 session.getIdaAuthnRequestFromHub().getId(),
                 idp.getIssuerId(),
                 matchingDatasetAssertion,

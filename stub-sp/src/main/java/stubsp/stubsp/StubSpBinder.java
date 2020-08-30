@@ -7,13 +7,13 @@ import org.opensaml.xmlsec.algorithm.DigestAlgorithm;
 import org.opensaml.xmlsec.algorithm.SignatureAlgorithm;
 import org.opensaml.xmlsec.algorithm.descriptors.DigestSHA256;
 import org.opensaml.xmlsec.algorithm.descriptors.SignatureRSASHA256;
+import stubidp.saml.domain.configuration.SamlConfiguration;
 import stubidp.saml.metadata.MetadataConfiguration;
 import stubidp.saml.metadata.bundle.MetadataResolverBundle;
 import stubidp.saml.security.EntityToEncryptForLocator;
 import stubidp.saml.security.IdaKeyStore;
 import stubidp.saml.security.IdaKeyStoreCredentialRetriever;
 import stubidp.saml.security.SignatureFactory;
-import stubidp.saml.domain.configuration.SamlConfiguration;
 import stubidp.shared.configuration.SigningKeyPairConfiguration;
 import stubidp.shared.cookies.CookieNames;
 import stubidp.shared.cookies.HmacValidator;
@@ -29,6 +29,7 @@ import stubsp.stubsp.builders.SpMetadataBuilder;
 import stubsp.stubsp.configuration.StubSpConfiguration;
 import stubsp.stubsp.cookies.StubSpCookieNames;
 import stubsp.stubsp.saml.locators.StubIdpEntityToEncryptForLocator;
+import stubsp.stubsp.saml.response.SamlResponseDecrypter;
 import stubsp.stubsp.services.AvailableServicesService;
 import stubsp.stubsp.services.InitiateSingleIdpJourneyService;
 import stubsp.stubsp.services.RootService;
@@ -36,12 +37,15 @@ import stubsp.stubsp.services.SamlResponseService;
 import stubsp.stubsp.services.SamlSpMetadataService;
 import stubsp.stubsp.services.SecureService;
 
+import javax.ws.rs.core.GenericType;
 import java.security.KeyPair;
 import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.security.cert.X509Certificate;
 import java.time.Duration;
-import java.util.Collections;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 
 import static stubidp.shared.csrf.AbstractCSRFCheckProtectionFilter.IS_SECURE_COOKIE_ENABLED;
 
@@ -53,12 +57,18 @@ public class StubSpBinder extends AbstractBinder {
     public static final String SP_SIGNING_CERT = "SpSigningCert";
     public static final String SP_ENCRYPTION_CERT = "SpEncryptionCert";
     public static final String METADATA_VALIDITY_PERIOD = "metadataValidityPeriod";
-    private static final String SP_METADATA_RESOLVER = "SpMetadataResolver";
+    public static final String SP_METADATA_RESOLVER = "SpMetadataResolver";
+    public static final String SP_CHECK_KEY_INFO = "SpCheckKeyInfo";
+    public static final String SP_KEY_STORE = "SpKeyStore";
     private static final String SP_METADATA_CONFIGURATION = "SpMetadataConfiguration";
+
+    public static final String EIDAS_KEY_STORE = "EidasKeyStore";
+    public static final String EIDAS_METADATA_RESOLVER = "EidasMetadataResolver";
 
     private final StubSpConfiguration configuration;
     private final Environment environment;
     private final MetadataResolverBundle<StubSpConfiguration> metadataResolverBundle;
+    private final X509CertificateFactory x509CertificateFactory = new X509CertificateFactory();
 
     public StubSpBinder(StubSpConfiguration configuration,
                         Environment environment,
@@ -88,8 +98,15 @@ public class StubSpBinder extends AbstractBinder {
         // security
         bind(StubSpCookieNames.class).to(CookieNames.class);
 
+        // saml response processing
+        bind(Boolean.FALSE).named(SP_CHECK_KEY_INFO).to(Boolean.class);
+        bind(Optional.empty()).named(EIDAS_METADATA_RESOLVER).to(new GenericType<Optional<MetadataResolver>>() {});
+        bind(Optional.empty()).named(EIDAS_KEY_STORE).to(new GenericType<Optional<IdaKeyStore>>() {});
+        bind(getKeystoreFromConfig(Optional.empty(), Optional.of(configuration.getEncryptionKeyPairConfiguration()))).named(SP_KEY_STORE).to(IdaKeyStore.class);
+
         // saml
         bind(SamlMessageRedirectViewFactory.class).to(SamlMessageRedirectViewFactory.class);
+        bind(SamlResponseDecrypter.class).to(SamlResponseDecrypter.class);
         bind(HmacValidator.class).to(HmacValidator.class);
         bind(HmacDigest.class).to(HmacDigest.class);
         bind(HmacDigest.HmacSha256MacFactory.class).to(HmacDigest.HmacSha256MacFactory.class);
@@ -102,7 +119,6 @@ public class StubSpBinder extends AbstractBinder {
         final MetadataRepository idpMetadataRepository = new MetadataRepository(metadataResolverBundle.getMetadataCredentialResolver(), configuration.getMetadata().get().getExpectedEntityId());
         bind(idpMetadataRepository).named(SP_METADATA_REPOSITORY).to(MetadataRepository.class);
 
-//        final PublicKeyFactory publicKeyFactory = new PublicKeyFactory(new X509CertificateFactory());
         bind(configuration.getMetadata()).named(SP_METADATA_CONFIGURATION).to(MetadataConfiguration.class);
         bind(SpMetadataBuilder.class).to(SpMetadataBuilder.class);
         bind(Duration.ofDays(1)).named(METADATA_VALIDITY_PERIOD).to(Duration.class);
@@ -112,20 +128,25 @@ public class StubSpBinder extends AbstractBinder {
         final DigestSHA256 digestAlgorithm = new DigestSHA256();
         bind(digestAlgorithm).to(DigestAlgorithm.class);
 
-        final IdaKeyStore spMetadataSigningKeyStore = getKeystoreFromConfig(configuration.getSpMetadataSigningKeyPairConfiguration());
-//        bind(spMetadataSigningKeyStore).named(SP_METADATA_SIGNING_KEYSTORE).to(IdaKeyStore.class);
+        final IdaKeyStore spMetadataSigningKeyStore = getKeystoreFromConfig(Optional.of(configuration.getSpMetadataSigningKeyPairConfiguration()), Optional.empty());
         final SignatureFactory signatureFactory = new SignatureFactory(true, new IdaKeyStoreCredentialRetriever(spMetadataSigningKeyStore), signatureAlgorithm, digestAlgorithm);
         bind(signatureFactory).named(SP_METADATA_SIGNATURE_FACTORY).to(SignatureFactory.class);
         bind(configuration.getSigningKeyPairConfiguration().getCert()).named(SP_SIGNING_CERT).to(String.class);
         bind(configuration.getEncryptionKeyPairConfiguration().getCert()).named(SP_ENCRYPTION_CERT).to(String.class);
     }
 
-    private IdaKeyStore getKeystoreFromConfig(SigningKeyPairConfiguration keyPairConfiguration) {
-        PrivateKey privateSigningKey = keyPairConfiguration.getPrivateKey();
-        X509Certificate signingCertificate = new X509CertificateFactory().createCertificate(keyPairConfiguration.getCert());
-        PublicKey publicSigningKey = signingCertificate.getPublicKey();
-        KeyPair signingKeyPair = new KeyPair(publicSigningKey, privateSigningKey);
+    private IdaKeyStore getKeystoreFromConfig(Optional<SigningKeyPairConfiguration> signingKeyPairConfiguration, Optional<SigningKeyPairConfiguration> encryptionKeyPairConfiguration) {
+        X509Certificate signingCertificate = null;
+        KeyPair signingKeyPair = null;
+        if(signingKeyPairConfiguration.isPresent()) {
+            PrivateKey privateSigningKey = signingKeyPairConfiguration.get().getPrivateKey();
+            signingCertificate = x509CertificateFactory.createCertificate(signingKeyPairConfiguration.get().getCert());
+            PublicKey publicSigningKey = signingCertificate.getPublicKey();
+            signingKeyPair = new KeyPair(publicSigningKey, privateSigningKey);
+        }
+        List<KeyPair> encryptionKeyPairs = new ArrayList<>();
+        encryptionKeyPairConfiguration.ifPresent(k -> encryptionKeyPairs.add(new KeyPair(x509CertificateFactory.createCertificate(k.getCert()).getPublicKey(), k.getPrivateKey())));
 
-        return new IdaKeyStore(signingCertificate, signingKeyPair, Collections.emptyList());
+        return new IdaKeyStore(signingCertificate, signingKeyPair, encryptionKeyPairs);
     }
 }

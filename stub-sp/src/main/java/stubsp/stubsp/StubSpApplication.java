@@ -22,12 +22,14 @@ import stubsp.stubsp.filters.NoCacheResponseFilter;
 import stubsp.stubsp.filters.RequireValidLoginFeature;
 import stubsp.stubsp.filters.SecurityHeadersFilter;
 import stubsp.stubsp.filters.StubSpCacheControlFilter;
+import stubsp.stubsp.resources.AuthenticationFailedResource;
 import stubsp.stubsp.resources.AvailableServicesResource;
 import stubsp.stubsp.resources.InitiateSingleIdpJourneyResource;
 import stubsp.stubsp.resources.RootResource;
 import stubsp.stubsp.resources.SamlResponseResource;
 import stubsp.stubsp.resources.SamlSpMetadataResource;
 import stubsp.stubsp.resources.SecureResource;
+import stubsp.stubsp.resources.SuccessResource;
 
 import javax.servlet.DispatcherType;
 import java.util.EnumSet;
@@ -84,6 +86,8 @@ public class StubSpApplication extends Application<StubSpConfiguration> {
         // resources
         environment.jersey().register(RootResource.class);
         environment.jersey().register(SecureResource.class);
+        environment.jersey().register(AuthenticationFailedResource.class);
+        environment.jersey().register(SuccessResource.class);
         environment.jersey().register(AvailableServicesResource.class);
         environment.jersey().register(SamlResponseResource.class);
         environment.jersey().register(SamlSpMetadataResource.class);

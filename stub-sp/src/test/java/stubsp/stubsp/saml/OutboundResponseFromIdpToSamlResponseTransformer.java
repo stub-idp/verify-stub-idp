@@ -1,4 +1,4 @@
-package stubidp.stubidp.saml.transformers.outbound;
+package stubsp.stubsp.saml;
 
 import org.opensaml.saml.saml2.core.Assertion;
 import org.opensaml.saml.saml2.core.Response;
@@ -6,10 +6,10 @@ import org.opensaml.saml.saml2.core.Status;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import stubidp.saml.domain.assertions.IdentityProviderAssertion;
+import stubidp.saml.domain.response.OutboundResponseFromIdp;
+import stubidp.saml.hub.transformers.outbound.IdpIdaStatusMarshaller;
 import stubidp.saml.utils.core.OpenSamlXmlObjectFactory;
 import stubidp.saml.utils.core.transformers.outbound.IdaResponseToSamlResponseTransformer;
-import stubidp.stubidp.domain.IdpIdaStatusMarshaller;
-import stubidp.saml.domain.response.OutboundResponseFromIdp;
 
 import java.util.Optional;
 

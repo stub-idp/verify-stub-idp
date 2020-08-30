@@ -11,17 +11,28 @@ import org.opensaml.saml.saml2.metadata.EntityDescriptor;
 import org.opensaml.xmlsec.signature.support.SignatureException;
 import stubidp.saml.constants.Constants;
 import stubidp.saml.extensions.IdaSamlBootstrap;
+import stubidp.saml.security.EncryptionKeyStore;
+import stubidp.saml.security.IdaKeyStore;
 import stubidp.saml.test.builders.EntityDescriptorBuilder;
 import stubidp.saml.test.builders.IdpSsoDescriptorBuilder;
 import stubidp.saml.test.builders.KeyDescriptorBuilder;
 import stubidp.saml.test.metadata.EntitiesDescriptorFactory;
 import stubidp.saml.test.metadata.MetadataFactory;
+import stubidp.shared.configuration.SigningKeyPairConfiguration;
+import stubidp.test.devpki.TestCertificateStrings;
 import stubidp.test.utils.httpstub.HttpStubRule;
 import stubidp.test.utils.keystore.KeyStoreResource;
 import stubidp.test.utils.keystore.builders.KeyStoreResourceBuilder;
+import stubidp.utils.security.security.PrivateKeyFactory;
+import stubidp.utils.security.security.PublicKeyFactory;
+import stubidp.utils.security.security.X509CertificateFactory;
 import stubsp.stubsp.StubSpApplication;
+import stubsp.stubsp.Urls;
 import stubsp.stubsp.configuration.StubSpConfiguration;
 
+import javax.ws.rs.core.UriBuilder;
+import java.net.URI;
+import java.security.KeyPair;
 import java.util.ArrayList;
 import java.util.Base64;
 import java.util.HashMap;
@@ -32,12 +43,16 @@ import java.util.stream.Collectors;
 import static stubidp.test.devpki.TestCertificateStrings.METADATA_SIGNING_A_PRIVATE_KEY;
 import static stubidp.test.devpki.TestCertificateStrings.METADATA_SIGNING_A_PUBLIC_CERT;
 import static stubidp.test.devpki.TestCertificateStrings.STUB_IDP_PUBLIC_PRIMARY_CERT;
+import static stubidp.test.devpki.TestCertificateStrings.STUB_IDP_PUBLIC_PRIMARY_PRIVATE_KEY;
 import static stubidp.test.devpki.TestCertificateStrings.TEST_RP_PRIVATE_ENCRYPTION_KEY;
 import static stubidp.test.devpki.TestCertificateStrings.TEST_RP_PRIVATE_SIGNING_KEY;
 import static stubidp.test.devpki.TestCertificateStrings.TEST_RP_PUBLIC_ENCRYPTION_CERT;
 import static stubidp.test.devpki.TestCertificateStrings.TEST_RP_PUBLIC_SIGNING_CERT;
 
 public class StubSpAppExtension extends DropwizardAppExtension<StubSpConfiguration> {
+
+    private static final X509CertificateFactory x509CertificateFactory = new X509CertificateFactory();
+    private static final PublicKeyFactory publicKeyFactory = new PublicKeyFactory(x509CertificateFactory);
 
     static {
         IdaSamlBootstrap.bootstrap();
@@ -46,8 +61,9 @@ public class StubSpAppExtension extends DropwizardAppExtension<StubSpConfigurati
     private static final Logger LOG = Logger.getLogger(StubSpAppExtension.class);
     private static final HttpStubRule metadataServer = new HttpStubRule();
     private static final String IDP_METADATA_PATH = "/saml/metadata/idp";
+    public static final String SP_ENTITY_ID = String.format("http://stub_sp.acme.org/%s/SSO/POST", "stub-sp");
+    public static final String IDP_ENTITY_ID = String.format("http://stub_idp.acme.org/%s/SSO/POST", "stub-idp-one");
 
-    private static final String IDP_ENTITY_ID = String.format("http://stub_idp.acme.org/%s/SSO/POST", "stub-idp-one");
     private static final KeyStoreResource metadataTrustStore = KeyStoreResourceBuilder.aKeyStoreResource().withCertificate("metadataCA", CACertificates.TEST_METADATA_CA).withCertificate("rootCA", CACertificates.TEST_ROOT_CA).build();
     private static final KeyStoreResource idpTrustStore = KeyStoreResourceBuilder.aKeyStoreResource().withCertificate("idpCA", CACertificates.TEST_IDP_CA).withCertificate("rootCA", CACertificates.TEST_ROOT_CA).build();
 
@@ -57,6 +73,8 @@ public class StubSpAppExtension extends DropwizardAppExtension<StubSpConfigurati
                 Map.entry("server.adminConnectors[0].port", "0"),
                 Map.entry("logging.appenders[0].type", "console"),
                 Map.entry("server.requestLog.appenders[0].type", "console"),
+                Map.entry("saml.entityId", SP_ENTITY_ID),
+                Map.entry("saml.expectedDestination", getExpectedDestinationHost()),
                 Map.entry("metadata.uri", "http://localhost:" + metadataServer.getPort() + IDP_METADATA_PATH),
                 Map.entry("metadata.expectedEntityId", IDP_ENTITY_ID),
                 Map.entry("metadata.trustStore.store", metadataTrustStore.getAbsolutePath()),
@@ -84,6 +102,14 @@ public class StubSpAppExtension extends DropwizardAppExtension<StubSpConfigurati
                 .map(o -> ConfigOverride.config(o.getKey(), o.getValue()))
                 .collect(Collectors.toUnmodifiableList());
         return overrides.toArray(new ConfigOverride[config.size()]);
+    }
+
+    public static URI getExpectedDestination() {
+        return UriBuilder.fromUri(getExpectedDestinationHost() + Urls.SAML_SSO_RESPONSE_RESOURCE).build();
+    }
+
+    private static String getExpectedDestinationHost() {
+        return "http://localhost:0";
     }
 
     public StubSpAppExtension() {
@@ -124,5 +150,15 @@ public class StubSpAppExtension extends DropwizardAppExtension<StubSpConfigurati
         EntitiesDescriptor entitiesDescriptor = new EntitiesDescriptorFactory()
                 .signedEntitiesDescriptor(entityDescriptors, METADATA_SIGNING_A_PUBLIC_CERT, METADATA_SIGNING_A_PRIVATE_KEY);
         return new MetadataFactory().metadata(entitiesDescriptor);
+    }
+
+    public EncryptionKeyStore getSpEncryptionTrustStore() {
+        return x -> publicKeyFactory.createPublicKey(getConfiguration().getEncryptionKeyPairConfiguration().getCert());
+    }
+
+    public IdaKeyStore getIdpSigningKeyStore() {
+        return new IdaKeyStore(x509CertificateFactory.createCertificate(STUB_IDP_PUBLIC_PRIMARY_CERT),
+                new KeyPair(publicKeyFactory.createPublicKey(STUB_IDP_PUBLIC_PRIMARY_CERT), new PrivateKeyFactory().createPrivateKey(Base64.getMimeDecoder().decode(STUB_IDP_PUBLIC_PRIMARY_PRIVATE_KEY))),
+                List.of());
     }
 }

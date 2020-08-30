@@ -7,6 +7,7 @@ import java.security.spec.InvalidKeySpecException;
 import java.security.spec.KeySpec;
 import java.security.spec.PKCS8EncodedKeySpec;
 
+// DUPLICATE CLASS
 class PrivateKeyFactory {
 
     public PrivateKey createPrivateKey(byte[] cert) {

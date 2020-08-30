@@ -1,9 +1,7 @@
-package stubidp.stubidp.domain;
+package stubidp.saml.domain.response;
 
 import stubidp.saml.domain.assertions.IdentityProviderAssertion;
 import stubidp.saml.domain.assertions.IdpIdaStatus;
-import stubidp.saml.domain.response.IdaSamlResponse;
-import stubidp.utils.security.security.IdGenerator;
 
 import java.io.Serializable;
 import java.net.URI;
@@ -12,14 +10,12 @@ import java.util.Objects;
 import java.util.Optional;
 
 public class OutboundResponseFromIdp extends IdaSamlResponse implements Serializable {
-    private static IdGenerator idGenerator = new IdGenerator();
     private Optional<IdentityProviderAssertion> matchingDatasetAssertion;
     private Optional<IdentityProviderAssertion> authnStatementAssertion;
     private IdpIdaStatus status;
 
     @SuppressWarnings("unused") // needed for JAXB
-    private OutboundResponseFromIdp() {
-    }
+    private OutboundResponseFromIdp() {}
 
     public OutboundResponseFromIdp(
             String id,
@@ -47,6 +43,7 @@ public class OutboundResponseFromIdp extends IdaSamlResponse implements Serializ
     }
 
     public static OutboundResponseFromIdp createSuccessResponseFromIdp(
+            String responseId,
             String inResponseTo,
             String issuerId,
             IdentityProviderAssertion matchingDatasetAssertion,
@@ -54,7 +51,7 @@ public class OutboundResponseFromIdp extends IdaSamlResponse implements Serializ
             URI destination) {
 
         return new OutboundResponseFromIdp(
-                idGenerator.getId(),
+                responseId,
                 inResponseTo,
                 issuerId,
                 Instant.now(),
@@ -65,24 +62,28 @@ public class OutboundResponseFromIdp extends IdaSamlResponse implements Serializ
     }
 
     public static OutboundResponseFromIdp createNoAuthnContextResponseIssuedByIdp(
+            String responseId,
             String inResponseTo,
             String issuerId,
             URI destination) {
-        return getOutboundResponseFromIdpWithNoAssertions(inResponseTo, issuerId, destination, IdpIdaStatus.noAuthenticationContext());
+        return getOutboundResponseFromIdpWithNoAssertions(responseId, inResponseTo, issuerId, destination, IdpIdaStatus.noAuthenticationContext());
     }
 
     public static OutboundResponseFromIdp createUpliftFailedResponseIssuedByIdp(
+            String responseId,
             String inResponseTo,
             String issuerId,
             URI destination) {
-        return getOutboundResponseFromIdpWithNoAssertions(inResponseTo, issuerId, destination, IdpIdaStatus.upliftFailed());
+        return getOutboundResponseFromIdpWithNoAssertions(responseId, inResponseTo, issuerId, destination, IdpIdaStatus.upliftFailed());
     }
 
     public static OutboundResponseFromIdp createAuthnFailedResponseIssuedByIdp(
+            String responseId,
             String inResponseTo,
             String issuerId,
             URI destination) {
         return getOutboundResponseFromIdpWithNoAssertions(
+                responseId,
                 inResponseTo,
                 issuerId,
                 destination,
@@ -90,29 +91,31 @@ public class OutboundResponseFromIdp extends IdaSamlResponse implements Serializ
     }
 
     public static OutboundResponseFromIdp createRequesterErrorResponseIssuedByIdp(
+            String responseId,
             String inResponseTo,
             String issuerId,
             URI destination, String requesterErrorMessage) {
 
         String message = (Objects.isNull(requesterErrorMessage) || requesterErrorMessage.isBlank()) ? null : requesterErrorMessage;
         return getOutboundResponseFromIdpWithNoAssertions(
+                responseId,
                 inResponseTo,
                 issuerId,
                 destination,
                 IdpIdaStatus.requesterError(Optional.ofNullable(message)));
     }
 
-    public static OutboundResponseFromIdp createAuthnCancelResponseIssuedByIdp(String inResponseTo, String issuerId, URI destination) {
-        return getOutboundResponseFromIdpWithNoAssertions(inResponseTo, issuerId, destination, IdpIdaStatus.authenticationCancelled());
+    public static OutboundResponseFromIdp createAuthnCancelResponseIssuedByIdp(String responseId, String inResponseTo, String issuerId, URI destination) {
+        return getOutboundResponseFromIdpWithNoAssertions(responseId, inResponseTo, issuerId, destination, IdpIdaStatus.authenticationCancelled());
     }
 
-    public static OutboundResponseFromIdp createAuthnPendingResponseIssuedByIdp(String inResponseTo, String issuerId, URI destination) {
-        return getOutboundResponseFromIdpWithNoAssertions(inResponseTo, issuerId, destination, IdpIdaStatus.authenticationPending());
+    public static OutboundResponseFromIdp createAuthnPendingResponseIssuedByIdp(String responseId, String inResponseTo, String issuerId, URI destination) {
+        return getOutboundResponseFromIdpWithNoAssertions(responseId, inResponseTo, issuerId, destination, IdpIdaStatus.authenticationPending());
     }
 
-    private static OutboundResponseFromIdp getOutboundResponseFromIdpWithNoAssertions(String inResponseTo, String issuerId, URI destination, IdpIdaStatus status) {
+    private static OutboundResponseFromIdp getOutboundResponseFromIdpWithNoAssertions(String responseId, String inResponseTo, String issuerId, URI destination, IdpIdaStatus status) {
         return new OutboundResponseFromIdp(
-                idGenerator.getId(),
+                responseId,
                 inResponseTo,
                 issuerId,
                 Instant.now(),

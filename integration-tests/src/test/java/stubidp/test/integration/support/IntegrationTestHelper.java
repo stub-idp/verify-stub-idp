@@ -1,6 +1,8 @@
 package stubidp.test.integration.support;
 
-public class IntegrationTestHelper {
+import stubidp.saml.test.OpenSAMLRunner;
+
+public class IntegrationTestHelper extends OpenSAMLRunner {
     static {
     }
 }

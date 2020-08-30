@@ -4,6 +4,7 @@ import javax.inject.Inject;
 import java.security.PublicKey;
 import java.security.cert.Certificate;
 
+// DUPLICATE CLASS
 public class PublicKeyFactory {
 
     private X509CertificateFactory certificateFactory;

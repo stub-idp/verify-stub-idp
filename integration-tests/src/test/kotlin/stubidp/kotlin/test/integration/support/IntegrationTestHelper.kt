@@ -1,5 +1,7 @@
 package stubidp.kotlin.test.integration.support
 
-open class IntegrationTestHelper {
+import stubidp.saml.test.OpenSAMLRunner
+
+open class IntegrationTestHelper : OpenSAMLRunner() {
     companion object
 }

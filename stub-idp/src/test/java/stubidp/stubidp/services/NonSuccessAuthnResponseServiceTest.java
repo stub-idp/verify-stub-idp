@@ -12,13 +12,14 @@ import stubidp.saml.domain.assertions.IdpIdaStatus;
 import stubidp.saml.domain.request.IdaAuthnRequestFromHub;
 import stubidp.shared.repositories.MetadataRepository;
 import stubidp.stubidp.domain.FraudIndicator;
-import stubidp.stubidp.domain.OutboundResponseFromIdp;
+import stubidp.saml.domain.response.OutboundResponseFromIdp;
 import stubidp.stubidp.domain.factories.AssertionFactory;
 import stubidp.stubidp.repositories.Idp;
 import stubidp.stubidp.repositories.IdpSession;
 import stubidp.stubidp.repositories.IdpStubsRepository;
 import stubidp.stubidp.saml.transformers.outbound.OutboundResponseFromIdpTransformerProvider;
 import stubidp.utils.rest.common.SessionId;
+import stubidp.utils.security.security.IdGenerator;
 
 import java.net.URI;
 import java.time.Instant;
@@ -61,6 +62,7 @@ public class NonSuccessAuthnResponseServiceTest {
     @BeforeEach
     public void createResource() {
         nonSuccessAuthnResponseService = new NonSuccessAuthnResponseService(
+                new IdGenerator(),
                 idpStubsRepository,
                 metadataRepository,
                 assertionFactory,

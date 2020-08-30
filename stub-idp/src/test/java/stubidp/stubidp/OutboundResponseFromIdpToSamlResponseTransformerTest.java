@@ -12,7 +12,7 @@ import stubidp.saml.utils.core.OpenSamlXmlObjectFactory;
 import stubidp.saml.utils.core.transformers.outbound.OutboundAssertionToSubjectTransformer;
 import stubidp.saml.utils.hub.factories.AttributeFactory_1_1;
 import stubidp.stubidp.domain.IdpIdaStatusMarshaller;
-import stubidp.stubidp.domain.OutboundResponseFromIdp;
+import stubidp.saml.domain.response.OutboundResponseFromIdp;
 import stubidp.stubidp.saml.transformers.outbound.OutboundResponseFromIdpToSamlResponseTransformer;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -43,6 +43,7 @@ public class OutboundResponseFromIdpToSamlResponseTransformerTest extends OpenSA
         Response response = openSamlXmlObjectFactory.createResponse();
         IdentityProviderAssertion assertion = anIdentityProviderAssertion().withMatchingDataset(MatchingDatasetBuilder.aMatchingDataset().build()).build();
         OutboundResponseFromIdp originalResponse = OutboundResponseFromIdp.createSuccessResponseFromIdp(
+                "response-id",
                 "in-response-to",
                 "issuer-id",
                 assertion,

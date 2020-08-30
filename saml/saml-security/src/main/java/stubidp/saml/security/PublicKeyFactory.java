@@ -9,6 +9,7 @@ import java.security.cert.CertificateException;
 import java.security.cert.CertificateFactory;
 import java.util.Base64;
 
+// DUPLICATE CLASS
 public class PublicKeyFactory {
 
     private final CertificateFactory certificateFactory;
