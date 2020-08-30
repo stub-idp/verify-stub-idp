@@ -6,7 +6,7 @@ import io.dropwizard.util.Duration;
 import stubidp.metrics.prometheus.config.PrometheusConfiguration;
 import stubidp.saml.metadata.MetadataResolverConfiguration;
 import stubidp.saml.metadata.MultiTrustStoresBackedMetadataConfiguration;
-import stubidp.shared.configuration.SigningKeyPairConfiguration;
+import stubidp.shared.configuration.KeyPairConfiguration;
 import stubidp.utils.rest.cache.AssetCacheConfiguration;
 import stubidp.utils.rest.common.ServiceInfoConfiguration;
 import stubidp.utils.rest.configuration.ServiceNameConfiguration;
@@ -63,17 +63,17 @@ public class StubSpConfiguration extends Configuration implements PrometheusConf
     @NotNull
     @Valid
     @JsonProperty
-    protected SigningKeyPairConfiguration signingKeyPairConfiguration;
+    protected KeyPairConfiguration signingKeyPairConfiguration;
 
     @NotNull
     @Valid
     @JsonProperty
-    protected SigningKeyPairConfiguration encryptionKeyPairConfiguration;
+    protected KeyPairConfiguration encryptionKeyPairConfiguration;
 
     @NotNull
     @Valid
     @JsonProperty
-    protected SigningKeyPairConfiguration spMetadataSigningKeyPairConfiguration;
+    protected KeyPairConfiguration spMetadataSigningKeyPairConfiguration;
 
     @NotNull
     @Valid
@@ -120,15 +120,15 @@ public class StubSpConfiguration extends Configuration implements PrometheusConf
         return saml;
     }
 
-    public SigningKeyPairConfiguration getSigningKeyPairConfiguration() {
+    public KeyPairConfiguration getSigningKeyPairConfiguration() {
         return signingKeyPairConfiguration;
     }
 
-    public SigningKeyPairConfiguration getEncryptionKeyPairConfiguration() {
+    public KeyPairConfiguration getEncryptionKeyPairConfiguration() {
         return encryptionKeyPairConfiguration;
     }
 
-    public SigningKeyPairConfiguration getSpMetadataSigningKeyPairConfiguration() {
+    public KeyPairConfiguration getSpMetadataSigningKeyPairConfiguration() {
         return spMetadataSigningKeyPairConfiguration;
     }
 

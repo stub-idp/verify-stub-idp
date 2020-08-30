@@ -8,7 +8,7 @@ import stubidp.metrics.prometheus.config.PrometheusConfiguration;
 import stubidp.saml.metadata.MetadataResolverConfiguration;
 import stubidp.saml.metadata.MultiTrustStoresBackedMetadataConfiguration;
 import stubidp.saml.domain.configuration.SamlConfiguration;
-import stubidp.shared.configuration.SigningKeyPairConfiguration;
+import stubidp.shared.configuration.KeyPairConfiguration;
 import stubidp.stubidp.repositories.reaper.StaleSessionReaperConfiguration;
 import stubidp.utils.rest.cache.AssetCacheConfiguration;
 import stubidp.utils.rest.common.ServiceInfoConfiguration;
@@ -53,12 +53,12 @@ public class StubIdpConfiguration extends Configuration implements
     @NotNull
     @Valid
     @JsonProperty
-    protected SigningKeyPairConfiguration signingKeyPairConfiguration;
+    protected KeyPairConfiguration signingKeyPairConfiguration;
 
     @NotNull
     @Valid
     @JsonProperty
-    protected SigningKeyPairConfiguration idpMetadataSigningKeyPairConfiguration;
+    protected KeyPairConfiguration idpMetadataSigningKeyPairConfiguration;
 
     @Valid
     @JsonProperty
@@ -162,11 +162,11 @@ public class StubIdpConfiguration extends Configuration implements
         return shouldCacheAssets;
     }
 
-    public SigningKeyPairConfiguration getSigningKeyPairConfiguration(){
+    public KeyPairConfiguration getSigningKeyPairConfiguration(){
         return signingKeyPairConfiguration;
     }
 
-    public SigningKeyPairConfiguration getIdpMetadataSigningKeyPairConfiguration(){
+    public KeyPairConfiguration getIdpMetadataSigningKeyPairConfiguration(){
         return idpMetadataSigningKeyPairConfiguration;
     }
 

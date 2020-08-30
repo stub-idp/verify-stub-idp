@@ -15,7 +15,7 @@ import stubidp.saml.security.IdaKeyStoreCredentialRetriever;
 import stubidp.saml.security.SignatureFactory;
 import stubidp.saml.security.signature.SignatureRSASSAPSS;
 import stubidp.saml.utils.core.api.CoreTransformersFactory;
-import stubidp.shared.configuration.SigningKeyPairConfiguration;
+import stubidp.shared.configuration.KeyPairConfiguration;
 import stubidp.shared.repositories.MetadataRepository;
 import stubidp.stubidp.builders.CountryMetadataBuilder;
 import stubidp.stubidp.builders.CountryMetadataSigningHelper;
@@ -138,7 +138,7 @@ public class StubIdpEidasBinder extends AbstractBinder {
         }
     }
 
-    private IdaKeyStore getKeystoreFromConfig(SigningKeyPairConfiguration keyPairConfiguration) {
+    private IdaKeyStore getKeystoreFromConfig(KeyPairConfiguration keyPairConfiguration) {
         PrivateKey privateSigningKey = keyPairConfiguration.getPrivateKey();
         X509Certificate signingCertificate = new X509CertificateFactory().createCertificate(keyPairConfiguration.getCert());
         PublicKey publicSigningKey = signingCertificate.getPublicKey();

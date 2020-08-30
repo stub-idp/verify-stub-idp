@@ -16,7 +16,7 @@ import stubidp.saml.security.SignatureFactory;
 import stubidp.saml.security.SigningKeyStore;
 import stubidp.saml.domain.configuration.SamlConfiguration;
 import stubidp.stubidp.saml.transformers.inbound.AuthnRequestToIdaRequestFromHubTransformer;
-import stubidp.shared.configuration.SigningKeyPairConfiguration;
+import stubidp.shared.configuration.KeyPairConfiguration;
 import stubidp.shared.repositories.MetadataRepository;
 import stubidp.stubidp.builders.IdpMetadataBuilder;
 import stubidp.stubidp.configuration.AssertionLifetimeConfiguration;
@@ -125,7 +125,7 @@ public class StubIdpIdpBinder extends AbstractBinder {
         bind(UserService.class).to(UserService.class);
     }
 
-    private IdaKeyStore getKeystoreFromConfig(SigningKeyPairConfiguration keyPairConfiguration) {
+    private IdaKeyStore getKeystoreFromConfig(KeyPairConfiguration keyPairConfiguration) {
         PrivateKey privateSigningKey = keyPairConfiguration.getPrivateKey();
         X509Certificate signingCertificate = new X509CertificateFactory().createCertificate(keyPairConfiguration.getCert());
         PublicKey publicSigningKey = signingCertificate.getPublicKey();

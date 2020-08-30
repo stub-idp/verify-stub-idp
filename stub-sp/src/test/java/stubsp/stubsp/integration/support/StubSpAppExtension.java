@@ -18,8 +18,6 @@ import stubidp.saml.test.builders.IdpSsoDescriptorBuilder;
 import stubidp.saml.test.builders.KeyDescriptorBuilder;
 import stubidp.saml.test.metadata.EntitiesDescriptorFactory;
 import stubidp.saml.test.metadata.MetadataFactory;
-import stubidp.shared.configuration.SigningKeyPairConfiguration;
-import stubidp.test.devpki.TestCertificateStrings;
 import stubidp.test.utils.httpstub.HttpStubRule;
 import stubidp.test.utils.keystore.KeyStoreResource;
 import stubidp.test.utils.keystore.builders.KeyStoreResourceBuilder;

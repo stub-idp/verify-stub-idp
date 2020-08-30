@@ -14,7 +14,7 @@ import stubidp.saml.security.EntityToEncryptForLocator;
 import stubidp.saml.security.IdaKeyStore;
 import stubidp.saml.security.IdaKeyStoreCredentialRetriever;
 import stubidp.saml.security.SignatureFactory;
-import stubidp.shared.configuration.SigningKeyPairConfiguration;
+import stubidp.shared.configuration.KeyPairConfiguration;
 import stubidp.shared.cookies.CookieNames;
 import stubidp.shared.cookies.HmacValidator;
 import stubidp.shared.repositories.MetadataRepository;
@@ -135,7 +135,7 @@ public class StubSpBinder extends AbstractBinder {
         bind(configuration.getEncryptionKeyPairConfiguration().getCert()).named(SP_ENCRYPTION_CERT).to(String.class);
     }
 
-    private IdaKeyStore getKeystoreFromConfig(Optional<SigningKeyPairConfiguration> signingKeyPairConfiguration, Optional<SigningKeyPairConfiguration> encryptionKeyPairConfiguration) {
+    private IdaKeyStore getKeystoreFromConfig(Optional<KeyPairConfiguration> signingKeyPairConfiguration, Optional<KeyPairConfiguration> encryptionKeyPairConfiguration) {
         X509Certificate signingCertificate = null;
         KeyPair signingKeyPair = null;
         if(signingKeyPairConfiguration.isPresent()) {

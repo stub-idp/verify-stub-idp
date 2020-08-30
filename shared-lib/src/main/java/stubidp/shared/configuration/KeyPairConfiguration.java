@@ -8,7 +8,7 @@ import javax.validation.Valid;
 import java.security.PrivateKey;
 import java.util.Optional;
 
-public class SigningKeyPairConfiguration {
+public class KeyPairConfiguration {
 
     @Valid
     @JsonProperty
