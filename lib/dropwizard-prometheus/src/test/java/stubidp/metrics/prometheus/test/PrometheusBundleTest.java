@@ -20,11 +20,13 @@ import static stubidp.metrics.prometheus.config.TestResource.TEST_RESOURCE_PATH;
 public class PrometheusBundleTest {
 
     public static final DropwizardAppExtension<TestConfiguration> appRuleWithMetrics = new DropwizardAppExtension<>(TestApplication.class, null,
+            ConfigOverride.config("logging.level", "WARN"),
             ConfigOverride.config("server.applicationConnectors[0].port", "0"),
             ConfigOverride.config("server.adminConnectors[0].port", "0"),
             ConfigOverride.config("prometheusEnabled", "true"));
 
     public static final DropwizardAppExtension<TestConfiguration> appRuleWithoutMetrics = new DropwizardAppExtension<>(TestApplication.class, null,
+            ConfigOverride.config("logging.level", "WARN"),
             ConfigOverride.config("server.applicationConnectors[0].port", "0"),
             ConfigOverride.config("server.adminConnectors[0].port", "0"),
             ConfigOverride.config("prometheusEnabled", "false"));

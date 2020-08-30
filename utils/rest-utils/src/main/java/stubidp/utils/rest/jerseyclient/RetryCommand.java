@@ -56,20 +56,20 @@ public class RetryCommand<T> {
     }
 
     private void logRetryFail(Exception e, Supplier<T> function) {
-        LOG.warn(format("Command %s failed on retry %d of %d.",
+        LOG.debug(format("Command %s failed on retry %d of %d.",
                 function.toString(),
                 retryCounter,
                 maxRetries), e);
     }
 
     private void logInitialFail(Exception e, Supplier<T> function) {
-        LOG.warn(format("Command %s failed, will be retried %d times.",
+        LOG.debug(format("Command %s failed, will be retried %d times.",
                 function.toString(),
                 maxRetries), e);
     }
 
     private T failAndStopRetry(Exception e, Supplier<T> function) {
-        LOG.warn("Max retries exceeded for " + function.toString());
+        LOG.debug("Max retries exceeded for " + function.toString());
         throw new ProcessingException(format("Command %s failed on all of %d retries.",
                 function.toString(),
                 maxRetries), e);

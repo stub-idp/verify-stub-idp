@@ -6,9 +6,8 @@ server:
     - type: http
       port: 0
 
-
 logging:
-  level: INFO
+  level: WARN
   appenders:
     - type: console
 

@@ -9,7 +9,6 @@ server:
         currentLogFilename: ./build/logstash-file-requests.log
         archivedLogFilenamePattern: ./build/logstash-file-requests.log.%d.log
         archivedFileCount: 1
-      - type: console
 
 logging:
     appenders:
@@ -17,4 +16,3 @@ logging:
           currentLogFilename: ./build/logstash-file-log.log
           archivedLogFilenamePattern: ./build/logstash-file-log.log.%d.log
           archivedFileCount: 1
-        - type: console
