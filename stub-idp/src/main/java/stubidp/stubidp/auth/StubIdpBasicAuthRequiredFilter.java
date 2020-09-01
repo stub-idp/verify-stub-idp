@@ -1,6 +1,5 @@
 package stubidp.stubidp.auth;
 
-import com.google.common.base.Splitter;
 import org.mindrot.jbcrypt.BCrypt;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,7 +14,6 @@ import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.container.ContainerRequestContext;
 import javax.ws.rs.container.ContainerRequestFilter;
 import javax.ws.rs.core.Response;
-import java.util.Iterator;
 import java.util.List;
 
 import static java.text.MessageFormat.format;
@@ -26,7 +24,6 @@ public class StubIdpBasicAuthRequiredFilter implements ContainerRequestFilter {
 
     private final StubIdpConfiguration stubIdpConfiguration;
     private final IdpStubsRepository idpStubsRepository;
-    private final Splitter splitter = Splitter.on(':').limit(2);
     private final int credOffset = "Basic ".length();
 
     @Inject
@@ -71,13 +68,10 @@ public class StubIdpBasicAuthRequiredFilter implements ContainerRequestFilter {
         String basicAuthHeaderValue = containerRequestContext.getHeaderString("Authorization");
         if (basicAuthHeaderValue != null && basicAuthHeaderValue.startsWith("Basic ")) {
             String combined = StringEncoding.fromBase64Encoded(basicAuthHeaderValue.substring(credOffset));
-            Iterator<String> credentials = splitter.split(combined).iterator();
-
-            if (credentials.hasNext()) {
-                providedUserName = credentials.next();
-                if (credentials.hasNext()) {
-                    providedPassword = credentials.next();
-                }
+            String[] credentials = combined.trim().split(":");
+            if(credentials.length==2) {
+                providedUserName = credentials[0];
+                providedPassword = credentials[1];
             }
         }
 

@@ -1,8 +1,7 @@
 package stubidp.stubidp.services;
 
-import com.google.common.cache.CacheBuilder;
-import com.google.common.cache.CacheLoader;
-import com.google.common.cache.LoadingCache;
+import com.github.benmanes.caffeine.cache.Caffeine;
+import com.github.benmanes.caffeine.cache.LoadingCache;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import stubidp.stubidp.configuration.SingleIdpConfiguration;
@@ -24,14 +23,9 @@ public class ServiceListService {
 
     private final SingleIdpConfiguration singleIdpConfiguration;
     private final JsonClient jsonClient;
-    private final LoadingCache<Source, List<Service>> servicesCache = CacheBuilder.newBuilder()
+    private final LoadingCache<Source, List<Service>> servicesCache = Caffeine.newBuilder()
             .expireAfterWrite(Duration.ofSeconds(5))
-            .build(new CacheLoader<>() {
-                @Override
-                public List<Service> load(Source key) {
-                    return readServices();
-                }
-            });
+            .build(k -> readServices());
 
     @Inject
     public ServiceListService(SingleIdpConfiguration singleIdpConfiguration, JsonClient jsonClient) {
@@ -44,7 +38,7 @@ public class ServiceListService {
             throw new FeatureNotEnabledException();
         }
 
-        return servicesCache.getUnchecked(Source.Hub);
+        return servicesCache.get(Source.Hub);
     }
 
     private List<Service> readServices() {

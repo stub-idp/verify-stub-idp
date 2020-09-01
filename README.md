@@ -9,7 +9,7 @@ This microservice is a stub IDP that can be white-labelled to simulate any IDP, 
 
 * Monorepo containing all code apart from third party dependencies
 * Minimized use of third party dependencies
-* Guava -> stdlib wherever possible
+* No guava, only stdlib & Caffeine
 * Dependabot updates
 * Dropwizard 2
 * OpenSAML 4

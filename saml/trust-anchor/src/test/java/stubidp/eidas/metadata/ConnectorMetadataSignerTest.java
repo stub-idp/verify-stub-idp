@@ -2,7 +2,6 @@ package stubidp.eidas.metadata;
 
 import ch.qos.logback.classic.Level;
 import ch.qos.logback.classic.Logger;
-import com.google.common.io.Resources;
 import net.shibboleth.utilities.java.support.xml.XMLParserException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -47,8 +46,8 @@ public class ConnectorMetadataSignerTest {
 
         InitializationService.initialize();
         Security.addProvider(new org.bouncycastle.jce.provider.BouncyCastleProvider());
-        privateKeyForSigning = FileKeyLoader.loadECKey(new File(Resources.getResource("pki/ecdsa.test.pk8").getFile()));
-        certificateForSigning = FileKeyLoader.loadCert(new File(Resources.getResource("pki/ecdsa.test.crt").getFile()));
+        privateKeyForSigning = FileKeyLoader.loadECKey(new File(getClass().getClassLoader().getResource("pki/ecdsa.test.pk8").getFile()));
+        certificateForSigning = FileKeyLoader.loadCert(new File(getClass().getClassLoader().getResource("pki/ecdsa.test.crt").getFile()));
         unsignedMetadataString = loadMetadataString("metadata/unsigned/metadata.xml");
     }
 

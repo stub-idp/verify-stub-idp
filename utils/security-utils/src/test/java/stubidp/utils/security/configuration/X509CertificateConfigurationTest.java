@@ -2,16 +2,15 @@ package stubidp.utils.security.configuration;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.exc.ValueInstantiationException;
-import com.google.common.io.Resources;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
+import java.io.InputStream;
 import java.util.Arrays;
 import java.util.Base64;
 import java.util.List;
+import java.util.Objects;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static stubidp.utils.security.security.Certificate.BEGIN_CERT;
@@ -59,9 +58,8 @@ public class X509CertificateConfigurationTest {
     }
 
     private String getCertificateString() throws IOException {
-        String path = Resources.getResource("public_key.crt").getFile();
-        byte[] cert = Files.readAllBytes(new File(path).toPath());
-        String fullCert = new String(cert);
+        InputStream stream = Objects.requireNonNull(getClass().getClassLoader().getResourceAsStream("public_key.crt"));
+        String fullCert = new String(stream.readAllBytes());
         return fullCert
                 .replace(BEGIN_CERT, "")
                 .replace(END_CERT, "")

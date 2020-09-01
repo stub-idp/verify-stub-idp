@@ -1,6 +1,6 @@
 package stubidp.stubidp.saml;
 
-import com.google.common.cache.CacheBuilder;
+import com.github.benmanes.caffeine.cache.Caffeine;
 import io.prometheus.client.Collector;
 import io.prometheus.client.GaugeMetricFamily;
 import net.shibboleth.utilities.java.support.component.ComponentInitializationException;
@@ -40,7 +40,7 @@ public abstract class BaseAuthnRequestValidator {
 
     private static final Logger LOG = LoggerFactory.getLogger(BaseAuthnRequestValidator.class);
 
-    private static final ConcurrentMapIdExpirationCache<AuthnRequestIdKey> concurrentMapIdExpirationCache = new ConcurrentMapIdExpirationCache<>(CacheBuilder.newBuilder().expireAfterWrite(java.time.Duration.ofHours(3)).<AuthnRequestIdKey, Instant>build().asMap());
+    private static final ConcurrentMapIdExpirationCache<AuthnRequestIdKey> concurrentMapIdExpirationCache = new ConcurrentMapIdExpirationCache<>(Caffeine.newBuilder().expireAfterWrite(java.time.Duration.ofHours(3)).<AuthnRequestIdKey, Instant>build().asMap());
     private static final Duration requestValidityDuration = Duration.ofMinutes(5); // should be long enough...
     private static final AuthnRequestFromTransactionValidator authnRequestFromTransactionValidator = new AuthnRequestFromTransactionValidator(new IssuerValidator(), new DuplicateAuthnRequestValidator(concurrentMapIdExpirationCache, () -> requestValidityDuration), new AuthnRequestIssueInstantValidator(() -> requestValidityDuration));
     private static final AuthnRequestSizeValidator authnRequestSizeValidator = new AuthnRequestSizeValidator(new StringSizeValidator());

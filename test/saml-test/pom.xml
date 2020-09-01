@@ -82,12 +82,6 @@
         </dependency>
         <!-- transitive dependency updates -->
         <dependency>
-            <groupId>com.google.guava</groupId>
-            <artifactId>guava</artifactId>
-            <version>${guava.version}</version>
-            <scope>compile</scope>
-        </dependency>
-        <dependency>
             <groupId>org.cryptacular</groupId>
             <artifactId>cryptacular</artifactId>
             <version>${cryptacular.version}</version>

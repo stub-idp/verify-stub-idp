@@ -1,6 +1,5 @@
 package stubidp.utils.rest.analytics;
 
-import com.google.common.collect.Maps;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.utils.URIBuilder;
 import org.apache.http.message.BasicNameValuePair;
@@ -24,6 +23,7 @@ import java.time.format.DateTimeFormatterBuilder;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import static java.text.MessageFormat.format;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -114,7 +114,8 @@ public class AnalyticsReporterTest {
 
         URIBuilder testURI = new URIBuilder(analyticsReporter.generateURI("SERVER friendly description of URL", requestContext, Optional.empty(), Optional.of("abc")));
 
-        Map<String, NameValuePair> expectedParams = Maps.uniqueIndex(expectedURI.getQueryParams(), NameValuePair::getName);
+        Map<String, NameValuePair> expectedParams = expectedURI.getQueryParams().stream()
+                .collect(Collectors.toMap(e -> ((NameValuePair)e).getName(), e -> e));
 
         for (NameValuePair param : testURI.getQueryParams()) {
             assertThat(expectedParams).containsEntry(param.getName(), param);
@@ -142,7 +143,8 @@ public class AnalyticsReporterTest {
         Optional<CustomVariable> customVariableOptional = Optional.of(new CustomVariable(1, "RP", "HMRC BLA"));
         URIBuilder testURI = new URIBuilder(analyticsReporter.generateURI("page-title", requestContext, customVariableOptional, visitorId));
 
-        Map<String, NameValuePair> expectedParams = Maps.uniqueIndex(expectedURI.getQueryParams(), NameValuePair::getName);
+        Map<String, NameValuePair> expectedParams = expectedURI.getQueryParams().stream()
+                .collect(Collectors.toMap(e -> ((NameValuePair)e).getName(), e -> e));
 
         for (NameValuePair param : testURI.getQueryParams()) {
             assertThat(expectedParams).containsEntry(param.getName(), param);

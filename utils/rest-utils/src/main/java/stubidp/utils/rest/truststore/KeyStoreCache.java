@@ -1,12 +1,11 @@
 package stubidp.utils.rest.truststore;
 
-import com.google.common.cache.Cache;
-import com.google.common.cache.CacheBuilder;
+import com.github.benmanes.caffeine.cache.Cache;
+import com.github.benmanes.caffeine.cache.Caffeine;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import java.security.KeyStore;
-import java.util.concurrent.ExecutionException;
 
 @Singleton
 public class KeyStoreCache {
@@ -17,17 +16,12 @@ public class KeyStoreCache {
     @Inject
     public KeyStoreCache(KeyStoreLoader keyStoreLoader) {
         this.keyStoreLoader = keyStoreLoader;
-        trustStoreCache = CacheBuilder.newBuilder().build();
+        this.trustStoreCache = Caffeine.newBuilder().build();
     }
 
     public KeyStore get(final ClientTrustStoreConfiguration configuration) {
         final String trustStorePath = configuration.getPath();
         final String password = configuration.getPassword();
-
-        try {
-            return trustStoreCache.get(trustStorePath, () -> keyStoreLoader.load(trustStorePath, password));
-        } catch (ExecutionException e) {
-            throw new RuntimeException(e);
-        }
+        return trustStoreCache.get(trustStorePath, p -> keyStoreLoader.load(p, password));
     }
 }

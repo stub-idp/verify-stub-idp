@@ -1,14 +1,15 @@
 package stubidp.utils.security.configuration;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.common.io.Resources;
 import org.junit.jupiter.api.Test;
 
-import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
+import java.io.InputStream;
+import java.net.URISyntaxException;
+import java.net.URL;
 import java.nio.file.Path;
 import java.util.Base64;
+import java.util.Objects;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static stubidp.utils.security.security.Certificate.BEGIN_CERT;
@@ -17,6 +18,7 @@ import static stubidp.utils.security.security.Certificate.END_CERT;
 public class DeserializablePublicKeyConfigurationTest {
 
     private ObjectMapper objectMapper = new ObjectMapper();
+    private String CERT_NAME = "public_key.crt";
 
     @Test
     public void shouldDefaultToFileType() throws Exception {
@@ -44,15 +46,16 @@ public class DeserializablePublicKeyConfigurationTest {
 
     private String getCertificateString() {
         try {
-            return new String(Files.readAllBytes(getCertPath()));
+            InputStream stream = Objects.requireNonNull(getClass().getClassLoader().getResourceAsStream(CERT_NAME));
+            return new String(stream.readAllBytes());
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
 
-    private Path getCertPath() {
-        String path = Resources.getResource("public_key.crt").getFile();
-        return new File(path).toPath();
+    private Path getCertPath() throws URISyntaxException {
+        URL url = Objects.requireNonNull(getClass().getClassLoader().getResource(CERT_NAME));
+        return Path.of(url.toURI());
     }
 
     private String getStrippedCert() {

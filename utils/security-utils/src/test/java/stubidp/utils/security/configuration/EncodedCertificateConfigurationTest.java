@@ -2,14 +2,13 @@ package stubidp.utils.security.configuration;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.exc.ValueInstantiationException;
-import com.google.common.io.Resources;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
+import java.io.InputStream;
 import java.util.Base64;
+import java.util.Objects;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -28,9 +27,8 @@ public class EncodedCertificateConfigurationTest {
 
     @Test
     public void should_ThrowExceptionWhenStringDoesNotContainAPublicKey() throws Exception {
-        String path = Resources.getResource("private_key.pk8").getFile();
-        byte[] key = Files.readAllBytes(new File(path).toPath());
-        String encodedKey = Base64.getEncoder().encodeToString(key);
+        InputStream stream = Objects.requireNonNull(getClass().getClassLoader().getResourceAsStream("private_key.pk8"));
+        String encodedKey = Base64.getEncoder().encodeToString(stream.readAllBytes());
         final ValueInstantiationException exception = Assertions.assertThrows(ValueInstantiationException.class,
                 () -> objectMapper.readValue("{\"type\": \"encoded\", \"cert\": \"" + encodedKey + "\", \"name\": \"someId\"}", DeserializablePublicKeyConfiguration.class));
         assertThat(exception.getMessage()).contains("Unable to load certificate");
@@ -44,15 +42,14 @@ public class EncodedCertificateConfigurationTest {
 
     @Test
     public void should_ThrowExceptionWhenIncorrectKeySpecified() throws Exception {
-        String path = getClass().getClassLoader().getResource("empty_file").getPath();
-        String jsonConfig = "{\"type\": \"encoded\", \"certFoo\": \"" + path + "\", \"name\": \"someId\"}";
+        String jsonConfig = "{\"type\": \"encoded\", \"certFoo\": \"" + "empty_file" + "\", \"name\": \"someId\"}";
         Assertions.assertThrows(ValueInstantiationException.class,
                 () -> objectMapper.readValue(jsonConfig, DeserializablePublicKeyConfiguration.class));
     }
 
     private String getCertificateAsString() throws IOException {
-        String path = Resources.getResource("public_key.crt").getFile();
-        byte[] cert = Files.readAllBytes(new File(path).toPath());
+        InputStream stream = Objects.requireNonNull(getClass().getClassLoader().getResourceAsStream("public_key.crt"));
+        byte[] cert = stream.readAllBytes();
         return Base64.getEncoder().encodeToString(cert);
     }
 

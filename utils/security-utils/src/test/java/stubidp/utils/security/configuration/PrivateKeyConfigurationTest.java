@@ -1,16 +1,12 @@
 package stubidp.utils.security.configuration;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.common.io.Resources;
 import org.junit.jupiter.api.Test;
-import stubidp.utils.security.configuration.EncodedPrivateKeyConfiguration;
-import stubidp.utils.security.configuration.PrivateKeyConfiguration;
-import stubidp.utils.security.configuration.PrivateKeyFileConfiguration;
 
-import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
+import java.io.InputStream;
 import java.util.Base64;
+import java.util.Objects;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -39,8 +35,7 @@ public class PrivateKeyConfigurationTest {
     }
 
     private String getKeyAsBase64() throws IOException {
-        String path = Resources.getResource("private_key.pk8").getFile();
-        byte[] key = Files.readAllBytes(new File(path).toPath());
-        return Base64.getEncoder().encodeToString(key);
+        InputStream stream = Objects.requireNonNull(getClass().getClassLoader().getResourceAsStream("private_key.pk8"));
+        return Base64.getEncoder().encodeToString(stream.readAllBytes());
     }
 }
