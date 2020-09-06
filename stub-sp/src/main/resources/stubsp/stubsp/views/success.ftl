@@ -3,3 +3,5 @@
 
 <a href="${secureResource}">Sign-in again</a>
 <a href="${rootResource}">Go back to the Insecure Area</a>
+
+<#include "idpResponse.ftl">

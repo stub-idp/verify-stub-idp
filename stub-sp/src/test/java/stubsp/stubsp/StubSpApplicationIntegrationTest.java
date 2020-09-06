@@ -118,11 +118,8 @@ public class StubSpApplicationIntegrationTest {
                 StubSpAppExtension.getExpectedDestination());
         String samlResponse = idpSamlGenerator.generate(outboundResponseFromIdp);
         Response response2 = post(Urls.SAML_SSO_RESPONSE_RESOURCE, samlResponse, relayState);
-        assertThat(response2.getStatus()).isEqualTo(303);
-        assertThat(response2.getLocation().getPath()).isEqualTo(Urls.SUCCESS_RESOURCE);
-        Response response3 = get(Urls.SUCCESS_RESOURCE);
-        assertThat(response3.getStatus()).isEqualTo(200);
-        assertThat(response3.readEntity(String.class)).contains("You signed in successfully");
+        assertThat(response2.getStatus()).isEqualTo(200);
+        assertThat(response2.readEntity(String.class)).contains("You signed in successfully");
     }
 
     @Test
@@ -140,11 +137,8 @@ public class StubSpApplicationIntegrationTest {
                 StubSpAppExtension.getExpectedDestination());
         String samlResponse = idpSamlGenerator.generate(outboundResponseFromIdp);
         Response response2 = post(Urls.SAML_SSO_RESPONSE_RESOURCE, samlResponse, relayState);
-        assertThat(response2.getStatus()).isEqualTo(303);
-        assertThat(response2.getLocation().getPath()).isEqualTo(Urls.AUTHENTICATION_FAILURE_RESOURCE);
-        Response response3 = get(Urls.AUTHENTICATION_FAILURE_RESOURCE);
-        assertThat(response3.getStatus()).isEqualTo(200);
-        assertThat(response3.readEntity(String.class)).contains("You failed to sign-in successfully");
+        assertThat(response2.getStatus()).isEqualTo(200);
+        assertThat(response2.readEntity(String.class)).contains("You failed to sign-in successfully");
     }
 
     public String getSamlResponseFromResponseString(String responseString) {

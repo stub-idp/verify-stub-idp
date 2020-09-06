@@ -1,5 +1,6 @@
 package stubidp.saml.domain.response;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.opensaml.xmlsec.signature.Signature;
 import stubidp.saml.domain.assertions.IdpIdaStatus;
 import stubidp.saml.domain.assertions.PassthroughAssertion;
@@ -42,6 +43,7 @@ public class InboundResponseFromIdp extends IdaSamlResponse {
         return authnStatementAssertion;
     }
 
+    @JsonIgnore
     public Optional<Signature> getSignature() {
         return signature;
     }

@@ -19,6 +19,6 @@ public class AuthenticationFailedResource {
 
     @GET
     public AuthenticationFailedView getAuthenticationFailedView() {
-        return new AuthenticationFailedView();
+        return new AuthenticationFailedView(null);
     }
 }

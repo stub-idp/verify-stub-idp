@@ -1,10 +1,14 @@
 package stubsp.stubsp.views;
 
 import stubsp.stubsp.Urls;
+import stubsp.stubsp.domain.SamlResponseFromIdpDto;
 
 public class SuccessView extends StubSpView {
-    public SuccessView() {
+    private final SamlResponseFromIdpDto samlResponseFromIdpDto;
+
+    public SuccessView(SamlResponseFromIdpDto samlResponseFromIdpDto) {
         super("Authentication Success", "success.ftl");
+        this.samlResponseFromIdpDto = samlResponseFromIdpDto;
     }
 
     public String getRootResource() {
@@ -13,5 +17,9 @@ public class SuccessView extends StubSpView {
 
     public String getSecureResource() {
         return Urls.SECURE_RESOURCE;
+    }
+
+    public SamlResponseFromIdpDto getSamlResponseFromIdpDto() {
+        return samlResponseFromIdpDto;
     }
 }

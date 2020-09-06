@@ -1,7 +1,6 @@
 package stubsp.stubsp.resources;
 
 import stubsp.stubsp.Urls;
-import stubsp.stubsp.views.AuthenticationFailedView;
 import stubsp.stubsp.views.SuccessView;
 
 import javax.inject.Inject;
@@ -20,6 +19,6 @@ public class SuccessResource {
 
     @GET
     public SuccessView getSuccessView() {
-        return new SuccessView();
+        return new SuccessView(null);
     }
 }

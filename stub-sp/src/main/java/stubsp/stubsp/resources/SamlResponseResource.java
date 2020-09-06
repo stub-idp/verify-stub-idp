@@ -1,8 +1,11 @@
 package stubsp.stubsp.resources;
 
 import stubsp.stubsp.Urls;
+import stubsp.stubsp.domain.SamlResponseFromIdpDto;
 import stubsp.stubsp.services.ResponseStatus;
 import stubsp.stubsp.services.SamlResponseService;
+import stubsp.stubsp.views.AuthenticationFailedView;
+import stubsp.stubsp.views.SuccessView;
 
 import javax.inject.Inject;
 import javax.ws.rs.FormParam;
@@ -27,15 +30,13 @@ public class SamlResponseResource {
     @POST
     public Response receiveSamlResponse(@FormParam(Urls.SAML_RESPONSE_PARAM) String samlResponse,
                                         @FormParam(Urls.RELAY_STATE_PARAM) String relayState) {
-        ResponseStatus responseStatus = samlResponseService.processResponse(samlResponse, relayState);
-        switch(responseStatus) {
+        SamlResponseFromIdpDto samlResponseFromIdpDto = samlResponseService.processResponse(samlResponse, relayState);
+        switch(samlResponseFromIdpDto.getResponseStatus()) {
             case SUCCESS: {
-                return Response.seeOther(UriBuilder.fromPath(Urls.SUCCESS_RESOURCE).build())
-                        .build();
+                return Response.ok(new SuccessView(samlResponseFromIdpDto)).build();
             }
             case AUTHENTICATION_FAILED: {
-                return Response.seeOther(UriBuilder.fromPath(Urls.AUTHENTICATION_FAILURE_RESOURCE).build())
-                        .build();
+                return Response.ok(new AuthenticationFailedView(samlResponseFromIdpDto)).build();
             }
             default: {
                 return Response.seeOther(UriBuilder.fromPath(Urls.ROOT_RESOURCE).build())
