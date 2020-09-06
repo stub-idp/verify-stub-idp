@@ -4,7 +4,7 @@ import certificates.values.CACertificates;
 import com.nimbusds.jose.JOSEException;
 import com.nimbusds.jose.JWSObject;
 import com.nimbusds.jose.crypto.RSASSAVerifier;
-import net.minidev.json.JSONObject;
+import com.nimbusds.jose.shaded.json.JSONObject;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import stubidp.test.devpki.TestCertificateStrings;
@@ -31,12 +31,7 @@ import static org.apache.commons.codec.binary.Base64.encodeInteger;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 import static org.assertj.core.api.Assertions.catchThrowable;
-import static org.junit.jupiter.api.Assertions.assertArrayEquals;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class GeneratorTest {
 
@@ -60,8 +55,8 @@ public class GeneratorTest {
         JWSObject output = generator.generate(files);
 
         assertSigned(output, publicKeyForSigning);
-        assertTrue(output.getPayload().toJSONObject().containsKey("keys"));
-        assertTrue(((List<Object>)output.getPayload().toJSONObject().get("keys")).isEmpty());
+        assertThat(output.getPayload().toJSONObject().containsKey("keys")).isTrue();
+        assertThat(((List<Object>)output.getPayload().toJSONObject().get("keys"))).isEmpty();
     }
 
     @Test
@@ -74,12 +69,12 @@ public class GeneratorTest {
         JWSObject output = generator.generateFromMap(trustAnchorMap);
 
         assertSigned(output, publicKeyForSigning);
-        assertTrue(output.getPayload().toJSONObject().containsKey("keys"));
+        assertThat(output.getPayload().toJSONObject()).containsKey("keys");
 
-        List<JSONObject> keys = (List<JSONObject>) output.getPayload().toJSONObject().get("keys");
-        assertEquals(1, keys.size());
-        assertEquals("https://generator.test",keys.get(0).getAsString("kid"));
-        assertArrayEquals(certificateForSigning.getEncoded(), output.getHeader().getX509CertChain().get(0).decode());
+        List<Map<String, String>> keys = (List<Map<String, String>>)output.getPayload().toJSONObject().get("keys");
+        assertThat(keys.size()).isEqualTo(1);
+        assertThat(keys.get(0).get("kid")).isEqualTo("https://generator.test");
+        assertThat(output.getHeader().getX509CertChain().get(0).decode()).containsExactlyInAnyOrder(certificateForSigning.getEncoded());
     }
 
     @Test
@@ -97,11 +92,11 @@ public class GeneratorTest {
         JWSObject output = generator.generateFromMap(trustAnchorMap);
 
         assertSigned(output, publicKeyForSigning);
-        assertTrue(output.getPayload().toJSONObject().containsKey("keys"));
+        assertThat(output.getPayload().toJSONObject()).containsKey("keys");
 
-        List<JSONObject> keys = (List<JSONObject>) output.getPayload().toJSONObject().get("keys");
-        assertEquals(1, keys.size());
-        assertEquals("https://generator.test",keys.get(0).getAsString("kid"));
+        List<Map<String, String>> keys = (List<Map<String, String>>)output.getPayload().toJSONObject().get("keys");
+        assertThat(keys.size()).isEqualTo(1);
+        assertThat(keys.get(0).get("kid")).isEqualTo("https://generator.test");
     }
 
     @Test
@@ -196,14 +191,16 @@ public class GeneratorTest {
         JWSObject output = generator.generate(files);
 
         assertSigned(output, publicKeyForSigning);
-        assertTrue(output.getPayload().toJSONObject().containsKey("keys"));
+        assertThat(output.getPayload().toJSONObject()).containsKey("keys");
 
-        List<JSONObject> keys = (List<JSONObject>) output.getPayload().toJSONObject().get("keys");
-        Set<String> kidSet = keys.stream().map(x -> x.getAsString("kid")).collect(Collectors.toSet());
+        List<Map<String, String>> keys = (List<Map<String, String>>)output.getPayload().toJSONObject().get("keys");
+        Set<String> kidSet = keys.stream()
+                .map(x -> x.get("kid"))
+                .collect(Collectors.toSet());
 
-        assertEquals(1024, kidSet.size());
+        assertThat(kidSet.size()).isEqualTo(1024);
         for (int i = 0; i < 1024; i++) {
-            assertTrue(kidSet.contains(String.format("https://%d.generator.test", i)));
+            assertThat(kidSet).contains(String.format("https://%d.generator.test", i));
         }
     }
 
@@ -230,9 +227,9 @@ public class GeneratorTest {
     }
 
     private void assertSigned(JWSObject output, RSAPublicKey signedKey) throws JOSEException {
-        assertEquals(JWSObject.State.SIGNED, output.getState());
-        assertNotNull(output.getSignature());
-        assertNotEquals("", output.getSignature().decodeToString());
-        assertTrue(output.verify(new RSASSAVerifier(signedKey)));
+        assertThat(output.getState()).isEqualTo(JWSObject.State.SIGNED);
+        assertThat(output.getSignature()).isNotNull();
+        assertThat(output.getSignature().decodeToString()).isNotEmpty();
+        assertThat(output.verify(new RSASSAVerifier(signedKey))).isTrue();
     }
 }
