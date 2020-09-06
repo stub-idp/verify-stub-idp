@@ -7,12 +7,12 @@
 <b>Relay State:</b> ${samlResponseFromIdpDto.relayState}
 </div>
 
-<b>Parsed Response:</b>
-<div class="dto">
+<h2>Parsed Response:</h2>
+<pre><code><div class="dto" style="color: white; background-color: black;">
 ${samlResponseFromIdpDto.jsonResponse}
-</div>
+</div></code></pre>
 
-<b>Saml Response:</b>
-<div class="saml">
+<h2>Saml Response:</h2>
+<pre><code><div class="saml" style="color: white; background-color: black;">
 ${samlResponseFromIdpDto.xmlResponse}
-</div>
+</div></code></pre>
