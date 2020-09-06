@@ -115,7 +115,7 @@ public class AnalyticsReporterTest {
         URIBuilder testURI = new URIBuilder(analyticsReporter.generateURI("SERVER friendly description of URL", requestContext, Optional.empty(), Optional.of("abc")));
 
         Map<String, NameValuePair> expectedParams = expectedURI.getQueryParams().stream()
-                .collect(Collectors.toMap(e -> ((NameValuePair)e).getName(), e -> e));
+                .collect(Collectors.toMap(e -> e.getName(), e -> e));
 
         for (NameValuePair param : testURI.getQueryParams()) {
             assertThat(expectedParams).containsEntry(param.getName(), param);
@@ -144,7 +144,7 @@ public class AnalyticsReporterTest {
         URIBuilder testURI = new URIBuilder(analyticsReporter.generateURI("page-title", requestContext, customVariableOptional, visitorId));
 
         Map<String, NameValuePair> expectedParams = expectedURI.getQueryParams().stream()
-                .collect(Collectors.toMap(e -> ((NameValuePair)e).getName(), e -> e));
+                .collect(Collectors.toMap(e -> e.getName(), e -> e));
 
         for (NameValuePair param : testURI.getQueryParams()) {
             assertThat(expectedParams).containsEntry(param.getName(), param);
