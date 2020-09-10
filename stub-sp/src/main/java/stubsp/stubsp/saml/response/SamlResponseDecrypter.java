@@ -78,6 +78,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import static java.text.MessageFormat.format;
 import static stubsp.stubsp.StubSpBinder.EIDAS_KEY_STORE;
 import static stubsp.stubsp.StubSpBinder.EIDAS_METADATA_RESOLVER;
+import static stubsp.stubsp.StubSpBinder.SKIP_KEY_INFO_CHECK;
 import static stubsp.stubsp.StubSpBinder.SP_CHECK_KEY_INFO;
 import static stubsp.stubsp.StubSpBinder.SP_KEY_STORE;
 import static stubsp.stubsp.StubSpBinder.SP_METADATA_RESOLVER;
@@ -96,6 +97,7 @@ public class SamlResponseDecrypter {
     private final URI spAssertionConsumerServices;
     private final String spEntityId;
     private final boolean checkKeyInfo;
+    private final boolean skipKeyInfoCheck;
 
     private final IdaKeyStore spKeyStore;
     private final IdaKeyStore eidasKeyStore;
@@ -109,7 +111,7 @@ public class SamlResponseDecrypter {
     }
 
     public SamlResponseDecrypter(Client client, URI idpMetadataUri, String spEntityId, Optional<URI> eidasMetadataUri, URI spAssertionConsumerServices, IdaKeyStore spKeyStore, IdaKeyStore eidasKeyStore, boolean checkKeyInfo) {
-        this(getMetadataResolver(client, idpMetadataUri), eidasMetadataUri.map(uri -> getMetadataResolver(client, uri)), spEntityId, spAssertionConsumerServices, spKeyStore, eidasKeyStore, checkKeyInfo);
+        this(getMetadataResolver(client, idpMetadataUri), eidasMetadataUri.map(uri -> getMetadataResolver(client, uri)), spEntityId, spAssertionConsumerServices, spKeyStore, eidasKeyStore, checkKeyInfo, false);
     }
 
     @Inject
@@ -118,10 +120,11 @@ public class SamlResponseDecrypter {
                                  SamlConfiguration samlConfiguration,
                                  @Named(SP_KEY_STORE) IdaKeyStore spKeyStore,
                                  @Named(EIDAS_KEY_STORE) Optional<IdaKeyStore> eidasKeyStore,
-                                 @Named(SP_CHECK_KEY_INFO) Boolean checkKeyInfo) {
+                                 @Named(SP_CHECK_KEY_INFO) Boolean checkKeyInfo,
+                                 @Named(SKIP_KEY_INFO_CHECK) Boolean skipKeyInfoCheck) {
         this(idpMetadataResolver, eidasMetadataResolver, samlConfiguration.getEntityId(),
         UriBuilder.fromUri(samlConfiguration.getExpectedDestinationHost() + Urls.SAML_SSO_RESPONSE_RESOURCE).build(),
-        spKeyStore, eidasKeyStore.orElse(null), checkKeyInfo);
+        spKeyStore, eidasKeyStore.orElse(null), checkKeyInfo, skipKeyInfoCheck);
     }
 
     public SamlResponseDecrypter(MetadataResolver idpMetadataResolver,
@@ -130,7 +133,8 @@ public class SamlResponseDecrypter {
                                  URI spAssertionConsumerServices,
                                  IdaKeyStore spKeyStore,
                                  IdaKeyStore eidasKeyStore,
-                                 boolean checkKeyInfo) {
+                                 boolean checkKeyInfo,
+                                 boolean skipKeyInfoCheck) {
         this.idpMetadataResolver = idpMetadataResolver;
         this.eidasMetadataResolver = eidasMetadataResolver;
         this.spEntityId = spEntityId;
@@ -138,6 +142,7 @@ public class SamlResponseDecrypter {
         this.spKeyStore = spKeyStore;
         this.eidasKeyStore = eidasKeyStore;
         this.checkKeyInfo = checkKeyInfo;
+        this.skipKeyInfoCheck = skipKeyInfoCheck;
     }
 
     /**
@@ -149,10 +154,12 @@ public class SamlResponseDecrypter {
                 = buildDecoratedSamlResponseToIdaResponseIssuedByIdpTransformer(credentialFactory, spKeyStore);
 
         final org.opensaml.saml.saml2.core.Response response = stringToOpenSamlObjectTransformer.apply(samlResponse);
-        if(checkKeyInfo) {
-            validateKeyInfoPresent(response);
-        } else {
-            validateKeyInfoNotPresent(response);
+        if(!skipKeyInfoCheck) {
+            if (checkKeyInfo) {
+                validateKeyInfoPresent(response);
+            } else {
+                validateKeyInfoNotPresent(response);
+            }
         }
         return decoratedSamlResponseToIdaResponseIssuedByIdpTransformer.apply(response);
     }

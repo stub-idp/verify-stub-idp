@@ -59,6 +59,7 @@ public class StubSpBinder extends AbstractBinder {
     public static final String METADATA_VALIDITY_PERIOD = "metadataValidityPeriod";
     public static final String SP_METADATA_RESOLVER = "SpMetadataResolver";
     public static final String SP_CHECK_KEY_INFO = "SpCheckKeyInfo";
+    public static final String SKIP_KEY_INFO_CHECK = "SkipKeyInfoCheck";
     public static final String SP_KEY_STORE = "SpKeyStore";
     private static final String SP_METADATA_CONFIGURATION = "SpMetadataConfiguration";
 
@@ -100,6 +101,7 @@ public class StubSpBinder extends AbstractBinder {
 
         // saml response processing
         bind(Boolean.FALSE).named(SP_CHECK_KEY_INFO).to(Boolean.class);
+        bind(Boolean.TRUE).named(SKIP_KEY_INFO_CHECK).to(Boolean.class);
         bind(Optional.empty()).named(EIDAS_METADATA_RESOLVER).to(new GenericType<Optional<MetadataResolver>>() {});
         bind(Optional.empty()).named(EIDAS_KEY_STORE).to(new GenericType<Optional<IdaKeyStore>>() {});
         bind(getKeystoreFromConfig(Optional.empty(), Optional.of(configuration.getEncryptionKeyPairConfiguration()))).named(SP_KEY_STORE).to(IdaKeyStore.class);
