@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import io.dropwizard.jackson.Jackson;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
+import stubidp.saml.domain.assertions.IdentityProviderAssertion;
 import stubidp.saml.domain.response.InboundResponseFromIdp;
 import stubsp.stubsp.domain.SamlResponseFromIdpDto;
 import stubsp.stubsp.saml.response.SamlResponseDecrypter;
@@ -23,7 +24,7 @@ public class SamlResponseService {
     public SamlResponseFromIdpDto processResponse(String samlResponse, String relayState) {
         Document document = Jsoup.parse(new String(Base64.getMimeDecoder().decode(samlResponse)));
         document.outputSettings().prettyPrint(true);
-        InboundResponseFromIdp inboundResponseFromIdp = samlResponseDecrypter.decryptSaml(samlResponse);
+        InboundResponseFromIdp<IdentityProviderAssertion> inboundResponseFromIdp = samlResponseDecrypter.decryptSaml(samlResponse);
         switch(inboundResponseFromIdp.getStatus().getStatusCode()) {
             case Success: {
                 try {

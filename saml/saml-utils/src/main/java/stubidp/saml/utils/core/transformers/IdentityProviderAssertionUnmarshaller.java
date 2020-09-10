@@ -10,7 +10,7 @@ import stubidp.saml.domain.assertions.PersistentId;
 
 import java.util.Optional;
 
-public class IdentityProviderAssertionUnmarshaller {
+public class IdentityProviderAssertionUnmarshaller implements IdpAssertionUnmarshaller<IdentityProviderAssertion> {
     private final VerifyMatchingDatasetUnmarshaller verifyMatchingDatasetUnmarshaller;
     private final EidasMatchingDatasetUnmarshaller eidasMatchingDatasetUnmarshaller;
     private final IdentityProviderAuthnStatementUnmarshaller identityProviderAuthnStatementUnmarshaller;
@@ -39,10 +39,7 @@ public class IdentityProviderAssertionUnmarshaller {
         return getIdentityProviderAssertion(assertion, matchingDataset, authnStatement);
     }
 
-    @Deprecated
-    /**
-     * Use {@link this#fromVerifyAssertion} instead
-     */
+    @Override
     public IdentityProviderAssertion fromAssertion(Assertion assertion) {
         return fromVerifyAssertion(assertion);
     }

@@ -37,8 +37,8 @@ public class ResponseForHubBuilder {
         return new ResponseForHubBuilder();
     }
 
-    public InboundResponseFromIdp buildInboundFromIdp() {
-        return new InboundResponseFromIdp(
+    public InboundResponseFromIdp<PassthroughAssertion> buildInboundFromIdp() {
+        return new InboundResponseFromIdp<>(
                 responseId,
                 inResponseTo,
                 issuerId,
@@ -52,8 +52,8 @@ public class ResponseForHubBuilder {
         );
     }
 
-    public InboundResponseFromIdp buildSuccessFromIdp() {
-        return new InboundResponseFromIdp(
+    public InboundResponseFromIdp<PassthroughAssertion> buildSuccessFromIdp() {
+        return new InboundResponseFromIdp<>(
                 responseId,
                 inResponseTo,
                 issuerId,

@@ -12,17 +12,18 @@ import stubidp.saml.security.SamlAssertionsSignatureValidator;
 import stubidp.saml.security.validators.ValidatedAssertions;
 import stubidp.saml.security.validators.ValidatedResponse;
 import stubidp.saml.security.validators.signature.SamlResponseSignatureValidator;
+import stubidp.saml.utils.core.transformers.IdpAssertionUnmarshaller;
 
 import java.util.function.Function;
 
-public class DecoratedSamlResponseToIdaResponseIssuedByIdpTransformer implements Function<Response, InboundResponseFromIdp> {
+public class DecoratedSamlResponseToIdaResponseIssuedByIdpTransformer<T extends IdpAssertionUnmarshaller<O>, O> implements Function<Response, InboundResponseFromIdp<O>> {
 
-    private final IdaResponseFromIdpUnmarshaller idaResponseUnmarshaller;
-    private IdpResponseValidator idpResponseValidator;
+    private final IdaResponseFromIdpUnmarshaller<T, O> idaResponseUnmarshaller;
+    private final IdpResponseValidator idpResponseValidator;
 
     //Deprecated
     public DecoratedSamlResponseToIdaResponseIssuedByIdpTransformer(
-            IdaResponseFromIdpUnmarshaller idaResponseUnmarshaller,
+            IdaResponseFromIdpUnmarshaller<T, O> idaResponseUnmarshaller,
             SamlResponseSignatureValidator samlResponseSignatureValidator,
             AssertionDecrypter assertionDecrypter,
             SamlAssertionsSignatureValidator samlAssertionsSignatureValidator,
@@ -41,13 +42,13 @@ public class DecoratedSamlResponseToIdaResponseIssuedByIdpTransformer implements
     }
 
     public DecoratedSamlResponseToIdaResponseIssuedByIdpTransformer(IdpResponseValidator idpResponseValidator,
-                                                                    IdaResponseFromIdpUnmarshaller idaResponseUnmarshaller){
+                                                                    IdaResponseFromIdpUnmarshaller<T, O> idaResponseUnmarshaller){
         this.idaResponseUnmarshaller = idaResponseUnmarshaller;
         this.idpResponseValidator = idpResponseValidator;
     }
 
     @Override
-    public InboundResponseFromIdp apply(Response response) {
+    public InboundResponseFromIdp<O> apply(Response response) {
         this.idpResponseValidator.validate(response);
         ValidatedResponse validatedResponse = this.idpResponseValidator.getValidatedResponse();
         ValidatedAssertions validatedAssertions = this.idpResponseValidator.getValidatedAssertions();

@@ -11,6 +11,7 @@ import org.opensaml.saml.saml2.encryption.Decrypter;
 import org.opensaml.saml.saml2.metadata.IDPSSODescriptor;
 import org.opensaml.xmlsec.encryption.support.EncryptionConstants;
 import org.slf4j.event.Level;
+import stubidp.saml.domain.assertions.IdentityProviderAssertion;
 import stubidp.saml.domain.configuration.SamlConfiguration;
 import stubidp.saml.domain.response.InboundResponseFromIdp;
 import stubidp.saml.extensions.validation.SamlTransformationErrorException;
@@ -28,7 +29,6 @@ import stubidp.saml.hub.core.validators.subjectconfirmation.AssertionSubjectConf
 import stubidp.saml.hub.metadata.IdpMetadataPublicKeyStore;
 import stubidp.saml.hub.transformers.inbound.IdaResponseFromIdpUnmarshaller;
 import stubidp.saml.hub.transformers.inbound.IdpIdaStatusUnmarshaller;
-import stubidp.saml.hub.transformers.inbound.PassthroughAssertionUnmarshaller;
 import stubidp.saml.hub.transformers.inbound.SamlStatusToCountryAuthenticationStatusCodeMapper;
 import stubidp.saml.hub.transformers.inbound.providers.DecoratedSamlResponseToIdaResponseIssuedByIdpTransformer;
 import stubidp.saml.hub.validators.authnrequest.ConcurrentMapIdExpirationCache;
@@ -55,8 +55,12 @@ import stubidp.saml.serializers.deserializers.StringToOpenSamlObjectTransformer;
 import stubidp.saml.serializers.deserializers.parser.SamlObjectParser;
 import stubidp.saml.serializers.deserializers.validators.Base64StringDecoder;
 import stubidp.saml.serializers.deserializers.validators.NotNullSamlStringValidator;
-import stubidp.saml.serializers.serializers.XmlObjectToBase64EncodedStringTransformer;
+import stubidp.saml.utils.core.domain.AddressFactory;
 import stubidp.saml.utils.core.transformers.AuthnContextFactory;
+import stubidp.saml.utils.core.transformers.EidasMatchingDatasetUnmarshaller;
+import stubidp.saml.utils.core.transformers.IdentityProviderAssertionUnmarshaller;
+import stubidp.saml.utils.core.transformers.IdentityProviderAuthnStatementUnmarshaller;
+import stubidp.saml.utils.core.transformers.VerifyMatchingDatasetUnmarshaller;
 import stubidp.saml.utils.hub.validators.StringSizeValidator;
 import stubsp.stubsp.Urls;
 import stubsp.stubsp.saml.response.eidas.EidasAttributeStatementAssertionValidator;
@@ -148,9 +152,9 @@ public class SamlResponseDecrypter {
     /**
      * Be warned that this method does little to no validation and is just for testing the contents of a response
      */
-    public InboundResponseFromIdp decryptSaml(String samlResponse) {
+    public InboundResponseFromIdp<IdentityProviderAssertion> decryptSaml(String samlResponse) {
         final SigningCredentialFactory credentialFactory = new SigningCredentialFactory(new AuthnResponseKeyStore(new IdpMetadataPublicKeyStore(idpMetadataResolver)));
-        DecoratedSamlResponseToIdaResponseIssuedByIdpTransformer decoratedSamlResponseToIdaResponseIssuedByIdpTransformer
+        DecoratedSamlResponseToIdaResponseIssuedByIdpTransformer<IdentityProviderAssertionUnmarshaller, IdentityProviderAssertion> decoratedSamlResponseToIdaResponseIssuedByIdpTransformer
                 = buildDecoratedSamlResponseToIdaResponseIssuedByIdpTransformer(credentialFactory, spKeyStore);
 
         final org.opensaml.saml.saml2.core.Response response = stringToOpenSamlObjectTransformer.apply(samlResponse);
@@ -303,12 +307,12 @@ public class SamlResponseDecrypter {
         return identityAssertion;
     }
 
-    private DecoratedSamlResponseToIdaResponseIssuedByIdpTransformer buildDecoratedSamlResponseToIdaResponseIssuedByIdpTransformer(SigningCredentialFactory credentialFactory, IdaKeyStore keyStore) {
+    private DecoratedSamlResponseToIdaResponseIssuedByIdpTransformer<IdentityProviderAssertionUnmarshaller, IdentityProviderAssertion> buildDecoratedSamlResponseToIdaResponseIssuedByIdpTransformer(SigningCredentialFactory credentialFactory, IdaKeyStore keyStore) {
         IdaKeyStoreCredentialRetriever storeCredentialRetriever = new IdaKeyStoreCredentialRetriever(keyStore);
-        return new DecoratedSamlResponseToIdaResponseIssuedByIdpTransformer(
-                new IdaResponseFromIdpUnmarshaller(
+        return new DecoratedSamlResponseToIdaResponseIssuedByIdpTransformer<>(
+                new IdaResponseFromIdpUnmarshaller<>(
                         new IdpIdaStatusUnmarshaller(),
-                        new PassthroughAssertionUnmarshaller(new XmlObjectToBase64EncodedStringTransformer<>(), new AuthnContextFactory())),
+                        new IdentityProviderAssertionUnmarshaller(new VerifyMatchingDatasetUnmarshaller(new AddressFactory()), new EidasMatchingDatasetUnmarshaller(), new IdentityProviderAuthnStatementUnmarshaller(new AuthnContextFactory()), spEntityId)),
                 new SamlResponseSignatureValidator(new SamlMessageSignatureValidator(new CredentialFactorySignatureValidator(credentialFactory))),
                 new AssertionDecrypter(new EncryptionAlgorithmValidator(), new DecrypterFactory().createDecrypter(storeCredentialRetriever.getDecryptingCredentials())),
                 new SamlAssertionsSignatureValidator(new SamlMessageSignatureValidator(new CredentialFactorySignatureValidator(credentialFactory))),

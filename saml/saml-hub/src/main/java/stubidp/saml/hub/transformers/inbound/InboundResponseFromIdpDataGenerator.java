@@ -1,8 +1,8 @@
 package stubidp.saml.hub.transformers.inbound;
 
+import stubidp.saml.domain.assertions.PassthroughAssertion;
 import stubidp.saml.domain.response.InboundResponseFromIdp;
 import stubidp.saml.hub.core.domain.InboundResponseFromIdpData;
-import stubidp.saml.domain.assertions.PassthroughAssertion;
 import stubidp.saml.hub.core.transformers.outbound.decorators.AssertionBlobEncrypter;
 
 import javax.inject.Inject;
@@ -19,7 +19,7 @@ public class InboundResponseFromIdpDataGenerator {
         this.assertionBlobEncrypter = assertionBlobEncrypter;
     }
 
-    public InboundResponseFromIdpData generate(InboundResponseFromIdp idaResponseFromIdp, String matchingServiceEntityId) {
+    public InboundResponseFromIdpData generate(InboundResponseFromIdp<PassthroughAssertion> idaResponseFromIdp, String matchingServiceEntityId) {
         Optional<String> principalIpAddressFromIdp = empty();
         Optional<String> persistentId = empty();
         Optional<String> idpFraudEventId = empty();

@@ -3,15 +3,14 @@ package stubidp.saml.domain.response;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.opensaml.xmlsec.signature.Signature;
 import stubidp.saml.domain.assertions.IdpIdaStatus;
-import stubidp.saml.domain.assertions.PassthroughAssertion;
 
 import java.net.URI;
 import java.time.Instant;
 import java.util.Optional;
 
-public class InboundResponseFromIdp extends IdaSamlResponse {
-    private Optional<PassthroughAssertion> matchingDatasetAssertion;
-    private Optional<PassthroughAssertion> authnStatementAssertion;
+public class InboundResponseFromIdp<Assertion> extends IdaSamlResponse {
+    private Optional<Assertion> matchingDatasetAssertion;
+    private Optional<Assertion> authnStatementAssertion;
     private Optional<Instant> notOnOrAfter;
     private Optional<Signature> signature;
     private IdpIdaStatus status;
@@ -24,9 +23,9 @@ public class InboundResponseFromIdp extends IdaSamlResponse {
             Optional<Instant> notOnOrAfter,
             IdpIdaStatus status,
             Optional<Signature> signature,
-            Optional<PassthroughAssertion> matchingDatasetAssertion,
+            Optional<Assertion> matchingDatasetAssertion,
             URI destination,
-            Optional<PassthroughAssertion> authnStatementAssertion) {
+            Optional<Assertion> authnStatementAssertion) {
         super(id, issueInstant, inResponseTo, issuer, destination);
         this.notOnOrAfter = notOnOrAfter;
         this.signature = signature;
@@ -35,11 +34,11 @@ public class InboundResponseFromIdp extends IdaSamlResponse {
         this.status = status;
     }
 
-    public Optional<PassthroughAssertion> getMatchingDatasetAssertion() {
+    public Optional<Assertion> getMatchingDatasetAssertion() {
         return matchingDatasetAssertion;
     }
 
-    public Optional<PassthroughAssertion> getAuthnStatementAssertion() {
+    public Optional<Assertion> getAuthnStatementAssertion() {
         return authnStatementAssertion;
     }
 

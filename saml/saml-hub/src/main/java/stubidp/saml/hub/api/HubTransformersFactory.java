@@ -12,12 +12,16 @@ import org.opensaml.security.credential.Credential;
 import org.opensaml.xmlsec.algorithm.DigestAlgorithm;
 import org.opensaml.xmlsec.algorithm.SignatureAlgorithm;
 import org.w3c.dom.Element;
+import stubidp.saml.domain.assertions.PassthroughAssertion;
+import stubidp.saml.domain.matching.HubAttributeQueryRequest;
 import stubidp.saml.domain.matching.HubEidasAttributeQueryRequest;
 import stubidp.saml.domain.matching.MatchingServiceHealthCheckRequest;
 import stubidp.saml.domain.request.EidasAuthnRequestFromHub;
 import stubidp.saml.domain.request.IdaAuthnRequestFromHub;
 import stubidp.saml.domain.response.InboundResponseFromIdp;
 import stubidp.saml.domain.response.OutboundResponseFromHub;
+import stubidp.saml.hub.configuration.SamlAuthnRequestValidityDurationConfiguration;
+import stubidp.saml.hub.configuration.SamlDuplicateRequestValidationConfiguration;
 import stubidp.saml.hub.core.transformers.outbound.decorators.SamlAttributeQueryAssertionEncrypter;
 import stubidp.saml.hub.core.validators.DestinationValidator;
 import stubidp.saml.hub.core.validators.assertion.AssertionAttributeStatementValidator;
@@ -30,13 +34,12 @@ import stubidp.saml.hub.core.validators.assertion.MatchingDatasetAssertionValida
 import stubidp.saml.hub.core.validators.subject.AssertionSubjectValidator;
 import stubidp.saml.hub.core.validators.subjectconfirmation.AssertionSubjectConfirmationValidator;
 import stubidp.saml.hub.core.validators.subjectconfirmation.BasicAssertionSubjectConfirmationValidator;
-import stubidp.saml.hub.configuration.SamlAuthnRequestValidityDurationConfiguration;
-import stubidp.saml.hub.configuration.SamlDuplicateRequestValidationConfiguration;
 import stubidp.saml.hub.domain.AuthnRequestFromRelyingParty;
 import stubidp.saml.hub.domain.Endpoints;
-import stubidp.saml.domain.matching.HubAttributeQueryRequest;
 import stubidp.saml.hub.domain.InboundResponseFromMatchingService;
 import stubidp.saml.hub.factories.AttributeQueryAttributeFactory;
+import stubidp.saml.hub.metadata.domain.HubIdentityProviderMetadataDto;
+import stubidp.saml.hub.metadata.transformers.HubIdentityProviderMetadataDtoToEntityDescriptorTransformer;
 import stubidp.saml.hub.transformers.inbound.AuthnRequestFromRelyingPartyUnmarshaller;
 import stubidp.saml.hub.transformers.inbound.AuthnRequestToIdaRequestFromRelyingPartyTransformer;
 import stubidp.saml.hub.transformers.inbound.IdaResponseFromIdpUnmarshaller;
@@ -78,8 +81,6 @@ import stubidp.saml.hub.validators.response.idp.components.ResponseAssertionsFro
 import stubidp.saml.hub.validators.response.matchingservice.EncryptedResponseFromMatchingServiceValidator;
 import stubidp.saml.hub.validators.response.matchingservice.HealthCheckResponseFromMatchingServiceValidator;
 import stubidp.saml.hub.validators.response.matchingservice.ResponseAssertionsFromMatchingServiceValidator;
-import stubidp.saml.hub.metadata.domain.HubIdentityProviderMetadataDto;
-import stubidp.saml.hub.metadata.transformers.HubIdentityProviderMetadataDtoToEntityDescriptorTransformer;
 import stubidp.saml.security.AssertionDecrypter;
 import stubidp.saml.security.DecrypterFactory;
 import stubidp.saml.security.EncrypterFactory;
@@ -119,11 +120,9 @@ import java.util.function.Function;
 @SuppressWarnings("unused")
 public class HubTransformersFactory {
 
-    private final CoreTransformersFactory coreTransformersFactory;
+    private static final CoreTransformersFactory coreTransformersFactory = new CoreTransformersFactory();
 
-    public HubTransformersFactory() {
-        coreTransformersFactory = new CoreTransformersFactory();
-    }
+    public HubTransformersFactory() {}
 
     public Function<OutboundResponseFromHub, String> getOutboundResponseFromHubToStringTransformer(
             final EncryptionKeyStore encryptionKeyStore,
@@ -340,7 +339,7 @@ public class HubTransformersFactory {
      * @deprecated Compliance Tool should implement this method
      */
     @Deprecated
-    public Function<String, InboundResponseFromIdp> getStringToIdaResponseIssuedByIdpTransformer(
+    public Function<String, InboundResponseFromIdp<PassthroughAssertion>> getStringToIdaResponseIssuedByIdpTransformer(
             SigningKeyStore signingKeyStore,
             IdaKeyStore keyStore,
             URI expectedDestinationHost,
@@ -349,7 +348,7 @@ public class HubTransformersFactory {
             String hubEntityId) {
         // not sure if we need to allow an extra ResponseSizeValidator here.
         Function<String, Response> t1 = getStringToResponseTransformer();
-        Function<Response, InboundResponseFromIdp> t2 = getDecoratedSamlResponseToIdaResponseIssuedByIdpTransformer(
+        Function<Response, InboundResponseFromIdp<PassthroughAssertion>> t2 = getDecoratedSamlResponseToIdaResponseIssuedByIdpTransformer(
                 signingKeyStore,
                 keyStore,
                 expectedDestinationHost,
@@ -360,7 +359,7 @@ public class HubTransformersFactory {
         return  t2.compose(t1);
     }
 
-    public Function<String, InboundResponseFromIdp> getStringToIdaResponseIssuedByIdpTransformer(
+    public Function<String, InboundResponseFromIdp<PassthroughAssertion>> getStringToIdaResponseIssuedByIdpTransformer(
             SignatureValidator idpSignatureValidator,
             IdaKeyStore keyStore,
             URI expectedDestinationHost,
@@ -370,7 +369,7 @@ public class HubTransformersFactory {
 
         // not sure if we need to allow an extra ResponseSizeValidator here.
         Function<String, Response> t1 = getStringToResponseTransformer();
-        Function<Response, InboundResponseFromIdp> t2 = getDecoratedSamlResponseToIdaResponseIssuedByIdpTransformer(
+        Function<Response, InboundResponseFromIdp<PassthroughAssertion>> t2 = getDecoratedSamlResponseToIdaResponseIssuedByIdpTransformer(
                 idpSignatureValidator,
                 keyStore,
                 expectedDestinationHost,
@@ -387,7 +386,7 @@ public class HubTransformersFactory {
      * @deprecated Compliance Tool should implement this method
      */
     @Deprecated
-    public DecoratedSamlResponseToIdaResponseIssuedByIdpTransformer getDecoratedSamlResponseToIdaResponseIssuedByIdpTransformer(
+    public DecoratedSamlResponseToIdaResponseIssuedByIdpTransformer<PassthroughAssertionUnmarshaller, PassthroughAssertion> getDecoratedSamlResponseToIdaResponseIssuedByIdpTransformer(
             SigningKeyStore signingKeyStore,
             IdaKeyStore keyStore,
             URI expectedDestinationHost,
@@ -404,7 +403,7 @@ public class HubTransformersFactory {
         );
     }
 
-    public DecoratedSamlResponseToIdaResponseIssuedByIdpTransformer getDecoratedSamlResponseToIdaResponseIssuedByIdpTransformer(
+    public DecoratedSamlResponseToIdaResponseIssuedByIdpTransformer<PassthroughAssertionUnmarshaller, PassthroughAssertion> getDecoratedSamlResponseToIdaResponseIssuedByIdpTransformer(
             SignatureValidator idpSignatureValidator,
             IdaKeyStore keyStore,
             URI expectedDestinationHost,
@@ -418,9 +417,9 @@ public class HubTransformersFactory {
             new DestinationValidator(expectedDestinationHost, expectedEndpoint),
             getResponseAssertionsFromIdpValidator(assertionIdCache, hubEntityId));
 
-        return new DecoratedSamlResponseToIdaResponseIssuedByIdpTransformer(
+        return new DecoratedSamlResponseToIdaResponseIssuedByIdpTransformer<>(
             validator,
-            new IdaResponseFromIdpUnmarshaller(
+            new IdaResponseFromIdpUnmarshaller<>(
                     new IdpIdaStatusUnmarshaller(),
                 getAssertionToPassthroughAssertionTransformer()
             )

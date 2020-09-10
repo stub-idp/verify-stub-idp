@@ -14,12 +14,13 @@ import stubidp.saml.extensions.extensions.IPAddress;
 import stubidp.saml.extensions.extensions.IdpFraudEventId;
 import stubidp.saml.serializers.serializers.XmlObjectToBase64EncodedStringTransformer;
 import stubidp.saml.utils.core.transformers.AuthnContextFactory;
+import stubidp.saml.utils.core.transformers.IdpAssertionUnmarshaller;
 
 import java.text.MessageFormat;
 import java.util.List;
 import java.util.Optional;
 
-public class PassthroughAssertionUnmarshaller {
+public class PassthroughAssertionUnmarshaller implements IdpAssertionUnmarshaller<PassthroughAssertion> {
 
     private static final List<String> VALID_GPG45_STATUSES = List.of("DF01", "FI01", "IT01");
     private final XmlObjectToBase64EncodedStringTransformer<Assertion> assertionStringTransformer;
@@ -34,6 +35,7 @@ public class PassthroughAssertionUnmarshaller {
         this.authnContextFactory = authnContextFactory;
     }
 
+    @Override
     public PassthroughAssertion fromAssertion(Assertion assertion) {
         return fromAssertion(assertion, false);
     }

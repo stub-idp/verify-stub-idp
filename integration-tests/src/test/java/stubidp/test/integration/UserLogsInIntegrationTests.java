@@ -9,6 +9,7 @@ import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import stubidp.saml.constants.Constants;
+import stubidp.saml.domain.assertions.IdentityProviderAssertion;
 import stubidp.saml.domain.response.InboundResponseFromIdp;
 import stubidp.stubidp.Urls;
 import stubidp.stubidp.cookies.StubIdpCookieNames;
@@ -176,13 +177,13 @@ public class UserLogsInIntegrationTests extends IntegrationTestHelper {
         final AuthnRequestSteps.Cookies cookies1 = authnRequestSteps.userPostsAuthnRequestToStubIdp();
         authnRequestSteps.userLogsIn(cookies1);
         final String samlResponse = authnRequestSteps.userConsentsReturnSamlResponse(cookies1, false);
-        final InboundResponseFromIdp inboundResponseFromIdp = samlResponseDecrypter.decryptSaml(samlResponse);
+        final InboundResponseFromIdp<IdentityProviderAssertion> inboundResponseFromIdp = samlResponseDecrypter.decryptSaml(samlResponse);
         final String firstPid = inboundResponseFromIdp.getAuthnStatementAssertion().get().getPersistentId().getNameId();
 
         final AuthnRequestSteps.Cookies cookies2 = authnRequestSteps.userPostsAuthnRequestToStubIdp();
         authnRequestSteps.userLogsIn(cookies2);
         final String samlResponse2 = authnRequestSteps.userConsentsReturnSamlResponse(cookies2, true);
-        final InboundResponseFromIdp inboundResponseFromIdp2 = samlResponseDecrypter.decryptSaml(samlResponse2);
+        final InboundResponseFromIdp<IdentityProviderAssertion> inboundResponseFromIdp2 = samlResponseDecrypter.decryptSaml(samlResponse2);
         assertThat(inboundResponseFromIdp2.getAuthnStatementAssertion().get().getPersistentId().getNameId()).isNotEqualTo(firstPid);
     }
 

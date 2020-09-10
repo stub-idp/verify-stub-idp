@@ -4,28 +4,28 @@ import stubidp.saml.domain.assertions.IdpIdaStatus;
 import stubidp.saml.domain.response.InboundResponseFromIdp;
 import stubidp.saml.security.validators.ValidatedAssertions;
 import stubidp.saml.security.validators.ValidatedResponse;
-import stubidp.saml.domain.assertions.PassthroughAssertion;
+import stubidp.saml.utils.core.transformers.IdpAssertionUnmarshaller;
 
 import java.net.URI;
 import java.time.Instant;
 import java.util.Optional;
 
-public class IdaResponseFromIdpUnmarshaller {
+public class IdaResponseFromIdpUnmarshaller<T extends IdpAssertionUnmarshaller<O>, O> {
     private final IdpIdaStatusUnmarshaller statusUnmarshaller;
-    private final PassthroughAssertionUnmarshaller passthroughAssertionUnmarshaller;
+    private final T passthroughAssertionUnmarshaller;
 
     public IdaResponseFromIdpUnmarshaller(
             IdpIdaStatusUnmarshaller statusUnmarshaller,
-            PassthroughAssertionUnmarshaller passthroughAssertionUnmarshaller) {
+            T passthroughAssertionUnmarshaller) {
         this.statusUnmarshaller = statusUnmarshaller;
         this.passthroughAssertionUnmarshaller = passthroughAssertionUnmarshaller;
     }
 
-    public InboundResponseFromIdp fromSaml(ValidatedResponse validatedResponse, ValidatedAssertions validatedAssertions) {
-        Optional<PassthroughAssertion> matchingDatasetAssertion = validatedAssertions.getMatchingDatasetAssertion()
+    public InboundResponseFromIdp<O> fromSaml(ValidatedResponse validatedResponse, ValidatedAssertions validatedAssertions) {
+        Optional<O> matchingDatasetAssertion = validatedAssertions.getMatchingDatasetAssertion()
                 .map(passthroughAssertionUnmarshaller::fromAssertion);
 
-        Optional<PassthroughAssertion> authnStatementAssertion = validatedAssertions.getAuthnStatementAssertion()
+        Optional<O> authnStatementAssertion = validatedAssertions.getAuthnStatementAssertion()
                 .map(passthroughAssertionUnmarshaller::fromAssertion);
 
         IdpIdaStatus transformedStatus = statusUnmarshaller.fromSaml(validatedResponse.getStatus());
@@ -34,7 +34,7 @@ public class IdaResponseFromIdpUnmarshaller {
                 .flatMap(a -> Optional.ofNullable(a.getSubject()))
                 .flatMap(s -> Optional.ofNullable(s.getSubjectConfirmations().get(0).getSubjectConfirmationData().getNotOnOrAfter()));
 
-        return new InboundResponseFromIdp(
+        return new InboundResponseFromIdp<O>(
                 validatedResponse.getID(),
                 validatedResponse.getInResponseTo(),
                 validatedResponse.getIssuer().getValue(),
