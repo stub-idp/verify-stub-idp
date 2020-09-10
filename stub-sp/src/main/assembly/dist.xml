@@ -34,6 +34,7 @@
             <outputDirectory>/</outputDirectory>
             <includes>
                 <include>startup.sh</include>
+                <include>metadata-refresh.sh</include>
             </includes>
         </fileSet>
         <fileSet>
