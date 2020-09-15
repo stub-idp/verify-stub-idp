@@ -19,7 +19,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class TimeoutRequestRetryWithBackoffHandlerTest {
 
-    private HttpContext httpContext = new BasicHttpContext();
+    private final HttpContext httpContext = new BasicHttpContext();
 
     @BeforeEach
     public void setup() {
@@ -30,7 +30,7 @@ public class TimeoutRequestRetryWithBackoffHandlerTest {
     public void should_retry_ConnectTimeoutExceptionByDefault() {
         final int numRetries = 2;
 
-        TimeoutRequestRetryWithBackoffHandler timeoutRequestRetryHandler = new TimeoutRequestRetryWithBackoffHandler(numRetries,Duration.milliseconds(1000));
+        TimeoutRequestRetryWithBackoffHandler timeoutRequestRetryHandler = new TimeoutRequestRetryWithBackoffHandler(numRetries,Duration.milliseconds(100));
         final boolean expected = timeoutRequestRetryHandler.retryRequest(new ConnectTimeoutException(), 1, httpContext);
 
         assertThat(expected).isTrue();
@@ -40,7 +40,7 @@ public class TimeoutRequestRetryWithBackoffHandlerTest {
     public void should_retry_SocketTimeoutExceptionByDefault() {
         final int numRetries = 2;
 
-        TimeoutRequestRetryWithBackoffHandler timeoutRequestRetryHandler = new TimeoutRequestRetryWithBackoffHandler(numRetries,Duration.milliseconds(1000));
+        TimeoutRequestRetryWithBackoffHandler timeoutRequestRetryHandler = new TimeoutRequestRetryWithBackoffHandler(numRetries,Duration.milliseconds(100));
         final boolean expected = timeoutRequestRetryHandler.retryRequest(new SocketTimeoutException(), 1, httpContext);
 
         assertThat(expected).isTrue();
@@ -49,9 +49,9 @@ public class TimeoutRequestRetryWithBackoffHandlerTest {
     @Test
     public void shouldRetryOnSpecifiedExceptionList() {
         final int numRetries = 2;
-        final List<String> retryExceptionNames = Arrays.asList(new String[]{ "org.apache.http.conn.ConnectTimeoutException", "java.net.SocketTimeoutException", "org.apache.http.NoHttpResponseException"}) ;
+        final List<String> retryExceptionNames = Arrays.asList("org.apache.http.conn.ConnectTimeoutException", "java.net.SocketTimeoutException", "org.apache.http.NoHttpResponseException") ;
 
-        TimeoutRequestRetryWithBackoffHandler timeoutRequestRetryHandler = new TimeoutRequestRetryWithBackoffHandler(numRetries,Duration.milliseconds(1000),retryExceptionNames);
+        TimeoutRequestRetryWithBackoffHandler timeoutRequestRetryHandler = new TimeoutRequestRetryWithBackoffHandler(numRetries,Duration.milliseconds(100),retryExceptionNames);
         boolean expected = timeoutRequestRetryHandler.retryRequest(new SocketTimeoutException(), 1, httpContext);
         assertThat(expected).isTrue();
 
@@ -70,12 +70,12 @@ public class TimeoutRequestRetryWithBackoffHandlerTest {
         final int numRetries = 2;
         final int executionCount = 3;
 
-        TimeoutRequestRetryWithBackoffHandler timeoutRequestRetryHandler = new TimeoutRequestRetryWithBackoffHandler(numRetries,Duration.milliseconds(1000));
+        TimeoutRequestRetryWithBackoffHandler timeoutRequestRetryHandler = new TimeoutRequestRetryWithBackoffHandler(numRetries,Duration.milliseconds(100));
         boolean expected = timeoutRequestRetryHandler.retryRequest(new ConnectTimeoutException(), numRetries, httpContext);
 
         assertThat(expected).isTrue();
 
-        timeoutRequestRetryHandler = new TimeoutRequestRetryWithBackoffHandler(numRetries,Duration.milliseconds(1000));
+        timeoutRequestRetryHandler = new TimeoutRequestRetryWithBackoffHandler(numRetries,Duration.milliseconds(100));
         expected = timeoutRequestRetryHandler.retryRequest(new ConnectTimeoutException(), executionCount, httpContext);
 
         assertThat(expected).isFalse();
@@ -85,7 +85,7 @@ public class TimeoutRequestRetryWithBackoffHandlerTest {
     public void should_not_be_retry_other_exceptions() {
         final int numRetries = 2;
 
-        TimeoutRequestRetryWithBackoffHandler timeoutRequestRetryHandler = new TimeoutRequestRetryWithBackoffHandler(numRetries,Duration.milliseconds(1000));
+        TimeoutRequestRetryWithBackoffHandler timeoutRequestRetryHandler = new TimeoutRequestRetryWithBackoffHandler(numRetries,Duration.milliseconds(100));
         final boolean expected = timeoutRequestRetryHandler.retryRequest(new IOException(), 1, httpContext);
 
         assertThat(expected).isFalse();
@@ -94,7 +94,7 @@ public class TimeoutRequestRetryWithBackoffHandlerTest {
     @Test
     public void firstRetryShouldBackOffForSpecifiedPeriod() {
         final int numRetries = 3;
-        final Duration backOffPeriod = Duration.milliseconds(1000);
+        final Duration backOffPeriod = Duration.milliseconds(100);
         final int retryAttempt = 1;
 
         TimeoutRequestRetryWithBackoffHandler timeoutRequestRetryHandler = new TimeoutRequestRetryWithBackoffHandler(numRetries,backOffPeriod);
@@ -104,13 +104,13 @@ public class TimeoutRequestRetryWithBackoffHandlerTest {
         long end = System.currentTimeMillis();
 
         assertThat(expected).isTrue();
-        assertThat((end-start) > retryAttempt * backOffPeriod.toMilliseconds()).isTrue();
+        assertThat(retryAttempt * backOffPeriod.toMilliseconds()).isLessThanOrEqualTo(end-start);
     }
 
     @Test
     public void secondRetryShouldBackOffForTwiceSpecifiedPeriod() {
         final int numRetries = 3;
-        final Duration backOffPeriod = Duration.milliseconds(1000);
+        final Duration backOffPeriod = Duration.milliseconds(100);
         final int retryAttempt = 2;
 
         TimeoutRequestRetryWithBackoffHandler timeoutRequestRetryHandler = new TimeoutRequestRetryWithBackoffHandler(numRetries,backOffPeriod);
@@ -120,13 +120,13 @@ public class TimeoutRequestRetryWithBackoffHandlerTest {
         long end = System.currentTimeMillis();
 
         assertThat(expected).isTrue();
-        assertThat((end-start) > retryAttempt * backOffPeriod.toMilliseconds()).isTrue();
+        assertThat(retryAttempt * backOffPeriod.toMilliseconds()).isLessThanOrEqualTo(end-start);
     }
 
     @Test
     public void thirdRetryShouldBackOffForThriceSpecifiedPeriod() {
         final int numRetries = 3;
-        final Duration backOffPeriod = Duration.milliseconds(1000);
+        final Duration backOffPeriod = Duration.milliseconds(100);
         final int retryAttempt = 3;
 
         TimeoutRequestRetryWithBackoffHandler timeoutRequestRetryHandler = new TimeoutRequestRetryWithBackoffHandler(numRetries,backOffPeriod);
@@ -136,6 +136,6 @@ public class TimeoutRequestRetryWithBackoffHandlerTest {
         long end = System.currentTimeMillis();
 
         assertThat(expected).isTrue();
-        assertThat((end-start) > retryAttempt * backOffPeriod.toMilliseconds()).isTrue();
+        assertThat(retryAttempt * backOffPeriod.toMilliseconds()).isLessThanOrEqualTo(end-start);
     }
 }
