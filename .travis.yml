@@ -2,8 +2,8 @@ dist: bionic
 language: java
 jdk:
   - openjdk11
-  - openjdk14
   - openjdk15
+  - openjdk16
   - openjdk-ea
 install:
   - mvn dependency:tree test -DskipTests=true -Dmaven.javadoc.skip=true -B -V
@@ -14,4 +14,5 @@ matrix:
   allow_failures:
 # openjdk11 from install-jdk is 11.0.2 and not the latest
     - jdk: openjdk11
+    - jdk: openjdk16
     - jdk: openjdk-ea
