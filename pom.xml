@@ -41,7 +41,7 @@
         <jsoup.version>1.13.1</jsoup.version>
         <logback.version>1.2.3</logback.version>
         <logstash_logback_encoder.version>6.4</logstash_logback_encoder.version>
-        <nimbus_jwt.version>9.1</nimbus_jwt.version>
+        <nimbus_jwt.version>9.1.1</nimbus_jwt.version>
         <opensaml.version>4.0.1</opensaml.version>
         <postgres.version>42.2.18</postgres.version>
         <prometheus_client.version>0.9.0</prometheus_client.version>
