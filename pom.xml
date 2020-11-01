@@ -50,7 +50,7 @@
         <snakeyaml.version>1.27</snakeyaml.version>
 
         <!-- transitive dependencies (mainly updates to opensaml) -->
-        <bouncycastle.version>1.66</bouncycastle.version>
+        <bouncycastle.version>1.67</bouncycastle.version>
         <commons_codec.version>1.15</commons_codec.version>
         <cryptacular.version>1.2.4</cryptacular.version>
         <guava.version>30.0-jre</guava.version>
