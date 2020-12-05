@@ -29,7 +29,7 @@
         <commons_text.version>1.9</commons_text.version>
         <commons_validator.version>1.7</commons_validator.version>
         <dropwizard.version>2.0.16</dropwizard.version>
-        <flyway.version>7.2.1</flyway.version>
+        <flyway.version>7.3.1</flyway.version>
         <freemarker.version>2.3.30</freemarker.version>
         <jackson.version>2.11.3</jackson.version>
         <jakarta_activation.version>1.2.2</jakarta_activation.version>
