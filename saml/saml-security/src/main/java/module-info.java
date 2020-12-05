@@ -20,6 +20,7 @@ module stubidp.saml.security {
     requires transitive java.validation;
     requires transitive java.xml;
     requires transitive net.shibboleth.utilities.java.support;
+    requires transitive org.apache.commons.codec;
     requires transitive org.opensaml.saml.impl;
     requires transitive org.opensaml.saml;
     requires transitive org.opensaml.security.impl;
