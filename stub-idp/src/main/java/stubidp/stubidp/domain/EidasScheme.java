@@ -36,12 +36,12 @@ public enum EidasScheme {
     slovenia("slovenia"),
     spain("spain"),
     sweden("sweden"),
-    united_kingdom("united-kingdom"),
+//    united_kingdom("united-kingdom"),
     iceland("iceland"),
     liechtenstein("liechtenstein"),
     norway("norway");
 
-    private String eidasSchemeName;
+    private final String eidasSchemeName;
 
     EidasScheme(String eidasSchemeName) {
         this.eidasSchemeName = eidasSchemeName;
