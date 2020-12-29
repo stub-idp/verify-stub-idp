@@ -11,7 +11,7 @@ import java.time.Instant;
 import java.util.List;
 
 public class ValidatedResponse implements ValidatedEncryptedAssertionContainer {
-    private Response response;
+    private final Response response;
 
     public ValidatedResponse(Response response) {
         this.response = response;

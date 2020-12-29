@@ -18,7 +18,7 @@ import static stubidp.utils.security.security.Certificate.END_CERT;
 
 public class X509CertificateConfigurationTest {
 
-    private ObjectMapper objectMapper = new ObjectMapper();
+    private final ObjectMapper objectMapper = new ObjectMapper();
 
     @Test
     public void should_loadPublicKey() throws Exception {
@@ -44,14 +44,14 @@ public class X509CertificateConfigurationTest {
     }
 
     @Test
-    public void should_ThrowExceptionWhenStringDoesNotContainAPublicKey() throws Exception {
+    public void should_ThrowExceptionWhenStringDoesNotContainAPublicKey() {
         String encodedKey = Base64.getEncoder().encodeToString("not-a-fullCertificate".getBytes());
         final ValueInstantiationException exception = Assertions.assertThrows(ValueInstantiationException.class, () -> objectMapper.readValue("{\"type\": \"x509\", \"cert\": \"" + encodedKey + "\", \"name\": \"someId\"}", DeserializablePublicKeyConfiguration.class));
         assertThat(exception.getMessage()).contains("Unable to load certificate");
     }
 
     @Test
-    public void should_ThrowExceptionWhenIncorrectKeySpecified() throws Exception {
+    public void should_ThrowExceptionWhenIncorrectKeySpecified() {
         String path = getClass().getClassLoader().getResource("empty_file").getPath();
         String jsonConfig = "{\"type\": \"x509\", \"certFoo\": \"" + path + "\", \"name\": \"someId\"}";
         Assertions.assertThrows(ValueInstantiationException.class, () -> objectMapper.readValue(jsonConfig, DeserializablePublicKeyConfiguration.class));

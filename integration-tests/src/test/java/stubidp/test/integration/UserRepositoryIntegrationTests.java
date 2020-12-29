@@ -62,7 +62,7 @@ public class UserRepositoryIntegrationTests extends IntegrationTestHelper {
                     .addUserCredentials(new TestUserCredentials(USERNAME, PASSWORD))
                     .build());
 
-    protected Client client = JerseyClientBuilder.createClient().property(ClientProperties.FOLLOW_REDIRECTS, false);
+    protected final Client client = JerseyClientBuilder.createClient().property(ClientProperties.FOLLOW_REDIRECTS, false);
 
     @BeforeEach
     void setUp() {
@@ -215,7 +215,7 @@ public class UserRepositoryIntegrationTests extends IntegrationTestHelper {
     protected static class UserBuilder {
         private Optional<String> levelOfAssurance = Optional.ofNullable(AuthnContext.LEVEL_1.toString());
         private Optional<String> username = Optional.of("default-username");
-        private Optional<Address> address = Optional.ofNullable(anAddress().withLines(asList("line-1", "line-2")).build());
+        private final Optional<Address> address = Optional.ofNullable(anAddress().withLines(asList("line-1", "line-2")).build());
         private Optional<String> password = Optional.of("default-password");
         private Optional<String> pid = Optional.of("default-pid");
 
@@ -228,11 +228,11 @@ public class UserRepositoryIntegrationTests extends IntegrationTestHelper {
                     pid,
                     username.orElse(null),
                     password.orElse(null),
-                    Optional.<SimpleMdsValue<String>>empty(),
-                    Optional.<SimpleMdsValue<String>>empty(),
-                    Collections.<SimpleMdsValue<String>>emptyList(),
-                    Optional.<SimpleMdsValue<Gender>>empty(),
-                    Optional.<SimpleMdsValue<Instant>>empty(),
+                    Optional.empty(),
+                    Optional.empty(),
+                    Collections.emptyList(),
+                    Optional.empty(),
+                    Optional.empty(),
                     address,
                     levelOfAssurance.orElse(null));
         }

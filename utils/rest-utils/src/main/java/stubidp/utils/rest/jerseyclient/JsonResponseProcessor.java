@@ -32,16 +32,14 @@ public class JsonResponseProcessor {
 
     @SuppressWarnings("unchecked")
     public <T> T getJsonEntity(URI uri, GenericType<T> genericType, Class<T> clazz, Response clientResponse) {
-        Response successResponse = filterErrorResponses(uri, clientResponse);
-        try {
-            if ((clazz != null && clazz == Response.class) || (genericType != null && genericType.getRawType() == Response.class)) {
+        final Response successResponse = filterErrorResponses(uri, clientResponse);
+        try (clientResponse) {
+            if ((clazz == Response.class) || (genericType != null && genericType.getRawType() == Response.class)) {
                 throw createUnauditedException(ExceptionType.INVALID_CLIENTRESPONSE_PARAM, UUID.randomUUID());
             } else if (clazz == null && genericType == null) {
                 return (T) new Object();
             }
             return getEntity(genericType, clazz, successResponse);
-        } finally {
-            clientResponse.close(); //Do this to avoid any possibility of a connection leak.
         }
     }
 

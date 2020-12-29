@@ -21,7 +21,7 @@ public class HubEidasAttributeQueryRequestBuilder {
     private String authnRequestIssuerEntityId = "issuer-id";
     private AuthnContext authnContext = AuthnContext.LEVEL_1;
     private String encryptedIdentityAssertion = "encryptedIdentityAssertion";
-    private String hubEidasEntityId = "hubEntityId";
+    private final String hubEidasEntityId = "hubEntityId";
 
     private HubEidasAttributeQueryRequestBuilder() {}
 

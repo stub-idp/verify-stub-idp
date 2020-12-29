@@ -6,8 +6,8 @@ import stubidp.test.utils.httpstub.RequestAndResponse;
 import java.util.Map;
 
 public class RequestAndResponseBuilder {
-    private ExpectedRequestBuilder expectedRequestBuilder;
-    private RegisteredResponseBuilder registeredResponseBuilder = new RegisteredResponseBuilder();
+    private final ExpectedRequestBuilder expectedRequestBuilder;
+    private final RegisteredResponseBuilder registeredResponseBuilder = new RegisteredResponseBuilder();
 
     RequestAndResponseBuilder(ExpectedRequestBuilder expectedRequestBuilder) {
         this.expectedRequestBuilder= expectedRequestBuilder;

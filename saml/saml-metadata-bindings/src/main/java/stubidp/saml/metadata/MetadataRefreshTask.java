@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Map;
 
 public class MetadataRefreshTask extends Task {
-    private AbstractReloadingMetadataResolver metadataProvider;
+    private final AbstractReloadingMetadataResolver metadataProvider;
 
     @Inject
     public MetadataRefreshTask(MetadataResolver metadataProvider) {

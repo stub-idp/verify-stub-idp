@@ -10,7 +10,7 @@ import javax.inject.Inject;
 import java.util.function.Function;
 
 public abstract class IdaAuthnRequestToAuthnRequestTransformer<TInput extends IdaSamlMessage> implements Function<TInput,AuthnRequest> {
-    private OpenSamlXmlObjectFactory samlObjectFactory;
+    private final OpenSamlXmlObjectFactory samlObjectFactory;
 
     @Inject
     protected IdaAuthnRequestToAuthnRequestTransformer(OpenSamlXmlObjectFactory samlObjectFactory) {

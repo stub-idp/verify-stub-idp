@@ -22,7 +22,7 @@ import static stubidp.test.devpki.TestCertificateStrings.METADATA_SIGNING_A_PUBL
 
 public class EntitiesDescriptorFactory {
     private final Instant validUntil = Instant.now().atZone(ZoneId.of("UTC")).plusWeeks(2).toInstant();
-    private EntityDescriptorFactory entityDescriptorFactory = new EntityDescriptorFactory();
+    private final EntityDescriptorFactory entityDescriptorFactory = new EntityDescriptorFactory();
 
     public EntitiesDescriptor defaultEntitiesDescriptor() {
         return entitiesDescriptor(defaultEntityDescriptors());

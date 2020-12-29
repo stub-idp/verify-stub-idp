@@ -54,7 +54,7 @@ public abstract class MetadataDto {
     }
 
     public Collection<Certificate> getCertificates() {
-        return Stream.<Certificate>concat(hubSigningCertificates.stream(), encryptionCertificates.stream())
+        return Stream.concat(hubSigningCertificates.stream(), encryptionCertificates.stream())
                 .collect(Collectors.toUnmodifiableList());
     }
 

@@ -43,7 +43,7 @@ public class LogstashFileAppenderAppRuleTest {
         }
     }
 
-    public static DropwizardAppExtension<TestConfiguration> dropwizardAppRule = new DropwizardAppExtension<>(TestApplication.class, ResourceHelpers
+    public static final DropwizardAppExtension<TestConfiguration> dropwizardAppRule = new DropwizardAppExtension<>(TestApplication.class, ResourceHelpers
             .resourceFilePath("file-appender-test-application.yml"),
             ConfigOverride.config("server.requestLog.appenders[0].currentLogFilename", requestLog.getAbsolutePath()),
             ConfigOverride.config("logging.appenders[0].currentLogFilename", logLog.getAbsolutePath())
@@ -68,7 +68,7 @@ public class LogstashFileAppenderAppRuleTest {
         int count = 0;
         while(count<5 && (requestLog.length() == 0)) {
             count++;
-            Thread.sleep(count*50);
+            Thread.sleep(count* 50L);
         }
 
         assertThat(requestLog.length()).isGreaterThan(0);
@@ -95,7 +95,7 @@ public class LogstashFileAppenderAppRuleTest {
         int count = 0;
         while(count<5 && (logLog.length() == 0)) {
             count++;
-            Thread.sleep(count*50);
+            Thread.sleep(count* 50L);
         }
 
         assertThat(logLog.length()).isGreaterThan(0);

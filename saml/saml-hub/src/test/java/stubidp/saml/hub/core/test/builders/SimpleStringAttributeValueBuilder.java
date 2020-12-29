@@ -5,7 +5,7 @@ import stubidp.saml.utils.core.OpenSamlXmlObjectFactory;
 
 public class SimpleStringAttributeValueBuilder {
 
-    private OpenSamlXmlObjectFactory openSamlXmlObjectFactory = new OpenSamlXmlObjectFactory();
+    private final OpenSamlXmlObjectFactory openSamlXmlObjectFactory = new OpenSamlXmlObjectFactory();
 
     private String value;
 

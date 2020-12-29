@@ -13,8 +13,8 @@ import java.util.List;
 public class ConditionsBuilder {
     private static final XMLObjectBuilderFactory xmlObjectBuilderFactory = XMLObjectProviderRegistrySupport.getBuilderFactory();
 
-    private List<AudienceRestriction> audienceRestrictions = new ArrayList<>();
-    private AudienceRestriction defaultAudienceRestriction = AudienceRestrictionBuilder.anAudienceRestriction().build();
+    private final List<AudienceRestriction> audienceRestrictions = new ArrayList<>();
+    private final AudienceRestriction defaultAudienceRestriction = AudienceRestrictionBuilder.anAudienceRestriction().build();
     private boolean shouldIncludeDefaultAudienceRestriction = true;
     private Instant notBefore = null;
     private Instant notOnOrAfter = null;

@@ -12,12 +12,12 @@ import java.util.Optional;
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
 public class EidasUser {
 
-    private String firstName;
+    private final String firstName;
     private final Optional<String> firstNameNonLatin;
-    private String familyName;
+    private final String familyName;
     private final Optional<String> familyNameNonLatin;
-    private String persistentId;
-    private Instant dateOfBirth;
+    private final String persistentId;
+    private final Instant dateOfBirth;
     private Optional<EidasAddress> address;
     private Optional<Gender> gender;
 

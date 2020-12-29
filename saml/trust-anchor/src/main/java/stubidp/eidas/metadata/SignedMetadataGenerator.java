@@ -14,11 +14,11 @@ import java.security.cert.X509Certificate;
 
 public class SignedMetadataGenerator {
 
-    private PrivateKey key;
-    private X509Certificate certificate;
-    private AlgorithmType algorithm;
-    private File inputFile;
-    private File outputFile;
+    private final PrivateKey key;
+    private final X509Certificate certificate;
+    private final AlgorithmType algorithm;
+    private final File inputFile;
+    private final File outputFile;
 
     public SignedMetadataGenerator(PrivateKey key, X509Certificate certificate, AlgorithmType algorithm, File inputFile, File outputFile) {
         this.key = key;

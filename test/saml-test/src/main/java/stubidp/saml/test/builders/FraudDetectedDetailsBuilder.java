@@ -3,7 +3,7 @@ package stubidp.saml.test.builders;
 import stubidp.saml.domain.assertions.FraudDetectedDetails;
 
 public class FraudDetectedDetailsBuilder {
-    private String eventId = "default-event-id";
+    private final String eventId = "default-event-id";
     private String fraudIndicator = "IT01";
 
     private FraudDetectedDetailsBuilder() {}

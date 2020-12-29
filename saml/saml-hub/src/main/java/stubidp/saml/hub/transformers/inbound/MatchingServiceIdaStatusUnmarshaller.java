@@ -5,7 +5,7 @@ import java.util.Map;
 public class MatchingServiceIdaStatusUnmarshaller extends IdaStatusUnmarshaller<MatchingServiceIdaStatus> {
 
     private static final Map<IdaStatusMapperStatus, MatchingServiceIdaStatus> SAML_TO_REST_CODES =
-            Map.<IdaStatusMapperStatus, MatchingServiceIdaStatus>ofEntries(
+            Map.ofEntries(
                     Map.entry(IdaStatusMapperStatus.RequesterError, MatchingServiceIdaStatus.RequesterError),
                     Map.entry(IdaStatusMapperStatus.NoMatchingServiceMatchFromMatchingService, MatchingServiceIdaStatus.NoMatchingServiceMatchFromMatchingService),
                     Map.entry(IdaStatusMapperStatus.MatchingServiceMatch, MatchingServiceIdaStatus.MatchingServiceMatch),

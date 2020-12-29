@@ -38,8 +38,8 @@ public class ResponseBuilder {
     private boolean shouldAddSignature = true;
     private SignatureAlgorithm signatureAlgorithm = new SignatureRSASHA256();
     private DigestAlgorithm digestAlgorithm = new DigestSHA256();
-    private List<Assertion> assertions = new ArrayList<>();
-    private List<EncryptedAssertion> encryptedAssertions = new ArrayList<>();
+    private final List<Assertion> assertions = new ArrayList<>();
+    private final List<EncryptedAssertion> encryptedAssertions = new ArrayList<>();
 
     private Optional<Issuer> issuer = ofNullable(IssuerBuilder.anIssuer().build());
     private Optional<String> id = Optional.of(DEFAULT_RESPONSE_ID);

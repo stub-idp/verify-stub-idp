@@ -6,11 +6,11 @@ import java.time.Instant;
 import java.util.Collection;
 
 public abstract class FetchedMetadata {
-    private Instant validUntil;
-    private String entityId;
-    private OrganisationDto organisation;
-    private Collection<ContactPersonDto> contactPersons;
-    private Certificate signingCertificate;
+    private final Instant validUntil;
+    private final String entityId;
+    private final OrganisationDto organisation;
+    private final Collection<ContactPersonDto> contactPersons;
+    private final Certificate signingCertificate;
 
     public FetchedMetadata(
         String entityId,

@@ -22,7 +22,7 @@ public class SamlObjectSigner {
     private final PrivateKey privateKey;
     private final String certificate;
     private final SamlObjectMarshaller marshaller;
-    private String signatureAlgorithm;
+    private final String signatureAlgorithm;
 
     public SamlObjectSigner(PublicKey publicKey, PrivateKey privateKey, String certificate, String signatureAlgorithm) {
         this.publicKey = publicKey;

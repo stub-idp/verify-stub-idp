@@ -23,7 +23,7 @@ public class SamlRequestSignatureValidatorTest extends OpenSAMLRunner {
     private AuthnRequest authnRequest;
 
     @BeforeEach
-    public void setUp() throws Exception {
+    public void setUp() {
         samlMessageSignatureValidator = mock(SamlMessageSignatureValidator.class);
         requestSignatureValidator = new SamlRequestSignatureValidator<>(samlMessageSignatureValidator);
         authnRequest = mock(AuthnRequest.class);

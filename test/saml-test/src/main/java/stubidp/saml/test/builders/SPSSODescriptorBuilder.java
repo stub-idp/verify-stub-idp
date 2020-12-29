@@ -14,17 +14,17 @@ import static stubidp.saml.test.builders.X509CertificateBuilder.aX509Certificate
 import static stubidp.saml.test.builders.X509DataBuilder.aX509Data;
 
 public class SPSSODescriptorBuilder {
-    private List<String> supportedProtocols = new ArrayList<>();
-    private List<KeyDescriptor> keyDescriptors = new ArrayList<>();
+    private final List<String> supportedProtocols = new ArrayList<>();
+    private final List<KeyDescriptor> keyDescriptors = new ArrayList<>();
     private boolean addDefaultSigningKey = true;
     private boolean addDefaultEncryptionKey = true;
-    private KeyDescriptor defaultSigningKeyDescriptor = KeyDescriptorBuilder.aKeyDescriptor().withKeyInfo(KeyInfoBuilder.aKeyInfo().withKeyName(TestEntityIds.HUB_ENTITY_ID).withX509Data(aX509Data().withX509Certificate(aX509Certificate().build()).build()).build()).withUse(UsageType.SIGNING.toString()).build();
-    private KeyDescriptor defaultEncryptionKeyDescriptor = KeyDescriptorBuilder.aKeyDescriptor().withKeyInfo(KeyInfoBuilder.aKeyInfo().withKeyName(TestEntityIds.HUB_ENTITY_ID).withX509Data(aX509Data().withX509Certificate(aX509Certificate().build()).build()).build()).withUse(UsageType.ENCRYPTION.toString()).build();
-    private List<AssertionConsumerService> assertionConsumerServices = new ArrayList<>();
-    private AssertionConsumerService defaultAssertionConsumerService = AssertionConsumerServiceBuilder.anAssertionConsumerService().build();
+    private final KeyDescriptor defaultSigningKeyDescriptor = KeyDescriptorBuilder.aKeyDescriptor().withKeyInfo(KeyInfoBuilder.aKeyInfo().withKeyName(TestEntityIds.HUB_ENTITY_ID).withX509Data(aX509Data().withX509Certificate(aX509Certificate().build()).build()).build()).withUse(UsageType.SIGNING.toString()).build();
+    private final KeyDescriptor defaultEncryptionKeyDescriptor = KeyDescriptorBuilder.aKeyDescriptor().withKeyInfo(KeyInfoBuilder.aKeyInfo().withKeyName(TestEntityIds.HUB_ENTITY_ID).withX509Data(aX509Data().withX509Certificate(aX509Certificate().build()).build()).build()).withUse(UsageType.ENCRYPTION.toString()).build();
+    private final List<AssertionConsumerService> assertionConsumerServices = new ArrayList<>();
+    private final AssertionConsumerService defaultAssertionConsumerService = AssertionConsumerServiceBuilder.anAssertionConsumerService().build();
     private boolean addDefaultAssertionConsumerService = true;
     private boolean addDefaultSupportedProtocol = true;
-    private String defaultSupportedProtocol = SAMLConstants.SAML20P_NS;
+    private final String defaultSupportedProtocol = SAMLConstants.SAML20P_NS;
 
     private SPSSODescriptorBuilder() {}
 

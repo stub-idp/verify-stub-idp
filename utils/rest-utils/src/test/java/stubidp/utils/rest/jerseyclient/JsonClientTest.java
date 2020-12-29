@@ -23,8 +23,8 @@ public class JsonClientTest {
     private JsonResponseProcessor jsonResponseProcessor;
 
     private JsonClient jsonClient;
-    private URI testUri = URI.create("/some-uri");
-    private String requestBody = "some-request-body";
+    private final URI testUri = URI.create("/some-uri");
+    private final String requestBody = "some-request-body";
 
     @BeforeEach
     public void setup() {
@@ -32,7 +32,7 @@ public class JsonClientTest {
     }
 
     @Test
-    public void post_shouldDelegateToJsonResponseProcessorToCheckForErrors() throws Exception {
+    public void post_shouldDelegateToJsonResponseProcessorToCheckForErrors() {
         Response clientResponse = Response.noContent().build();
         when(errorHandlingClient.post(testUri, requestBody)).thenReturn(clientResponse);
 
@@ -42,7 +42,7 @@ public class JsonClientTest {
     }
 
     @Test
-    public void basicPost_shouldDelegateToProcessor() throws Exception {
+    public void basicPost_shouldDelegateToProcessor() {
         Response clientResponse = Response.noContent().build();
         when(errorHandlingClient.post(testUri, requestBody)).thenReturn(clientResponse);
 
@@ -52,7 +52,7 @@ public class JsonClientTest {
     }
 
     @Test
-    public void basicGet_shouldDelegateToProcessor() throws Exception {
+    public void basicGet_shouldDelegateToProcessor() {
         Response clientResponse = Response.noContent().build();
         when(errorHandlingClient.get(testUri)).thenReturn(clientResponse);
 
@@ -62,7 +62,7 @@ public class JsonClientTest {
     }
 
     @Test
-    public void getWithGenericType_shouldDelegateToProcessor() throws Exception {
+    public void getWithGenericType_shouldDelegateToProcessor() {
         Response clientResponse = Response.noContent().build();
         when(errorHandlingClient.get(testUri)).thenReturn(clientResponse);
         GenericType<String> genericType = new GenericType<>() {};

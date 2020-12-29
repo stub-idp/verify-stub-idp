@@ -8,6 +8,6 @@ public class BooleanBasedMdsAttributeValueUnmarshaller extends BaseMdsSamlObject
     @Override
     protected void processElementContent(XMLObject samlObject, String elementContent) {
         BooleanBasedMdsAttributeValue booleanBasedMdsAttributeValue = (BooleanBasedMdsAttributeValue) samlObject;
-        booleanBasedMdsAttributeValue.setValue(Boolean.valueOf(elementContent));
+        booleanBasedMdsAttributeValue.setValue(Boolean.parseBoolean(elementContent));
     }
 }

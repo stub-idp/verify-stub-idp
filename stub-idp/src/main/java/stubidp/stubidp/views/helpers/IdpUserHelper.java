@@ -9,7 +9,7 @@ import static java.util.stream.Collectors.joining;
 
 public class IdpUserHelper {
 
-    private DatabaseIdpUser idpUser;
+    private final DatabaseIdpUser idpUser;
 
     public IdpUserHelper(DatabaseIdpUser databaseIdpUser) { this.idpUser = databaseIdpUser; }
 

@@ -23,7 +23,7 @@ import static stubidp.dropwizard.logstash.RootResource.TEST_LOG_LINE;
 @ExtendWith(DropwizardExtensionsSupport.class)
 public class LogstashConsoleAppenderAppRuleTest {
 
-    public static DropwizardAppExtension<TestConfiguration> dropwizardAppRule = new DropwizardAppExtension<>(TestApplication.class, ResourceHelpers.resourceFilePath("console-appender-test-application.yml"));
+    public static final DropwizardAppExtension<TestConfiguration> dropwizardAppRule = new DropwizardAppExtension<>(TestApplication.class, ResourceHelpers.resourceFilePath("console-appender-test-application.yml"));
 
     private final Client client = new JerseyClientBuilder().build();
 

@@ -318,7 +318,7 @@ public class HubTransformersFactory {
                         new MatchingServiceIdaStatusUnmarshaller()
                 ),
                 getSamlResponseSignatureValidator(getSignatureValidator(signingKeyStore)),
-                this.<InboundResponseFromMatchingService>getSamlResponseAssertionDecrypter(keyStore),
+                this.getSamlResponseAssertionDecrypter(keyStore),
                 getSamlAssertionsSignatureValidator(getSignatureValidator(signingKeyStore)),
                 new EncryptedResponseFromMatchingServiceValidator(),
                 new ResponseAssertionsFromMatchingServiceValidator(

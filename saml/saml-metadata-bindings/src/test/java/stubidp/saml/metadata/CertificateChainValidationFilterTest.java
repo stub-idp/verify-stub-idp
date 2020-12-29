@@ -35,19 +35,19 @@ class CertificateChainValidationFilterTest extends OpenSAMLRunner {
     private static final List<String> HUB_KEY_NAMES = asList(EntityDescriptorFactory.SIGNING_ONE, EntityDescriptorFactory.SIGNING_TWO, EntityDescriptorFactory.ENCRYPTION);
 
     @RegisterExtension
-    static KeyStoreRule idpKeyStoreRule = KeyStoreRuleBuilder.aKeyStoreRule().withCertificate("idp", CACertificates.TEST_IDP_CA)
+    static final KeyStoreRule idpKeyStoreRule = KeyStoreRuleBuilder.aKeyStoreRule().withCertificate("idp", CACertificates.TEST_IDP_CA)
                                                                     .withCertificate("root", CACertificates.TEST_ROOT_CA).build();
 
     @RegisterExtension
-    static KeyStoreRule hubKeyStoreRule = KeyStoreRuleBuilder.aKeyStoreRule().withCertificate("hub", CACertificates.TEST_CORE_CA)
+    static final KeyStoreRule hubKeyStoreRule = KeyStoreRuleBuilder.aKeyStoreRule().withCertificate("hub", CACertificates.TEST_CORE_CA)
                                                                     .withCertificate("root", CACertificates.TEST_ROOT_CA).build();
 
     @RegisterExtension
-    static KeyStoreRule rpKeyStoreRule = KeyStoreRuleBuilder.aKeyStoreRule().withCertificate("rp", CACertificates.TEST_RP_CA)
+    static final KeyStoreRule rpKeyStoreRule = KeyStoreRuleBuilder.aKeyStoreRule().withCertificate("rp", CACertificates.TEST_RP_CA)
                                                                    .withCertificate("root", CACertificates.TEST_ROOT_CA).build();
 
-    private MetadataFactory metadataFactory = new MetadataFactory();
-    private CertificateChainValidator certificateChainValidator = new CertificateChainValidator(new PKIXParametersProvider(), new X509CertificateFactory());
+    private final MetadataFactory metadataFactory = new MetadataFactory();
+    private final CertificateChainValidator certificateChainValidator = new CertificateChainValidator(new PKIXParametersProvider(), new X509CertificateFactory());
 
     @Test
     void shouldNotFilterOutTrustedCertificatesWhenAllCertificatesAreValid() throws Exception {

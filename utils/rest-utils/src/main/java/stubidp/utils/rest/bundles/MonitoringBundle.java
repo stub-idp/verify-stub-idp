@@ -12,7 +12,7 @@ public class MonitoringBundle implements ConfiguredBundle<ServiceNameConfigurati
     public void initialize(Bootstrap<?> bootstrap) {}
 
     @Override
-    public void run(ServiceNameConfiguration configuration, Environment environment) throws Exception {
+    public void run(ServiceNameConfiguration configuration, Environment environment) {
         environment.jersey().register(new ServiceNameResource(configuration.getServiceName()));
         environment.jersey().register(new VersionInfoResource(configuration.getClass()));
     }

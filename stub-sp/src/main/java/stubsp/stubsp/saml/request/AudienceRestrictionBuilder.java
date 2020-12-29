@@ -5,7 +5,7 @@ import stubidp.saml.utils.core.OpenSamlXmlObjectFactory;
 
 public class AudienceRestrictionBuilder {
 
-    private OpenSamlXmlObjectFactory openSamlXmlObjectFactory = new OpenSamlXmlObjectFactory();
+    private final OpenSamlXmlObjectFactory openSamlXmlObjectFactory = new OpenSamlXmlObjectFactory();
     private String audienceId;
 
     public static AudienceRestrictionBuilder anAudienceRestriction() {

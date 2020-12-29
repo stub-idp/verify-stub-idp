@@ -12,7 +12,7 @@ import java.util.Map;
 public class SetServiceUnavailableTask extends Task {
     private static final Logger LOG = LoggerFactory.getLogger(SetServiceUnavailableTask.class);
 
-    private ServiceStatus serviceStatus;
+    private final ServiceStatus serviceStatus;
 
     public SetServiceUnavailableTask(final ServiceStatus serviceStatus){
         super("set-service-unavailable");
@@ -20,7 +20,7 @@ public class SetServiceUnavailableTask extends Task {
     }
 
     @Override
-    public void execute(final Map<String, List<String>> parameters, final PrintWriter output) throws Exception {
+    public void execute(final Map<String, List<String>> parameters, final PrintWriter output) {
         LOG.info("Setting service status to unavailable");
         serviceStatus.setServiceStatus(false);
     }

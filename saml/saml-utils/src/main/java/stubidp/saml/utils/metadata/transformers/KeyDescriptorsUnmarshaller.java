@@ -13,7 +13,7 @@ import java.util.List;
 
 public class KeyDescriptorsUnmarshaller {
 
-    private OpenSamlXmlObjectFactory openSamlXmlObjectFactory;
+    private final OpenSamlXmlObjectFactory openSamlXmlObjectFactory;
 
     public KeyDescriptorsUnmarshaller(OpenSamlXmlObjectFactory openSamlXmlObjectFactory) {
         this.openSamlXmlObjectFactory = openSamlXmlObjectFactory;

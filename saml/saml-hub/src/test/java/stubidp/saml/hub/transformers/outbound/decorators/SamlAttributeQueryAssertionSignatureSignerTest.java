@@ -35,14 +35,14 @@ import static stubidp.saml.test.builders.SubjectConfirmationDataBuilder.aSubject
 @ExtendWith(MockitoExtension.class)
 public class SamlAttributeQueryAssertionSignatureSignerTest extends OpenSAMLRunner {
 
-    private OpenSamlXmlObjectFactory samlObjectFactory = new OpenSamlXmlObjectFactory();
+    private final OpenSamlXmlObjectFactory samlObjectFactory = new OpenSamlXmlObjectFactory();
 
     @Mock
     private IdaKeyStoreCredentialRetriever keyStoreCredentialRetriever;
     public SamlAttributeQueryAssertionSignatureSigner assertionSignatureSigner;
 
     @BeforeEach
-    public void setUp() throws Exception {
+    public void setUp() {
         assertionSignatureSigner = new SamlAttributeQueryAssertionSignatureSigner(
                 keyStoreCredentialRetriever,
                 samlObjectFactory,

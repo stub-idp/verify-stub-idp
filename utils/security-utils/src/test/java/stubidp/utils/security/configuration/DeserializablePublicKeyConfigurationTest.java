@@ -17,8 +17,8 @@ import static stubidp.utils.security.security.Certificate.END_CERT;
 
 public class DeserializablePublicKeyConfigurationTest {
 
-    private ObjectMapper objectMapper = new ObjectMapper();
-    private String CERT_NAME = "public_key.crt";
+    private final ObjectMapper objectMapper = new ObjectMapper();
+    private final String CERT_NAME = "public_key.crt";
 
     @Test
     public void shouldDefaultToFileType() throws Exception {

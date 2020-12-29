@@ -47,7 +47,7 @@ public class MatchingDatasetAssertionValidator {
         Attribute.UNSPECIFIED
     );
 
-    private static final Map<String, QName> VALID_TYPE_FOR_ATTRIBUTE = Map.<String, QName>ofEntries(
+    private static final Map<String, QName> VALID_TYPE_FOR_ATTRIBUTE = Map.ofEntries(
         Map.entry(IdaConstants.Attributes_1_1.Firstname.NAME, PersonName.TYPE_NAME),
         Map.entry(IdaConstants.Attributes_1_1.Middlename.NAME, PersonName.TYPE_NAME),
         Map.entry(IdaConstants.Attributes_1_1.Surname.NAME, PersonName.TYPE_NAME),

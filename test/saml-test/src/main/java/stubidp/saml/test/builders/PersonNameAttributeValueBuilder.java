@@ -13,7 +13,7 @@ public class PersonNameAttributeValueBuilder {
     private Optional<Instant> from = Optional.empty();
     private Optional<Instant> to = Optional.empty();
     private String value = "John";
-    private Optional<String> language = Optional.empty();
+    private final Optional<String> language = Optional.empty();
     private Optional<Boolean> verified = Optional.empty();
 
     private PersonNameAttributeValueBuilder() {}

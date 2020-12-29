@@ -24,7 +24,7 @@ import java.util.Optional;
 
 public class AuthnRequestBuilder {
 
-    private OpenSamlXmlObjectFactory openSamlXmlObjectFactory = new OpenSamlXmlObjectFactory();
+    private final OpenSamlXmlObjectFactory openSamlXmlObjectFactory = new OpenSamlXmlObjectFactory();
     private Optional<NameIDPolicy> nameIdPolicy = Optional.empty();
     private Optional<Scoping> scoping = Optional.empty();
     private Optional<String> assertionConsumerServiceUrl = Optional.empty();
@@ -33,14 +33,14 @@ public class AuthnRequestBuilder {
 
     private Optional<Issuer> issuer = Optional.ofNullable(IssuerBuilder.anIssuer().build());
     private Optional<String> id = Optional.of(AuthnRequestIdGenerator.generateRequestId());
-    private Optional<String> minimumLevelOfAssurance = Optional.of(IdaAuthnContext.LEVEL_1_AUTHN_CTX);
+    private final Optional<String> minimumLevelOfAssurance = Optional.of(IdaAuthnContext.LEVEL_1_AUTHN_CTX);
     private boolean shouldSign = true;
     private boolean shouldAddSignature = true;
     private Optional<Instant> issueInstant = Optional.of(Instant.now());
 
     private Optional<String> versionNumber = Optional.of(IdaConstants.SAML_VERSION_NUMBER);
     private Optional<String> destination = Optional.empty();
-    private Optional<String> requiredLevelOfAssurance = Optional.of(IdaAuthnContext.LEVEL_2_AUTHN_CTX);
+    private final Optional<String> requiredLevelOfAssurance = Optional.of(IdaAuthnContext.LEVEL_2_AUTHN_CTX);
     private Optional<Credential> signingCredential = Optional.empty();
     private Optional<Boolean> forceAuthn = Optional.empty();
     private Optional<Integer> assertionConsumerServiceIndex = Optional.empty();

@@ -54,7 +54,7 @@ public class PKIXSignatureValidationFilterProvider implements Provider<Signature
             ALGO_ID_SIGNATURE_ECDSA_SHA512,
             ALGO_ID_SIGNATURE_RSA_SHA256_MGF1
     );
-    private KeyStore metadataTrustStore;
+    private final KeyStore metadataTrustStore;
 
     @Inject
     public PKIXSignatureValidationFilterProvider(@Named("metadataTruststore") KeyStore metadataTrustStore) {
@@ -65,7 +65,7 @@ public class PKIXSignatureValidationFilterProvider implements Provider<Signature
     @Override
     public SignatureValidationFilter get() {
         ArrayList<String> aliases;
-        BasicPKIXValidationInformation basicPKIXValidationInformation = null;
+        BasicPKIXValidationInformation basicPKIXValidationInformation;
         try {
             CertificateFactory certificateFactory = CertificateFactory.getInstance("X.509");
             aliases = Collections.list(metadataTrustStore.aliases());

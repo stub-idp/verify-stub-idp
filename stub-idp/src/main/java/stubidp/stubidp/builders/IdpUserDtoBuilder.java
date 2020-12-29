@@ -15,7 +15,7 @@ public class IdpUserDtoBuilder {
     private Optional<String> pid = Optional.empty();
     private Optional<SimpleMdsValue<String>> firstName = Optional.empty();
     private Optional<SimpleMdsValue<String>> middleNames = Optional.empty();
-    private List<SimpleMdsValue<String>> surnames = new ArrayList<>();
+    private final List<SimpleMdsValue<String>> surnames = new ArrayList<>();
     private Optional<SimpleMdsValue<Gender>> gender = Optional.empty();
     private Optional<SimpleMdsValue<Instant>> dateOfBirth = Optional.empty();
     private Optional<Address> address = Optional.empty();

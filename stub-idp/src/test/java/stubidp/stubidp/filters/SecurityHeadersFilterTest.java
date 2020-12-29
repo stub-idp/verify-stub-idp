@@ -24,7 +24,7 @@ public class SecurityHeadersFilterTest {
     private ContainerResponseContext containerResponseContext;
 
     @Test
-    public void checkSecurityHeadersAreAdded() throws IOException {
+    public void checkSecurityHeadersAreAdded() {
         SecurityHeadersFilter securityHeadersFilter = new SecurityHeadersFilter();
         MultivaluedMap<String, Object> headers = new MultivaluedHashMap<>();
         when(containerResponseContext.getHeaders()).thenReturn(headers);

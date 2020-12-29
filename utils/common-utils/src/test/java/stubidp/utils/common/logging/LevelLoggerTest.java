@@ -31,12 +31,12 @@ public class LevelLoggerTest {
     @Captor
     private ArgumentCaptor<LoggingEvent> captorLoggingEvent;
 
-    private LevelLogger<LevelLoggerTest> levelLogger = LevelLogger.getLevelLogger(LevelLoggerTest.class);
-    private UUID errorId = UUID.randomUUID();
+    private final LevelLogger<LevelLoggerTest> levelLogger = LevelLogger.getLevelLogger(LevelLoggerTest.class);
+    private final UUID errorId = UUID.randomUUID();
     private final String innerErrorMessage = "innerErrorMessage";
 
     @BeforeEach
-    public void setUp() throws Exception {
+    public void setUp() {
         final Logger logger = (Logger) LoggerFactory.getLogger(Logger.ROOT_LOGGER_NAME);
         logger.addAppender(mockAppender);
     }

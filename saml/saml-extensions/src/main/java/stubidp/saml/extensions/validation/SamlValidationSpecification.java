@@ -4,8 +4,8 @@ import java.text.MessageFormat;
 
 public abstract class SamlValidationSpecification {
 
-    private String message;
-    private boolean contextExpected;
+    private final String message;
+    private final boolean contextExpected;
 
     public abstract SamlDocumentReference documentReference();
 

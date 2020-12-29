@@ -15,8 +15,8 @@ import java.util.Optional;
 
 public class MetadataBackedEncryptionCredentialResolver implements EncryptionCredentialResolver {
 
-    private CredentialResolver credentialResolver;
-    private QName role;
+    private final CredentialResolver credentialResolver;
+    private final QName role;
 
     public MetadataBackedEncryptionCredentialResolver(CredentialResolver credentialResolver, QName role) {
         this.credentialResolver = credentialResolver;

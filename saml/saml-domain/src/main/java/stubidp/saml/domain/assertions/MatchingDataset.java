@@ -64,7 +64,7 @@ public class MatchingDataset {
     }
 
     public List<Address> getAddresses() {
-        return Stream.<Address>concat(currentAddresses.stream(), previousAddresses.stream())
+        return Stream.concat(currentAddresses.stream(), previousAddresses.stream())
                 .collect(Collectors.toUnmodifiableList());
     }
 

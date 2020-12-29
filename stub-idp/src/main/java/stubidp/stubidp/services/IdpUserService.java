@@ -85,7 +85,7 @@ public class IdpUserService {
         sessionRepository.updateSession(session.get().getSessionId(), session.get());
     }
 
-    private DatabaseIdpUser createUserInIdp(String firstname, String surname, String addressLine1, String addressLine2, String addressTown, String addressPostCode, final AuthnContext _levelOfAssurance, String dateOfBirth, Optional<Gender> gender, String username, String password, Idp idp) throws IncompleteRegistrationException, InvalidDateException, UsernameAlreadyTakenException {
+    private DatabaseIdpUser createUserInIdp(String firstname, String surname, String addressLine1, String addressLine2, String addressTown, String addressPostCode, final AuthnContext _levelOfAssurance, String dateOfBirth, Optional<Gender> gender, String username, String password, Idp idp) throws IncompleteRegistrationException, UsernameAlreadyTakenException {
         if (!isMandatoryDataPresent(firstname, surname, addressLine1, addressLine2, addressTown, addressPostCode, dateOfBirth, username, password)) {
             throw new IncompleteRegistrationException();
         }

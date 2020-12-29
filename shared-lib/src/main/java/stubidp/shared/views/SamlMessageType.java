@@ -8,7 +8,7 @@ public enum SamlMessageType {
         this.formName = formName;
     }
 
-    private String formName;
+    private final String formName;
     public String toString() {
         return formName;
     }

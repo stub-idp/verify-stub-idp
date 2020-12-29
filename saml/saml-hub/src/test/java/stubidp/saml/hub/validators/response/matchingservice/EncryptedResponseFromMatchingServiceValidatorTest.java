@@ -39,7 +39,7 @@ public class EncryptedResponseFromMatchingServiceValidatorTest extends OpenSAMLR
     private EncryptedResponseFromMatchingServiceValidator validator;
 
     @BeforeEach
-    public void setUp() throws Exception {
+    public void setUp() {
         happyStatus = createStatus(StatusCode.SUCCESS, createSubStatusCode(SamlStatusCode.MATCH));
         validator = new EncryptedResponseFromMatchingServiceValidator();
     }

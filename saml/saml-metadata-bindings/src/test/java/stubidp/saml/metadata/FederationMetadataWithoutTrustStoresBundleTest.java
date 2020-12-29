@@ -42,7 +42,7 @@ public class FederationMetadataWithoutTrustStoresBundleTest {
     private static final String VERIFY_METADATA_PATH = "/saml/metadata/sp";
     private static final HttpStubRule verifyMetadataServer = new HttpStubRule();
     @RegisterExtension
-    public static KeyStoreRule metadataKeyStoreRule;
+    public static final KeyStoreRule metadataKeyStoreRule;
 
     static {
         try {
@@ -53,11 +53,7 @@ public class FederationMetadataWithoutTrustStoresBundleTest {
         }
 
         verifyMetadataServer.reset();
-        try {
-            verifyMetadataServer.register(VERIFY_METADATA_PATH, 200, APPLICATION_SAMLMETADATA_XML, new MetadataFactory().defaultMetadata());
-        } catch (JsonProcessingException e) {
-            throw new RuntimeException(e);
-        }
+        verifyMetadataServer.register(VERIFY_METADATA_PATH, 200, APPLICATION_SAMLMETADATA_XML, new MetadataFactory().defaultMetadata());
     }
 
     public static final DropwizardAppExtension<TestConfiguration> APPLICATION_DROPWIZARD_APP_RULE = new DropwizardAppExtension<>(
@@ -108,7 +104,7 @@ public class FederationMetadataWithoutTrustStoresBundleTest {
 
         @Path("/")
         public static class TestResource {
-            private MetadataResolver metadataResolver;
+            private final MetadataResolver metadataResolver;
             TestResource(MetadataResolver metadataResolver) {
                 this.metadataResolver = metadataResolver;
             }

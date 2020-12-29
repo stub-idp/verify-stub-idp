@@ -17,9 +17,9 @@ public class UdpServer {
 
     private Thread thread;
     private volatile DatagramSocket serverSocket;
-    private List<String> received = new CopyOnWriteArrayList<>();
-    private CyclicBarrier barrier = new CyclicBarrier(2);
-    private AtomicBoolean stopped = new AtomicBoolean(false);
+    private final List<String> received = new CopyOnWriteArrayList<>();
+    private final CyclicBarrier barrier = new CyclicBarrier(2);
+    private final AtomicBoolean stopped = new AtomicBoolean(false);
 
     public void start() {
         try {
@@ -28,21 +28,17 @@ public class UdpServer {
             throw new RuntimeException(e);
         }
 
-        thread = new Thread(new Runnable() {
-
-            @Override
-            public void run() {
-                byte[] receiveData = new byte[1024];
-                while (!stopped.get()) {
-                    try {
-                        DatagramPacket receivePacket = new DatagramPacket(receiveData, receiveData.length);
-                        serverSocket.receive(receivePacket);
-                        received.add(new String(receivePacket.getData()));
-                        barrier.await();
-                    } catch (IOException | BrokenBarrierException | InterruptedException e) {
-                        if (!stopped.get()) e.printStackTrace();
-                        stopped.set(true);
-                    }
+        thread = new Thread(() -> {
+            byte[] receiveData = new byte[1024];
+            while (!stopped.get()) {
+                try {
+                    DatagramPacket receivePacket = new DatagramPacket(receiveData, receiveData.length);
+                    serverSocket.receive(receivePacket);
+                    received.add(new String(receivePacket.getData()));
+                    barrier.await();
+                } catch (IOException | BrokenBarrierException | InterruptedException e) {
+                    if (!stopped.get()) e.printStackTrace();
+                    stopped.set(true);
                 }
             }
         });

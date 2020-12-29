@@ -20,7 +20,7 @@ public class CacheControlFilterTest {
     private CacheControlFilter filter;
 
     @BeforeEach
-    public void setUp() throws Exception {
+    public void setUp() {
         AssetCacheConfiguration assetCacheConfiguration = new AssetCacheConfiguration() {
             @Override
             public boolean shouldCacheAssets() {

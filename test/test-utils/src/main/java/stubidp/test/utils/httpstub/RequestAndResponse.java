@@ -4,9 +4,9 @@ import javax.validation.constraints.NotNull;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class RequestAndResponse {
-    private ExpectedRequest request;
-    private RegisteredResponse response;
-    private AtomicInteger callCount = new AtomicInteger(0);
+    private final ExpectedRequest request;
+    private final RegisteredResponse response;
+    private final AtomicInteger callCount = new AtomicInteger(0);
 
     public RequestAndResponse(@NotNull ExpectedRequest request, @NotNull RegisteredResponse response) {
         this.request = request;

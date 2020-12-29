@@ -9,13 +9,15 @@ import org.opensaml.xmlsec.config.impl.DefaultSecurityConfigurationBootstrap;
 import org.opensaml.xmlsec.impl.BasicSignatureValidationConfiguration;
 
 import java.security.Security;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class EidasSecurityConfigurationInitializer implements Initializer {
+
+    public EidasSecurityConfigurationInitializer() {}
+
     @Override
     public void init() {
         Security.addProvider(new BouncyCastleProvider());

@@ -1,7 +1,7 @@
 package stubidp.saml.domain.assertions;
 
 public class TransliterableMdsValue extends SimpleMdsValue<String> {
-    private String nonLatinScriptValue;
+    private final String nonLatinScriptValue;
 
     public TransliterableMdsValue(String value, String nonLatinScriptValue) {
         super(value, null, null, true);

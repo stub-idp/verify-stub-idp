@@ -23,7 +23,7 @@ public class SamlStatusToCountryAuthenticationStatusMappingsFactory {
     public static Map<SamlStatusDefinitions, CountryAuthenticationStatus.Status> getSamlToCountryAuthenticationStatusMappings() {
         // Matching SAML statuses to their CountryAuthenticationStatus counterparts is dependent on the ordering of these put()
         // statements. There must be a better way of doing this.
-        return Map.<SamlStatusDefinitions, CountryAuthenticationStatus.Status>ofEntries(
+        return Map.ofEntries(
                 Map.entry(SamlStatusDefinitions.Success, CountryAuthenticationStatus.Status.Success)
         );
     }

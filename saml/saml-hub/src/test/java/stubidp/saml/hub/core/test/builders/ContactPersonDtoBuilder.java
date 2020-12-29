@@ -14,8 +14,8 @@ public class ContactPersonDtoBuilder {
     private String companyName = "default-company-name";
     private String givenName = "default-given-name";
     private String surName = "default-sur-name";
-    private List<String> telephoneNumbers = new ArrayList<>();
-    private List<URI> emailAddresses = new ArrayList<>();
+    private final List<String> telephoneNumbers = new ArrayList<>();
+    private final List<URI> emailAddresses = new ArrayList<>();
 
     private boolean addDefaultTelephoneNumber = true;
     private boolean addDefaultEmailAddress = true;

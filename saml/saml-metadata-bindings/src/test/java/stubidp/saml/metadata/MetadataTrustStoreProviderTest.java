@@ -25,16 +25,16 @@ public class MetadataTrustStoreProviderTest {
     KeyStoreLoader keyStoreLoader;
 
     @RegisterExtension
-    public static KeyStoreRule emptyKeyStoreRule = KeyStoreRuleBuilder.aKeyStoreRule().build();
+    public static final KeyStoreRule emptyKeyStoreRule = KeyStoreRuleBuilder.aKeyStoreRule().build();
 
     @RegisterExtension
-    public static KeyStoreRule keyStoreRule = KeyStoreRuleBuilder.aKeyStoreRule().withCertificate("hub", TestCertificateStrings.HUB_TEST_PUBLIC_SIGNING_CERT).build();
+    public static final KeyStoreRule keyStoreRule = KeyStoreRuleBuilder.aKeyStoreRule().withCertificate("hub", TestCertificateStrings.HUB_TEST_PUBLIC_SIGNING_CERT).build();
 
-    private String filePath ="file path";
+    private final String filePath ="file path";
     private final String password = "password";
 
     @Test
-    public void shouldThrowExceptionIfTrustStoreContainsNoCertificates() throws KeyStoreException {
+    public void shouldThrowExceptionIfTrustStoreContainsNoCertificates() {
         Mockito.when(keyStoreLoader.load(filePath,password)).thenReturn(emptyKeyStoreRule.getKeyStore());
         MetadataTrustStoreProvider metadataTrustStoreProvider = new MetadataTrustStoreProvider(keyStoreLoader, filePath, password);
 

@@ -18,9 +18,9 @@ import static stubidp.saml.test.builders.X509DataBuilder.aX509Data;
 public class IdpSsoDescriptorBuilder {
     private Optional<String> protocol = Optional.of(SAMLConstants.SAML20P_NS);
     private Optional<SingleSignOnService> singleSignOnService = Optional.ofNullable(EndpointBuilder.anEndpoint().buildSingleSignOnService());
-    private List<KeyDescriptor> keyDescriptors = new ArrayList<>();
+    private final List<KeyDescriptor> keyDescriptors = new ArrayList<>();
     private boolean addDefaultSigningKey = true;
-    private KeyDescriptor defaultSigningKeyDescriptor = aKeyDescriptor()
+    private final KeyDescriptor defaultSigningKeyDescriptor = aKeyDescriptor()
             .withKeyInfo(KeyInfoBuilder.aKeyInfo()
                     .withKeyName(TestEntityIds.HUB_ENTITY_ID)
                     .withX509Data(aX509Data()

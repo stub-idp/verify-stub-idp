@@ -61,7 +61,7 @@ public class AccessLogstashConsoleAppenderFactory extends ConsoleAppenderFactory
         return wrapAsync(appender, asyncAppenderFactory);
     }
 
-    private class CustomFormatter extends AccessEventCompositeJsonFormatter {
+    private static class CustomFormatter extends AccessEventCompositeJsonFormatter {
         public CustomFormatter(ContextAware declaredOrigin) {
             super(declaredOrigin);
 

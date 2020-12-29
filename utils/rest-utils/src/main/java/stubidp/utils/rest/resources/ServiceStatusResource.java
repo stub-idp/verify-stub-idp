@@ -12,7 +12,7 @@ import javax.ws.rs.core.Response;
 @Path(CommonUrls.SERVICE_STATUS)
 public class ServiceStatusResource {
 
-    private ServiceStatus serviceStatus;
+    private final ServiceStatus serviceStatus;
 
     @Inject
     public ServiceStatusResource() {

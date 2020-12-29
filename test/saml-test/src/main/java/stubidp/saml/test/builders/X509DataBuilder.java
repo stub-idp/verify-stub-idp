@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class X509DataBuilder {
-    private List<X509Certificate> x509Certificates = new ArrayList<>();
+    private final List<X509Certificate> x509Certificates = new ArrayList<>();
 
     private X509DataBuilder() {}
 

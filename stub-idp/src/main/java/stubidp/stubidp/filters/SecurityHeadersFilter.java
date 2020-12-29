@@ -3,7 +3,6 @@ package stubidp.stubidp.filters;
 import javax.ws.rs.container.ContainerRequestContext;
 import javax.ws.rs.container.ContainerResponseContext;
 import javax.ws.rs.container.ContainerResponseFilter;
-import java.io.IOException;
 
 public class SecurityHeadersFilter implements ContainerResponseFilter {
     @Override

@@ -11,7 +11,7 @@ import java.util.UUID;
 
 public class DatabaseEidasUserBuilder {
     private String username;
-    private String persistentId = UUID.randomUUID().toString();
+    private final String persistentId = UUID.randomUUID().toString();
     private String password;
     private SimpleMdsValue<String> firstname;
     private Optional<SimpleMdsValue<String>> nonLatinFirstname = Optional.empty();

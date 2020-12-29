@@ -15,7 +15,7 @@ import java.util.Collections;
 import java.util.List;
 
 public class AddressImpl extends XSAnyImpl implements Address {
-    private List<Line> lines = new ArrayList<>();
+    private final List<Line> lines = new ArrayList<>();
     private PostCode postCode;
     private Instant from;
     private Instant to;

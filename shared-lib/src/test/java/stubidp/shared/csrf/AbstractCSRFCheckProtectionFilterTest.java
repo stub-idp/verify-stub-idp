@@ -32,7 +32,7 @@ import static org.mockito.Mockito.when;
 @ExtendWith(MockitoExtension.class)
 class AbstractCSRFCheckProtectionFilterTest {
 
-    private boolean isSecureCookieEnabled = true;
+    private final boolean isSecureCookieEnabled = true;
     private final CookieNames cookieNames = new CookieNames() {
         @Override
         public String getSessionCookieName() {
@@ -76,20 +76,20 @@ class AbstractCSRFCheckProtectionFilterTest {
     }
 
     @Test
-    void shouldValidateSession() throws Exception {
+    void shouldValidateSession() {
         when(hmacValidator.validateHMACSHA256("secure-cookie", sessionId.getSessionId())).thenReturn(false);
         Assertions.assertThrows(CSRFCouldNotValidateSessionException.class, () -> abstractCSRFCheckProtectionFilter.filter(containerRequestContext));
     }
 
     @Test
-    void shouldValidateEntityExists() throws Exception {
+    void shouldValidateEntityExists() {
         when(containerRequestContext.hasEntity()).thenReturn(false);
         when(hmacValidator.validateHMACSHA256("secure-cookie", sessionId.getSessionId())).thenReturn(true);
         Assertions.assertThrows(CSRFBodyNotFoundException.class, () -> abstractCSRFCheckProtectionFilter.filter(containerRequestContext));
     }
 
     @Test
-    void shouldCheckTokenExistsInTheSession() throws Exception {
+    void shouldCheckTokenExistsInTheSession() {
         final String csrfToken = "foo";
         final String entity = "a=1&b=2&c=3&"+AbstractCSRFCheckProtectionFilter.CSRF_PROTECT_FORM_KEY+"="+csrfToken;
         tokenFromSession = Optional.empty();
@@ -100,7 +100,7 @@ class AbstractCSRFCheckProtectionFilterTest {
     }
 
     @Test
-    void shouldCheckTokenWithTheOneInTheSession() throws Exception {
+    void shouldCheckTokenWithTheOneInTheSession() {
         final String entity = "a=1&b=2&c=3&"+AbstractCSRFCheckProtectionFilter.CSRF_PROTECT_FORM_KEY+"=not_this_token";
         when(containerRequestContext.hasEntity()).thenReturn(true);
         when(hmacValidator.validateHMACSHA256("secure-cookie", sessionId.getSessionId())).thenReturn(true);
@@ -109,7 +109,7 @@ class AbstractCSRFCheckProtectionFilterTest {
     }
 
     @Test
-    void shouldErrorIfTokenNotFound() throws Exception {
+    void shouldErrorIfTokenNotFound() {
         final String entity = "a=1&b=2&c=3&";
         when(hmacValidator.validateHMACSHA256("secure-cookie", sessionId.getSessionId())).thenReturn(true);
         when(containerRequestContext.hasEntity()).thenReturn(true);

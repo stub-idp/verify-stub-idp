@@ -23,7 +23,7 @@ import javax.ws.rs.core.UriBuilder;
 @SessionCookieValueMustExistAsASession
 public class SingleIdpLogoutPageResource {
 
-    private IdpSessionRepository idpSessionRepository;
+    private final IdpSessionRepository idpSessionRepository;
 
     @Inject
     public SingleIdpLogoutPageResource(IdpSessionRepository idpSessionRepository) {

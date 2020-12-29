@@ -26,7 +26,7 @@ import java.util.Optional;
 public class MetadataResolverBundle<T extends Configuration> implements io.dropwizard.ConfiguredBundle<T> {
     private final MetadataConfigurationExtractor<T> configExtractor;
     private MetadataResolver metadataResolver;
-    private DropwizardMetadataResolverFactory dropwizardMetadataResolverFactory = new DropwizardMetadataResolverFactory();
+    private final DropwizardMetadataResolverFactory dropwizardMetadataResolverFactory = new DropwizardMetadataResolverFactory();
     private ExplicitKeySignatureTrustEngine signatureTrustEngine;
     private MetadataCredentialResolver credentialResolver;
     private final boolean validateSignatures;

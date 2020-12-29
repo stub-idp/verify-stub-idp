@@ -9,11 +9,11 @@ import java.time.Instant;
 import java.util.Optional;
 
 public class InboundResponseFromIdp<Assertion> extends IdaSamlResponse {
-    private Optional<Assertion> matchingDatasetAssertion;
-    private Optional<Assertion> authnStatementAssertion;
-    private Optional<Instant> notOnOrAfter;
-    private Optional<Signature> signature;
-    private IdpIdaStatus status;
+    private final Optional<Assertion> matchingDatasetAssertion;
+    private final Optional<Assertion> authnStatementAssertion;
+    private final Optional<Instant> notOnOrAfter;
+    private final Optional<Signature> signature;
+    private final IdpIdaStatus status;
 
     public InboundResponseFromIdp(
             String id,

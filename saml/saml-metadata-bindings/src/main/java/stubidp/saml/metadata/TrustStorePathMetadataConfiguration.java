@@ -28,11 +28,11 @@ public class TrustStorePathMetadataConfiguration extends MetadataConfiguration {
      */
     @NotNull
     @Valid
-    private String trustStorePath;
+    private final String trustStorePath;
 
     @NotNull
     @Valid
-    private String trustStorePassword;
+    private final String trustStorePassword;
 
     @JsonCreator
     public TrustStorePathMetadataConfiguration(

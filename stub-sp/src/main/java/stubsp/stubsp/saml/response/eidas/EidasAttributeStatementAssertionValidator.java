@@ -43,7 +43,7 @@ public class EidasAttributeStatementAssertionValidator {
             Attribute.URI_REFERENCE
     );
 
-    private static final Map<String, QName> VALID_TYPE_FOR_ATTRIBUTE = Map.<String, QName>ofEntries(
+    private static final Map<String, QName> VALID_TYPE_FOR_ATTRIBUTE = Map.ofEntries(
             Map.entry(Eidas_Attributes.FirstName.NAME, CurrentGivenName.TYPE_NAME),
             Map.entry(Eidas_Attributes.FamilyName.NAME, CurrentFamilyName.TYPE_NAME),
             Map.entry(Eidas_Attributes.DateOfBirth.NAME, DateOfBirth.TYPE_NAME),

@@ -12,7 +12,7 @@ import static java.util.Optional.empty;
 
 public class InboundResponseFromIdpDataGenerator {
 
-    private AssertionBlobEncrypter assertionBlobEncrypter;
+    private final AssertionBlobEncrypter assertionBlobEncrypter;
 
     @Inject
     public InboundResponseFromIdpDataGenerator(AssertionBlobEncrypter assertionBlobEncrypter) {
@@ -28,7 +28,7 @@ public class InboundResponseFromIdpDataGenerator {
 
         if (idaResponseFromIdp.getAuthnStatementAssertion().isPresent()) {
             final PassthroughAssertion authnStatementAssertion = idaResponseFromIdp.getAuthnStatementAssertion().get();
-            principalIpAddressFromIdp = Optional.ofNullable(authnStatementAssertion.getPrincipalIpAddressAsSeenByIdp().orElse(null));
+            principalIpAddressFromIdp = authnStatementAssertion.getPrincipalIpAddressAsSeenByIdp();
             persistentId = Optional.ofNullable(authnStatementAssertion.getPersistentId().getNameId());
             if (authnStatementAssertion.getAuthnContext().isPresent()) {
                 levelOfAssurance = authnStatementAssertion.getAuthnContext().get().name();

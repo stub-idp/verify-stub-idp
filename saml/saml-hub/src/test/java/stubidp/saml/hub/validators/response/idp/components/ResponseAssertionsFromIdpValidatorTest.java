@@ -44,7 +44,7 @@ public class ResponseAssertionsFromIdpValidatorTest {
     private ResponseAssertionsFromIdpValidator validator;
 
     @BeforeEach
-    public void setUp() throws Exception {
+    public void setUp() {
         validator = new ResponseAssertionsFromIdpValidator(
                 assertionValidator,
                 matchingDatasetAssertionValidator,

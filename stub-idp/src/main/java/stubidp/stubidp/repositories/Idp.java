@@ -18,9 +18,9 @@ public class Idp {
     private final String friendlyId;
     private final String displayName;
     private final String assetId;
-    private boolean sendKeyInfo;
-    private String issuerId;
-    private AllIdpsUserRepository allIdpsUserRepository;
+    private final boolean sendKeyInfo;
+    private final String issuerId;
+    private final AllIdpsUserRepository allIdpsUserRepository;
 
     public Idp(String displayName, String friendlyId, String assetId, boolean sendKeyInfo, String issuerId, AllIdpsUserRepository allIdpsUserRepository) {
         this.friendlyId = friendlyId;

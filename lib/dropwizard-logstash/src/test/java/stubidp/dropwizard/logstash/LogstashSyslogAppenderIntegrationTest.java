@@ -22,7 +22,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class LogstashSyslogAppenderIntegrationTest {
 
-    private UdpServer udpServer = new UdpServer();
+    private final UdpServer udpServer = new UdpServer();
 
     @BeforeEach
     public void startUdpInterceptor() {

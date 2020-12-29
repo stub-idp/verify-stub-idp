@@ -1,6 +1,5 @@
 package stubidp.saml.security.saml.deserializers;
 
-import org.apache.xml.security.exceptions.XMLSecurityException;
 import org.opensaml.core.xml.io.UnmarshallingException;
 import org.opensaml.saml.saml2.core.AuthnRequest;
 import org.xml.sax.SAXException;

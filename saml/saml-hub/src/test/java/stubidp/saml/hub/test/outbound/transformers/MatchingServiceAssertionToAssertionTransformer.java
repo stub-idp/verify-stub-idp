@@ -23,7 +23,7 @@ public class MatchingServiceAssertionToAssertionTransformer {
     private final OpenSamlXmlObjectFactory openSamlXmlObjectFactory;
     private final MatchingServiceAuthnStatementToAuthnStatementTransformer matchingServiceAuthnStatementToAuthnStatementTransformer;
     private final OutboundAssertionToSubjectTransformer outboundAssertionToSubjectTransformer;
-    private XMLObjectBuilderFactory builderFactory = XMLObjectProviderRegistrySupport.getBuilderFactory();
+    private final XMLObjectBuilderFactory builderFactory = XMLObjectProviderRegistrySupport.getBuilderFactory();
 
     @Inject
     public MatchingServiceAssertionToAssertionTransformer(

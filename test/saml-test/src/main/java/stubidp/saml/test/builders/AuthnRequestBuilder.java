@@ -46,12 +46,12 @@ public class AuthnRequestBuilder {
 
     private Optional<Issuer> issuer = ofNullable(IssuerBuilder.anIssuer().build());
     private Optional<String> id = ofNullable(AuthnRequestIdGenerator.generateRequestId());
-    private Optional<String> minimumLevelOfAssurance = ofNullable(IdaAuthnContext.LEVEL_1_AUTHN_CTX);
+    private final Optional<String> minimumLevelOfAssurance = ofNullable(IdaAuthnContext.LEVEL_1_AUTHN_CTX);
     private Optional<Instant> issueInstant = ofNullable(Instant.now());
 
     private Optional<String> versionNumber = ofNullable(IdaConstants.SAML_VERSION_NUMBER);
     private Optional<String> destination = empty();
-    private Optional<String> requiredLevelOfAssurance = ofNullable(IdaAuthnContext.LEVEL_2_AUTHN_CTX);
+    private final Optional<String> requiredLevelOfAssurance = ofNullable(IdaAuthnContext.LEVEL_2_AUTHN_CTX);
     private Optional<Credential> signingCredential = empty();
     private Optional<Boolean> forceAuthn = empty();
     private Optional<Integer> assertionConsumerServiceIndex = empty();

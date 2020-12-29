@@ -14,7 +14,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class TimeoutRequestRetryHandlerTest {
 
-    private HttpContext httpContext = new BasicHttpContext();
+    private final HttpContext httpContext = new BasicHttpContext();
 
     @BeforeEach
     public void setup() {

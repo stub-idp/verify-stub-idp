@@ -28,13 +28,13 @@ public class HubIdentityProviderMetadataDtoToEntityDescriptorTransformerTest ext
     private HubIdentityProviderMetadataDtoToEntityDescriptorTransformer transformer;
 
     @BeforeEach
-    public void setUp() throws Exception {
+    public void setUp() {
         OpenSamlXmlObjectFactory openSamlXmlObjectFactory = new OpenSamlXmlObjectFactory();
         transformer = new HubIdentityProviderMetadataDtoToEntityDescriptorTransformer(openSamlXmlObjectFactory, new KeyDescriptorsUnmarshaller(openSamlXmlObjectFactory), new IdGenerator());
     }
 
     @Test
-    public void transform_shouldTransformIdpSigningCertificates() throws Exception {
+    public void transform_shouldTransformIdpSigningCertificates() {
         String idpOneIssuerId = UUID.randomUUID().toString();
         String idpTwoIssuerId = UUID.randomUUID().toString();
         final Certificate idpCertOne = aCertificate().withIssuerId(idpOneIssuerId).build();
@@ -50,7 +50,7 @@ public class HubIdentityProviderMetadataDtoToEntityDescriptorTransformerTest ext
     }
 
     @Test
-    public void transform_shouldTransformHubEncryptionCertificate() throws Exception {
+    public void transform_shouldTransformHubEncryptionCertificate() {
         final Certificate encryptionCert = aCertificate().withKeyUse(Certificate.KeyUse.Encryption).build();
 
         final EntityDescriptor result = transformer.apply(IdentityProviderMetadataDtoBuilder.anIdentityProviderMetadataDto()

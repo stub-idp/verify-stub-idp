@@ -21,7 +21,7 @@ public class PersonNameMarshallerTest extends OpenSAMLRunner {
     private PersonName personName;
 
     @BeforeEach
-    public void setUp() throws Exception {
+    public void setUp() {
         personName = new PersonNameBuilder().buildObject();
         marshaller = XMLObjectProviderRegistrySupport.getMarshallerFactory().getMarshaller(personName);
     }

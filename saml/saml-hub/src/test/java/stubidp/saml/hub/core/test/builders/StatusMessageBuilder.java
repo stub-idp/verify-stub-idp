@@ -5,7 +5,7 @@ import stubidp.saml.utils.core.OpenSamlXmlObjectFactory;
 
 public class StatusMessageBuilder {
 
-    private static OpenSamlXmlObjectFactory openSamlXmlObjectFactory = new OpenSamlXmlObjectFactory();
+    private static final OpenSamlXmlObjectFactory openSamlXmlObjectFactory = new OpenSamlXmlObjectFactory();
 
     private String message = "default message";
 

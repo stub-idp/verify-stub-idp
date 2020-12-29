@@ -41,8 +41,8 @@ import static org.mockito.Mockito.mock;
 
 public class PKIXSignatureValidationFilterProviderTest {
 
-    private MetadataFactory metadataFactory = new MetadataFactory();
-    private static KeyStoreLoader keyStoreLoader = new KeyStoreLoader();
+    private final MetadataFactory metadataFactory = new MetadataFactory();
+    private static final KeyStoreLoader keyStoreLoader = new KeyStoreLoader();
 
     private KeyStore trustStore;
     private SignatureValidationFilter signatureValidationFilter;

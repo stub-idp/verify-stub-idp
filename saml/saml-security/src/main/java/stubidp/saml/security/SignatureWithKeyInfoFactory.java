@@ -11,8 +11,8 @@ import org.opensaml.xmlsec.signature.X509Data;
 
 public class SignatureWithKeyInfoFactory extends SignatureFactory {
 
-    private String issuerId;
-    private String signingCertificate;
+    private final String issuerId;
+    private final String signingCertificate;
 
     public SignatureWithKeyInfoFactory(IdaKeyStoreCredentialRetriever keyStoreCredentialRetriever, SignatureAlgorithm signatureAlgorithm, DigestAlgorithm digestAlgorithm, String issuerId, String signingCertificate) {
         super(keyStoreCredentialRetriever, signatureAlgorithm, digestAlgorithm);

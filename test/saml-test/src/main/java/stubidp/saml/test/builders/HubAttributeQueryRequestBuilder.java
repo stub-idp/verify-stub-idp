@@ -25,7 +25,7 @@ public class HubAttributeQueryRequestBuilder {
     private String authnRequestIssuerEntityId = "issuer-id";
     private AuthnContext authnContext = AuthnContext.LEVEL_1;
     private String encryptedMathcingDatasetAssertion = "aPassthroughAssertion().buildEncryptedMatchingDatasetAssertion()";
-    private String hubEntityId = "hubEntityId";
+    private final String hubEntityId = "hubEntityId";
 
     private HubAttributeQueryRequestBuilder() {}
 
@@ -90,7 +90,7 @@ public class HubAttributeQueryRequestBuilder {
     }
 
     public HubAttributeQueryRequestBuilder addUserAccountCreationAttribute(final UserAccountCreationAttribute userAccountCreationAttribute) {
-        if(!userAccountCreationAttributes.isPresent()){
+        if(userAccountCreationAttributes.isEmpty()){
            List<UserAccountCreationAttribute> userAccountCreationAttributeList = new ArrayList<>();
 
            userAccountCreationAttributes = Optional.ofNullable(userAccountCreationAttributeList);

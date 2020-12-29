@@ -10,7 +10,7 @@ import java.util.Map;
 public class UnknownUserCreationIdaStatusMarshaller extends IdaStatusMarshaller<UnknownUserCreationIdaStatus> {
 
     private static final Map<UnknownUserCreationIdaStatus, DetailedStatusCode> REST_TO_SAML_CODES =
-            Map.<UnknownUserCreationIdaStatus, DetailedStatusCode>ofEntries(
+            Map.ofEntries(
                     Map.entry(UnknownUserCreationIdaStatus.CreateFailure, DetailedStatusCode.UnknownUserCreateFailure),
                     Map.entry(UnknownUserCreationIdaStatus.Success, DetailedStatusCode.UnknownUserCreateSuccess),
                     Map.entry(UnknownUserCreationIdaStatus.NoAttributeFailure, DetailedStatusCode.UnknownUserNoAttributeFailure)

@@ -167,7 +167,7 @@ public final class TestCertificateStrings {
                 Map.entry(TestEntityIds.STUB_COUNTRY_TWO, STUB_COUNTRY_PUBLIC_PRIMARY_CERT)
         );
 
-        PRIVATE_SIGNING_KEYS = Map.<String, String>ofEntries(
+        PRIVATE_SIGNING_KEYS = Map.ofEntries(
                 Map.entry(TEST_ENTITY_ID, TEST_PRIVATE_KEY),
                 Map.entry(TestEntityIds.HUB_ENTITY_ID, HUB_TEST_PRIVATE_SIGNING_KEY),
                 Map.entry(TestEntityIds.HUB_SECONDARY_ENTITY_ID, HUB_TEST_PRIVATE_SECONDARY_SIGNING_KEY),

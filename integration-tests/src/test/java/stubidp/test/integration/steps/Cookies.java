@@ -9,7 +9,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class Cookies {
-    Map<String, NewCookie> cookies;
+    final Map<String, NewCookie> cookies;
 
     public Cookies() {
         cookies = new HashMap<>();

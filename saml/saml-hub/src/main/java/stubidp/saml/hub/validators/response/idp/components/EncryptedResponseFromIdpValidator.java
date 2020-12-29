@@ -21,7 +21,7 @@ import static stubidp.saml.security.validators.signature.SamlSignatureUtil.isSig
 @SuppressWarnings("rawtypes")
 public class EncryptedResponseFromIdpValidator<T extends Enum> {
     private static final int SUB_STATUS_CODE_LIMIT = 1;
-    private SamlStatusToAuthenticationStatusCodeMapper<T> statusCodeMapper;
+    private final SamlStatusToAuthenticationStatusCodeMapper<T> statusCodeMapper;
 
     public EncryptedResponseFromIdpValidator(final SamlStatusToAuthenticationStatusCodeMapper<T> statusCodeMapper) {
         this.statusCodeMapper = statusCodeMapper;

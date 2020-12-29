@@ -37,7 +37,7 @@ public class IdaResponseFromIdpUnmarshallerTest extends OpenSAMLRunner {
     @Mock
     private Issuer issuer = null;
     private IdaResponseFromIdpUnmarshaller<PassthroughAssertionUnmarshaller, PassthroughAssertion> unmarshaller;
-    private Signature signature = SignatureBuilder.aSignature().build();
+    private final Signature signature = SignatureBuilder.aSignature().build();
 
     @BeforeEach
     public void setup() {
@@ -48,7 +48,7 @@ public class IdaResponseFromIdpUnmarshallerTest extends OpenSAMLRunner {
     }
 
     @Test
-    public void transform_shouldTransformTheSamlResponseToIdaResponseByIdp() throws Exception {
+    public void transform_shouldTransformTheSamlResponseToIdaResponseByIdp() {
         Assertion mdsAssertion = anAssertion().addAttributeStatement(anAttributeStatement().build()).buildUnencrypted();
         Assertion authnStatementAssertion = anAssertion().addAuthnStatement(anAuthnStatement().build()).buildUnencrypted();
 

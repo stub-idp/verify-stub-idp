@@ -25,10 +25,10 @@ import static stubidp.shared.csrf.AbstractCSRFCheckProtectionFilter.CSRF_PROTECT
 
 public class PreRegistrationSteps {
     private Response response;
-    private Cookies cookies;
+    private final Cookies cookies;
     private String csrfToken;
-    private Client client;
-    private StubIdpAppExtension applicationRule;
+    private final Client client;
+    private final StubIdpAppExtension applicationRule;
     private String responseEntity;
 
     private static final String IDP_NAME = "stub-idp-demo-one";

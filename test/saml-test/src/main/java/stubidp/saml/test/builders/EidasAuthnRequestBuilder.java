@@ -11,7 +11,7 @@ import java.util.UUID;
 public class EidasAuthnRequestBuilder {
     private String id = UUID.randomUUID().toString();
     private String issuer = "issuer_id";
-    private Instant issueInstant = Instant.now();
+    private final Instant issueInstant = Instant.now();
     private URI destination = URI.create("http://eidas/ssoLocation");
     private String providerName;
     private List<AuthnContext> authnContextList;

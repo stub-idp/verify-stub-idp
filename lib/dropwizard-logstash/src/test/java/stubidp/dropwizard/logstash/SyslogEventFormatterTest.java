@@ -14,7 +14,6 @@ import stubidp.dropwizard.logstash.SyslogEventFormatter;
 
 import java.time.Clock;
 import java.time.Instant;
-import java.time.LocalDateTime;
 import java.time.ZoneId;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -24,8 +23,8 @@ import static org.mockito.Mockito.when;
 public class SyslogEventFormatterTest {
 
     public SyslogEventFormatter formatter;
-    private String hostname = "test-hostname";
-    private String tag = "test-tag";
+    private final String hostname = "test-hostname";
+    private final String tag = "test-tag";
 
     @Mock
     private Layout<ILoggingEvent> layout;

@@ -23,7 +23,7 @@ public final class ApplicationException extends RuntimeException {
             boolean audited,
             UUID errorId) {
 
-        this(exceptionType, audited, errorId, null, Optional.<URI>empty(), Optional.<String>empty());
+        this(exceptionType, audited, errorId, null, Optional.empty(), Optional.empty());
     }
 
     private ApplicationException(
@@ -32,7 +32,7 @@ public final class ApplicationException extends RuntimeException {
             UUID errorId,
             Throwable cause) {
 
-        this(exceptionType, audited, errorId, cause, Optional.<URI>empty(), Optional.<String>empty());
+        this(exceptionType, audited, errorId, cause, Optional.empty(), Optional.empty());
     }
 
     private ApplicationException(
@@ -78,11 +78,11 @@ public final class ApplicationException extends RuntimeException {
     }
 
     public static ApplicationException createUnauditedException(ExceptionType exceptionType, String message, Throwable cause) {
-        return new ApplicationException(exceptionType, false, UUID.randomUUID(), cause, Optional.<URI>empty(), Optional.of(message));
+        return new ApplicationException(exceptionType, false, UUID.randomUUID(), cause, Optional.empty(), Optional.of(message));
     }
 
     public static ApplicationException createUnauditedException(ExceptionType exceptionType, UUID errorId, Throwable cause, URI uri) {
-        return new ApplicationException(exceptionType, false, errorId, cause, Optional.ofNullable(uri), Optional.<String>empty());
+        return new ApplicationException(exceptionType, false, errorId, cause, Optional.ofNullable(uri), Optional.empty());
     }
 
     public static ApplicationException createUnauditedException(ExceptionType exceptionType, UUID errorId, Throwable cause) {
@@ -94,7 +94,7 @@ public final class ApplicationException extends RuntimeException {
     }
 
     public static ApplicationException createUnauditedException(ExceptionType exceptionType, UUID errorId, URI uri) {
-        return new ApplicationException(exceptionType, false, errorId, null, Optional.ofNullable(uri), Optional.<String>empty());
+        return new ApplicationException(exceptionType, false, errorId, null, Optional.ofNullable(uri), Optional.empty());
     }
 
     public static ApplicationException createExceptionFromErrorStatusDto(ErrorStatusDto errorStatusDto, final URI uri) {

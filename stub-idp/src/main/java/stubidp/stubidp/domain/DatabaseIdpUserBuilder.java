@@ -15,7 +15,7 @@ import java.util.UUID;
 
 public class DatabaseIdpUserBuilder {
     private String username;
-    private String persistentId = UUID.randomUUID().toString();
+    private final String persistentId = UUID.randomUUID().toString();
     private String password;
     private List<SimpleMdsValue<String>> firstnames = List.of();
     private List<SimpleMdsValue<String>> middleNames = List.of();

@@ -9,12 +9,12 @@ import java.util.Base64;
 @SuppressWarnings("unused")
 public class EncodedPrivateKeyConfiguration extends PrivateKeyConfiguration {
 
+    private final PrivateKey privateKey;
+
     @JsonCreator
     public EncodedPrivateKeyConfiguration(@JsonProperty("key") String key) {
         this.privateKey = getPrivateKeyFromBytes(Base64.getDecoder().decode(key));
     }
-
-    private PrivateKey privateKey;
 
     public PrivateKey getPrivateKey() {
         return privateKey;

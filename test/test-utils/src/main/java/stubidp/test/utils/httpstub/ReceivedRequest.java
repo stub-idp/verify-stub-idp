@@ -16,7 +16,7 @@ public class ReceivedRequest {
     protected final String querystring;
     protected final String method;
     protected final String url;
-    protected byte[] entity;
+    protected final byte[] entity;
 
     public ReceivedRequest(HttpServletRequest request) {
         this.method = request.getMethod();
@@ -43,7 +43,7 @@ public class ReceivedRequest {
                 throw new RuntimeException("duplicateheaders");
 //                _headers.put(headerName.toLowerCase(), Collections.<String>list(request.getHeaders(headerName)));
             } else {
-                _headers.put(headerName.toLowerCase(), Collections.<String>list(request.getHeaders(headerName)));
+                _headers.put(headerName.toLowerCase(), Collections.list(request.getHeaders(headerName)));
             }
         }
         return _headers;

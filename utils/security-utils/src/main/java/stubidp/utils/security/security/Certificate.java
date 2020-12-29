@@ -1,9 +1,9 @@
 package stubidp.utils.security.security;
 
 public class Certificate {
-    private String issuerId;
-    private String certificate;
-    private KeyUse keyUse;
+    private final String issuerId;
+    private final String certificate;
+    private final KeyUse keyUse;
 
     public Certificate(String issuerId, String certificate, KeyUse keyUse) {
         this.issuerId = issuerId;
@@ -26,7 +26,7 @@ public class Certificate {
     public enum KeyUse {
         Signing("SIGNING"),
         Encryption("ENCRYPTION");
-        private String description;
+        private final String description;
 
         KeyUse(String description) {
             this.description = description;

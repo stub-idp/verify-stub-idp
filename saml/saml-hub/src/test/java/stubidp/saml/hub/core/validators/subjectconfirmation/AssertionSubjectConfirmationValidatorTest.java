@@ -24,7 +24,7 @@ public class AssertionSubjectConfirmationValidatorTest extends OpenSAMLRunner {
     }
 
     @Test
-    public void validate_shouldThrowExceptionIfSubjectConfirmationDataRecipientAttributeDoesNotMatchTheExpectedIssuerId() throws Exception {
+    public void validate_shouldThrowExceptionIfSubjectConfirmationDataRecipientAttributeDoesNotMatchTheExpectedIssuerId() {
         final String expectedRecipientId = TestEntityIds.HUB_ENTITY_ID;
         final String actualRecipientId = TestEntityIds.TEST_RP;
         final SubjectConfirmation subjectConfirmation = aSubjectConfirmation()
@@ -36,7 +36,7 @@ public class AssertionSubjectConfirmationValidatorTest extends OpenSAMLRunner {
     }
 
     @Test
-    public void validate_shouldThrowExceptionIfSubjectConfirmationDataInResponseToAttributeIsNotTheOriginalRequestId() throws Exception {
+    public void validate_shouldThrowExceptionIfSubjectConfirmationDataInResponseToAttributeIsNotTheOriginalRequestId() {
         final String subjectInResponseTo = "an-incorrect-request-id";
         final SubjectConfirmation subjectConfirmation = aSubjectConfirmation()
                 .withSubjectConfirmationData(SubjectConfirmationDataBuilder.aSubjectConfirmationData()
@@ -55,12 +55,7 @@ public class AssertionSubjectConfirmationValidatorTest extends OpenSAMLRunner {
             SamlValidationSpecificationFailure failure, final String recipient) {
 
         SamlTransformationErrorManagerTestHelper.validateFail(
-                new SamlTransformationErrorManagerTestHelper.Action() {
-                    @Override
-                    public void execute() {
-                        validator.validate(subjectConfirmation, REQUEST_ID, recipient);
-                    }
-                },
+                () -> validator.validate(subjectConfirmation, REQUEST_ID, recipient),
                 failure
         );
     }

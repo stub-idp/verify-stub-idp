@@ -14,8 +14,8 @@ public class StubCountry {
     private final String friendlyId;
     private final String displayName;
     private final String assetId;
-    private String issuerId;
-    private AllIdpsUserRepository allIdpsUserRepository;
+    private final String issuerId;
+    private final AllIdpsUserRepository allIdpsUserRepository;
 
     public StubCountry(String friendlyId, String displayName, String assetId, String issuerId, AllIdpsUserRepository allIdpsUserRepository) {
         this.friendlyId = friendlyId;

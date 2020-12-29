@@ -120,8 +120,8 @@ public class OutboundResponseFromIdp extends IdaSamlResponse implements Serializ
                 issuerId,
                 Instant.now(),
                 status,
-                Optional.<IdentityProviderAssertion>empty(),
-                Optional.<IdentityProviderAssertion>empty(),
+                Optional.empty(),
+                Optional.empty(),
                 destination);
     }
 

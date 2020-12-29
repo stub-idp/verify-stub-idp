@@ -17,10 +17,10 @@ import java.util.Optional;
 public class MultiTrustStoresBackedMetadataConfiguration extends TrustStoreBackedMetadataConfiguration {
 
     @Valid
-    private TrustStoreConfiguration spTrustStore;
+    private final TrustStoreConfiguration spTrustStore;
 
     @Valid
-    private TrustStoreConfiguration idpTrustStore;
+    private final TrustStoreConfiguration idpTrustStore;
 
     @JsonCreator
     public MultiTrustStoresBackedMetadataConfiguration(

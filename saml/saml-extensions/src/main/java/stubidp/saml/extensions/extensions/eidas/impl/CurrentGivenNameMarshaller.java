@@ -12,7 +12,7 @@ public class CurrentGivenNameMarshaller extends AbstractTransliterableStringMars
     public static final Marshaller MARSHALLER = new CurrentGivenNameMarshaller();
 
     /** {@inheritDoc} */
-    protected void marshallElementContent(XMLObject samlObject, Element domElement) throws MarshallingException {
+    protected void marshallElementContent(XMLObject samlObject, Element domElement) {
         CurrentGivenName currentGivenName = (CurrentGivenName) samlObject;
         ElementSupport.appendTextContent(domElement, currentGivenName.getFirstName());
     }

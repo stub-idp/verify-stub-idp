@@ -7,7 +7,7 @@ import java.security.cert.Certificate;
 // DUPLICATE CLASS
 public class PublicKeyFactory {
 
-    private X509CertificateFactory certificateFactory;
+    private final X509CertificateFactory certificateFactory;
 
     @Inject
     public PublicKeyFactory(X509CertificateFactory certificateFactory) {

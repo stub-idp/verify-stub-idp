@@ -4,7 +4,7 @@ import org.opensaml.saml.saml2.core.Response;
 import stubidp.saml.hub.domain.InboundHealthCheckResponseFromMatchingService;
 
 public class InboundHealthCheckResponseFromMatchingServiceUnmarshaller {
-    private MatchingServiceIdaStatusUnmarshaller statusUnmarshaller;
+    private final MatchingServiceIdaStatusUnmarshaller statusUnmarshaller;
 
     public InboundHealthCheckResponseFromMatchingServiceUnmarshaller(
             MatchingServiceIdaStatusUnmarshaller statusUnmarshaller) {

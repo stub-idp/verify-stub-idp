@@ -15,12 +15,12 @@ public class MatchingServiceIdaStatusUnmarshallerTest extends OpenSAMLRunner {
     private MatchingServiceIdaStatusUnmarshaller unmarshaller;
 
     @BeforeEach
-    public void setUp() throws Exception {
+    public void setUp() {
         unmarshaller = new MatchingServiceIdaStatusUnmarshaller();
     }
 
     @Test
-    public void transform_shouldTransformMatchingServiceSuccessfulMatch() throws Exception {
+    public void transform_shouldTransformMatchingServiceSuccessfulMatch() {
         OpenSamlXmlObjectFactory samlObjectFactory = new OpenSamlXmlObjectFactory();
         Status originalStatus = samlObjectFactory.createStatus();
         StatusCode successStatusCode = samlObjectFactory.createStatusCode();
@@ -36,7 +36,7 @@ public class MatchingServiceIdaStatusUnmarshallerTest extends OpenSAMLRunner {
     }
 
     @Test
-    public void transform_shouldTransformNoMatchFromMatchingService() throws Exception {
+    public void transform_shouldTransformNoMatchFromMatchingService() {
         OpenSamlXmlObjectFactory samlObjectFactory = new OpenSamlXmlObjectFactory();
         Status originalStatus = samlObjectFactory.createStatus();
         StatusCode topLevelStatusCode = samlObjectFactory.createStatusCode();
@@ -52,7 +52,7 @@ public class MatchingServiceIdaStatusUnmarshallerTest extends OpenSAMLRunner {
     }
 
     @Test
-    public void transform_shouldTransformRequesterErrorFromMatchingService() throws Exception {
+    public void transform_shouldTransformRequesterErrorFromMatchingService() {
         OpenSamlXmlObjectFactory samlObjectFactory = new OpenSamlXmlObjectFactory();
         Status originalStatus = samlObjectFactory.createStatus();
         StatusCode topLevelStatusCode = samlObjectFactory.createStatusCode();

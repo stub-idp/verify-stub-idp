@@ -9,8 +9,8 @@ import java.util.List;
 
 public class HubIdentityProviderMetadataDto extends MetadataDto {
 
-    private Collection<Certificate> idpSigningCertificates;
-    private Collection<SamlEndpointDto> singleSignOnEndpoints;
+    private final Collection<Certificate> idpSigningCertificates;
+    private final Collection<SamlEndpointDto> singleSignOnEndpoints;
 
     public HubIdentityProviderMetadataDto(
             Collection<SamlEndpointDto> singleSignOnEndpoints,

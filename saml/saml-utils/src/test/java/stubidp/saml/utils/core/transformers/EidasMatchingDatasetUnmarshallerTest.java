@@ -32,7 +32,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class EidasMatchingDatasetUnmarshallerTest extends OpenSAMLRunner {
 
     private EidasMatchingDatasetUnmarshaller unmarshaller;
-    private static OpenSamlXmlObjectFactory openSamlXmlObjectFactory = new OpenSamlXmlObjectFactory();
+    private static final OpenSamlXmlObjectFactory openSamlXmlObjectFactory = new OpenSamlXmlObjectFactory();
 
     @BeforeEach
     public void setUp() {

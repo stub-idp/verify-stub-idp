@@ -15,11 +15,11 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 public class MatchingDatasetBuilder {
-    private List<TransliterableMdsValue> firstnames = new ArrayList<>();
-    private List<SimpleMdsValue<String>> middleNames = new ArrayList<>();
-    private List<TransliterableMdsValue> surnames = new ArrayList<>();
+    private final List<TransliterableMdsValue> firstnames = new ArrayList<>();
+    private final List<SimpleMdsValue<String>> middleNames = new ArrayList<>();
+    private final List<TransliterableMdsValue> surnames = new ArrayList<>();
     private Optional<SimpleMdsValue<Gender>> gender = Optional.empty();
-    private List<SimpleMdsValue<Instant>> dateOfBirths = new ArrayList<>();
+    private final List<SimpleMdsValue<Instant>> dateOfBirths = new ArrayList<>();
     private List<Address> currentAddresses = new ArrayList<>();
     private List<Address> previousAddresses = new ArrayList<>();
     private String personalId = "default-pid";

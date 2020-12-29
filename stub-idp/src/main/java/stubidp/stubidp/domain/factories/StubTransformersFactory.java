@@ -37,7 +37,7 @@ public class StubTransformersFactory {
             final SigningKeyStore signingKeyStore){
         AuthnRequestSizeValidator sizeValidator = new AuthnRequestSizeValidator(new StringSizeValidator());
 
-        StringToOpenSamlObjectTransformer<AuthnRequest> stringtoOpenSamlObjectTransformer = coreTransformersFactory.<AuthnRequest>getStringtoOpenSamlObjectTransformer(sizeValidator);
+        StringToOpenSamlObjectTransformer<AuthnRequest> stringtoOpenSamlObjectTransformer = coreTransformersFactory.getStringtoOpenSamlObjectTransformer(sizeValidator);
 
         return getAuthnRequestToIdaRequestFromHubTransformer(signingKeyStore).compose(stringtoOpenSamlObjectTransformer);
     }

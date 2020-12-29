@@ -2,7 +2,6 @@ package stubsp.stubsp.resources;
 
 import stubsp.stubsp.Urls;
 import stubsp.stubsp.domain.SamlResponseFromIdpDto;
-import stubsp.stubsp.services.ResponseStatus;
 import stubsp.stubsp.services.SamlResponseService;
 import stubsp.stubsp.views.AuthenticationFailedView;
 import stubsp.stubsp.views.SuccessView;

@@ -21,7 +21,7 @@ public class BooleanBasedMdsAttributeValueMarshaller extends AbstractSAMLObjectM
     }
 
     @Override
-    protected void marshallElementContent(XMLObject xmlObject, Element domElement) throws MarshallingException {
+    protected void marshallElementContent(XMLObject xmlObject, Element domElement) {
         BooleanBasedMdsAttributeValue booleanBasedMdsAttributeValue = (BooleanBasedMdsAttributeValue) xmlObject;
         ElementSupport.appendTextContent(domElement, String.valueOf(booleanBasedMdsAttributeValue.getValue()));
     }

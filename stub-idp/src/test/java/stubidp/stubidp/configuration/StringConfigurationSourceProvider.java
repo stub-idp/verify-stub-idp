@@ -7,14 +7,14 @@ import java.io.IOException;
 import java.io.InputStream;
 
 public class StringConfigurationSourceProvider implements ConfigurationSourceProvider {
-    private String configuration;
+    private final String configuration;
 
     public StringConfigurationSourceProvider(String configuration) {
         this.configuration = configuration;
     }
 
     @Override
-    public InputStream open(String path) throws IOException {
+    public InputStream open(String path) {
         return new ByteArrayInputStream(this.configuration.getBytes());
     }
 }

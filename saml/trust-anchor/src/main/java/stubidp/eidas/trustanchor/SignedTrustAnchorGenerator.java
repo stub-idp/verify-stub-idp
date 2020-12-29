@@ -18,10 +18,10 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class SignedTrustAnchorGenerator {
-  private PrivateKey key;
-  private X509Certificate certificate;
-  private List<File> inputFiles;
-  private File outputFile;
+  private final PrivateKey key;
+  private final X509Certificate certificate;
+  private final List<File> inputFiles;
+  private final File outputFile;
 
   public SignedTrustAnchorGenerator(PrivateKey key, X509Certificate certificate, List<File> inputFiles, File outputFile) {
     this.key = key;

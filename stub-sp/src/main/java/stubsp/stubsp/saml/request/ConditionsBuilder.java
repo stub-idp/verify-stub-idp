@@ -9,9 +9,9 @@ import java.util.List;
 
 public class ConditionsBuilder {
 
-    private OpenSamlXmlObjectFactory openSamlXmlObjectFactory = new OpenSamlXmlObjectFactory();
-    private List<AudienceRestriction> audienceRestrictions = new ArrayList<>();
-    private AudienceRestriction defaultAudienceRestriction = AudienceRestrictionBuilder.anAudienceRestriction().build();
+    private final OpenSamlXmlObjectFactory openSamlXmlObjectFactory = new OpenSamlXmlObjectFactory();
+    private final List<AudienceRestriction> audienceRestrictions = new ArrayList<>();
+    private final AudienceRestriction defaultAudienceRestriction = AudienceRestrictionBuilder.anAudienceRestriction().build();
     private boolean shouldIncludeDefaultAudienceRestriction = true;
 
     public static ConditionsBuilder aConditions() {

@@ -5,7 +5,7 @@ public enum Gender {
     MALE("Male"),
     NOT_SPECIFIED("Not Specified");
 
-    private String value;
+    private final String value;
 
     Gender(String value) {
         this.value = value;

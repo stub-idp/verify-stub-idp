@@ -13,7 +13,7 @@ import static stubidp.saml.test.builders.IssuerBuilder.anIssuer;
 public class EntitiesDescriptorToElementTransformerTest extends OpenSAMLRunner {
 
     @Test
-    public void transform_shouldTransformASamlObjectIntoAnElement() throws Exception {
+    public void transform_shouldTransformASamlObjectIntoAnElement() {
         AuthnRequest authnRequest = anAuthnRequest().withIssuer(anIssuer().build()).build();
         XmlObjectToElementTransformer<AuthnRequest> transformer = new XmlObjectToElementTransformer<>();
 

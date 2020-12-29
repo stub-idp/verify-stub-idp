@@ -216,7 +216,7 @@ public class IdentityProviderAssertionToAssertionTransformerTest extends OpenSAM
 
         transformer.transform(assertion);
 
-        verify(attributeFactory, never()).createCurrentAddressesAttribute(ArgumentMatchers.<Address>anyList());
+        verify(attributeFactory, never()).createCurrentAddressesAttribute(ArgumentMatchers.anyList());
     }
 
     @Test
@@ -236,7 +236,7 @@ public class IdentityProviderAssertionToAssertionTransformerTest extends OpenSAM
 
         transformer.transform(assertion);
 
-        verify(attributeFactory, never()).createPreviousAddressesAttribute(ArgumentMatchers.<Address>anyList());
+        verify(attributeFactory, never()).createPreviousAddressesAttribute(ArgumentMatchers.anyList());
     }
 
     @Test

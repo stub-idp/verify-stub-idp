@@ -25,14 +25,14 @@ import static stubidp.utils.rest.exceptions.ApplicationException.createException
 
 public class JsonResponseProcessorTest {
 
-    private URI uri = URI.create("http://somedomain.com");
-    private UUID errorId = UUID.randomUUID();
-    private ExceptionType exceptionType = ExceptionType.INVALID_SAML;
+    private final URI uri = URI.create("http://somedomain.com");
+    private final UUID errorId = UUID.randomUUID();
+    private final ExceptionType exceptionType = ExceptionType.INVALID_SAML;
 
     private JsonResponseProcessor responseProcessor;
 
     @BeforeEach
-    public void setUp() throws Exception {
+    public void setUp() {
         responseProcessor = new JsonResponseProcessor(new ObjectMapper());
     }
 
@@ -128,12 +128,12 @@ public class JsonResponseProcessorTest {
     }
 
     @Test
-    public void getJsonEntity_shouldThrowWhenNoEntityPresent() throws Exception {
+    public void getJsonEntity_shouldThrowWhenNoEntityPresent() {
         Assertions.assertThrows(IllegalArgumentException.class, () -> responseProcessor.getJsonEntity(uri, null, String.class, createMock204Response()));
     }
 
     @Test
-    public void getJsonEntity_shouldThrowWhenGettingEntityFails() throws Exception {
+    public void getJsonEntity_shouldThrowWhenGettingEntityFails() {
         final ApplicationException e = Assertions.assertThrows(ApplicationException.class, () -> responseProcessor.getJsonEntity(uri, null, String.class, createResponseWithBadEntity()));
 
         assertThat(e.getExceptionType()).isEqualTo(ExceptionType.NETWORK_ERROR);

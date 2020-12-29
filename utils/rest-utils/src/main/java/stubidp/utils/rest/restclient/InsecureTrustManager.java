@@ -6,11 +6,11 @@ import java.security.cert.X509Certificate;
 
 public class InsecureTrustManager implements X509TrustManager {
 
-    public void checkClientTrusted(final X509Certificate[] chain, final String authType) throws CertificateException {
+    public void checkClientTrusted(final X509Certificate[] chain, final String authType) {
         // Everyone is trusted!
     }
 
-    public void checkServerTrusted(final X509Certificate[] chain, final String authType) throws CertificateException {
+    public void checkServerTrusted(final X509Certificate[] chain, final String authType) {
         // Everyone is trusted!
     }
 

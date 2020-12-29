@@ -11,7 +11,7 @@ import java.util.Optional;
 public class AssertionBlobEncrypter {
     private final StringToOpenSamlObjectTransformer<Assertion> stringToAssertionTransformer;
     private final XmlObjectToBase64EncodedStringTransformer<Assertion> assertionToBase64EncodedStringTransformer;
-    private AssertionEncrypter assertionEncrypter;
+    private final AssertionEncrypter assertionEncrypter;
 
     @Inject
     public AssertionBlobEncrypter(StringToOpenSamlObjectTransformer<Assertion> stringToAssertionTransformer,

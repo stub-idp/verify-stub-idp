@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class AttributeAuthorityDescriptorBuilder {
-    private List<KeyDescriptor> keyDescriptors = new ArrayList<>();
+    private final List<KeyDescriptor> keyDescriptors = new ArrayList<>();
 
     private AttributeAuthorityDescriptorBuilder() {}
 

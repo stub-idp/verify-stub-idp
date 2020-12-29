@@ -21,7 +21,7 @@ import java.util.stream.Collectors;
 public class UserService {
 
     public static class ResponseMessage {
-        private String message;
+        private final String message;
 
         private ResponseMessage(String message) {
             this.message = message;

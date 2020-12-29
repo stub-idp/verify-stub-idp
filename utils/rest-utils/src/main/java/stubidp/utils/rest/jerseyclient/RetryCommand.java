@@ -15,9 +15,9 @@ public class RetryCommand<T> {
     private static final Logger LOG = LoggerFactory.getLogger(RetryCommand.class);
 
     private int retryCounter;
-    private int maxRetries;
-    private Class exceptionClass;
-    private Meter retryMeter;
+    private final int maxRetries;
+    private final Class exceptionClass;
+    private final Meter retryMeter;
 
     public RetryCommand(int maxRetries) {
         this(maxRetries, Exception.class, null);

@@ -14,9 +14,9 @@ import java.security.cert.X509Certificate;
 import java.util.Base64;
 
 public class ConnectorMetadataSigner {
-    private PrivateKey key;
-    private X509Certificate certificate;
-    private AlgorithmType algorithm;
+    private final PrivateKey key;
+    private final X509Certificate certificate;
+    private final AlgorithmType algorithm;
 
     public ConnectorMetadataSigner(X509Certificate certificate, PrivateKey key, AlgorithmType algorithm) {
         this.key = key;

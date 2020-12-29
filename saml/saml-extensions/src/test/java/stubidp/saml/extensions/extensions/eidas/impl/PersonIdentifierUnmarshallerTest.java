@@ -1,7 +1,6 @@
 package stubidp.saml.extensions.extensions.eidas.impl;
 
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import stubidp.saml.Utils;
 import stubidp.saml.extensions.extensions.eidas.PersonIdentifier;
 import stubidp.saml.test.OpenSAMLRunner;

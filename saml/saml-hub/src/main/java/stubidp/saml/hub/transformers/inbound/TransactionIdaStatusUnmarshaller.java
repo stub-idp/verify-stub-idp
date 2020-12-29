@@ -7,7 +7,7 @@ import java.util.Map;
 public class TransactionIdaStatusUnmarshaller extends IdaStatusUnmarshaller<TransactionIdaStatus> {
 
     private static final Map<IdaStatusMapperStatus, TransactionIdaStatus> SAML_TO_REST_CODES =
-            Map.<IdaStatusMapperStatus, TransactionIdaStatus>ofEntries(
+            Map.ofEntries(
                     Map.entry(IdaStatusMapperStatus.RequesterErrorFromIdpAsSentByHub, TransactionIdaStatus.RequesterError),
                     Map.entry(IdaStatusMapperStatus.AuthenticationFailed, TransactionIdaStatus.AuthenticationFailed),
                     Map.entry(IdaStatusMapperStatus.NoAuthenticationContext, TransactionIdaStatus.NoAuthenticationContext),

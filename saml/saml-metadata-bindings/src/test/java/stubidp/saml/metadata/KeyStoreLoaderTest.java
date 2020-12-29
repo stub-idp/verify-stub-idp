@@ -8,16 +8,16 @@ import java.security.KeyStore;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class KeyStoreLoaderTest {
-    private KeyStoreLoader keyStoreLoader = new KeyStoreLoader();
+    private final KeyStoreLoader keyStoreLoader = new KeyStoreLoader();
 
     @Test
-    public void testLoadFromString() throws Exception {
+    public void testLoadFromString() {
         KeyStore keyStore = keyStoreLoader.load(ResourceHelpers.resourceFilePath("test-truststore.ts"), "puppet");
         assertThat(keyStore).isNotNull();
     }
 
     @Test
-    public void testLoadFromStream() throws Exception {
+    public void testLoadFromStream() {
         KeyStore keyStore = keyStoreLoader.load(this.getClass().getResourceAsStream("/test-truststore.ts"), "puppet");
         assertThat(keyStore).isNotNull();
     }

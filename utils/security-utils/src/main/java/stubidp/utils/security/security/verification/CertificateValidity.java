@@ -7,7 +7,7 @@ public class CertificateValidity {
     private final Optional<CertPathValidatorException> exception;
 
     public static CertificateValidity valid() {
-        return new CertificateValidity(Optional.<CertPathValidatorException>empty());
+        return new CertificateValidity(Optional.empty());
     }
 
     public static CertificateValidity invalid(CertPathValidatorException e) {
@@ -19,7 +19,7 @@ public class CertificateValidity {
     }
 
     public boolean isValid() {
-        return !exception.isPresent();
+        return exception.isEmpty();
     }
 
     public Optional<CertPathValidatorException> getException() {

@@ -1,6 +1,5 @@
 package stubidp.utils.rest.bundles;
 
-import io.dropwizard.Bundle;
 import io.dropwizard.Configuration;
 import io.dropwizard.ConfiguredBundle;
 import io.dropwizard.setup.Bootstrap;
@@ -17,7 +16,7 @@ public class ServiceStatusBundle<T extends Configuration> implements ConfiguredB
     }
 
     @Override
-    public void run(T configuration, Environment environment) throws Exception {
+    public void run(T configuration, Environment environment) {
         environment.jersey().register(new ServiceStatusResource());
         environment.jersey().register(new ConnectionCloseFilter());
         environment.admin().addTask(new SetServiceUnavailableTask(ServiceStatus.getInstance()));

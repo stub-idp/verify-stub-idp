@@ -7,7 +7,7 @@ import stubidp.saml.test.OpenSamlXmlObjectFactory;
 
 public class PersonIdentifierAttributeBuilder {
     private PersonIdentifier pid = null;
-    private OpenSamlXmlObjectFactory openSamlXmlObjectFactory = new OpenSamlXmlObjectFactory();
+    private final OpenSamlXmlObjectFactory openSamlXmlObjectFactory = new OpenSamlXmlObjectFactory();
 
     public static PersonIdentifierAttributeBuilder aPersonIdentifier() {
         return new PersonIdentifierAttributeBuilder();

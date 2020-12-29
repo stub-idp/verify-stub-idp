@@ -8,7 +8,7 @@ import java.util.function.Function;
  * This concrete class is necessary to convince guice to inject two Function<OutboundResponseFromHub, String> implementations.
  */
 public class OutboundSamlProfileResponseFromHubToStringFunction implements Function<OutboundResponseFromHub, String> {
-    private Function<OutboundResponseFromHub, String> transformer;
+    private final Function<OutboundResponseFromHub, String> transformer;
 
     public OutboundSamlProfileResponseFromHubToStringFunction(Function<OutboundResponseFromHub,String> transformer) {
         this.transformer = transformer;

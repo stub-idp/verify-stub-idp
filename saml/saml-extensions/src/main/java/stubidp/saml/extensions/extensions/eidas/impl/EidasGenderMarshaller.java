@@ -13,7 +13,7 @@ public class EidasGenderMarshaller extends AbstractSAMLObjectMarshaller {
     public static final Marshaller MARSHALLER = new EidasGenderMarshaller();
 
     /** {@inheritDoc} */
-    protected void marshallElementContent(XMLObject samlObject, Element domElement) throws MarshallingException {
+    protected void marshallElementContent(XMLObject samlObject, Element domElement) {
         EidasGender eidasGender = (EidasGender) samlObject;
         ElementSupport.appendTextContent(domElement, eidasGender.getValue());
     }

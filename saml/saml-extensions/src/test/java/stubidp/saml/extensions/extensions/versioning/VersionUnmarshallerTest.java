@@ -1,7 +1,6 @@
 package stubidp.saml.extensions.extensions.versioning;
 
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import stubidp.saml.extensions.extensions.versioning.Version;
 import stubidp.saml.Utils;
 import stubidp.saml.test.OpenSAMLRunner;

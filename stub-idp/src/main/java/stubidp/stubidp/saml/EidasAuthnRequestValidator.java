@@ -5,7 +5,6 @@ import org.opensaml.saml.metadata.resolver.MetadataResolver;
 import org.opensaml.saml.saml2.core.AuthnRequest;
 import org.opensaml.saml.saml2.metadata.SPSSODescriptor;
 import org.opensaml.security.SecurityException;
-import org.opensaml.xmlsec.signature.X509Certificate;
 import org.opensaml.xmlsec.signature.support.SignatureException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

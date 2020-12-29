@@ -18,10 +18,10 @@ import static stubidp.test.devpki.TestCertificateStrings.HUB_TEST_PUBLIC_SIGNING
 
 public class TrustStoreConfigurationTest {
 
-    private ObjectMapper objectMapper = new ObjectMapper();
+    private final ObjectMapper objectMapper = new ObjectMapper();
 
     @RegisterExtension
-    public static KeyStoreRule keyStoreRule = KeyStoreRuleBuilder.aKeyStoreRule().withCertificate("hub", HUB_TEST_PUBLIC_SIGNING_CERT).build();
+    public static final KeyStoreRule keyStoreRule = KeyStoreRuleBuilder.aKeyStoreRule().withCertificate("hub", HUB_TEST_PUBLIC_SIGNING_CERT).build();
 
     @Test
     public void shouldLoadTrustStoreFromFile() throws IOException {
@@ -58,7 +58,7 @@ public class TrustStoreConfigurationTest {
     }
 
     @Test
-    public void shouldThrowExceptionWhenIncorrectKeySpecified() throws IOException {
+    public void shouldThrowExceptionWhenIncorrectKeySpecified() {
         String jsonConfig = "{\"type\": \"file\", \"trustStorePathhhh\": \"path\", \"trustStorePassword\": \"puppet\"}";
         Assertions.assertThrows(UnrecognizedPropertyException.class, () -> objectMapper.readValue(jsonConfig, TrustStoreConfiguration.class));
     }

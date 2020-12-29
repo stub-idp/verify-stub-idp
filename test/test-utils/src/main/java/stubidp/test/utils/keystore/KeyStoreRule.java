@@ -15,12 +15,12 @@ public class KeyStoreRule implements BeforeEachCallback, AfterAllCallback {
     }
 
     @Override
-    public void beforeEach(ExtensionContext context) throws Exception {
+    public void beforeEach(ExtensionContext context) {
         keyStoreResource.create();
     }
 
     @Override
-    public void afterAll(ExtensionContext context) throws Exception {
+    public void afterAll(ExtensionContext context) {
         keyStoreResource.delete();
     }
 

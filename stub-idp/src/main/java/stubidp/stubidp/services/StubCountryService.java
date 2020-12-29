@@ -47,7 +47,7 @@ public class StubCountryService {
                                                 String surname,
                                                 String nonLatinSurname,
                                                 String dob,
-                                                AuthnContext levelOfAssurance) throws InvalidSessionIdException, InvalidUsernameOrPasswordException, InvalidDateException, IncompleteRegistrationException, UsernameAlreadyTakenException {
+                                                AuthnContext levelOfAssurance) throws InvalidSessionIdException, InvalidUsernameOrPasswordException, IncompleteRegistrationException, UsernameAlreadyTakenException {
         StubCountry stubCountry = stubCountryRepository.getStubCountryWithFriendlyId(eidasScheme);
         DatabaseEidasUser user = createEidasUserInStubCountry(
                 username, password, stubCountry, firstName, nonLatinFirstname,

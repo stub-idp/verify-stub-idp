@@ -12,7 +12,7 @@ import stubidp.saml.utils.core.OpenSamlXmlObjectFactory;
 import javax.inject.Inject;
 
 public class OutboundAssertionToSubjectTransformer {
-    private OpenSamlXmlObjectFactory openSamlXmlObjectFactory;
+    private final OpenSamlXmlObjectFactory openSamlXmlObjectFactory;
 
     @Inject
     public OutboundAssertionToSubjectTransformer(OpenSamlXmlObjectFactory openSamlXmlObjectFactory) {

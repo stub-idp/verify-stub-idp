@@ -4,6 +4,7 @@ import org.opensaml.xmlsec.signature.Signature;
 
 import java.net.URI;
 import java.time.Instant;
+import java.util.Objects;
 import java.util.Optional;
 
 public class AuthnRequestFromRelyingParty extends VerifySamlMessage {
@@ -59,28 +60,14 @@ public class AuthnRequestFromRelyingParty extends VerifySamlMessage {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof AuthnRequestFromRelyingParty)) return false;
-
+        if (o == null || getClass() != o.getClass()) return false;
         AuthnRequestFromRelyingParty that = (AuthnRequestFromRelyingParty) o;
-
-        if (forceAuthentication != null ? !forceAuthentication.equals(that.forceAuthentication) : that.forceAuthentication != null)
-            return false;
-        if (assertionConsumerServiceUrl != null ? !assertionConsumerServiceUrl.equals(that.assertionConsumerServiceUrl) : that.assertionConsumerServiceUrl != null)
-            return false;
-        if (assertionConsumerServiceIndex != null ? !assertionConsumerServiceIndex.equals(that.assertionConsumerServiceIndex) : that.assertionConsumerServiceIndex != null)
-            return false;
-        if (signature != null ? !signature.equals(that.signature) : that.signature != null) return false;
-        return verifyServiceProviderVersion != null ? verifyServiceProviderVersion.equals(that.verifyServiceProviderVersion) : that.verifyServiceProviderVersion == null;
+        return Objects.equals(forceAuthentication, that.forceAuthentication) && Objects.equals(assertionConsumerServiceUrl, that.assertionConsumerServiceUrl) && Objects.equals(assertionConsumerServiceIndex, that.assertionConsumerServiceIndex) && Objects.equals(signature, that.signature) && Objects.equals(verifyServiceProviderVersion, that.verifyServiceProviderVersion);
     }
 
     @Override
     public int hashCode() {
-        int result = forceAuthentication != null ? forceAuthentication.hashCode() : 0;
-        result = 31 * result + (assertionConsumerServiceUrl != null ? assertionConsumerServiceUrl.hashCode() : 0);
-        result = 31 * result + (assertionConsumerServiceIndex != null ? assertionConsumerServiceIndex.hashCode() : 0);
-        result = 31 * result + (signature != null ? signature.hashCode() : 0);
-        result = 31 * result + (verifyServiceProviderVersion != null ? verifyServiceProviderVersion.hashCode() : 0);
-        return result;
+        return Objects.hash(forceAuthentication, assertionConsumerServiceUrl, assertionConsumerServiceIndex, signature, verifyServiceProviderVersion);
     }
 
     @Override

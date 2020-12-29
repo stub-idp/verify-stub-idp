@@ -41,7 +41,7 @@ public class ErrorHandlingClientTest {
 
     private ErrorHandlingClient errorHandlingClient;
 
-    private URI testUri = URI.create("/some-uri");
+    private final URI testUri = URI.create("/some-uri");
 
     @BeforeEach
     public void setup() {
@@ -49,7 +49,7 @@ public class ErrorHandlingClientTest {
     }
 
     @Test
-    public void getWithCookiesAndHeaders_shouldAddCookiesAndHeadersToRequest() throws Exception {
+    public void getWithCookiesAndHeaders_shouldAddCookiesAndHeadersToRequest() {
         final Cookie cookie = new Cookie("cookie", "monster");
         final List<Cookie> cookies = List.of(cookie);
         final String headerName = "X-Clacks-Overhead";
@@ -59,7 +59,7 @@ public class ErrorHandlingClientTest {
         when(client.target(any(URI.class))).thenReturn(webTarget);
         when(webTarget.request()).thenReturn(webTargetBuilder);
         when(webTargetBuilder.accept(ArgumentMatchers.<MediaType>any())).thenReturn(webTargetBuilder);
-        when(webTargetBuilder.cookie(ArgumentMatchers.<Cookie>any())).thenReturn(webTargetBuilder);
+        when(webTargetBuilder.cookie(ArgumentMatchers.any())).thenReturn(webTargetBuilder);
         when(webTargetBuilder.header(anyString(), any())).thenReturn(webTargetBuilder);
 
         errorHandlingClient.get(testUri, cookies, headers);
@@ -70,14 +70,14 @@ public class ErrorHandlingClientTest {
     }
 
     @Test
-    public void get_shouldThrowApplicationExceptionWhenAWireProblemOccurs() throws Exception {
+    public void get_shouldThrowApplicationExceptionWhenAWireProblemOccurs() {
         when(client.target(testUri)).thenThrow(new ProcessingException(""));
 
         Assertions.assertThrows(ApplicationException.class, () -> errorHandlingClient.get(testUri));
     }
 
     @Test
-    public void postWithHeaders_shouldAddHeadersToRequest() throws Exception {
+    public void postWithHeaders_shouldAddHeadersToRequest() {
         final String headerName = "X-Clacks-Overhead";
         final String headerValue = "GNU Terry Pratchett";
         final Map<String, String> headers = Map.of(headerName, headerValue);
@@ -94,7 +94,7 @@ public class ErrorHandlingClientTest {
     }
 
     @Test
-    public void shouldRetryPostRequestIfConfigured() throws Exception {
+    public void shouldRetryPostRequestIfConfigured() {
         when(client.target(any(URI.class))).thenReturn(webTarget);
         when(webTarget.request(MediaType.APPLICATION_JSON_TYPE)).thenReturn(webTargetBuilder);
         when(webTargetBuilder.post(Entity.json(""))).thenThrow(RuntimeException.class);
@@ -106,7 +106,7 @@ public class ErrorHandlingClientTest {
     }
 
     @Test
-    public void shouldRetryGetRequestIfConfigured() throws Exception {
+    public void shouldRetryGetRequestIfConfigured() {
         when(client.target(any(URI.class))).thenReturn(webTarget);
         when(webTarget.request()).thenReturn(webTargetBuilder);
         when(webTargetBuilder.accept(ArgumentMatchers.<MediaType>any())).thenReturn(webTargetBuilder);
@@ -119,7 +119,7 @@ public class ErrorHandlingClientTest {
     }
 
     @Test
-    public void post_shouldThrowApplicationExceptionWhenAWireProblemOccurs() throws Exception {
+    public void post_shouldThrowApplicationExceptionWhenAWireProblemOccurs() {
         when(client.target(testUri)).thenThrow(new ProcessingException(""));
 
         Assertions.assertThrows(ApplicationException.class, () -> errorHandlingClient.post(testUri, ""));

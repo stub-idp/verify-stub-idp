@@ -165,8 +165,6 @@ public class EidasRegistrationPageResource {
                     return createErrorResponse(ErrorMessageType.INVALID_SESSION_ID, schemeId);
                 } catch (IncompleteRegistrationException e) {
                     return createErrorResponse(ErrorMessageType.INCOMPLETE_REGISTRATION, schemeId);
-                } catch (InvalidDateException e) {
-                    return createErrorResponse(ErrorMessageType.INVALID_DATE, schemeId);
                 } catch (UsernameAlreadyTakenException e) {
                     return createErrorResponse(ErrorMessageType.USERNAME_ALREADY_TAKEN, schemeId);
                 } catch (InvalidUsernameOrPasswordException e) {

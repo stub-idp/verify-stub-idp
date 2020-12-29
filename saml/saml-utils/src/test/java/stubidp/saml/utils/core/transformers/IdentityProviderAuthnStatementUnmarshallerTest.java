@@ -29,13 +29,13 @@ public class IdentityProviderAuthnStatementUnmarshallerTest {
     public IdentityProviderAuthnStatementUnmarshaller unmarshaller;
 
     @BeforeEach
-    public void setUp() throws Exception {
+    public void setUp() {
         unmarshaller = new IdentityProviderAuthnStatementUnmarshaller(
                 authnContextFactory);
     }
 
     @Test
-    public void transform_shouldTransformAuthnStatement() throws Exception {
+    public void transform_shouldTransformAuthnStatement() {
         AuthnContextClassRef authnContextClassRef = anAuthnContextClassRef().withAuthnContextClasRefValue(IdaAuthnContext.LEVEL_3_AUTHN_CTX).build();
         AuthnContext authnContext = anAuthnContext()
                 .withAuthnContextClassRef(authnContextClassRef)
@@ -53,7 +53,7 @@ public class IdentityProviderAuthnStatementUnmarshallerTest {
     }
 
     @Test
-    public void transform_shouldTransformClientIpAddressWhenAssertionContainsAuthnStatement() throws Exception {
+    public void transform_shouldTransformClientIpAddressWhenAssertionContainsAuthnStatement() {
         String ipAddress = "1.2.3.4";
         Assertion assertion = anAssertion()
                 .addAuthnStatement(anAuthnStatement().build())

@@ -12,7 +12,7 @@ public class VersionMarshaller extends AbstractSAMLObjectMarshaller {
     public static final Marshaller MARSHALLER = new VersionMarshaller();
 
     @Override
-    protected void marshallAttributes(XMLObject xmlObject, Element domElement) throws MarshallingException {
+    protected void marshallAttributes(XMLObject xmlObject, Element domElement) {
         XMLObjectSupport.marshallAttribute(XMLConstants.XSI_TYPE_ATTRIB_NAME, Version.NAMESPACE_PREFIX + ":" + Version.TYPE_LOCAL_NAME, domElement, false);
     }
 }

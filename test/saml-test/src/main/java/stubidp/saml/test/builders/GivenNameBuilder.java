@@ -5,7 +5,7 @@ import org.opensaml.saml.saml2.metadata.GivenName;
 import java.util.Optional;
 
 public class GivenNameBuilder {
-    private Optional<String> value = Optional.ofNullable("Fred");
+    private final Optional<String> value = Optional.ofNullable("Fred");
 
     private GivenNameBuilder() {}
 

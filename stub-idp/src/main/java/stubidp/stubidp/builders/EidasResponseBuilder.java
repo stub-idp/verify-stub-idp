@@ -18,7 +18,7 @@ import java.util.List;
 public class EidasResponseBuilder {
 
     private static final SecureRandomIdentifierGenerationStrategy idGeneratorStrategy = new SecureRandomIdentifierGenerationStrategy();
-    private Response eidasResponse;
+    private final Response eidasResponse;
 
     public EidasResponseBuilder() {
         eidasResponse = build(Response.DEFAULT_ELEMENT_NAME);

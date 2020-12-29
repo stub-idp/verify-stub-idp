@@ -14,7 +14,7 @@ public class AddressAttributeValueBuilder_1_1 {
     private Optional<Instant> from = Optional.empty();
     private Optional<Instant> to = Optional.empty();
 
-    private List<String> lines = new ArrayList<>();
+    private final List<String> lines = new ArrayList<>();
     private Optional<String> postCode = Optional.of("RG99 1YY");
     private Optional<String> internationalPostCode = Optional.of("RG88 1ZZ");
     private Optional<String> uprn = Optional.of("79347894352");

@@ -12,12 +12,12 @@ import java.util.List;
 import java.util.Optional;
 
 public class ContactPersonBuilder {
-    private Optional<GivenName> givenName = Optional.ofNullable(GivenNameBuilder.aGivenName().build());
+    private final Optional<GivenName> givenName = Optional.ofNullable(GivenNameBuilder.aGivenName().build());
     private Optional<Company> company = Optional.ofNullable(CompanyBuilder.aCompany().build());
-    private Optional<SurName> surName = Optional.ofNullable(SurNameBuilder.aSurName().build());
-    private List<EmailAddress> emailAddresses = new ArrayList<>();
+    private final Optional<SurName> surName = Optional.ofNullable(SurNameBuilder.aSurName().build());
+    private final List<EmailAddress> emailAddresses = new ArrayList<>();
     private boolean addDefaultEmailAddress = true;
-    private List<TelephoneNumber> telephoneNumbers = new ArrayList<>();
+    private final List<TelephoneNumber> telephoneNumbers = new ArrayList<>();
     private boolean addDefaultTelephoneNumber = true;
 
     private ContactPersonBuilder() {}

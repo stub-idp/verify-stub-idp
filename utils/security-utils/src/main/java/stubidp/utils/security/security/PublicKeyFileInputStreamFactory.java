@@ -13,7 +13,7 @@ public class PublicKeyFileInputStreamFactory implements PublicKeyInputStreamFact
 
     public InputStream createInputStream(String publicKeyUri) {
         try {
-            return new FileInputStream(new File(publicKeyUri));
+            return new FileInputStream(publicKeyUri);
         } catch (FileNotFoundException e) {
             throw new RuntimeException(e);
         }

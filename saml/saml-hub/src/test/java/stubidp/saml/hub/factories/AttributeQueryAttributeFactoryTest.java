@@ -14,7 +14,7 @@ public class AttributeQueryAttributeFactoryTest extends OpenSAMLRunner {
     private AttributeQueryAttributeFactory attributeQueryAttributeFactory;
 
     @BeforeEach
-    public void setUp() throws Exception {
+    public void setUp() {
         attributeQueryAttributeFactory = new AttributeQueryAttributeFactory(new OpenSamlXmlObjectFactory());
     }
 

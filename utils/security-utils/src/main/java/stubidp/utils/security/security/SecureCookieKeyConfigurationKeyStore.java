@@ -16,7 +16,7 @@ import java.util.Objects;
 
 public class SecureCookieKeyConfigurationKeyStore implements SecureCookieKeyStore {
 
-    private KeyConfiguration keyConfiguration;
+    private final KeyConfiguration keyConfiguration;
 
     @Inject
     public SecureCookieKeyConfigurationKeyStore(SecureCookieConfiguration keyConfiguration) {
@@ -38,7 +38,7 @@ public class SecureCookieKeyConfigurationKeyStore implements SecureCookieKeyStor
     }
 
     private static Key getSecureCookieKey(String keyUri) throws IOException {
-        try(InputStream inputStream = new FileInputStream(new File(keyUri))) {
+        try(InputStream inputStream = new FileInputStream(keyUri)) {
             byte[] ous = FileUtils.readStream(inputStream);
             return new SecretKeySpec(ous, "HmacSHA1");
         }

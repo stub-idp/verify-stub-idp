@@ -36,8 +36,8 @@ public class AssertionBuilder {
 
     private boolean shouldSign = true;
     private SAMLVersion version = SAMLVersion.VERSION_20;
-    private List<AttributeStatement> attributeStatements = new ArrayList<>();
-    private List<AuthnStatement> authnStatements = new ArrayList<>();
+    private final List<AttributeStatement> attributeStatements = new ArrayList<>();
+    private final List<AuthnStatement> authnStatements = new ArrayList<>();
 
     private Optional<String> id = Optional.of("some-assertion-id");
     private Optional<Subject> subject = Optional.ofNullable(SubjectBuilder.aSubject().build());

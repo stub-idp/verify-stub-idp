@@ -21,11 +21,11 @@ import static stubidp.utils.rest.exceptions.ApplicationException.createUnaudited
 public class ErrorHandlingClient {
 
     private final Client jerseyClient;
-    private Integer numberOfRetries = 0;
+    private final Integer numberOfRetries;
 
     @Inject
     public ErrorHandlingClient(Client jerseyClient) {
-        numberOfRetries = 0;
+        this.numberOfRetries = 0;
         this.jerseyClient = jerseyClient;
     }
 
@@ -35,7 +35,7 @@ public class ErrorHandlingClient {
     }
 
     public Response get(final URI uri) {
-        return get(uri, Collections.<Cookie>emptyList(), Collections.<String, String>emptyMap());
+        return get(uri, Collections.emptyList(), Collections.emptyMap());
     }
 
     public Response get(final URI uri, final List<Cookie> cookies, final Map<String, String> headers) {
@@ -61,7 +61,7 @@ public class ErrorHandlingClient {
     }
 
     public Response post(final URI uri, final Object postBody) {
-        return post(uri, Collections.<String, String>emptyMap(), postBody);
+        return post(uri, Collections.emptyMap(), postBody);
     }
 
     public Response post(final URI uri, final Map<String, String> headers, final Object postBody) {

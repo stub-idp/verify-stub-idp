@@ -17,7 +17,7 @@ public enum UserAccountCreationAttribute implements Serializable {
     ADDRESS_HISTORY("addresshistory"),
     CYCLE_3("cycle_3");
 
-    private String attributeName;
+    private final String attributeName;
 
     private UserAccountCreationAttribute(final String attributeName) {
         this.attributeName = attributeName;

@@ -12,8 +12,8 @@ public final class CountryAuthenticationStatus implements IdaStatus {
         Failure
     }
 
-    private Status status;
-    private String message;
+    private final Status status;
+    private final String message;
 
     public static CountryAuthenticationStatus success() { return new CountryAuthenticationStatus(Status.Success);}
     public static CountryAuthenticationStatus failure() { return new CountryAuthenticationStatus(Status.Failure);}

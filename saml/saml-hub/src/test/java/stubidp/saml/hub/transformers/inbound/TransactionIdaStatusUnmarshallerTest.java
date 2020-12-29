@@ -18,12 +18,12 @@ public class TransactionIdaStatusUnmarshallerTest extends OpenSAMLRunner {
     private TransactionIdaStatusUnmarshaller unmarshaller;
 
     @BeforeEach
-    public void setUp() throws Exception {
+    public void setUp() {
         unmarshaller = new TransactionIdaStatusUnmarshaller();
     }
 
     @Test
-    public void transform_shouldTransformSuccessWithNoSubCode() throws Exception {
+    public void transform_shouldTransformSuccessWithNoSubCode() {
         OpenSamlXmlObjectFactory samlObjectFactory = new OpenSamlXmlObjectFactory();
         Status originalStatus = samlObjectFactory.createStatus();
         StatusCode successStatusCode = samlObjectFactory.createStatusCode();
@@ -36,7 +36,7 @@ public class TransactionIdaStatusUnmarshallerTest extends OpenSAMLRunner {
     }
 
     @Test
-    public void transform_shouldTransformNoAuthenticationContext() throws Exception {
+    public void transform_shouldTransformNoAuthenticationContext() {
         OpenSamlXmlObjectFactory samlObjectFactory = new OpenSamlXmlObjectFactory();
         Status originalStatus = samlObjectFactory.createStatus();
         StatusCode topLevelStatusCode = samlObjectFactory.createStatusCode();
@@ -52,7 +52,7 @@ public class TransactionIdaStatusUnmarshallerTest extends OpenSAMLRunner {
     }
 
     @Test
-    public void transform_shouldTransformNoMatchFromHub() throws Exception {
+    public void transform_shouldTransformNoMatchFromHub() {
         OpenSamlXmlObjectFactory samlObjectFactory = new OpenSamlXmlObjectFactory();
         Status originalStatus = samlObjectFactory.createStatus();
         StatusCode topLevelStatusCode = samlObjectFactory.createStatusCode();
@@ -68,7 +68,7 @@ public class TransactionIdaStatusUnmarshallerTest extends OpenSAMLRunner {
     }
 
     @Test
-    public void transform_shouldTransformAuthnFailed() throws Exception {
+    public void transform_shouldTransformAuthnFailed() {
         OpenSamlXmlObjectFactory samlObjectFactory = new OpenSamlXmlObjectFactory();
         Status status = samlObjectFactory.createStatus();
         StatusCode topLevelStatusCode = samlObjectFactory.createStatusCode();
@@ -83,7 +83,7 @@ public class TransactionIdaStatusUnmarshallerTest extends OpenSAMLRunner {
     }
 
     @Test
-    public void transform_shouldTransformRequesterErrorFromIdpAsSentByHub() throws Exception {
+    public void transform_shouldTransformRequesterErrorFromIdpAsSentByHub() {
         Status status =
             aStatus()
                 .withStatusCode(

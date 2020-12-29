@@ -6,7 +6,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class Cycle3DatasetBuilder {
-    private Map<String,String> attributes = new HashMap<>();
+    private final Map<String,String> attributes = new HashMap<>();
 
     private Cycle3DatasetBuilder() {}
 

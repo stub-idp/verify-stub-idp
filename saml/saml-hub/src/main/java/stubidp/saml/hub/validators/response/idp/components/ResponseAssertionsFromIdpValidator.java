@@ -16,7 +16,7 @@ public class ResponseAssertionsFromIdpValidator {
     private final MatchingDatasetAssertionValidator matchingDatasetAssertionValidator;
     private final AuthnStatementAssertionValidator authnStatementAssertionValidator;
     private final IPAddressValidator ipAddressValidator;
-    private String hubEntityId;
+    private final String hubEntityId;
 
     public ResponseAssertionsFromIdpValidator(IdentityProviderAssertionValidator assertionValidator,
                                               MatchingDatasetAssertionValidator matchingDatasetAssertionValidator,

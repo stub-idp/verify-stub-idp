@@ -62,7 +62,7 @@ public class SamlAssertionsSignatureValidatorTest extends OpenSAMLRunner {
     }
 
     @Test
-    public void shouldFailOnAssertionSignedWithWrongIssuer() throws Exception {
+    public void shouldFailOnAssertionSignedWithWrongIssuer() {
         final Assertion assertion = AssertionBuilder.anAuthnStatementAssertion().buildUnencrypted();
         when(samlMessageSignatureValidator.validate(assertion, IDPSSODescriptor.DEFAULT_ELEMENT_NAME)).thenReturn(SamlValidationResponse.aValidResponse());
 

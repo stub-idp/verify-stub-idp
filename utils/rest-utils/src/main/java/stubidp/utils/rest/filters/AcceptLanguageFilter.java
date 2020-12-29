@@ -38,7 +38,7 @@ import java.util.Enumeration;
  */
 public class AcceptLanguageFilter implements Filter {
     @Override
-    public void init(final FilterConfig filterConfig) throws ServletException {
+    public void init(final FilterConfig filterConfig) {
     }
     @Override
     public void doFilter(ServletRequest servletRequest, final ServletResponse servletResponse, final FilterChain filterChain) throws IOException, ServletException {

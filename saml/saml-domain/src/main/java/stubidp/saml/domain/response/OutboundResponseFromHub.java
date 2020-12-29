@@ -8,8 +8,8 @@ import java.util.List;
 
 public class OutboundResponseFromHub extends IdaSamlResponse {
 
-    private List<String> encryptedAssertions;
-    private TransactionIdaStatus status;
+    private final List<String> encryptedAssertions;
+    private final TransactionIdaStatus status;
 
     public OutboundResponseFromHub(
             String responseId,

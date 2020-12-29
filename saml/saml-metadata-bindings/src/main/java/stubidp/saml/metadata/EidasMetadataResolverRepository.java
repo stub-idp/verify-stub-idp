@@ -44,7 +44,7 @@ public class EidasMetadataResolverRepository implements MetadataResolverReposito
     private final Timer timer;
     private final MetadataSignatureTrustEngineFactory metadataSignatureTrustEngineFactory;
     private Duration delayBeforeNextRefresh;
-    private Client client;
+    private final Client client;
 
     @Inject
     public EidasMetadataResolverRepository(EidasTrustAnchorResolver trustAnchorResolver,

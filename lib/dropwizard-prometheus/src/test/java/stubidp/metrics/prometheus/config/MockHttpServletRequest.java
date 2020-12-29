@@ -170,32 +170,32 @@ public class MockHttpServletRequest implements HttpServletRequest {
 	}
 
 	@Override
-	public boolean authenticate(final HttpServletResponse httpServletResponse) throws IOException, ServletException {
+	public boolean authenticate(final HttpServletResponse httpServletResponse) {
 		throw new RuntimeException("Not implemented");
 	}
 
 	@Override
-	public void login(final String s, final String s1) throws ServletException {
+	public void login(final String s, final String s1) {
 
 	}
 
 	@Override
-	public void logout() throws ServletException {
+	public void logout() {
 
 	}
 
 	@Override
-	public Collection<Part> getParts() throws IOException, ServletException {
+	public Collection<Part> getParts() {
 		throw new RuntimeException("Not implemented");
 	}
 
 	@Override
-	public Part getPart(final String s) throws IOException, ServletException {
+	public Part getPart(final String s) {
 		throw new RuntimeException("Not implemented");
 	}
 
 	@Override
-	public <T extends HttpUpgradeHandler> T upgrade(final Class<T> aClass) throws IOException, ServletException {
+	public <T extends HttpUpgradeHandler> T upgrade(final Class<T> aClass) {
 		throw new RuntimeException("Not implemented");
 	}
 
@@ -219,7 +219,7 @@ public class MockHttpServletRequest implements HttpServletRequest {
 	}
 
 	@Override
-	public void setCharacterEncoding(final String s) throws UnsupportedEncodingException {
+	public void setCharacterEncoding(final String s) {
 
 	}
 
@@ -239,7 +239,7 @@ public class MockHttpServletRequest implements HttpServletRequest {
 	}
 
 	@Override
-	public ServletInputStream getInputStream() throws IOException {
+	public ServletInputStream getInputStream() {
 		throw new RuntimeException("Not implemented");
 	}
 
@@ -284,7 +284,7 @@ public class MockHttpServletRequest implements HttpServletRequest {
 	}
 
 	@Override
-	public BufferedReader getReader() throws IOException {
+	public BufferedReader getReader() {
 		throw new RuntimeException("Not implemented");
 	}
 

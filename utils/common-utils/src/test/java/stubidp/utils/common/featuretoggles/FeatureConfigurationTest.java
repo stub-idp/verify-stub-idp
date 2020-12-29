@@ -11,14 +11,14 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class FeatureConfigurationTest {
 
     @Test
-    public void loadFromFile_shouldCreateConfiguration() throws Exception {
+    public void loadFromFile_shouldCreateConfiguration() {
         Yaml yaml = new Yaml(new Constructor(FeatureConfiguration.class));
         String fileName = "stubidp.utils.common.featuretoggles/feature-toggles.yml";
         ClassLoader classloader = Thread.currentThread().getContextClassLoader();
         InputStream is = classloader.getResourceAsStream(fileName);
 
         // Parse the YAML file and return the output as a series of Maps and Lists
-        FeatureConfiguration featureConfiguration = (FeatureConfiguration) yaml.load(is);
+        FeatureConfiguration featureConfiguration = yaml.load(is);
 
         assertThat(featureConfiguration.getFeatureClass()).isEqualTo("IdaFeatures");
         assertThat(featureConfiguration.getFeatures().size()).isEqualTo(2);
@@ -29,14 +29,14 @@ public class FeatureConfigurationTest {
     }
 
     @Test
-    public void loadFromFile_shouldCreateConfigurationForEmptyFeatureList() throws Exception {
+    public void loadFromFile_shouldCreateConfigurationForEmptyFeatureList() {
         Yaml yaml = new Yaml(new Constructor(FeatureConfiguration.class));
         String fileName = "stubidp.utils.common.featuretoggles/no-features.yml";
         ClassLoader classloader = Thread.currentThread().getContextClassLoader();
         InputStream is = classloader.getResourceAsStream(fileName);
 
         // Parse the YAML file and return the output as a series of Maps and Lists
-        FeatureConfiguration featureConfiguration = (FeatureConfiguration) yaml.load(is);
+        FeatureConfiguration featureConfiguration = yaml.load(is);
 
         assertThat(featureConfiguration.getFeatureClass()).isEqualTo("IdaFeatures");
         assertThat(featureConfiguration.getFeatures().size()).isEqualTo(0);

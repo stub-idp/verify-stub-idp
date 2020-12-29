@@ -10,7 +10,7 @@ import java.io.IOException;
 public class ConnectionCloseFilter implements ContainerResponseFilter {
 
     @Override
-    public void filter(ContainerRequestContext requestContext, ContainerResponseContext responseContext) throws IOException {
+    public void filter(ContainerRequestContext requestContext, ContainerResponseContext responseContext) {
         ServiceStatus serviceStatus = ServiceStatus.getInstance();
         if (!serviceStatus.isServerStatusOK()) {
             responseContext.getHeaders().add("Connection", "close");

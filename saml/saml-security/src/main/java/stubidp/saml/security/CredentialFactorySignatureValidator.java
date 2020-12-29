@@ -11,7 +11,6 @@ import org.opensaml.xmlsec.signature.Signature;
 import org.opensaml.xmlsec.signature.support.impl.ExplicitKeySignatureTrustEngine;
 
 import javax.xml.namespace.QName;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 

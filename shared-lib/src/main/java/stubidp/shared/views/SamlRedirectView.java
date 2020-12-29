@@ -6,11 +6,11 @@ import java.net.URI;
 import java.util.Optional;
 
 public class SamlRedirectView extends View {
-    private URI targetUri;
-    private String responseBody;
-    private SamlMessageType samlMessageType;
-    private String relayState;
-    private Optional<Boolean> registration;
+    private final URI targetUri;
+    private final String responseBody;
+    private final SamlMessageType samlMessageType;
+    private final String relayState;
+    private final Optional<Boolean> registration;
 
     public SamlRedirectView(URI targetUri, String base64EncodedResponseBody, SamlMessageType samlMessageType, String relayState, Optional<Boolean> registration) {
         super("samlRedirectView.ftl");

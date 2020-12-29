@@ -20,7 +20,7 @@ import static stubidp.saml.test.builders.IdentityProviderAssertionBuilder.anIden
 
 public class OutboundResponseFromIdpToSamlResponseTransformerTest extends OpenSAMLRunner {
 
-    private OpenSamlXmlObjectFactory openSamlXmlObjectFactory = new OpenSamlXmlObjectFactory();
+    private final OpenSamlXmlObjectFactory openSamlXmlObjectFactory = new OpenSamlXmlObjectFactory();
     private OutboundResponseFromIdpToSamlResponseTransformer transformer;
 
     @BeforeEach
@@ -39,7 +39,7 @@ public class OutboundResponseFromIdpToSamlResponseTransformerTest extends OpenSA
     }
 
     @Test
-    public void transform_shouldTransformMatchingDataAssertion() throws Exception {
+    public void transform_shouldTransformMatchingDataAssertion() {
         Response response = openSamlXmlObjectFactory.createResponse();
         IdentityProviderAssertion assertion = anIdentityProviderAssertion().withMatchingDataset(MatchingDatasetBuilder.aMatchingDataset().build()).build();
         OutboundResponseFromIdp originalResponse = OutboundResponseFromIdp.createSuccessResponseFromIdp(

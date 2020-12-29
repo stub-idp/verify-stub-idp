@@ -13,7 +13,7 @@ public class PlaceOfBirthMarshaller extends AbstractSAMLObjectMarshaller {
     public static final Marshaller MARSHALLER = new PlaceOfBirthMarshaller();
 
     /** {@inheritDoc} */
-    protected void marshallElementContent(XMLObject samlObject, Element domElement) throws MarshallingException {
+    protected void marshallElementContent(XMLObject samlObject, Element domElement) {
         PlaceOfBirth placeOfBirth = (PlaceOfBirth) samlObject;
         ElementSupport.appendTextContent(domElement, placeOfBirth.getPlaceOfBirth());
     }

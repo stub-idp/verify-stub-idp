@@ -17,14 +17,14 @@ import static stubidp.stubidp.StubIdpEidasBinder.COUNTRY_METADATA_SIGNATURE_FACT
 
 @Singleton
 public class CountryMetadataSigningHelper {
-    private SignatureFactory signatureFactory;
+    private final SignatureFactory signatureFactory;
 
     @Inject
     public CountryMetadataSigningHelper(@Named(COUNTRY_METADATA_SIGNATURE_FACTORY) SignatureFactory signatureFactory) {
         this.signatureFactory = signatureFactory;
     }
 
-    public <T extends SignableSAMLObject> T sign(T signableSAMLObject) throws MarshallingException, SignatureException, SecurityException {
+    public <T extends SignableSAMLObject> T sign(T signableSAMLObject) throws MarshallingException, SignatureException {
         signableSAMLObject.setSignature(signatureFactory.createSignature());
         XMLObjectProviderRegistrySupport.getMarshallerFactory().getMarshaller(signableSAMLObject).marshall(signableSAMLObject);
         Signer.signObject(signableSAMLObject.getSignature());

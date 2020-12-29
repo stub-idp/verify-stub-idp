@@ -31,9 +31,9 @@ public class EntityDescriptorBuilder {
     private boolean shouldBeSigned = true;
     private Duration cacheDuration = Duration.ofMillis(100_000L);
     private Organization organization = OrganizationBuilder.anOrganization().build();
-    private List<SPSSODescriptor> spServiceDescriptors = new ArrayList<>();
+    private final List<SPSSODescriptor> spServiceDescriptors = new ArrayList<>();
     private Instant validUntil = Instant.now().atZone(ZoneId.of("UTC")).plusDays(1).toInstant();
-    private List<ContactPerson> contactPersons = new ArrayList<>();
+    private final List<ContactPerson> contactPersons = new ArrayList<>();
     private String id = UUID.randomUUID().toString();
     private SPSSODescriptor spssoDescriptor = SPSSODescriptorBuilder.anSpServiceDescriptor().addKeyDescriptor(KeyDescriptorBuilder.aKeyDescriptor().withX509ForSigning("").build()).addKeyDescriptor(KeyDescriptorBuilder.aKeyDescriptor().withX509ForEncryption("").build()).build();
     private final ContactPerson defaultContactPerson = ContactPersonBuilder.aContactPerson().build();

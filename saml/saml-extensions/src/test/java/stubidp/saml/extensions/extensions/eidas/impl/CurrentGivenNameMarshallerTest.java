@@ -3,7 +3,6 @@ package stubidp.saml.extensions.extensions.eidas.impl;
 import net.shibboleth.utilities.java.support.xml.XMLConstants;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.opensaml.core.xml.config.XMLObjectProviderRegistrySupport;
 import org.opensaml.core.xml.io.Marshaller;
 import org.w3c.dom.Element;

@@ -15,7 +15,7 @@ import stubidp.saml.extensions.extensions.impl.StringBasedMdsAttributeValueBuild
 public class IdpFraudEventIdAttributeBuilder {
 
     private static final java.lang.String INVALID_TYPE_LOCAL_NAME = "InvalidFraudEventType";
-    private OpenSamlXmlObjectFactory openSamlXmlObjectFactory = new OpenSamlXmlObjectFactory();
+    private final OpenSamlXmlObjectFactory openSamlXmlObjectFactory = new OpenSamlXmlObjectFactory();
     private Optional<String> value = Optional.ofNullable("default-event-id");
 
     public static IdpFraudEventIdAttributeBuilder anIdpFraudEventIdAttribute() {

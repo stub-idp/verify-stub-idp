@@ -5,7 +5,7 @@ import stubidp.utils.security.security.HmacDigest;
 import javax.inject.Inject;
 
 public class HmacValidator {
-    private HmacDigest hmacDigest;
+    private final HmacDigest hmacDigest;
 
     @Inject
     public HmacValidator(HmacDigest hmacDigest) {

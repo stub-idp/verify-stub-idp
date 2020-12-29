@@ -12,13 +12,13 @@ import java.util.List;
 import java.util.Optional;
 
 public class MatchingDatasetBuilder {
-    private List<TransliterableMdsValue> firstnames = new ArrayList<>();
-    private List<SimpleMdsValue<String>> middlenames = new ArrayList<>();
-    private List<TransliterableMdsValue> surnames = new ArrayList<>();
+    private final List<TransliterableMdsValue> firstnames = new ArrayList<>();
+    private final List<SimpleMdsValue<String>> middlenames = new ArrayList<>();
+    private final List<TransliterableMdsValue> surnames = new ArrayList<>();
     private Optional<SimpleMdsValue<Gender>> gender = Optional.empty();
-    private List<SimpleMdsValue<Instant>> dateOfBirths = new ArrayList<>();
-    private List<Address> currentAddresses = new ArrayList<>();
-    private List<Address> previousAddresses = new ArrayList<>();
+    private final List<SimpleMdsValue<Instant>> dateOfBirths = new ArrayList<>();
+    private final List<Address> currentAddresses = new ArrayList<>();
+    private final List<Address> previousAddresses = new ArrayList<>();
     private String personalId;
 
     public void addFirstNames(List<TransliterableMdsValue> firstnames) {

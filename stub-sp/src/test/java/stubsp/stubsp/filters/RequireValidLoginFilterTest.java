@@ -6,10 +6,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import stubidp.shared.cookies.HmacValidator;
-import stubidp.shared.exceptions.InvalidSecureCookieException;
-import stubidp.shared.exceptions.SecureCookieNotFoundException;
-import stubidp.shared.exceptions.SessionIdCookieNotFoundException;
-import stubidp.shared.exceptions.SessionNotFoundException;
 import stubidp.shared.repositories.MetadataRepository;
 import stubidp.shared.views.SamlMessageRedirectViewFactory;
 import stubidp.utils.rest.common.SessionId;
@@ -32,7 +28,7 @@ import static stubsp.stubsp.filters.RequireValidLoginFilter.NO_CURRENT_SESSION_C
 @ExtendWith(MockitoExtension.class)
 class RequireValidLoginFilterTest {
 
-    private boolean isSecureCookieEnabled = true;
+    private final boolean isSecureCookieEnabled = true;
     @Mock
     private HmacValidator hmacValidator;
     @Mock

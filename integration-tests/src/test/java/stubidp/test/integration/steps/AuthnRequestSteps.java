@@ -46,7 +46,7 @@ import static stubidp.test.integration.support.StubIdpAppExtension.SP_ENTITY_ID;
 public class AuthnRequestSteps {
     private final Client client;
     private final String idpName;
-    private int port;
+    private final int port;
 
     public static class Cookies {
         private final String sessionId;

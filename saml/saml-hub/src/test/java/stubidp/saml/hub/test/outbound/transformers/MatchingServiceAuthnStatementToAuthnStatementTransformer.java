@@ -17,7 +17,7 @@ public class MatchingServiceAuthnStatementToAuthnStatementTransformer {
         this.openSamlXmlObjectFactory = openSamlXmlObjectFactory;
     }
 
-    private OpenSamlXmlObjectFactory openSamlXmlObjectFactory;
+    private final OpenSamlXmlObjectFactory openSamlXmlObjectFactory;
 
     public AuthnStatement transform(MatchingServiceAuthnStatement idaAuthnStatement) {
         AuthnStatement authnStatement = openSamlXmlObjectFactory.createAuthnStatement();

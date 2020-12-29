@@ -31,7 +31,7 @@ public class CountryAuthenticationStatusUnmarshallerTest extends OpenSAMLRunner 
     private CountryAuthenticationStatusUnmarshaller countryAuthenticationStatusUnmarshaller;
 
     @BeforeEach
-    public void setUp() throws Exception {
+    public void setUp() {
         samlObjectFactory = new OpenSamlXmlObjectFactory();
         stringToOpenSamlObjectTransformer = new CoreTransformersFactory().getStringtoOpenSamlObjectTransformer(input -> {});
         countryAuthenticationStatusUnmarshaller = new CountryAuthenticationStatusUnmarshaller();

@@ -11,7 +11,7 @@ import stubidp.saml.extensions.extensions.StringValueSamlObject;
 public class StringValueSamlObjectMarshaller extends AbstractSAMLObjectMarshaller {
 
     @Override
-    protected void marshallElementContent(XMLObject xmlObject, Element domElement) throws MarshallingException {
+    protected void marshallElementContent(XMLObject xmlObject, Element domElement) {
         StringValueSamlObject stringValueSamlObject = (StringValueSamlObject) xmlObject;
         ElementSupport.appendTextContent(domElement, stringValueSamlObject.getValue());
     }

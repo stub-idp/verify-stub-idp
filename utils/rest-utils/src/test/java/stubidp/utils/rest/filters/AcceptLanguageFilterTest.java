@@ -16,8 +16,8 @@ import static org.mockito.Mockito.when;
 
 public class AcceptLanguageFilterTest{
 
-    private HttpServletRequest request = mock(HttpServletRequest.class);
-    private String encodingHeader = "someheader";
+    private final HttpServletRequest request = mock(HttpServletRequest.class);
+    private final String encodingHeader = "someheader";
 
     @BeforeEach
     public void setUp(){

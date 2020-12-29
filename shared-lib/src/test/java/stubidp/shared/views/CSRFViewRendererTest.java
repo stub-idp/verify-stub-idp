@@ -43,13 +43,13 @@ public class CSRFViewRendererTest {
         }
     }
 
-    private CSRFViewRenderer csrfViewRenderer = new CSRFViewRenderer();
+    private final CSRFViewRenderer csrfViewRenderer = new CSRFViewRenderer();
 
     @Test
     public void shouldIgnoreAnyContentThatHasNoForm() throws IOException {
         final ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
         csrfViewRenderer.render(new TestView("testview.ftl"), Locale.ENGLISH, byteArrayOutputStream);
-        final String view = new String(byteArrayOutputStream.toByteArray());
+        final String view = byteArrayOutputStream.toString();
         assertThat(view).contains("hellotestview");
         assertThat(view).doesNotContain(CSRF_PROTECT_FORM_KEY);
     }
@@ -58,7 +58,7 @@ public class CSRFViewRendererTest {
     public void shouldAddValueToAllForms() throws IOException {
         final ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
         csrfViewRenderer.render(new TestView("testview_withform.ftl"), Locale.ENGLISH, byteArrayOutputStream);
-        final String view = new String(byteArrayOutputStream.toByteArray());
+        final String view = byteArrayOutputStream.toString();
         final Document document = Jsoup.parse(view);
         final Elements forms = document.getElementsByTag("form");
         assertThat(forms.size()).isEqualTo(2);
@@ -70,7 +70,7 @@ public class CSRFViewRendererTest {
     }
 
     @Test
-    public void shouldNotOverwriteExistingValues() throws IOException {
+    public void shouldNotOverwriteExistingValues() {
         final ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
         Assertions.assertThrows(CSRFConflictingFormAttributeException.class, () -> csrfViewRenderer.render(new TestView("testview_withconflictingform.ftl"), Locale.ENGLISH, byteArrayOutputStream));
     }
@@ -79,7 +79,7 @@ public class CSRFViewRendererTest {
     public void shouldNotAddValueToAllFormsWhenNotSet() throws IOException {
         final ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
         csrfViewRenderer.render(new TestNoCsrfView("testview_withform.ftl"), Locale.ENGLISH, byteArrayOutputStream);
-        final String view = new String(byteArrayOutputStream.toByteArray());
+        final String view = byteArrayOutputStream.toString();
         final Document document = Jsoup.parse(view);
         final Elements forms = document.getElementsByTag("form");
         assertThat(forms.size()).isEqualTo(2);

@@ -51,9 +51,9 @@ public class AnalyticsReporterTest {
     @Mock
     private PiwikClient piwikClient;
 
-    private String visitorId = "123";
+    private final String visitorId = "123";
 
-    private Clock clock = Clock.fixed(Instant.now(), ZoneId.of("UTC"));
+    private final Clock clock = Clock.fixed(Instant.now(), ZoneId.of("UTC"));
 
     @Test
     public void shouldCallGenerateUrlAndSendToPiwikAsynchronouslyWhenReportingCustomVariable() throws Exception {
@@ -241,7 +241,7 @@ public class AnalyticsReporterTest {
 
     private boolean queryContains(String query, String name, String expectedValue) {
         String match = name + "=" + expectedValue;
-        return List.<String>of(query.split("&")).stream().anyMatch(match::equals);
+        return List.of(query.split("&")).stream().anyMatch(match::equals);
     }
 
     private void checkQueryParamMissing(String query, String name) {

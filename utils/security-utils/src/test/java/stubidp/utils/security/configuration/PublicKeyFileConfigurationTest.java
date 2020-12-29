@@ -12,7 +12,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class PublicKeyFileConfigurationTest {
 
-    private ObjectMapper objectMapper = new ObjectMapper();
+    private final ObjectMapper objectMapper = new ObjectMapper();
 
     @Test
     public void should_loadPublicKeyFromJSON() throws Exception {
@@ -37,20 +37,20 @@ public class PublicKeyFileConfigurationTest {
     }
 
     @Test
-    public void should_ThrowExceptionWhenFileDoesNotExist() throws Exception {
+    public void should_ThrowExceptionWhenFileDoesNotExist() {
         final ValueInstantiationException exception = Assertions.assertThrows(ValueInstantiationException.class, () -> objectMapper.readValue("{\"type\": \"file\", \"cert\": \"/foo/bar\", \"name\": \"someId\"}", DeserializablePublicKeyConfiguration.class));
         assertThat(exception.getMessage()).contains("NoSuchFileException");
     }
 
     @Test
-    public void should_ThrowExceptionWhenFileDoesNotContainAPublicKey() throws Exception {
+    public void should_ThrowExceptionWhenFileDoesNotContainAPublicKey() {
         String path = getClass().getClassLoader().getResource("empty_file").getPath();
         final ValueInstantiationException exception = Assertions.assertThrows(ValueInstantiationException.class, () -> objectMapper.readValue("{\"type\": \"file\", \"cert\": \"" + path + "\", \"name\": \"someId\"}", DeserializablePublicKeyConfiguration.class));
         assertThat(exception.getMessage()).contains("Unable to load certificate");
     }
 
     @Test
-    public void should_ThrowExceptionWhenIncorrectKeySpecified() throws Exception {
+    public void should_ThrowExceptionWhenIncorrectKeySpecified() {
         String path = getClass().getClassLoader().getResource("empty_file").getPath();
         Assertions.assertThrows(ValueInstantiationException.class, () -> objectMapper.readValue("{\"type\": \"file\", \"certFoo\": \"" + path + "\", \"name\": \"someId\"}", DeserializablePublicKeyConfiguration.class));
     }

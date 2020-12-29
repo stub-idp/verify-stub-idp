@@ -46,7 +46,7 @@ public class SessionCookieValueMustExistAsASessionFilter implements ContainerReq
     }
 
     @Override
-    public void filter(ContainerRequestContext requestContext) throws IOException {
+    public void filter(ContainerRequestContext requestContext) {
 
         // Get SessionId from cookie
         final Optional<String> sessionCookie = Optional.ofNullable(getValueOfPossiblyNullCookie(requestContext.getCookies(), cookieNames.getSessionCookieName()));

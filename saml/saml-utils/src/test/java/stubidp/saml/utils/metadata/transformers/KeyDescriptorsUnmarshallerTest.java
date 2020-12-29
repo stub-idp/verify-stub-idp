@@ -16,7 +16,7 @@ public class KeyDescriptorsUnmarshallerTest extends OpenSAMLRunner {
     private final KeyDescriptorsUnmarshaller factory = new KeyDescriptorsUnmarshaller(new OpenSamlXmlObjectFactory());
 
     @Test
-    public void transform_shouldTransformCertificate() throws Exception {
+    public void transform_shouldTransformCertificate() {
         Certificate certificate = aCertificate().build();
         List<KeyDescriptor> keyDescriptors = factory.fromCertificates(List.of(certificate));
         KeyDescriptor keyDescriptor = keyDescriptors.get(0);

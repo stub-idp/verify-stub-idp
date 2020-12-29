@@ -8,9 +8,9 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 public abstract class AbstractHttpStub {
     protected static final int RANDOM_PORT = 0;
-    protected Server server;
-    protected List<RecordedRequest> recordedRequests = new CopyOnWriteArrayList<>();
-    protected List<RequestAndResponse> requestsAndResponses = new CopyOnWriteArrayList<>();
+    protected final Server server;
+    protected final List<RecordedRequest> recordedRequests = new CopyOnWriteArrayList<>();
+    protected final List<RequestAndResponse> requestsAndResponses = new CopyOnWriteArrayList<>();
 
     public AbstractHttpStub(int port) {
         server = new Server(port);

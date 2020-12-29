@@ -28,7 +28,7 @@ public class SamlResponseSignatureValidatorTest extends OpenSAMLRunner {
     private Response response;
 
     @BeforeEach
-    public void setUp() throws Exception {
+    public void setUp() {
         samlMessageSignatureValidator = mock(SamlMessageSignatureValidator.class);
         responseSignatureValidator = new SamlResponseSignatureValidator(samlMessageSignatureValidator);
         response = mock(Response.class);

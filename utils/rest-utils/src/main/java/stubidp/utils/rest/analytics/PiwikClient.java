@@ -9,7 +9,7 @@ import java.net.URI;
 
 public class PiwikClient {
 
-    private Client client;
+    private final Client client;
 
     @Inject
     public PiwikClient(@Named("PiwikClient") Client client){

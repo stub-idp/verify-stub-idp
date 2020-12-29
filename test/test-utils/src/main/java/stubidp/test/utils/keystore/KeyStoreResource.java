@@ -69,10 +69,8 @@ public class KeyStoreResource implements ManagedFileResource {
     private void setKeys() {
         X509CertificateFactory x509CertificateFactory = new X509CertificateFactory();
         PrivateKeyFactory privateKeyFactory = new PrivateKeyFactory();
-        keys.stream().forEach((entry) -> {
-            X509Certificate[] x509Certificates = Arrays
-                    .asList(entry.getCertificates())
-                    .stream()
+        keys.forEach((entry) -> {
+            X509Certificate[] x509Certificates = Arrays.stream(entry.getCertificates())
                     .map(x509CertificateFactory::createCertificate)
                     .toArray(X509Certificate[]::new);
             PrivateKey key = privateKeyFactory.createPrivateKey(entry.getKey().getBytes());
@@ -86,7 +84,7 @@ public class KeyStoreResource implements ManagedFileResource {
 
     private void setCertificates() {
         X509CertificateFactory x509CertificateFactory = new X509CertificateFactory();
-        certificates.stream().forEach((entry) -> {
+        certificates.forEach((entry) -> {
             X509Certificate x509Certificate = x509CertificateFactory.createCertificate(entry.getCertificate());
             try {
                 keyStore.setCertificateEntry(entry.getAlias(), x509Certificate);

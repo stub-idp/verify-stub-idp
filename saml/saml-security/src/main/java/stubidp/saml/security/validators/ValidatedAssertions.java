@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Optional;
 
 public class ValidatedAssertions {
-    private List<Assertion> assertions;
+    private final List<Assertion> assertions;
 
     public ValidatedAssertions(List<Assertion> assertions) {
         this.assertions = assertions;

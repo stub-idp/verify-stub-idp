@@ -25,7 +25,7 @@ public class SignatureBuilder {
     private String id = null;
     private SignatureAlgorithm signatureAlgorithm = new SignatureRSASHA256();
     private DigestAlgorithm digestAlgorithm = new DigestSHA256();
-    private List<String> x509Data = new ArrayList<>();
+    private final List<String> x509Data = new ArrayList<>();
 
     private SignatureBuilder() {}
 

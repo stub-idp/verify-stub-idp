@@ -3,7 +3,6 @@ package stubidp.saml.extensions.extensions.impl;
 import net.shibboleth.utilities.java.support.xml.XMLConstants;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.opensaml.core.xml.config.XMLObjectProviderRegistrySupport;
 import org.opensaml.core.xml.io.Marshaller;
 import org.w3c.dom.Element;
@@ -20,7 +19,7 @@ public class VerifiedMarshallerTest extends OpenSAMLRunner {
     private Verified verifiedAttributeValue;
 
     @BeforeEach
-    public void setUp() throws Exception {
+    public void setUp() {
         verifiedAttributeValue = new VerifiedBuilder().buildObject();
         marshaller = XMLObjectProviderRegistrySupport.getMarshallerFactory().getMarshaller(verifiedAttributeValue);
     }

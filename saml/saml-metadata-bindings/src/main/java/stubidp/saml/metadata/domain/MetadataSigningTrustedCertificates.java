@@ -4,7 +4,7 @@ import java.security.cert.X509Certificate;
 import java.util.List;
 
 public class MetadataSigningTrustedCertificates {
-    private List<X509Certificate> certificates;
+    private final List<X509Certificate> certificates;
 
     public MetadataSigningTrustedCertificates(List<X509Certificate> certificates) {
         this.certificates = certificates;

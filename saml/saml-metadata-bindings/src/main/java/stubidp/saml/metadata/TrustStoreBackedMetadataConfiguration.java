@@ -17,7 +17,7 @@ public class TrustStoreBackedMetadataConfiguration extends MetadataConfiguration
 
     @NotNull
     @Valid
-    private TrustStoreConfiguration trustStore;
+    private final TrustStoreConfiguration trustStore;
 
     @JsonCreator
     public TrustStoreBackedMetadataConfiguration(

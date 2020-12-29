@@ -9,7 +9,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class ManifestReaderTest {
 
-    private ManifestReader manifestReader = new ManifestReader();
+    private final ManifestReader manifestReader = new ManifestReader();
 
     @Test
     public void shouldReadAttributeValueForAClassFromAJarFile() throws IOException {
@@ -19,13 +19,13 @@ public class ManifestReaderTest {
     }
 
     @Test
-    public void shouldThrowExceptionWhenManifestFileDoesNotExist() throws IOException {
+    public void shouldThrowExceptionWhenManifestFileDoesNotExist() {
         final IOException exception = Assertions.assertThrows(IOException.class, () -> manifestReader.getAttributeValueFor(manifestReader.getClass(), "any-attribute-name"));
         assertThat(exception.getMessage()).isEqualTo("Manifest file not found for the given class.");
     }
 
     @Test
-    public void shouldThrowExceptionWhenAttributeDoesNotExist() throws IOException {
+    public void shouldThrowExceptionWhenAttributeDoesNotExist() {
         final IOException exception = Assertions.assertThrows(IOException.class, () -> manifestReader.getAttributeValueFor(Test.class, "some-unknown-attribute"));
         assertThat(exception.getMessage()).isEqualTo("Unknown attribute name");
     }

@@ -11,7 +11,7 @@ import java.util.Map;
 public class SimpleProfileTransactionIdaStatusMarshaller extends IdaStatusMarshaller<TransactionIdaStatus> {
 
     private static final Map<TransactionIdaStatus, DetailedStatusCode> REST_TO_SAML_CODES =
-            Map.<TransactionIdaStatus, DetailedStatusCode>ofEntries(
+            Map.ofEntries(
                     Map.entry(TransactionIdaStatus.Success, DetailedStatusCode.Success),
                     Map.entry(TransactionIdaStatus.NoAuthenticationContext, DetailedStatusCode.NoAuthenticationContext),
                     // no-match is different in the simple saml profile: because there are no assertions included

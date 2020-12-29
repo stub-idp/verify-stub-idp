@@ -65,7 +65,7 @@ public class SamlAttributeQueryAssertionEncrypterTest extends OpenSAMLRunner {
     }
 
     @Test
-    public void shouldConvertAssertionIntoEncryptedAssertion() throws EncryptionException {
+    public void shouldConvertAssertionIntoEncryptedAssertion() {
         final AttributeQuery decoratedAttributeQuery = samlAttributeQueryAssertionEncrypter.encryptAssertions(attributeQuery);
 
         final SubjectConfirmationData subjectConfirmationData = decoratedAttributeQuery.getSubject()

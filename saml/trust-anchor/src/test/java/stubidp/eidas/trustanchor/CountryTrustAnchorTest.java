@@ -16,7 +16,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class CountryTrustAnchorTest {
 
-    private List<X509Certificate> invalidCertChain = createInvalidCertChain();
+    private final List<X509Certificate> invalidCertChain = createInvalidCertChain();
 
     @Test
     public void makeThrowsExceptionIfIncludesInvalidCertificate() {

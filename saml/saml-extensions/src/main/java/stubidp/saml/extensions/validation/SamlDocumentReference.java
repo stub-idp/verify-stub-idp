@@ -8,8 +8,8 @@ public final class SamlDocumentReference {
     public static SamlDocumentReference samlBindings(String documentSection) { return new SamlDocumentReference("Saml Bindings 2.0", documentSection); }
     public static SamlDocumentReference unspecified() { return new SamlDocumentReference("Unspecified", "--"); }
 
-    private String documentName;
-    private String documentSection;
+    private final String documentName;
+    private final String documentSection;
 
     private SamlDocumentReference(String documentName, String documentSection) {
         this.documentName = documentName;

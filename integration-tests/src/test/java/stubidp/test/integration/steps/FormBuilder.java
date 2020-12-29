@@ -2,7 +2,7 @@ package stubidp.test.integration.steps;
 import javax.ws.rs.core.Form;
 
 public class FormBuilder {
-    private Form form;
+    private final Form form;
 
     public static FormBuilder newForm() {
         return new FormBuilder();

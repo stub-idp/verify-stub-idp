@@ -27,12 +27,12 @@ public class CertificateStoreTest {
         publicKeyConfiguration2 = getPublicKey("public_key_2.crt");
     }
 
-    private PublicKeyFileConfiguration getPublicKey(String publicKey) throws IOException, URISyntaxException {
+    private PublicKeyFileConfiguration getPublicKey(String publicKey) {
         return new PublicKeyFileConfiguration(getClass().getClassLoader().getResource(publicKey).getFile(), "TestCertificateName");
     }
 
     @Test
-    public void getEncryptionCertificateValue_shouldStripOutHeadersIfPresent() throws UnsupportedEncodingException {
+    public void getEncryptionCertificateValue_shouldStripOutHeadersIfPresent() {
         CertificateStore certificateStore = new CertificateStore(List.of(publicKeyConfiguration), List.of(publicKeyConfiguration));
         String encryptionCertificateValue = certificateStore.getEncryptionCertificates().get(0).getCertificate();
 
@@ -42,7 +42,7 @@ public class CertificateStoreTest {
     }
 
     @Test
-    public void getEncryptionCertificateValue_shouldHandleMultipleCertificateValues() throws UnsupportedEncodingException {
+    public void getEncryptionCertificateValue_shouldHandleMultipleCertificateValues() {
         CertificateStore certificateStore = new CertificateStore(List.of(publicKeyConfiguration, publicKeyConfiguration2), List.of(publicKeyConfiguration));
         final List<Certificate> encryptionCertificates = certificateStore.getEncryptionCertificates();
 
@@ -58,7 +58,7 @@ public class CertificateStoreTest {
     }
 
     @Test
-    public void getSigningCertificateValue_shouldStripOutHeadersIfPresent() throws UnsupportedEncodingException {
+    public void getSigningCertificateValue_shouldStripOutHeadersIfPresent() {
         CertificateStore certificateStore = new CertificateStore(List.of(publicKeyConfiguration), List.of(publicKeyConfiguration2));
         List<Certificate> signingCertificateValues = certificateStore.getSigningCertificates();
 

@@ -18,9 +18,9 @@ import java.time.ZoneId;
 
 public class ExpiredCertificateMetadataFilterTest {
 
-    private MetadataFactory metadataFactory = new MetadataFactory();
+    private final MetadataFactory metadataFactory = new MetadataFactory();
     private MetadataFilter metadataFilter;
-    private OpenSamlXMLObjectUnmarshaller<XMLObject> unmarshaller = new OpenSamlXMLObjectUnmarshaller<>(new SamlObjectParser());
+    private final OpenSamlXMLObjectUnmarshaller<XMLObject> unmarshaller = new OpenSamlXMLObjectUnmarshaller<>(new SamlObjectParser());
 
     @BeforeAll
     public static void setUp() throws Exception {

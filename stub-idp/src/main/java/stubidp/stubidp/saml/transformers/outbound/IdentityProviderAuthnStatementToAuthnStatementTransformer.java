@@ -15,7 +15,7 @@ public class IdentityProviderAuthnStatementToAuthnStatementTransformer {
         this.openSamlXmlObjectFactory = openSamlXmlObjectFactory;
     }
 
-    private OpenSamlXmlObjectFactory openSamlXmlObjectFactory;
+    private final OpenSamlXmlObjectFactory openSamlXmlObjectFactory;
 
     public AuthnStatement transform(IdentityProviderAuthnStatement idaAuthnStatement) {
         AuthnStatement authnStatement = openSamlXmlObjectFactory.createAuthnStatement();

@@ -6,7 +6,7 @@ public class GeneratePasswordView extends View {
 
     private final String password;
     private final String passwordHash;
-    private String pageTitle;
+    private final String pageTitle;
 
     public GeneratePasswordView(String password, String passwordHash, String pageTitle) {
         super("generatePassword.ftl");

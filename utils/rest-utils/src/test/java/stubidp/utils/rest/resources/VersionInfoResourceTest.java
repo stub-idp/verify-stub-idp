@@ -20,7 +20,7 @@ public class VersionInfoResourceTest {
     }
 
     @Test
-    public void shouldLoadDataFromManifest() throws Exception {
+    public void shouldLoadDataFromManifest() {
         VersionInfoResource versionInfoResource = new TestVersionInfoResource();
         VersionInfoDto versionInfo = versionInfoResource.getVersionInfo();
         assertThat(versionInfo.getBuildNumber()).isEqualTo("1");

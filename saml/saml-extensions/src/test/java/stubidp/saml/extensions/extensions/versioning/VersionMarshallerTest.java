@@ -11,7 +11,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class VersionMarshallerTest extends OpenSAMLRunner {
 
-    private VersionMarshaller versionMarshaller = new VersionMarshaller();
+    private final VersionMarshaller versionMarshaller = new VersionMarshaller();
 
     @Test
     public void shouldMarshallVersion() throws Exception {

@@ -15,7 +15,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class EncodedPrivateKeyConfigurationTest {
 
-    private ObjectMapper objectMapper = new ObjectMapper();
+    private final ObjectMapper objectMapper = new ObjectMapper();
 
     @Test
     public void should_loadPrivateKeyFromJSON() throws Exception {
@@ -25,18 +25,18 @@ public class EncodedPrivateKeyConfigurationTest {
     }
 
     @Test
-    public void should_ThrowExceptionWhenKeyIsNotBase64() throws Exception {
+    public void should_ThrowExceptionWhenKeyIsNotBase64() {
         Assertions.assertThrows(ValueInstantiationException.class, () -> objectMapper.configure(DeserializationFeature.FAIL_ON_INVALID_SUBTYPE, false).readValue("{\"type\": \"encoded\", \"key\": \"not-a-key\"}", PrivateKeyConfiguration.class));
     }
 
     @Test
-    public void should_ThrowExceptionWhenKeyIsNotAValidKey() throws Exception {
+    public void should_ThrowExceptionWhenKeyIsNotAValidKey() {
         final ValueInstantiationException exception = Assertions.assertThrows(ValueInstantiationException.class, () -> objectMapper.configure(DeserializationFeature.FAIL_ON_INVALID_SUBTYPE, false).readValue("{\"type\": \"encoded\", \"key\": \"dGVzdAo=\"}", PrivateKeyConfiguration.class));
         assertThat(exception.getMessage()).contains("InvalidKeySpecException");
     }
 
     @Test
-    public void should_throwAnExceptionWhenIncorrectFieldSpecified() throws Exception {
+    public void should_throwAnExceptionWhenIncorrectFieldSpecified() {
         Assertions.assertThrows(ValueInstantiationException.class, () -> objectMapper.readValue("{\"privateKeyFoo\": \"" + "foobar" + "\"}", PrivateKeyConfiguration.class));
     }
 

@@ -12,7 +12,7 @@ import java.util.Optional;
 public class SubjectBuilder {
     private static final OpenSamlXmlObjectFactory openSamlXmlObjectFactory = new OpenSamlXmlObjectFactory();
     private Optional<NameID> nameIdValue = Optional.of(NameIdBuilder.aNameId().build());
-    private List<SubjectConfirmation> subjectConfirmations = new ArrayList<>();
+    private final List<SubjectConfirmation> subjectConfirmations = new ArrayList<>();
     private boolean shouldAddDefaultSubjectConfirmation = true;
 
     private SubjectBuilder() {}

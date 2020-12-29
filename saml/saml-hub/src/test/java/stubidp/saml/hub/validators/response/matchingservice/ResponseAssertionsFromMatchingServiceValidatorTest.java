@@ -35,7 +35,7 @@ public class ResponseAssertionsFromMatchingServiceValidatorTest extends OpenSAML
     private ResponseAssertionsFromMatchingServiceValidator validator;
 
     @BeforeEach
-    public void setUp() throws Exception {
+    public void setUp() {
         validator = new ResponseAssertionsFromMatchingServiceValidator(assertionValidator, TestEntityIds.HUB_ENTITY_ID);
     }
 

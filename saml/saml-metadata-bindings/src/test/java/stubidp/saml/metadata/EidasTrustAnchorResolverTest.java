@@ -61,7 +61,7 @@ public class EidasTrustAnchorResolverTest {
     private PrivateKey privateSigningKey;
     private X509Certificate publicSigningCert;
 
-    private X509CertificateFactory certificateFactory = new X509CertificateFactory();
+    private final X509CertificateFactory certificateFactory = new X509CertificateFactory();
 
     @BeforeEach
     public void setUp() throws URISyntaxException, KeyStoreException, CertificateException, NoSuchAlgorithmException, IOException {

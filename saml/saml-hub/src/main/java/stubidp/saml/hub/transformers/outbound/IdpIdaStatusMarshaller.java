@@ -17,7 +17,7 @@ import static java.util.Optional.of;
 public class IdpIdaStatusMarshaller extends IdaStatusMarshaller<IdpIdaStatus> {
 
     private static final Map<IdpIdaStatus, DetailedStatusCode> REST_TO_SAML_CODES =
-            Map.<IdpIdaStatus, DetailedStatusCode>ofEntries(
+            Map.ofEntries(
                     Map.entry(IdpIdaStatus.success(), DetailedStatusCode.Success),
                     Map.entry(IdpIdaStatus.noAuthenticationContext(), DetailedStatusCode.NoAuthenticationContext),
                     Map.entry(IdpIdaStatus.authenticationFailed(), DetailedStatusCode.AuthenticationFailed),
@@ -28,7 +28,7 @@ public class IdpIdaStatusMarshaller extends IdaStatusMarshaller<IdpIdaStatus> {
             );
 
     private static final Map<IdpIdaStatus, String> REST_TO_STATUS_DETAIL =
-            Map.<IdpIdaStatus, String>ofEntries(
+            Map.ofEntries(
                     Map.entry(IdpIdaStatus.authenticationCancelled(), StatusValue.CANCEL),
                     Map.entry(IdpIdaStatus.authenticationPending(), StatusValue.PENDING),
                     Map.entry(IdpIdaStatus.upliftFailed(), StatusValue.UPLIFT_FAILED)

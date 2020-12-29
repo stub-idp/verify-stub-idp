@@ -54,7 +54,7 @@ public class EncryptionAlgorithmValidatorTest extends OpenSAMLRunner {
     }
 
     @Test
-    public void validateShouldNotThrowIfKeyTransportAlgorithmIsInWhitelist() throws Exception {
+    public void validateShouldNotThrowIfKeyTransportAlgorithmIsInWhitelist() {
         final Set<String> whitelistedAlgos = Set.of(EncryptionConstants.ALGO_ID_BLOCKCIPHER_AES128);
         final Set<String> whiteListedKeyTransportAlgos = Set.of(EncryptionConstants.ALGO_ID_KEYTRANSPORT_RSA15, EncryptionConstants.ALGO_ID_KEYTRANSPORT_RSAOAEP);
 
@@ -75,7 +75,7 @@ public class EncryptionAlgorithmValidatorTest extends OpenSAMLRunner {
 
 
     @Test
-    public void validateShouldNotThrowSamlExceptionIfKeyTransportAlgorithmIsRSAOAEP() throws Exception {
+    public void validateShouldNotThrowSamlExceptionIfKeyTransportAlgorithmIsRSAOAEP() {
         final String keyTransportAlgorithm = EncryptionConstants.ALGO_ID_KEYTRANSPORT_RSAOAEP;
         assertThatCode(() -> validator.validate(createStandardEncryptedAssertion(EncryptionConstants.ALGO_ID_BLOCKCIPHER_AES128, keyTransportAlgorithm, true))).doesNotThrowAnyException();
     }

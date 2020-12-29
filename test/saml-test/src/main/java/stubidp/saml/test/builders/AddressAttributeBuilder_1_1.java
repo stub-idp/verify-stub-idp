@@ -11,7 +11,7 @@ import java.util.List;
 public class AddressAttributeBuilder_1_1 {
     private static final OpenSamlXmlObjectFactory openSamlXmlObjectFactory = new OpenSamlXmlObjectFactory();
 
-    private List<Address> addresses = new ArrayList<>();
+    private final List<Address> addresses = new ArrayList<>();
 
     private AddressAttributeBuilder_1_1() {}
 

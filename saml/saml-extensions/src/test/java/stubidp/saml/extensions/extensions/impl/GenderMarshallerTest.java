@@ -21,7 +21,7 @@ public class GenderMarshallerTest extends OpenSAMLRunner {
     private Gender gender;
 
     @BeforeEach
-    public void setUp() throws Exception {
+    public void setUp() {
         gender = new GenderBuilder().buildObject();
         marshaller = XMLObjectProviderRegistrySupport.getMarshallerFactory().getMarshaller(gender);
     }

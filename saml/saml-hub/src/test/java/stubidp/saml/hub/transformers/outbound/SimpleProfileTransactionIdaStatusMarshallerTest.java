@@ -16,19 +16,19 @@ public class SimpleProfileTransactionIdaStatusMarshallerTest extends OpenSAMLRun
     private SimpleProfileTransactionIdaStatusMarshaller marshaller;
 
     @BeforeEach
-    public void setUp() throws Exception {
+    public void setUp() {
         marshaller = new SimpleProfileTransactionIdaStatusMarshaller(new OpenSamlXmlObjectFactory());
     }
 
     @Test
-    public void toSamlStatus_shouldTransformSuccess() throws Exception {
+    public void toSamlStatus_shouldTransformSuccess() {
         Status transformedStatus = marshaller.toSamlStatus(TransactionIdaStatus.Success);
 
         assertThat(transformedStatus.getStatusCode().getValue()).isEqualTo(StatusCode.SUCCESS);
     }
 
     @Test
-    public void toSamlStatus_shouldTransformNoAuthenticationContext() throws Exception {
+    public void toSamlStatus_shouldTransformNoAuthenticationContext() {
         Status transformedStatus = marshaller.toSamlStatus(TransactionIdaStatus.NoAuthenticationContext);
 
         assertThat(transformedStatus.getStatusCode().getValue()).isEqualTo(StatusCode.RESPONDER);
@@ -36,7 +36,7 @@ public class SimpleProfileTransactionIdaStatusMarshallerTest extends OpenSAMLRun
     }
 
     @Test
-    public void toSamlStatus_shouldTransformAuthnFailedWithNoSubStatus() throws Exception {
+    public void toSamlStatus_shouldTransformAuthnFailedWithNoSubStatus() {
         Status transformedStatus = marshaller.toSamlStatus(TransactionIdaStatus.AuthenticationFailed);
 
         assertThat(transformedStatus.getStatusCode().getValue()).isEqualTo(StatusCode.RESPONDER);
@@ -45,7 +45,7 @@ public class SimpleProfileTransactionIdaStatusMarshallerTest extends OpenSAMLRun
     }
 
     @Test
-    public void toSamlStatus_shouldTransformRequesterError() throws Exception {
+    public void toSamlStatus_shouldTransformRequesterError() {
         Status transformedStatus = marshaller.toSamlStatus(TransactionIdaStatus.RequesterError);
 
         assertThat(transformedStatus.getStatusCode().getValue()).isEqualTo(StatusCode.RESPONDER);
@@ -53,7 +53,7 @@ public class SimpleProfileTransactionIdaStatusMarshallerTest extends OpenSAMLRun
     }
 
     @Test
-    public void toSamlStatus_shouldTransformNoMatchingServiceMatchMayRetry() throws Exception {
+    public void toSamlStatus_shouldTransformNoMatchingServiceMatchMayRetry() {
         Status transformedStatus = marshaller.toSamlStatus(TransactionIdaStatus.NoMatchingServiceMatchFromHub);
 
         assertThat(transformedStatus.getStatusCode().getValue()).isEqualTo(StatusCode.RESPONDER);

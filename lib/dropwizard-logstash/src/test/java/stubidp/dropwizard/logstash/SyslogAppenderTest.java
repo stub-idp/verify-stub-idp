@@ -35,7 +35,7 @@ public class SyslogAppenderTest {
     private SyslogOutputStream outputStream;
 
     @BeforeEach
-    public void setUp() throws Exception {
+    public void setUp() {
         appender = new SyslogAppender(syslogEventFormatter, outputStream);
         appender.start();
     }

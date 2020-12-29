@@ -11,9 +11,9 @@ import java.util.List;
 public class DateAttributeBuilder_1_1 {
     private static final OpenSamlXmlObjectFactory openSamlXmlObjectFactory = new OpenSamlXmlObjectFactory();
 
-    private List<AttributeValue> values = new ArrayList<>();
+    private final List<AttributeValue> values = new ArrayList<>();
     private boolean addDefaultValue = true;
-    private AttributeValue defaultDateAttributeValue = DateAttributeValueBuilder.aDateValue().build();
+    private final AttributeValue defaultDateAttributeValue = DateAttributeValueBuilder.aDateValue().build();
 
     private DateAttributeBuilder_1_1() {}
 

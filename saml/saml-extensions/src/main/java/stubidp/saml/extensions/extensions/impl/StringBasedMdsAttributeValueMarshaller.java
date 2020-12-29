@@ -17,7 +17,7 @@ public class StringBasedMdsAttributeValueMarshaller extends BaseMdsSamlObjectMar
     }
 
     @Override
-    protected void marshallElementContent(XMLObject xmlObject, Element domElement) throws MarshallingException {
+    protected void marshallElementContent(XMLObject xmlObject, Element domElement) {
         StringBasedMdsAttributeValue stringBasedMdsAttributeValue = (StringBasedMdsAttributeValue) xmlObject;
         ElementSupport.appendTextContent(domElement, stringBasedMdsAttributeValue.getValue());
     }

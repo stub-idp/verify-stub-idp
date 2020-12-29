@@ -23,7 +23,7 @@ public class DateMarshallerTest extends OpenSAMLRunner {
     private Date date;
 
     @BeforeEach
-    public void setUp() throws Exception {
+    public void setUp() {
         date = new DateBuilder().buildObject();
         marshaller = XMLObjectProviderRegistrySupport.getMarshallerFactory().getMarshaller(date);
     }

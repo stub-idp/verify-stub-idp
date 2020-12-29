@@ -4,7 +4,6 @@ import com.nimbusds.jose.jwk.JWK;
 import org.junit.jupiter.api.Test;
 
 import javax.ws.rs.core.UriBuilder;
-import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.security.cert.CertificateException;
 

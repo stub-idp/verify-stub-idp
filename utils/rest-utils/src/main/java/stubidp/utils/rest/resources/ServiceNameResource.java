@@ -12,7 +12,7 @@ import javax.ws.rs.core.MediaType;
 @Path(CommonUrls.SERVICE_NAME_ROOT)
 public class ServiceNameResource {
 
-    private ServiceNameDto serviceNameDto;
+    private final ServiceNameDto serviceNameDto;
 
     public ServiceNameResource(String serviceName) {
         this.serviceNameDto = new ServiceNameDto(serviceName);

@@ -9,8 +9,8 @@ import stubidp.saml.security.validators.ValidatedResponse;
 
 public class ResponseAssertionsFromMatchingServiceValidator {
 
-    private AssertionValidator assertionValidator;
-    private String hubEntityId;
+    private final AssertionValidator assertionValidator;
+    private final String hubEntityId;
 
     public ResponseAssertionsFromMatchingServiceValidator(AssertionValidator assertionValidator, String hubEntityId) {
         this.assertionValidator = assertionValidator;

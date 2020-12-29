@@ -31,7 +31,7 @@ public class CSRFViewRenderer extends FreemarkerViewRenderer {
         byteArrayOutputStream.close();
 
         if(view instanceof CSRFView && ((CSRFView)view).getCsrfToken().isPresent()) {
-            org.jsoup.nodes.Document document = Jsoup.parse(new String(byteArrayOutputStream.toByteArray()));
+            org.jsoup.nodes.Document document = Jsoup.parse(byteArrayOutputStream.toString());
             final Elements nodeList = document.getElementsByTag("form");
             for (final Element item : nodeList) {
                 if (item.children().stream().anyMatch(it -> (it.tag().getName().equals("input") && it.hasAttr("name") && it.attr("name").equals(AbstractCSRFCheckProtectionFilter.CSRF_PROTECT_FORM_KEY)))) {

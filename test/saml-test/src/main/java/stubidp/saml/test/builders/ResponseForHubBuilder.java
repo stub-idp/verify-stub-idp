@@ -23,7 +23,7 @@ public class ResponseForHubBuilder {
     private String inResponseTo = "request-id";
     private String issuerId = "issuer-id";
     private Instant issueInstant = Instant.now();
-    private Optional<Instant> notOnOrAfter = Optional.ofNullable(Instant.now().plus(5, ChronoUnit.MINUTES));
+    private final Optional<Instant> notOnOrAfter = Optional.ofNullable(Instant.now().plus(5, ChronoUnit.MINUTES));
     private TransactionIdaStatus transactionIdpStatus = TransactionIdaStatus.Success;
     private IdpIdaStatus idpIdaStatus = IdpIdaStatus.success();
     private Optional<Signature> signature = Optional.empty();

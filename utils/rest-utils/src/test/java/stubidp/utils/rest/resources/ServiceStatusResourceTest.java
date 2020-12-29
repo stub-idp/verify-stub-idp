@@ -8,16 +8,16 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class ServiceStatusResourceTest {
 
-    ServiceStatus instance  = ServiceStatus.getInstance();
+    final ServiceStatus instance  = ServiceStatus.getInstance();
 
     @Test
-    public void shouldReturn200WhenInitialised() throws Exception {
+    public void shouldReturn200WhenInitialised() {
         ServiceStatusResource serviceStatusResource = new ServiceStatusResource();
         assertThat(serviceStatusResource.isOnline().getStatus()).isEqualTo(200);
     }
 
     @Test
-    public void shouldReturn503WhenServiceStatusIsFalse() throws Exception {
+    public void shouldReturn503WhenServiceStatusIsFalse() {
         ServiceStatusResource serviceStatusResource = new ServiceStatusResource();
         instance.setServiceStatus(false);
         assertThat(serviceStatusResource.isOnline().getStatus()).isEqualTo(503);

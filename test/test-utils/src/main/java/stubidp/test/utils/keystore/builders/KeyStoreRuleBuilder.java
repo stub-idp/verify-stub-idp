@@ -8,7 +8,7 @@ import java.io.File;
 import java.util.List;
 
 public class KeyStoreRuleBuilder {
-    private KeyStoreResourceBuilder keyStoreResourceBuilder = KeyStoreResourceBuilder.aKeyStoreResource();
+    private final KeyStoreResourceBuilder keyStoreResourceBuilder = KeyStoreResourceBuilder.aKeyStoreResource();
 
     public KeyStoreRuleBuilder withKeys(List<KeyEntry> keys) {
         this.keyStoreResourceBuilder.withKeys(keys);

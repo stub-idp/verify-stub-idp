@@ -21,7 +21,7 @@ public class HealthCheckResponseFromMatchingServiceValidatorTest extends OpenSAM
     private HealthCheckResponseFromMatchingServiceValidator validator;
 
     @BeforeEach
-    public void setUp() throws Exception {
+    public void setUp() {
         validator = new HealthCheckResponseFromMatchingServiceValidator();
     }
 

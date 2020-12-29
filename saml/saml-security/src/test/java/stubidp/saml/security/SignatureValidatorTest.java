@@ -28,7 +28,6 @@ import stubidp.saml.test.OpenSAMLRunner;
 import stubidp.test.devpki.TestEntityIds;
 
 import javax.xml.namespace.QName;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 

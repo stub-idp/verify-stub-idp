@@ -21,7 +21,7 @@ public class SamlEntityDescriptorValidatorTest extends OpenSAMLRunner {
     private SamlEntityDescriptorValidator validator;
 
     @BeforeEach
-    public void setUp() throws Exception {
+    public void setUp() {
         validator = new SamlEntityDescriptorValidator();
     }
 
@@ -105,12 +105,7 @@ public class SamlEntityDescriptorValidatorTest extends OpenSAMLRunner {
     public void assertExceptionMessage(final EntityDescriptor entityDescriptor, SamlValidationSpecificationFailure failure) {
 
         SamlTransformationErrorManagerTestHelper.validateFail(
-                new SamlTransformationErrorManagerTestHelper.Action() {
-                    @Override
-                    public void execute() {
-                        validator.validate(entityDescriptor);
-                    }
-                },
+                () -> validator.validate(entityDescriptor),
                 failure
         );
 

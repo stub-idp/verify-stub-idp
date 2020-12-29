@@ -13,7 +13,7 @@ public class CurrentAddressMarshaller extends AbstractSAMLObjectMarshaller {
     public static final Marshaller MARSHALLER = new CurrentAddressMarshaller();
 
     /** {@inheritDoc} */
-    protected void marshallElementContent(XMLObject samlObject, Element domElement) throws MarshallingException {
+    protected void marshallElementContent(XMLObject samlObject, Element domElement) {
         CurrentAddress currentAddress = (CurrentAddress) samlObject;
         ElementSupport.appendTextContent(domElement, currentAddress.getCurrentAddress());
     }

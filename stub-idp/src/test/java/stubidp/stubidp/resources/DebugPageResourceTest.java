@@ -29,7 +29,7 @@ public class DebugPageResourceTest {
     private final String RELAY_STATE = "relayState";
 
     private DebugPageResource resource;
-    private Idp idp = new Idp(IDP_NAME,IDP_NAME,"an assetId", false, null, null);
+    private final Idp idp = new Idp(IDP_NAME,IDP_NAME,"an assetId", false, null, null);
 
     @Mock
     private IdpStubsRepository idpStubsRepository;

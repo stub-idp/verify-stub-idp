@@ -13,7 +13,7 @@ public class ApplicationVersionMarshaller extends AbstractSAMLObjectMarshaller {
     /**
      * {@inheritDoc}
      */
-    protected void marshallElementContent(XMLObject samlObject, Element domElement) throws MarshallingException {
+    protected void marshallElementContent(XMLObject samlObject, Element domElement) {
         ApplicationVersion applicationVersion = (ApplicationVersion) samlObject;
         ElementSupport.appendTextContent(domElement, applicationVersion.getValue());
     }

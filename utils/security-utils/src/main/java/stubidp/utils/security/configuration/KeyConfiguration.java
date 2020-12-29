@@ -3,13 +3,9 @@ package stubidp.utils.security.configuration;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 public class KeyConfiguration {
-
-    protected KeyConfiguration() {
-    }
 
     @Valid
     @Size(min = 1)
@@ -20,6 +16,9 @@ public class KeyConfiguration {
     @Size(min = 1)
     @JsonProperty
     protected String base64EncodedKey;
+
+    protected KeyConfiguration() {
+    }
 
     public String getKeyUri() {
         return keyUri;

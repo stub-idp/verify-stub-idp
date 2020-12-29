@@ -48,7 +48,7 @@ public class AnalyticsReporter {
     }
 
     public void report(String friendlyDescription, ContainerRequest context) {
-        reportToPiwik(friendlyDescription, context, Optional.<CustomVariable>empty());
+        reportToPiwik(friendlyDescription, context, Optional.empty());
     }
 
     public void reportPageView(String pageTitle, ContainerRequest context, String uri) {

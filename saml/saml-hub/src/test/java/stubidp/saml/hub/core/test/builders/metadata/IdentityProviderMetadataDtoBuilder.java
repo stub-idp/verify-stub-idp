@@ -18,13 +18,13 @@ import java.util.List;
 
 public class IdentityProviderMetadataDtoBuilder {
 
-    private List<SamlEndpointDto> singleSignOnServiceEndpoints = new ArrayList<>();
+    private final List<SamlEndpointDto> singleSignOnServiceEndpoints = new ArrayList<>();
     private String entityId = TestEntityIds.HUB_ENTITY_ID;
-    private OrganisationDto organisation = OrganisationDtoBuilder.anOrganisationDto().build();
-    private List<ContactPersonDto> contactPersons = new ArrayList<>();
+    private final OrganisationDto organisation = OrganisationDtoBuilder.anOrganisationDto().build();
+    private final List<ContactPersonDto> contactPersons = new ArrayList<>();
     private List<Certificate> signingCertificates = null;
     private Instant validUntil = Instant.now().atZone(ZoneId.of("UTC")).plusDays(365).toInstant();
-    private List<Certificate> idpSigningCertificates = new ArrayList<>();
+    private final List<Certificate> idpSigningCertificates = new ArrayList<>();
     private Certificate encryptionCertificate = null;
 
     private boolean useDefaultSingleSignOnServiceEndpoints = true;

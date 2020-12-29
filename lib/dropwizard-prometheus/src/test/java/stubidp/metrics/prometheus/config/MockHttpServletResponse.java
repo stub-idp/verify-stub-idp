@@ -50,17 +50,17 @@ public class MockHttpServletResponse implements HttpServletResponse {
 	}
 
 	@Override
-	public void sendError(final int i, final String s) throws IOException {
+	public void sendError(final int i, final String s) {
 
 	}
 
 	@Override
-	public void sendError(final int i) throws IOException {
+	public void sendError(final int i) {
 
 	}
 
 	@Override
-	public void sendRedirect(final String s) throws IOException {
+	public void sendRedirect(final String s) {
 
 	}
 
@@ -106,12 +106,12 @@ public class MockHttpServletResponse implements HttpServletResponse {
 	}
 
 	@Override
-	public ServletOutputStream getOutputStream() throws IOException {
+	public ServletOutputStream getOutputStream() {
 		throw new RuntimeException("Not implemented");
 	}
 
 	@Override
-	public PrintWriter getWriter() throws IOException {
+	public PrintWriter getWriter() {
 		if (pw == null) {
 			pw = new PrintWriter(new StringWriter());
 		}
@@ -189,7 +189,7 @@ public class MockHttpServletResponse implements HttpServletResponse {
 	}
 
 	@Override
-	public void flushBuffer() throws IOException {
+	public void flushBuffer() {
 
 	}
 

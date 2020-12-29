@@ -11,7 +11,7 @@ import java.util.Map;
 public class MatchingServiceIdaStatusMarshaller extends IdaStatusMarshaller<MatchingServiceIdaStatus> {
 
     private static final Map<MatchingServiceIdaStatus, DetailedStatusCode> REST_TO_SAML_CODES =
-            Map.<MatchingServiceIdaStatus, DetailedStatusCode>ofEntries(
+            Map.ofEntries(
                     Map.entry(MatchingServiceIdaStatus.MatchingServiceMatch, DetailedStatusCode.MatchingServiceMatch),
                     Map.entry(MatchingServiceIdaStatus.NoMatchingServiceMatchFromMatchingService, DetailedStatusCode.NoMatchingServiceMatchFromMatchingService),
                     Map.entry(MatchingServiceIdaStatus.RequesterError, DetailedStatusCode.RequesterErrorFromIdp),

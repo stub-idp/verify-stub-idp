@@ -7,7 +7,7 @@ import stubidp.saml.utils.core.OpenSamlXmlObjectFactory;
 
 public class NameIdPolicyBuilder {
 
-    private OpenSamlXmlObjectFactory openSamlXmlObjectFactory = new OpenSamlXmlObjectFactory();
+    private final OpenSamlXmlObjectFactory openSamlXmlObjectFactory = new OpenSamlXmlObjectFactory();
     private Optional<String> format = Optional.ofNullable(NameIDType.PERSISTENT);
 
     public static NameIdPolicyBuilder aNameIdPolicy() {

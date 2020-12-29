@@ -44,7 +44,7 @@ public class EidasAuthnRequestBuilder {
     private String issuerEntityId = "issuerEntityId";
     private String destination = "destination";
     private Instant issueInstant = Instant.now();
-    private List<RequestedAttribute> requestedAttributeList = new ArrayList<>();
+    private final List<RequestedAttribute> requestedAttributeList = new ArrayList<>();
     private boolean withKeyInfo = true;
     private boolean removeAllX509Datas = false;
     private boolean removeAllCertificates = false;

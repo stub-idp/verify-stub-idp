@@ -19,35 +19,35 @@ import static stubidp.saml.domain.assertions.AuthnContext.LEVEL_1;
 public class IdpUserBuilder {
 
     private String username = "default-username";
-    private String persistentId = UUID.randomUUID().toString();
+    private final String persistentId = UUID.randomUUID().toString();
     private String password = "default-password";
-    private List<SimpleMdsValue<String>> firstnames = singletonList(new SimpleMdsValue<>(
+    private final List<SimpleMdsValue<String>> firstnames = singletonList(new SimpleMdsValue<>(
             "default-first-name",
             Instant.now().atZone(ZoneId.of("UTC")).minusYears(20).toInstant(),
             null,
             true
     ));
-    private List<SimpleMdsValue<String>> middleNames = singletonList(new SimpleMdsValue<>(
+    private final List<SimpleMdsValue<String>> middleNames = singletonList(new SimpleMdsValue<>(
             "default-middle-name",
             Instant.now().atZone(ZoneId.of("UTC")).minusYears(20).toInstant(),
             null,
             true
     ));
-    private List<SimpleMdsValue<String>> surnames = singletonList(new SimpleMdsValue<>(
+    private final List<SimpleMdsValue<String>> surnames = singletonList(new SimpleMdsValue<>(
             "default-surname",
             Instant.now().atZone(ZoneId.of("UTC")).minusYears(20).toInstant(),
             null,
             true
     ));
-    private Optional<SimpleMdsValue<Gender>> gender = Optional.empty();
-    private List<SimpleMdsValue<Instant>> dateOfBirths = singletonList(new SimpleMdsValue<>(
+    private final Optional<SimpleMdsValue<Gender>> gender = Optional.empty();
+    private final List<SimpleMdsValue<Instant>> dateOfBirths = singletonList(new SimpleMdsValue<>(
             Instant.now().atZone(ZoneId.of("UTC")).minusYears(20).toInstant(),
             Instant.now().atZone(ZoneId.of("UTC")).minusYears(20).toInstant(),
             null,
             true
     ));
-    private List<Address> addresses = emptyList();
-    private AuthnContext levelOfAssurance = LEVEL_1;
+    private final List<Address> addresses = emptyList();
+    private final AuthnContext levelOfAssurance = LEVEL_1;
 
     public static IdpUserBuilder anIdpUser() {
         return new IdpUserBuilder();

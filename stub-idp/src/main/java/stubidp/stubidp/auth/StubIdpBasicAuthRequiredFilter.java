@@ -80,8 +80,8 @@ public class StubIdpBasicAuthRequiredFilter implements ContainerRequestFilter {
     }
 
     private static final class UsernamePassword {
-        private String password;
-        private String username;
+        private final String password;
+        private final String username;
 
         private UsernamePassword(String password, String username) {
             this.password = password;

@@ -18,7 +18,7 @@ public class IPAddressValidatorTest extends OpenSAMLRunner {
     private IPAddressValidator validator;
 
     @BeforeEach
-    public void setUp() throws Exception {
+    public void setUp() {
         validator = new IPAddressValidator();
     }
 

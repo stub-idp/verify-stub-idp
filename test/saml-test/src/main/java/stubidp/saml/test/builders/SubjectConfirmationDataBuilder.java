@@ -21,8 +21,8 @@ public class SubjectConfirmationDataBuilder {
     private Optional<Instant> notBefore = Optional.empty();
     private Optional<String> address = Optional.empty();
     private Optional<String> inResponseTo = Optional.of(ResponseBuilder.DEFAULT_REQUEST_ID);
-    private List<Assertion> assertions = new ArrayList<>();
-    private List<EncryptedAssertion> encryptedAssertions = new ArrayList<>();
+    private final List<Assertion> assertions = new ArrayList<>();
+    private final List<EncryptedAssertion> encryptedAssertions = new ArrayList<>();
 
     private SubjectConfirmationDataBuilder() {}
 

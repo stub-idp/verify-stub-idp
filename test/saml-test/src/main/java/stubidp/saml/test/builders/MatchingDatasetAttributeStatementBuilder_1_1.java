@@ -14,8 +14,8 @@ public class MatchingDatasetAttributeStatementBuilder_1_1 {
     private Optional<Attribute> currentAddressAttribute = Optional.ofNullable(AddressAttributeBuilder_1_1.anAddressAttribute().addAddress(AddressAttributeValueBuilder_1_1.anAddressAttributeValue().build()).buildCurrentAddress());
     private Optional<Attribute> surnameAttribute = Optional.ofNullable(PersonNameAttributeBuilder_1_1.aPersonName_1_1().buildAsSurname());
     private Optional<Attribute> firstnameAttribute = Optional.ofNullable(PersonNameAttributeBuilder_1_1.aPersonName_1_1().buildAsFirstname());
-    private List<Attribute> customAttributes = new ArrayList<>();
-    private List<Attribute> previousAddressAttributes = new ArrayList<>();
+    private final List<Attribute> customAttributes = new ArrayList<>();
+    private final List<Attribute> previousAddressAttributes = new ArrayList<>();
     private Optional<Attribute> middleNamesAttribute = Optional.ofNullable(PersonNameAttributeBuilder_1_1.aPersonName_1_1().buildAsMiddlename());
     private Optional<Attribute> genderAttribute = Optional.ofNullable(GenderAttributeBuilder_1_1.aGender_1_1().build());
 

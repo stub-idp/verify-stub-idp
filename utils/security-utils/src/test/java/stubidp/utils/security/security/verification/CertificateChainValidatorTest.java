@@ -26,7 +26,7 @@ public class CertificateChainValidatorTest {
     private CertificateChainValidator certificateChainValidator;
 
     @BeforeEach
-    public void setUp() throws Exception {
+    public void setUp() {
         x509CertificateFactory = new X509CertificateFactory();
         certificateChainValidator = new CertificateChainValidator(new PKIXParametersProvider(), x509CertificateFactory);
     }

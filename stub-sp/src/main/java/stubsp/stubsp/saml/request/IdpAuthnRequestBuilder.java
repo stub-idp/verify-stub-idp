@@ -9,7 +9,7 @@ import java.util.Optional;
 
 public class IdpAuthnRequestBuilder {
 
-    private static XmlObjectToBase64EncodedStringTransformer<AuthnRequest> toBase64EncodedStringTransformer = new XmlObjectToBase64EncodedStringTransformer<>();
+    private static final XmlObjectToBase64EncodedStringTransformer<AuthnRequest> toBase64EncodedStringTransformer = new XmlObjectToBase64EncodedStringTransformer<>();
 
     private String destination;
     private String entityId;

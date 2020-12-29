@@ -13,7 +13,7 @@ public class PersonIdentifierMarshaller extends AbstractSAMLObjectMarshaller {
     public static final Marshaller MARSHALLER = new PersonIdentifierMarshaller();
 
     /** {@inheritDoc} */
-    protected void marshallElementContent(XMLObject samlObject, Element domElement) throws MarshallingException {
+    protected void marshallElementContent(XMLObject samlObject, Element domElement) {
         PersonIdentifier personIdentifier = (PersonIdentifier) samlObject;
         ElementSupport.appendTextContent(domElement, personIdentifier.getPersonIdentifier());
     }

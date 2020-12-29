@@ -3,7 +3,7 @@ package stubidp.test.utils.helpers;
 import java.io.File;
 
 public class TemporaryFileBuilder {
-    private TemporaryFileResourceBuilder temporaryFileResourceBuilder = TemporaryFileResourceBuilder.aTemporaryFileResource();
+    private final TemporaryFileResourceBuilder temporaryFileResourceBuilder = TemporaryFileResourceBuilder.aTemporaryFileResource();
 
     public static TemporaryFileBuilder aTemporaryFile() {
         return new TemporaryFileBuilder();

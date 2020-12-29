@@ -12,7 +12,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class PrivateKeyFileConfigurationTest {
 
-    private ObjectMapper objectMapper = new ObjectMapper();
+    private final ObjectMapper objectMapper = new ObjectMapper();
 
     @Test
     public void should_loadPrivateKeyFromJSON() throws Exception {
@@ -34,20 +34,20 @@ public class PrivateKeyFileConfigurationTest {
     }
 
     @Test
-    public void should_ThrowExceptionWhenFileDoesNotExist() throws Exception {
+    public void should_ThrowExceptionWhenFileDoesNotExist() {
         final ValueInstantiationException exception = Assertions.assertThrows(ValueInstantiationException.class, () -> objectMapper.readValue("{\"keyFile\": \"/foo/bar\"}", PrivateKeyConfiguration.class));
         assertThat(exception.getMessage()).contains("NoSuchFileException");
     }
 
     @Test
-    public void should_ThrowExceptionWhenFileDoesNotContainAPrivateKey() throws Exception {
+    public void should_ThrowExceptionWhenFileDoesNotContainAPrivateKey() {
         String path = getClass().getClassLoader().getResource("empty_file").getPath();
         final ValueInstantiationException exception = Assertions.assertThrows(ValueInstantiationException.class, () -> objectMapper.readValue("{\"keyFile\": \"" + path + "\"}", PrivateKeyConfiguration.class));
         assertThat(exception.getMessage()).contains("InvalidKeySpecException");
     }
 
     @Test
-    public void should_throwAnExceptionWhenIncorrectJSONKeySpecified() throws Exception {
+    public void should_throwAnExceptionWhenIncorrectJSONKeySpecified() {
         String path = getClass().getClassLoader().getResource("empty_file").getPath();
         Assertions.assertThrows(ValueInstantiationException.class, () -> objectMapper.readValue("{\"privateKeyFoo\": \"" + path + "\"}", PrivateKeyConfiguration.class));
     }

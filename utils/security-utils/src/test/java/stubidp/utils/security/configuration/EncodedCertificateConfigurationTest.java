@@ -14,7 +14,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class EncodedCertificateConfigurationTest {
 
-    private ObjectMapper objectMapper = new ObjectMapper();
+    private final ObjectMapper objectMapper = new ObjectMapper();
 
     @Test
     public void should_loadPublicKeyFromJSON() throws Exception {
@@ -35,13 +35,13 @@ public class EncodedCertificateConfigurationTest {
     }
 
     @Test
-    public void should_ThrowExceptionWhenStringIsNotBase64Encoded() throws Exception {
+    public void should_ThrowExceptionWhenStringIsNotBase64Encoded() {
         Assertions.assertThrows(ValueInstantiationException.class,
                 () -> objectMapper.readValue("{\"type\": \"encoded\", \"cert\": \"" + "FOOBARBAZ" + "\", \"name\": \"someId\"}", DeserializablePublicKeyConfiguration.class));
     }
 
     @Test
-    public void should_ThrowExceptionWhenIncorrectKeySpecified() throws Exception {
+    public void should_ThrowExceptionWhenIncorrectKeySpecified() {
         String jsonConfig = "{\"type\": \"encoded\", \"certFoo\": \"" + "empty_file" + "\", \"name\": \"someId\"}";
         Assertions.assertThrows(ValueInstantiationException.class,
                 () -> objectMapper.readValue(jsonConfig, DeserializablePublicKeyConfiguration.class));

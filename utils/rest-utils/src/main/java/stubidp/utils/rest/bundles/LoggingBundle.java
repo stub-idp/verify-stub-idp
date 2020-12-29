@@ -1,7 +1,6 @@
 package stubidp.utils.rest.bundles;
 
 import ch.qos.logback.classic.LoggerContext;
-import io.dropwizard.Configuration;
 import io.dropwizard.ConfiguredBundle;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
@@ -20,7 +19,7 @@ public class LoggingBundle<T extends ServiceNameConfiguration> implements Config
     }
 
     @Override
-    public void run(T configuration, Environment environment) throws Exception {
+    public void run(T configuration, Environment environment) {
         LoggerContext context = (LoggerContext) LoggerFactory.getILoggerFactory();
 
         // Add service-name to context for easy search in kibana

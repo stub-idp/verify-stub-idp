@@ -12,7 +12,7 @@ public class StubIdpBuilder {
     private String assetId = "default-stub-idp";
     private String displayName = "Default Stub IDP";
     private String friendlyId = "default-stub-idp";
-    private List<UserCredentials> idpUserCredentials = new ArrayList<>();
+    private final List<UserCredentials> idpUserCredentials = new ArrayList<>();
     private boolean sendKeyInfo = false;
 
     public static StubIdpBuilder aStubIdp() {

@@ -38,7 +38,7 @@ public class HintsIntegrationTests extends IntegrationTestHelper {
     public static final StubIdpAppExtension applicationRule = new StubIdpAppExtension()
             .withStubIdp(aStubIdp().withId(IDP_NAME).withDisplayName(DISPLAY_NAME).build());
 
-    public Client client = JerseyClientBuilder.createClient().property(ClientProperties.FOLLOW_REDIRECTS, false);
+    public final Client client = JerseyClientBuilder.createClient().property(ClientProperties.FOLLOW_REDIRECTS, false);
 
     @BeforeEach
     public void setUp() {

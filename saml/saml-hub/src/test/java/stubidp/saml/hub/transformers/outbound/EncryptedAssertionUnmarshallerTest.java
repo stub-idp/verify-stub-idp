@@ -21,7 +21,7 @@ public class EncryptedAssertionUnmarshallerTest extends OpenSAMLRunner {
     public StringToOpenSamlObjectTransformer<EncryptedAssertion> stringToEncryptedAssertionTransformer;
 
     @Test
-    public void shouldCreateAEncryptedAssertionObjectFromAGivenString() throws Exception {
+    public void shouldCreateAEncryptedAssertionObjectFromAGivenString() {
         EncryptedAssertionUnmarshaller encryptedAssertionUnmarshaller = new EncryptedAssertionUnmarshaller(stringToEncryptedAssertionTransformer);
         final EncryptedAssertion expected = new EncryptedAssertionBuilder().buildObject();
         when(stringToEncryptedAssertionTransformer.apply(ENCRYPTED_ASSERTION_BLOB)).thenReturn(expected);

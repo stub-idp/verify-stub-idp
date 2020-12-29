@@ -44,7 +44,7 @@ public class HttpStubRule implements AfterAllCallback {
         register(requestAndResponse);
     }
 
-    public void register(String path, int responseStatus, String contentType, String responseBody) throws JsonProcessingException {
+    public void register(String path, int responseStatus, String contentType, String responseBody) {
         RequestAndResponse requestAndResponse = ExpectedRequestBuilder.expectRequest().withPath(path).andWillRespondWith().withStatus(responseStatus).withContentType(contentType).withBody(responseBody).build();
         register(requestAndResponse);
     }

@@ -11,11 +11,11 @@ import java.util.List;
 import java.util.Optional;
 
 public class HubAttributeQueryRequest extends BaseHubAttributeQueryRequest {
-    private String encryptedAuthnAssertion;
-    private Optional<HubAssertion> cycle3AttributeAssertion;
-    private Optional<List<UserAccountCreationAttribute>> userAccountCreationAttributes;
-    private AuthnContext authnContext;
-    private String encryptedMatchingDatasetAssertion;
+    private final String encryptedAuthnAssertion;
+    private final Optional<HubAssertion> cycle3AttributeAssertion;
+    private final Optional<List<UserAccountCreationAttribute>> userAccountCreationAttributes;
+    private final AuthnContext authnContext;
+    private final String encryptedMatchingDatasetAssertion;
 
     public HubAttributeQueryRequest(
             String id,

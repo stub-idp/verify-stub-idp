@@ -5,7 +5,7 @@ import stubidp.saml.utils.core.OpenSamlXmlObjectFactory;
 
 public class ScopingBuilder {
 
-    private OpenSamlXmlObjectFactory openSamlXmlObjectFactory = new OpenSamlXmlObjectFactory();
+    private final OpenSamlXmlObjectFactory openSamlXmlObjectFactory = new OpenSamlXmlObjectFactory();
 
     public static ScopingBuilder aScoping() {
         return new ScopingBuilder();

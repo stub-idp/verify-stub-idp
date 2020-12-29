@@ -7,8 +7,8 @@ import stubidp.saml.security.validators.ValidatedAssertions;
 import stubidp.saml.security.validators.ValidatedResponse;
 
 public class InboundResponseFromMatchingServiceUnmarshaller {
-    private PassthroughAssertionUnmarshaller passthroughAssertionUnmarshaller;
-    private MatchingServiceIdaStatusUnmarshaller statusUnmarshaller;
+    private final PassthroughAssertionUnmarshaller passthroughAssertionUnmarshaller;
+    private final MatchingServiceIdaStatusUnmarshaller statusUnmarshaller;
 
     public InboundResponseFromMatchingServiceUnmarshaller(
             PassthroughAssertionUnmarshaller passthroughAssertionUnmarshaller,

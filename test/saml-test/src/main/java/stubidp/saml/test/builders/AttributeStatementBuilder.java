@@ -20,7 +20,7 @@ import java.util.List;
 public class AttributeStatementBuilder {
     private static final OpenSamlXmlObjectFactory openSamlXmlObjectFactory = new OpenSamlXmlObjectFactory();
 
-    private List<Attribute> attributes = new ArrayList<>();
+    private final List<Attribute> attributes = new ArrayList<>();
 
     private AttributeStatementBuilder() {}
 

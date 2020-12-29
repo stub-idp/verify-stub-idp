@@ -43,7 +43,7 @@ public class AssertionValidatorTest extends OpenSAMLRunner {
     }
 
     @Test
-    public void validate_shouldDelegateSubjectValidation() throws Exception {
+    public void validate_shouldDelegateSubjectValidation() {
         String requestId = UUID.randomUUID().toString();
         Assertion assertion = anAssertion()
                 .withSubject(aSubject().build())
@@ -55,7 +55,7 @@ public class AssertionValidatorTest extends OpenSAMLRunner {
     }
 
     @Test
-    public void validate_shouldDelegateSubjectConfirmationValidation() throws Exception {
+    public void validate_shouldDelegateSubjectConfirmationValidation() {
         String requestId = UUID.randomUUID().toString();
         SubjectConfirmation subjectConfirmation = aSubjectConfirmation().build();
         Assertion assertion = anAssertion()
@@ -68,7 +68,7 @@ public class AssertionValidatorTest extends OpenSAMLRunner {
     }
 
     @Test
-    public void validate_shouldDelegateAttributeValidation() throws Exception {
+    public void validate_shouldDelegateAttributeValidation() {
         String requestId = UUID.randomUUID().toString();
         Assertion assertion = anAssertion()
                 .withSubject(aSubject().build())
@@ -80,7 +80,7 @@ public class AssertionValidatorTest extends OpenSAMLRunner {
     }
 
     @Test
-    public void validate_shouldThrowExceptionIfAnyAssertionDoesNotContainASignature() throws Exception {
+    public void validate_shouldThrowExceptionIfAnyAssertionDoesNotContainASignature() {
         String someID = UUID.randomUUID().toString();
         Assertion assertion = anAssertion().withSignature(null).withId(someID).buildUnencrypted();
 
@@ -88,7 +88,7 @@ public class AssertionValidatorTest extends OpenSAMLRunner {
     }
 
     @Test
-    public void validate_shouldThrowExceptionIfAnAssertionIsNotSigned() throws Exception {
+    public void validate_shouldThrowExceptionIfAnAssertionIsNotSigned() {
         String someID = UUID.randomUUID().toString();
 
         Assertion assertion = anAssertion().withoutSigning().withId(someID).buildUnencrypted();
@@ -97,35 +97,35 @@ public class AssertionValidatorTest extends OpenSAMLRunner {
     }
 
     @Test
-    public void validate_shouldDoNothingIfAllAssertionsAreSigned() throws Exception {
+    public void validate_shouldDoNothingIfAllAssertionsAreSigned() {
         Assertion assertion = anAssertion().buildUnencrypted();
 
         validator.validate(assertion, "", assertion.getID());
     }
 
     @Test
-    public void validate_shouldThrowExceptionIfIdIsMissing() throws Exception {
+    public void validate_shouldThrowExceptionIfIdIsMissing() {
         Assertion assertion = anAssertion().withId(null).buildUnencrypted();
 
         assertExceptionMessage(assertion, SamlTransformationErrorFactory.missingId());
     }
 
     @Test
-    public void validate_shouldThrowExceptionIfVersionIsMissing() throws Exception {
+    public void validate_shouldThrowExceptionIfVersionIsMissing() {
         Assertion assertion = anAssertion().withVersion(null).buildUnencrypted();
 
         assertExceptionMessage(assertion, SamlTransformationErrorFactory.missingVersion(assertion.getID()));
     }
 
     @Test
-    public void validate_shouldThrowExceptionIfVersionIsNotSamlTwoPointZero() throws Exception {
+    public void validate_shouldThrowExceptionIfVersionIsNotSamlTwoPointZero() {
         Assertion assertion = anAssertion().withVersion(SAMLVersion.VERSION_10).buildUnencrypted();
 
         assertExceptionMessage(assertion, SamlTransformationErrorFactory.illegalVersion(assertion.getID()));
     }
 
     @Test
-    public void validate_shouldThrowExceptionIfIssueInstantIsMissing() throws Exception {
+    public void validate_shouldThrowExceptionIfIssueInstantIsMissing() {
         Assertion assertion = anAssertion().withIssueInstant(null).buildUnencrypted();
 
         assertExceptionMessage(assertion, SamlTransformationErrorFactory.missingIssueInstant(assertion.getID()));
@@ -136,12 +136,7 @@ public class AssertionValidatorTest extends OpenSAMLRunner {
             SamlValidationSpecificationFailure failure) {
 
         SamlTransformationErrorManagerTestHelper.validateFail(
-                new SamlTransformationErrorManagerTestHelper.Action() {
-                    @Override
-                    public void execute() {
-                        validator.validate(assertion, "", "");
-                    }
-                },
+                () -> validator.validate(assertion, "", ""),
                 failure
         );
     }

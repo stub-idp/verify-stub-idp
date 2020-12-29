@@ -32,7 +32,7 @@ public class IdpIdaStatusUnmarshallerTest extends OpenSAMLRunner {
     private StringToOpenSamlObjectTransformer<Response> stringToOpenSamlObjectTransformer;
 
     @BeforeEach
-    public void setUp() throws Exception {
+    public void setUp() {
         unmarshaller = new IdpIdaStatusUnmarshaller();
         stringToOpenSamlObjectTransformer = new CoreTransformersFactory().getStringtoOpenSamlObjectTransformer(input -> {});
     }

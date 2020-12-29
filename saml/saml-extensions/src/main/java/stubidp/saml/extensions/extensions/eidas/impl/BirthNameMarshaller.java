@@ -13,7 +13,7 @@ public class BirthNameMarshaller extends AbstractSAMLObjectMarshaller {
     public static final Marshaller MARSHALLER = new BirthNameMarshaller();
 
     /** {@inheritDoc} */
-    protected void marshallElementContent(XMLObject samlObject, Element domElement) throws MarshallingException {
+    protected void marshallElementContent(XMLObject samlObject, Element domElement) {
         BirthName birthName = (BirthName) samlObject;
         ElementSupport.appendTextContent(domElement, birthName.getBirthName());
     }

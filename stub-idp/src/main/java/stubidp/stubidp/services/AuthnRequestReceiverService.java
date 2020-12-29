@@ -52,8 +52,8 @@ public class AuthnRequestReceiverService {
     private final AuthnRequestToIdaRequestFromHubTransformer authnRequestToIdaRequestFromHubTransformer;
 
     public static class SessionCreated {
-        private URI nextLocation;
-        private SessionId idpSessionId;
+        private final URI nextLocation;
+        private final SessionId idpSessionId;
 
         SessionCreated(URI nextLocation, SessionId idpSessionId) {
             this.nextLocation = nextLocation;

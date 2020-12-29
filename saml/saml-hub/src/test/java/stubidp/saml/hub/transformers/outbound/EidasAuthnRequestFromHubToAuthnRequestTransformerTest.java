@@ -49,7 +49,7 @@ public class EidasAuthnRequestFromHubToAuthnRequestTransformerTest extends OpenS
     private EidasAuthnRequestFromHubToAuthnRequestTransformer transformer;
 
     @BeforeEach
-    public void setUp() throws Exception {
+    public void setUp() {
         transformer = new EidasAuthnRequestFromHubToAuthnRequestTransformer(new OpenSamlXmlObjectFactory(), new AuthnContextFactory());
     }
 
@@ -72,7 +72,7 @@ public class EidasAuthnRequestFromHubToAuthnRequestTransformerTest extends OpenS
     }
 
     @Test
-    public void shouldCreateAnEidasAuthnRequest() throws Exception {
+    public void shouldCreateAnEidasAuthnRequest() {
         List<AuthnContext> authnContexts = Collections.singletonList(AuthnContext.LEVEL_2);
         EidasAuthnRequestFromHub originalRequestFromTransaction = anEidasAuthnRequestFromHub(A_PROVIDER, HTTP_ISSUER_ENTITY_ID_COM, authnContexts);
 

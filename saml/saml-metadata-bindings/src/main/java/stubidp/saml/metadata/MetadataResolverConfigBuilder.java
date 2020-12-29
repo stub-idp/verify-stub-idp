@@ -18,7 +18,7 @@ import static stubidp.saml.metadata.ResourceEncoder.entityIdAsResource;
 
 public class MetadataResolverConfigBuilder {
 
-    private KeyStoreLoader keyStoreLoader = new KeyStoreLoader();
+    private final KeyStoreLoader keyStoreLoader = new KeyStoreLoader();
 
     public MetadataResolverConfiguration createMetadataResolverConfiguration(JWK trustAnchor, EidasMetadataConfiguration configuration)
             throws CertificateException{

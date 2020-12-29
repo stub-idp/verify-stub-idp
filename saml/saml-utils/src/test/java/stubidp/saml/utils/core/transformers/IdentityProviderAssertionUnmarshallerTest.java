@@ -45,7 +45,7 @@ public class IdentityProviderAssertionUnmarshallerTest extends OpenSAMLRunner {
     private IdentityProviderAssertionUnmarshaller unmarshaller;
 
     @BeforeEach
-    public void setUp() throws Exception {
+    public void setUp() {
         unmarshaller = new IdentityProviderAssertionUnmarshaller(
                 matchingDatasetUnmarshaller,
                 eidasMatchingDatasetUnmarshaller,

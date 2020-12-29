@@ -9,9 +9,9 @@ import java.security.KeyStoreException;
 
 public class MetadataTrustStoreProvider implements Provider<KeyStore> {
 
-    private KeyStoreLoader keyStoreLoader;
-    private String uri;
-    private String password;
+    private final KeyStoreLoader keyStoreLoader;
+    private final String uri;
+    private final String password;
 
     public MetadataTrustStoreProvider(KeyStoreLoader keyStoreLoader, String uri, String password) {
         this.keyStoreLoader = keyStoreLoader;
@@ -22,7 +22,7 @@ public class MetadataTrustStoreProvider implements Provider<KeyStore> {
     @Override
     public KeyStore get() {
         KeyStore trustStore = keyStoreLoader.load(uri, password);
-        int trustStoreSize = 0;
+        int trustStoreSize;
         try {
             trustStoreSize = trustStore.size();
         } catch (KeyStoreException e) {

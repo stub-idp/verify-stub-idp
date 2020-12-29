@@ -11,10 +11,10 @@ import java.util.List;
 public class PersonNameAttributeBuilder_1_1 {
     private static final OpenSamlXmlObjectFactory openSamlXmlObjectFactory = new OpenSamlXmlObjectFactory();
 
-    private List<AttributeValue> values = new ArrayList<>();
+    private final List<AttributeValue> values = new ArrayList<>();
     private String nameFormat = Attribute.UNSPECIFIED;
     private boolean addDefaultValue = true;
-    private AttributeValue defaultPersonNameAttributeValue = PersonNameAttributeValueBuilder.aPersonNameValue().build();
+    private final AttributeValue defaultPersonNameAttributeValue = PersonNameAttributeValueBuilder.aPersonNameValue().build();
 
     private PersonNameAttributeBuilder_1_1() {}
 

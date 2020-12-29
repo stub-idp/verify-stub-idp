@@ -14,7 +14,6 @@ import com.nimbusds.jose.util.Base64URL;
 import java.security.PrivateKey;
 import java.security.cert.CertificateEncodingException;
 import java.security.cert.X509Certificate;
-import java.util.Arrays;
 import java.util.Collections;
 
 class JWKSetSigner {
