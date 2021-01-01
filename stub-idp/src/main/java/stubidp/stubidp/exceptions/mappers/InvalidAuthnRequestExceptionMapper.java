@@ -18,7 +18,7 @@ public class InvalidAuthnRequestExceptionMapper implements ExceptionMapper<Inval
             .help("Number of invalid verify authn requests received.")
             .register();
 
-    private static final Logger LOG = LoggerFactory.getLogger(InvalidAuthnRequestException.class);
+    private static final Logger LOG = LoggerFactory.getLogger(InvalidAuthnRequestExceptionMapper.class);
 
     @Override
     public Response toResponse(InvalidAuthnRequestException exception) {

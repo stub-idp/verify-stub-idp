@@ -34,20 +34,24 @@ public class CSRFViewRenderer extends FreemarkerViewRenderer {
             org.jsoup.nodes.Document document = Jsoup.parse(byteArrayOutputStream.toString());
             final Elements nodeList = document.getElementsByTag("form");
             for (final Element item : nodeList) {
-                if (item.children().stream().anyMatch(it -> (it.tag().getName().equals("input") && it.hasAttr("name") && it.attr("name").equals(AbstractCSRFCheckProtectionFilter.CSRF_PROTECT_FORM_KEY)))) {
+                if (item.children().stream().anyMatch(it -> ("input".equals(it.tag().getName()) && it.hasAttr("name") && it.attr("name").equals(AbstractCSRFCheckProtectionFilter.CSRF_PROTECT_FORM_KEY)))) {
                     throw new CSRFConflictingFormAttributeException();
                 } else {
-                    item.appendChild(new Element(Tag.valueOf("input"), "", new Attributes() {{
-                        put("name", AbstractCSRFCheckProtectionFilter.CSRF_PROTECT_FORM_KEY);
-                        put("id", AbstractCSRFCheckProtectionFilter.CSRF_PROTECT_FORM_KEY);
-                        put("value", ((CSRFView) view).getCsrfToken().get());
-                        put("type", "hidden");
-                    }}));
+                    item.appendChild(new Element(Tag.valueOf("input"), "", new MyAttributes(view)));
                 }
             }
             output.write(document.html().getBytes());
         } else {
             output.write(byteArrayOutputStream.toByteArray());
+        }
+    }
+
+    private static class MyAttributes extends Attributes {
+        public MyAttributes(View view) {
+            put("name", AbstractCSRFCheckProtectionFilter.CSRF_PROTECT_FORM_KEY);
+            put("id", AbstractCSRFCheckProtectionFilter.CSRF_PROTECT_FORM_KEY);
+            put("value", ((CSRFView) view).getCsrfToken().get());
+            put("type", "hidden");
         }
     }
 }

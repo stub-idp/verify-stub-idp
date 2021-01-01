@@ -2,6 +2,7 @@ package stubidp.saml.test.support;
 
 import org.opensaml.security.credential.BasicCredential;
 import org.opensaml.security.credential.Credential;
+import org.opensaml.security.credential.MutableCredential;
 import org.opensaml.security.credential.UsageType;
 import stubidp.test.devpki.TestCertificateStrings;
 import stubidp.utils.security.security.InternalPublicKeyStore;
@@ -71,10 +72,10 @@ public abstract class AbstractHardCodedKeyStore implements InternalPublicKeyStor
     }
 
     public List<Credential> getVerifyingCredentials(String entityId) {
-        ArrayList<Credential> verifyingCredentials = new ArrayList<>();
+        List<Credential> verifyingCredentials = new ArrayList<>();
         List<PublicKey> verifyingKeysForEntity = getVerifyingKeysForEntity(entityId);
         for(PublicKey verifyingKeyForEntity: verifyingKeysForEntity){
-            BasicCredential credential = new BasicCredential(verifyingKeyForEntity);
+            MutableCredential credential = new BasicCredential(verifyingKeyForEntity);
             credential.setUsageType(UsageType.SIGNING);
             verifyingCredentials.add(credential);
         }

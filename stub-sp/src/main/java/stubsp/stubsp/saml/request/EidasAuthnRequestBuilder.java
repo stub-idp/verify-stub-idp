@@ -41,6 +41,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class EidasAuthnRequestBuilder {
+    private static final RequestedAttribute[] REQUESTED_ATTRIBUTES = {};
+
     private String issuerEntityId = "issuerEntityId";
     private String destination = "destination";
     private Instant issueInstant = Instant.now();
@@ -171,7 +173,7 @@ public class EidasAuthnRequestBuilder {
         requestedAttributeList.add(createRequestedAttribute(IdaConstants.Eidas_Attributes.FamilyName.NAME));
         requestedAttributeList.add(createRequestedAttribute(IdaConstants.Eidas_Attributes.FirstName.NAME));
         requestedAttributeList.add(createRequestedAttribute(IdaConstants.Eidas_Attributes.DateOfBirth.NAME));
-        requestedAttributes.setRequestedAttributes(requestedAttributeList.toArray(new RequestedAttribute[] {}));
+        requestedAttributes.setRequestedAttributes(requestedAttributeList.toArray(REQUESTED_ATTRIBUTES));
 
         Extensions extensions = new ExtensionsBuilder().buildObject();
         extensions.getUnknownXMLObjects().add(spType);

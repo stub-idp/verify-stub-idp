@@ -42,9 +42,9 @@ public class PKIXSignatureValidationFilterProvider implements Provider<Signature
      in the @metadataTruststore. To arrive at the value 0 we count the nodes between the signature certificate and the
      trust anchor.
      */
-    public static final int CERTIFICATE_CHAIN_DEPTH = 0;
+    private static final int CERTIFICATE_CHAIN_DEPTH = 0;
 
-    public static final List<String> WHITELISTED_ALGORITHMS = asList(
+    private static final List<String> WHITELISTED_ALGORITHMS = asList(
             ALGO_ID_SIGNATURE_RSA_SHA256,
             ALGO_ID_SIGNATURE_RSA_SHA512,
             ALGO_ID_DIGEST_SHA256,

@@ -6,7 +6,6 @@ import stubidp.saml.extensions.validation.SamlValidationSpecificationFailure;
 import stubidp.saml.test.OpenSAMLRunner;
 
 import java.net.URI;
-import java.net.URISyntaxException;
 
 import static stubidp.saml.hub.core.errors.SamlTransformationErrorFactory.destinationEmpty;
 import static stubidp.saml.hub.core.errors.SamlTransformationErrorFactory.destinationMissing;

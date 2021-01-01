@@ -43,7 +43,7 @@ public class CertificateChainEvaluableCriterion implements EvaluableCredentialCr
 
     private final CertificateChainValidator certificateChainValidator;
     private final KeyStore keyStore;
-    private final Logger log = LoggerFactory.getLogger(CertificateChainEvaluableCriterion.class);
+    private static final Logger log = LoggerFactory.getLogger(CertificateChainEvaluableCriterion.class);
 
 
     public CertificateChainEvaluableCriterion(CertificateChainValidator certificateChainValidator, KeyStore keyStore) {

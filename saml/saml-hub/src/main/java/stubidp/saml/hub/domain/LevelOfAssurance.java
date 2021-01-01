@@ -19,7 +19,7 @@ public enum LevelOfAssurance implements Comparable<LevelOfAssurance> {
     }
 
     public static LevelOfAssurance fromString(String levelOfAssurance) {
-        return Arrays.stream(LevelOfAssurance.values())
+        return Arrays.stream(values())
             .filter(x -> x.value.equals(levelOfAssurance))
             .findFirst()
             .orElseThrow(() -> new RuntimeException("Unknown level of Assurance"));

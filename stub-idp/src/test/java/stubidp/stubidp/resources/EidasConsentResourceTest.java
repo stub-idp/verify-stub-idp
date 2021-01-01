@@ -82,7 +82,7 @@ public class EidasConsentResourceTest {
     @Test
     public void postShouldReturnASuccessfulResponseWithRsaSha256SigningAlgorithmWhenSessionIsValid() {
         when(sessionRepository.deleteAndGet(SESSION_ID)).thenReturn(Optional.of(session));
-        SamlResponseFromValue<org.opensaml.saml.saml2.core.Response> samlResponse = new SamlResponseFromValue<org.opensaml.saml.saml2.core.Response>(null, (r) -> null, null, null);
+        SamlResponseFromValue<org.opensaml.saml.saml2.core.Response> samlResponse = new SamlResponseFromValue<>(null, (r) -> null, null, null);
         when(rsaSha256AuthnResponseService.getSuccessResponse(session, SCHEME_NAME)).thenReturn(samlResponse);
         when(samlResponseRedirectViewFactory.sendSamlResponse(samlResponse)).thenReturn(Response.ok().build());
 
@@ -95,7 +95,7 @@ public class EidasConsentResourceTest {
     @Test
     public void postShouldReturnASuccessfulResponseWithRsaSsaPsaSigningAlgorithmWhenSessionIsValid() {
         when(sessionRepository.deleteAndGet(SESSION_ID)).thenReturn(Optional.of(session));
-        SamlResponseFromValue<org.opensaml.saml.saml2.core.Response> samlResponse = new SamlResponseFromValue<org.opensaml.saml.saml2.core.Response>(null, (r) -> null, null, null);
+        SamlResponseFromValue<org.opensaml.saml.saml2.core.Response> samlResponse = new SamlResponseFromValue<>(null, (r) -> null, null, null);
         when(rsaSsaPssAuthnResponseService.getSuccessResponse(session, SCHEME_NAME)).thenReturn(samlResponse);
         when(samlResponseRedirectViewFactory.sendSamlResponse(samlResponse)).thenReturn(Response.ok().build());
 

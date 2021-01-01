@@ -59,7 +59,7 @@ public class ErrorHandlingClientTest {
         when(client.target(any(URI.class))).thenReturn(webTarget);
         when(webTarget.request()).thenReturn(webTargetBuilder);
         when(webTargetBuilder.accept(ArgumentMatchers.<MediaType>any())).thenReturn(webTargetBuilder);
-        when(webTargetBuilder.cookie(ArgumentMatchers.any())).thenReturn(webTargetBuilder);
+        when(webTargetBuilder.cookie(any())).thenReturn(webTargetBuilder);
         when(webTargetBuilder.header(anyString(), any())).thenReturn(webTargetBuilder);
 
         errorHandlingClient.get(testUri, cookies, headers);

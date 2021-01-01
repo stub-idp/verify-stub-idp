@@ -22,6 +22,8 @@ import static org.mockito.Mockito.when;
 @ExtendWith(MockitoExtension.class)
 public class SyslogEventFormatterTest {
 
+    private static final StackTraceElement[] STACK_TRACE_ELEMENTS = {};
+
     public SyslogEventFormatter formatter;
     private final String hostname = "test-hostname";
     private final String tag = "test-tag";
@@ -86,7 +88,7 @@ public class SyslogEventFormatterTest {
     private LoggingEvent createLoggingEvent(Level level) {
         final LoggingEvent event = new LoggingEvent();
         event.setLevel(level);
-        event.setCallerData(new StackTraceElement[]{});
+        event.setCallerData(STACK_TRACE_ELEMENTS);
         return event;
     }
 }

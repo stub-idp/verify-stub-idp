@@ -23,8 +23,7 @@ public class IdaKeyStoreCredentialRetriever {
     public Credential getSigningCredential() {
         UsageType usageType = UsageType.SIGNING;
         KeyPair keyPair = keyStore.getSigningKeyPair();
-        BasicCredential credential = buildCredential(keyPair.getPublic(), keyPair.getPrivate(), usageType);
-        return credential;
+        return buildCredential(keyPair.getPublic(), keyPair.getPrivate(), usageType);
     }
 
     public X509Certificate getSigningCertificate() {

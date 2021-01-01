@@ -9,6 +9,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class Cookies {
+    private static final NewCookie[] NEW_COOKIES = new NewCookie[0];
+
     final Map<String, NewCookie> cookies;
 
     public Cookies() {
@@ -20,13 +22,13 @@ public class Cookies {
             if (v.getMaxAge() == 0) {
                 cookies.remove(k);
             } else {
-                this.cookies.put(k, v);
+                cookies.put(k, v);
             }
         });
     }
 
     public void setSessionCookie(String sessionId) {
-        this.cookies.put(StubIdpCookieNames.SESSION_COOKIE_NAME,
+        cookies.put(StubIdpCookieNames.SESSION_COOKIE_NAME,
                 new HttpOnlyNewCookie(StubIdpCookieNames.SESSION_COOKIE_NAME,
                                         sessionId,
                                         "/",
@@ -35,16 +37,16 @@ public class Cookies {
                                         false));
     }
 
-    public NewCookie getSessionCookie() { return this.cookies.get(StubIdpCookieNames.SESSION_COOKIE_NAME); }
+    public NewCookie getSessionCookie() { return cookies.get(StubIdpCookieNames.SESSION_COOKIE_NAME); }
 
-    public NewCookie getSecureCookie() { return this.cookies.get(StubIdpCookieNames.SECURE_COOKIE_NAME); }
+    public NewCookie getSecureCookie() { return cookies.get(StubIdpCookieNames.SECURE_COOKIE_NAME); }
 
     public NewCookie getCookie(String name) {
         return cookies.get(name);
     }
 
     public NewCookie[] getCookies() {
-        return cookies.isEmpty() ? null : cookies.values().toArray(new NewCookie[0]);
+        return cookies.isEmpty() ? null : cookies.values().toArray(NEW_COOKIES);
     }
 
 }

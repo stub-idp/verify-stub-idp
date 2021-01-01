@@ -72,7 +72,7 @@ public class CoreTransformersFactory {
                 new NotNullSamlStringValidator(),
                 new Base64StringDecoder(),
                 sizeValidator,
-                new OpenSamlXMLObjectUnmarshaller<TOutput>(new SamlObjectParser())
+                new OpenSamlXMLObjectUnmarshaller<>(new SamlObjectParser())
         );
     }
 

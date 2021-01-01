@@ -26,7 +26,7 @@ final class HardCodedTestUserList {
     private HardCodedTestUserList() {}
 
     static List<DatabaseIdpUser> getHardCodedTestUsers(String idpFriendlyId) {
-        return idpUsers.computeIfAbsent(idpFriendlyId, id -> _getHardCodedTestUsers(id));
+        return idpUsers.computeIfAbsent(idpFriendlyId, HardCodedTestUserList::_getHardCodedTestUsers);
     }
 
     private static List<DatabaseIdpUser> _getHardCodedTestUsers(String idpFriendlyId) {
@@ -188,7 +188,7 @@ final class HardCodedTestUserList {
     }
 
     static List<DatabaseEidasUser> getHardCodedCountryTestUsers(String idpFriendlyId) {
-        return eidasUsers.computeIfAbsent(idpFriendlyId, id -> _getHardCodedCountryTestUsers(id));
+        return eidasUsers.computeIfAbsent(idpFriendlyId, HardCodedTestUserList::_getHardCodedCountryTestUsers);
     }
 
     private static List<DatabaseEidasUser> _getHardCodedCountryTestUsers(String idpFriendlyId) {

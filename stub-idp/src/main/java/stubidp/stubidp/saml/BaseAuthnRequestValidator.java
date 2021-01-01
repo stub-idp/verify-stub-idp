@@ -75,9 +75,8 @@ public abstract class BaseAuthnRequestValidator {
     private MetadataBackedSignatureValidator getMetadataBackedSignatureValidator(MetadataResolver metadataResolver, KeyStore trustStore) {
         CertificateChainValidator certificateChainValidator = new CertificateChainValidator(new PKIXParametersProvider(), new X509CertificateFactory());
         CertificateChainEvaluableCriterion c = new CertificateChainEvaluableCriterion(certificateChainValidator, trustStore);
-        MetadataBackedSignatureValidator metadataBackedSignatureValidator = MetadataBackedSignatureValidator
+        return MetadataBackedSignatureValidator
                 .withCertificateChainValidation(new ExplicitKeySignatureTrustEngine(getMetadataCredentialResolver(metadataResolver), DefaultSecurityConfigurationBootstrap.buildBasicInlineKeyInfoCredentialResolver()), c);
-        return metadataBackedSignatureValidator;
     }
 
     private MetadataCredentialResolver getMetadataCredentialResolver(MetadataResolver metadataResolver) {
@@ -103,7 +102,7 @@ public abstract class BaseAuthnRequestValidator {
 
         @Override
         public List<MetricFamilySamples> collect() {
-            GaugeMetricFamily sessionsGauge = new GaugeMetricFamily("stubidp_replay_cache_total", "Total number of requests in the replay cache (idp + eidas).", concurrentMapIdExpirationCache.getKeyCount());
+            final GaugeMetricFamily sessionsGauge = new GaugeMetricFamily("stubidp_replay_cache_total", "Total number of requests in the replay cache (idp + eidas).", concurrentMapIdExpirationCache.getKeyCount());
             return List.of(sessionsGauge);
         }
     }

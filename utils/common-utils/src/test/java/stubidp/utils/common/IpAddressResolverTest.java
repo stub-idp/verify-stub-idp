@@ -4,7 +4,6 @@ import org.junit.jupiter.api.Test;
 import stubidp.utils.common.IpAddressResolver;
 
 import java.net.URI;
-import java.net.UnknownHostException;
 
 import static org.assertj.core.api.Assertions.assertThat;
 

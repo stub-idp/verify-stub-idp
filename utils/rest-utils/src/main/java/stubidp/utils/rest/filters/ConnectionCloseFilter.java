@@ -5,7 +5,6 @@ import stubidp.utils.rest.configuration.ServiceStatus;
 import javax.ws.rs.container.ContainerRequestContext;
 import javax.ws.rs.container.ContainerResponseContext;
 import javax.ws.rs.container.ContainerResponseFilter;
-import java.io.IOException;
 
 public class ConnectionCloseFilter implements ContainerResponseFilter {
 

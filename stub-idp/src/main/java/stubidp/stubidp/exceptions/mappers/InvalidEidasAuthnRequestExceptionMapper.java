@@ -18,7 +18,7 @@ public class InvalidEidasAuthnRequestExceptionMapper implements ExceptionMapper<
             .help("Number of invalid eidas authn requests received.")
             .register();
 
-    private static final Logger LOG = LoggerFactory.getLogger(InvalidEidasAuthnRequestException.class);
+    private static final Logger LOG = LoggerFactory.getLogger(InvalidEidasAuthnRequestExceptionMapper.class);
 
     @Override
     public Response toResponse(InvalidEidasAuthnRequestException exception) {

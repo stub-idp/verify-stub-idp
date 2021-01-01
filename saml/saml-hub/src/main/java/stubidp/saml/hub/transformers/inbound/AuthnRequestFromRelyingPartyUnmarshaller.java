@@ -33,7 +33,7 @@ public class AuthnRequestFromRelyingPartyUnmarshaller {
         final String issuerId = authnRequest.getIssuer().getValue();
         final Instant issueInstant = authnRequest.getIssueInstant();
         final Boolean forceAuthn = authnRequest.isForceAuthn();
-        final Optional<String> assertionConsumerServiceURL = Optional.ofNullable(authnRequest.getAssertionConsumerServiceURL());
+        final Optional<String> assertionConsumerServiceURL = ofNullable(authnRequest.getAssertionConsumerServiceURL());
         final Integer assertionConsumerServiceIndex = authnRequest.getAssertionConsumerServiceIndex();
         final Signature signature = authnRequest.getSignature();
         final Optional<String> verifyServiceProviderVersion = extractVerifyServiceProviderVersion(authnRequest.getExtensions(), issuerId);
@@ -43,7 +43,7 @@ public class AuthnRequestFromRelyingPartyUnmarshaller {
                 issuerId,
                 issueInstant,
                 URI.create(authnRequest.getDestination()),
-                Optional.ofNullable(forceAuthn),
+                ofNullable(forceAuthn),
                 assertionConsumerServiceURL.map(URI::create),
                 ofNullable(assertionConsumerServiceIndex),
                 ofNullable(signature),
@@ -52,7 +52,7 @@ public class AuthnRequestFromRelyingPartyUnmarshaller {
     }
 
     private Optional<String> extractVerifyServiceProviderVersion(Extensions extensions, String issuerId) {
-        return Optional.ofNullable(extensions).flatMap(item -> {
+        return ofNullable(extensions).flatMap(item -> {
             try {
                 return item.getUnknownXMLObjects().stream()
                         .filter(EncryptedAttribute.class::isInstance)

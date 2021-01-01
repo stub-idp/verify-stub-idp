@@ -93,7 +93,7 @@ public class HubAttributeQueryRequestBuilder {
         if(userAccountCreationAttributes.isEmpty()){
            List<UserAccountCreationAttribute> userAccountCreationAttributeList = new ArrayList<>();
 
-           userAccountCreationAttributes = Optional.ofNullable(userAccountCreationAttributeList);
+           userAccountCreationAttributes = ofNullable(userAccountCreationAttributeList);
         }
         this.userAccountCreationAttributes.get().add(userAccountCreationAttribute);
         return this;

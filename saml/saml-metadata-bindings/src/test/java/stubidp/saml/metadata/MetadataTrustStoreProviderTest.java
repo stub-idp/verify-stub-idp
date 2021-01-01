@@ -38,7 +38,7 @@ public class MetadataTrustStoreProviderTest {
         Mockito.when(keyStoreLoader.load(filePath,password)).thenReturn(emptyKeyStoreRule.getKeyStore());
         MetadataTrustStoreProvider metadataTrustStoreProvider = new MetadataTrustStoreProvider(keyStoreLoader, filePath, password);
 
-        Assertions.assertThrows(EmptyTrustStoreException.class, () -> metadataTrustStoreProvider.get());
+        Assertions.assertThrows(EmptyTrustStoreException.class, metadataTrustStoreProvider::get);
     }
 
     @Test
@@ -46,7 +46,7 @@ public class MetadataTrustStoreProviderTest {
         Mockito.when(keyStoreLoader.load(filePath,password)).thenReturn(KeyStore.getInstance(KeyStore.getDefaultType()));
         MetadataTrustStoreProvider metadataTrustStoreProvider = new MetadataTrustStoreProvider(keyStoreLoader, filePath, password);
 
-        Assertions.assertThrows(RuntimeException.class, () -> metadataTrustStoreProvider.get());
+        Assertions.assertThrows(RuntimeException.class, metadataTrustStoreProvider::get);
     }
 
     @Test

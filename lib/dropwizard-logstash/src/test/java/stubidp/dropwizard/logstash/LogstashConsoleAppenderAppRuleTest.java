@@ -45,7 +45,7 @@ public class LogstashConsoleAppenderAppRuleTest {
 
         final List<AccessEventFormat> list = parseLogsOfType(AccessEventFormat.class, outputCapture);
 
-        List<AccessEventFormat> accessEventStream = list.stream().filter(accessLog -> accessLog.getMethod().equals("GET")).collect(toList());
+        List<AccessEventFormat> accessEventStream = list.stream().filter(accessLog -> "GET".equals(accessLog.getMethod())).collect(toList());
         assertThat(accessEventStream.size()).as("check there's an access log in the following:\n%s", List.of(outputCapture.toString().split(System.lineSeparator()))).isGreaterThanOrEqualTo(1);
         AccessEventFormat accessEvent = accessEventStream.get(0);
         assertThat(accessEvent.getMethod()).isEqualTo("GET");
@@ -75,7 +75,7 @@ public class LogstashConsoleAppenderAppRuleTest {
 
         final List<AccessEventFormat> list = parseLogsOfType(AccessEventFormat.class, outputCapture);
 
-        List<AccessEventFormat> accessEventStream = list.stream().filter(accessLog -> accessLog.getMethod().equals("GET")).collect(toList());
+        List<AccessEventFormat> accessEventStream = list.stream().filter(accessLog -> "GET".equals(accessLog.getMethod())).collect(toList());
         assertThat(accessEventStream.size()).as("check there's an access log in the following:\n%s", List.of(outputCapture.toString().split(System.lineSeparator()))).isGreaterThanOrEqualTo(1);
         AccessEventFormat accessEvent = accessEventStream.get(0);
         assertThat(accessEvent.getReferer()).isEqualTo("-");

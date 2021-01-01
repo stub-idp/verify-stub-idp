@@ -64,7 +64,7 @@ public class CryptoHelperTest {
             String idpEntityId = EXAMPLE_IDP + "/" + i;
             encryptedValues.put(idpEntityId, cryptoHelper.encrypt_yesIKnowThisCryptoCodeHasNotBeenAudited(idpEntityId).get());
         }
-        List<String> shuffledKeys = new ArrayList<String>(encryptedValues.keySet());
+        List<String> shuffledKeys = new ArrayList<>(encryptedValues.keySet());
         Collections.shuffle(shuffledKeys);
         for(String key:shuffledKeys) {
             assertThat(key).isEqualTo(cryptoHelper.decrypt_yesIKnowThisCryptoCodeHasNotBeenAudited(encryptedValues.get(key)).get());

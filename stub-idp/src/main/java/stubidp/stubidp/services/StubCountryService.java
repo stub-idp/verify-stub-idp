@@ -7,7 +7,6 @@ import stubidp.stubidp.domain.DatabaseEidasUser;
 import stubidp.stubidp.domain.EidasScheme;
 import stubidp.stubidp.domain.EidasUser;
 import stubidp.stubidp.exceptions.IncompleteRegistrationException;
-import stubidp.stubidp.exceptions.InvalidDateException;
 import stubidp.stubidp.exceptions.InvalidSessionIdException;
 import stubidp.stubidp.exceptions.InvalidUsernameOrPasswordException;
 import stubidp.stubidp.exceptions.UsernameAlreadyTakenException;
@@ -103,7 +102,8 @@ public class StubCountryService {
     private EidasUser createEidasUser(Optional<DatabaseEidasUser> optionalUser) {
 
         DatabaseEidasUser user = optionalUser.get();
-        EidasUser eidasUser = new EidasUser(
+
+        return new EidasUser(
                 user.getFirstname().getValue(),
                 getOptionalValue(user.getNonLatinFirstname()),
                 user.getSurname().getValue(),
@@ -113,8 +113,6 @@ public class StubCountryService {
                 Optional.empty(),
                 Optional.empty()
         );
-
-        return eidasUser;
     }
 
     private Optional<String> getOptionalValue(Optional<SimpleMdsValue<String>> fieldValue) {
@@ -134,7 +132,7 @@ public class StubCountryService {
 
     private boolean isMandatoryDataPresent(String... args) {
         for (String arg : args) {
-            if (arg == null || arg.trim().length() == 0) {
+            if (arg == null || arg.trim().isEmpty()) {
                 return false;
             }
         }

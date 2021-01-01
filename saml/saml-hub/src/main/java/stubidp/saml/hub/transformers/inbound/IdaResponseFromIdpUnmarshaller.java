@@ -34,7 +34,7 @@ public class IdaResponseFromIdpUnmarshaller<T extends IdpAssertionUnmarshaller<O
                 .flatMap(a -> Optional.ofNullable(a.getSubject()))
                 .flatMap(s -> Optional.ofNullable(s.getSubjectConfirmations().get(0).getSubjectConfirmationData().getNotOnOrAfter()));
 
-        return new InboundResponseFromIdp<O>(
+        return new InboundResponseFromIdp<>(
                 validatedResponse.getID(),
                 validatedResponse.getInResponseTo(),
                 validatedResponse.getIssuer().getValue(),

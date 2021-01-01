@@ -2,7 +2,6 @@ package stubidp.saml.metadata;
 
 import certificates.values.CACertificates;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import io.dropwizard.Application;
 import io.dropwizard.Configuration;
 import io.dropwizard.client.JerseyClientBuilder;
@@ -60,8 +59,8 @@ public class FederationMetadataWithoutTrustStoresBundleTest {
         TestApplication.class,
         ResourceHelpers.resourceFilePath("test-app.yml"),
         ConfigOverride.config("metadata.uri", "http://localhost:" + verifyMetadataServer.getPort() + VERIFY_METADATA_PATH),
-        ConfigOverride.config("metadata.trustStore.path", () -> metadataKeyStoreRule.getAbsolutePath()),
-        ConfigOverride.config("metadata.trustStore.password", () -> metadataKeyStoreRule.getPassword()),
+        ConfigOverride.config("metadata.trustStore.path", metadataKeyStoreRule::getAbsolutePath),
+        ConfigOverride.config("metadata.trustStore.password", metadataKeyStoreRule::getPassword),
         ConfigOverride.config("metadata.unknownProperty", () -> "unknownValue")
     );
 

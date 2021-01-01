@@ -119,7 +119,7 @@ public abstract class AbstractCSRFCheckProtectionFilter implements ContainerRequ
             status = Status.VERIFIED;
         }
 
-        if(status != Status.VERIFIED) {
+        if(Status.VERIFIED != status) {
             throw new CSRFCouldNotValidateSessionException(status);
         }
 

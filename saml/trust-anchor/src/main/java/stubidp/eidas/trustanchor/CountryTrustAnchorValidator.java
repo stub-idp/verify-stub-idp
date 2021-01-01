@@ -127,7 +127,7 @@ public class CountryTrustAnchorValidator {
 
     private boolean hasCertificates(JWK anchor) {
         return Optional.ofNullable(anchor.getX509CertChain())
-                .map(certChain -> certChain.size() > 0)
+                .map(certChain -> !certChain.isEmpty())
                 .orElse(false);
     }
 }

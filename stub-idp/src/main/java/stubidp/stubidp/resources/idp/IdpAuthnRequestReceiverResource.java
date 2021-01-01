@@ -51,6 +51,8 @@ public class IdpAuthnRequestReceiverResource {
             .help("Number of received verify authn requests.")
             .register();
 
+    private static final NewCookie[] NEW_COOKIES = new NewCookie[0];
+
     private final AuthnRequestReceiverService authnRequestReceiverService;
     private final CookieFactory cookieFactory;
     private final Boolean isSecureCookieEnabled;
@@ -108,6 +110,6 @@ public class IdpAuthnRequestReceiverResource {
         }
         cookies.add(cookieFactory.createSessionIdCookie(sessionCreated.getIdpSessionId()));
 
-        return cookies.toArray(new NewCookie[0]);
+        return cookies.toArray(NEW_COOKIES);
     }
 }

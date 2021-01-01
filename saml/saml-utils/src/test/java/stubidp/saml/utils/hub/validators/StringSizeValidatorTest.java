@@ -35,12 +35,7 @@ public class StringSizeValidatorTest extends OpenSAMLRunner {
         final String input = "Ring a ring";
 
         SamlTransformationErrorManagerTestHelper.validateFail(
-                new SamlTransformationErrorManagerTestHelper.Action() {
-                    @Override
-                    public void execute() {
-                        validator.validate(input, 0, 5);
-                    }
-                },
+                () -> validator.validate(input, 0, 5),
                 SamlTransformationErrorFactory.stringTooLarge(11, 5)
         );
     }

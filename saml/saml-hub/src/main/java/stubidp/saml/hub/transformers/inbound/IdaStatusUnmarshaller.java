@@ -22,7 +22,7 @@ public abstract class IdaStatusUnmarshaller<T extends IdaStatus> {
         IdaStatusMapperStatus statusMapperStatus = getStatusMapperStatus(status);
 
         if (!statusMap.containsKey(statusMapperStatus)) {
-            throw new IllegalArgumentException(MessageFormat.format("{0} is not valid in this context", statusMapperStatus));
+            throw new IllegalArgumentException(format("{0} is not valid in this context", statusMapperStatus));
         }
 
         String message = null;

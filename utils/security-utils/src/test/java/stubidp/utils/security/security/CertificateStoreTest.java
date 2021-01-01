@@ -6,9 +6,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
 import stubidp.utils.security.configuration.PublicKeyFileConfiguration;
 
-import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.net.URISyntaxException;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -46,11 +43,9 @@ public class CertificateStoreTest {
         CertificateStore certificateStore = new CertificateStore(List.of(publicKeyConfiguration, publicKeyConfiguration2), List.of(publicKeyConfiguration));
         final List<Certificate> encryptionCertificates = certificateStore.getEncryptionCertificates();
 
-        encryptionCertificates.forEach(cert -> {
-            assertThat(List.of(
-                    stripHeaders(publicKeyConfiguration.getCert()),
-                    stripHeaders(publicKeyConfiguration2.getCert()))).contains(cert.getCertificate());
-        });
+        encryptionCertificates.forEach(cert -> assertThat(List.of(
+                stripHeaders(publicKeyConfiguration.getCert()),
+                stripHeaders(publicKeyConfiguration2.getCert()))).contains(cert.getCertificate()));
     }
 
     private String stripHeaders(final String originalCertificate) {

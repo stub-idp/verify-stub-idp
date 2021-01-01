@@ -38,7 +38,7 @@ public class PersonNameMarshallerTest extends OpenSAMLRunner {
         assertThat(marshalledElement.getNamespaceURI()).isEqualTo(PersonName.DEFAULT_ELEMENT_NAME.getNamespaceURI());
 
         assertThat(marshalledElement.getAttributeNS(XMLConstants.XSI_NS, XMLConstants.XSI_TYPE_ATTRIB_NAME.getLocalPart())).isEqualTo(String.format("%s:%s", IDA_PREFIX, PersonName.TYPE_LOCAL_NAME));
-        assertThat(marshalledElement.getAttributeNS(IdaConstants.IDA_NS, PersonName.LANGUAGE_ATTRIB_NAME)).isEqualTo(language);
+        assertThat(marshalledElement.getAttributeNS(IDA_NS, PersonName.LANGUAGE_ATTRIB_NAME)).isEqualTo(language);
         assertThat(marshalledElement.getTextContent()).isEqualTo(name);
     }
 
@@ -65,7 +65,7 @@ public class PersonNameMarshallerTest extends OpenSAMLRunner {
 
         Element marshalledElement = marshaller.marshall(personName);
 
-        assertThat(marshalledElement.getAttributeNodeNS(IDA_NS, PersonName.FROM_ATTRIB_NAME).getPrefix()).isEqualTo(IdaConstants.IDA_PREFIX);
+        assertThat(marshalledElement.getAttributeNodeNS(IDA_NS, PersonName.FROM_ATTRIB_NAME).getPrefix()).isEqualTo(IDA_PREFIX);
     }
 
     @Test
@@ -84,7 +84,7 @@ public class PersonNameMarshallerTest extends OpenSAMLRunner {
 
         Element marshalledElement = marshaller.marshall(personName);
 
-        assertThat(marshalledElement.getAttributeNodeNS(IDA_NS, PersonName.TO_ATTRIB_NAME).getPrefix()).isEqualTo(IdaConstants.IDA_PREFIX);
+        assertThat(marshalledElement.getAttributeNodeNS(IDA_NS, PersonName.TO_ATTRIB_NAME).getPrefix()).isEqualTo(IDA_PREFIX);
     }
 
     @Test
@@ -103,7 +103,7 @@ public class PersonNameMarshallerTest extends OpenSAMLRunner {
 
         Element marshalledElement = marshaller.marshall(personName);
 
-        assertThat(marshalledElement.getAttributeNodeNS(IDA_NS, PersonName.VERIFIED_ATTRIB_NAME).getPrefix()).isEqualTo(IdaConstants.IDA_PREFIX);
+        assertThat(marshalledElement.getAttributeNodeNS(IDA_NS, PersonName.VERIFIED_ATTRIB_NAME).getPrefix()).isEqualTo(IDA_PREFIX);
     }
 
     private void checkMarshallingVerifiedAttributeWithValue(boolean verifiedValue) throws MarshallingException {

@@ -2,9 +2,6 @@ package stubidp.utils.rest.configuration;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
-import java.lang.Boolean;
-import java.lang.Integer;
-import java.lang.String;
 
 public class AnalyticsConfiguration {
 

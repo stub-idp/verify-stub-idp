@@ -448,7 +448,6 @@ public class OpenSamlXmlObjectFactory {
 
 
     public StatusDetail createStatusDetail() {
-        StatusDetail statusDetail = (StatusDetail) openSamlBuilderFactory.getBuilder(StatusDetail.DEFAULT_ELEMENT_NAME).buildObject(StatusDetail.DEFAULT_ELEMENT_NAME);
-        return statusDetail;
+        return (StatusDetail) openSamlBuilderFactory.getBuilder(StatusDetail.DEFAULT_ELEMENT_NAME).buildObject(StatusDetail.DEFAULT_ELEMENT_NAME);
     }
 }

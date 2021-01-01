@@ -117,12 +117,12 @@ public class IdentityProviderAssertionToAssertionTransformer {
             attributeStatement.getAttributes().add(dateOfBirthAttribute);
         }
 
-        if (matchingDataset.getCurrentAddresses().size() > 0) {
+        if (!matchingDataset.getCurrentAddresses().isEmpty()) {
             Attribute currentAddressesAttribute = attributeFactory.createCurrentAddressesAttribute(matchingDataset.getCurrentAddresses());
             attributeStatement.getAttributes().add(currentAddressesAttribute);
         }
 
-        if (matchingDataset.getPreviousAddresses().size() > 0) {
+        if (!matchingDataset.getPreviousAddresses().isEmpty()) {
             Attribute previousAddressesAttribute = attributeFactory.createPreviousAddressesAttribute(matchingDataset.getPreviousAddresses());
             attributeStatement.getAttributes().add(previousAddressesAttribute);
         }

@@ -20,7 +20,7 @@ import static java.text.MessageFormat.format;
 
 @SuppressWarnings("rawtypes")
 public class TimeoutRequestRetryWithBackoffHandler implements HttpRequestRetryHandler {
-    private static final Logger LOG = LoggerFactory.getLogger(TimeoutRequestRetryHandler.class);
+    private static final Logger LOG = LoggerFactory.getLogger(TimeoutRequestRetryWithBackoffHandler.class);
     private final int numRetries;
     private final Duration retryBackoffPeriod;
     private final List<Class> defaultRetryExceptions = Arrays.asList(new Class[]{ ConnectTimeoutException.class, SocketTimeoutException.class}) ;

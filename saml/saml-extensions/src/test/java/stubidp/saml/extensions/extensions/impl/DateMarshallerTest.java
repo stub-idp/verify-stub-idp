@@ -58,7 +58,7 @@ public class DateMarshallerTest extends OpenSAMLRunner {
 
         Element marshalledElement = marshaller.marshall(date);
 
-        assertThat(marshalledElement.getAttributeNodeNS(IDA_NS, Date.FROM_ATTRIB_NAME).getPrefix()).isEqualTo(IdaConstants.IDA_PREFIX);
+        assertThat(marshalledElement.getAttributeNodeNS(IDA_NS, Date.FROM_ATTRIB_NAME).getPrefix()).isEqualTo(IDA_PREFIX);
     }
 
     @Test

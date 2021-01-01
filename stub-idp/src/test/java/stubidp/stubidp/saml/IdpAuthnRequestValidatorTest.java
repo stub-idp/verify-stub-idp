@@ -209,8 +209,7 @@ class IdpAuthnRequestValidatorTest {
                 .build());
         EntitiesDescriptor entitiesDescriptor = new EntitiesDescriptorFactory()
                 .signedEntitiesDescriptor(entityDescriptorList, METADATA_SIGNING_A_PUBLIC_CERT, METADATA_SIGNING_A_PRIVATE_KEY);
-        final String metadata = new MetadataFactory().metadata(entitiesDescriptor);
-        return metadata;
+        return new MetadataFactory().metadata(entitiesDescriptor);
     }
 
     private static class TestFileBackedTrustStoreConfiguration extends FileBackedTrustStoreConfiguration {

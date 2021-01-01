@@ -96,7 +96,8 @@ import stubidp.saml.extensions.extensions.versioning.application.ApplicationVers
 
 public abstract class IdaSamlBootstrap {
 
-    private static boolean hasBeenBootstrapped = false;
+    private static boolean hasBeenBootstrapped;
+    private static final Object lock = new Object();
 
     public static class BootstrapException extends RuntimeException {
         public BootstrapException(Exception e) {
@@ -104,18 +105,20 @@ public abstract class IdaSamlBootstrap {
         }
     }
 
-    public static synchronized void bootstrap() {
-        if (hasBeenBootstrapped) {
-            return;
-        }
+    public static void bootstrap() {
+        synchronized (lock) {
+            if (hasBeenBootstrapped) {
+                return;
+            }
 
-        try {
-            doBootstrapping();
-        } catch (InitializationException e) {
-            throw new BootstrapException(e);
-        }
+            try {
+                doBootstrapping();
+            } catch (InitializationException e) {
+                throw new BootstrapException(e);
+            }
 
-        hasBeenBootstrapped = true;
+            hasBeenBootstrapped = true;
+        }
     }
 
     private static void doBootstrapping() throws InitializationException {

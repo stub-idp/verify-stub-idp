@@ -62,7 +62,7 @@ public class GenderMarshallerTest extends OpenSAMLRunner {
 
         Element marshalledElement = marshaller.marshall(gender);
 
-        assertThat(marshalledElement.getAttributeNodeNS(IDA_NS, Gender.FROM_ATTRIB_NAME).getPrefix()).isEqualTo(IdaConstants.IDA_PREFIX);
+        assertThat(marshalledElement.getAttributeNodeNS(IDA_NS, Gender.FROM_ATTRIB_NAME).getPrefix()).isEqualTo(IDA_PREFIX);
     }
 
     @Test
@@ -82,7 +82,7 @@ public class GenderMarshallerTest extends OpenSAMLRunner {
 
         Element marshalledElement = marshaller.marshall(gender);
 
-        assertThat(marshalledElement.getAttributeNodeNS(IDA_NS, Gender.TO_ATTRIB_NAME).getPrefix()).isEqualTo(IdaConstants.IDA_PREFIX);
+        assertThat(marshalledElement.getAttributeNodeNS(IDA_NS, Gender.TO_ATTRIB_NAME).getPrefix()).isEqualTo(IDA_PREFIX);
     }
 
     @Test
@@ -101,7 +101,7 @@ public class GenderMarshallerTest extends OpenSAMLRunner {
 
         Element marshalledElement = marshaller.marshall(gender);
 
-        assertThat(marshalledElement.getAttributeNodeNS(IDA_NS, Gender.VERIFIED_ATTRIB_NAME).getPrefix()).isEqualTo(IdaConstants.IDA_PREFIX);
+        assertThat(marshalledElement.getAttributeNodeNS(IDA_NS, Gender.VERIFIED_ATTRIB_NAME).getPrefix()).isEqualTo(IDA_PREFIX);
     }
 
     private void checkMarshallingVerifiedAttributeWithValue(boolean verifiedValue) throws MarshallingException {

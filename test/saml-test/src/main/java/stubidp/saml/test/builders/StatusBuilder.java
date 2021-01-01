@@ -20,12 +20,8 @@ public class StatusBuilder {
 
     public Status build() {
         Status status = openSamlXmlObjectFactory.createStatus();
-        if (statusCode.isPresent()) {
-            status.setStatusCode(statusCode.get());
-        }
-        if (message.isPresent()) {
-            status.setStatusMessage(message.get());
-        }
+        statusCode.ifPresent(status::setStatusCode);
+        message.ifPresent(status::setStatusMessage);
         return status;
     }
 

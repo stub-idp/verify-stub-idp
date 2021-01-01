@@ -3,7 +3,6 @@ package stubidp.saml.extensions.extensions.versioning;
 import net.shibboleth.utilities.java.support.xml.XMLConstants;
 import org.opensaml.core.xml.XMLObject;
 import org.opensaml.core.xml.io.Marshaller;
-import org.opensaml.core.xml.io.MarshallingException;
 import org.opensaml.core.xml.util.XMLObjectSupport;
 import org.opensaml.saml.common.AbstractSAMLObjectMarshaller;
 import org.w3c.dom.Element;

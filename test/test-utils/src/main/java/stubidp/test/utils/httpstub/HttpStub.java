@@ -1,5 +1,6 @@
 package stubidp.test.utils.httpstub;
 
+import java.util.Comparator;
 import java.util.Optional;
 
 public class HttpStub extends AbstractHttpStub {
@@ -29,7 +30,7 @@ public class HttpStub extends AbstractHttpStub {
             return requestsAndResponses
                     .stream()
                     .filter(requestAndResponse -> requestAndResponse.getRequest().applies(receivedRequest))
-                    .min((r1, r2) -> Integer.compare(r1.callCount(), r2.callCount()));
+                    .min(Comparator.comparingInt(RequestAndResponse::callCount));
         }
 
     }

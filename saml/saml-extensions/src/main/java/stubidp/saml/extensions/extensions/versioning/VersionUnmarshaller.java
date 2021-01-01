@@ -2,7 +2,6 @@ package stubidp.saml.extensions.extensions.versioning;
 
 import org.opensaml.core.xml.XMLObject;
 import org.opensaml.core.xml.io.Unmarshaller;
-import org.opensaml.core.xml.io.UnmarshallingException;
 import org.opensaml.saml.common.AbstractSAMLObjectUnmarshaller;
 import stubidp.saml.extensions.extensions.versioning.application.ApplicationVersion;
 

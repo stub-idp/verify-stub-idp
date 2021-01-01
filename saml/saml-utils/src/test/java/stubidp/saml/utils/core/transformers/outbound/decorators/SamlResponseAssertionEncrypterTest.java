@@ -55,7 +55,7 @@ public class SamlResponseAssertionEncrypterTest extends OpenSAMLRunner {
         List<Assertion> assertionList = spy(newArrayList(assertion));
         when(response.getAssertions()).thenReturn(assertionList);
         when(encrypter.encrypt(assertion)).thenReturn(encryptedAssertion);
-        List<EncryptedAssertion> encryptedAssertionList = spy(new ArrayList<EncryptedAssertion>());
+        List<EncryptedAssertion> encryptedAssertionList = spy(new ArrayList<>());
         when(response.getEncryptedAssertions()).thenReturn(encryptedAssertionList);
         when(response.getInResponseTo()).thenReturn("some id");
 

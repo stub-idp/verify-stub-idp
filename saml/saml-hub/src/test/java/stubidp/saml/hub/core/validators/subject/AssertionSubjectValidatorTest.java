@@ -11,6 +11,7 @@ import stubidp.saml.test.OpenSAMLRunner;
 import stubidp.saml.test.support.SamlTransformationErrorManagerTestHelper;
 import stubidp.saml.test.builders.NameIdBuilder;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static stubidp.saml.test.builders.SubjectBuilder.aSubject;
 
 public class AssertionSubjectValidatorTest extends OpenSAMLRunner {
@@ -44,10 +45,10 @@ public class AssertionSubjectValidatorTest extends OpenSAMLRunner {
     @Test
     public void validate_shouldSuccessfullyValidateMultipleNameIdFormats() {
         Subject subject = aSubject().withNameId(NameIdBuilder.aNameId().withFormat(NameIDType.PERSISTENT).build()).build();
-        assert(subject.getNameID().getFormat().equals(NameIDType.PERSISTENT));
+        assertThat(subject.getNameID().getFormat()).isEqualTo(NameIDType.PERSISTENT);
 
         subject = aSubject().withNameId(NameIdBuilder.aNameId().withFormat(NameIDType.TRANSIENT).build()).build();
-        assert(subject.getNameID().getFormat().equals(NameIDType.TRANSIENT));
+        assertThat(subject.getNameID().getFormat()).isEqualTo(NameIDType.TRANSIENT);
     }
 
     @Test

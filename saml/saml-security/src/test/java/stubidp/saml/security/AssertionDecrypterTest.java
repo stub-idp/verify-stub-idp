@@ -62,7 +62,7 @@ public class AssertionDecrypterTest extends OpenSAMLRunner {
 
     @Test
     public void shouldConvertEncryptedAssertionIntoAssertion() throws Exception {
-        final Response response = responseForAssertion(EncryptedAssertionBuilder.anEncryptedAssertionBuilder().withPublicEncryptionCert(TestCertificateStrings.HUB_TEST_PUBLIC_ENCRYPTION_CERT).withId(assertionId).build());
+        final Response response = responseForAssertion(anEncryptedAssertionBuilder().withPublicEncryptionCert(TestCertificateStrings.HUB_TEST_PUBLIC_ENCRYPTION_CERT).withId(assertionId).build());
         final List<Assertion> assertions = assertionDecrypter.decryptAssertions(new ValidatedResponse(response));
         assertThat(assertions.get(0).getID()).isEqualTo(assertionId);
     }

@@ -83,7 +83,8 @@ public class StubSpApplicationIntegrationTest {
         final Response response = get(Urls.AVAILABLE_SERVICE_RESOURCE);
         assertThat(response.getStatus()).isEqualTo(200);
         // WARNING: don't remove the type in GenericType, leads to compiler error on 11.0.2+9/travis
-        final List<AvailableServiceDto> availableServices = response.readEntity(new GenericType<List<AvailableServiceDto>>() {});
+        final List<AvailableServiceDto> availableServices = response.readEntity(new GenericType<>() {
+        });
         assertThat(availableServices).hasSize(1);
     }
 

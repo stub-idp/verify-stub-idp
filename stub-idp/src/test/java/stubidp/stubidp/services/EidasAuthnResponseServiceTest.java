@@ -161,13 +161,13 @@ class EidasAuthnResponseServiceTest {
     private void assertThatRequiredAssertionsAreIncluded(List<Attribute> attributes) {
         assertThat(attributes).hasSize(4);
         assertThat(attributes.stream().anyMatch(a -> a.getName().equals(IdaConstants.Eidas_Attributes.FirstName.NAME)
-                        && ((CurrentGivenName) a.getAttributeValues().get(0)).getFirstName().equals("Firstname")))
+                        && "Firstname".equals(((CurrentGivenName) a.getAttributeValues().get(0)).getFirstName())))
                 .isTrue();
         assertThat(attributes.stream().anyMatch(a -> a.getName().equals(IdaConstants.Eidas_Attributes.FamilyName.NAME)
-                        && ((CurrentFamilyName) a.getAttributeValues().get(0)).getFamilyName().equals("Familyname")))
+                        && "Familyname".equals(((CurrentFamilyName) a.getAttributeValues().get(0)).getFamilyName())))
                 .isTrue();
         assertThat(attributes.stream().anyMatch(a -> a.getName().equals(IdaConstants.Eidas_Attributes.PersonIdentifier.NAME)
-                        && ((PersonIdentifier) a.getAttributeValues().get(0)).getPersonIdentifier().equals("pid")))
+                        && "pid".equals(((PersonIdentifier) a.getAttributeValues().get(0)).getPersonIdentifier())))
                 .isTrue();
         assertThat(attributes.stream().anyMatch(a -> a.getName().equals(IdaConstants.Eidas_Attributes.DateOfBirth.NAME)
                         && ((DateOfBirth) a.getAttributeValues().get(0)).getDateOfBirth().equals(dateOfBirth)))
@@ -177,11 +177,11 @@ class EidasAuthnResponseServiceTest {
 
     private void assertThatNonLatinAssertionsAreIncluded(List<Attribute> attributes) {
         assertThat(attributes.stream().anyMatch(a -> a.getName().equals(IdaConstants.Eidas_Attributes.FirstName.NAME)
-                && ((CurrentGivenName) a.getAttributeValues().get(1)).getFirstName().equals("nonLatinFirstname") &&
+                && "nonLatinFirstname".equals(((CurrentGivenName) a.getAttributeValues().get(1)).getFirstName()) &&
                 !((CurrentGivenName) a.getAttributeValues().get(1)).isLatinScript()
         )).isTrue();
         assertThat(attributes.stream().anyMatch(a -> a.getName().equals(IdaConstants.Eidas_Attributes.FamilyName.NAME)
-                && ((CurrentFamilyName) a.getAttributeValues().get(1)).getFamilyName().equals("nonLatinFamilyname") &&
+                && "nonLatinFamilyname".equals(((CurrentFamilyName) a.getAttributeValues().get(1)).getFamilyName()) &&
                 !((CurrentFamilyName) a.getAttributeValues().get(1)).isLatinScript()
         )).isTrue();
     }

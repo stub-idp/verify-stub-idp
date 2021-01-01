@@ -38,13 +38,8 @@ public class IdpSsoDescriptorBuilder {
     public IDPSSODescriptor build() {
         IDPSSODescriptor descriptor = new IDPSSODescriptorBuilder().buildObject();
 
-        if (protocol.isPresent()) {
-            descriptor.addSupportedProtocol(protocol.get());
-        }
-
-        if (singleSignOnService.isPresent()) {
-            descriptor.getSingleSignOnServices().add(singleSignOnService.get());
-        }
+        protocol.ifPresent(descriptor::addSupportedProtocol);
+        singleSignOnService.ifPresent(signOnService -> descriptor.getSingleSignOnServices().add(signOnService));
 
         if (addDefaultSigningKey) {
             descriptor.getKeyDescriptors().add(defaultSigningKeyDescriptor);

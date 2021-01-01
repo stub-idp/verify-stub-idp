@@ -34,7 +34,7 @@ import static java.util.stream.Collectors.toList;
 
 public class EidasMetadataResolverRepository implements MetadataResolverRepository {
 
-    private final Logger log = LoggerFactory.getLogger(EidasMetadataResolverRepository.class);
+    private static final Logger log = LoggerFactory.getLogger(EidasMetadataResolverRepository.class);
     private final EidasTrustAnchorResolver trustAnchorResolver;
     private final DropwizardMetadataResolverFactory dropwizardMetadataResolverFactory;
     private final MetadataResolverConfigBuilder metadataResolverConfigBuilder;

@@ -19,9 +19,7 @@ public class NameIdPolicyBuilder {
     public NameIDPolicy build() {
         NameIDPolicy nameIdPolicy = openSamlXmlObjectFactory.createNameIdPolicy();
 
-        if (format.isPresent()) {
-            nameIdPolicy.setFormat(format.get());
-        }
+        format.ifPresent(nameIdPolicy::setFormat);
 
         return nameIdPolicy;
     }

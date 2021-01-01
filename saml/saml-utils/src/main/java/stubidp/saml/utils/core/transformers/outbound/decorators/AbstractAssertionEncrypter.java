@@ -27,7 +27,7 @@ public abstract class AbstractAssertionEncrypter<T> {
     }
 
     public T encryptAssertions(T samlMessage) {
-        if (getAssertions(samlMessage).size() > 0) {
+        if (!getAssertions(samlMessage).isEmpty()) {
             String entityToEncryptFor = entityToEncryptForLocator.fromRequestId(getRequestId(samlMessage));
             Credential credential = credentialResolver.getEncryptingCredential(entityToEncryptFor);
 

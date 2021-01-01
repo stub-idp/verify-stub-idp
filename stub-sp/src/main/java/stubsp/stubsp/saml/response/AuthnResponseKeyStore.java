@@ -11,7 +11,7 @@ import java.util.List;
 
 public class AuthnResponseKeyStore implements SigningKeyStore {
 
-    private final Logger logger = LoggerFactory.getLogger(AuthnResponseKeyStore.class);
+    private static final Logger logger = LoggerFactory.getLogger(AuthnResponseKeyStore.class);
     private final IdpMetadataPublicKeyStore idpMetadataPublicKeyStore;
 
     @Inject

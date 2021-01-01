@@ -23,7 +23,7 @@ public class CredentialFactorySignatureValidator extends SignatureValidator {
 
     @Override
     protected List<Criterion> getAdditionalCriteria(String entityId, QName role) {
-        return Collections.singletonList(new Criterion() {});
+        return Collections.singletonList(new MyCriterion());
     }
 
     @Override
@@ -34,4 +34,6 @@ public class CredentialFactorySignatureValidator extends SignatureValidator {
         KeyInfoCredentialResolver kiResolver = DefaultSecurityConfigurationBootstrap.buildBasicInlineKeyInfoCredentialResolver();
         return new ExplicitKeySignatureTrustEngine(credResolver, kiResolver);
     }
+
+    private static class MyCriterion implements Criterion {}
 }

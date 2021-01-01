@@ -1,17 +1,20 @@
 package stubidp.utils.rest.configuration;
 
 public class ServiceStatus {
-    private static ServiceStatus instance = null;
+    private static ServiceStatus instance;
+    private static Object lock = new Object();
     private volatile boolean serverStatus = true;
 
     private ServiceStatus() {
     }
 
-    public static synchronized ServiceStatus getInstance() {
-        if (instance == null) {
-            instance = new ServiceStatus();
+    public static ServiceStatus getInstance() {
+        synchronized (lock) {
+            if (instance == null) {
+                instance = new ServiceStatus();
+            }
+            return instance;
         }
-        return instance;
     }
 
     public boolean isServerStatusOK() {

@@ -15,7 +15,7 @@ import java.util.Arrays;
 import java.util.List;
 
 public class KeyStoreResource implements ManagedFileResource {
-    private final static String password = "password";
+    private static final String password = "password";
     private final File file;
     private final List<KeyEntry> keys;
     private final List<CertificateEntry> certificates;

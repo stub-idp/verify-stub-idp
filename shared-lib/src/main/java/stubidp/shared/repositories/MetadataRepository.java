@@ -58,7 +58,7 @@ public class MetadataRepository {
         try {
             return StreamSupport.stream(metadataResolver.getRoleDescriptorResolver().resolve(criteriaSet).spliterator(), false)
                     .flatMap(x -> x.getKeyDescriptors().stream())
-                    .filter(x -> usageType.equals(x.getUse()))
+                    .filter(x -> usageType == x.getUse())
                     .flatMap(x -> extractAllCerts(x).stream())
                     .collect(Collectors.toUnmodifiableSet());
         } catch (ResolverException e) {

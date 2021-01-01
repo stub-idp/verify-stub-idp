@@ -31,9 +31,9 @@ public class EncryptionAlgorithmValidator {
         }
 
         EncryptionMethod encryptionMethod;
-        if (encryptedElement.getEncryptedKeys().size() != 0) {
+        if (!encryptedElement.getEncryptedKeys().isEmpty()) {
             encryptionMethod = encryptedElement.getEncryptedKeys().get(0).getEncryptionMethod();
-        } else if (encryptedElement.getEncryptedData().getKeyInfo().getEncryptedKeys().size() != 0) {
+        } else if (!encryptedElement.getEncryptedData().getKeyInfo().getEncryptedKeys().isEmpty()) {
             encryptionMethod = encryptedElement.getEncryptedData().getKeyInfo().getEncryptedKeys().get(0).getEncryptionMethod();
         } else {
             SamlValidationSpecificationFailure failure = SamlTransformationErrorFactory.unableToLocateEncryptedKey();

@@ -31,7 +31,7 @@ public class SignatureFactoryTest extends OpenSAMLRunner {
         when(idaKeyStoreCredentialRetriever.getSigningCredential()).thenReturn(null);
         when(idaKeyStoreCredentialRetriever.getSigningCertificate()).thenReturn(null);
 
-        final Exception exception = Assertions.assertThrows(Exception.class, () -> signatureFactory.createSignature());
+        final Exception exception = Assertions.assertThrows(Exception.class, signatureFactory::createSignature);
         assertThat(exception.getMessage()).isEqualTo("Unable to generate key info without a signing certificate");
     }
 }

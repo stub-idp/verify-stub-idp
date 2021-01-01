@@ -11,7 +11,7 @@ public final class SamlTransformationErrorManagerTestHelper {
     private SamlTransformationErrorManagerTestHelper() {}
 
     public static void validateFail(Action action, SamlValidationSpecificationFailure failure) {
-        final SamlTransformationErrorException e = Assertions.assertThrows(SamlTransformationErrorException.class, () -> action.execute());
+        final SamlTransformationErrorException e = Assertions.assertThrows(SamlTransformationErrorException.class, action::execute);
         assertThat(e.getMessage()).isEqualTo(failure.getErrorMessage());
         assertThat(e.getLogLevel()).isEqualTo(failure.getLogLevel());
     }

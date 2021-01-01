@@ -118,7 +118,7 @@ public class IdpUserService {
 
     private boolean isMandatoryDataPresent(String... args) {
         for (String arg : args) {
-            if (arg == null || arg.trim().length() == 0) {
+            if (arg == null || arg.trim().isEmpty()) {
                 return false;
             }
         }

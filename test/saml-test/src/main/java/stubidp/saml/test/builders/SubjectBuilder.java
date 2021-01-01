@@ -24,9 +24,7 @@ public class SubjectBuilder {
     public Subject build() {
         Subject subject = openSamlXmlObjectFactory.createSubject();
 
-        if (nameIdValue.isPresent()) {
-            subject.setNameID(nameIdValue.get());
-        }
+        nameIdValue.ifPresent(subject::setNameID);
 
         if (shouldAddDefaultSubjectConfirmation) {
             subjectConfirmations.add(SubjectConfirmationBuilder.aSubjectConfirmation().build());

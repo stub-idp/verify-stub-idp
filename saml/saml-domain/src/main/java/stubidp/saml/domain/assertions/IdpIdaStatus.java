@@ -38,7 +38,7 @@ public final class IdpIdaStatus implements IdaStatus {
     }
 
     private IdpIdaStatus(Status status) {
-        this(status, Optional.empty());
+        this(status, empty());
     }
 
     private IdpIdaStatus(Status status, Optional<String> message) {
@@ -86,7 +86,7 @@ public final class IdpIdaStatus implements IdaStatus {
                 final IdpIdaStatus.Status statusCode,
                 final Optional<String> message) {
 
-            if (!statusCode.equals(RequesterError)) {
+            if (statusCode != RequesterError) {
                 return new IdpIdaStatus(statusCode);
             }
 

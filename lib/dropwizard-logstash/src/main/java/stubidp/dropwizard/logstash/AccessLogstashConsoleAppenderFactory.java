@@ -42,12 +42,7 @@ public class AccessLogstashConsoleAppenderFactory extends ConsoleAppenderFactory
                                          LevelFilterFactory<IAccessEvent> levelFilterFactory,
                                          AsyncAppenderFactory<IAccessEvent> asyncAppenderFactory) {
 
-        AccessEventCompositeJsonEncoder encoder = new AccessEventCompositeJsonEncoder() {
-            @Override
-            protected CompositeJsonFormatter<IAccessEvent> createFormatter() {
-                return new CustomFormatter(this);
-            }
-        };
+        AccessEventCompositeJsonEncoder encoder = new MyAccessEventCompositeJsonEncoder();
         encoder.setContext(context);
         encoder.start();
 
@@ -68,27 +63,45 @@ public class AccessLogstashConsoleAppenderFactory extends ConsoleAppenderFactory
             JsonProviders<IAccessEvent> topLevel = getProviders();
             topLevel.addProvider(new AccessEventFormattedTimestampJsonProvider());
             topLevel.addProvider(new LogstashVersionJsonProvider<>());
-            topLevel.addProvider(new AccessMessageJsonProvider() {{setFieldName("message");}});
+            topLevel.addProvider(new MyAccessMessageJsonProvider());
             topLevel.addProvider(accessProvider());
         }
 
         private JsonProvider<IAccessEvent> accessProvider() {
-            AbstractNestedJsonProvider<IAccessEvent> access = new AbstractNestedJsonProvider<>() {
-            };
+            final AbstractNestedJsonProvider<IAccessEvent> access = new IAccessEventAbstractNestedJsonProvider();
             access.setFieldName("access");
-            JsonProviders<IAccessEvent> accessProviders = access.getProviders();
-            accessProviders.addProvider(new MethodJsonProvider() {{setFieldName("method");}});
+            final JsonProviders<IAccessEvent> accessProviders = access.getProviders();
+            accessProviders.addProvider(new MyMethodJsonProvider());
             accessProviders.addProvider(new HttpVersionJsonProvider());
             accessProviders.addProvider(new RefererJsonProvider());
             accessProviders.addProvider(new UserAgentJsonProvider());
             accessProviders.addProvider(new HostJsonProvider());
-            accessProviders.addProvider(new StatusCodeJsonProvider() {{setFieldName("response_code");}});
+            accessProviders.addProvider(new MyStatusCodeJsonProvider());
             accessProviders.addProvider(new UrlJsonProvider());
             accessProviders.addProvider(new RemoteIpJsonProvider());
-            accessProviders.addProvider(new RemoteUserJsonProvider() {{setFieldName("user_name");}});
+            accessProviders.addProvider(new MyRemoteUserJsonProvider());
             accessProviders.addProvider(new BodySentJsonProvider());
             accessProviders.addProvider(new ElapsedTimeMsJsonProvider());
             return access;
+        }
+
+        private static class MyAccessMessageJsonProvider extends AccessMessageJsonProvider {
+            MyAccessMessageJsonProvider() { setFieldName("message"); }
+        }
+
+        private static class IAccessEventAbstractNestedJsonProvider extends AbstractNestedJsonProvider<IAccessEvent> {
+        }
+
+        private static class MyMethodJsonProvider extends MethodJsonProvider {
+            MyMethodJsonProvider() {setFieldName("method");}
+        }
+
+        private static class MyStatusCodeJsonProvider extends StatusCodeJsonProvider {
+            MyStatusCodeJsonProvider() {setFieldName("response_code");}
+        }
+
+        private static class MyRemoteUserJsonProvider extends RemoteUserJsonProvider {
+            MyRemoteUserJsonProvider() {setFieldName("user_name");}
         }
     }
 
@@ -158,6 +171,13 @@ public class AccessLogstashConsoleAppenderFactory extends ConsoleAppenderFactory
         @Override
         public void writeTo(JsonGenerator generator, IAccessEvent event) throws IOException {
             generator.writeStringField("host", event.getRequestHeader("Host"));
+        }
+    }
+
+    private static class MyAccessEventCompositeJsonEncoder extends AccessEventCompositeJsonEncoder {
+        @Override
+        protected CompositeJsonFormatter<IAccessEvent> createFormatter() {
+            return new CustomFormatter(this);
         }
     }
 }

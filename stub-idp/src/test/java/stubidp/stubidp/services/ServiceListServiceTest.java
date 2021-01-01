@@ -45,7 +45,7 @@ public class ServiceListServiceTest {
 
         ServiceListService service = new ServiceListService(singleIdpConfiguration, jsonClient);
 
-        Assertions.assertThrows(FeatureNotEnabledException.class, () -> service.getServices());
+        Assertions.assertThrows(FeatureNotEnabledException.class, service::getServices);
     }
 
     @Test

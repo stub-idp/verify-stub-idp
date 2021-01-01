@@ -10,7 +10,6 @@ import stubidp.stubidp.domain.EidasScheme;
 import stubidp.stubidp.domain.SubmitButtonValue;
 import stubidp.stubidp.exceptions.GenericStubIdpException;
 import stubidp.stubidp.exceptions.IncompleteRegistrationException;
-import stubidp.stubidp.exceptions.InvalidDateException;
 import stubidp.stubidp.exceptions.InvalidEidasSchemeException;
 import stubidp.stubidp.exceptions.InvalidSessionIdException;
 import stubidp.stubidp.exceptions.InvalidUsernameOrPasswordException;
@@ -116,7 +115,7 @@ public class EidasRegistrationPageResource {
             @FormParam(Urls.SIGN_ASSERTIONS_PARAM) Optional<SignAssertions> signAssertionChecks,
             @CookieParam(StubIdpCookieNames.SESSION_COOKIE_NAME) @NotNull SessionId sessionCookie) {
 
-        final boolean signAssertions = signAssertionChecks.isPresent() && SignAssertions.signAssertions.equals(signAssertionChecks.get());
+        final boolean signAssertions = signAssertionChecks.isPresent() && SignAssertions.signAssertions == signAssertionChecks.get();
 
         final Optional<EidasScheme> eidasScheme = EidasScheme.fromString(schemeId);
         if(eidasScheme.isEmpty()) {

@@ -29,15 +29,9 @@ public class ContactPersonBuilder {
     public ContactPerson build() {
         ContactPerson contactPerson = new org.opensaml.saml.saml2.metadata.impl.ContactPersonBuilder().buildObject();
 
-        if (givenName.isPresent()) {
-            contactPerson.setGivenName(givenName.get());
-        }
-        if (surName.isPresent()) {
-            contactPerson.setSurName(surName.get());
-        }
-        if (company.isPresent()){
-            contactPerson.setCompany(company.get());
-        }
+        givenName.ifPresent(contactPerson::setGivenName);
+        surName.ifPresent(contactPerson::setSurName);
+        company.ifPresent(contactPerson::setCompany);
 
         if (addDefaultEmailAddress) {
             emailAddresses.add(EmailAddressBuilder.anEmailAddress().build());

@@ -19,12 +19,8 @@ public class StatusCodeBuilder {
 
     public StatusCode build() {
         StatusCode statusCode = openSamlXmlObjectFactory.createStatusCode();
-        if (value.isPresent()) {
-            statusCode.setValue(value.get());
-        }
-        if (subStatus.isPresent()) {
-            statusCode.setStatusCode(subStatus.get() );
-        }
+        value.ifPresent(statusCode::setValue);
+        subStatus.ifPresent(statusCode::setStatusCode);
         return statusCode;
     }
 

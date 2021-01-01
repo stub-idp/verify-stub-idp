@@ -39,29 +39,17 @@ public class MatchingDatasetAttributeStatementBuilder_1_1 {
     public AttributeStatement build() {
         AttributeStatementBuilder attributeStatementBuilder = anAttributeStatement();
 
-        if (firstnameAttribute.isPresent()) {
-            attributeStatementBuilder.addAttribute(firstnameAttribute.get());
-        }
+        firstnameAttribute.ifPresent(attributeStatementBuilder::addAttribute);
 
-        if (middleNamesAttribute.isPresent()) {
-            attributeStatementBuilder.addAttribute(middleNamesAttribute.get());
-        }
+        middleNamesAttribute.ifPresent(attributeStatementBuilder::addAttribute);
 
-        if (surnameAttribute.isPresent()) {
-            attributeStatementBuilder.addAttribute(surnameAttribute.get());
-        }
+        surnameAttribute.ifPresent(attributeStatementBuilder::addAttribute);
 
-        if (dateOfBirthAttribute.isPresent()) {
-            attributeStatementBuilder.addAttribute(dateOfBirthAttribute.get());
-        }
+        dateOfBirthAttribute.ifPresent(attributeStatementBuilder::addAttribute);
 
-        if (genderAttribute.isPresent()) {
-            attributeStatementBuilder.addAttribute(genderAttribute.get());
-        }
+        genderAttribute.ifPresent(attributeStatementBuilder::addAttribute);
 
-        if (currentAddressAttribute.isPresent()) {
-            attributeStatementBuilder.addAttribute(currentAddressAttribute.get());
-        }
+        currentAddressAttribute.ifPresent(attributeStatementBuilder::addAttribute);
 
         attributeStatementBuilder.addAllAttributes(previousAddressAttributes);
         attributeStatementBuilder.addAllAttributes(customAttributes);

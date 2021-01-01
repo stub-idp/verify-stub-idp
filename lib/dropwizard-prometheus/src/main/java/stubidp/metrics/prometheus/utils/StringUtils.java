@@ -5,6 +5,6 @@ import java.util.Objects;
 public class StringUtils {
 
 	public static boolean isEmpty(String s) {
-		return Objects.isNull(s) || s.length() == 0;
+		return Objects.isNull(s) || s.isEmpty();
 	}
 }

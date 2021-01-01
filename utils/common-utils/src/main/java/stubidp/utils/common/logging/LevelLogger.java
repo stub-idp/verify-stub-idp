@@ -8,7 +8,7 @@ import java.util.UUID;
 
 public class LevelLogger<T> {
 
-    private final Logger log;
+    private static Logger log;
 
     private LevelLogger(Class<T> clazz) {
         log = LoggerFactory.getLogger(clazz);

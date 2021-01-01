@@ -64,7 +64,7 @@ public class ReceivedRequest {
     public String getHeader(String name) {
         if(headers.containsKey(name.toLowerCase())) {
             final List<String> strings = headers.get(name.toLowerCase());
-            if(Objects.nonNull(strings) && strings.size() > 0) {
+            if(Objects.nonNull(strings) && !strings.isEmpty()) {
                 return strings.get(0);
             }
         }

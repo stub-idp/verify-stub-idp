@@ -99,7 +99,7 @@ public class EidasLoginPageResource {
             @FormParam(Urls.SIGN_ASSERTIONS_PARAM) Optional<SignAssertions> signAssertionChecks,
             @CookieParam(StubIdpCookieNames.SESSION_COOKIE_NAME) @NotNull SessionId sessionCookie) {
 
-        final boolean signAssertions = signAssertionChecks.isPresent() && SignAssertions.signAssertions.equals(signAssertionChecks.get());
+        final boolean signAssertions = signAssertionChecks.isPresent() && SignAssertions.signAssertions == signAssertionChecks.get();
 
         final Optional<EidasScheme> eidasScheme = EidasScheme.fromString(schemeName);
         if(eidasScheme.isEmpty()) {

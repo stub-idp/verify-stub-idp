@@ -27,7 +27,7 @@ public class FeatureEntryBuilder {
 
             @Override
             public boolean isActive() {
-                return FeatureEntryBuilder.this.isActive;
+                return isActive;
             }
         };
     }

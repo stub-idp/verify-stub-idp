@@ -22,10 +22,8 @@ public class IdentityProviderAuthnStatementBuilder {
     }
 
     public IdentityProviderAuthnStatement build() {
-        if (fraudAuthnDetails.isPresent()) {
-            return createIdentityProviderFraudAuthnStatement(fraudAuthnDetails.get(), userIpAddress.orElse(null));
-        }
-        return createIdentityProviderAuthnStatement(authnContext, userIpAddress.orElse(null));
+        return fraudAuthnDetails.map(authnDetails -> createIdentityProviderFraudAuthnStatement(authnDetails, userIpAddress.orElse(null)))
+                .orElseGet(() -> createIdentityProviderAuthnStatement(authnContext, userIpAddress.orElse(null)));
     }
 
     public IdentityProviderAuthnStatementBuilder withAuthnContext(AuthnContext authnContext) {

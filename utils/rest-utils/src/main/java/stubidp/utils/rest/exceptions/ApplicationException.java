@@ -54,12 +54,8 @@ public final class ApplicationException extends RuntimeException {
 
     @Override
     public String getMessage() {
-        String message = super.getMessage();
-        if (clientMessage.isPresent()) {
-            return format(ERROR_MESSAGE_FORMAT, message, clientMessage.get());
-        } else {
-            return message;
-        }
+        final String message = super.getMessage();
+        return clientMessage.map(s -> format(ERROR_MESSAGE_FORMAT, message, s)).orElse(message);
     }
 
     private ApplicationException(ErrorStatusDto errorStatus, URI uri) {
@@ -102,10 +98,7 @@ public final class ApplicationException extends RuntimeException {
     }
 
     private static String getUriErrorMessage(Optional<URI> uri) {
-        if (uri.isPresent()) {
-            return format("whilst contacting uri: {0}", uri.get());
-        }
-        return "";
+        return uri.map(value -> format("whilst contacting uri: {0}", value)).orElse("");
     }
 
     public UUID getErrorId() {

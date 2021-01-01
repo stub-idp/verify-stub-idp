@@ -42,7 +42,7 @@ public class PassthroughAssertion implements Serializable {
     }
 
     public boolean isFraudulent() {
-        return authnContext.isPresent() && authnContext.get().equals(AuthnContext.LEVEL_X);
+        return authnContext.isPresent() && authnContext.get() == AuthnContext.LEVEL_X;
     }
 
     public Optional<FraudDetectedDetails> getFraudDetectedDetails() {

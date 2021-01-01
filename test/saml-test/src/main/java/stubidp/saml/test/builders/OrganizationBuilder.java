@@ -26,15 +26,9 @@ public class OrganizationBuilder {
     public Organization build() {
         Organization organization = new org.opensaml.saml.saml2.metadata.impl.OrganizationBuilder().buildObject();
 
-        if (organizationDisplayName.isPresent()) {
-            organization.getDisplayNames().add(organizationDisplayName.get());
-        }
-        if (name.isPresent()){
-            organization.getOrganizationNames().add(name.get());
-        }
-        if (url.isPresent()){
-            organization.getURLs().add(url.get());
-        }
+        organizationDisplayName.ifPresent(displayName -> organization.getDisplayNames().add(displayName));
+        name.ifPresent(organizationName -> organization.getOrganizationNames().add(organizationName));
+        url.ifPresent(organizationURL -> organization.getURLs().add(organizationURL));
 
         return organization;
     }

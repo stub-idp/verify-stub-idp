@@ -6,7 +6,6 @@ import stubidp.utils.security.configuration.SecureCookieKeyStore;
 
 import javax.crypto.spec.SecretKeySpec;
 import javax.inject.Inject;
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;

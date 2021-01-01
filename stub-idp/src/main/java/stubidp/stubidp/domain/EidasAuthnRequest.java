@@ -63,7 +63,7 @@ public class EidasAuthnRequest {
 
         Optional<XMLObject> requestedAttributesObj = request.getExtensions().getOrderedChildren()
                 .stream()
-                .filter(x -> x.getClass() == RequestedAttributesImpl.class)
+                .filter(x -> RequestedAttributesImpl.class == x.getClass())
                 .findFirst();
 
         return requestedAttributesObj

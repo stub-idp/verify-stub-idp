@@ -36,7 +36,6 @@ import stubidp.saml.hub.core.validators.subjectconfirmation.AssertionSubjectConf
 import stubidp.saml.hub.core.validators.subjectconfirmation.BasicAssertionSubjectConfirmationValidator;
 import stubidp.saml.hub.domain.AuthnRequestFromRelyingParty;
 import stubidp.saml.hub.domain.Endpoints;
-import stubidp.saml.hub.domain.InboundResponseFromMatchingService;
 import stubidp.saml.hub.factories.AttributeQueryAttributeFactory;
 import stubidp.saml.hub.metadata.domain.HubIdentityProviderMetadataDto;
 import stubidp.saml.hub.metadata.transformers.HubIdentityProviderMetadataDtoToEntityDescriptorTransformer;
@@ -295,8 +294,8 @@ public class HubTransformersFactory {
             SignatureAlgorithm signatureAlgorithm,
             DigestAlgorithm digestAlgorithm) {
         return new RequestAbstractTypeToStringTransformer<>(
-                new SigningRequestAbstractTypeSignatureCreator<T>(new SignatureFactory(includeKeyInfo, new IdaKeyStoreCredentialRetriever(keyStore), signatureAlgorithm, digestAlgorithm)),
-                new SamlSignatureSigner<T>(),
+                new SigningRequestAbstractTypeSignatureCreator<>(new SignatureFactory(includeKeyInfo, new IdaKeyStoreCredentialRetriever(keyStore), signatureAlgorithm, digestAlgorithm)),
+                new SamlSignatureSigner<>(),
                 new XmlObjectToBase64EncodedStringTransformer<>()
         );
     }
@@ -525,7 +524,7 @@ public class HubTransformersFactory {
         return new AttributeQueryToElementTransformer(
                 new SigningRequestAbstractTypeSignatureCreator<>(new SignatureFactory(new IdaKeyStoreCredentialRetriever(keyStore), signatureAlgorithm, digestAlgorithm)),
                 new SamlAttributeQueryAssertionSignatureSigner(new IdaKeyStoreCredentialRetriever(keyStore), new OpenSamlXmlObjectFactory(), hubEntityId),
-                new SamlSignatureSigner<AttributeQuery>(),
+                new SamlSignatureSigner<>(),
                 new XmlObjectToElementTransformer<>(),
                 getSamlAttributeQueryAssertionEncrypter(encryptionKeyStore, entity)
         );

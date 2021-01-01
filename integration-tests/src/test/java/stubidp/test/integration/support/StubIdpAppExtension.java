@@ -1,7 +1,6 @@
 package stubidp.test.integration.support;
 
 import certificates.values.CACertificates;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import io.dropwizard.jackson.Jackson;
 import io.dropwizard.testing.ConfigOverride;
 import io.dropwizard.testing.junit5.DropwizardAppExtension;
@@ -195,8 +194,7 @@ public class StubIdpAppExtension extends DropwizardAppExtension<StubIdpConfigura
         }
         EntitiesDescriptor entitiesDescriptor = new EntitiesDescriptorFactory()
                 .signedEntitiesDescriptor(entityDescriptors, METADATA_SIGNING_A_PUBLIC_CERT, METADATA_SIGNING_A_PRIVATE_KEY);
-        final String metadata = new MetadataFactory().metadata(entitiesDescriptor);
-        return metadata;
+        return new MetadataFactory().metadata(entitiesDescriptor);
     }
 
     private String getEidasMetadata() throws MarshallingException, SignatureException {
@@ -212,8 +210,7 @@ public class StubIdpAppExtension extends DropwizardAppExtension<StubIdpConfigura
                 .build());
         EntitiesDescriptor entitiesDescriptor = new EntitiesDescriptorFactory()
                 .signedEntitiesDescriptor(entityDescriptorList, METADATA_SIGNING_A_PUBLIC_CERT, METADATA_SIGNING_A_PRIVATE_KEY);
-        final String metadata = new MetadataFactory().metadata(entitiesDescriptor);
-        return metadata;
+        return new MetadataFactory().metadata(entitiesDescriptor);
     }
 
     @Override

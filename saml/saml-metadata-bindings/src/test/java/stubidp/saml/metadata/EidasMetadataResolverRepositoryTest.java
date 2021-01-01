@@ -34,7 +34,6 @@ import java.security.cert.X509Certificate;
 import java.text.ParseException;
 import java.time.Duration;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -103,7 +102,7 @@ public class EidasMetadataResolverRepositoryTest {
         when(dropwizardMetadataResolverFactory.createMetadataResolverWithClient(any(), eq(true), eq(metadataClient))).thenReturn(metadataResolver);
         when(metadataSignatureTrustEngineFactory.createSignatureTrustEngine(metadataResolver)).thenReturn(explicitKeySignatureTrustEngine);
 
-        List<String> stringCertChain = Arrays.asList(
+        List<String> stringCertChain = asList(
                 CACertificates.TEST_ROOT_CA,
                 CACertificates.TEST_IDP_CA,
                 TestCertificateStrings.STUB_COUNTRY_PUBLIC_PRIMARY_CERT
