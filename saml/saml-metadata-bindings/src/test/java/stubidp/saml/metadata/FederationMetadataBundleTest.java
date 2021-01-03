@@ -35,11 +35,11 @@ import javax.ws.rs.core.Response;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static stubidp.saml.constants.Constants.APPLICATION_SAMLMETADATA_XML;
 
 @ExtendWith(DropwizardExtensionsSupport.class)
 public class FederationMetadataBundleTest extends OpenSAMLRunner {
 
-    private static final String APPLICATION_SAMLMETADATA_XML = "application/samlmetadata+xml";
     private static final String VERIFY_METADATA_PATH = "/saml/metadata/sp";
     private static final HttpStubRule verifyMetadataServer = new HttpStubRule();
     @RegisterExtension
