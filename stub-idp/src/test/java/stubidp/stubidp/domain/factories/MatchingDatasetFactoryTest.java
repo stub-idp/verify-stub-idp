@@ -36,7 +36,7 @@ public class MatchingDatasetFactoryTest {
             AuthnContext.LEVEL_2);
 
     @Test
-    public void shouldSplitAddressesIntoCurrentAndPrevious() {
+    void shouldSplitAddressesIntoCurrentAndPrevious() {
         final MatchingDataset matchingDataset = MatchingDatasetFactory.create(completeUser);
         assertThat(matchingDataset.getCurrentAddresses().size()).isEqualTo(1);
         assertThat(matchingDataset.getPreviousAddresses().size()).isEqualTo(1);

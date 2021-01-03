@@ -4,6 +4,11 @@ module stubidp.saml.utils {
     opens stubidp.saml.utils.core.transformers.inbound;
     opens stubidp.saml.utils.core.transformers.outbound.decorators;
     opens stubidp.saml.utils.core.transformers;
+    opens stubidp.saml.utils.hub.validators;
+    opens stubidp.saml.utils.metadata.transformers;
+    opens stubidp.saml.utils.core.transformers.outbound;
+    opens stubidp.saml.utils.hub.transformers.outbound;
+    opens stubidp.saml.utils.hub.factories;
 
     exports stubidp.saml.utils.core.api;
     exports stubidp.saml.utils.core.domain;

@@ -24,21 +24,21 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static stubidp.saml.test.builders.StatusBuilder.aStatus;
 import static stubidp.saml.test.builders.StatusCodeBuilder.aStatusCode;
 
-public class CountryAuthenticationStatusUnmarshallerTest extends OpenSAMLRunner {
+class CountryAuthenticationStatusUnmarshallerTest extends OpenSAMLRunner {
 
     private OpenSamlXmlObjectFactory samlObjectFactory;
     private StringToOpenSamlObjectTransformer<Response> stringToOpenSamlObjectTransformer;
     private CountryAuthenticationStatusUnmarshaller countryAuthenticationStatusUnmarshaller;
 
     @BeforeEach
-    public void setUp() {
+    void setUp() {
         samlObjectFactory = new OpenSamlXmlObjectFactory();
         stringToOpenSamlObjectTransformer = new CoreTransformersFactory().getStringtoOpenSamlObjectTransformer(input -> {});
         countryAuthenticationStatusUnmarshaller = new CountryAuthenticationStatusUnmarshaller();
     }
 
     @Test
-    public void shouldTransformSuccessWithNoSubCode() {
+    void shouldTransformSuccessWithNoSubCode() {
         Status originalStatus = samlObjectFactory.createStatus();
         StatusCode successStatusCode = samlObjectFactory.createStatusCode();
         successStatusCode.setValue(StatusCode.SUCCESS);
@@ -50,7 +50,7 @@ public class CountryAuthenticationStatusUnmarshallerTest extends OpenSAMLRunner 
     }
 
     @Test
-    public void shouldTransformSuccessWithMessage() {
+    void shouldTransformSuccessWithMessage() {
         Status originalStatus = samlObjectFactory.createStatus();
         StatusCode successStatusCode = samlObjectFactory.createStatusCode();
         successStatusCode.setValue(StatusCode.SUCCESS);
@@ -66,7 +66,7 @@ public class CountryAuthenticationStatusUnmarshallerTest extends OpenSAMLRunner 
     }
 
     @Test
-    public void shouldTransformNoAuthenticationContext() {
+    void shouldTransformNoAuthenticationContext() {
         Status originalStatus = samlObjectFactory.createStatus();
         StatusCode topLevelStatusCode = samlObjectFactory.createStatusCode();
         topLevelStatusCode.setValue(StatusCode.RESPONDER);
@@ -81,7 +81,7 @@ public class CountryAuthenticationStatusUnmarshallerTest extends OpenSAMLRunner 
     }
 
     @Test
-    public void shouldTransformAuthnFailed() {
+    void shouldTransformAuthnFailed() {
         Status status = samlObjectFactory.createStatus();
         StatusCode topLevelStatusCode = samlObjectFactory.createStatusCode();
         topLevelStatusCode.setValue(StatusCode.RESPONDER);
@@ -96,7 +96,7 @@ public class CountryAuthenticationStatusUnmarshallerTest extends OpenSAMLRunner 
     }
 
     @Test
-    public void shouldTransformAuthnFailedWithoutSubstatus() {
+    void shouldTransformAuthnFailedWithoutSubstatus() {
         String message = "error detail";
         StatusCode topLevelStatusCode = aStatusCode().withValue(StatusCode.AUTHN_FAILED).build();
         Status status = aStatus()
@@ -112,7 +112,7 @@ public class CountryAuthenticationStatusUnmarshallerTest extends OpenSAMLRunner 
     }
 
     @Test
-    public void shouldTransformRequestDeniedWithoutSubstatus() {
+    void shouldTransformRequestDeniedWithoutSubstatus() {
         String message = "error detail";
         StatusCode topLevelStatusCode = aStatusCode().withValue(StatusCode.REQUEST_DENIED).build();
         Status status = aStatus()
@@ -128,7 +128,7 @@ public class CountryAuthenticationStatusUnmarshallerTest extends OpenSAMLRunner 
     }
 
     @Test
-    public void shouldTransformRequesterErrorWithoutMessage() {
+    void shouldTransformRequesterErrorWithoutMessage() {
         Status status = samlObjectFactory.createStatus();
         StatusCode topLevelStatusCode = samlObjectFactory.createStatusCode();
         topLevelStatusCode.setValue(StatusCode.REQUESTER);
@@ -141,7 +141,7 @@ public class CountryAuthenticationStatusUnmarshallerTest extends OpenSAMLRunner 
     }
 
     @Test
-    public void shouldTransformRequesterErrorWithMessage() {
+    void shouldTransformRequesterErrorWithMessage() {
         String message = "some message";
 
         StatusCode topLevelStatusCode = aStatusCode().withValue(StatusCode.REQUESTER).build();
@@ -158,7 +158,7 @@ public class CountryAuthenticationStatusUnmarshallerTest extends OpenSAMLRunner 
     }
 
     @Test
-    public void shouldTransformRequesterErrorWithRequestDeniedSubstatus() {
+    void shouldTransformRequesterErrorWithRequestDeniedSubstatus() {
         Status status = samlObjectFactory.createStatus();
         StatusCode topLevelStatusCode = samlObjectFactory.createStatusCode();
         topLevelStatusCode.setValue(StatusCode.REQUESTER);
@@ -172,7 +172,7 @@ public class CountryAuthenticationStatusUnmarshallerTest extends OpenSAMLRunner 
     }
 
     @Test
-    public void shouldTransformResponderErrorWithoutMessage() {
+    void shouldTransformResponderErrorWithoutMessage() {
         Status status = samlObjectFactory.createStatus();
         StatusCode topLevelStatusCode = samlObjectFactory.createStatusCode();
         topLevelStatusCode.setValue(StatusCode.RESPONDER);
@@ -185,7 +185,7 @@ public class CountryAuthenticationStatusUnmarshallerTest extends OpenSAMLRunner 
     }
 
     @Test
-    public void shouldTransformResponderErrorWithMessage() {
+    void shouldTransformResponderErrorWithMessage() {
         String message = "some message";
 
         StatusCode topLevelStatusCode = aStatusCode().withValue(StatusCode.RESPONDER).build();
@@ -202,7 +202,7 @@ public class CountryAuthenticationStatusUnmarshallerTest extends OpenSAMLRunner 
     }
 
     @Test
-    public void shouldTransformResponderErrorWithCanceledSubstatus() {
+    void shouldTransformResponderErrorWithCanceledSubstatus() {
         Status status = samlObjectFactory.createStatus();
         StatusCode topLevelStatusCode = samlObjectFactory.createStatusCode();
         topLevelStatusCode.setValue(StatusCode.RESPONDER);
@@ -216,7 +216,7 @@ public class CountryAuthenticationStatusUnmarshallerTest extends OpenSAMLRunner 
     }
 
     @Test
-    public void shouldMapSamlStatusDetailOfAuthnCancelToAuthenticationCancelled() throws Exception {
+    void shouldMapSamlStatusDetailOfAuthnCancelToAuthenticationCancelled() throws Exception {
         String cancelXml = readXmlFile("status-cancel.xml");
         Response cancelResponse = stringToOpenSamlObjectTransformer.apply(cancelXml);
 
@@ -226,7 +226,7 @@ public class CountryAuthenticationStatusUnmarshallerTest extends OpenSAMLRunner 
     }
 
     @Test
-    public void shouldMapSamlStatusDetailOfLoaPendingToAuthenticationPending() throws Exception {
+    void shouldMapSamlStatusDetailOfLoaPendingToAuthenticationPending() throws Exception {
         String pendingXml = readXmlFile("status-pending.xml");
         Response pendingResponse = stringToOpenSamlObjectTransformer.apply(pendingXml);
 
@@ -236,7 +236,7 @@ public class CountryAuthenticationStatusUnmarshallerTest extends OpenSAMLRunner 
     }
 
     @Test
-    public void shouldRemainSuccessEvenIfStatusDetailCancelReturned() throws Exception {
+    void shouldRemainSuccessEvenIfStatusDetailCancelReturned() throws Exception {
         String successWithCancelXml = readXmlFile("status-success-with-cancel.xml");
         Response cancelResponse = stringToOpenSamlObjectTransformer.apply(successWithCancelXml);
 
@@ -246,7 +246,7 @@ public class CountryAuthenticationStatusUnmarshallerTest extends OpenSAMLRunner 
     }
 
     @Test
-    public void shouldRemainNoAuthnContextIfStatusDetailAbsent() throws Exception {
+    void shouldRemainNoAuthnContextIfStatusDetailAbsent() throws Exception {
         String successWithCancelXml = readXmlFile("status-noauthncontext.xml");
         Response cancelResponse = stringToOpenSamlObjectTransformer.apply(successWithCancelXml);
 

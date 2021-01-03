@@ -18,18 +18,18 @@ public class IPAddressValidatorTest extends OpenSAMLRunner {
     private IPAddressValidator validator;
 
     @BeforeEach
-    public void setUp() {
+    void setUp() {
         validator = new IPAddressValidator();
     }
 
     @Test
-    public void validate_shouldThrowWhenAssertionDoesNotContainAnAttributeStatement() {
+    void validate_shouldThrowWhenAssertionDoesNotContainAnAttributeStatement() {
         Assertion assertion = anAssertion().buildUnencrypted();
         validateException(SamlTransformationErrorFactory.missingIPAddress(assertion.getID()), assertion);
     }
 
     @Test
-    public void validate_shouldNotThrowWhenFirstAttributeStatementContainsAnIPAddressAttribute() {
+    void validate_shouldNotThrowWhenFirstAttributeStatementContainsAnIPAddressAttribute() {
         Assertion assertion = anAssertion()
                 .addAttributeStatement(anAttributeStatement().addAttribute(IPAddressAttributeBuilder.anIPAddress().build()).build())
                 .buildUnencrypted();
@@ -38,7 +38,7 @@ public class IPAddressValidatorTest extends OpenSAMLRunner {
     }
 
     @Test
-    public void validate_shouldNotThrowWhenSecondAttributeStatementContainsAnIPAddressAttribute() {
+    void validate_shouldNotThrowWhenSecondAttributeStatementContainsAnIPAddressAttribute() {
         Assertion assertion = anAssertion()
                 .addAttributeStatement(anAttributeStatement().build())
                 .addAttributeStatement(anAttributeStatement().addAttribute(IPAddressAttributeBuilder.anIPAddress().build()).build())
@@ -48,7 +48,7 @@ public class IPAddressValidatorTest extends OpenSAMLRunner {
     }
 
     @Test
-    public void validate_shouldNotThrowWhenFirstAttributeStatementContainsMultipleAttributesIncludingIPAddressAttribute() {
+    void validate_shouldNotThrowWhenFirstAttributeStatementContainsMultipleAttributesIncludingIPAddressAttribute() {
         Assertion assertion = anAssertion()
                 .addAttributeStatement(anAttributeStatement()
                         .addAttribute(aPersonName_1_1().buildAsFirstname())
@@ -60,7 +60,7 @@ public class IPAddressValidatorTest extends OpenSAMLRunner {
     }
 
     @Test
-    public void validate_shouldThrowWhenAssertionContainsAttributeStatementsButNoIPAddressAttribute() {
+    void validate_shouldThrowWhenAssertionContainsAttributeStatementsButNoIPAddressAttribute() {
         Assertion assertion = anAssertion()
                 .addAttributeStatement(anAttributeStatement().build())
                 .buildUnencrypted();
@@ -68,7 +68,7 @@ public class IPAddressValidatorTest extends OpenSAMLRunner {
     }
 
     @Test
-    public void validate_shouldThrowWhenAssertionContainsIPAddressAttributeWithNoValue() {
+    void validate_shouldThrowWhenAssertionContainsIPAddressAttributeWithNoValue() {
         Assertion assertion = anAssertion()
                 .addAttributeStatement(anAttributeStatement().addAttribute(IPAddressAttributeBuilder.anIPAddress().withValue(null).build()).build())
                 .buildUnencrypted();
@@ -77,7 +77,7 @@ public class IPAddressValidatorTest extends OpenSAMLRunner {
     }
 
     @Test
-    public void validate_shouldNotWarnWhenAssertionContainsAnInvalidIPAddress() {
+    void validate_shouldNotWarnWhenAssertionContainsAnInvalidIPAddress() {
         final String ipAddress = "10.10.10.1a";
         final Assertion assertion = anAssertion()
                 .addAttributeStatement(anAttributeStatement().addAttribute(IPAddressAttributeBuilder.anIPAddress().withValue(ipAddress).build()).build())

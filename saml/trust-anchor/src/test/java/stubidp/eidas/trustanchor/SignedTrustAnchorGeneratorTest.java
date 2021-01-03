@@ -15,7 +15,7 @@ import static org.mockito.Mockito.when;
 public class SignedTrustAnchorGeneratorTest {
 
     @Test
-    public void testSignerThrowsExceptionWhenInputFileNotReadable() {
+    void testSignerThrowsExceptionWhenInputFileNotReadable() {
 
         PrivateKey key = mock(PrivateKey.class);
         X509Certificate certificate = mock(X509Certificate.class);

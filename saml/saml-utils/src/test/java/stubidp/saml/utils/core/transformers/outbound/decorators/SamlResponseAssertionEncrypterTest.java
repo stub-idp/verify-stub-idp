@@ -48,7 +48,7 @@ public class SamlResponseAssertionEncrypterTest extends OpenSAMLRunner {
     private EncryptedAssertion encryptedAssertion;
 
     @Test
-    public void shouldConvertAssertionIntoEncryptedAssertion() throws EncryptionException {
+    void shouldConvertAssertionIntoEncryptedAssertion() throws EncryptionException {
         when(entityToEncryptForLocator.fromRequestId(ArgumentMatchers.anyString())).thenReturn("some id");
         when(credentialFactory.getEncryptingCredential("some id")).thenReturn(credential);
         when(encrypterFactory.createEncrypter(credential)).thenReturn(encrypter);
@@ -71,7 +71,7 @@ public class SamlResponseAssertionEncrypterTest extends OpenSAMLRunner {
     }
 
     @Test
-    public void decorate_shouldWrapEncryptionAssertionInSamlExceptionWhenEncryptionFails() throws EncryptionException {
+    void decorate_shouldWrapEncryptionAssertionInSamlExceptionWhenEncryptionFails() throws EncryptionException {
         when(entityToEncryptForLocator.fromRequestId(ArgumentMatchers.anyString())).thenReturn("some id");
         when(credentialFactory.getEncryptingCredential("some id")).thenReturn(credential);
         List<Assertion> assertionList = spy(newArrayList(assertion));

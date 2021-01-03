@@ -24,7 +24,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-public class IdpResponseValidatorTest {
+class IdpResponseValidatorTest {
 
     @Mock
     private SamlResponseSignatureValidator samlResponseSignatureValidator;
@@ -44,7 +44,7 @@ public class IdpResponseValidatorTest {
     private IdpResponseValidator validator;
 
     @BeforeEach
-    public void setUp() {
+    void setUp() {
         validator = new IdpResponseValidator(
             samlResponseSignatureValidator,
             assertionDecrypter,
@@ -55,25 +55,25 @@ public class IdpResponseValidatorTest {
     }
 
     @Test
-    public void shouldValidateResponseIsEncrypted() {
+    void shouldValidateResponseIsEncrypted() {
         validator.validate(response);
         verify(encryptedResponseFromIdpValidator).validate(response);
     }
 
     @Test
-    public void shouldValidateResponseDestination() {
+    void shouldValidateResponseDestination() {
         validator.validate(response);
         verify(responseDestinationValidator).validate(response.getDestination());
     }
 
     @Test
-    public void shouldValidateSamlResponseSignature() {
+    void shouldValidateSamlResponseSignature() {
         validator.validate(response);
         verify(samlResponseSignatureValidator).validate(response, IDPSSODescriptor.DEFAULT_ELEMENT_NAME);
     }
 
     @Test
-    public void shouldValidateSamlAssertionSignature() {
+    void shouldValidateSamlAssertionSignature() {
         Assertion assertion = mock(Assertion.class);
         List<Assertion> assertions = List.of(assertion);
         ValidatedResponse validatedResponse = mock(ValidatedResponse.class);

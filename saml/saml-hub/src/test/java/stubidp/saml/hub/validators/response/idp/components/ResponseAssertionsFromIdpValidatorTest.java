@@ -30,7 +30,7 @@ import static stubidp.saml.test.builders.MatchingDatasetAttributeStatementBuilde
 import static stubidp.saml.test.builders.ResponseBuilder.aResponse;
 
 @ExtendWith(MockitoExtension.class)
-public class ResponseAssertionsFromIdpValidatorTest {
+class ResponseAssertionsFromIdpValidatorTest {
 
     @Mock
     private IdentityProviderAssertionValidator assertionValidator;
@@ -44,7 +44,7 @@ public class ResponseAssertionsFromIdpValidatorTest {
     private ResponseAssertionsFromIdpValidator validator;
 
     @BeforeEach
-    public void setUp() {
+    void setUp() {
         validator = new ResponseAssertionsFromIdpValidator(
                 assertionValidator,
                 matchingDatasetAssertionValidator,
@@ -55,7 +55,7 @@ public class ResponseAssertionsFromIdpValidatorTest {
     }
 
     @Test
-    public void validate_shouldDelegateAuthnStatementAssertionValidation() throws Exception {
+    void validate_shouldDelegateAuthnStatementAssertionValidation() throws Exception {
         Response response = aResponse()
                 .addEncryptedAssertion(anAssertion().addAttributeStatement(aMatchingDatasetAttributeStatement_1_1().build()).build())
                 .addEncryptedAssertion(anAssertion().build())
@@ -70,7 +70,7 @@ public class ResponseAssertionsFromIdpValidatorTest {
     }
 
     @Test
-    public void validate_shouldDelegateMatchingDatasetAssertionValidation() throws Exception {
+    void validate_shouldDelegateMatchingDatasetAssertionValidation() throws Exception {
         Response response = aResponse()
                 .addEncryptedAssertion(anAssertion().addAttributeStatement(aMatchingDatasetAttributeStatement_1_1().build()).build())
                 .addEncryptedAssertion(anAssertion().build())
@@ -85,7 +85,7 @@ public class ResponseAssertionsFromIdpValidatorTest {
     }
 
     @Test
-    public void validate_shouldThrowExceptionIfMatchingDatasetStatementElementIsMissing() throws Exception {
+    void validate_shouldThrowExceptionIfMatchingDatasetStatementElementIsMissing() throws Exception {
         final Response response = aResponse()
                 .addEncryptedAssertion(anAssertion().addAuthnStatement(anAuthnStatement().build()).build())
                 .addEncryptedAssertion(anAssertion().build()).build();
@@ -95,7 +95,7 @@ public class ResponseAssertionsFromIdpValidatorTest {
     }
 
     @Test
-    public void validate_shouldThrowExceptionIfAuthnStatementAssertionIsMissing() throws Exception {
+    void validate_shouldThrowExceptionIfAuthnStatementAssertionIsMissing() throws Exception {
         Response response = aResponse()
                 .addEncryptedAssertion(anAssertion().addAttributeStatement(aMatchingDatasetAttributeStatement_1_1().build()).build())
                 .addEncryptedAssertion(anAssertion().addAttributeStatement(aMatchingDatasetAttributeStatement_1_1().build()).build())
@@ -108,7 +108,7 @@ public class ResponseAssertionsFromIdpValidatorTest {
     }
 
     @Test
-    public void validate_shouldThrowExceptionIfThereAreMultipleAuthnStatementsWithinTheAuthnStatementAssertionPresent() throws Exception {
+    void validate_shouldThrowExceptionIfThereAreMultipleAuthnStatementsWithinTheAuthnStatementAssertionPresent() throws Exception {
         Response response = aResponse()
                 .addEncryptedAssertion(anAssertion().addAttributeStatement(aMatchingDatasetAttributeStatement_1_1().build()).build())
                 .addEncryptedAssertion(anAssertion().addAuthnStatement(anAuthnStatement().build()).addAuthnStatement(anAuthnStatement().build()).build())
@@ -121,7 +121,7 @@ public class ResponseAssertionsFromIdpValidatorTest {
     }
 
     @Test
-    public void validate_shouldDelegateToIpAddressValidator() throws Exception {
+    void validate_shouldDelegateToIpAddressValidator() throws Exception {
         Assertion authnStatementAssertion = anAssertion().addAuthnStatement(anAuthnStatement().build()).buildUnencrypted();
         Response response = aResponse()
                 .addEncryptedAssertion(anAssertion().addAttributeStatement(aMatchingDatasetAttributeStatement_1_1().build()).build())

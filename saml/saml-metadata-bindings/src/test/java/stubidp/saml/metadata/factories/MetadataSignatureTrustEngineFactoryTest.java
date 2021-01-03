@@ -40,7 +40,7 @@ public class MetadataSignatureTrustEngineFactoryTest {
     private static DOMMetadataResolver metadataResolver;
 
     @BeforeAll
-    public static void beforeAll() throws Exception {
+    static void beforeAll() throws Exception {
         InitializationService.initialize();
 
         //has Hub's entity ID
@@ -53,7 +53,7 @@ public class MetadataSignatureTrustEngineFactoryTest {
     }
 
     @Test
-    public void shouldSupportValidatingSignaturesUsingKeysInMetadata() throws Exception {
+    void shouldSupportValidatingSignaturesUsingKeysInMetadata() throws Exception {
         SignatureTrustEngine signatureTrustEngine = new MetadataSignatureTrustEngineFactory().createSignatureTrustEngine(metadataResolver);
 
         Signature signature = createSignatureInAuthnRequest(TestEntityIds.HUB_ENTITY_ID);
@@ -66,7 +66,7 @@ public class MetadataSignatureTrustEngineFactoryTest {
     }
 
     @Test
-    public void shouldSupportInvalidatingSignaturesUsingKeysInMetadata() throws Exception {
+    void shouldSupportInvalidatingSignaturesUsingKeysInMetadata() throws Exception {
         SignatureTrustEngine signatureTrustEngine = new MetadataSignatureTrustEngineFactory().createSignatureTrustEngine(metadataResolver);
 
         Signature signature = createSignatureInAuthnRequest(TestEntityIds.STUB_IDP_ONE);

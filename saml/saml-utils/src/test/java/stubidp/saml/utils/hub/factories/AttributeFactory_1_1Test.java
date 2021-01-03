@@ -31,12 +31,12 @@ public class AttributeFactory_1_1Test extends OpenSAMLRunner {
     private AttributeFactory_1_1 attributeFactory;
 
     @BeforeEach
-    public void setup() {
+    void setup() {
         attributeFactory = new AttributeFactory_1_1(new OpenSamlXmlObjectFactory());
     }
 
     @Test
-    public void createFirstNameAttribute_shouldSetUpTheAttribute() {
+    void createFirstNameAttribute_shouldSetUpTheAttribute() {
         SimpleMdsValue<String> firstName = new SimpleMdsValue<>("Bob",
                 BaseMdsSamlObjectUnmarshaller.InstantFromDate.of("2012-03-02"),
                 BaseMdsSamlObjectUnmarshaller.InstantFromDate.of("2013-09-04"),
@@ -56,7 +56,7 @@ public class AttributeFactory_1_1Test extends OpenSAMLRunner {
     }
 
     @Test
-    public void createFirstNameAttribute_shouldHandleMultipleValues() {
+    void createFirstNameAttribute_shouldHandleMultipleValues() {
         List<SimpleMdsValue<String>> firstNames = asList(
                 SimpleMdsValueBuilder.<String>aSimpleMdsValue().build(),
                 SimpleMdsValueBuilder.<String>aSimpleMdsValue().build());
@@ -67,7 +67,7 @@ public class AttributeFactory_1_1Test extends OpenSAMLRunner {
     }
 
     @Test
-    public void createMiddlenameAttribute_shouldSetUpTheAttribute() {
+    void createMiddlenameAttribute_shouldSetUpTheAttribute() {
         SimpleMdsValue<String> middlename = new SimpleMdsValue<>("Robert",
                 BaseMdsSamlObjectUnmarshaller.InstantFromDate.of("2012-03-02"),
                 BaseMdsSamlObjectUnmarshaller.InstantFromDate.of("2013-09-04"),
@@ -87,7 +87,7 @@ public class AttributeFactory_1_1Test extends OpenSAMLRunner {
     }
 
     @Test
-    public void createSurnameAttribute_shouldSetUpTheAttribute() {
+    void createSurnameAttribute_shouldSetUpTheAttribute() {
         SimpleMdsValue<String> surname = new SimpleMdsValue<>("McBoberson",
                 BaseMdsSamlObjectUnmarshaller.InstantFromDate.of("2012-03-02"),
                 BaseMdsSamlObjectUnmarshaller.InstantFromDate.of("2013-09-04"),
@@ -107,7 +107,7 @@ public class AttributeFactory_1_1Test extends OpenSAMLRunner {
     }
 
     @Test
-    public void createGenderAttribute_shouldSetUpTheAttribute() {
+    void createGenderAttribute_shouldSetUpTheAttribute() {
         SimpleMdsValue<Gender> genderSimpleMdsValue = new SimpleMdsValue<>(Gender.FEMALE,
                 BaseMdsSamlObjectUnmarshaller.InstantFromDate.of("2012-03-02"),
                 BaseMdsSamlObjectUnmarshaller.InstantFromDate.of("2013-09-04"),
@@ -127,7 +127,7 @@ public class AttributeFactory_1_1Test extends OpenSAMLRunner {
     }
 
     @Test
-    public void createCycle3Attribute_shouldSetUpTheAttribute() {
+    void createCycle3Attribute_shouldSetUpTheAttribute() {
         String value = "some value";
         String attributeName = "someAttributeName";
         Attribute createdAttribute = attributeFactory.createCycle3DataAttribute(attributeName, value);
@@ -139,7 +139,7 @@ public class AttributeFactory_1_1Test extends OpenSAMLRunner {
     }
 
     @Test
-    public void createDateOfBirthAttribute_shouldSetUpTheAttribute() {
+    void createDateOfBirthAttribute_shouldSetUpTheAttribute() {
         SimpleMdsValue<Instant> dateOfBirth = new SimpleMdsValue<>(BaseMdsSamlObjectUnmarshaller.InstantFromDate.of("1981-03-29"),
                 BaseMdsSamlObjectUnmarshaller.InstantFromDate.of("2012-03-02"),
                 BaseMdsSamlObjectUnmarshaller.InstantFromDate.of("2013-09-04"),
@@ -160,7 +160,7 @@ public class AttributeFactory_1_1Test extends OpenSAMLRunner {
     }
 
     @Test
-    public void createCurrentAddressAttribute_shouldSetUpTheAttribute() {
+    void createCurrentAddressAttribute_shouldSetUpTheAttribute() {
         String line1Value = "1 Cherry Cottage";
         String line2Value = "Wurpel Lane";
         String postCodeValue = "RG99 1YY";
@@ -197,14 +197,14 @@ public class AttributeFactory_1_1Test extends OpenSAMLRunner {
     }
 
     @Test
-    public void createCurrentAddressAttribute_shouldHandleMissingToDate() {
+    void createCurrentAddressAttribute_shouldHandleMissingToDate() {
         Address currentAddress = AddressBuilder.anAddress().withLines(asList("Flat 15", "Dalton Tower")).withToDate(null).build();
 
         attributeFactory.createCurrentAddressesAttribute(List.of(currentAddress));
     }
 
     @Test
-    public void createCurrentAddressAttribute_shouldHandleMissingPostCode() {
+    void createCurrentAddressAttribute_shouldHandleMissingPostCode() {
         Address currentAddress = AddressBuilder.anAddress().withPostCode(null).build();
 
         final Attribute createdAttribute = attributeFactory.createCurrentAddressesAttribute(List.of(currentAddress));
@@ -214,7 +214,7 @@ public class AttributeFactory_1_1Test extends OpenSAMLRunner {
     }
 
     @Test
-    public void createCurrentAddressAttribute_shouldHandleMissingInternationalPostCode() {
+    void createCurrentAddressAttribute_shouldHandleMissingInternationalPostCode() {
         Address currentAddress = AddressBuilder.anAddress().withInternationalPostCode(null).build();
 
         final Attribute createdAttribute = attributeFactory.createCurrentAddressesAttribute(List.of(currentAddress));
@@ -224,7 +224,7 @@ public class AttributeFactory_1_1Test extends OpenSAMLRunner {
     }
 
     @Test
-    public void createCurrentAddressAttribute_shouldHandleMissingUPRN() {
+    void createCurrentAddressAttribute_shouldHandleMissingUPRN() {
         Address currentAddress = AddressBuilder.anAddress().withUPRN(null).build();
 
         final Attribute createdAttribute = attributeFactory.createCurrentAddressesAttribute(List.of(currentAddress));
@@ -234,7 +234,7 @@ public class AttributeFactory_1_1Test extends OpenSAMLRunner {
     }
 
     @Test
-    public void createPreviousAddressAttribute_shouldSetUpTheAttribute() {
+    void createPreviousAddressAttribute_shouldSetUpTheAttribute() {
         String line1Value = "1 Cherry Cottage";
         String line2Value = "Wurpel Lane";
         String postCodeValue = "RG99 1YY";
@@ -268,7 +268,7 @@ public class AttributeFactory_1_1Test extends OpenSAMLRunner {
     }
 
     @Test
-    public void createPreviousAddressAttribute_shouldHandleMultipleValues() {
+    void createPreviousAddressAttribute_shouldHandleMultipleValues() {
         List<Address> previousAddresses = asList(AddressBuilder.anAddress().build(), AddressBuilder.anAddress().build());
 
         Attribute createdAttribute = attributeFactory.createPreviousAddressesAttribute(previousAddresses);
@@ -277,7 +277,7 @@ public class AttributeFactory_1_1Test extends OpenSAMLRunner {
     }
 
     @Test
-    public void createPreviousAddressAttribute_shouldHandleMissingToDate() {
+    void createPreviousAddressAttribute_shouldHandleMissingToDate() {
         Address previousAddress = AddressBuilder.anAddress().withLines(asList("Flat 15", "Dalton Tower")).withToDate(null).build();
 
         attributeFactory.createPreviousAddressesAttribute(Collections.singletonList(previousAddress));
@@ -286,7 +286,7 @@ public class AttributeFactory_1_1Test extends OpenSAMLRunner {
 
 
     @Test
-    public void createGpg45StatusAttribute_shouldSetUpTheAttribute() {
+    void createGpg45StatusAttribute_shouldSetUpTheAttribute() {
         String gpg45Status = "waiting";
         Attribute createdAttribute = attributeFactory.createGpg45StatusAttribute(gpg45Status);
 
@@ -301,7 +301,7 @@ public class AttributeFactory_1_1Test extends OpenSAMLRunner {
     }
 
     @Test
-    public void createIpAddressAttribute_shouldSetUpTheAttribute() {
+    void createIpAddressAttribute_shouldSetUpTheAttribute() {
         String ipAddressValue = "0.9.8.7";
         Attribute createdAttribute = attributeFactory.createUserIpAddressAttribute(ipAddressValue);
 
@@ -316,7 +316,7 @@ public class AttributeFactory_1_1Test extends OpenSAMLRunner {
     }
 
     @Test
-    public void createIdpFraudEventIdAttribute_shouldSetUpTheAttribute() {
+    void createIdpFraudEventIdAttribute_shouldSetUpTheAttribute() {
         String fraudEventId = "fraud-event";
         Attribute createdAttribute = attributeFactory.createIdpFraudEventIdAttribute(fraudEventId);
 

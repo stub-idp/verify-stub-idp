@@ -24,7 +24,7 @@ public class OutboundResponseFromIdpToSamlResponseTransformerTest extends OpenSA
     private OutboundResponseFromIdpToSamlResponseTransformer transformer;
 
     @BeforeEach
-    public void setup() {
+    void setup() {
         IdpIdaStatusMarshaller statusTransformer = new IdpIdaStatusMarshaller(openSamlXmlObjectFactory);
         OutboundAssertionToSubjectTransformer outboundAssertionToSubjectTransformer = new OutboundAssertionToSubjectTransformer(openSamlXmlObjectFactory);
         IdentityProviderAssertionToAssertionTransformer assertionTransformer = new IdentityProviderAssertionToAssertionTransformer(
@@ -39,7 +39,7 @@ public class OutboundResponseFromIdpToSamlResponseTransformerTest extends OpenSA
     }
 
     @Test
-    public void transform_shouldTransformMatchingDataAssertion() {
+    void transform_shouldTransformMatchingDataAssertion() {
         Response response = openSamlXmlObjectFactory.createResponse();
         IdentityProviderAssertion assertion = anIdentityProviderAssertion().withMatchingDataset(MatchingDatasetBuilder.aMatchingDataset().build()).build();
         OutboundResponseFromIdp originalResponse = OutboundResponseFromIdp.createSuccessResponseFromIdp(

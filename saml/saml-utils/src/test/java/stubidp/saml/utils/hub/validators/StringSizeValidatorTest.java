@@ -8,7 +8,7 @@ import stubidp.saml.utils.hub.errors.SamlTransformationErrorFactory;
 public class StringSizeValidatorTest extends OpenSAMLRunner {
 
     @Test
-    public void shouldPassIfStringSizeIsBetweenLowerAndUpperLimits() {
+    void shouldPassIfStringSizeIsBetweenLowerAndUpperLimits() {
         StringSizeValidator validator = new StringSizeValidator();
 
         String input = "This is between 10 and 30";
@@ -17,7 +17,7 @@ public class StringSizeValidatorTest extends OpenSAMLRunner {
     }
 
     @Test
-    public void shouldFailIfStringSizeIsLessThanLowerLimit() {
+    void shouldFailIfStringSizeIsLessThanLowerLimit() {
         final StringSizeValidator validator = new StringSizeValidator();
 
         final String input = "Ring";
@@ -29,7 +29,7 @@ public class StringSizeValidatorTest extends OpenSAMLRunner {
     }
 
     @Test
-    public void shouldFailIfStringSizeIsMoreThanUpperLimit() {
+    void shouldFailIfStringSizeIsMoreThanUpperLimit() {
         final StringSizeValidator validator = new StringSizeValidator();
 
         final String input = "Ring a ring";

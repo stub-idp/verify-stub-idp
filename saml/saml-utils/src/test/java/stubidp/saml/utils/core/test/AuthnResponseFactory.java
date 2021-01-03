@@ -56,7 +56,7 @@ public class AuthnResponseFactory {
                 digestAlgorithm);
     }
 
-    public Response aResponseFromIdp(
+    private Response aResponseFromIdp(
             String requestId,
             String idpEntityId,
             String publicCert,
@@ -67,7 +67,7 @@ public class AuthnResponseFactory {
         return aResponseFromIdp(requestId, idpEntityId, publicCert, privateKey, destination, signatureAlgorithm, digestAlgorithm, EncryptionConstants.ALGO_ID_BLOCKCIPHER_AES128);
     }
 
-    public Response aResponseFromIdp(
+    private Response aResponseFromIdp(
             String requestId,
             String idpEntityId,
             String publicCert,

@@ -14,7 +14,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-public class SigningRequestAbstractTypeSignatureCreatorTest {
+class SigningRequestAbstractTypeSignatureCreatorTest {
 
     private SigningRequestAbstractTypeSignatureCreator<AttributeQuery> signatureCreator;
     @Mock
@@ -23,12 +23,12 @@ public class SigningRequestAbstractTypeSignatureCreatorTest {
     private static final String id = "response-id";
 
     @BeforeEach
-    public void setup() {
+    void setup() {
         signatureCreator = new SigningRequestAbstractTypeSignatureCreator<>(signatureFactory);
     }
 
     @Test
-    public void decorate_shouldGetSignatureAndAssignIt() {
+    void decorate_shouldGetSignatureAndAssignIt() {
         AttributeQuery response = mock(AttributeQuery.class);
         when(response.getID()).thenReturn(id);
 
@@ -38,7 +38,7 @@ public class SigningRequestAbstractTypeSignatureCreatorTest {
     }
 
     @Test
-    public void decorate_shouldAssignSignatureToResponse() {
+    void decorate_shouldAssignSignatureToResponse() {
         AttributeQuery response = mock(AttributeQuery.class);
         Signature signature = mock(Signature.class);
         when(response.getID()).thenReturn(id);

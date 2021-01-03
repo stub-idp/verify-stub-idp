@@ -19,7 +19,7 @@ public class CurrentAddressImpl extends XSAnyImpl implements CurrentAddress {
      * @param elementLocalName the local name of the XML element this Object represents
      * @param namespacePrefix the prefix for the given namespace
      */
-    protected CurrentAddressImpl(String namespaceURI, String elementLocalName, String namespacePrefix) {
+    CurrentAddressImpl(String namespaceURI, String elementLocalName, String namespacePrefix) {
         super(namespaceURI, elementLocalName, namespacePrefix);
     }
 

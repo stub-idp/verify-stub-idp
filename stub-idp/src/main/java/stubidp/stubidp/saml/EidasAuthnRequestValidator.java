@@ -56,7 +56,7 @@ public class EidasAuthnRequestValidator extends BaseAuthnRequestValidator {
         }
     }
 
-    public static void validateKeyInfo(SignableSAMLObject signableSAMLObject) {
+    private static void validateKeyInfo(SignableSAMLObject signableSAMLObject) {
         if (Objects.isNull(signableSAMLObject.getSignature().getKeyInfo())) {
             throw new InvalidEidasAuthnRequestException("KeyInfo cannot be null");
         }

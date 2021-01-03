@@ -21,19 +21,19 @@ public class EncryptionAlgorithmValidatorTest extends OpenSAMLRunner {
     private EncryptionAlgorithmValidator validator;
 
     @BeforeEach
-    public void setup() {
+    void setup() {
         validator = new EncryptionAlgorithmValidator();
     }
 
     @Test
-    public void validateShouldNotThrowSamlExceptionIfEncryptionAlgorithmIsAES128() {
+    void validateShouldNotThrowSamlExceptionIfEncryptionAlgorithmIsAES128() {
         final String encryptionAlgorithm = EncryptionConstants.ALGO_ID_BLOCKCIPHER_AES128;
         assertThatCode(() -> validator.validate(createStandardEncryptedAssertion(encryptionAlgorithm, EncryptionConstants.ALGO_ID_KEYTRANSPORT_RSAOAEP, true))).doesNotThrowAnyException();
         assertThatCode(() -> validator.validate(createOtherTypeOfEncryptedAssertion(encryptionAlgorithm, EncryptionConstants.ALGO_ID_KEYTRANSPORT_RSAOAEP))).doesNotThrowAnyException();
     }
 
     @Test
-    public void validateShouldNotThrowSamlExceptionIfEncryptionAlgorithmIsWhitelisted() {
+    void validateShouldNotThrowSamlExceptionIfEncryptionAlgorithmIsWhitelisted() {
         final String algoIdBlockcipherAes256 = EncryptionConstants.ALGO_ID_BLOCKCIPHER_AES256;
         final Set<String> whitelistedAlgos = Set.of(EncryptionConstants.ALGO_ID_BLOCKCIPHER_AES128, algoIdBlockcipherAes256);
         final Set<String> whitelistedKeyTransportAlgos = Set.of(EncryptionConstants.ALGO_ID_KEYTRANSPORT_RSAOAEP, EncryptionConstants.ALGO_ID_KEYTRANSPORT_RSAOAEP11);
@@ -44,7 +44,7 @@ public class EncryptionAlgorithmValidatorTest extends OpenSAMLRunner {
     }
 
     @Test
-    public void validateShouldThrowSamlExceptionIfEncryptionAlgorithmIsNotAES128() throws Exception {
+    void validateShouldThrowSamlExceptionIfEncryptionAlgorithmIsNotAES128() throws Exception {
         final String encryptionAlgorithm = EncryptionConstants.ALGO_ID_BLOCKCIPHER_TRIPLEDES;
         EncryptedAssertion standardEncryptedAssertion = createStandardEncryptedAssertion(encryptionAlgorithm, EncryptionConstants.ALGO_ID_KEYTRANSPORT_RSAOAEP, true);
 
@@ -54,7 +54,7 @@ public class EncryptionAlgorithmValidatorTest extends OpenSAMLRunner {
     }
 
     @Test
-    public void validateShouldNotThrowIfKeyTransportAlgorithmIsInWhitelist() {
+    void validateShouldNotThrowIfKeyTransportAlgorithmIsInWhitelist() {
         final Set<String> whitelistedAlgos = Set.of(EncryptionConstants.ALGO_ID_BLOCKCIPHER_AES128);
         final Set<String> whiteListedKeyTransportAlgos = Set.of(EncryptionConstants.ALGO_ID_KEYTRANSPORT_RSA15, EncryptionConstants.ALGO_ID_KEYTRANSPORT_RSAOAEP);
 
@@ -64,7 +64,7 @@ public class EncryptionAlgorithmValidatorTest extends OpenSAMLRunner {
     }
 
     @Test
-    public void validateShouldThrowSamlExceptionIfKeyMissing() throws Exception {
+    void validateShouldThrowSamlExceptionIfKeyMissing() throws Exception {
         final String keyTransportAlgorithm = EncryptionConstants.ALGO_ID_KEYTRANSPORT_RSAOAEP;
         EncryptedAssertion assertionWithNoKey =  createStandardEncryptedAssertion(EncryptionConstants.ALGO_ID_BLOCKCIPHER_AES128, keyTransportAlgorithm, false);
 
@@ -75,13 +75,13 @@ public class EncryptionAlgorithmValidatorTest extends OpenSAMLRunner {
 
 
     @Test
-    public void validateShouldNotThrowSamlExceptionIfKeyTransportAlgorithmIsRSAOAEP() {
+    void validateShouldNotThrowSamlExceptionIfKeyTransportAlgorithmIsRSAOAEP() {
         final String keyTransportAlgorithm = EncryptionConstants.ALGO_ID_KEYTRANSPORT_RSAOAEP;
         assertThatCode(() -> validator.validate(createStandardEncryptedAssertion(EncryptionConstants.ALGO_ID_BLOCKCIPHER_AES128, keyTransportAlgorithm, true))).doesNotThrowAnyException();
     }
 
     @Test
-    public void validateShouldThrowSamlExceptionIfKeyTransportAlgorithmIsNotRSAOAEP() throws Exception {
+    void validateShouldThrowSamlExceptionIfKeyTransportAlgorithmIsNotRSAOAEP() throws Exception {
         final String keyTransportAlgorithm = EncryptionConstants.ALGO_ID_KEYTRANSPORT_RSA15;
         EncryptedAssertion standardEncryptedAssertion = createStandardEncryptedAssertion(EncryptionConstants.ALGO_ID_BLOCKCIPHER_AES128, keyTransportAlgorithm, true);
 

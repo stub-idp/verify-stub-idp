@@ -13,7 +13,7 @@ import stubidp.utils.rest.restclient.ClientProvider;
 
 import javax.ws.rs.client.Client;
 
-public class StubIdpSingleIdpBinder extends AbstractBinder {
+class StubIdpSingleIdpBinder extends AbstractBinder {
 
     private final StubIdpConfiguration stubIdpConfiguration;
     private final Environment environment;

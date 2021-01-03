@@ -9,7 +9,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class VersionInfoResourceTest {
 
     private static class TestVersionInfoResource extends VersionInfoResource {
-        public TestVersionInfoResource() {
+        TestVersionInfoResource() {
             super(ServiceNameConfiguration.class);
         }
 
@@ -20,7 +20,7 @@ public class VersionInfoResourceTest {
     }
 
     @Test
-    public void shouldLoadDataFromManifest() {
+    void shouldLoadDataFromManifest() {
         VersionInfoResource versionInfoResource = new TestVersionInfoResource();
         VersionInfoDto versionInfo = versionInfoResource.getVersionInfo();
         assertThat(versionInfo.getBuildNumber()).isEqualTo("1");

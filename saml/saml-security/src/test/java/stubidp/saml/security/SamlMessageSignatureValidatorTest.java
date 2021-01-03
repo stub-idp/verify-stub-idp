@@ -29,7 +29,7 @@ public class SamlMessageSignatureValidatorTest extends OpenSAMLRunner {
     private static final SamlMessageSignatureValidator samlMessageSignatureValidator = new SamlMessageSignatureValidator(signatureValidator);
 
     @Test
-    public void validateWithIssue_shouldReturnBadResponseIfRequestSignatureIsMissing() {
+    void validateWithIssue_shouldReturnBadResponseIfRequestSignatureIsMissing() {
         final AuthnRequest unsignedAuthnRequest = anAuthnRequest()
                 .withIssuer(anIssuer().withIssuerId(issuerId).build())
                 .withoutSignatureElement()
@@ -42,7 +42,7 @@ public class SamlMessageSignatureValidatorTest extends OpenSAMLRunner {
     }
 
     @Test
-    public void validateWithIssue_shouldReturnBadResponseIfRequestIsNotSigned() {
+    void validateWithIssue_shouldReturnBadResponseIfRequestIsNotSigned() {
         final AuthnRequest unsignedAuthnRequest = anAuthnRequest()
                 .withIssuer(anIssuer().withIssuerId(issuerId).build())
                 .withoutSigning()
@@ -55,7 +55,7 @@ public class SamlMessageSignatureValidatorTest extends OpenSAMLRunner {
     }
 
     @Test
-    public void validateWithIssue_shouldReturnBadResponseIfRequestSignatureIsBad() {
+    void validateWithIssue_shouldReturnBadResponseIfRequestSignatureIsBad() {
         Credential badCredential = new TestCredentialFactory(TestCertificateStrings.UNCHAINED_PUBLIC_CERT, TestCertificateStrings.UNCHAINED_PRIVATE_KEY).getSigningCredential();
         final AuthnRequest unsignedAuthnRequest = anAuthnRequest()
                 .withIssuer(anIssuer().withIssuerId(issuerId).build())
@@ -69,7 +69,7 @@ public class SamlMessageSignatureValidatorTest extends OpenSAMLRunner {
     }
 
     @Test
-    public void validate_shouldAcceptSignedAuthnRequest() {
+    void validate_shouldAcceptSignedAuthnRequest() {
         final AuthnRequest signedAuthnRequest = anAuthnRequest().build();
 
         SamlValidationResponse signatureValidationResponse = samlMessageSignatureValidator.validate(signedAuthnRequest, SPSSODescriptor.DEFAULT_ELEMENT_NAME);
@@ -78,7 +78,7 @@ public class SamlMessageSignatureValidatorTest extends OpenSAMLRunner {
     }
 
     @Test
-    public void validate_shouldAcceptSignedAssertion() {
+    void validate_shouldAcceptSignedAssertion() {
         final Assertion signedAssertion = anAssertion().buildUnencrypted();
 
         SamlValidationResponse signatureValidationResponse = samlMessageSignatureValidator.validate(signedAssertion, IDPSSODescriptor.DEFAULT_ELEMENT_NAME);
@@ -87,7 +87,7 @@ public class SamlMessageSignatureValidatorTest extends OpenSAMLRunner {
     }
 
     @Test
-    public void validate_shouldAcceptSignedAttributeQuery() {
+    void validate_shouldAcceptSignedAttributeQuery() {
         final AttributeQuery signedAttributeQuery = AttributeQueryBuilder.anAttributeQuery().build();
 
         SamlValidationResponse signatureValidationResponse = samlMessageSignatureValidator.validate(signedAttributeQuery, SPSSODescriptor.DEFAULT_ELEMENT_NAME);
@@ -96,7 +96,7 @@ public class SamlMessageSignatureValidatorTest extends OpenSAMLRunner {
     }
 
     @Test
-    public void validate_shouldAcceptSignedResponse() throws Exception {
+    void validate_shouldAcceptSignedResponse() throws Exception {
         final Response signedResponse = ResponseBuilder.aResponse().build();
 
         SamlValidationResponse signatureValidationResponse = samlMessageSignatureValidator.validate(signedResponse, IDPSSODescriptor.DEFAULT_ELEMENT_NAME);
@@ -105,7 +105,7 @@ public class SamlMessageSignatureValidatorTest extends OpenSAMLRunner {
     }
 
     @Test
-    public void validate_shouldReturnBadResponseIfIssuerIsMissing() {
+    void validate_shouldReturnBadResponseIfIssuerIsMissing() {
         final AuthnRequest signedAuthnRequest = anAuthnRequest()
                 .withIssuer(null)
                 .build();
@@ -117,7 +117,7 @@ public class SamlMessageSignatureValidatorTest extends OpenSAMLRunner {
     }
 
     @Test
-    public void validate_shouldReturnBadResponseIfIssuerIsEmpty() {
+    void validate_shouldReturnBadResponseIfIssuerIsEmpty() {
         final AuthnRequest signedAuthnRequest = anAuthnRequest()
                 .withIssuer(anIssuer().withIssuerId("").build())
                 .build();

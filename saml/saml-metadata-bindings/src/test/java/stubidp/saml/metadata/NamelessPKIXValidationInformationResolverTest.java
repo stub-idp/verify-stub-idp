@@ -9,7 +9,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class NamelessPKIXValidationInformationResolverTest {
 
     @Test
-    public void shouldNotSupportTrustedNameResolution() {
+    void shouldNotSupportTrustedNameResolution() {
         NamelessPKIXValidationInformationResolver namelessPKIXValidationInformationResolver = new NamelessPKIXValidationInformationResolver(Collections.emptyList());
 
         assertThat(namelessPKIXValidationInformationResolver.supportsTrustedNameResolution()).isFalse();

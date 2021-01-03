@@ -38,7 +38,7 @@ import static org.mockito.Mockito.when;
 import static stubidp.utils.rest.analytics.AnalyticsReporter.PIWIK_VISITOR_ID;
 
 @ExtendWith(MockitoExtension.class)
-public class AnalyticsReporterTest {
+class AnalyticsReporterTest {
 
     private static final DateTimeFormatter dateTimeFormatter = new DateTimeFormatterBuilder().appendPattern("yyyy-MM-dd HH:mm:ss")
             .appendInstant(0)
@@ -56,7 +56,7 @@ public class AnalyticsReporterTest {
     private final Clock clock = Clock.fixed(Instant.now(), ZoneId.of("UTC"));
 
     @Test
-    public void shouldCallGenerateUrlAndSendToPiwikAsynchronouslyWhenReportingCustomVariable() throws Exception {
+    void shouldCallGenerateUrlAndSendToPiwikAsynchronouslyWhenReportingCustomVariable() throws Exception {
         doReturn(Map.of(PIWIK_VISITOR_ID, new Cookie(PIWIK_VISITOR_ID, visitorId))).when(requestContext).getCookies();
         when(requestContext.getRequestUri()).thenReturn(URI.create("http://localhost"));
 
@@ -70,7 +70,7 @@ public class AnalyticsReporterTest {
     }
 
     @Test
-    public void shouldCallGenerateUrlAndSendToPiwkAsynchronously() throws URISyntaxException {
+    void shouldCallGenerateUrlAndSendToPiwkAsynchronously() throws URISyntaxException {
         doReturn(Map.of(PIWIK_VISITOR_ID, new Cookie(PIWIK_VISITOR_ID, visitorId))).when(requestContext).getCookies();
 
         String friendlyDescription = "friendly description of URL";
@@ -86,7 +86,7 @@ public class AnalyticsReporterTest {
     }
 
     @Test
-    public void shouldHandleAnyExceptions() throws URISyntaxException {
+    void shouldHandleAnyExceptions() throws URISyntaxException {
         doReturn(Map.of(PIWIK_VISITOR_ID, new Cookie(PIWIK_VISITOR_ID, visitorId))).when(requestContext).getCookies();
 
         String friendlyDescription = "friendly description of URL";
@@ -99,7 +99,7 @@ public class AnalyticsReporterTest {
     }
 
     @Test
-    public void shouldGeneratePiwikUrl() throws URISyntaxException {
+    void shouldGeneratePiwikUrl() throws URISyntaxException {
         Instant now = Instant.now(clock);
 
         when(requestContext.getHeaderString("Referer")).thenReturn("http://piwikserver/referrerUrl");
@@ -125,7 +125,7 @@ public class AnalyticsReporterTest {
     }
 
     @Test
-    public void shouldGeneratePiwikCustomVariableUrl() throws URISyntaxException {
+    void shouldGeneratePiwikCustomVariableUrl() throws URISyntaxException {
         doReturn(Map.of(PIWIK_VISITOR_ID, new Cookie(PIWIK_VISITOR_ID, visitorId))).when(requestContext).getCookies();
         when(requestContext.getRequestUri()).thenReturn(URI.create("http://localhost"));
 
@@ -154,7 +154,7 @@ public class AnalyticsReporterTest {
     }
 
     @Test
-    public void simulatePageView_generatesExpectedParameters() {
+    void simulatePageView_generatesExpectedParameters() {
         doReturn(Map.of(PIWIK_VISITOR_ID, new Cookie(PIWIK_VISITOR_ID, visitorId))).when(requestContext).getCookies();
 
         AnalyticsConfiguration config = new AnalyticsConfigurationBuilder().build();
@@ -172,7 +172,7 @@ public class AnalyticsReporterTest {
     }
 
     @Test
-    public void simulatePageView_includesVisitorIdIfPresent() {
+    void simulatePageView_includesVisitorIdIfPresent() {
         doReturn(Map.of(PIWIK_VISITOR_ID, new Cookie(PIWIK_VISITOR_ID, visitorId))).when(requestContext).getCookies();
 
         AnalyticsReporter reporter = new AnalyticsReporter(piwikClient, new AnalyticsConfigurationBuilder().build(), clock);
@@ -185,7 +185,7 @@ public class AnalyticsReporterTest {
     }
 
     @Test
-    public void simulatePageView_handlesMissingVisitorId() {
+    void simulatePageView_handlesMissingVisitorId() {
         when(requestContext.getCookies()).thenReturn(Map.of());
         AnalyticsConfiguration config = new AnalyticsConfigurationBuilder().build();
         AnalyticsReporter reporter = new AnalyticsReporter(piwikClient, config, clock);
@@ -199,7 +199,7 @@ public class AnalyticsReporterTest {
     }
 
     @Test
-    public void simulatePageView_doesNotReportIfAnalyticsIsDisabled() {
+    void simulatePageView_doesNotReportIfAnalyticsIsDisabled() {
         AnalyticsConfiguration config = new AnalyticsConfigurationBuilder().setEnabled(false).build();
         AnalyticsReporter reporter = new AnalyticsReporter(piwikClient, config, clock);
 

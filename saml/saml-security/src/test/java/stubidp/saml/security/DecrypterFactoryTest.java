@@ -39,7 +39,7 @@ public class DecrypterFactoryTest extends OpenSAMLRunner {
     private PublicKey unusedPublicKey;
 
     @BeforeEach
-    public void setup() {
+    void setup() {
         PublicKeyFactory publicKeyFactory = new PublicKeyFactory(new X509CertificateFactory());
         privateEncryptionKey = new PrivateKeyFactory().createPrivateKey(Base64.getMimeDecoder().decode(OLD_HUB_PRIVATE_ENCRYPTION_KEY));
 
@@ -48,17 +48,17 @@ public class DecrypterFactoryTest extends OpenSAMLRunner {
     }
 
     @Test
-    public void createDecrypter_shouldCreateDecrypterWhichWorksWithInline() throws IOException, UnmarshallingException, DecryptionException, ParserConfigurationException, SAXException {
+    void createDecrypter_shouldCreateDecrypterWhichWorksWithInline() throws IOException, UnmarshallingException, DecryptionException, ParserConfigurationException, SAXException {
         testDecrypt("encryptedAssertionRetrievalMethod.xml");
     }
 
     @Test
-    public void createDecrypter_shouldCreateDecrypterWhichWorksWithRetrievalMethod() throws IOException, UnmarshallingException, DecryptionException, ParserConfigurationException, SAXException {
+    void createDecrypter_shouldCreateDecrypterWhichWorksWithRetrievalMethod() throws IOException, UnmarshallingException, DecryptionException, ParserConfigurationException, SAXException {
         testDecrypt("encryptedAssertionInline.xml");
     }
 
     @Test
-    public void createDecrpyter_shouldCreateDecrypterWhichReadsMultipleEncryptionKeys() {
+    void createDecrpyter_shouldCreateDecrypterWhichReadsMultipleEncryptionKeys() {
         Credential primaryPrivateEncryptionKey = getPrivateKeyFor(TestEntityIds.HUB_ENTITY_ID);
         Credential secondaryPrivateEncryptionKey = getPrivateKeyFor(TestEntityIds.TEST_RP);
         Credential publicKeyForPrimaryPrivateEncryptionKey = getCredential(TestEntityIds.HUB_ENTITY_ID);

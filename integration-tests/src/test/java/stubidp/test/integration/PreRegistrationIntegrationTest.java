@@ -43,10 +43,10 @@ public class PreRegistrationIntegrationTest extends IntegrationTestHelper {
     private static final String PASSWORD_PARAM = "bar";
     private static final String LEVEL_OF_ASSURANCE_PARAM = AuthnContext.LEVEL_2.name();
 
-    public static final StubIdpAppExtension applicationRule = new StubIdpAppExtension(Map.of("singleIdpJourney.enabled", "true"))
+    private static final StubIdpAppExtension applicationRule = new StubIdpAppExtension(Map.of("singleIdpJourney.enabled", "true"))
             .withStubIdp(aStubIdp().withId(IDP_NAME).withDisplayName(DISPLAY_NAME).build());
 
-    public static final Client client = JerseyClientBuilder.createClient().property(ClientProperties.FOLLOW_REDIRECTS, false);
+    private static final Client client = JerseyClientBuilder.createClient().property(ClientProperties.FOLLOW_REDIRECTS, false);
 
     @BeforeEach
     void setUp() {

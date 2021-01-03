@@ -65,8 +65,8 @@ class IdpAuthnRequestValidatorTest {
     private static final KeyStoreResource metadataTrustStore = KeyStoreResourceBuilder.aKeyStoreResource().withCertificate("metadataCA", CACertificates.TEST_METADATA_CA).withCertificate("rootCA", CACertificates.TEST_ROOT_CA).build();
     private static final KeyStoreResource spTrustStore = KeyStoreResourceBuilder.aKeyStoreResource().withCertificate("coreCA", CACertificates.TEST_CORE_CA).withCertificate("rootCA", CACertificates.TEST_ROOT_CA).build();
 
-    public static MetadataResolver hubMetadataResolver;
-    public static MetadataConfiguration metadataConfiguration;
+    private static MetadataResolver hubMetadataResolver;
+    private static MetadataConfiguration metadataConfiguration;
 
     @Mock
     private SamlConfiguration samlConfiguration;
@@ -74,7 +74,7 @@ class IdpAuthnRequestValidatorTest {
     private IdpAuthnRequestValidator idpAuthnRequestValidator;
 
     @BeforeAll
-    public static void beforeAll() throws MarshallingException, SignatureException, JsonProcessingException {
+    static void beforeAll() throws MarshallingException, SignatureException, JsonProcessingException {
         metadataTrustStore.create();
         spTrustStore.create();
         IdaSamlBootstrap.bootstrap();
@@ -95,31 +95,31 @@ class IdpAuthnRequestValidatorTest {
     }
 
     @AfterAll
-    public static void afterAll() {
+    static void afterAll() {
         spTrustStore.delete();
         metadataTrustStore.delete();
     }
 
     @BeforeEach
-    public void beforeEach() {
+    void beforeEach() {
         when(samlConfiguration.getExpectedDestinationHost()).thenReturn(stubIdpBaseUri);
         idpAuthnRequestValidator = new IdpAuthnRequestValidator(hubMetadataResolver, metadataConfiguration, samlConfiguration);
     }
 
     @Test
-    public void shouldThrowExceptionWhenRequestIsNull() {
+    void shouldThrowExceptionWhenRequestIsNull() {
         SamlTransformationErrorException exception = assertThrows(SamlTransformationErrorException.class, () -> idpAuthnRequestValidator.transformAndValidate(IDP_NAME, null));
         assertThat(exception.getMessage()).contains("Missing SAML message");
     }
 
     @Test
-    public void shouldThrowExceptionWhenRequestIsTooSmall() {
+    void shouldThrowExceptionWhenRequestIsTooSmall() {
         SamlTransformationErrorException exception = assertThrows(SamlTransformationErrorException.class, () -> idpAuthnRequestValidator.transformAndValidate(IDP_NAME, ""));
         assertThat(exception.getMessage()).contains("The size of string is 0; it should be at least 1,200.");
     }
 
     @Test
-    public void shouldThrowExceptionWhenKeyInfoIsNotNull() {
+    void shouldThrowExceptionWhenKeyInfoIsNotNull() {
         String _authnRequest = IdpAuthnRequestBuilder.anAuthnRequest()
                 .withKeyInfo(true)
                 .withEntityId(hubEntityId)
@@ -131,7 +131,7 @@ class IdpAuthnRequestValidatorTest {
     }
 
     @Test
-    public void shouldValidateAValidAuthnRequest() {
+    void shouldValidateAValidAuthnRequest() {
         String _authnRequest = IdpAuthnRequestBuilder.anAuthnRequest()
                 .withEntityId(hubEntityId)
                 .withIssueInstant(Instant.now())
@@ -141,7 +141,7 @@ class IdpAuthnRequestValidatorTest {
     }
 
     @Test
-    public void shouldFailDuplicateSubmissionsOfSameRequest() {
+    void shouldFailDuplicateSubmissionsOfSameRequest() {
         String _authnRequest = IdpAuthnRequestBuilder.anAuthnRequest()
                 .withEntityId(hubEntityId)
                 .withIssueInstant(Instant.now())
@@ -153,7 +153,7 @@ class IdpAuthnRequestValidatorTest {
     }
 
     @Test
-    public void shouldNotValidateAValidAuthnRequestSignedWithWrongKey() {
+    void shouldNotValidateAValidAuthnRequestSignedWithWrongKey() {
         String _authnRequest = IdpAuthnRequestBuilder.anAuthnRequest()
                 .withEntityId(hubEntityId)
                 .withIssueInstant(Instant.now())
@@ -165,7 +165,7 @@ class IdpAuthnRequestValidatorTest {
     }
 
     @Test
-    public void shouldNotAllowAnIncorrectDestination() {
+    void shouldNotAllowAnIncorrectDestination() {
         String _authnRequest = IdpAuthnRequestBuilder.anAuthnRequest()
                 .withEntityId(hubEntityId)
                 .withIssueInstant(Instant.now())
@@ -176,7 +176,7 @@ class IdpAuthnRequestValidatorTest {
     }
 
     @Test
-    public void shouldNotValidateRequestFromUnepectedIssuer() {
+    void shouldNotValidateRequestFromUnepectedIssuer() {
         String _authnRequest = IdpAuthnRequestBuilder.anAuthnRequest()
                 .withEntityId("something else")
                 .withIssueInstant(Instant.now())
@@ -187,7 +187,7 @@ class IdpAuthnRequestValidatorTest {
     }
 
     @Test
-    public void shouldNotAcceptExpiredRequest() {
+    void shouldNotAcceptExpiredRequest() {
         String _authnRequest = IdpAuthnRequestBuilder.anAuthnRequest()
                 .withEntityId(hubEntityId)
                 .withIssueInstant(Instant.now().atZone(ZoneId.of("UTC")).minusHours(1).toInstant())

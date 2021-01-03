@@ -41,7 +41,7 @@ public class SignatureValidatorTest extends OpenSAMLRunner {
     private SignatureValidator signatureValidator;
 
     @BeforeEach
-    public void setUp() {
+    void setUp() {
         this.signatureValidator = new SignatureValidator() {
             @Override
             protected TrustEngine<Signature> getTrustEngine(String entityId) {
@@ -59,7 +59,7 @@ public class SignatureValidatorTest extends OpenSAMLRunner {
     }
 
     @Test
-    public void shouldNotAllowMD5Digests() throws SignatureException, SecurityException, MarshallingException {
+    void shouldNotAllowMD5Digests() throws SignatureException, SecurityException, MarshallingException {
         final Response signedResponse = aResponse()
                 .withDigestAlgorithm(new DigestMD5())
                 .build();
@@ -67,7 +67,7 @@ public class SignatureValidatorTest extends OpenSAMLRunner {
     }
 
     @Test
-    public void shouldNotAllowSha1DigestMethod() throws SignatureException, SecurityException, MarshallingException {
+    void shouldNotAllowSha1DigestMethod() throws SignatureException, SecurityException, MarshallingException {
         final Response signedResponse = aResponse()
                 .withDigestAlgorithm(new DigestSHA1())
                 .build();
@@ -75,7 +75,7 @@ public class SignatureValidatorTest extends OpenSAMLRunner {
     }
 
     @Test
-    public void shouldAllowSha256DigestMethod() throws SignatureException, SecurityException, MarshallingException {
+    void shouldAllowSha256DigestMethod() throws SignatureException, SecurityException, MarshallingException {
         final Response signedResponse = aResponse()
                 .withDigestAlgorithm(new DigestSHA256())
                 .build();
@@ -83,7 +83,7 @@ public class SignatureValidatorTest extends OpenSAMLRunner {
     }
 
     @Test
-    public void shouldAllowSha512DigestMethod() throws SignatureException, SecurityException, MarshallingException {
+    void shouldAllowSha512DigestMethod() throws SignatureException, SecurityException, MarshallingException {
         final Response signedResponse = aResponse()
                 .withDigestAlgorithm(new DigestSHA512())
                 .build();
@@ -91,7 +91,7 @@ public class SignatureValidatorTest extends OpenSAMLRunner {
     }
 
     @Test
-    public void shouldNotAllowSigningAlgorithmRsaSHA1() throws Exception {
+    void shouldNotAllowSigningAlgorithmRsaSHA1() throws Exception {
         final Response signedResponse = aResponse()
                 .withSignatureAlgorithm(new SignatureRSASHA1())
                 .build();
@@ -99,7 +99,7 @@ public class SignatureValidatorTest extends OpenSAMLRunner {
     }
 
     @Test
-    public void shouldAllowSigningAlgorithmRsaSHA256() throws Exception {
+    void shouldAllowSigningAlgorithmRsaSHA256() throws Exception {
         final Response signedResponse = aResponse()
                 .withSignatureAlgorithm(new SignatureRSASHA256())
                 .build();
@@ -107,7 +107,7 @@ public class SignatureValidatorTest extends OpenSAMLRunner {
     }
 
     @Test
-    public void shouldAllowSigningAlgorithmRsaSHA512() throws Exception {
+    void shouldAllowSigningAlgorithmRsaSHA512() throws Exception {
         final Response signedResponse = aResponse()
                 .withSignatureAlgorithm(new SignatureRSASHA512())
                 .build();
@@ -115,7 +115,7 @@ public class SignatureValidatorTest extends OpenSAMLRunner {
     }
 
     @Test
-    public void shouldNotAllowSigningAlgorithmMD5() throws Exception {
+    void shouldNotAllowSigningAlgorithmMD5() throws Exception {
         final Response signedResponse = aResponse()
                 .withSignatureAlgorithm(new SignatureRSAMD5())
                 .build();

@@ -13,7 +13,7 @@ public class ErrorPageView extends View {
         super("errorPage.ftl", StandardCharsets.UTF_8);
     }
 
-    public ErrorPageView(String templateName, Charset charset) {
+    ErrorPageView(String templateName, Charset charset) {
         super(templateName, charset);
     }
 

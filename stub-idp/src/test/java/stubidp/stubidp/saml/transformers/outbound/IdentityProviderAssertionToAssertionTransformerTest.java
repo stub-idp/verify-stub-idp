@@ -44,7 +44,7 @@ import static stubidp.saml.test.builders.IPAddressAttributeBuilder.anIPAddress;
 import static stubidp.saml.test.builders.IdentityProviderAssertionBuilder.anIdentityProviderAssertion;
 
 @ExtendWith(MockitoExtension.class)
-public class IdentityProviderAssertionToAssertionTransformerTest extends OpenSAMLRunner {
+class IdentityProviderAssertionToAssertionTransformerTest extends OpenSAMLRunner {
 
     private IdentityProviderAssertionToAssertionTransformer transformer;
     @Mock
@@ -60,7 +60,7 @@ public class IdentityProviderAssertionToAssertionTransformerTest extends OpenSAM
     private final TransliterableMdsValue currentSurname = TransliterableMdsValueBuilder.asTransliterableMdsValue().withValue("subject-currentSurname").withVerifiedStatus(true).build();
 
     @BeforeEach
-    public void setup() {
+    void setup() {
         OpenSamlXmlObjectFactory openSamlXmlObjectFactory = new OpenSamlXmlObjectFactory();
         transformer = new IdentityProviderAssertionToAssertionTransformer(
                 openSamlXmlObjectFactory,
@@ -70,7 +70,7 @@ public class IdentityProviderAssertionToAssertionTransformerTest extends OpenSAM
     }
 
     @Test
-    public void shouldTransformAssertionSubjects() {
+    void shouldTransformAssertionSubjects() {
         IdentityProviderAssertion assertion = anIdentityProviderAssertion().build();
 
         transformer.transform(assertion);
@@ -79,7 +79,7 @@ public class IdentityProviderAssertionToAssertionTransformerTest extends OpenSAM
     }
 
     @Test
-    public void shouldTransformAssertionSubjectsFirstName() {
+    void shouldTransformAssertionSubjectsFirstName() {
         TransliterableMdsValue firstname = TransliterableMdsValueBuilder.asTransliterableMdsValue().withValue("Bob").build();
         IdentityProviderAssertion assertion = anIdentityProviderAssertion().withMatchingDataset(
                 MatchingDatasetBuilder.aMatchingDataset().addFirstname(firstname).build()).build();
@@ -90,7 +90,7 @@ public class IdentityProviderAssertionToAssertionTransformerTest extends OpenSAM
     }
 
     @Test
-    public void shouldHandleMissingAssertionSubjectsFirstname() {
+    void shouldHandleMissingAssertionSubjectsFirstname() {
         MatchingDataset matchingDataset = MatchingDatasetBuilder.aMatchingDataset()
                 .addMiddleNames(TransliterableMdsValueBuilder.asTransliterableMdsValue().withValue("subject-middlename").withVerifiedStatus(true).build())
                 .withSurnameHistory(asList(previousSurname, currentSurname))
@@ -108,7 +108,7 @@ public class IdentityProviderAssertionToAssertionTransformerTest extends OpenSAM
     }
 
     @Test
-    public void shouldTransformAssertionSubjectsMiddleNames() {
+    void shouldTransformAssertionSubjectsMiddleNames() {
         SimpleMdsValue<String> middleNames = SimpleMdsValueBuilder.<String>aSimpleMdsValue().withValue("archibald ferdinand").build();
         IdentityProviderAssertion assertion = anIdentityProviderAssertion().withMatchingDataset(MatchingDatasetBuilder.aMatchingDataset().addMiddleNames(middleNames).build()).build();
 
@@ -118,7 +118,7 @@ public class IdentityProviderAssertionToAssertionTransformerTest extends OpenSAM
     }
 
     @Test
-    public void shouldHandleMissingAssertionSubjectsMiddleNames() {
+    void shouldHandleMissingAssertionSubjectsMiddleNames() {
         MatchingDataset matchingDataset = MatchingDatasetBuilder.aMatchingDataset()
                 .addFirstname(TransliterableMdsValueBuilder.asTransliterableMdsValue().withValue("subject-firstname").withVerifiedStatus(true).build())
                 .withSurnameHistory(asList(previousSurname, currentSurname))
@@ -135,7 +135,7 @@ public class IdentityProviderAssertionToAssertionTransformerTest extends OpenSAM
     }
 
     @Test
-    public void shouldTransformAssertionSubjectsSurname() {
+    void shouldTransformAssertionSubjectsSurname() {
         TransliterableMdsValue surname = TransliterableMdsValueBuilder.asTransliterableMdsValue().withValue("Cratchit").build();
         IdentityProviderAssertion assertion = anIdentityProviderAssertion().withMatchingDataset(MatchingDatasetBuilder.aMatchingDataset().addSurname(surname).build()).build();
 
@@ -145,7 +145,7 @@ public class IdentityProviderAssertionToAssertionTransformerTest extends OpenSAM
     }
 
     @Test
-    public void shouldHandleMissingAssertionSubjectsSurname() {
+    void shouldHandleMissingAssertionSubjectsSurname() {
         IdentityProviderAssertion assertion = anIdentityProviderAssertion().withMatchingDataset(MatchingDatasetBuilder.aFullyPopulatedMatchingDataset().withoutSurname().build()).build();
 
         transformer.transform(assertion);
@@ -154,7 +154,7 @@ public class IdentityProviderAssertionToAssertionTransformerTest extends OpenSAM
     }
 
     @Test
-    public void shouldTransformAssertionSubjectsGender() {
+    void shouldTransformAssertionSubjectsGender() {
         SimpleMdsValue<Gender> gender = SimpleMdsValueBuilder.<Gender>aSimpleMdsValue().withValue(Gender.FEMALE).build();
         IdentityProviderAssertion assertion = anIdentityProviderAssertion().withMatchingDataset(MatchingDatasetBuilder.aMatchingDataset().withGender(gender).build()).build();
 
@@ -164,7 +164,7 @@ public class IdentityProviderAssertionToAssertionTransformerTest extends OpenSAM
     }
 
     @Test
-    public void shouldHandleMissingAssertionSubjectsGender() {
+    void shouldHandleMissingAssertionSubjectsGender() {
         IdentityProviderAssertion assertion = anIdentityProviderAssertion().withMatchingDataset(MatchingDatasetBuilder.aFullyPopulatedMatchingDataset().withGender(null).build()).build();
 
         transformer.transform(assertion);
@@ -173,7 +173,7 @@ public class IdentityProviderAssertionToAssertionTransformerTest extends OpenSAM
     }
 
     @Test
-    public void shouldTransformAssertionSubjectsDateOfBirth() {
+    void shouldTransformAssertionSubjectsDateOfBirth() {
         SimpleMdsValue<Instant> dateOfBirth = SimpleMdsValueBuilder.<Instant>aSimpleMdsValue().withValue(BaseMdsSamlObjectUnmarshaller.InstantFromDate.of("1986-12-05")).build();
         IdentityProviderAssertion assertion = anIdentityProviderAssertion().withMatchingDataset(MatchingDatasetBuilder.aMatchingDataset().addDateOfBirth(dateOfBirth).build()).build();
 
@@ -183,7 +183,7 @@ public class IdentityProviderAssertionToAssertionTransformerTest extends OpenSAM
     }
 
     @Test
-    public void shouldHandleMissingAssertionSubjectsDateOfBirth() {
+    void shouldHandleMissingAssertionSubjectsDateOfBirth() {
         MatchingDataset matchingDataset = MatchingDatasetBuilder.aMatchingDataset()
                 .addFirstname(TransliterableMdsValueBuilder.asTransliterableMdsValue().withValue("subject-firstname").withVerifiedStatus(true).build())
                 .addMiddleNames(SimpleMdsValueBuilder.<String>aSimpleMdsValue().withValue("subject-middlename").withVerifiedStatus(true).build())
@@ -201,7 +201,7 @@ public class IdentityProviderAssertionToAssertionTransformerTest extends OpenSAM
     }
 
     @Test
-    public void shouldTransformAssertionSubjectsCurrentAddress() {
+    void shouldTransformAssertionSubjectsCurrentAddress() {
         List<Address> address = singletonList(AddressFactory.create(singletonList("221b Baker St."), "W4 1SH", "A 1", "4536789", "2007-09-28", "2007-10-29", true));
         IdentityProviderAssertion assertion = anIdentityProviderAssertion().withMatchingDataset(MatchingDatasetBuilder.aMatchingDataset().withCurrentAddresses(address).build()).build();
 
@@ -211,7 +211,7 @@ public class IdentityProviderAssertionToAssertionTransformerTest extends OpenSAM
     }
 
     @Test
-    public void shouldHandleMissingAssertionSubjectsCurrentAddress() {
+    void shouldHandleMissingAssertionSubjectsCurrentAddress() {
         IdentityProviderAssertion assertion = anIdentityProviderAssertion().withMatchingDataset(MatchingDatasetBuilder.aFullyPopulatedMatchingDataset().withCurrentAddresses(new ArrayList<>()).build()).build();
 
         transformer.transform(assertion);
@@ -220,7 +220,7 @@ public class IdentityProviderAssertionToAssertionTransformerTest extends OpenSAM
     }
 
     @Test
-    public void shouldTransformAssertionSubjectsPreviousAddresses() {
+    void shouldTransformAssertionSubjectsPreviousAddresses() {
         Address previousAddressOne = AddressFactory.create(singletonList("221b Baker St."), "W4 1SH", null, null, "2007-09-27", "2007-09-28", true);
         Address previousAddressTwo = AddressFactory.create(singletonList("1 Goose Lane"), "M1 2FG", null, null, "2006-09-29", "2006-09-28", false);
         IdentityProviderAssertion assertion = anIdentityProviderAssertion().withMatchingDataset(MatchingDatasetBuilder.aMatchingDataset().withPreviousAddresses(asList(previousAddressOne, previousAddressTwo)).build()).build();
@@ -231,7 +231,7 @@ public class IdentityProviderAssertionToAssertionTransformerTest extends OpenSAM
     }
 
     @Test
-    public void shouldHandleMissingAssertionSubjectsPreviousAddress() {
+    void shouldHandleMissingAssertionSubjectsPreviousAddress() {
         IdentityProviderAssertion assertion = anIdentityProviderAssertion().withMatchingDataset(MatchingDatasetBuilder.aFullyPopulatedMatchingDataset().withPreviousAddresses(new ArrayList<>()).build()).build();
 
         transformer.transform(assertion);
@@ -240,7 +240,7 @@ public class IdentityProviderAssertionToAssertionTransformerTest extends OpenSAM
     }
 
     @Test
-    public void shouldTransformAssertionId() {
+    void shouldTransformAssertionId() {
         String assertionId = "assertion-id";
         IdentityProviderAssertion assertion = anIdentityProviderAssertion().withId(assertionId).build();
 
@@ -250,7 +250,7 @@ public class IdentityProviderAssertionToAssertionTransformerTest extends OpenSAM
     }
 
     @Test
-    public void shouldTransformAssertionIssuer() {
+    void shouldTransformAssertionIssuer() {
         String assertionIssuerId = "assertion issuer";
         IdentityProviderAssertion assertion = anIdentityProviderAssertion().withIssuer(assertionIssuerId).build();
 
@@ -260,7 +260,7 @@ public class IdentityProviderAssertionToAssertionTransformerTest extends OpenSAM
     }
 
     @Test
-    public void shouldTransformAssertionIssuerInstance() {
+    void shouldTransformAssertionIssuerInstance() {
         Instant issueInstant = Instant.parse("2012-12-31T12:34:56Z");
         IdentityProviderAssertion assertion = anIdentityProviderAssertion().withIssueInstant(issueInstant).build();
 
@@ -270,7 +270,7 @@ public class IdentityProviderAssertionToAssertionTransformerTest extends OpenSAM
     }
 
     @Test
-    public void shouldTransformLevelOfAssurance() {
+    void shouldTransformLevelOfAssurance() {
         AuthnContext levelOfAssurance = AuthnContext.LEVEL_2;
         IdentityProviderAuthnStatement authnStatement = anIdentityProviderAuthnStatement()
                 .withAuthnContext(levelOfAssurance)
@@ -285,7 +285,7 @@ public class IdentityProviderAssertionToAssertionTransformerTest extends OpenSAM
     }
 
     @Test
-    public void shouldTransformFraudDetailsEventId() {
+    void shouldTransformFraudDetailsEventId() {
         String reference = "reference";
         FraudAuthnDetails fraudAuthnDetails = new FraudAuthnDetails(reference, "IT01");
         IdentityProviderAssertion assertion = anIdentityProviderAssertion()
@@ -298,7 +298,7 @@ public class IdentityProviderAssertionToAssertionTransformerTest extends OpenSAM
     }
 
     @Test
-    public void houldTransformFraudDetailsIndicatorIfPresent() {
+    void houldTransformFraudDetailsIndicatorIfPresent() {
         String indicator = "FI01";
         FraudAuthnDetails fraudAuthnDetails = new FraudAuthnDetails("ref", "FI01");
         IdentityProviderAssertion assertion = anIdentityProviderAssertion()
@@ -311,7 +311,7 @@ public class IdentityProviderAssertionToAssertionTransformerTest extends OpenSAM
     }
 
     @Test
-    public void shouldTransformIpAddress() {
+    void shouldTransformIpAddress() {
         String ipAddressValue = "9.9.8.8";
         IdentityProviderAssertion assertion = anIdentityProviderAssertion()
                 .withAuthnStatement(anIdentityProviderAuthnStatement().withUserIpAddress(new IpAddress(ipAddressValue)).build())

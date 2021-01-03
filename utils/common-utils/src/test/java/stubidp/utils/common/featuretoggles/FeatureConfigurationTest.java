@@ -11,7 +11,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class FeatureConfigurationTest {
 
     @Test
-    public void loadFromFile_shouldCreateConfiguration() {
+    void loadFromFile_shouldCreateConfiguration() {
         Yaml yaml = new Yaml(new Constructor(FeatureConfiguration.class));
         String fileName = "stubidp.utils.common.featuretoggles/feature-toggles.yml";
         ClassLoader classloader = Thread.currentThread().getContextClassLoader();
@@ -29,7 +29,7 @@ public class FeatureConfigurationTest {
     }
 
     @Test
-    public void loadFromFile_shouldCreateConfigurationForEmptyFeatureList() {
+    void loadFromFile_shouldCreateConfigurationForEmptyFeatureList() {
         Yaml yaml = new Yaml(new Constructor(FeatureConfiguration.class));
         String fileName = "stubidp.utils.common.featuretoggles/no-features.yml";
         ClassLoader classloader = Thread.currentThread().getContextClassLoader();

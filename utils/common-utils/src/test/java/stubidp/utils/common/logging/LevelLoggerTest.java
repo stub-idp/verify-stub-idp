@@ -36,34 +36,34 @@ public class LevelLoggerTest {
     private final String innerErrorMessage = "innerErrorMessage";
 
     @BeforeEach
-    public void setUp() {
+    void setUp() {
         final Logger logger = (Logger) LoggerFactory.getLogger(Logger.ROOT_LOGGER_NAME);
         logger.addAppender(mockAppender);
     }
 
     @Test
-    public void assertExceptionIsLoggedWithLevelError() {
+    void assertExceptionIsLoggedWithLevelError() {
         levelLogger.log(Level.ERROR, new RuntimeException(innerErrorMessage), errorId);
         String message = MessageFormat.format("UNEXPECTED_EXCEPTION – '{'id: {0}, message: {1}'}'", errorId, innerErrorMessage);
         verifyLogMessageAndLevel(ch.qos.logback.classic.Level.ERROR, message);
     }
 
     @Test
-    public void assertExceptionIsLoggedWithLevelWarn() {
+    void assertExceptionIsLoggedWithLevelWarn() {
         levelLogger.log(Level.WARN, new RuntimeException(innerErrorMessage), errorId);
         String message = MessageFormat.format("UNEXPECTED_EXCEPTION – '{'id: {0}, message: {1}'}'", errorId, innerErrorMessage);
         verifyLogMessageAndLevel(ch.qos.logback.classic.Level.WARN, message);
     }
 
     @Test
-    public void assertExceptionIsLoggedWithLevelInfo() {
+    void assertExceptionIsLoggedWithLevelInfo() {
         levelLogger.log(Level.INFO, new RuntimeException(innerErrorMessage), errorId);
         String message = MessageFormat.format("UNEXPECTED_EXCEPTION – '{'id: {0}, message: {1}'}'", errorId, innerErrorMessage);
         verifyLogMessageAndLevel(ch.qos.logback.classic.Level.INFO, message);
     }
 
     @Test
-    public void assertExceptionIsLoggedWithLevelDebug() {
+    void assertExceptionIsLoggedWithLevelDebug() {
         levelLogger.log(Level.DEBUG, new RuntimeException(innerErrorMessage), errorId);
         String message = MessageFormat.format("UNEXPECTED_EXCEPTION – '{'id: {0}, message: {1}'}'", errorId, innerErrorMessage);
         verifyLogMessageAndLevel(ch.qos.logback.classic.Level.DEBUG, message);

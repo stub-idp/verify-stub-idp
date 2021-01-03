@@ -17,7 +17,7 @@ public class EncodedCertificateConfigurationTest {
     private final ObjectMapper objectMapper = new ObjectMapper();
 
     @Test
-    public void should_loadPublicKeyFromJSON() throws Exception {
+    void should_loadPublicKeyFromJSON() throws Exception {
         String encodedCert = getCertificateAsString();
         String jsonConfig = "{\"type\": \"encoded\", \"cert\": \"" + encodedCert + "\", \"name\": \"someId\"}";
         DeserializablePublicKeyConfiguration config = objectMapper.readValue(jsonConfig, DeserializablePublicKeyConfiguration.class);
@@ -26,7 +26,7 @@ public class EncodedCertificateConfigurationTest {
     }
 
     @Test
-    public void should_ThrowExceptionWhenStringDoesNotContainAPublicKey() throws Exception {
+    void should_ThrowExceptionWhenStringDoesNotContainAPublicKey() throws Exception {
         InputStream stream = Objects.requireNonNull(getClass().getClassLoader().getResourceAsStream("private_key.pk8"));
         String encodedKey = Base64.getEncoder().encodeToString(stream.readAllBytes());
         final ValueInstantiationException exception = Assertions.assertThrows(ValueInstantiationException.class,
@@ -35,13 +35,13 @@ public class EncodedCertificateConfigurationTest {
     }
 
     @Test
-    public void should_ThrowExceptionWhenStringIsNotBase64Encoded() {
+    void should_ThrowExceptionWhenStringIsNotBase64Encoded() {
         Assertions.assertThrows(ValueInstantiationException.class,
                 () -> objectMapper.readValue("{\"type\": \"encoded\", \"cert\": \"" + "FOOBARBAZ" + "\", \"name\": \"someId\"}", DeserializablePublicKeyConfiguration.class));
     }
 
     @Test
-    public void should_ThrowExceptionWhenIncorrectKeySpecified() {
+    void should_ThrowExceptionWhenIncorrectKeySpecified() {
         String jsonConfig = "{\"type\": \"encoded\", \"certFoo\": \"" + "empty_file" + "\", \"name\": \"someId\"}";
         Assertions.assertThrows(ValueInstantiationException.class,
                 () -> objectMapper.readValue(jsonConfig, DeserializablePublicKeyConfiguration.class));

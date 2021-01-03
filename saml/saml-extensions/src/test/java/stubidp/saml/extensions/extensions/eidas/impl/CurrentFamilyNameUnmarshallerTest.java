@@ -7,23 +7,23 @@ import stubidp.saml.test.OpenSAMLRunner;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class CurrentFamilyNameUnmarshallerTest extends OpenSAMLRunner {
+class CurrentFamilyNameUnmarshallerTest extends OpenSAMLRunner {
     @Test
-    public void shouldUnmarshallCurrentFamilyNameValue() throws Exception {
+    void shouldUnmarshallCurrentFamilyNameValue() throws Exception {
         final CurrentFamilyName currentFamilyName = Utils.unmarshall(getCurrentFamilyNameSamlString(true));
 
         assertThat(currentFamilyName.getFamilyName()).isEqualTo("Garcia");
     }
 
     @Test
-    public void shouldUnmarshallLatinScriptValueWhenAbsent() throws Exception {
+    void shouldUnmarshallLatinScriptValueWhenAbsent() throws Exception {
         final CurrentFamilyName currentFamilyName = Utils.unmarshall(getCurrentFamilyNameSamlString(true));
 
         assertThat(currentFamilyName.isLatinScript()).isEqualTo(true);
     }
 
     @Test
-    public void shouldUnmarshallLatinScriptValueWhenPresent() throws Exception {
+    void shouldUnmarshallLatinScriptValueWhenPresent() throws Exception {
         final CurrentFamilyName currentFamilyName = Utils.unmarshall(getCurrentFamilyNameSamlString(false));
 
         assertThat(currentFamilyName.isLatinScript()).isEqualTo(false);

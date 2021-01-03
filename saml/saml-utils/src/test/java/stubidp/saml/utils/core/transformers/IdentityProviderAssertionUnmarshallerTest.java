@@ -45,7 +45,7 @@ public class IdentityProviderAssertionUnmarshallerTest extends OpenSAMLRunner {
     private IdentityProviderAssertionUnmarshaller unmarshaller;
 
     @BeforeEach
-    public void setUp() {
+    void setUp() {
         unmarshaller = new IdentityProviderAssertionUnmarshaller(
                 matchingDatasetUnmarshaller,
                 eidasMatchingDatasetUnmarshaller,
@@ -54,7 +54,7 @@ public class IdentityProviderAssertionUnmarshallerTest extends OpenSAMLRunner {
     }
 
     @Test
-    public void transform_shouldTransformResponseWhenNoMatchingDatasetIsPresent() {
+    void transform_shouldTransformResponseWhenNoMatchingDatasetIsPresent() {
         Assertion originalAssertion = AssertionBuilder.anAssertion().buildUnencrypted();
 
         IdentityProviderAssertion transformedAssertion = unmarshaller.fromVerifyAssertion(originalAssertion);
@@ -62,7 +62,7 @@ public class IdentityProviderAssertionUnmarshallerTest extends OpenSAMLRunner {
     }
 
     @Test
-    public void transform_shouldDelegateMatchingDatasetTransformationWhenAssertionContainsMatchingDataset() {
+    void transform_shouldDelegateMatchingDatasetTransformationWhenAssertionContainsMatchingDataset() {
         Attribute firstName = PersonNameAttributeBuilder_1_1.aPersonName_1_1().addValue(PersonNameAttributeValueBuilder.aPersonNameValue().withTo(BaseMdsSamlObjectUnmarshaller.InstantFromDate.of("1066-01-05")).build()).buildAsFirstname();
         Assertion assertion = AssertionBuilder.aMatchingDatasetAssertion(
                 firstName,
@@ -84,7 +84,7 @@ public class IdentityProviderAssertionUnmarshallerTest extends OpenSAMLRunner {
     }
 
     @Test
-    public void transform_shouldDelegateAuthnStatementTransformationWhenAssertionContainsAuthnStatement() {
+    void transform_shouldDelegateAuthnStatementTransformationWhenAssertionContainsAuthnStatement() {
         Assertion assertion = AssertionBuilder.anAuthnStatementAssertion().buildUnencrypted();
         IdentityProviderAuthnStatement authnStatement = IdentityProviderAuthnStatementBuilder.anIdentityProviderAuthnStatement().build();
 
@@ -97,7 +97,7 @@ public class IdentityProviderAssertionUnmarshallerTest extends OpenSAMLRunner {
     }
 
     @Test
-    public void transform_shouldTransformSubjectConfirmationData() {
+    void transform_shouldTransformSubjectConfirmationData() {
         Assertion assertion = AssertionBuilder.anAssertion().buildUnencrypted();
         SubjectConfirmationData subjectConfirmationData = assertion.getSubject().getSubjectConfirmations().get(0).getSubjectConfirmationData();
 

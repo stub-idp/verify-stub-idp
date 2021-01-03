@@ -10,10 +10,10 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class AddressUnmarshallerTest extends OpenSAMLRunner {
+class AddressUnmarshallerTest extends OpenSAMLRunner {
 
     @Test
-    public void unmarshall_shouldUnmarshallAnAddress() throws Exception {
+    void unmarshall_shouldUnmarshallAnAddress() throws Exception {
         String line1Value = "1 Cherry Cottage";
         String line2Value = "Wurpel Lane";
         String postCodeValue = "RG99 1YY";
@@ -47,7 +47,7 @@ public class AddressUnmarshallerTest extends OpenSAMLRunner {
     }
 
     @Test
-    public void unmarshall_shouldUnmarshallVerifiedWhenTrue() throws Exception {
+    void unmarshall_shouldUnmarshallVerifiedWhenTrue() throws Exception {
         String addressXmlString = createAddressXmlString("", "", "", "", "2020-03-15", "2020-03-15", true, "");
 
         Address address = Utils.unmarshall(addressXmlString);
@@ -56,7 +56,7 @@ public class AddressUnmarshallerTest extends OpenSAMLRunner {
     }
 
     @Test
-    public void unmarshall_shouldUnmarshallVerifiedWhenFalse() throws Exception {
+    void unmarshall_shouldUnmarshallVerifiedWhenFalse() throws Exception {
         String addressXmlString = createAddressXmlString("", "", "", "", "2020-03-15", "2020-03-15", false, "");
 
         Address address = Utils.unmarshall(addressXmlString);
@@ -65,7 +65,7 @@ public class AddressUnmarshallerTest extends OpenSAMLRunner {
     }
 
     @Test
-    public void unmarshall_shouldSetVerifiedToDefaultValueWhenAbsent() throws Exception {
+    void unmarshall_shouldSetVerifiedToDefaultValueWhenAbsent() throws Exception {
         String addressXmlString = "  <saml:AttributeValue" +
                 "        xmlns:saml=\"urn:oasis:names:tc:SAML:2.0:assertion\"" +
                 "        xmlns:ida=\"http://www.cabinetoffice.gov.uk/resource-library/ida/attributes\"" +

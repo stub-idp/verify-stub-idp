@@ -7,9 +7,9 @@ import stubidp.saml.test.OpenSAMLRunner;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class PersonIdentifierUnmarshallerTest extends OpenSAMLRunner {
+class PersonIdentifierUnmarshallerTest extends OpenSAMLRunner {
     @Test
-    public void shouldUnmarshallPersonIdentifier() throws Exception {
+    void shouldUnmarshallPersonIdentifier() throws Exception {
         final PersonIdentifier personIdentifier = Utils.unmarshall("" +
                 "<saml2:AttributeValue " +
                 "   xmlns:eidas-natural=\"http://eidas.europa.eu/attributes/naturalperson\"\n " +

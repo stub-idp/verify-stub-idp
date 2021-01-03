@@ -13,12 +13,12 @@ public class RelayStateValidatorTest extends OpenSAMLRunner {
     private RelayStateValidator relayStateValidator;
 
     @BeforeEach
-    public void setUp() {
+    void setUp() {
         relayStateValidator = new RelayStateValidator();
     }
 
     @Test
-    public void validate_shouldCheckRelayStateLengthIsLessThanEightyOneCharactersOrRaiseException() {
+    void validate_shouldCheckRelayStateLengthIsLessThanEightyOneCharactersOrRaiseException() {
         final String aStringMoreThanEightyCharacters = generateLongString();
         SamlTransformationErrorManagerTestHelper.validateFail(
                 () -> relayStateValidator.validate(aStringMoreThanEightyCharacters),
@@ -27,14 +27,14 @@ public class RelayStateValidatorTest extends OpenSAMLRunner {
     }
 
     @Test
-    public void validate_shouldCheckRelayStateForValidStringAndNotThrowAnException() {
+    void validate_shouldCheckRelayStateForValidStringAndNotThrowAnException() {
         String aStringLessThanEightyCharacters = generateShortString();
 
         relayStateValidator.validate(aStringLessThanEightyCharacters);
     }
 
     @Test
-    public void validate_shouldCheckForInvalidCharacters() {
+    void validate_shouldCheckForInvalidCharacters() {
         final String aString = "aStringWith";
 
         for (final String i : asList(">", "<", "'", "\"", "%", "&", ";")) {

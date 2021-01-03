@@ -34,9 +34,9 @@ import static stubidp.saml.test.builders.HubEidasAttributeQueryRequestBuilder.aH
 import static stubidp.saml.test.builders.HubAssertionBuilder.aHubAssertion;
 
 @ExtendWith(MockitoExtension.class)
-public class HubEidasAttributeQueryRequestToSamlAttributeQueryTransformerTest extends OpenSAMLRunner {
+class HubEidasAttributeQueryRequestToSamlAttributeQueryTransformerTest extends OpenSAMLRunner {
 
-    public static final String ENCRYPTED_IDENTITY_ASSERTION = "encrypted-identity-assertion!";
+    private static final String ENCRYPTED_IDENTITY_ASSERTION = "encrypted-identity-assertion!";
 
     private HubEidasAttributeQueryRequestToSamlAttributeQueryTransformer transformer;
 
@@ -58,7 +58,7 @@ public class HubEidasAttributeQueryRequestToSamlAttributeQueryTransformerTest ex
     private EncryptedAssertionUnmarshaller encryptedAssertionUnmarshaller;
 
     @BeforeEach
-    public void setup() {
+    void setup() {
         openSamlXmlObjectFactory = new OpenSamlXmlObjectFactory();
         HubAssertionMarshaller assertionTransformer = new HubAssertionMarshaller(openSamlXmlObjectFactory, attributeFactory, outboundAssertionToSubjectTransformer);
         AssertionFromIdpToAssertionTransformer assertionFromIdpAssertionTransformer = new AssertionFromIdpToAssertionTransformer(stringAssertionTransformer);
@@ -72,7 +72,7 @@ public class HubEidasAttributeQueryRequestToSamlAttributeQueryTransformerTest ex
     }
 
     @Test
-    public void shouldTransformProperly() {
+    void shouldTransformProperly() {
         PersistentId persistentId = new PersistentId("default-name-id");
         HubEidasAttributeQueryRequest hubEidasAttributeQueryRequest = aHubEidasAttributeQueryRequest()
             .withId("originalId")
@@ -88,7 +88,7 @@ public class HubEidasAttributeQueryRequestToSamlAttributeQueryTransformerTest ex
     }
 
     @Test
-    public void shouldIncludeCycle3Assertion() {
+    void shouldIncludeCycle3Assertion() {
         final HubAssertion cycle3DataAssertion = aHubAssertion().build();
 
         HubEidasAttributeQueryRequest hubEidasAttributeQueryRequest = aHubEidasAttributeQueryRequest()
@@ -103,7 +103,7 @@ public class HubEidasAttributeQueryRequestToSamlAttributeQueryTransformerTest ex
     }
 
     @Test
-    public void shouldIncludeEncryptedIdentityAssertionOnly() {
+    void shouldIncludeEncryptedIdentityAssertionOnly() {
         HubEidasAttributeQueryRequest hubEidasAttributeQueryRequest = aHubEidasAttributeQueryRequest()
             .withEncryptedIdentityAssertion(ENCRYPTED_IDENTITY_ASSERTION)
             .build();
@@ -123,7 +123,7 @@ public class HubEidasAttributeQueryRequestToSamlAttributeQueryTransformerTest ex
     }
 
     @Test
-    public void shouldIncludeEncryptedIdentityAssertionAndCycle3Assertion() {
+    void shouldIncludeEncryptedIdentityAssertionAndCycle3Assertion() {
         final HubAssertion cycle3DataAssertion = aHubAssertion().build();
 
         HubEidasAttributeQueryRequest hubEidasAttributeQueryRequest = aHubEidasAttributeQueryRequest()
@@ -147,7 +147,7 @@ public class HubEidasAttributeQueryRequestToSamlAttributeQueryTransformerTest ex
     }
 
     @Test
-    public void shouldSetTheSPNameQualifierAndNameQualifierToValuesThatShouldntBeThereButCurrentlyHaveNoWhereBetterToBe() {
+    void shouldSetTheSPNameQualifierAndNameQualifierToValuesThatShouldntBeThereButCurrentlyHaveNoWhereBetterToBe() {
         final HubAssertion cycle3DataAssertion = aHubAssertion().build();
 
         HubEidasAttributeQueryRequest hubEidasAttributeQueryRequest = aHubEidasAttributeQueryRequest()
@@ -165,7 +165,7 @@ public class HubEidasAttributeQueryRequestToSamlAttributeQueryTransformerTest ex
     }
 
     @Test
-    public void shouldSetAttributesToUserAccountCreationAttributes() {
+    void shouldSetAttributesToUserAccountCreationAttributes() {
         Attribute attribute1 = openSamlXmlObjectFactory.createAttribute();
         Attribute attribute2 = openSamlXmlObjectFactory.createAttribute();
         when(attributeQueryAttributeFactory.createAttribute(CURRENT_ADDRESS)).thenReturn(attribute1);
@@ -185,7 +185,7 @@ public class HubEidasAttributeQueryRequestToSamlAttributeQueryTransformerTest ex
     }
 
     @Test
-    public void shouldNotExplodeWhenUserAccountCreationAttributesAreAbsent() {
+    void shouldNotExplodeWhenUserAccountCreationAttributesAreAbsent() {
         HubEidasAttributeQueryRequest hubEidasAttributeQueryRequest = aHubEidasAttributeQueryRequest()
             .withoutUserAccountCreationAttributes()
             .build();

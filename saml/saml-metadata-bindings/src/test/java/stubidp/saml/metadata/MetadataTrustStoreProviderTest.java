@@ -25,16 +25,16 @@ public class MetadataTrustStoreProviderTest {
     KeyStoreLoader keyStoreLoader;
 
     @RegisterExtension
-    public static final KeyStoreRule emptyKeyStoreRule = KeyStoreRuleBuilder.aKeyStoreRule().build();
+    static final KeyStoreRule emptyKeyStoreRule = KeyStoreRuleBuilder.aKeyStoreRule().build();
 
     @RegisterExtension
-    public static final KeyStoreRule keyStoreRule = KeyStoreRuleBuilder.aKeyStoreRule().withCertificate("hub", TestCertificateStrings.HUB_TEST_PUBLIC_SIGNING_CERT).build();
+    static final KeyStoreRule keyStoreRule = KeyStoreRuleBuilder.aKeyStoreRule().withCertificate("hub", TestCertificateStrings.HUB_TEST_PUBLIC_SIGNING_CERT).build();
 
     private final String filePath ="file path";
     private final String password = "password";
 
     @Test
-    public void shouldThrowExceptionIfTrustStoreContainsNoCertificates() {
+    void shouldThrowExceptionIfTrustStoreContainsNoCertificates() {
         Mockito.when(keyStoreLoader.load(filePath,password)).thenReturn(emptyKeyStoreRule.getKeyStore());
         MetadataTrustStoreProvider metadataTrustStoreProvider = new MetadataTrustStoreProvider(keyStoreLoader, filePath, password);
 
@@ -42,7 +42,7 @@ public class MetadataTrustStoreProviderTest {
     }
 
     @Test
-    public void shouldPropagateExceptionIfKeystoreIsUninitialized() throws KeyStoreException {
+    void shouldPropagateExceptionIfKeystoreIsUninitialized() throws KeyStoreException {
         Mockito.when(keyStoreLoader.load(filePath,password)).thenReturn(KeyStore.getInstance(KeyStore.getDefaultType()));
         MetadataTrustStoreProvider metadataTrustStoreProvider = new MetadataTrustStoreProvider(keyStoreLoader, filePath, password);
 
@@ -50,7 +50,7 @@ public class MetadataTrustStoreProviderTest {
     }
 
     @Test
-    public void shouldReturnTrustStoreContainingCertificates() throws KeyStoreException {
+    void shouldReturnTrustStoreContainingCertificates() throws KeyStoreException {
         Mockito.when(keyStoreLoader.load(filePath, password)).thenReturn(keyStoreRule.getKeyStore());
         MetadataTrustStoreProvider metadataTrustStoreProvider = new MetadataTrustStoreProvider(keyStoreLoader, filePath, password);
 

@@ -40,7 +40,7 @@ public class ServiceListServiceTest {
     private JsonClient jsonClient;
 
     @Test
-    public void getServiceListWhenFeatureDisabled_ThrowsFeatureNotEnabledException() throws FeatureNotEnabledException {
+    void getServiceListWhenFeatureDisabled_ThrowsFeatureNotEnabledException() throws FeatureNotEnabledException {
         when(singleIdpConfiguration.isEnabled()).thenReturn(false);
 
         ServiceListService service = new ServiceListService(singleIdpConfiguration, jsonClient);
@@ -49,7 +49,7 @@ public class ServiceListServiceTest {
     }
 
     @Test
-    public void getServiceListWhenFeatureEnabled_ReturnsAListOfServices() throws FeatureNotEnabledException {
+    void getServiceListWhenFeatureEnabled_ReturnsAListOfServices() throws FeatureNotEnabledException {
         when(singleIdpConfiguration.getServiceListUri()).thenReturn(uri);
         when(singleIdpConfiguration.isEnabled()).thenReturn(true);
         when(jsonClient.get(eq(uri), ArgumentMatchers.<GenericType<List<Service>>>any())).thenReturn(Arrays.asList(service1, service2, service3, service4, service5));
@@ -62,7 +62,7 @@ public class ServiceListServiceTest {
     }
 
     @Test
-    public void getServiceListWhenFeatureEnabledButErrorReadingFromHub_ReturnEmptyArray() throws FeatureNotEnabledException {
+    void getServiceListWhenFeatureEnabledButErrorReadingFromHub_ReturnEmptyArray() throws FeatureNotEnabledException {
         when(singleIdpConfiguration.getServiceListUri()).thenReturn(uri);
         when(singleIdpConfiguration.isEnabled()).thenReturn(true);
         when(jsonClient.get(eq(uri), ArgumentMatchers.<GenericType<List<Service>>>any())).thenThrow(new ProcessingException("No Response from Server"));
@@ -75,7 +75,7 @@ public class ServiceListServiceTest {
     }
 
     @Test
-    public void getServiceListWhenFeatureEnabledButNoServicesReturned_ReturnEmptyArray() throws FeatureNotEnabledException {
+    void getServiceListWhenFeatureEnabledButNoServicesReturned_ReturnEmptyArray() throws FeatureNotEnabledException {
         when(singleIdpConfiguration.getServiceListUri()).thenReturn(uri);
         when(singleIdpConfiguration.isEnabled()).thenReturn(true);
         when(jsonClient.get(eq(uri), ArgumentMatchers.<GenericType<List<Service>>>any())).thenReturn(new ArrayList<>());

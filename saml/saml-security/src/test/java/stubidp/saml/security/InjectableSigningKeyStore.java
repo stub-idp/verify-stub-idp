@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-public class InjectableSigningKeyStore implements SigningKeyStore {
+class InjectableSigningKeyStore implements SigningKeyStore {
 
     private final Map<String, List<String>> publicSigningKeys;
     private final PublicKeyFactory publicKeyFactory = new PublicKeyFactory(new X509CertificateFactory());

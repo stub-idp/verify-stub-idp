@@ -85,7 +85,7 @@ public class IdentityProviderMetadataDtoBuilder {
         return this;
     }
 
-    public IdentityProviderMetadataDtoBuilder withSigningCertificate(Certificate certificate) {
+    private IdentityProviderMetadataDtoBuilder withSigningCertificate(Certificate certificate) {
         this.signingCertificates = List.of(certificate);
         return this;
     }

@@ -26,17 +26,17 @@ import java.util.stream.Collectors;
 import static org.assertj.core.api.Assertions.assertThat;
 import static stubidp.saml.test.builders.IdaAuthnRequestBuilder.anIdaAuthnRequest;
 
-public class IdaAuthnRequestFromHubToAuthnRequestTransformerTest extends OpenSAMLRunner {
+class IdaAuthnRequestFromHubToAuthnRequestTransformerTest extends OpenSAMLRunner {
 
     private IdaAuthnRequestFromHubToAuthnRequestTransformer transformer;
 
     @BeforeEach
-    public void setup() {
+    void setup() {
         transformer = new IdaAuthnRequestFromHubToAuthnRequestTransformer(new OpenSamlXmlObjectFactory());
     }
 
     @Test
-    public void shouldUseTheOriginalRequestIdForTheTransformedRequest() {
+    void shouldUseTheOriginalRequestIdForTheTransformedRequest() {
         String originalRequestId = UUID.randomUUID().toString();
         IdaAuthnRequestFromHub originalRequestFromHub = anIdaAuthnRequest().withId(originalRequestId).buildFromHub();
 
@@ -46,7 +46,7 @@ public class IdaAuthnRequestFromHubToAuthnRequestTransformerTest extends OpenSAM
     }
 
     @Test
-    public void shouldUseTheOriginalExpiryTimestampToSetTheNotOnOrAfter() {
+    void shouldUseTheOriginalExpiryTimestampToSetTheNotOnOrAfter() {
         Instant sessionExpiry = Instant.now().atZone(ZoneId.of("UTC")).plusHours(2).toInstant();
         IdaAuthnRequestFromHub originalRequestFromHub = anIdaAuthnRequest().withSessionExpiryTimestamp(sessionExpiry).buildFromHub();
 
@@ -55,7 +55,7 @@ public class IdaAuthnRequestFromHubToAuthnRequestTransformerTest extends OpenSAM
     }
 
     @Test
-    public void shouldUseTheOriginalRequestIssuerIdForTheTransformedRequest() {
+    void shouldUseTheOriginalRequestIssuerIdForTheTransformedRequest() {
         String originalIssuerId = UUID.randomUUID().toString();
         IdaAuthnRequestFromHub originalRequestFromHub = anIdaAuthnRequest().withIssuer(originalIssuerId).buildFromHub();
 
@@ -65,21 +65,21 @@ public class IdaAuthnRequestFromHubToAuthnRequestTransformerTest extends OpenSAM
     }
 
     @Test
-    public void shouldCreateAProxyElementWithAProxyCountOfZeroInTheTransformedRequest() {
+    void shouldCreateAProxyElementWithAProxyCountOfZeroInTheTransformedRequest() {
         AuthnRequest transformedRequest = transformer.apply(anIdaAuthnRequest().buildFromHub());
 
         assertThat(transformedRequest.getScoping().getProxyCount()).isEqualTo(0);
     }
 
     @Test
-    public void shouldCreateANameIdPolicyElementWithAFormatOfPersistentInTheTransformedRequest() {
+    void shouldCreateANameIdPolicyElementWithAFormatOfPersistentInTheTransformedRequest() {
         AuthnRequest transformedRequest = transformer.apply(anIdaAuthnRequest().buildFromHub());
 
         assertThat(transformedRequest.getNameIDPolicy().getFormat()).isEqualTo(NameIDType.PERSISTENT);
     }
     
     @Test
-    public void shouldCorrectlyMapLevelsOfAssurance() {
+    void shouldCorrectlyMapLevelsOfAssurance() {
         List<AuthnContext> levelsOfAssurance = Arrays.asList(AuthnContext.LEVEL_1, AuthnContext.LEVEL_2);
         List<String> expected = Arrays.asList(IdaAuthnContext.LEVEL_1_AUTHN_CTX, IdaAuthnContext.LEVEL_2_AUTHN_CTX);
 
@@ -97,7 +97,7 @@ public class IdaAuthnRequestFromHubToAuthnRequestTransformerTest extends OpenSAM
     }
 
     @Test
-    public void shouldPropagateComparisonType() {
+    void shouldPropagateComparisonType() {
         IdaAuthnRequestFromHub originalRequestFromHub = anIdaAuthnRequest()
                 .withComparisonType(AuthnContextComparisonTypeEnumeration.MINIMUM)
                 .buildFromHub();
@@ -109,7 +109,7 @@ public class IdaAuthnRequestFromHubToAuthnRequestTransformerTest extends OpenSAM
     }
 
     @Test
-    public void shouldMaintainTheAuthnContextsInPreferenceOrder() {
+    void shouldMaintainTheAuthnContextsInPreferenceOrder() {
         IdaAuthnRequestFromHub originalRequestFromHub = anIdaAuthnRequest()
                 .withLevelsOfAssurance(Arrays.asList(AuthnContext.LEVEL_1, AuthnContext.LEVEL_2))
                 .buildFromHub();
@@ -125,7 +125,7 @@ public class IdaAuthnRequestFromHubToAuthnRequestTransformerTest extends OpenSAM
     }
 
     @Test
-    public void shouldSetAllowCreateToTrue() {
+    void shouldSetAllowCreateToTrue() {
         IdaAuthnRequestFromHub originalRequestFromHub = anIdaAuthnRequest().buildFromHub();
         AuthnRequest transformedRequest = transformer.apply(originalRequestFromHub);
 
@@ -135,7 +135,7 @@ public class IdaAuthnRequestFromHubToAuthnRequestTransformerTest extends OpenSAM
     }
 
     @Test
-    public void shouldSetForceAuthnToTrue() {
+    void shouldSetForceAuthnToTrue() {
         IdaAuthnRequestFromHub originalRequestFromTransaction = anIdaAuthnRequest()
                 .withForceAuthentication(Optional.of(true))
                 .buildFromHub();
@@ -147,7 +147,7 @@ public class IdaAuthnRequestFromHubToAuthnRequestTransformerTest extends OpenSAM
     }
 
     @Test
-    public void shouldSetForceAuthnToFalse() {
+    void shouldSetForceAuthnToFalse() {
         IdaAuthnRequestFromHub originalRequestFromTransaction = anIdaAuthnRequest()
                 .withForceAuthentication(Optional.of(false))
                 .buildFromHub();
@@ -167,7 +167,7 @@ public class IdaAuthnRequestFromHubToAuthnRequestTransformerTest extends OpenSAM
     }
 
     @Test
-    public void shouldSetProtocolBindingToPost() {
+    void shouldSetProtocolBindingToPost() {
         IdaAuthnRequestFromHub originalRequestFromTransaction = anIdaAuthnRequest()
             .buildFromHub();
 

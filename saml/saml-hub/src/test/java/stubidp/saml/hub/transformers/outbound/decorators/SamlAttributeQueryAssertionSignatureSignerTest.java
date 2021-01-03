@@ -33,16 +33,16 @@ import static stubidp.saml.test.builders.SubjectConfirmationBuilder.aSubjectConf
 import static stubidp.saml.test.builders.SubjectConfirmationDataBuilder.aSubjectConfirmationData;
 
 @ExtendWith(MockitoExtension.class)
-public class SamlAttributeQueryAssertionSignatureSignerTest extends OpenSAMLRunner {
+class SamlAttributeQueryAssertionSignatureSignerTest extends OpenSAMLRunner {
 
     private final OpenSamlXmlObjectFactory samlObjectFactory = new OpenSamlXmlObjectFactory();
 
     @Mock
     private IdaKeyStoreCredentialRetriever keyStoreCredentialRetriever;
-    public SamlAttributeQueryAssertionSignatureSigner assertionSignatureSigner;
+    private SamlAttributeQueryAssertionSignatureSigner assertionSignatureSigner;
 
     @BeforeEach
-    public void setUp() {
+    void setUp() {
         assertionSignatureSigner = new SamlAttributeQueryAssertionSignatureSigner(
                 keyStoreCredentialRetriever,
                 samlObjectFactory,
@@ -50,7 +50,7 @@ public class SamlAttributeQueryAssertionSignatureSignerTest extends OpenSAMLRunn
     }
 
     @Test
-    public void decorate_shouldSetSignatureOnAssertionIssuedByTheHub() {
+    void decorate_shouldSetSignatureOnAssertionIssuedByTheHub() {
         Credential hubSigningCredential = createHubSigningCredential();
         when(keyStoreCredentialRetriever.getSigningCredential()).thenReturn(hubSigningCredential);
         AttributeQuery inputAttributeQuery = anAttributeQueryWithHubSignature();

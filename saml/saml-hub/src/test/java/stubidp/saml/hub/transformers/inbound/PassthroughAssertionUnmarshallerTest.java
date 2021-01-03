@@ -29,7 +29,7 @@ import static stubidp.saml.test.builders.Gpg45StatusAttributeBuilder.aGpg45Statu
 import static stubidp.saml.test.builders.IPAddressAttributeBuilder.anIPAddress;
 
 @ExtendWith(MockitoExtension.class)
-public class PassthroughAssertionUnmarshallerTest extends OpenSAMLRunner {
+class PassthroughAssertionUnmarshallerTest extends OpenSAMLRunner {
 
     @Mock
     private XmlObjectToBase64EncodedStringTransformer<Assertion> assertionStringTransformer;
@@ -39,12 +39,12 @@ public class PassthroughAssertionUnmarshallerTest extends OpenSAMLRunner {
     private PassthroughAssertionUnmarshaller unmarshaller;
 
     @BeforeEach
-    public void setup() {
+    void setup() {
         unmarshaller = new PassthroughAssertionUnmarshaller(assertionStringTransformer, authnContextFactory);
     }
 
     @Test
-    public void shouldMapEidasLoACorrectly() {
+    void shouldMapEidasLoACorrectly() {
         final AuthnContextClassRef authnContextClassRef = anAuthnContextClassRef().withAuthnContextClasRefValue(EidasAuthnContext.EIDAS_LOA_SUBSTANTIAL).build();
         Assertion theAssertion = anAssertion()
             .addAuthnStatement(anAuthnStatement().withAuthnContext(anAuthnContext().withAuthnContextClassRef(authnContextClassRef).build()).build())
@@ -58,7 +58,7 @@ public class PassthroughAssertionUnmarshallerTest extends OpenSAMLRunner {
     }
 
     @Test
-    public void transform_shouldHandleFraudAuthnStatementAndSetThatAssertionIsForFraudulentEventAndSetFraudDetails() {
+    void transform_shouldHandleFraudAuthnStatementAndSetThatAssertionIsForFraudulentEventAndSetFraudDetails() {
         final AuthnContextClassRef authnContextClassRef = anAuthnContextClassRef().withAuthnContextClasRefValue(IdaAuthnContext.LEVEL_X_AUTHN_CTX).build();
         Assertion theAssertion = anAssertion()
                 .addAuthnStatement(anAuthnStatement().withAuthnContext(anAuthnContext().withAuthnContextClassRef(authnContextClassRef).build()).build())
@@ -74,7 +74,7 @@ public class PassthroughAssertionUnmarshallerTest extends OpenSAMLRunner {
     }
 
     @Test
-    public void transform_shouldThrowExceptionWhenFraudIndicatorAuthnStatementDoesNotContainUniqueId() {
+    void transform_shouldThrowExceptionWhenFraudIndicatorAuthnStatementDoesNotContainUniqueId() {
         Assertion theAssertion = anAssertion()
                 .addAuthnStatement(anAuthnStatement()
                         .withAuthnContext(anAuthnContext()
@@ -94,7 +94,7 @@ public class PassthroughAssertionUnmarshallerTest extends OpenSAMLRunner {
     }
 
     @Test
-    public void transform_shouldTransformTheIdpFraudEventIdForAFraudAssertion() {
+    void transform_shouldTransformTheIdpFraudEventIdForAFraudAssertion() {
         String fraudEventId = "Fraud Id";
         Assertion theAssertion = anAssertion()
                 .addAuthnStatement(anAuthnStatement()
@@ -121,7 +121,7 @@ public class PassthroughAssertionUnmarshallerTest extends OpenSAMLRunner {
     }
 
     @Test
-    public void transform_shouldTransformTheGpg45StatusIt01ForAFraudAssertion() {
+    void transform_shouldTransformTheGpg45StatusIt01ForAFraudAssertion() {
         String gpg45Status = "IT01";
         Assertion theAssertion = givenAFraudEventAssertion(gpg45Status);
 
@@ -132,7 +132,7 @@ public class PassthroughAssertionUnmarshallerTest extends OpenSAMLRunner {
     }
 
     @Test
-    public void transform_shouldTransformTheGpg45StatusFi01ForAFraudAssertion() {
+    void transform_shouldTransformTheGpg45StatusFi01ForAFraudAssertion() {
         String gpg45Status = "FI01";
         Assertion theAssertion = givenAFraudEventAssertion(gpg45Status);
 
@@ -143,7 +143,7 @@ public class PassthroughAssertionUnmarshallerTest extends OpenSAMLRunner {
     }
 
     @Test
-    public void transform_shouldTransformTheGpg45StatusDF01ForAFraudAssertion() {
+    void transform_shouldTransformTheGpg45StatusDF01ForAFraudAssertion() {
         String gpg45Status = "DF01";
         Assertion theAssertion = givenAFraudEventAssertion(gpg45Status);
 
@@ -154,7 +154,7 @@ public class PassthroughAssertionUnmarshallerTest extends OpenSAMLRunner {
     }
 
     @Test
-    public void transform_shouldThrowExceptionIfGpg45StatusIsNotRecognised() {
+    void transform_shouldThrowExceptionIfGpg45StatusIsNotRecognised() {
         String gpg45Status = "status not known";
         Assertion theAssertion = givenAFraudEventAssertion(gpg45Status);
 
@@ -162,7 +162,7 @@ public class PassthroughAssertionUnmarshallerTest extends OpenSAMLRunner {
     }
 
     @Test
-    public void transform_shouldNotSetFraudlentFlagForNotFraudulentEvent() {
+    void transform_shouldNotSetFraudlentFlagForNotFraudulentEvent() {
         final AuthnContextClassRef authnContextClassRef = anAuthnContextClassRef().withAuthnContextClasRefValue(IdaAuthnContext.LEVEL_3_AUTHN_CTX).build();
         Assertion theAssertion = anAssertion()
                 .addAuthnStatement(anAuthnStatement().withAuthnContext(anAuthnContext().withAuthnContextClassRef(authnContextClassRef).build()).build())
@@ -178,7 +178,7 @@ public class PassthroughAssertionUnmarshallerTest extends OpenSAMLRunner {
 
 
     @Test
-    public void transform_shouldTransformIpAddress() {
+    void transform_shouldTransformIpAddress() {
         String ipAddy = "1.2.3.4";
         Assertion theAssertion = anAssertion()
                 .addAttributeStatement(anAttributeStatement().addAttribute(anIPAddress().withValue(ipAddy).build()).build())

@@ -14,15 +14,15 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class MetadataHealthCheckTest {
 
-    public static final String EXPECTED_ENTITY_ID = "https://signin.service.gov.uk";
+    private static final String EXPECTED_ENTITY_ID = "https://signin.service.gov.uk";
 
     @BeforeAll
-    public static void bootStrapOpenSAML() throws InitializationException {
+    static void bootStrapOpenSAML() throws InitializationException {
         InitializationService.initialize();
     }
 
     @Test
-    public void shouldReturnHealthyResponseWhenMetadataContainsHubEntityID() throws Exception {
+    void shouldReturnHealthyResponseWhenMetadataContainsHubEntityID() throws Exception {
         String metadata = new MetadataFactory().defaultMetadata();
 
         StringBackedMetadataResolver filesystemMetadataResolver = new StringBackedMetadataResolver(metadata);
@@ -35,7 +35,7 @@ public class MetadataHealthCheckTest {
     }
 
     @Test
-    public void shouldReturnUnhealthyResponseWhenHubEntityCannotBeFound() throws Exception {
+    void shouldReturnUnhealthyResponseWhenHubEntityCannotBeFound() throws Exception {
         String metadata = new MetadataFactory().emptyMetadata();
         StringBackedMetadataResolver filesystemMetadataResolver = new StringBackedMetadataResolver(metadata);
         initializeResolver(filesystemMetadataResolver);

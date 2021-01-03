@@ -4,7 +4,7 @@ package stubidp.utils.common.logging;
 import java.text.MessageFormat;
 import java.util.UUID;
 
-public final class LogFormatter {
+final class LogFormatter {
 
     private LogFormatter() {
     }

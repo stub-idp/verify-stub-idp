@@ -25,7 +25,7 @@ import static stubidp.saml.test.builders.HubAssertionBuilder.aHubAssertion;
 import static stubidp.saml.test.builders.SimpleStringAttributeBuilder.aSimpleStringAttribute;
 
 @ExtendWith(MockitoExtension.class)
-public class HubAssertionMarshallerTest extends OpenSAMLRunner {
+class HubAssertionMarshallerTest extends OpenSAMLRunner {
 
     private HubAssertionMarshaller marshaller;
     @Mock
@@ -34,13 +34,13 @@ public class HubAssertionMarshallerTest extends OpenSAMLRunner {
     private OutboundAssertionToSubjectTransformer outboundAssertionToSubjectTransformer;
 
     @BeforeEach
-    public void setup() {
+    void setup() {
         OpenSamlXmlObjectFactory openSamlXmlObjectFactory = new OpenSamlXmlObjectFactory();
         marshaller = new HubAssertionMarshaller(openSamlXmlObjectFactory, attributeFactory, outboundAssertionToSubjectTransformer);
     }
 
     @Test
-    public void transform_shouldTransformAssertionSubjects() {
+    void transform_shouldTransformAssertionSubjects() {
         HubAssertion assertion = aHubAssertion().build();
 
         marshaller.toSaml(assertion);
@@ -49,7 +49,7 @@ public class HubAssertionMarshallerTest extends OpenSAMLRunner {
     }
 
     @Test
-    public void transform_shouldTransformAssertionId() {
+    void transform_shouldTransformAssertionId() {
         String assertionId = "assertion-id";
         HubAssertion assertion = aHubAssertion().withId(assertionId).build();
 
@@ -59,7 +59,7 @@ public class HubAssertionMarshallerTest extends OpenSAMLRunner {
     }
 
     @Test
-    public void transform_shouldTransformAssertionIssuer() {
+    void transform_shouldTransformAssertionIssuer() {
         String assertionIssuerId = "assertion issuer";
         HubAssertion assertion = aHubAssertion().withIssuerId(assertionIssuerId).build();
 
@@ -69,7 +69,7 @@ public class HubAssertionMarshallerTest extends OpenSAMLRunner {
     }
 
     @Test
-    public void transform_shouldTransformAssertionIssuerInstance() {
+    void transform_shouldTransformAssertionIssuerInstance() {
         Instant issueInstant = Instant.parse("2012-12-31T12:34:56Z");
         HubAssertion assertion = aHubAssertion().withIssueInstant(issueInstant).build();
 
@@ -79,7 +79,7 @@ public class HubAssertionMarshallerTest extends OpenSAMLRunner {
     }
 
     @Test
-    public void transform_shouldTransformCycle3DataAssertion() {
+    void transform_shouldTransformCycle3DataAssertion() {
         String attributeName = "someName";
         String value = "some value";
         HubAssertion assertion = aHubAssertion().withCycle3Data(aCycle3Dataset().addCycle3Data(attributeName, value).build()).build();
@@ -95,7 +95,7 @@ public class HubAssertionMarshallerTest extends OpenSAMLRunner {
     }
 
     @Test
-    public void transform_shouldTransformLevelOfCycle3DataAssertion() {
+    void transform_shouldTransformLevelOfCycle3DataAssertion() {
         String attributeName = "someName";
         String value = "some value";
         HubAssertion assertion = aHubAssertion().withCycle3Data(aCycle3Dataset().addCycle3Data(attributeName, value).build()).build();

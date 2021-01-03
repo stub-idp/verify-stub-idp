@@ -32,12 +32,12 @@ public class AuthnStatementAssertionValidatorTest extends OpenSAMLRunner {
     private AuthnStatementAssertionValidator validator;
 
     @BeforeEach
-    public void setup() {
+    void setup() {
         validator = new AuthnStatementAssertionValidator(duplicateAssertionValidator);
     }
 
     @Test
-    public void validate_shouldThrowExceptionIfAuthnContextIsAbsent() {
+    void validate_shouldThrowExceptionIfAuthnContextIsAbsent() {
         AuthnStatement authnStatement = AuthnStatementBuilder.anAuthnStatement().withAuthnContext(null).build();
         Assertion assertion = AssertionBuilder.anAssertion().addAuthnStatement(authnStatement).buildUnencrypted();
 
@@ -45,7 +45,7 @@ public class AuthnStatementAssertionValidatorTest extends OpenSAMLRunner {
     }
 
     @Test
-    public void validate_shouldPassValidation() {
+    void validate_shouldPassValidation() {
         AuthnStatement authnStatement = AuthnStatementBuilder.anAuthnStatement().build();
         Assertion assertion = AssertionBuilder.anAssertion().addAuthnStatement(authnStatement).buildUnencrypted();
 
@@ -53,7 +53,7 @@ public class AuthnStatementAssertionValidatorTest extends OpenSAMLRunner {
     }
 
     @Test
-    public void validate_shouldThrowExceptionIfAuthnContextClassRefIsAbsent() {
+    void validate_shouldThrowExceptionIfAuthnContextClassRefIsAbsent() {
         AuthnContext authnContext = AuthnContextBuilder.anAuthnContext().withAuthnContextClassRef(null).build();
         AuthnStatement authnStatement = AuthnStatementBuilder.anAuthnStatement().withAuthnContext(authnContext).build();
         Assertion assertion = AssertionBuilder.anAssertion().addAuthnStatement(authnStatement).buildUnencrypted();
@@ -62,7 +62,7 @@ public class AuthnStatementAssertionValidatorTest extends OpenSAMLRunner {
     }
 
     @Test
-    public void validate_shouldThrowExceptionIfAuthnContextClassRefValueIsAbsent() {
+    void validate_shouldThrowExceptionIfAuthnContextClassRefValueIsAbsent() {
         AuthnContextClassRef authnContextClassRef = AuthnContextClassRefBuilder.anAuthnContextClassRef().withAuthnContextClasRefValue(null).build();
         AuthnContext authnContext = AuthnContextBuilder.anAuthnContext().withAuthnContextClassRef(authnContextClassRef).build();
         AuthnStatement authnStatement = AuthnStatementBuilder.anAuthnStatement().withAuthnContext(authnContext).build();
@@ -72,7 +72,7 @@ public class AuthnStatementAssertionValidatorTest extends OpenSAMLRunner {
     }
 
     @Test
-    public void validate_shouldValidateForDuplicateIds() {
+    void validate_shouldValidateForDuplicateIds() {
         String id = "duplicate-id";
         Assertion assertion = AssertionBuilder.anAssertion().withId(id).addAuthnStatement(AuthnStatementBuilder.anAuthnStatement().build()).buildUnencrypted();
 
@@ -82,7 +82,7 @@ public class AuthnStatementAssertionValidatorTest extends OpenSAMLRunner {
     }
 
     @Test
-    public void validate_shouldThrowExceptionIfAuthnInstantIsAbsent() {
+    void validate_shouldThrowExceptionIfAuthnInstantIsAbsent() {
         AuthnStatement authnStatement = AuthnStatementBuilder.anAuthnStatement().withAuthnInstant(null).build();
         Assertion assertion = AssertionBuilder.anAssertion().addAuthnStatement(authnStatement).buildUnencrypted();
 

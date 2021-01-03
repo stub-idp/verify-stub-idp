@@ -15,7 +15,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class ValidatedAssertionsTest extends OpenSAMLRunner {
 
     @Test
-    public void should_returnMatchingDatasetAssertion() {
+    void should_returnMatchingDatasetAssertion() {
         Assertion mdsAssertion = AssertionBuilder.anAssertion().addAttributeStatement(AttributeStatementBuilder.anAttributeStatement().build()).buildUnencrypted();
         List<Assertion> assertions = asList(AssertionBuilder.anAssertion().buildUnencrypted(), mdsAssertion);
 
@@ -25,7 +25,7 @@ public class ValidatedAssertionsTest extends OpenSAMLRunner {
     }
 
     @Test
-    public void should_returnAuthnStatementAssertion() {
+    void should_returnAuthnStatementAssertion() {
         Assertion mdsAssertion = AssertionBuilder.anAssertion().addAttributeStatement(AttributeStatementBuilder.anAttributeStatement().build()).buildUnencrypted();
         Assertion authnStatementAssertion = AssertionBuilder.anAssertion().buildUnencrypted();
         List<Assertion> assertions = asList(mdsAssertion, authnStatementAssertion);
@@ -36,7 +36,7 @@ public class ValidatedAssertionsTest extends OpenSAMLRunner {
     }
 
     @Test
-    public void should_supportAnEmptyListOfAssertions() {
+    void should_supportAnEmptyListOfAssertions() {
         ValidatedAssertions validatedAssertions = new ValidatedAssertions(emptyList());
 
         assertThat(validatedAssertions.getAuthnStatementAssertion().isPresent()).isFalse();

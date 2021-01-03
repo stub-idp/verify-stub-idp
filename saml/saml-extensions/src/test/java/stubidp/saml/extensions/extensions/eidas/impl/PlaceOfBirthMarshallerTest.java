@@ -12,10 +12,10 @@ import stubidp.saml.test.OpenSAMLRunner;
 import static org.assertj.core.api.Assertions.assertThat;
 import static stubidp.saml.extensions.IdaConstants.EIDAS_NATURUAL_PREFIX;
 
-public class PlaceOfBirthMarshallerTest extends OpenSAMLRunner {
+class PlaceOfBirthMarshallerTest extends OpenSAMLRunner {
 
     @Test
-    public void shouldMarshallPlaceOfBirth() throws Exception {
+    void shouldMarshallPlaceOfBirth() throws Exception {
         final String place = "Peterborough";
         final PlaceOfBirth placeOfBirth = new PlaceOfBirthBuilder().buildObject();
         final Marshaller placeOfBirthMarshaller = XMLObjectProviderRegistrySupport.getMarshallerFactory().getMarshaller(placeOfBirth);

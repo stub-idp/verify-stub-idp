@@ -43,7 +43,7 @@ public class LogstashFileAppenderAppRuleTest {
         }
     }
 
-    public static final DropwizardAppExtension<TestConfiguration> dropwizardAppRule = new DropwizardAppExtension<>(TestApplication.class, ResourceHelpers
+    private static final DropwizardAppExtension<TestConfiguration> dropwizardAppRule = new DropwizardAppExtension<>(TestApplication.class, ResourceHelpers
             .resourceFilePath("file-appender-test-application.yml"),
             ConfigOverride.config("server.requestLog.appenders[0].currentLogFilename", requestLog.getAbsolutePath()),
             ConfigOverride.config("logging.appenders[0].currentLogFilename", logLog.getAbsolutePath())

@@ -18,7 +18,7 @@ public class MetadataResolverConfigBuilderTest {
     private final EidasMetadataConfiguration mockConfiguration = mock(EidasMetadataConfiguration.class);
 
     @Test
-    public void shouldConcatenateMetadataSourceUriAndMetadataEntityIdIntoEncodedFullUri() throws CertificateException {
+    void shouldConcatenateMetadataSourceUriAndMetadataEntityIdIntoEncodedFullUri() throws CertificateException {
         String entityId = "https://example.local/ServiceMetadata";
         when(mockTrustAnchor.getKeyID()).thenReturn(entityId);
 

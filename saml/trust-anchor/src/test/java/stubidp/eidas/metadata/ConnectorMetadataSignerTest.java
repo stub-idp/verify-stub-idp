@@ -40,7 +40,7 @@ public class ConnectorMetadataSignerTest {
     private String unsignedMetadataString;
 
     @BeforeEach
-    public void setUp() throws InitializationException, IOException, NoSuchAlgorithmException, InvalidKeySpecException, NoSuchProviderException {
+    void setUp() throws InitializationException, IOException, NoSuchAlgorithmException, InvalidKeySpecException, NoSuchProviderException {
         Logger root = (Logger) LoggerFactory.getLogger(Logger.ROOT_LOGGER_NAME);
         root.setLevel(Level.OFF);
 
@@ -52,7 +52,7 @@ public class ConnectorMetadataSignerTest {
     }
 
     @Test
-    public void shouldSignMetadataWithECDSA() throws Exception {
+    void shouldSignMetadataWithECDSA() throws Exception {
         SignableSAMLObject signedMetadata = new ConnectorMetadataSigner(certificateForSigning, privateKeyForSigning, ECDSA).sign(unsignedMetadataString);
         Signature signature = signedMetadata.getSignature();
 
@@ -64,7 +64,7 @@ public class ConnectorMetadataSignerTest {
     }
 
     @Test
-    public void shouldSignMetadataWithRSA() throws Exception {
+    void shouldSignMetadataWithRSA() throws Exception {
         privateKeyForSigning = new PrivateKeyFactory().createPrivateKey(Base64.getDecoder().decode(TestCertificateStrings.METADATA_SIGNING_A_PRIVATE_KEY));
         certificateForSigning = new X509CertificateFactory().createCertificate(TestCertificateStrings.METADATA_SIGNING_A_PUBLIC_CERT);
 
@@ -79,19 +79,19 @@ public class ConnectorMetadataSignerTest {
     }
 
     @Test
-    public void shouldErrorWhenMetadataEmpty() {
+    void shouldErrorWhenMetadataEmpty() {
         assertThrows(XMLParserException.class,
                 ()->new ConnectorMetadataSigner(certificateForSigning, privateKeyForSigning, ECDSA).sign(""));
     }
 
     @Test
-    public void shouldErrorWhenMetadataNull() {
+    void shouldErrorWhenMetadataNull() {
         assertThrows(NullPointerException.class,
                 ()->new ConnectorMetadataSigner(certificateForSigning, privateKeyForSigning, ECDSA).sign(null));
     }
 
     @Test
-    public void shouldErrorWhenMetadataInvalid() throws IOException {
+    void shouldErrorWhenMetadataInvalid() throws IOException {
         String metadataString = loadMetadataString("metadata/unsigned/bad-metadata.xml");
         assertThrows(UnmarshallingException.class,
                 ()->new ConnectorMetadataSigner(certificateForSigning, privateKeyForSigning, ECDSA).sign(metadataString));

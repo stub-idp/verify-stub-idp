@@ -68,7 +68,7 @@ public class LoginPageResourceTest {
     private CookieNames cookieNames;
 
     @BeforeEach
-    public void createResource() {
+    void createResource() {
         resource = new LoginPageResource(
                 idpStubsRepository,
                 nonSuccessAuthnResponseService,
@@ -79,7 +79,7 @@ public class LoginPageResourceTest {
     }
 
     @Test
-    public void shouldBuildNoAuthnContext(){
+    void shouldBuildNoAuthnContext(){
         when(sessionRepository.deleteAndGet(SESSION_ID)).thenReturn(Optional.of(new IdpSession(SESSION_ID, idaAuthnRequestFromHub, RELAY_STATE, null, null, null, null, null, null)));
         when(idaAuthnRequestFromHub.getId()).thenReturn(SAML_REQUEST_ID);
         when(nonSuccessAuthnResponseService.generateNoAuthnContext(anyString(), anyString(), eq(RELAY_STATE))).thenReturn(new SamlResponseFromValue<>("saml", Function.identity(), RELAY_STATE, URI.create("uri")));
@@ -91,7 +91,7 @@ public class LoginPageResourceTest {
     }
 
     @Test
-    public void shouldBuildUpliftFailed() {
+    void shouldBuildUpliftFailed() {
         when(sessionRepository.deleteAndGet(SESSION_ID)).thenReturn(Optional.of(new IdpSession(SESSION_ID, idaAuthnRequestFromHub, RELAY_STATE, null, null, null, null, null, null)));
         when(idaAuthnRequestFromHub.getId()).thenReturn(SAML_REQUEST_ID);
         when(nonSuccessAuthnResponseService.generateUpliftFailed(anyString(), anyString(), eq(RELAY_STATE))).thenReturn(new SamlResponseFromValue<>("saml", Function.identity(), RELAY_STATE, URI.create("uri")));
@@ -103,7 +103,7 @@ public class LoginPageResourceTest {
     }
 
     @Test
-    public void shouldBuildNoAuthnCancel() {
+    void shouldBuildNoAuthnCancel() {
         when(sessionRepository.deleteAndGet(SESSION_ID)).thenReturn(Optional.of(new IdpSession(SESSION_ID, idaAuthnRequestFromHub, RELAY_STATE, null, null, null, null, null, null)));
         when(idaAuthnRequestFromHub.getId()).thenReturn(SAML_REQUEST_ID);
         when(nonSuccessAuthnResponseService.generateAuthnCancel(anyString(), anyString(), eq(RELAY_STATE))).thenReturn(new SamlResponseFromValue<>("saml", Function.identity(), RELAY_STATE, URI.create("uri")));
@@ -115,7 +115,7 @@ public class LoginPageResourceTest {
     }
 
     @Test
-    public void shouldBuildSuccessResponse() throws InvalidUsernameOrPasswordException, InvalidSessionIdException {
+    void shouldBuildSuccessResponse() throws InvalidUsernameOrPasswordException, InvalidSessionIdException {
         when(sessionRepository.get(SESSION_ID)).thenReturn(Optional.of(new IdpSession(SESSION_ID, idaAuthnRequestFromHub, RELAY_STATE, null, null, null, null, null, null)));
         final Response response = resource.post(IDP_NAME, USERNAME, PASSWORD, SubmitButtonValue.SignIn, SESSION_ID);
 
@@ -124,7 +124,7 @@ public class LoginPageResourceTest {
     }
 
     @Test
-    public void shouldBuildAuthnPending(){
+    void shouldBuildAuthnPending(){
         when(sessionRepository.deleteAndGet(SESSION_ID)).thenReturn(Optional.of(new IdpSession(SESSION_ID, idaAuthnRequestFromHub, RELAY_STATE, null, null, null, null, null, null)));
         when(idaAuthnRequestFromHub.getId()).thenReturn(SAML_REQUEST_ID);
         when(nonSuccessAuthnResponseService.generateAuthnPending(anyString(), anyString(), eq(RELAY_STATE))).thenReturn(new SamlResponseFromValue<>("saml", Function.identity(), RELAY_STATE, URI.create("uri")));
@@ -136,7 +136,7 @@ public class LoginPageResourceTest {
     }
 
     @Test
-    public void shouldRedirectToConsentWhenNewlyRegisteredUserReturnsFromHub() {
+    void shouldRedirectToConsentWhenNewlyRegisteredUserReturnsFromHub() {
         Optional<IdpSession> idpSession = Optional.of(Mockito.mock(IdpSession.class));
         when(idpStubsRepository.getIdpWithFriendlyId(IDP_NAME)).thenReturn(idp);
         when(sessionRepository.get(SESSION_ID)).thenReturn(idpSession);
@@ -148,7 +148,7 @@ public class LoginPageResourceTest {
     }
 
     @Test
-    public void shouldRedirectLoggedInUserToHomePageIfNoIdaAuthReqFromHub() {
+    void shouldRedirectLoggedInUserToHomePageIfNoIdaAuthReqFromHub() {
         Optional<IdpSession> idpSession = Optional.of(Mockito.mock(IdpSession.class));
         when(idpStubsRepository.getIdpWithFriendlyId(IDP_NAME)).thenReturn(idp);
         when(sessionRepository.get(SESSION_ID)).thenReturn(idpSession);
@@ -160,14 +160,14 @@ public class LoginPageResourceTest {
     }
 
     @Test
-    public void shouldShowLoginFormWhenNoCookiePresent() {
+    void shouldShowLoginFormWhenNoCookiePresent() {
         when(idpStubsRepository.getIdpWithFriendlyId(IDP_NAME)).thenReturn(idp);
         final Response response = resource.get(IDP_NAME, Optional.of(ErrorMessageType.NO_ERROR), null);
         assertThat(response.getStatus()).isEqualTo(Response.Status.OK.getStatusCode());
     }
 
     @Test
-    public void shouldPresentLoginScreenInWhenThereIsNoActivePreRegSession() {
+    void shouldPresentLoginScreenInWhenThereIsNoActivePreRegSession() {
         Optional<IdpSession> preRegSession = Optional.of(Mockito.mock(IdpSession.class));
         when(sessionRepository.get(SESSION_ID)).thenReturn(preRegSession);
         when(preRegSession.get().getIdpUser()).thenReturn(Optional.empty());
@@ -180,14 +180,14 @@ public class LoginPageResourceTest {
     }
 
     @Test
-    public void shouldLogUserInAndTakeToHomePageWhenNoIdaReq() {
+    void shouldLogUserInAndTakeToHomePageWhenNoIdaReq() {
         final Response response = resource.post(IDP_NAME,USERNAME,PASSWORD, SubmitButtonValue.SignIn, SESSION_ID);
         assertThat(response.getStatus()).isEqualTo(Response.Status.SEE_OTHER.getStatusCode());
         assertThat(response.getLocation().toString()).contains("an%20idp%20name");
     }
 
     @Test
-    public void shouldLogUserInAndTakeToConsentPageWhenIdaReqPresent() {
+    void shouldLogUserInAndTakeToConsentPageWhenIdaReqPresent() {
         when(sessionRepository.get(SESSION_ID)).thenReturn(Optional.ofNullable(new IdpSession(SESSION_ID, idaAuthnRequestFromHub, RELAY_STATE, null, null, null, null, null, null)));
         final Response response = resource.post(IDP_NAME,USERNAME,PASSWORD, SubmitButtonValue.SignIn, SESSION_ID);
         assertThat(response.getStatus()).isEqualTo(Response.Status.SEE_OTHER.getStatusCode());

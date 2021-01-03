@@ -8,7 +8,7 @@ import stubidp.saml.utils.core.OpenSamlXmlObjectFactory;
 import javax.inject.Inject;
 import java.time.Instant;
 
-public class MatchingServiceAuthnStatementToAuthnStatementTransformer {
+class MatchingServiceAuthnStatementToAuthnStatementTransformer {
 
     @Inject
     public MatchingServiceAuthnStatementToAuthnStatementTransformer(

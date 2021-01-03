@@ -34,7 +34,7 @@ import java.util.function.Function;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class HubTransformersFactoryTest {
+class HubTransformersFactoryTest {
 
     private StringToOpenSamlObjectTransformer<AuthnRequest> stringtoOpenSamlObjectTransformer;
 
@@ -43,7 +43,7 @@ public class HubTransformersFactoryTest {
     private final X509Certificate hubSigningCert = new X509CertificateFactory().createCertificate(TestCertificateStrings.HUB_TEST_PUBLIC_SIGNING_CERT);
 
     @BeforeEach
-    public void setUp() {
+    void setUp() {
         IdaSamlBootstrap.bootstrap();
         CoreTransformersFactory coreTransformersFactory = new CoreTransformersFactory();
         stringtoOpenSamlObjectTransformer = coreTransformersFactory.
@@ -51,7 +51,7 @@ public class HubTransformersFactoryTest {
     }
 
     @Test
-    public void shouldNotContainKeyInfoInIdaAuthnRequest() {
+    void shouldNotContainKeyInfoInIdaAuthnRequest() {
         Function<IdaAuthnRequestFromHub, String> eidasTransformer = new HubTransformersFactory().getIdaAuthnRequestFromHubToStringTransformer(
             getKeyStore(hubSigningCert),
             signatureAlgorithm,
@@ -71,7 +71,7 @@ public class HubTransformersFactoryTest {
     }
 
     @Test
-    public void shouldContainKeyInfoInEidasAuthnRequestWhenHubSignCertIsPresent() {
+    void shouldContainKeyInfoInEidasAuthnRequestWhenHubSignCertIsPresent() {
         Function<EidasAuthnRequestFromHub, String> eidasTransformer = new HubTransformersFactory().getEidasAuthnRequestFromHubToStringTransformer(
             getKeyStore(hubSigningCert),
             signatureAlgorithm,
@@ -91,7 +91,7 @@ public class HubTransformersFactoryTest {
     }
 
     @Test
-    public void shouldThrowExceptionWhenKeyInfoIsRequiredButSigningCertIsNotPresent() {
+    void shouldThrowExceptionWhenKeyInfoIsRequiredButSigningCertIsNotPresent() {
         Function<EidasAuthnRequestFromHub, String> eidasTransformer = new HubTransformersFactory().getEidasAuthnRequestFromHubToStringTransformer(
                 getKeyStore(null),
                 signatureAlgorithm,

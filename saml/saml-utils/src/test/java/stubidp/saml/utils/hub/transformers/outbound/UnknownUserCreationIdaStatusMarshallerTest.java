@@ -16,12 +16,12 @@ public class UnknownUserCreationIdaStatusMarshallerTest extends OpenSAMLRunner {
     private UnknownUserCreationIdaStatusMarshaller unknownUserCreationIdaStatusToSamlStatusMarshaller;
 
     @BeforeEach
-    public void setUp() {
+    void setUp() {
         unknownUserCreationIdaStatusToSamlStatusMarshaller = new UnknownUserCreationIdaStatusMarshaller(new OpenSamlXmlObjectFactory());
     }
 
     @Test
-    public void transform_shouldTransformUnknownUserCreationSuccess() {
+    void transform_shouldTransformUnknownUserCreationSuccess() {
 
         Status transformedStatus = unknownUserCreationIdaStatusToSamlStatusMarshaller.toSamlStatus(UnknownUserCreationIdaStatus.Success);
 
@@ -30,7 +30,7 @@ public class UnknownUserCreationIdaStatusMarshallerTest extends OpenSAMLRunner {
     }
 
     @Test
-    public void transform_shouldTransformUnknownUserCreationFailure() {
+    void transform_shouldTransformUnknownUserCreationFailure() {
 
         Status transformedStatus = unknownUserCreationIdaStatusToSamlStatusMarshaller.toSamlStatus(UnknownUserCreationIdaStatus.CreateFailure);
 

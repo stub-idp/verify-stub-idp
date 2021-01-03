@@ -34,7 +34,7 @@ public class SamlSignatureUtilTest extends OpenSAMLRunner {
     private SignatureFactory signatureFactory;
 
     @BeforeEach
-    public void setup() {
+    void setup() {
         PublicKeyFactory publicKeyFactory = new PublicKeyFactory(new X509CertificateFactory());
         PrivateKey privateKey = new PrivateKeyFactory().createPrivateKey(Base64.getMimeDecoder().decode(TestCertificateStrings.PRIVATE_SIGNING_KEYS.get(
                 TestEntityIds.HUB_ENTITY_ID)));
@@ -52,7 +52,7 @@ public class SamlSignatureUtilTest extends OpenSAMLRunner {
     }
 
     @Test
-    public void isSignatureSigned_shouldThrowExceptionIfSignatureIsNotMarshalled() {
+    void isSignatureSigned_shouldThrowExceptionIfSignatureIsNotMarshalled() {
         Signature signature = signatureFactory.createSignature();
         try {
             assertThat(SamlSignatureUtil.isSignaturePresent(signature)).isEqualTo(false);
@@ -64,14 +64,14 @@ public class SamlSignatureUtilTest extends OpenSAMLRunner {
     }
 
     @Test
-    public void isSignatureSigned_shouldReturnFalseIfSignatureIsNotSigned() throws MarshallingException {
+    void isSignatureSigned_shouldReturnFalseIfSignatureIsNotSigned() throws MarshallingException {
         Signature signature = signatureFactory.createSignature();
         XMLObjectProviderRegistrySupport.getMarshallerFactory().getMarshaller(signature).marshall(signature);
         assertThat(SamlSignatureUtil.isSignaturePresent(signature)).isEqualTo(false);
     }
 
     @Test
-    public void isSignatureSigned_shouldReturnTrueIfSignatureIsSigned() throws SignatureException, MarshallingException {
+    void isSignatureSigned_shouldReturnTrueIfSignatureIsSigned() throws SignatureException, MarshallingException {
         Signature signature = signatureFactory.createSignature();
         XMLObjectProviderRegistrySupport.getMarshallerFactory().getMarshaller(signature).marshall(signature);
         Signer.signObject(signature);

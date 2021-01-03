@@ -1,8 +1,8 @@
 package stubidp.utils.common.featuretoggles;
 
 public class FeatureEntryBuilder {
-    public String featureName;
-    public boolean isActive;
+    private String featureName;
+    private boolean isActive;
 
     public static FeatureEntryBuilder aFeatureEntry() {
         return new FeatureEntryBuilder();

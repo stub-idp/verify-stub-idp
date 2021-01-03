@@ -13,19 +13,19 @@ import stubidp.saml.test.OpenSAMLRunner;
 import static org.assertj.core.api.Assertions.assertThat;
 import static stubidp.saml.extensions.IdaConstants.IDA_PREFIX;
 
-public class VerifiedMarshallerTest extends OpenSAMLRunner {
+class VerifiedMarshallerTest extends OpenSAMLRunner {
 
     private Marshaller marshaller;
     private Verified verifiedAttributeValue;
 
     @BeforeEach
-    public void setUp() {
+    void setUp() {
         verifiedAttributeValue = new VerifiedBuilder().buildObject();
         marshaller = XMLObjectProviderRegistrySupport.getMarshallerFactory().getMarshaller(verifiedAttributeValue);
     }
 
     @Test
-    public void marshall_shouldMarshallVerifiedValueWhenTrue() throws Exception {
+    void marshall_shouldMarshallVerifiedValueWhenTrue() throws Exception {
         verifiedAttributeValue.setValue(true);
 
         Element marshalledElement = marshaller.marshall(verifiedAttributeValue);
@@ -36,7 +36,7 @@ public class VerifiedMarshallerTest extends OpenSAMLRunner {
     }
 
     @Test
-    public void marshall_shouldMarshallVerifiedValueWhenFalse() throws Exception {
+    void marshall_shouldMarshallVerifiedValueWhenFalse() throws Exception {
         verifiedAttributeValue.setValue(false);
 
         Element marshalledElement = marshaller.marshall(verifiedAttributeValue);
@@ -47,7 +47,7 @@ public class VerifiedMarshallerTest extends OpenSAMLRunner {
     }
 
     @Test
-    public void marshall_shouldEnsureXsiNamespaceDefinitionIsIncluded() throws Exception {
+    void marshall_shouldEnsureXsiNamespaceDefinitionIsIncluded() throws Exception {
         Element marshalledElement = marshaller.marshall(new VerifiedBuilder().buildObject());
         assertThat(marshalledElement.hasAttributeNS(XMLConstants.XMLNS_NS, XMLConstants.XSI_PREFIX)).isTrue();
     }

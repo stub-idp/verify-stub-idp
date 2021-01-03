@@ -8,9 +8,9 @@ import stubidp.saml.test.OpenSAMLRunner;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class DateOfBirthUnmarshallerTest extends OpenSAMLRunner {
+class DateOfBirthUnmarshallerTest extends OpenSAMLRunner {
     @Test
-    public void shouldUnmarshallDateOfBirth() throws Exception {
+    void shouldUnmarshallDateOfBirth() throws Exception {
         final DateOfBirth dateOfBirth = Utils.unmarshall("" +
                 "<saml2:AttributeValue " +
                 "   xmlns:eidas-natural=\"http://eidas.europa.eu/attributes/naturalperson\"\n " +

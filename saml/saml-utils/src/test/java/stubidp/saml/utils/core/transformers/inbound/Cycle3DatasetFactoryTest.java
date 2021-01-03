@@ -22,12 +22,12 @@ public class Cycle3DatasetFactoryTest extends OpenSAMLRunner {
     private Cycle3DatasetFactory cycle3DatasetFactory;
 
     @BeforeEach
-    public void setup() {
+    void setup() {
         cycle3DatasetFactory = new Cycle3DatasetFactory();
     }
 
     @Test
-    public void transform_shouldTransformAListOfAttributesToACycle3Dataset() {
+    void transform_shouldTransformAListOfAttributesToACycle3Dataset() {
         String attributeNameOne = "attribute name one";
         String attributeNameTwo = "attribute name two";
         String attributeValueOne = "attribute value one";
@@ -48,7 +48,7 @@ public class Cycle3DatasetFactoryTest extends OpenSAMLRunner {
     }
 
     @Test
-    public void transform_shouldThrowExceptionIfThereIsMoreThanOneAttributeStatement() {
+    void transform_shouldThrowExceptionIfThereIsMoreThanOneAttributeStatement() {
         final Assertion assertion = AssertionBuilder.anAssertion()
                 .addAttributeStatement(AttributeStatementBuilder.anAttributeStatement().build())
                 .addAttributeStatement(AttributeStatementBuilder.anAttributeStatement().build())
@@ -60,7 +60,7 @@ public class Cycle3DatasetFactoryTest extends OpenSAMLRunner {
     }
 
     @Test
-    public void transform_shouldThrowExceptionIfThereIsNoAttributeStatement() {
+    void transform_shouldThrowExceptionIfThereIsNoAttributeStatement() {
         final Assertion assertion = AssertionBuilder.anAssertion()
                 .buildUnencrypted();
         SamlTransformationErrorManagerTestHelper.validateFail(

@@ -25,12 +25,12 @@ public class EidasAttributeFactoryTest extends OpenSAMLRunner {
     private EidasAttributeFactory eidasAttributeFactory;
 
     @BeforeEach
-    public void setup() {
+    void setup() {
         eidasAttributeFactory = new EidasAttributeFactory();
     }
 
     @Test
-    public void createFirstNameAttribute() {
+    void createFirstNameAttribute() {
         final String firstName = "Bob";
         final Attribute attribute = eidasAttributeFactory.createFirstNameAttribute(firstName);
 
@@ -43,7 +43,7 @@ public class EidasAttributeFactoryTest extends OpenSAMLRunner {
     }
 
     @Test
-    public void createFamilyName() {
+    void createFamilyName() {
         final String familyName = "Smith";
         final Attribute attribute = eidasAttributeFactory.createFamilyName(familyName);
 
@@ -56,7 +56,7 @@ public class EidasAttributeFactoryTest extends OpenSAMLRunner {
     }
 
     @Test
-    public void createDateOfBirth() {
+    void createDateOfBirth() {
         final Instant dateOfBirth = BaseMdsSamlObjectUnmarshaller.InstantFromDate.of("1965-01-01");
 
         final Attribute attribute = eidasAttributeFactory.createDateOfBirth(dateOfBirth);
@@ -70,7 +70,7 @@ public class EidasAttributeFactoryTest extends OpenSAMLRunner {
     }
 
     @Test
-    public void createPersonIdentifier() {
+    void createPersonIdentifier() {
         final String personIdentifier = "UK/GB/12346";
         final Attribute attribute = eidasAttributeFactory.createPersonIdentifier(personIdentifier);
 
@@ -83,7 +83,7 @@ public class EidasAttributeFactoryTest extends OpenSAMLRunner {
     }
 
     @Test
-    public void createCurrentAddress() {
+    void createCurrentAddress() {
         final String currentAddress = "PGVpZGFzLW5hdHVyYWw6RnVsbEN2YWRkcmVzcz5DdXJyZW50IEFkZHJlc3M8L2VpZGFzLW5hdHVyYWw6RnVsbEN2YWRkcmVzcz4K";
         final Attribute attribute = eidasAttributeFactory.createCurrentAddress(currentAddress);
 
@@ -96,7 +96,7 @@ public class EidasAttributeFactoryTest extends OpenSAMLRunner {
     }
 
     @Test
-    public void createGender() {
+    void createGender() {
         final String gender = "Male";
         final Attribute attribute = eidasAttributeFactory.createGender(gender);
 

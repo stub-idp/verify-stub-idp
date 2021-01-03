@@ -4,7 +4,7 @@ import java.net.InetAddress;
 import java.net.URI;
 import java.net.UnknownHostException;
 
-public class IpAddressResolver {
+class IpAddressResolver {
 
     public String lookupIpAddress(URI url) {
         try {

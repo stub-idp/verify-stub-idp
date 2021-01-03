@@ -34,10 +34,10 @@ import static stubidp.saml.test.builders.HubAttributeQueryRequestBuilder.aHubAtt
 import static stubidp.saml.test.builders.HubAssertionBuilder.aHubAssertion;
 
 @ExtendWith(MockitoExtension.class)
-public class HubAttributeQueryRequestToSamlAttributeQueryTransformerTest extends OpenSAMLRunner {
+class HubAttributeQueryRequestToSamlAttributeQueryTransformerTest extends OpenSAMLRunner {
 
-    public static final String ENCRYPTED_MDS_ASSERTION = "encrypted-mds-assertion!";
-    public static final String ENCRYPTED_AUTHN_ASSERTION = "encrypted-authn-statement-assertion!";
+    private static final String ENCRYPTED_MDS_ASSERTION = "encrypted-mds-assertion!";
+    private static final String ENCRYPTED_AUTHN_ASSERTION = "encrypted-authn-statement-assertion!";
     public static final String AUTHN_STATEMENT_ID = "AUTHEN_STATEMENT_ID";
 
     private HubAttributeQueryRequestToSamlAttributeQueryTransformer transformer;
@@ -54,7 +54,7 @@ public class HubAttributeQueryRequestToSamlAttributeQueryTransformerTest extends
     private EncryptedAssertionUnmarshaller encryptedAssertionUnmarshaller;
 
     @BeforeEach
-    public void setup() {
+    void setup() {
         openSamlXmlObjectFactory = new OpenSamlXmlObjectFactory();
         HubAssertionMarshaller assertionTransformer = new HubAssertionMarshaller(openSamlXmlObjectFactory, attributeFactory, outboundAssertionToSubjectTransformer);
 
@@ -66,7 +66,7 @@ public class HubAttributeQueryRequestToSamlAttributeQueryTransformerTest extends
     }
 
     @Test
-    public void transform_shouldProperlyTransform() {
+    void transform_shouldProperlyTransform() {
         PersistentId persistentId = new PersistentId("default-name-id");
         HubAttributeQueryRequest originalQuery = aHubAttributeQueryRequest()
                 .withId("originalId")
@@ -82,7 +82,7 @@ public class HubAttributeQueryRequestToSamlAttributeQueryTransformerTest extends
     }
 
     @Test
-    public void transform_shouldOnlyIncludeCycle3Unencrypted() {
+    void transform_shouldOnlyIncludeCycle3Unencrypted() {
         final HubAssertion cycle3DataAssertion = aHubAssertion().build();
 
         HubAttributeQueryRequest originalQuery = aHubAttributeQueryRequest()
@@ -97,7 +97,7 @@ public class HubAttributeQueryRequestToSamlAttributeQueryTransformerTest extends
     }
 
     @Test
-    public void transform_shouldContainBothMdsAndAuthnAssertionsEncrypted() {
+    void transform_shouldContainBothMdsAndAuthnAssertionsEncrypted() {
         HubAttributeQueryRequest originalQuery = aHubAttributeQueryRequest()
                 .withEncryptedMatchingDatasetAssertion(ENCRYPTED_MDS_ASSERTION)
                 .withEncryptedAuthnAssertion(ENCRYPTED_AUTHN_ASSERTION)
@@ -116,7 +116,7 @@ public class HubAttributeQueryRequestToSamlAttributeQueryTransformerTest extends
     }
 
     @Test
-    public void transform_shouldSetTheSPNameQualifierAndNameQualifierToValuesThatShouldntBeThereButCurrentlyHaveNoWhereBetterToBe() {
+    void transform_shouldSetTheSPNameQualifierAndNameQualifierToValuesThatShouldntBeThereButCurrentlyHaveNoWhereBetterToBe() {
         final String authnStatementAssertion = PassthroughAssertionBuilder.aPassthroughAssertion().withUnderlyingAssertion(ENCRYPTED_AUTHN_ASSERTION).buildAuthnStatementAssertionAsString();
         final HubAssertion cycle3DataAssertion = aHubAssertion().build();
 
@@ -136,7 +136,7 @@ public class HubAttributeQueryRequestToSamlAttributeQueryTransformerTest extends
     }
 
     @Test
-    public void transform_shouldSetAttributesToUserAccountCreationAttributes(){
+    void transform_shouldSetAttributesToUserAccountCreationAttributes(){
         Attribute attribute1 = openSamlXmlObjectFactory.createAttribute();
         Attribute attribute2 = openSamlXmlObjectFactory.createAttribute();
         when(attributeQueryAttributeFactory.createAttribute(CURRENT_ADDRESS)).thenReturn(attribute1);
@@ -156,7 +156,7 @@ public class HubAttributeQueryRequestToSamlAttributeQueryTransformerTest extends
     }
 
     @Test
-    public void transform_shouldNotExplodeWhenUserAccountCreationAttributesAreAbsent(){
+    void transform_shouldNotExplodeWhenUserAccountCreationAttributesAreAbsent(){
         HubAttributeQueryRequest hubAttributeQueryRequest = aHubAttributeQueryRequest()
                 .withoutUserAccountCreationAttributes()
                 .build();

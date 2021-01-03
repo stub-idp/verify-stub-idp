@@ -24,7 +24,7 @@ public class CSRFViewRendererTest {
     private static final String CSRF_TOKEN = UUID.randomUUID().toString();
 
     private static class TestView extends View implements CSRFView {
-        protected TestView(String templateName) {
+        TestView(String templateName) {
             super(templateName);
         }
         @Override
@@ -34,7 +34,7 @@ public class CSRFViewRendererTest {
     }
 
     private static class TestNoCsrfView extends View implements CSRFView {
-        protected TestNoCsrfView(String templateName) {
+        TestNoCsrfView(String templateName) {
             super(templateName);
         }
         @Override
@@ -46,7 +46,7 @@ public class CSRFViewRendererTest {
     private final CSRFViewRenderer csrfViewRenderer = new CSRFViewRenderer();
 
     @Test
-    public void shouldIgnoreAnyContentThatHasNoForm() throws IOException {
+    void shouldIgnoreAnyContentThatHasNoForm() throws IOException {
         final ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
         csrfViewRenderer.render(new TestView("testview.ftl"), Locale.ENGLISH, byteArrayOutputStream);
         final String view = byteArrayOutputStream.toString();
@@ -55,7 +55,7 @@ public class CSRFViewRendererTest {
     }
 
     @Test
-    public void shouldAddValueToAllForms() throws IOException {
+    void shouldAddValueToAllForms() throws IOException {
         final ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
         csrfViewRenderer.render(new TestView("testview_withform.ftl"), Locale.ENGLISH, byteArrayOutputStream);
         final String view = byteArrayOutputStream.toString();
@@ -70,13 +70,13 @@ public class CSRFViewRendererTest {
     }
 
     @Test
-    public void shouldNotOverwriteExistingValues() {
+    void shouldNotOverwriteExistingValues() {
         final ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
         Assertions.assertThrows(CSRFConflictingFormAttributeException.class, () -> csrfViewRenderer.render(new TestView("testview_withconflictingform.ftl"), Locale.ENGLISH, byteArrayOutputStream));
     }
 
     @Test
-    public void shouldNotAddValueToAllFormsWhenNotSet() throws IOException {
+    void shouldNotAddValueToAllFormsWhenNotSet() throws IOException {
         final ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
         csrfViewRenderer.render(new TestNoCsrfView("testview_withform.ftl"), Locale.ENGLISH, byteArrayOutputStream);
         final String view = byteArrayOutputStream.toString();

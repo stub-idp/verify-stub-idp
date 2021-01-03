@@ -15,14 +15,14 @@ public class AuthnContextFactoryTest {
     private final AuthnContextFactory factory = new AuthnContextFactory();
 
     @Test
-    public void shouldBeAbleToMapFromEidasToLoA() {
+    void shouldBeAbleToMapFromEidasToLoA() {
         assertThat(factory.mapFromEidasToLoA(EidasAuthnContext.EIDAS_LOA_LOW)).isEqualTo(AuthnContext.LEVEL_1);
         assertThat(factory.mapFromEidasToLoA(EidasAuthnContext.EIDAS_LOA_SUBSTANTIAL)).isEqualTo(AuthnContext.LEVEL_2);
         assertThat(factory.mapFromEidasToLoA(EidasAuthnContext.EIDAS_LOA_HIGH)).isEqualTo(AuthnContext.LEVEL_2);
     }
 
     @Test
-    public void shouldBeAbleToMapFromLoAtoEidas() {
+    void shouldBeAbleToMapFromLoAtoEidas() {
         assertThat(factory.mapFromLoAToEidas(AuthnContext.LEVEL_1)).isEqualTo(EidasAuthnContext.EIDAS_LOA_LOW);
         assertThat(factory.mapFromLoAToEidas(AuthnContext.LEVEL_2)).isEqualTo(EidasAuthnContext.EIDAS_LOA_SUBSTANTIAL);
         assertThatThrownBy(() -> factory.mapFromLoAToEidas(AuthnContext.LEVEL_3)).isInstanceOf(IllegalStateException.class);
@@ -31,7 +31,7 @@ public class AuthnContextFactoryTest {
     }
 
     @Test
-    public void shouldThrowExceptionWhenMappingInvalidEidasToLoA() {
+    void shouldThrowExceptionWhenMappingInvalidEidasToLoA() {
         final String levelOfAssurance = "glarg";
         try {
             factory.mapFromEidasToLoA(levelOfAssurance);
@@ -42,7 +42,7 @@ public class AuthnContextFactoryTest {
     }
 
     @Test
-    public void shouldCorrectlyTransformValidValues() {
+    void shouldCorrectlyTransformValidValues() {
         assertThat(factory.authnContextForLevelOfAssurance(IdaAuthnContext.LEVEL_1_AUTHN_CTX)).isEqualTo(AuthnContext.LEVEL_1);
         assertThat(factory.authnContextForLevelOfAssurance(IdaAuthnContext.LEVEL_2_AUTHN_CTX)).isEqualTo(AuthnContext.LEVEL_2);
         assertThat(factory.authnContextForLevelOfAssurance(IdaAuthnContext.LEVEL_3_AUTHN_CTX)).isEqualTo(AuthnContext.LEVEL_3);
@@ -51,7 +51,7 @@ public class AuthnContextFactoryTest {
     }
 
     @Test
-    public void shouldThrowExceptionIfInvalidValue() {
+    void shouldThrowExceptionIfInvalidValue() {
         final String levelOfAssurance = "glarg";
         try {
             factory.authnContextForLevelOfAssurance(levelOfAssurance);

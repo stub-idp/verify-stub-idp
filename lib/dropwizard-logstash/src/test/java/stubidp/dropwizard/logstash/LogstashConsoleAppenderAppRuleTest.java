@@ -23,13 +23,13 @@ import static stubidp.dropwizard.logstash.RootResource.TEST_LOG_LINE;
 @ExtendWith(DropwizardExtensionsSupport.class)
 public class LogstashConsoleAppenderAppRuleTest {
 
-    public static final DropwizardAppExtension<TestConfiguration> dropwizardAppRule = new DropwizardAppExtension<>(TestApplication.class, ResourceHelpers.resourceFilePath("console-appender-test-application.yml"));
+    private static final DropwizardAppExtension<TestConfiguration> dropwizardAppRule = new DropwizardAppExtension<>(TestApplication.class, ResourceHelpers.resourceFilePath("console-appender-test-application.yml"));
 
     private final Client client = new JerseyClientBuilder().build();
 
     @Test
     @CaptureSystemOutput
-    public void testLoggingLogstashRequestLog(CaptureSystemOutput.OutputCapture outputCapture) {
+    void testLoggingLogstashRequestLog(CaptureSystemOutput.OutputCapture outputCapture) {
         final String REFERER = "http://foobar/";
         final String USER_AGENT = "lynx/1.337";
         final String URL_PATH = "/?queryparam=test";
@@ -65,7 +65,7 @@ public class LogstashConsoleAppenderAppRuleTest {
 
     @Test
     @CaptureSystemOutput
-    public void testRequestLogWithMissingRefererHeader(CaptureSystemOutput.OutputCapture outputCapture) {
+    void testRequestLogWithMissingRefererHeader(CaptureSystemOutput.OutputCapture outputCapture) {
         for(int i=0;i<5;i++) {
             final Response response = client.target("http://localhost:" + dropwizardAppRule.getLocalPort() + "/")
                     .request()
@@ -83,7 +83,7 @@ public class LogstashConsoleAppenderAppRuleTest {
 
     @Test
     @CaptureSystemOutput
-    public void testLoggingLogstashFileLog(CaptureSystemOutput.OutputCapture outputCapture) {
+    void testLoggingLogstashFileLog(CaptureSystemOutput.OutputCapture outputCapture) {
         for(int i=0;i<5;i++) {
             final Response response = client.target("http://localhost:" + dropwizardAppRule.getLocalPort() + "/log")
                     .request()

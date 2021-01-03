@@ -23,7 +23,7 @@ public class SecurityHeadersFilterTest {
     private ContainerResponseContext containerResponseContext;
 
     @Test
-    public void checkSecurityHeadersAreAdded() {
+    void checkSecurityHeadersAreAdded() {
         SecurityHeadersFilter securityHeadersFilter = new SecurityHeadersFilter();
         MultivaluedMap<String, Object> headers = new MultivaluedHashMap<>();
         when(containerResponseContext.getHeaders()).thenReturn(headers);
@@ -34,7 +34,7 @@ public class SecurityHeadersFilterTest {
         checkSecurityHeaders(headers);
     }
 
-    public static void checkSecurityHeaders(MultivaluedMap<String, Object> headers) {
+    static void checkSecurityHeaders(MultivaluedMap<String, Object> headers) {
         assertThat(headers.containsKey("X-Frame-Options")).isTrue();
         assertThat(headers.get("X-Frame-Options").size()).isEqualTo(1);
         assertThat(headers.get("X-Frame-Options").get(0)).isEqualTo("DENY");

@@ -4,10 +4,10 @@ import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class LevelOfAssuranceTest {
+class LevelOfAssuranceTest {
 
     @Test
-    public void checkOrdering() {
+    void checkOrdering() {
         assertThat(LevelOfAssurance.HIGH.compareTo(LevelOfAssurance.SUBSTANTIAL) > 0).isTrue();
         assertThat(LevelOfAssurance.HIGH.compareTo(LevelOfAssurance.LOW) > 0).isTrue();
         assertThat(LevelOfAssurance.SUBSTANTIAL.compareTo(LevelOfAssurance.LOW) > 0).isTrue();

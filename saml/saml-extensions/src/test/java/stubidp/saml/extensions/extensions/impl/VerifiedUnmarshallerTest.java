@@ -7,9 +7,9 @@ import stubidp.saml.test.OpenSAMLRunner;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class VerifiedUnmarshallerTest extends OpenSAMLRunner {
+class VerifiedUnmarshallerTest extends OpenSAMLRunner {
     @Test
-    public void unmarshall_shouldSetValueWhenTrue() throws Exception {
+    void unmarshall_shouldSetValueWhenTrue() throws Exception {
         Verified verified = Utils.unmarshall("" +
                 "<saml:AttributeValue " +
                 "       xmlns:ida=\"http://www.cabinetoffice.gov.uk/resource-library/ida/attributes\"\n " +
@@ -24,7 +24,7 @@ public class VerifiedUnmarshallerTest extends OpenSAMLRunner {
     }
 
     @Test
-    public void unmarshall_shouldSetValueWhenFalse() throws Exception {
+    void unmarshall_shouldSetValueWhenFalse() throws Exception {
         Verified verified = Utils.unmarshall("" +
                 "<saml:AttributeValue " +
                 "       xmlns:ida=\"http://www.cabinetoffice.gov.uk/resource-library/ida/attributes\"\n " +

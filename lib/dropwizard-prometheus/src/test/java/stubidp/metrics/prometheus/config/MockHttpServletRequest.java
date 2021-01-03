@@ -24,7 +24,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
 
-public class MockHttpServletRequest implements HttpServletRequest {
+class MockHttpServletRequest implements HttpServletRequest {
 
 	private final Map<String, List<String>> headers = new HashMap<>();
 	private String requestURI;

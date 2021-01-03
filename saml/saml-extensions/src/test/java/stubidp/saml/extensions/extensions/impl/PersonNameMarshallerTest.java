@@ -14,19 +14,19 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static stubidp.saml.extensions.IdaConstants.IDA_NS;
 import static stubidp.saml.extensions.IdaConstants.IDA_PREFIX;
 
-public class PersonNameMarshallerTest extends OpenSAMLRunner {
+class PersonNameMarshallerTest extends OpenSAMLRunner {
 
     private Marshaller marshaller;
     private PersonName personName;
 
     @BeforeEach
-    public void setUp() {
+    void setUp() {
         personName = new PersonNameBuilder().buildObject();
         marshaller = XMLObjectProviderRegistrySupport.getMarshallerFactory().getMarshaller(personName);
     }
 
     @Test
-    public void marshall_shouldMarshallPersonName() throws Exception {
+    void marshall_shouldMarshallPersonName() throws Exception {
         String name = "John";
         String language = "en-GB";
         personName.setValue(name);
@@ -42,14 +42,14 @@ public class PersonNameMarshallerTest extends OpenSAMLRunner {
     }
 
     @Test
-    public void marshall_shouldEnsureXsiNamespaceDefinitionIsInluded() throws Exception {
+    void marshall_shouldEnsureXsiNamespaceDefinitionIsInluded() throws Exception {
         Element marshalledElement = marshaller.marshall(new PersonNameBuilder().buildObject());
 
         assertThat(marshalledElement.hasAttributeNS(XMLConstants.XMLNS_NS, XMLConstants.XSI_PREFIX)).isTrue();
     }
 
     @Test
-    public void marshall_shouldMarshallFromDateInCorrectFormat() throws Exception {
+    void marshall_shouldMarshallFromDateInCorrectFormat() throws Exception {
         String fromDate = "2012-02-09";
         personName.setFrom(BaseMdsSamlObjectUnmarshaller.InstantFromDate.of(fromDate));
 
@@ -59,7 +59,7 @@ public class PersonNameMarshallerTest extends OpenSAMLRunner {
     }
 
     @Test
-    public void marshall_shouldMarshallFromDateWithNamespacePrefix() throws Exception {
+    void marshall_shouldMarshallFromDateWithNamespacePrefix() throws Exception {
         personName.setFrom(BaseMdsSamlObjectUnmarshaller.InstantFromDate.of("2012-02-09"));
 
         Element marshalledElement = marshaller.marshall(personName);
@@ -68,7 +68,7 @@ public class PersonNameMarshallerTest extends OpenSAMLRunner {
     }
 
     @Test
-    public void marshall_shouldMarshallToDateInCorrectFormat() throws Exception {
+    void marshall_shouldMarshallToDateInCorrectFormat() throws Exception {
         String toDate = "2012-02-09";
         personName.setTo(BaseMdsSamlObjectUnmarshaller.InstantFromDate.of(toDate));
 
@@ -78,7 +78,7 @@ public class PersonNameMarshallerTest extends OpenSAMLRunner {
     }
 
     @Test
-    public void marshall_shouldMarshallToDateWithNamespacePrefix() throws Exception {
+    void marshall_shouldMarshallToDateWithNamespacePrefix() throws Exception {
         personName.setTo(BaseMdsSamlObjectUnmarshaller.InstantFromDate.of("2012-02-09"));
 
         Element marshalledElement = marshaller.marshall(personName);
@@ -87,17 +87,17 @@ public class PersonNameMarshallerTest extends OpenSAMLRunner {
     }
 
     @Test
-    public void marshall_shouldMarshallVerifiedWhenTrue() throws Exception {
+    void marshall_shouldMarshallVerifiedWhenTrue() throws Exception {
         checkMarshallingVerifiedAttributeWithValue(true);
     }
 
     @Test
-    public void marshall_shouldMarshallVerifiedWhenFalse() throws Exception {
+    void marshall_shouldMarshallVerifiedWhenFalse() throws Exception {
         checkMarshallingVerifiedAttributeWithValue(false);
     }
 
     @Test
-    public void marshall_shouldMarshallVerifiedWithNamespacePrefix() throws Exception {
+    void marshall_shouldMarshallVerifiedWithNamespacePrefix() throws Exception {
         personName.setVerified(true);
 
         Element marshalledElement = marshaller.marshall(personName);

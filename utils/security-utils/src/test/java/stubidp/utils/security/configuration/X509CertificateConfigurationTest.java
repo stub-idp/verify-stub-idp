@@ -21,7 +21,7 @@ public class X509CertificateConfigurationTest {
     private final ObjectMapper objectMapper = new ObjectMapper();
 
     @Test
-    public void should_loadPublicKey() throws Exception {
+    void should_loadPublicKey() throws Exception {
         String strippedCert = getCertificateString();
         String jsonConfig = "{\"type\": \"x509\", \"cert\": \"" + strippedCert + "\", \"name\": \"someId\"}";
         DeserializablePublicKeyConfiguration config = objectMapper.readValue(jsonConfig, DeserializablePublicKeyConfiguration.class);
@@ -30,7 +30,7 @@ public class X509CertificateConfigurationTest {
     }
 
     @Test
-    public void should_loadPublicKeyWhenUsingAliases() throws Exception {
+    void should_loadPublicKeyWhenUsingAliases() throws Exception {
         String strippedCert = getCertificateString();
         List<String> aliases = Arrays.asList("cert", "x509");
 
@@ -44,14 +44,14 @@ public class X509CertificateConfigurationTest {
     }
 
     @Test
-    public void should_ThrowExceptionWhenStringDoesNotContainAPublicKey() {
+    void should_ThrowExceptionWhenStringDoesNotContainAPublicKey() {
         String encodedKey = Base64.getEncoder().encodeToString("not-a-fullCertificate".getBytes());
         final ValueInstantiationException exception = Assertions.assertThrows(ValueInstantiationException.class, () -> objectMapper.readValue("{\"type\": \"x509\", \"cert\": \"" + encodedKey + "\", \"name\": \"someId\"}", DeserializablePublicKeyConfiguration.class));
         assertThat(exception.getMessage()).contains("Unable to load certificate");
     }
 
     @Test
-    public void should_ThrowExceptionWhenIncorrectKeySpecified() {
+    void should_ThrowExceptionWhenIncorrectKeySpecified() {
         String path = getClass().getClassLoader().getResource("empty_file").getPath();
         String jsonConfig = "{\"type\": \"x509\", \"certFoo\": \"" + path + "\", \"name\": \"someId\"}";
         Assertions.assertThrows(ValueInstantiationException.class, () -> objectMapper.readValue(jsonConfig, DeserializablePublicKeyConfiguration.class));

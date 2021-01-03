@@ -12,10 +12,10 @@ import stubidp.saml.test.OpenSAMLRunner;
 import static org.assertj.core.api.Assertions.assertThat;
 import static stubidp.saml.extensions.IdaConstants.EIDAS_NATURUAL_PREFIX;
 
-public class CurrentAddressMarshallerTest extends OpenSAMLRunner {
+class CurrentAddressMarshallerTest extends OpenSAMLRunner {
 
     @Test
-    public void shouldMarshallCurrentAddress() throws Exception {
+    void shouldMarshallCurrentAddress() throws Exception {
         final String address = "PGVpZGFzLW5hdHVyYWw6RnVsbEN2YWRkcmVzcz5DdXJyZW50IEFkZHJlc3M8L2VpZGFzLW5hdHVyYWw6RnVsbEN2YWRkcmVzcz4K";
         final CurrentAddress currentAddress = new CurrentAddressBuilder().buildObject();
         final Marshaller currentAddressMarshaller = XMLObjectProviderRegistrySupport.getMarshallerFactory().getMarshaller(currentAddress);

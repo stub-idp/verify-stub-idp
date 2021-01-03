@@ -1,6 +1,6 @@
 package stubidp.saml.extensions.validation;
 
-public class TransformationErrorContext {
+class TransformationErrorContext {
     private final String messageId;
     private final String entityId;
     private final String messageType;

@@ -12,10 +12,10 @@ import stubidp.saml.test.OpenSAMLRunner;
 import static org.assertj.core.api.Assertions.assertThat;
 import static stubidp.saml.extensions.IdaConstants.EIDAS_NATURUAL_PREFIX;
 
-public class PersonIdentifierMarshallerTest extends OpenSAMLRunner {
+class PersonIdentifierMarshallerTest extends OpenSAMLRunner {
 
     @Test
-    public void shouldMarshallPersonIdentifier() throws Exception {
+    void shouldMarshallPersonIdentifier() throws Exception {
         final String personId = "UK/GB/12345";
         final PersonIdentifier personIdentifier = new PersonIdentifierBuilder().buildObject();
         final Marshaller personIdentifierMarshaller = XMLObjectProviderRegistrySupport.getMarshallerFactory().getMarshaller(personIdentifier);

@@ -13,7 +13,7 @@ public class XmlUtilsTest {
      * @see https://en.wikipedia.org/wiki/Billion_laughs
      */
     @Test
-    public void convertToElement_shouldDealWithEntityExpansionAttacks() throws Exception {
+    void convertToElement_shouldDealWithEntityExpansionAttacks() throws Exception {
         String xmlString = "<?xml version=\"1.0\"?>\n" +
             "<!DOCTYPE lolz [\n" +
             " <!ENTITY lol \"lol\">\n" +
@@ -44,7 +44,7 @@ public class XmlUtilsTest {
      * @see https://www.owasp.org/index.php/XML_External_Entity_%28XXE%29_Processing
      */
     @Test
-    public void convertToElement_shouldThrowExceptionIfProvidedWithDoctypeDeclaration() throws Exception {
+    void convertToElement_shouldThrowExceptionIfProvidedWithDoctypeDeclaration() throws Exception {
         String xmlString = "<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>" +
                 "<!DOCTYPE foo [" +
                 "  <!ELEMENT foo ANY >" +

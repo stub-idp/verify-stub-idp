@@ -6,7 +6,7 @@ import org.apache.commons.validator.routines.InetAddressValidator;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class EmailValidator {
+class EmailValidator {
 
     private static final String SPECIAL_CHARS = "\\p{Cntrl}\\(\\)<>@,;:'\\\\\\\"\\.\\[\\]";
     private static final String VALID_CHARS = "[^\\s" + SPECIAL_CHARS + "]";

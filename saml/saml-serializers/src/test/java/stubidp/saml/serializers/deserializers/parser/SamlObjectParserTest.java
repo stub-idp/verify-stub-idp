@@ -15,19 +15,19 @@ import stubidp.saml.serializers.deserializers.parser.SamlObjectParser;
 public class SamlObjectParserTest {
 
     @BeforeEach
-    public void setup() throws InitializationException {
+    void setup() throws InitializationException {
         InitializationService.initialize();
     }
 
     @Test
-    public void shouldNotFailWithEntityDescriptorStuff() throws Exception {
+    void shouldNotFailWithEntityDescriptorStuff() throws Exception {
         SamlObjectParser samlObjectParser = new SamlObjectParser();
         EntityDescriptor samlObject = samlObjectParser.getSamlObject(entityDescriptor);
         Assertions.assertThat(samlObject.getIDPSSODescriptor(SAMLConstants.SAML20P_NS).getKeyDescriptors().get(0).getUse()).isEqualTo(UsageType.SIGNING);
     }
 
     @Test
-    public void shouldFailWhenNaughtyXml() {
+    void shouldFailWhenNaughtyXml() {
         String xmlString = "<?xml version=\"1.0\"?>\n" +
                 "<!DOCTYPE lolz [\n" +
                 " <!ENTITY lol \"lol\">\n" +

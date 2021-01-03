@@ -18,12 +18,12 @@ public class DestinationValidatorTest extends OpenSAMLRunner {
     private DestinationValidator validator;
 
     @BeforeEach
-    public void setup() {
+    void setup() {
         validator = new DestinationValidator(URI.create(EXPECTED_DESTINATION), EXPECTED_ENDPOINT);
     }
 
     @Test
-    public void validate_shouldThrowExceptionIfDestinationIsAbsent() {
+    void validate_shouldThrowExceptionIfDestinationIsAbsent() {
         validateException(
             destinationMissing(URI.create(EXPECTED_DESTINATION + EXPECTED_ENDPOINT)),
             null
@@ -31,17 +31,17 @@ public class DestinationValidatorTest extends OpenSAMLRunner {
     }
 
     @Test
-    public void validate_shouldNotThrowExceptionIfUriMatches() {
+    void validate_shouldNotThrowExceptionIfUriMatches() {
         validator.validate("http://correct.destination.com/foo/bar");
     }
 
     @Test
-    public void validate_shouldBeValidIfPortSpecifiedOnDestinationButNotForSamlProxy() {
+    void validate_shouldBeValidIfPortSpecifiedOnDestinationButNotForSamlProxy() {
         validator.validate("http://correct.destination.com:999/foo/bar");
     }
 
     @Test
-    public void validate_shouldThrowSamlExceptionIfHostForTheUriOnResponseDoesNotMatchTheSamlReceiverHost() {
+    void validate_shouldThrowSamlExceptionIfHostForTheUriOnResponseDoesNotMatchTheSamlReceiverHost() {
         String invalidDestination = "http://saml.com/foo/bar";
         validateException(
             destinationEmpty(URI.create(EXPECTED_DESTINATION + EXPECTED_ENDPOINT), invalidDestination),
@@ -50,7 +50,7 @@ public class DestinationValidatorTest extends OpenSAMLRunner {
     }
 
     @Test
-    public void validate_shouldThrowSamlExceptionIfHostsMatchButPathsDoNot() {
+    void validate_shouldThrowSamlExceptionIfHostsMatchButPathsDoNot() {
         validateException(
             destinationEmpty(URI.create(EXPECTED_DESTINATION + EXPECTED_ENDPOINT), EXPECTED_DESTINATION + "/this/is/a/path"),
             EXPECTED_DESTINATION + "/this/is/a/path"

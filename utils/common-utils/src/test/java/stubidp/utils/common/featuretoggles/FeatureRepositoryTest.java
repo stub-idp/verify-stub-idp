@@ -10,7 +10,7 @@ import static stubidp.utils.common.featuretoggles.IdaFeatures.UIRework;
 public class FeatureRepositoryTest {
 
     @Test
-    public void should_loadActive() throws Exception {
+    void should_loadActive() throws Exception {
         FeatureConfiguration configuration = FeatureConfigurationBuilder.aFeatureConfiguration()
                 .withFeatureClass(IdaFeatures.class.getCanonicalName())
                 .withFeature(aFeatureEntry().withFeatureName(UIRework.name()).isActive(true).build())
@@ -24,7 +24,7 @@ public class FeatureRepositoryTest {
     }
 
     @Test
-    public void should_loadInactive() throws Exception {
+    void should_loadInactive() throws Exception {
         FeatureConfiguration configuration = FeatureConfigurationBuilder.aFeatureConfiguration()
                 .withFeatureClass(IdaFeatures.class.getCanonicalName())
                 .withFeature(aFeatureEntry().withFeatureName(UIRework.name()).isActive(true).build())

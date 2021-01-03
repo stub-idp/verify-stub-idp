@@ -35,13 +35,13 @@ public class HintsIntegrationTests extends IntegrationTestHelper {
 
     private AuthnRequestSteps authnRequestSteps;
 
-    public static final StubIdpAppExtension applicationRule = new StubIdpAppExtension()
+    private static final StubIdpAppExtension applicationRule = new StubIdpAppExtension()
             .withStubIdp(aStubIdp().withId(IDP_NAME).withDisplayName(DISPLAY_NAME).build());
 
-    public final Client client = JerseyClientBuilder.createClient().property(ClientProperties.FOLLOW_REDIRECTS, false);
+    private final Client client = JerseyClientBuilder.createClient().property(ClientProperties.FOLLOW_REDIRECTS, false);
 
     @BeforeEach
-    public void setUp() {
+    void setUp() {
         client.target("http://localhost:" + applicationRule.getAdminPort() + "/tasks/metadata-refresh").request().post(Entity.text(""));
         authnRequestSteps = new AuthnRequestSteps(
                 client,
@@ -50,7 +50,7 @@ public class HintsIntegrationTests extends IntegrationTestHelper {
     }
 
     @Test
-    public void debugPageShowsHintsTest() {
+    void debugPageShowsHintsTest() {
         List<String> hints = List.of(IdpHint.has_apps.name(), "snakes", "plane");
         final Optional<Boolean> registration = Optional.of(true);
         final Optional<String> language = Optional.empty();
@@ -69,7 +69,7 @@ public class HintsIntegrationTests extends IntegrationTestHelper {
     }
 
     @Test
-    public void debugPageShowsLanguageHintTest() {
+    void debugPageShowsLanguageHintTest() {
         List<String> hints = List.of();
         final Optional<Boolean> registration = Optional.empty();
         final Optional<String> language = Optional.of("cy");
@@ -92,7 +92,7 @@ public class HintsIntegrationTests extends IntegrationTestHelper {
                 .map(Element::text).collect(Collectors.toList());
     }
 
-    public Response aUserVisitsTheDebugPage(String idp, AuthnRequestSteps.Cookies cookies) {
+    Response aUserVisitsTheDebugPage(String idp, AuthnRequestSteps.Cookies cookies) {
         return client.target(getDebugPath(idp))
                 .request()
                 .cookie(StubIdpCookieNames.SESSION_COOKIE_NAME, cookies.getSessionId())

@@ -56,12 +56,12 @@ public class SingleIdpPromptResourceTest {
     private final Idp idp = new Idp(idpName, "Test Idp", "test-idp-asset-id", true, TestEntityIds.STUB_IDP_ONE, null);
 
     @BeforeEach
-    public void setUp() {
+    void setUp() {
         singleIdpStartPromptPageResource = new SingleIdpStartPromptPageResource(idpStubsRepository, serviceListService, singleIdpConfiguration, idpSessionRepository);
     }
 
     @Test
-    public void shouldThrowIfFeatureDisabled() {
+    void shouldThrowIfFeatureDisabled() {
         when(singleIdpConfiguration.isEnabled()).thenReturn(false);
 
         assertThatExceptionOfType(FeatureNotEnabledException.class)
@@ -69,7 +69,7 @@ public class SingleIdpPromptResourceTest {
     }
 
     @Test
-    public void shouldReturnPageViewWithEmptyListIfHubReturnsNoServices() throws FeatureNotEnabledException {
+    void shouldReturnPageViewWithEmptyListIfHubReturnsNoServices() throws FeatureNotEnabledException {
         when(singleIdpConfiguration.isEnabled()).thenReturn(true);
         when(singleIdpConfiguration.getVerifySubmissionUri()).thenReturn(verifySubmissionUri);
         when(idpStubsRepository.getIdpWithFriendlyId(idpName)).thenReturn(idp);
@@ -85,7 +85,7 @@ public class SingleIdpPromptResourceTest {
     }
 
     @Test
-    public void shouldReturnPageViewWithSortedListIfHubReturnsPopulatedListOfServices() throws FeatureNotEnabledException {
+    void shouldReturnPageViewWithSortedListIfHubReturnsPopulatedListOfServices() throws FeatureNotEnabledException {
         when(singleIdpConfiguration.isEnabled()).thenReturn(true);
         when(singleIdpConfiguration.getVerifySubmissionUri()).thenReturn(verifySubmissionUri);
         when(idpStubsRepository.getIdpWithFriendlyId(idpName)).thenReturn(idp);

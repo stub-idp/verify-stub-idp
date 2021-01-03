@@ -18,12 +18,12 @@ import static stubidp.saml.test.builders.EntitiesDescriptorBuilder.anEntitiesDes
 public class EntitiesDescriptorNamePredicateTest {
 
     @BeforeEach
-    public void setUp() throws InitializationException {
+    void setUp() throws InitializationException {
         InitializationService.initialize();
     }
 
     @Test
-    public void shouldApplyForEntityWithExpectedParent() throws MarshallingException, SignatureException {
+    void shouldApplyForEntityWithExpectedParent() throws MarshallingException, SignatureException {
         String entitiesName = "collection of entities";
 
         EntityDescriptor entityDescriptor = new EntityDescriptorFactory().idpEntityDescriptor("an idp");
@@ -40,7 +40,7 @@ public class EntitiesDescriptorNamePredicateTest {
     }
 
     @Test
-    public void shouldNotApplyForEntityWithWrongParent() throws MarshallingException, SignatureException {
+    void shouldNotApplyForEntityWithWrongParent() throws MarshallingException, SignatureException {
         EntityDescriptor entityDescriptor = new EntityDescriptorFactory().idpEntityDescriptor("an idp");
         anEntitiesDescriptor()
                 .withEntityDescriptors(Collections.singletonList(entityDescriptor))
@@ -54,7 +54,7 @@ public class EntitiesDescriptorNamePredicateTest {
     }
 
     @Test
-    public void shouldNotApplyForEntityWithNoParent() {
+    void shouldNotApplyForEntityWithNoParent() {
         EntityDescriptor entityDescriptor = new EntityDescriptorFactory().idpEntityDescriptor("an idp");
 
         EntitiesDescriptorNamePredicate entitiesDescriptorNamePredicate = new EntitiesDescriptorNamePredicate(
@@ -64,7 +64,7 @@ public class EntitiesDescriptorNamePredicateTest {
     }
 
     @Test
-    public void shouldNotApplyForEntityWithNamelessParent() throws MarshallingException, SignatureException {
+    void shouldNotApplyForEntityWithNamelessParent() throws MarshallingException, SignatureException {
         EntityDescriptor entityDescriptor = new EntityDescriptorFactory().idpEntityDescriptor("an idp");
         anEntitiesDescriptor()
                 .withEntityDescriptors(Collections.singletonList(entityDescriptor))
@@ -78,7 +78,7 @@ public class EntitiesDescriptorNamePredicateTest {
     }
 
     @Test
-    public void shouldNotApplyForEntityWithWrongParentType() {
+    void shouldNotApplyForEntityWithWrongParentType() {
         EntityDescriptor entityDescriptor = new EntityDescriptorFactory().idpEntityDescriptor("an idp");
         entityDescriptor.setParent(new AddressBuilder().buildObject("Some", "Other", "Type"));
 

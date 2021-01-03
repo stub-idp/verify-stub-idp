@@ -16,7 +16,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-public class CookieFactoryTest {
+class CookieFactoryTest {
 
     private final int SESSION_COOKIE_MAX_AGE = -1;
     private final boolean IS_SECURE = true;
@@ -27,7 +27,7 @@ public class CookieFactoryTest {
     @Mock
     SecureCookieConfiguration secureCookieConfiguration;
 
-    CookieFactory cookieFactory;
+    private CookieFactory cookieFactory;
 
     private final CookieNames cookieNames = new CookieNames() {
         @Override
@@ -42,12 +42,12 @@ public class CookieFactoryTest {
     };
 
     @BeforeEach
-    public void setup() {
+    void setup() {
         cookieFactory = new CookieFactory(hmacDigest, secureCookieConfiguration, cookieNames);
     }
 
     @Test
-    public void createSecureCookieWithSecurelyHashedValue_shouldCreateACookie() {
+    void createSecureCookieWithSecurelyHashedValue_shouldCreateACookie() {
         when(secureCookieConfiguration.isSecure()).thenReturn(IS_SECURE);
         SessionId sessionId = new SessionId(UUID.randomUUID().toString());
 
@@ -65,7 +65,7 @@ public class CookieFactoryTest {
     }
 
     @Test
-    public void createSessionIdCookie_shouldCreateACookie() {
+    void createSessionIdCookie_shouldCreateACookie() {
         when(secureCookieConfiguration.isSecure()).thenReturn(IS_SECURE);
         SessionId expectedValue = SessionId.createNewSessionId();
 

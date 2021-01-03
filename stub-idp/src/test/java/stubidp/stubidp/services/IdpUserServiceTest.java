@@ -53,12 +53,12 @@ public class IdpUserServiceTest {
     private IdpStubsRepository idpStubsRepository;
 
     @BeforeEach
-    public void createResource() {
+    void createResource() {
         idpUserService = new IdpUserService(sessionRepository, idpStubsRepository);
     }
 
     @Test
-    public void shouldBuildSuccessResponse() throws InvalidUsernameOrPasswordException, InvalidSessionIdException {
+    void shouldBuildSuccessResponse() throws InvalidUsernameOrPasswordException, InvalidSessionIdException {
         when(idpStubsRepository.getIdpWithFriendlyId(IDP_NAME)).thenReturn(idp);
         Optional<DatabaseIdpUser> idpUserOptional = Optional.of(MatchingDatasetFactoryTest.completeUser);
         when(idp.getUser(USERNAME, PASSWORD)).thenReturn(idpUserOptional);
@@ -72,7 +72,7 @@ public class IdpUserServiceTest {
     }
 
     @Test
-    public void shouldHaveStatusSuccessResponseWhenUserRegisters() throws InvalidSessionIdException, IncompleteRegistrationException, InvalidDateException, UsernameAlreadyTakenException, InvalidUsernameOrPasswordException {
+    void shouldHaveStatusSuccessResponseWhenUserRegisters() throws InvalidSessionIdException, IncompleteRegistrationException, InvalidDateException, UsernameAlreadyTakenException, InvalidUsernameOrPasswordException {
         IdpSession session = new IdpSession(SessionId.createNewSessionId(), idaAuthnRequestFromHubOptional, "test-relay-state", Collections.emptyList(), Collections.emptyList(), Optional.empty(), Optional.empty(), Optional.empty(), null);
         when(sessionRepository.get(SESSION_ID)).thenReturn(Optional.of(new IdpSession(SESSION_ID, idaAuthnRequestFromHubOptional, RELAY_STATE, null, null, null, null, null, null)));
         when(idpStubsRepository.getIdpWithFriendlyId(IDP_NAME)).thenReturn(idp);

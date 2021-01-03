@@ -44,7 +44,7 @@ public class SecurityIntegrationTests extends IntegrationTestHelper {
             IDP_NAME,
             applicationRule.getLocalPort());
 
-    public static final StubIdpAppExtension applicationRule = new StubIdpAppExtension()
+    private static final StubIdpAppExtension applicationRule = new StubIdpAppExtension()
             .withStubIdp(aStubIdp().withId(IDP_NAME).withDisplayName(DISPLAY_NAME).build());
 
     @BeforeEach

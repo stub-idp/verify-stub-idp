@@ -14,13 +14,13 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-public class AcceptLanguageFilterTest{
+class AcceptLanguageFilterTest{
 
     private final HttpServletRequest request = mock(HttpServletRequest.class);
     private final String encodingHeader = "someheader";
 
     @BeforeEach
-    public void setUp(){
+    void setUp(){
         ArrayList<String> headers = new ArrayList<>();
         headers.add(HttpHeaders.ACCEPT_LANGUAGE);
         headers.add(HttpHeaders.ACCEPT_ENCODING);
@@ -31,7 +31,7 @@ public class AcceptLanguageFilterTest{
     }
 
     @Test
-    public void getHeaderNames_removesAcceptLanguageHeader(){
+    void getHeaderNames_removesAcceptLanguageHeader(){
         AcceptLanguageFilter f = new AcceptLanguageFilter();
         Enumeration<String> headerNames = new AcceptLanguageFilter.HideAcceptLanguage(request).getHeaderNames();
         verify(request).getHeaderNames();
@@ -39,7 +39,7 @@ public class AcceptLanguageFilterTest{
     }
 
     @Test
-    public void getHeader_returnsValueOfAcceptLanguageHeaderNullForOthers(){
+    void getHeader_returnsValueOfAcceptLanguageHeaderNullForOthers(){
         AcceptLanguageFilter f = new AcceptLanguageFilter();
         assertThat(new AcceptLanguageFilter.HideAcceptLanguage(request).getHeader(HttpHeaders.ACCEPT_ENCODING)).isEqualTo(encodingHeader);
         assertThat(new AcceptLanguageFilter.HideAcceptLanguage(request).getHeader(HttpHeaders.ACCEPT_LANGUAGE)).isNull();

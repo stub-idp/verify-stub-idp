@@ -35,16 +35,16 @@ public class EmojiSupportIntegrationTests extends IntegrationTestHelper {
             IDP_NAME,
             applicationRule.getLocalPort());
 
-    public static final StubIdpAppExtension applicationRule = new StubIdpAppExtension()
+    private static final StubIdpAppExtension applicationRule = new StubIdpAppExtension()
             .withStubIdp(aStubIdp().withId(IDP_NAME).withDisplayName(DISPLAY_NAME).build());
 
     @BeforeEach
-    public void before() {
+    void before() {
         client.target("http://localhost:"+applicationRule.getAdminPort()+"/tasks/metadata-refresh").request().post(Entity.text(""));
     }
 
     @Test
-    public void loginBehaviourTest() {
+    void loginBehaviourTest() {
         final AuthnRequestSteps.Cookies cookies = authnRequestSteps.userPostsAuthnRequestToStubIdp();
         authnRequestSteps.userLogsIn(cookies, IDP_NAME+"-emoji");
         final Document page = userConsents(cookies);

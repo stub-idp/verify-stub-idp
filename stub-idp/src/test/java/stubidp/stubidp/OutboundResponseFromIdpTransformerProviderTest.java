@@ -53,7 +53,7 @@ public class OutboundResponseFromIdpTransformerProviderTest {
     private OutboundResponseFromIdpTransformerProvider testTransformerProvider;
 
     @BeforeEach
-    public void setUp() {
+    void setUp() {
         mockStubTransformersFactory = mock(StubTransformersFactory.class);
 
         testTransformerProvider = new OutboundResponseFromIdpTransformerProvider(
@@ -68,7 +68,7 @@ public class OutboundResponseFromIdpTransformerProviderTest {
     }
 
     @Test
-    public void testGet_shouldReturnTransformerWhichAddsKeyInfoWhenConfiguredToSend() {
+    void testGet_shouldReturnTransformerWhichAddsKeyInfoWhenConfiguredToSend() {
         Idp idpSendingKeyInfo = new Idp("test-idp", "Test Idp", "test-idp-asset-id", true, ISSUER_ID, null);
 
         testTransformerProvider.get(idpSendingKeyInfo);
@@ -85,7 +85,7 @@ public class OutboundResponseFromIdpTransformerProviderTest {
     }
 
     @Test
-    public void testGet_shouldReturnTransformerWithoutKeyInfoWhenConfiguredNotToSend() {
+    void testGet_shouldReturnTransformerWithoutKeyInfoWhenConfiguredNotToSend() {
         Idp idpNotSendingKeyInfo = new Idp("test-idp", "Test Idp", "test-idp-asset-id", false, ISSUER_ID, null);
 
         testTransformerProvider.get(idpNotSendingKeyInfo);
@@ -100,7 +100,7 @@ public class OutboundResponseFromIdpTransformerProviderTest {
     }
 
     @Test
-    public void testGet_shouldReturnTransformerWithoutKeyInfoWhenSigningKeyIsAbsent() {
+    void testGet_shouldReturnTransformerWithoutKeyInfoWhenSigningKeyIsAbsent() {
         Idp idpNotSendingKeyInfo = new Idp("test-idp", "Test Idp", "test-idp-asset-id", false, ISSUER_ID, null);
         OutboundResponseFromIdpTransformerProvider nullPublicKeyTransformerProvider = new OutboundResponseFromIdpTransformerProvider(
                 ENC_KEYSTORE_DUMMY,

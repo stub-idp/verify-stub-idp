@@ -17,12 +17,12 @@ public class TimeoutRequestRetryHandlerTest {
     private final HttpContext httpContext = new BasicHttpContext();
 
     @BeforeEach
-    public void setup() {
+    void setup() {
         httpContext.setAttribute(HttpClientContext.HTTP_REQUEST, new BasicHttpRequest("GET", "http://localhost"));
     }
 
     @Test
-    public void should_retry_ConnectTimeoutException() {
+    void should_retry_ConnectTimeoutException() {
         final int numRetries = 2;
 
         TimeoutRequestRetryHandler timeoutRequestRetryHandler = new TimeoutRequestRetryHandler(numRetries);
@@ -32,7 +32,7 @@ public class TimeoutRequestRetryHandlerTest {
     }
 
     @Test
-    public void should_only_retry_set_number_of_times() {
+    void should_only_retry_set_number_of_times() {
         final int numRetries = 2;
         final int executionCount = 3;
 
@@ -47,7 +47,7 @@ public class TimeoutRequestRetryHandlerTest {
     }
 
     @Test
-    public void should_not_be_retry_other_exceptions() {
+    void should_not_be_retry_other_exceptions() {
         final int numRetries = 2;
 
         TimeoutRequestRetryHandler timeoutRequestRetryHandler = new TimeoutRequestRetryHandler(numRetries);

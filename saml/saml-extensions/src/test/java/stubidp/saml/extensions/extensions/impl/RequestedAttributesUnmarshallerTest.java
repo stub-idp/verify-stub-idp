@@ -8,10 +8,10 @@ import stubidp.saml.test.OpenSAMLRunner;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class RequestedAttributesUnmarshallerTest extends OpenSAMLRunner {
+class RequestedAttributesUnmarshallerTest extends OpenSAMLRunner {
 
     @Test
-    public void shouldUnmarshallAnRequestedAttribute() throws Exception {
+    void shouldUnmarshallAnRequestedAttribute() throws Exception {
         String requestedAttributesString = createdRequestedAttributesString(false);
 
         RequestedAttributes requestedAttributes = Utils.unmarshall(requestedAttributesString);
@@ -30,7 +30,7 @@ public class RequestedAttributesUnmarshallerTest extends OpenSAMLRunner {
     }
 
     @Test
-    public void shouldUnmarshallRequiredWhenAbsent() throws Exception {
+    void shouldUnmarshallRequiredWhenAbsent() throws Exception {
         String requestedAttributesString = createdRequestedAttributesString(true);
 
         RequestedAttributes requestedAttributes = Utils.unmarshall(requestedAttributesString);

@@ -11,10 +11,10 @@ import stubidp.saml.test.OpenSAMLRunner;
 import static org.assertj.core.api.Assertions.assertThat;
 import static stubidp.saml.extensions.IdaConstants.EIDAS_NATURUAL_PREFIX;
 
-public class EidasGenderMarshallerTest extends OpenSAMLRunner {
+class EidasGenderMarshallerTest extends OpenSAMLRunner {
 
     @Test
-    public void shouldMarshallGender() throws Exception {
+    void shouldMarshallGender() throws Exception {
         final String genderValue = "Male";
         final EidasGender eidasGender = new EidasGenderBuilder().buildObject();
         final Marshaller genderMarshaller = XMLObjectProviderRegistrySupport.getMarshallerFactory().getMarshaller(eidasGender);

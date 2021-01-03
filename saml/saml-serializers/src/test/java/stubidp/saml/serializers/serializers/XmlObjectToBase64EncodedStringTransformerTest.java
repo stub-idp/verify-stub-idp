@@ -26,13 +26,13 @@ public class XmlObjectToBase64EncodedStringTransformerTest {
     private XmlObjectToBase64EncodedStringTransformer<AuthnRequest> xmlObjectToBase64EncodedStringTransformer;
 
     @BeforeEach
-    public void setup() throws InitializationException {
+    void setup() throws InitializationException {
         InitializationService.initialize();
         xmlObjectToBase64EncodedStringTransformer = new XmlObjectToBase64EncodedStringTransformer<>();
     }
 
     @Test
-    public void shouldTransformAuthnRequestToBase64EncodedString() throws ParserConfigurationException, IOException, SAXException {
+    void shouldTransformAuthnRequestToBase64EncodedString() throws ParserConfigurationException, IOException, SAXException {
         AuthnRequest authnRequest = new AuthnRequestBuilder().buildObject();
         String encodedString = xmlObjectToBase64EncodedStringTransformer.apply(authnRequest);
 

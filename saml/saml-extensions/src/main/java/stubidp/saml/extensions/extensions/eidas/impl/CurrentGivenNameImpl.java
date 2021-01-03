@@ -18,7 +18,7 @@ public class CurrentGivenNameImpl extends AbstractTransliterableString implement
      * @param elementLocalName the local name of the XML element this Object represents
      * @param namespacePrefix the prefix for the given namespace
      */
-    protected CurrentGivenNameImpl(String namespaceURI, String elementLocalName, String namespacePrefix) {
+    CurrentGivenNameImpl(String namespaceURI, String elementLocalName, String namespacePrefix) {
         super(namespaceURI, elementLocalName, namespacePrefix);
     }
 

@@ -55,7 +55,7 @@ public class ConsentResourceTest {
     private ConsentResource consentResource;
 
     @BeforeEach
-    public void setUp() {
+    void setUp() {
         consentResource = new ConsentResource(idpStubsRepository, sessionRepository, successAuthnResponseService, nonSuccessAuthnResponseService, new SamlMessageRedirectViewFactory(cookieNames));
     }
 
@@ -63,7 +63,7 @@ public class ConsentResourceTest {
     private final Idp idp = new Idp(idpName, "Test Idp", "test-idp-asset-id", true, TestEntityIds.STUB_IDP_ONE, null);
 
     @Test
-    public void shouldWarnUserIfLOAIsTooLow() {
+    void shouldWarnUserIfLOAIsTooLow() {
         final SessionId idpSessionId = SessionId.createNewSessionId();
 
         IdpSession session = new IdpSession(idpSessionId, idaAuthnRequestFromHub, RELAY_STATE, null, null, null, null, null, null);
@@ -80,7 +80,7 @@ public class ConsentResourceTest {
     }
 
     @Test
-    public void shouldWarnUserIfLOAIsTooLowWhenMultipleValuesPresent() {
+    void shouldWarnUserIfLOAIsTooLowWhenMultipleValuesPresent() {
         final SessionId idpSessionId = SessionId.createNewSessionId();
 
         IdpSession session = new IdpSession(idpSessionId, idaAuthnRequestFromHub, RELAY_STATE, null, null, null, null, null, null);
@@ -97,7 +97,7 @@ public class ConsentResourceTest {
     }
 
     @Test
-    public void shouldNotWarnUserIfLOAIsOk() {
+    void shouldNotWarnUserIfLOAIsOk() {
         final SessionId idpSessionId = SessionId.createNewSessionId();
 
         IdpSession session = new IdpSession(idpSessionId, idaAuthnRequestFromHub, RELAY_STATE, null, null, null, null, null, null);

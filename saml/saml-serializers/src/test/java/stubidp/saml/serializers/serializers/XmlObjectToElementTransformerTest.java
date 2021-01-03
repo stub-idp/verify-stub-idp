@@ -14,12 +14,12 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class XmlObjectToElementTransformerTest {
 
     @BeforeEach
-    public void setup() throws InitializationException {
+    void setup() throws InitializationException {
         InitializationService.initialize();
     }
 
     @Test
-    public void shouldTransformObjectToElement() {
+    void shouldTransformObjectToElement() {
         AuthnRequest authnRequest = new AuthnRequestBuilder().buildObject();
         Element element = new XmlObjectToElementTransformer<>().apply(authnRequest);
         assertThat(element.getTagName()).isEqualTo("saml2p:AuthnRequest");

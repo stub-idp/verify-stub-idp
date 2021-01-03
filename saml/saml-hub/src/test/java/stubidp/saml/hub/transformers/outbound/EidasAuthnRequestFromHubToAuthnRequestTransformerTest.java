@@ -39,7 +39,7 @@ import java.util.stream.Collectors;
 import static org.assertj.core.api.Assertions.assertThat;
 import static stubidp.saml.test.builders.EidasAuthnRequestBuilder.anEidasAuthnRequest;
 
-public class EidasAuthnRequestFromHubToAuthnRequestTransformerTest extends OpenSAMLRunner {
+class EidasAuthnRequestFromHubToAuthnRequestTransformerTest extends OpenSAMLRunner {
 
     private static final String A_PROVIDER = "A_PROVIDER";
     private static final String HTTP_ISSUER_ENTITY_ID_COM = "http://issuer-entity-id.com";
@@ -49,12 +49,12 @@ public class EidasAuthnRequestFromHubToAuthnRequestTransformerTest extends OpenS
     private EidasAuthnRequestFromHubToAuthnRequestTransformer transformer;
 
     @BeforeEach
-    public void setUp() {
+    void setUp() {
         transformer = new EidasAuthnRequestFromHubToAuthnRequestTransformer(new OpenSamlXmlObjectFactory(), new AuthnContextFactory());
     }
 
     @Test
-    public void shouldApplyNameIdPolicy() {
+    void shouldApplyNameIdPolicy() {
         EidasAuthnRequestFromHub request = new EidasAuthnRequestFromHub(
                 "theId",
                 "theIssuer",
@@ -72,7 +72,7 @@ public class EidasAuthnRequestFromHubToAuthnRequestTransformerTest extends OpenS
     }
 
     @Test
-    public void shouldCreateAnEidasAuthnRequest() {
+    void shouldCreateAnEidasAuthnRequest() {
         List<AuthnContext> authnContexts = Collections.singletonList(AuthnContext.LEVEL_2);
         EidasAuthnRequestFromHub originalRequestFromTransaction = anEidasAuthnRequestFromHub(A_PROVIDER, HTTP_ISSUER_ENTITY_ID_COM, authnContexts);
 
@@ -104,7 +104,7 @@ public class EidasAuthnRequestFromHubToAuthnRequestTransformerTest extends OpenS
     }
 
     @Test
-    public void shouldGenerateAnEidasAuthnRequestExtensions() {
+    void shouldGenerateAnEidasAuthnRequestExtensions() {
         List<AuthnContext> authnContexts = Collections.singletonList(AuthnContext.LEVEL_2);
         EidasAuthnRequestFromHub originalRequestFromTransaction = anEidasAuthnRequestFromHub(A_PROVIDER, HTTP_ISSUER_ENTITY_ID_COM, authnContexts);
 

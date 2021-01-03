@@ -24,7 +24,7 @@ import static stubidp.saml.domain.assertions.AuthnContext.LEVEL_1;
 import static stubidp.saml.domain.assertions.AuthnContext.LEVEL_2;
 
 @ExtendWith(MockitoExtension.class)
-public class IdaAuthnRequestFromHubUnmarshallerTest extends OpenSAMLRunner {
+class IdaAuthnRequestFromHubUnmarshallerTest extends OpenSAMLRunner {
 
     @Mock
     private AuthnRequest authnRequest;
@@ -38,7 +38,7 @@ public class IdaAuthnRequestFromHubUnmarshallerTest extends OpenSAMLRunner {
     private Issuer issuer;
 
     @BeforeEach
-    public void setupAuthnRequest() {
+    void setupAuthnRequest() {
         when(authnRequest.getIssuer()).thenReturn(issuer);
         when(authnRequest.getRequestedAuthnContext()).thenReturn(requestedAuthnContext);
         when(authnRequest.getConditions()).thenReturn(conditions);
@@ -48,7 +48,7 @@ public class IdaAuthnRequestFromHubUnmarshallerTest extends OpenSAMLRunner {
     }
 
     @Test
-    public void shouldMapLevelOfAssurance() {
+    void shouldMapLevelOfAssurance() {
         IdaAuthnRequestFromHubUnmarshaller unmarshaller = new IdaAuthnRequestFromHubUnmarshaller();
 
         IdaAuthnRequestFromHub outputIdaAuthnRequestFromHub = unmarshaller.fromSaml(authnRequest);
@@ -57,7 +57,7 @@ public class IdaAuthnRequestFromHubUnmarshallerTest extends OpenSAMLRunner {
     }
 
     @Test
-    public void shouldKeepComparisonType() {
+    void shouldKeepComparisonType() {
         IdaAuthnRequestFromHubUnmarshaller unmarshaller = new IdaAuthnRequestFromHubUnmarshaller();
 
         IdaAuthnRequestFromHub outputIdaAuthnRequestFromHub = unmarshaller.fromSaml(authnRequest);

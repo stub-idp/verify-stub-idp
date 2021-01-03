@@ -38,12 +38,12 @@ public class AssertionValidatorTest extends OpenSAMLRunner {
     private AssertionValidator validator;
 
     @BeforeEach
-    public void setup() {
+    void setup() {
         validator = new AssertionValidator(issuerValidator, subjectValidator, assertionAttributeStatementValidator, basicAssertionSubjectConfirmationValidator);
     }
 
     @Test
-    public void validate_shouldDelegateSubjectValidation() {
+    void validate_shouldDelegateSubjectValidation() {
         String requestId = UUID.randomUUID().toString();
         Assertion assertion = anAssertion()
                 .withSubject(aSubject().build())
@@ -55,7 +55,7 @@ public class AssertionValidatorTest extends OpenSAMLRunner {
     }
 
     @Test
-    public void validate_shouldDelegateSubjectConfirmationValidation() {
+    void validate_shouldDelegateSubjectConfirmationValidation() {
         String requestId = UUID.randomUUID().toString();
         SubjectConfirmation subjectConfirmation = aSubjectConfirmation().build();
         Assertion assertion = anAssertion()
@@ -68,7 +68,7 @@ public class AssertionValidatorTest extends OpenSAMLRunner {
     }
 
     @Test
-    public void validate_shouldDelegateAttributeValidation() {
+    void validate_shouldDelegateAttributeValidation() {
         String requestId = UUID.randomUUID().toString();
         Assertion assertion = anAssertion()
                 .withSubject(aSubject().build())
@@ -80,7 +80,7 @@ public class AssertionValidatorTest extends OpenSAMLRunner {
     }
 
     @Test
-    public void validate_shouldThrowExceptionIfAnyAssertionDoesNotContainASignature() {
+    void validate_shouldThrowExceptionIfAnyAssertionDoesNotContainASignature() {
         String someID = UUID.randomUUID().toString();
         Assertion assertion = anAssertion().withSignature(null).withId(someID).buildUnencrypted();
 
@@ -88,7 +88,7 @@ public class AssertionValidatorTest extends OpenSAMLRunner {
     }
 
     @Test
-    public void validate_shouldThrowExceptionIfAnAssertionIsNotSigned() {
+    void validate_shouldThrowExceptionIfAnAssertionIsNotSigned() {
         String someID = UUID.randomUUID().toString();
 
         Assertion assertion = anAssertion().withoutSigning().withId(someID).buildUnencrypted();
@@ -97,35 +97,35 @@ public class AssertionValidatorTest extends OpenSAMLRunner {
     }
 
     @Test
-    public void validate_shouldDoNothingIfAllAssertionsAreSigned() {
+    void validate_shouldDoNothingIfAllAssertionsAreSigned() {
         Assertion assertion = anAssertion().buildUnencrypted();
 
         validator.validate(assertion, "", assertion.getID());
     }
 
     @Test
-    public void validate_shouldThrowExceptionIfIdIsMissing() {
+    void validate_shouldThrowExceptionIfIdIsMissing() {
         Assertion assertion = anAssertion().withId(null).buildUnencrypted();
 
         assertExceptionMessage(assertion, SamlTransformationErrorFactory.missingId());
     }
 
     @Test
-    public void validate_shouldThrowExceptionIfVersionIsMissing() {
+    void validate_shouldThrowExceptionIfVersionIsMissing() {
         Assertion assertion = anAssertion().withVersion(null).buildUnencrypted();
 
         assertExceptionMessage(assertion, SamlTransformationErrorFactory.missingVersion(assertion.getID()));
     }
 
     @Test
-    public void validate_shouldThrowExceptionIfVersionIsNotSamlTwoPointZero() {
+    void validate_shouldThrowExceptionIfVersionIsNotSamlTwoPointZero() {
         Assertion assertion = anAssertion().withVersion(SAMLVersion.VERSION_10).buildUnencrypted();
 
         assertExceptionMessage(assertion, SamlTransformationErrorFactory.illegalVersion(assertion.getID()));
     }
 
     @Test
-    public void validate_shouldThrowExceptionIfIssueInstantIsMissing() {
+    void validate_shouldThrowExceptionIfIssueInstantIsMissing() {
         Assertion assertion = anAssertion().withIssueInstant(null).buildUnencrypted();
 
         assertExceptionMessage(assertion, SamlTransformationErrorFactory.missingIssueInstant(assertion.getID()));

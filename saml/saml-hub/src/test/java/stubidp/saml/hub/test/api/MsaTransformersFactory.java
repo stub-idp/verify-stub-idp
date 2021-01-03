@@ -24,9 +24,9 @@ import stubidp.saml.utils.hub.transformers.outbound.MatchingServiceIdaStatusMars
 
 import java.util.function.Function;
 
-public class MsaTransformersFactory {
+class MsaTransformersFactory {
 
-    public ResponseToElementTransformer getResponseToElementTransformer(
+    private ResponseToElementTransformer getResponseToElementTransformer(
             EncryptionKeyStore encryptionKeyStore,
             IdaKeyStore keyStore,
             EntityToEncryptForLocator entityToEncryptForLocator,
@@ -47,7 +47,7 @@ public class MsaTransformersFactory {
         );
     }
 
-    public HealthCheckResponseFromMatchingServiceTransformer getHealthCheckResponseFromMatchingServiceToResponseTransformer() {
+    private HealthCheckResponseFromMatchingServiceTransformer getHealthCheckResponseFromMatchingServiceToResponseTransformer() {
         return new HealthCheckResponseFromMatchingServiceTransformer(
                 new OpenSamlXmlObjectFactory(),
                 new MatchingServiceIdaStatusMarshaller(new OpenSamlXmlObjectFactory())

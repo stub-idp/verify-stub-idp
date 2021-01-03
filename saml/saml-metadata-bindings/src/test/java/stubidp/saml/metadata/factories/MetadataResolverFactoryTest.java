@@ -32,7 +32,7 @@ public class MetadataResolverFactoryTest {
     SignatureValidationFilter signatureValidationFilter;
 
     @Test
-    public void shouldProvideMetadataResolver() throws Exception {
+    void shouldProvideMetadataResolver() throws Exception {
         Client client = new JerseyClientBuilder().build();
         MetadataResolverFactory metadataResolverFactory = new MetadataResolverFactory();
         MetadataResolver metadataResolver = metadataResolverFactory.create(client, URI.create("http://example.local"), asList(signatureValidationFilter,  expiredCertificateMetadataFilter), Duration.ofSeconds(20), Duration.ofSeconds(60));

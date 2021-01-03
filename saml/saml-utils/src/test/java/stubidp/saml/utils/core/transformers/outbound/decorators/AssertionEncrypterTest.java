@@ -31,7 +31,7 @@ public class AssertionEncrypterTest {
     private EncryptedAssertion expectedEncryptedAssertion;
 
     @Test
-    public void shouldEncryptAssertion() throws Exception {
+    void shouldEncryptAssertion() throws Exception {
         String entityId = "my-entity-id";
         when(credentialFactory.getEncryptingCredential(entityId)).thenReturn(credential);
         when(encrypterFactory.createEncrypter(credential)).thenReturn(encrypter);

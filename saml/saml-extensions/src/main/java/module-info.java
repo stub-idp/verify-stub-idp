@@ -1,6 +1,8 @@
 @SuppressWarnings({"requires-automatic", "requires-transitive-automatic"})
 module stubidp.saml.extensions {
     opens stubidp.saml.extensions.extensions.impl;
+    opens stubidp.saml.extensions.extensions.eidas.impl;
+    opens stubidp.saml.extensions.extensions.versioning;
 
     exports stubidp.saml.extensions;
     exports stubidp.saml.extensions.domain;

@@ -7,7 +7,7 @@ import stubidp.saml.utils.core.OpenSamlXmlObjectFactory;
 
 import java.time.Instant;
 
-public class IdentityProviderAuthnStatementToAuthnStatementTransformer {
+class IdentityProviderAuthnStatementToAuthnStatementTransformer {
 
     public IdentityProviderAuthnStatementToAuthnStatementTransformer(OpenSamlXmlObjectFactory openSamlXmlObjectFactory) {
         this.openSamlXmlObjectFactory = openSamlXmlObjectFactory;

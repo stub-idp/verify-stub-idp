@@ -40,7 +40,7 @@ public class IdentityProviderAssertionValidatorTest extends OpenSAMLRunner {
     private AssertionAttributeStatementValidator assertionAttributeStatementValidator;
 
     @Test
-    public void validate_shouldDelegateSubjectConfirmationValidation() {
+    void validate_shouldDelegateSubjectConfirmationValidation() {
         String requestId = UUID.randomUUID().toString();
         String expectedRecipientId = UUID.randomUUID().toString();
         final SubjectConfirmation subjectConfirmation = aSubjectConfirmation().build();
@@ -55,7 +55,7 @@ public class IdentityProviderAssertionValidatorTest extends OpenSAMLRunner {
     }
 
     @Test
-    public void validate_shouldThrowExceptionIfNoSubjectConfirmationMethodAttributeHasBearerValue() {
+    void validate_shouldThrowExceptionIfNoSubjectConfirmationMethodAttributeHasBearerValue() {
         String someID = UUID.randomUUID().toString();
         final Assertion assertion = anAssertion().withId(someID).addAuthnStatement(anAuthnStatement().build()).withSubject(SubjectBuilder.aSubject().withSubjectConfirmation(aSubjectConfirmation().withMethod("invalid").build()).build()).buildUnencrypted();
         final IdentityProviderAssertionValidator validator = new IdentityProviderAssertionValidator(issuerValidator, subjectValidator, assertionAttributeStatementValidator, subjectConfirmationValidator);
@@ -67,7 +67,7 @@ public class IdentityProviderAssertionValidatorTest extends OpenSAMLRunner {
     }
 
     @Test
-    public void validate_shouldThrowExceptionIfInvalidFraudEventTypeUsed(){
+    void validate_shouldThrowExceptionIfInvalidFraudEventTypeUsed(){
         final AuthnContextClassRef authnContextClassRef = anAuthnContextClassRef().withAuthnContextClasRefValue(AuthnContext.LEVEL_X.getUri()).build();
         final org.opensaml.saml.saml2.core.AuthnContext authnContext = anAuthnContext().withAuthnContextClassRef(authnContextClassRef).build();
 

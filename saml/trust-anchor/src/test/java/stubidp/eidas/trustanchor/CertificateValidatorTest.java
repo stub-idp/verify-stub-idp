@@ -23,7 +23,7 @@ public class CertificateValidatorTest {
     private List<Base64> x509CertChain;
 
     @BeforeEach
-    public void setup() throws CertificateException {
+    void setup() throws CertificateException {
         Base64 testCert = mock(Base64.class);
         x509CertChain = List.of(testCert);
 
@@ -33,7 +33,7 @@ public class CertificateValidatorTest {
     }
 
     @Test
-    public void shouldReturnNoErrorsForValidTrustAnchorCerts() {
+    void shouldReturnNoErrorsForValidTrustAnchorCerts() {
         Collection<String> errors = testValidator.checkCertificateValidity(x509CertChain, publicKey);
 
         assertThat(errors).isEmpty();

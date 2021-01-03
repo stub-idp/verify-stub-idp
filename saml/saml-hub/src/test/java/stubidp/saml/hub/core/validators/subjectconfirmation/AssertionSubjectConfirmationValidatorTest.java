@@ -19,12 +19,12 @@ public class AssertionSubjectConfirmationValidatorTest extends OpenSAMLRunner {
     private AssertionSubjectConfirmationValidator validator;
 
     @BeforeEach
-    public void setup() {
+    void setup() {
         validator = new AssertionSubjectConfirmationValidator();
     }
 
     @Test
-    public void validate_shouldThrowExceptionIfSubjectConfirmationDataRecipientAttributeDoesNotMatchTheExpectedIssuerId() {
+    void validate_shouldThrowExceptionIfSubjectConfirmationDataRecipientAttributeDoesNotMatchTheExpectedIssuerId() {
         final String expectedRecipientId = TestEntityIds.HUB_ENTITY_ID;
         final String actualRecipientId = TestEntityIds.TEST_RP;
         final SubjectConfirmation subjectConfirmation = aSubjectConfirmation()
@@ -36,7 +36,7 @@ public class AssertionSubjectConfirmationValidatorTest extends OpenSAMLRunner {
     }
 
     @Test
-    public void validate_shouldThrowExceptionIfSubjectConfirmationDataInResponseToAttributeIsNotTheOriginalRequestId() {
+    void validate_shouldThrowExceptionIfSubjectConfirmationDataInResponseToAttributeIsNotTheOriginalRequestId() {
         final String subjectInResponseTo = "an-incorrect-request-id";
         final SubjectConfirmation subjectConfirmation = aSubjectConfirmation()
                 .withSubjectConfirmationData(SubjectConfirmationDataBuilder.aSubjectConfirmationData()

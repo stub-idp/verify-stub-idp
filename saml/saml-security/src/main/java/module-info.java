@@ -8,6 +8,9 @@ module stubidp.saml.security {
     exports stubidp.saml.security;
 
     opens stubidp.saml.security;
+    opens stubidp.saml.security.validators;
+    opens stubidp.saml.security.validators.encryptedelementtype;
+    opens stubidp.saml.security.validators.issuer;
     opens stubidp.saml.security.validators.signature;
 
     requires org.slf4j;

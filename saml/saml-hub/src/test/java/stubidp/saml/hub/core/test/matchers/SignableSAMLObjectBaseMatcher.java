@@ -16,7 +16,7 @@ public class SignableSAMLObjectBaseMatcher extends Condition<SignableSAMLObject>
 
     private final SamlMessageSignatureValidator samlMessageSignatureValidator;
 
-    public SignableSAMLObjectBaseMatcher(SamlMessageSignatureValidator samlMessageSignatureValidator) {
+    private SignableSAMLObjectBaseMatcher(SamlMessageSignatureValidator samlMessageSignatureValidator) {
         this.samlMessageSignatureValidator = samlMessageSignatureValidator;
     }
 

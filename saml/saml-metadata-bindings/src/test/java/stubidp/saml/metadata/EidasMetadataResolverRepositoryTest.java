@@ -92,12 +92,12 @@ public class EidasMetadataResolverRepositoryTest {
     private List<JWK> trustAnchors;
 
     @BeforeEach
-    public void setUp() {
+    void setUp() {
         trustAnchors = new ArrayList<>();
     }
 
     @Test
-    public void shouldCreateMetadataResolverWhenTrustAnchorIsValid() throws KeyStoreException, CertificateException, ComponentInitializationException, SignatureException, ParseException, JOSEException {
+    void shouldCreateMetadataResolverWhenTrustAnchorIsValid() throws KeyStoreException, CertificateException, ComponentInitializationException, SignatureException, ParseException, JOSEException {
         when(trustAnchorResolver.getTrustAnchors()).thenReturn(trustAnchors);
         when(dropwizardMetadataResolverFactory.createMetadataResolverWithClient(any(), eq(true), eq(metadataClient))).thenReturn(metadataResolver);
         when(metadataSignatureTrustEngineFactory.createSignatureTrustEngine(metadataResolver)).thenReturn(explicitKeySignatureTrustEngine);
@@ -139,7 +139,7 @@ public class EidasMetadataResolverRepositoryTest {
     }
 
     @Test
-    public void shouldUseEarliestExpiryDateOfX509Cert() throws ComponentInitializationException, CertificateException, SignatureException, ParseException, JOSEException {
+    void shouldUseEarliestExpiryDateOfX509Cert() throws ComponentInitializationException, CertificateException, SignatureException, ParseException, JOSEException {
         when(trustAnchorResolver.getTrustAnchors()).thenReturn(trustAnchors);
         when(dropwizardMetadataResolverFactory.createMetadataResolverWithClient(any(), eq(true), eq(metadataClient))).thenReturn(metadataResolver);
         when(metadataSignatureTrustEngineFactory.createSignatureTrustEngine(metadataResolver)).thenReturn(explicitKeySignatureTrustEngine);
@@ -182,7 +182,7 @@ public class EidasMetadataResolverRepositoryTest {
     }
 
     @Test
-    public void shouldNotCreateMetadataResolverAndLogWhenCertificateIsExpired() throws CertificateException, SignatureException, ParseException, JOSEException {
+    void shouldNotCreateMetadataResolverAndLogWhenCertificateIsExpired() throws CertificateException, SignatureException, ParseException, JOSEException {
         when(trustAnchorResolver.getTrustAnchors()).thenReturn(trustAnchors);
         when(metadataConfiguration.getTrustAnchorMaxRefreshDelay()).thenReturn(Duration.ofSeconds(60));
         Logger logger = (Logger) LoggerFactory.getLogger(EidasMetadataResolverRepository.class);
@@ -214,7 +214,7 @@ public class EidasMetadataResolverRepositoryTest {
     }
 
     @Test
-    public void shouldNotCreateMetadataResolverRepositoryWhenCertificateIsInvalid() throws CertificateException, SignatureException, ParseException, JOSEException {
+    void shouldNotCreateMetadataResolverRepositoryWhenCertificateIsInvalid() throws CertificateException, SignatureException, ParseException, JOSEException {
         when(trustAnchorResolver.getTrustAnchors()).thenReturn(trustAnchors);
         when(metadataConfiguration.getTrustAnchorMaxRefreshDelay()).thenReturn(Duration.ofSeconds(60));
         String entityId = "http://signin.gov.uk/entity-id";
@@ -237,7 +237,7 @@ public class EidasMetadataResolverRepositoryTest {
     }
 
     @Test
-    public void shouldAddNewMetadataResolverWhenRefreshing() throws CertificateException, SignatureException, ParseException, JOSEException, ComponentInitializationException {
+    void shouldAddNewMetadataResolverWhenRefreshing() throws CertificateException, SignatureException, ParseException, JOSEException, ComponentInitializationException {
         when(dropwizardMetadataResolverFactory.createMetadataResolverWithClient(any(), eq(true), eq(metadataClient))).thenReturn(metadataResolver);
         when(metadataSignatureTrustEngineFactory.createSignatureTrustEngine(metadataResolver)).thenReturn(explicitKeySignatureTrustEngine);
         when(metadataConfiguration.getTrustAnchorMaxRefreshDelay()).thenReturn(Duration.ofSeconds(60));
@@ -259,7 +259,7 @@ public class EidasMetadataResolverRepositoryTest {
     }
 
     @Test
-    public void shouldRemoveOldMetadataResolverWhenRefreshing() throws CertificateException, SignatureException, ParseException, JOSEException, ComponentInitializationException {
+    void shouldRemoveOldMetadataResolverWhenRefreshing() throws CertificateException, SignatureException, ParseException, JOSEException, ComponentInitializationException {
         when(dropwizardMetadataResolverFactory.createMetadataResolverWithClient(any(), eq(true), eq(metadataClient))).thenReturn(metadataResolver);
         when(metadataSignatureTrustEngineFactory.createSignatureTrustEngine(metadataResolver)).thenReturn(explicitKeySignatureTrustEngine);
 
@@ -283,7 +283,7 @@ public class EidasMetadataResolverRepositoryTest {
     }
 
     @Test
-    public void shouldNotRecreateExistingMetadataResolversWhenRefreshing() throws ParseException, CertificateException, JOSEException, SignatureException, ComponentInitializationException {
+    void shouldNotRecreateExistingMetadataResolversWhenRefreshing() throws ParseException, CertificateException, JOSEException, SignatureException, ComponentInitializationException {
         when(dropwizardMetadataResolverFactory.createMetadataResolverWithClient(any(), eq(true), eq(metadataClient))).thenReturn(metadataResolver);
         when(metadataSignatureTrustEngineFactory.createSignatureTrustEngine(metadataResolver)).thenReturn(explicitKeySignatureTrustEngine);
 

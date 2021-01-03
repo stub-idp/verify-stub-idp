@@ -29,12 +29,12 @@ public class ResponseSignatureCreatorTest extends OpenSAMLRunner {
     private Signature signature;
 
     @BeforeEach
-    public void setup() {
+    void setup() {
         responseSignatureCreator = new ResponseSignatureCreator(signatureFactory);
     }
 
     @Test
-    public void decorate_shouldGetSignatureAndAssignIt() {
+    void decorate_shouldGetSignatureAndAssignIt() {
         String id = "response-id";
         when(response.getSignatureReferenceID()).thenReturn(id);
 
@@ -44,7 +44,7 @@ public class ResponseSignatureCreatorTest extends OpenSAMLRunner {
     }
 
     @Test
-    public void shouldAssignSignatureToResponse() {
+    void shouldAssignSignatureToResponse() {
         String id = "response-id";
         when(response.getSignatureReferenceID()).thenReturn(id);
         when(signatureFactory.createSignature(id)).thenReturn(signature);

@@ -27,12 +27,12 @@ public class JsonClientTest {
     private final String requestBody = "some-request-body";
 
     @BeforeEach
-    public void setup() {
+    void setup() {
         jsonClient = new JsonClient(errorHandlingClient, jsonResponseProcessor);
     }
 
     @Test
-    public void post_shouldDelegateToJsonResponseProcessorToCheckForErrors() {
+    void post_shouldDelegateToJsonResponseProcessorToCheckForErrors() {
         Response clientResponse = Response.noContent().build();
         when(errorHandlingClient.post(testUri, requestBody)).thenReturn(clientResponse);
 
@@ -42,7 +42,7 @@ public class JsonClientTest {
     }
 
     @Test
-    public void basicPost_shouldDelegateToProcessor() {
+    void basicPost_shouldDelegateToProcessor() {
         Response clientResponse = Response.noContent().build();
         when(errorHandlingClient.post(testUri, requestBody)).thenReturn(clientResponse);
 
@@ -52,7 +52,7 @@ public class JsonClientTest {
     }
 
     @Test
-    public void basicGet_shouldDelegateToProcessor() {
+    void basicGet_shouldDelegateToProcessor() {
         Response clientResponse = Response.noContent().build();
         when(errorHandlingClient.get(testUri)).thenReturn(clientResponse);
 
@@ -62,7 +62,7 @@ public class JsonClientTest {
     }
 
     @Test
-    public void getWithGenericType_shouldDelegateToProcessor() {
+    void getWithGenericType_shouldDelegateToProcessor() {
         Response clientResponse = Response.noContent().build();
         when(errorHandlingClient.get(testUri)).thenReturn(clientResponse);
         GenericType<String> genericType = new GenericType<>() {};

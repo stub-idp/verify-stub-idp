@@ -14,10 +14,10 @@ import java.time.Instant;
 import static org.assertj.core.api.Assertions.assertThat;
 import static stubidp.saml.extensions.IdaConstants.EIDAS_NATURUAL_PREFIX;
 
-public class DateOfBirthMarshallerTest extends OpenSAMLRunner {
+class DateOfBirthMarshallerTest extends OpenSAMLRunner {
 
     @Test
-    public void shouldMarshallDateOfBirth() throws Exception {
+    void shouldMarshallDateOfBirth() throws Exception {
         final String dateString = "1965-01-01";
         final Instant date = BaseMdsSamlObjectUnmarshaller.InstantFromDate.of(dateString);
         final DateOfBirth dateOfBirth = new DateOfBirthBuilder().buildObject();

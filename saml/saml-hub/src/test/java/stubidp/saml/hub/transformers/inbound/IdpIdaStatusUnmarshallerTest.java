@@ -26,19 +26,19 @@ import static stubidp.saml.test.builders.StatusBuilder.aStatus;
 import static stubidp.saml.test.builders.StatusCodeBuilder.aStatusCode;
 
 @ExtendWith(MockitoExtension.class)
-public class IdpIdaStatusUnmarshallerTest extends OpenSAMLRunner {
+class IdpIdaStatusUnmarshallerTest extends OpenSAMLRunner {
 
     private IdpIdaStatusUnmarshaller unmarshaller;
     private StringToOpenSamlObjectTransformer<Response> stringToOpenSamlObjectTransformer;
 
     @BeforeEach
-    public void setUp() {
+    void setUp() {
         unmarshaller = new IdpIdaStatusUnmarshaller();
         stringToOpenSamlObjectTransformer = new CoreTransformersFactory().getStringtoOpenSamlObjectTransformer(input -> {});
     }
 
     @Test
-    public void transform_shouldTransformSuccessWithNoSubCode() {
+    void transform_shouldTransformSuccessWithNoSubCode() {
         OpenSamlXmlObjectFactory samlObjectFactory = new OpenSamlXmlObjectFactory();
         Status originalStatus = samlObjectFactory.createStatus();
         StatusCode successStatusCode = samlObjectFactory.createStatusCode();
@@ -51,7 +51,7 @@ public class IdpIdaStatusUnmarshallerTest extends OpenSAMLRunner {
     }
 
     @Test
-    public void transform_shouldTransformNoAuthenticationContext() {
+    void transform_shouldTransformNoAuthenticationContext() {
         OpenSamlXmlObjectFactory samlObjectFactory = new OpenSamlXmlObjectFactory();
         Status originalStatus = samlObjectFactory.createStatus();
         StatusCode topLevelStatusCode = samlObjectFactory.createStatusCode();
@@ -67,7 +67,7 @@ public class IdpIdaStatusUnmarshallerTest extends OpenSAMLRunner {
     }
 
     @Test
-    public void transform_shouldTransformAuthnFailed() {
+    void transform_shouldTransformAuthnFailed() {
         OpenSamlXmlObjectFactory samlObjectFactory = new OpenSamlXmlObjectFactory();
         Status status = samlObjectFactory.createStatus();
         StatusCode topLevelStatusCode = samlObjectFactory.createStatusCode();
@@ -82,7 +82,7 @@ public class IdpIdaStatusUnmarshallerTest extends OpenSAMLRunner {
     }
 
     @Test
-    public void transform_shouldTransformRequesterErrorWithoutMessage() {
+    void transform_shouldTransformRequesterErrorWithoutMessage() {
         OpenSamlXmlObjectFactory samlObjectFactory = new OpenSamlXmlObjectFactory();
 
         Status status = samlObjectFactory.createStatus();
@@ -96,7 +96,7 @@ public class IdpIdaStatusUnmarshallerTest extends OpenSAMLRunner {
     }
 
     @Test
-    public void transform_shouldTransformRequesterErrorWithRequestDeniedSubstatus() {
+    void transform_shouldTransformRequesterErrorWithRequestDeniedSubstatus() {
         OpenSamlXmlObjectFactory samlObjectFactory = new OpenSamlXmlObjectFactory();
 
         Status status = samlObjectFactory.createStatus();
@@ -113,7 +113,7 @@ public class IdpIdaStatusUnmarshallerTest extends OpenSAMLRunner {
     }
 
     @Test
-    public void transform_shouldTransformRequesterErrorWithMessage() {
+    void transform_shouldTransformRequesterErrorWithMessage() {
         String message = "some message";
 
         StatusCode topLevelStatusCode = aStatusCode().withValue(StatusCode.REQUESTER).build();
@@ -130,7 +130,7 @@ public class IdpIdaStatusUnmarshallerTest extends OpenSAMLRunner {
     }
 
     @Test
-    public void shouldMapSamlStatusDetailOfAuthnCancelToAuthenticationCancelled() throws Exception {
+    void shouldMapSamlStatusDetailOfAuthnCancelToAuthenticationCancelled() throws Exception {
         String cancelXml = readXmlFile("status-cancel.xml");
         Response cancelResponse = stringToOpenSamlObjectTransformer.apply(cancelXml);
 
@@ -140,7 +140,7 @@ public class IdpIdaStatusUnmarshallerTest extends OpenSAMLRunner {
     }
 
     @Test
-    public void shouldMapSamlStatusDetailOfLoaPendingToAuthenticationPending() throws Exception {
+    void shouldMapSamlStatusDetailOfLoaPendingToAuthenticationPending() throws Exception {
         String pendingXml = readXmlFile("status-pending.xml");
         Response pendingResponse = stringToOpenSamlObjectTransformer.apply(pendingXml);
 
@@ -150,7 +150,7 @@ public class IdpIdaStatusUnmarshallerTest extends OpenSAMLRunner {
     }
 
     @Test
-    public void shouldRemainSuccessEvenIfStatusDetailCancelReturned() throws Exception {
+    void shouldRemainSuccessEvenIfStatusDetailCancelReturned() throws Exception {
         String successWithCancelXml = readXmlFile("status-success-with-cancel.xml");
         Response cancelResponse = stringToOpenSamlObjectTransformer.apply(successWithCancelXml);
 
@@ -160,7 +160,7 @@ public class IdpIdaStatusUnmarshallerTest extends OpenSAMLRunner {
     }
 
     @Test
-    public void shouldRemainNoAuthnContextIfStatusDetailAbsent() throws Exception {
+    void shouldRemainNoAuthnContextIfStatusDetailAbsent() throws Exception {
         String successWithCancelXml = readXmlFile("status-noauthncontext.xml");
         Response cancelResponse = stringToOpenSamlObjectTransformer.apply(successWithCancelXml);
 

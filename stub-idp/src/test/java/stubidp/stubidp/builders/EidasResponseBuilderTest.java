@@ -20,12 +20,12 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class EidasResponseBuilderTest {
 
     @BeforeAll
-    public static void setUpClass() {
+    static void setUpClass() {
         IdaSamlBootstrap.bootstrap();
     }
 
     @Test
-    public void shouldCreateEidasResponseWithRequiredFields() {
+    void shouldCreateEidasResponseWithRequiredFields() {
         List<Attribute> attributes = Collections.emptyList();
         Instant issueInstant = Instant.now().minusSeconds(2);
         Instant assertionIssueInstant = Instant.now().minusSeconds(1);

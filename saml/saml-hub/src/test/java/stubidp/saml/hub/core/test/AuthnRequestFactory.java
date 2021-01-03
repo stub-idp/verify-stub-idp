@@ -12,7 +12,7 @@ import java.time.Instant;
 import java.util.Optional;
 import java.util.function.Function;
 
-public class AuthnRequestFactory {
+class AuthnRequestFactory {
     private final Function<AuthnRequest, String> authnRequestToStringTransformer;
 
     public AuthnRequestFactory(Function<AuthnRequest, String> authnRequestToStringTransformer) {

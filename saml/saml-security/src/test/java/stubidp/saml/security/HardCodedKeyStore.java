@@ -2,8 +2,8 @@ package stubidp.saml.security;
 
 import stubidp.saml.test.support.AbstractHardCodedKeyStore;
 
-public class HardCodedKeyStore extends AbstractHardCodedKeyStore implements SigningKeyStore, EncryptionKeyStore {
-    public HardCodedKeyStore(String entityId) {
+class HardCodedKeyStore extends AbstractHardCodedKeyStore implements SigningKeyStore, EncryptionKeyStore {
+    HardCodedKeyStore(String entityId) {
         super(entityId);
     }
 }

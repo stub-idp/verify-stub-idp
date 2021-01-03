@@ -7,9 +7,9 @@ import stubidp.saml.test.OpenSAMLRunner;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class GenderUnmarshallerTest extends OpenSAMLRunner {
+class GenderUnmarshallerTest extends OpenSAMLRunner {
     @Test
-    public void unmarshall_shouldSetValue() throws Exception {
+    void unmarshall_shouldSetValue() throws Exception {
         Gender gender = Utils.unmarshall("" +
                 "<saml:AttributeValue " +
                 "       xmlns:ida=\"http://www.cabinetoffice.gov.uk/resource-library/ida/attributes\"\n " +
@@ -25,7 +25,7 @@ public class GenderUnmarshallerTest extends OpenSAMLRunner {
     }
 
     @Test
-    public void unmarshall_shouldSetVerifiedWhenTrue() throws Exception {
+    void unmarshall_shouldSetVerifiedWhenTrue() throws Exception {
         Gender gender = Utils.unmarshall("" +
                 "<saml:AttributeValue " +
                 "       xmlns:ida=\"http://www.cabinetoffice.gov.uk/resource-library/ida/attributes\"\n " +
@@ -41,7 +41,7 @@ public class GenderUnmarshallerTest extends OpenSAMLRunner {
     }
 
     @Test
-    public void unmarshall_shouldSetVerifiedWhenFalse() throws Exception {
+    void unmarshall_shouldSetVerifiedWhenFalse() throws Exception {
         Gender gender = Utils.unmarshall("" +
                 "<saml:AttributeValue " +
                 "       xmlns:ida=\"http://www.cabinetoffice.gov.uk/resource-library/ida/attributes\"\n " +
@@ -57,7 +57,7 @@ public class GenderUnmarshallerTest extends OpenSAMLRunner {
     }
 
     @Test
-    public void unmarshall_shouldSetVerifiedToDefaultWhenAbsent() throws Exception {
+    void unmarshall_shouldSetVerifiedToDefaultWhenAbsent() throws Exception {
         Gender gender = Utils.unmarshall("" +
                 "<saml:AttributeValue " +
                 "       xmlns:ida=\"http://www.cabinetoffice.gov.uk/resource-library/ida/attributes\"\n " +

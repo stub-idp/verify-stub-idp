@@ -23,18 +23,18 @@ import java.time.format.DateTimeFormatterBuilder;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class MetadataRepositoryTest {
+class MetadataRepositoryTest {
     private static final DateTimeFormatter dateTimeFormatter = new DateTimeFormatterBuilder()
             .appendInstant(3) // ensure that 0 millis is printed, and does not get truncated
             .toFormatter()
             .withZone(ZoneId.of("UTC"));
 
-    public static final String ENCRYPTION_CERTIFICATE = TestCertificateStrings.HUB_TEST_PUBLIC_ENCRYPTION_CERT;
-    public static final String SIGNING_CERTIFICATE_1 = TestCertificateStrings.HUB_TEST_PUBLIC_SIGNING_CERT;
-    public static final String SIGNING_CERTIFICATE_2 = TestCertificateStrings.TEST_RP_PUBLIC_SIGNING_CERT;
-    public static final String LOCATION = "http://localhost:50190/SAML2/SSO/Response/POST";
+    private static final String ENCRYPTION_CERTIFICATE = TestCertificateStrings.HUB_TEST_PUBLIC_ENCRYPTION_CERT;
+    private static final String SIGNING_CERTIFICATE_1 = TestCertificateStrings.HUB_TEST_PUBLIC_SIGNING_CERT;
+    private static final String SIGNING_CERTIFICATE_2 = TestCertificateStrings.TEST_RP_PUBLIC_SIGNING_CERT;
+    private static final String LOCATION = "http://localhost:50190/SAML2/SSO/Response/POST";
 
-    public static final String METADATA_PATTERN = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" +
+    private static final String METADATA_PATTERN = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" +
             "<md:EntitiesDescriptor xmlns:md=\"urn:oasis:names:tc:SAML:2.0:metadata\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" ID=\"_entities\">\n" +
             "    <md:EntityDescriptor ID=\"_9efc2cf0-bca2-43c6-94a4-348a929515d4\" entityID=\"https://signin.service.gov.uk\" validUntil=\"{0}\" xsi:type=\"md:EntityDescriptorType\">\n" +
             "        <md:SPSSODescriptor protocolSupportEnumeration=\"urn:oasis:names:tc:SAML:2.0:protocol\" xsi:type=\"md:SPSSODescriptorType\">\n" +
@@ -72,30 +72,30 @@ public class MetadataRepositoryTest {
             "    </md:EntityDescriptor>\n" +
             "</md:EntitiesDescriptor>\n";
 
-    public static final String METADATA_WITHOUT_HUB_PATTERN = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" +
+    private static final String METADATA_WITHOUT_HUB_PATTERN = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" +
             "<md:EntitiesDescriptor xmlns:md=\"urn:oasis:names:tc:SAML:2.0:metadata\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" ID=\"_entities\">\n" +
             "</md:EntitiesDescriptor>\n";
 
-    public static final String DEFAULT_METADATA = MessageFormat.format(METADATA_PATTERN, dateTimeFormatter.format(Instant.now().atZone(ZoneId.of("UTC")).plusHours(1)), ENCRYPTION_CERTIFICATE, SIGNING_CERTIFICATE_1, SIGNING_CERTIFICATE_2, LOCATION);
-    public static final String METADATA_WITHUOUT_HUB = MessageFormat.format(METADATA_WITHOUT_HUB_PATTERN, dateTimeFormatter.format(Instant.now().atZone(ZoneId.of("UTC")).plusHours(1)));
+    private static final String DEFAULT_METADATA = MessageFormat.format(METADATA_PATTERN, dateTimeFormatter.format(Instant.now().atZone(ZoneId.of("UTC")).plusHours(1)), ENCRYPTION_CERTIFICATE, SIGNING_CERTIFICATE_1, SIGNING_CERTIFICATE_2, LOCATION);
+    private static final String METADATA_WITHUOUT_HUB = MessageFormat.format(METADATA_WITHOUT_HUB_PATTERN, dateTimeFormatter.format(Instant.now().atZone(ZoneId.of("UTC")).plusHours(1)));
 
     private MetadataRepository metadataRepository;
 
     @Test
-    public void shouldReturnTheAssertionConsumerService() throws Exception {
+    void shouldReturnTheAssertionConsumerService() throws Exception {
         metadataRepository = initializeMetadata(DEFAULT_METADATA);
 
         assertThat(metadataRepository.getAssertionConsumerServiceLocation()).isEqualTo(URI.create(LOCATION));
     }
     @Test
-     public void shouldReturnTheEncryptionCertificateMetadata() throws Exception {
+    void shouldReturnTheEncryptionCertificateMetadata() throws Exception {
         metadataRepository = initializeMetadata(DEFAULT_METADATA);
 
         assertThat(metadataRepository.getEncryptionCertificate()).isEqualTo(ENCRYPTION_CERTIFICATE);
     }
 
     @Test
-    public void shouldReturnTheSigningCertificates() throws Exception {
+    void shouldReturnTheSigningCertificates() throws Exception {
         metadataRepository = initializeMetadata(DEFAULT_METADATA);
 
         Iterable<String> signingCertificates = metadataRepository.getSigningCertificates();
@@ -103,14 +103,14 @@ public class MetadataRepositoryTest {
     }
 
     @Test
-    public void shouldReturnNoCertificatesIfMetadataIsOld() throws Exception {
+    void shouldReturnNoCertificatesIfMetadataIsOld() throws Exception {
         String expiredDateTime = dateTimeFormatter.format(Instant.now().atZone(ZoneId.of("UTC")).minusYears(100));
         metadataRepository = initializeMetadata(MessageFormat.format(METADATA_PATTERN, expiredDateTime, ENCRYPTION_CERTIFICATE, SIGNING_CERTIFICATE_1, SIGNING_CERTIFICATE_2, LOCATION));
         assertThat(metadataRepository.getSigningCertificates()).isEmpty();
     }
 
     @Test
-    public void shouldReturnNoCertificatesIfMetadataIsMissingHubEntityDescriptor() throws Exception {
+    void shouldReturnNoCertificatesIfMetadataIsMissingHubEntityDescriptor() throws Exception {
         metadataRepository = initializeMetadata(METADATA_WITHUOUT_HUB);
         assertThat(metadataRepository.getSigningCertificates()).isEmpty();
     }

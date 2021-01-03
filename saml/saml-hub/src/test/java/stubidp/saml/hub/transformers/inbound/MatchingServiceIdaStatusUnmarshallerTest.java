@@ -10,17 +10,17 @@ import stubidp.saml.utils.core.OpenSamlXmlObjectFactory;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class MatchingServiceIdaStatusUnmarshallerTest extends OpenSAMLRunner {
+class MatchingServiceIdaStatusUnmarshallerTest extends OpenSAMLRunner {
 
     private MatchingServiceIdaStatusUnmarshaller unmarshaller;
 
     @BeforeEach
-    public void setUp() {
+    void setUp() {
         unmarshaller = new MatchingServiceIdaStatusUnmarshaller();
     }
 
     @Test
-    public void transform_shouldTransformMatchingServiceSuccessfulMatch() {
+    void transform_shouldTransformMatchingServiceSuccessfulMatch() {
         OpenSamlXmlObjectFactory samlObjectFactory = new OpenSamlXmlObjectFactory();
         Status originalStatus = samlObjectFactory.createStatus();
         StatusCode successStatusCode = samlObjectFactory.createStatusCode();
@@ -36,7 +36,7 @@ public class MatchingServiceIdaStatusUnmarshallerTest extends OpenSAMLRunner {
     }
 
     @Test
-    public void transform_shouldTransformNoMatchFromMatchingService() {
+    void transform_shouldTransformNoMatchFromMatchingService() {
         OpenSamlXmlObjectFactory samlObjectFactory = new OpenSamlXmlObjectFactory();
         Status originalStatus = samlObjectFactory.createStatus();
         StatusCode topLevelStatusCode = samlObjectFactory.createStatusCode();
@@ -52,7 +52,7 @@ public class MatchingServiceIdaStatusUnmarshallerTest extends OpenSAMLRunner {
     }
 
     @Test
-    public void transform_shouldTransformRequesterErrorFromMatchingService() {
+    void transform_shouldTransformRequesterErrorFromMatchingService() {
         OpenSamlXmlObjectFactory samlObjectFactory = new OpenSamlXmlObjectFactory();
         Status originalStatus = samlObjectFactory.createStatus();
         StatusCode topLevelStatusCode = samlObjectFactory.createStatusCode();
@@ -65,7 +65,7 @@ public class MatchingServiceIdaStatusUnmarshallerTest extends OpenSAMLRunner {
     }
 
     @Test
-    public void transform_shouldTransformHealthyStatusFromMatchingService() {
+    void transform_shouldTransformHealthyStatusFromMatchingService() {
         OpenSamlXmlObjectFactory samlObjectFactory = new OpenSamlXmlObjectFactory();
         Status status = samlObjectFactory.createStatus();
         StatusCode topLevelStatusCode = samlObjectFactory.createStatusCode();
@@ -80,7 +80,7 @@ public class MatchingServiceIdaStatusUnmarshallerTest extends OpenSAMLRunner {
     }
 
     @Test
-    public void shouldTransformCreateFailureCaseFromMatchingService() {
+    void shouldTransformCreateFailureCaseFromMatchingService() {
         OpenSamlXmlObjectFactory samlObjectFactory = new OpenSamlXmlObjectFactory();
         Status status = samlObjectFactory.createStatus();
         StatusCode topLevelStatusCode = samlObjectFactory.createStatusCode();

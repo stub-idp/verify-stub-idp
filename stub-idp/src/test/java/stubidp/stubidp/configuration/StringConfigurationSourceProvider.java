@@ -5,7 +5,7 @@ import io.dropwizard.configuration.ConfigurationSourceProvider;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 
-public class StringConfigurationSourceProvider implements ConfigurationSourceProvider {
+class StringConfigurationSourceProvider implements ConfigurationSourceProvider {
     private final String configuration;
 
     public StringConfigurationSourceProvider(String configuration) {

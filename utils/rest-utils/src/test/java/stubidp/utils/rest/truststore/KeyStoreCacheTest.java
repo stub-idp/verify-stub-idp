@@ -27,20 +27,20 @@ public class KeyStoreCacheTest {
     private ClientTrustStoreConfiguration configuration;
 
     @BeforeEach
-    public void setUp(){
+    void setUp(){
         keyStoreCache = new KeyStoreCache(keyStoreLoader);
         configuration = ClientTrustStoreConfigurationBuilder.aClientTrustStoreConfiguration().build();
     }
 
     @Test
-    public void shouldLoadKeyStoreIfNotAlreadyLoaded() {
+    void shouldLoadKeyStoreIfNotAlreadyLoaded() {
         when(keyStoreLoader.load(configuration.getPath(), configuration.getPassword())).thenReturn(keyStore);
         KeyStore keyStore = keyStoreCache.get(configuration);
         assertThat(keyStore).isEqualTo(this.keyStore);
     }
 
     @Test
-    public void shouldOnlyHaveToLoadTheKeyStoreOnce() {
+    void shouldOnlyHaveToLoadTheKeyStoreOnce() {
         when(keyStoreLoader.load(configuration.getPath(), configuration.getPassword())).thenReturn(keyStore);
         keyStoreCache.get(configuration);
         keyStoreCache.get(configuration);

@@ -11,7 +11,7 @@ import java.util.Map;
 public class Cookies {
     private static final NewCookie[] NEW_COOKIES = new NewCookie[0];
 
-    final Map<String, NewCookie> cookies;
+    private final Map<String, NewCookie> cookies;
 
     public Cookies() {
         cookies = new HashMap<>();

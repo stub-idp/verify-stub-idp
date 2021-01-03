@@ -19,13 +19,13 @@ public class IdaResponseToSamlResponseTransformerTest extends OpenSAMLRunner {
     private IdaResponseToSamlResponseTransformer<OutboundResponseFromHub> systemUnderTest;
 
     @BeforeEach
-    public void setup() {
+    void setup() {
         OpenSamlXmlObjectFactory openSamlXmlObjectFactory = new OpenSamlXmlObjectFactory();
         systemUnderTest = new TestTransformer(openSamlXmlObjectFactory);
     }
 
     @Test
-    public void transform_shouldTransformResponseId() {
+    void transform_shouldTransformResponseId() {
     	OutboundResponseFromHub idaResponse = ResponseForHubBuilder.anAuthnResponse().withResponseId("response-id").buildOutboundResponseFromHub();
 
         Response transformedResponse = systemUnderTest.apply(idaResponse);
@@ -34,7 +34,7 @@ public class IdaResponseToSamlResponseTransformerTest extends OpenSAMLRunner {
     }
 
     @Test
-    public void transform_shouldTransformIssueInstant() {
+    void transform_shouldTransformIssueInstant() {
         Instant issueInstant = Instant.now();
         OutboundResponseFromHub idaResponse = ResponseForHubBuilder.anAuthnResponse().withIssueInstant(issueInstant).buildOutboundResponseFromHub();
         Response transformedResponse = systemUnderTest.apply(idaResponse);
@@ -42,7 +42,7 @@ public class IdaResponseToSamlResponseTransformerTest extends OpenSAMLRunner {
     }
 
     @Test
-    public void transform_shouldTransformInResponseToIfPresent() {
+    void transform_shouldTransformInResponseToIfPresent() {
         String inResponseTo = "id of original request";
         OutboundResponseFromHub idaResponse = ResponseForHubBuilder.anAuthnResponse().withInResponseTo(inResponseTo).buildOutboundResponseFromHub();
         Response transformedResponse = systemUnderTest.apply(idaResponse);
@@ -51,7 +51,7 @@ public class IdaResponseToSamlResponseTransformerTest extends OpenSAMLRunner {
     }
 
     @Test
-    public void transform_shouldNotTransformInResponseToIfMissing() {
+    void transform_shouldNotTransformInResponseToIfMissing() {
     	OutboundResponseFromHub idaResponse = ResponseForHubBuilder.anAuthnResponse().withInResponseTo(null).buildOutboundResponseFromHub();
         Response transformedResponse = systemUnderTest.apply(idaResponse);
 
@@ -59,7 +59,7 @@ public class IdaResponseToSamlResponseTransformerTest extends OpenSAMLRunner {
     }
 
     @Test
-    public void transform_shouldTransformIssuer() {
+    void transform_shouldTransformIssuer() {
         String issuer = "response issuer";
         OutboundResponseFromHub idaResponse = ResponseForHubBuilder.anAuthnResponse().withIssuerId(issuer).buildOutboundResponseFromHub();
         Response transformedResponse = systemUnderTest.apply(idaResponse);
@@ -67,9 +67,9 @@ public class IdaResponseToSamlResponseTransformerTest extends OpenSAMLRunner {
         assertThat(transformedResponse.getIssuer().getValue()).isEqualTo(TestEntityIds.HUB_ENTITY_ID);
     }
 
-    public static class TestTransformer extends IdaResponseToSamlResponseTransformer<OutboundResponseFromHub>{
+    static class TestTransformer extends IdaResponseToSamlResponseTransformer<OutboundResponseFromHub>{
 
-        public TestTransformer(
+        TestTransformer(
                 OpenSamlXmlObjectFactory openSamlXmlObjectFactory) {
             super(openSamlXmlObjectFactory);
         }

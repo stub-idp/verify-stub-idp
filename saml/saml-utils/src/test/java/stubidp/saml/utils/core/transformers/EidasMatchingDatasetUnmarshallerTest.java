@@ -35,12 +35,12 @@ public class EidasMatchingDatasetUnmarshallerTest extends OpenSAMLRunner {
     private static final OpenSamlXmlObjectFactory openSamlXmlObjectFactory = new OpenSamlXmlObjectFactory();
 
     @BeforeEach
-    public void setUp() {
+    void setUp() {
         this.unmarshaller = new EidasMatchingDatasetUnmarshaller();
     }
 
     @Test
-    public void transformShouldTransformAnAssertionIntoAMatchingDataset() {
+    void transformShouldTransformAnAssertionIntoAMatchingDataset() {
         Attribute firstname = anEidasFirstName("Bob", true);
         Attribute surname = anEidasFamilyName("Bobbins", true);
         Instant dob = BaseMdsSamlObjectUnmarshaller.InstantFromDate.of("1986-12-05");
@@ -65,7 +65,7 @@ public class EidasMatchingDatasetUnmarshallerTest extends OpenSAMLRunner {
     }
 
     @Test
-    public void transformShouldTransformAnAssertionIntoAMatchingDatasetWithNonLatinNames() {
+    void transformShouldTransformAnAssertionIntoAMatchingDatasetWithNonLatinNames() {
         Attribute firstname = anEidasFirstName("Bob", true);
         firstname.getAttributeValues().add(getCurrentGivenName("Βαρίδι", false));
         Attribute surname = anEidasFamilyName("Smith", true);

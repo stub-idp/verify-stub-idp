@@ -18,7 +18,7 @@ import java.util.List;
 
 import static java.text.MessageFormat.format;
 
-public class StubIdpBasicAuthRequiredFilter implements ContainerRequestFilter {
+class StubIdpBasicAuthRequiredFilter implements ContainerRequestFilter {
 
     private static final Logger LOG = LoggerFactory.getLogger(StubIdpBasicAuthRequiredFilter.class);
 
@@ -88,11 +88,11 @@ public class StubIdpBasicAuthRequiredFilter implements ContainerRequestFilter {
             this.username = username;
         }
 
-        public String getPassword() {
+        String getPassword() {
             return password;
         }
 
-        public String getUsername() {
+        String getUsername() {
             return username;
         }
     }

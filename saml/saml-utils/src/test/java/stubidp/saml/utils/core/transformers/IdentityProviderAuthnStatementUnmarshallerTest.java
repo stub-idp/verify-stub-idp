@@ -26,16 +26,16 @@ public class IdentityProviderAuthnStatementUnmarshallerTest {
 
     @Mock
     private AuthnContextFactory authnContextFactory;
-    public IdentityProviderAuthnStatementUnmarshaller unmarshaller;
+    private IdentityProviderAuthnStatementUnmarshaller unmarshaller;
 
     @BeforeEach
-    public void setUp() {
+    void setUp() {
         unmarshaller = new IdentityProviderAuthnStatementUnmarshaller(
                 authnContextFactory);
     }
 
     @Test
-    public void transform_shouldTransformAuthnStatement() {
+    void transform_shouldTransformAuthnStatement() {
         AuthnContextClassRef authnContextClassRef = anAuthnContextClassRef().withAuthnContextClasRefValue(IdaAuthnContext.LEVEL_3_AUTHN_CTX).build();
         AuthnContext authnContext = anAuthnContext()
                 .withAuthnContextClassRef(authnContextClassRef)
@@ -53,7 +53,7 @@ public class IdentityProviderAuthnStatementUnmarshallerTest {
     }
 
     @Test
-    public void transform_shouldTransformClientIpAddressWhenAssertionContainsAuthnStatement() {
+    void transform_shouldTransformClientIpAddressWhenAssertionContainsAuthnStatement() {
         String ipAddress = "1.2.3.4";
         Assertion assertion = anAssertion()
                 .addAuthnStatement(anAuthnStatement().build())

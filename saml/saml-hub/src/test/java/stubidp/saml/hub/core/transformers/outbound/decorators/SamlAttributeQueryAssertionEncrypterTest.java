@@ -39,17 +39,17 @@ public class SamlAttributeQueryAssertionEncrypterTest extends OpenSAMLRunner {
     public Credential credential;
     @Mock(answer = Answers.RETURNS_SMART_NULLS)
     public KeyStoreBackedEncryptionCredentialResolver credentialResolver;
-    public final EntityToEncryptForLocator entityToEncryptForLocator = mock(EntityToEncryptForLocator.class);
-    public final EncrypterFactory encrypterFactory = mock(EncrypterFactory.class);
-    public final Encrypter encrypter = mock(Encrypter.class);
+    private final EntityToEncryptForLocator entityToEncryptForLocator = mock(EntityToEncryptForLocator.class);
+    private final EncrypterFactory encrypterFactory = mock(EncrypterFactory.class);
+    private final Encrypter encrypter = mock(Encrypter.class);
 
-    public AttributeQuery attributeQuery;
-    public EncryptedAssertion encryptedAssertion;
-    public SamlAttributeQueryAssertionEncrypter samlAttributeQueryAssertionEncrypter;
-    public Assertion assertion;
+    private AttributeQuery attributeQuery;
+    private EncryptedAssertion encryptedAssertion;
+    private SamlAttributeQueryAssertionEncrypter samlAttributeQueryAssertionEncrypter;
+    private Assertion assertion;
 
     @BeforeEach
-    public void setUp() throws Exception {
+    void setUp() throws Exception {
         assertion = anAssertion().buildUnencrypted();
         attributeQuery = anAttributeQueryWithAssertion(assertion);
         encryptedAssertion = anAssertion().build();
@@ -65,7 +65,7 @@ public class SamlAttributeQueryAssertionEncrypterTest extends OpenSAMLRunner {
     }
 
     @Test
-    public void shouldConvertAssertionIntoEncryptedAssertion() {
+    void shouldConvertAssertionIntoEncryptedAssertion() {
         final AttributeQuery decoratedAttributeQuery = samlAttributeQueryAssertionEncrypter.encryptAssertions(attributeQuery);
 
         final SubjectConfirmationData subjectConfirmationData = decoratedAttributeQuery.getSubject()
@@ -83,7 +83,7 @@ public class SamlAttributeQueryAssertionEncrypterTest extends OpenSAMLRunner {
     }
 
     @Test
-    public void decorate_shouldWrapEncryptionAssertionInSamlExceptionWhenEncryptionFails() throws EncryptionException {
+    void decorate_shouldWrapEncryptionAssertionInSamlExceptionWhenEncryptionFails() throws EncryptionException {
         EncryptionException encryptionException = new EncryptionException("BLAM!");
         when(encrypter.encrypt(assertion)).thenThrow(encryptionException);
 

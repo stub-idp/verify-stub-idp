@@ -23,11 +23,11 @@ public class AddressImpl extends XSAnyImpl implements Address {
     private UPRN uprn;
     private boolean verified;
 
-    protected AddressImpl(String namespaceURI, String localName, String namespacePrefix) {
+    AddressImpl(String namespaceURI, String localName, String namespacePrefix) {
         this(namespaceURI, localName, namespacePrefix, Address.TYPE_NAME);
     }
 
-    protected AddressImpl(String namespaceURI, String localName, String namespacePrefix, QName typeName) {
+    AddressImpl(String namespaceURI, String localName, String namespacePrefix, QName typeName) {
         super(namespaceURI, localName, namespacePrefix);
         super.setSchemaType(typeName);
     }

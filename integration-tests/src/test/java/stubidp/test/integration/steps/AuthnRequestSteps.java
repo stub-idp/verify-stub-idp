@@ -52,7 +52,7 @@ public class AuthnRequestSteps {
         private final String sessionId;
         private final String secure;
 
-        public Cookies(String sessionId, String secure) {
+        Cookies(String sessionId, String secure) {
             this.sessionId = sessionId;
             this.secure = secure;
         }

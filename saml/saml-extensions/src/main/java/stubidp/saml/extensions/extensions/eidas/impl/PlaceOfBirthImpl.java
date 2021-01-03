@@ -19,7 +19,7 @@ public class PlaceOfBirthImpl extends XSAnyImpl implements PlaceOfBirth {
      * @param elementLocalName the local name of the XML element this Object represents
      * @param namespacePrefix the prefix for the given namespace
      */
-    protected PlaceOfBirthImpl(String namespaceURI, String elementLocalName, String namespacePrefix) {
+    PlaceOfBirthImpl(String namespaceURI, String elementLocalName, String namespacePrefix) {
         super(namespaceURI, elementLocalName, namespacePrefix);
     }
 

@@ -27,10 +27,10 @@ public class HomePageIntegrationTest extends IntegrationTestHelper {
     private static final String IDP_NAME = "stub-idp-demo-one";
     private static final String DISPLAY_NAME = "Stub Idp One Pre-Register";
 
-    public static final StubIdpAppExtension applicationRule = new StubIdpAppExtension(Map.of("singleIdpJourney.enabled", "true"))
+    private static final StubIdpAppExtension applicationRule = new StubIdpAppExtension(Map.of("singleIdpJourney.enabled", "true"))
             .withStubIdp(aStubIdp().withId(IDP_NAME).withDisplayName(DISPLAY_NAME).build());
 
-    public static final Client client = JerseyClientBuilder.createClient().property(ClientProperties.FOLLOW_REDIRECTS, false);
+    private static final Client client = JerseyClientBuilder.createClient().property(ClientProperties.FOLLOW_REDIRECTS, false);
 
     @BeforeEach
     void setUp() {

@@ -142,7 +142,7 @@ public class StubSpApplicationIntegrationTest {
         assertThat(response2.readEntity(String.class)).contains("You failed to sign-in successfully");
     }
 
-    public String getSamlResponseFromResponseString(String responseString) {
+    String getSamlResponseFromResponseString(String responseString) {
         final Document page = Jsoup.parse(responseString);
         assertThat(page.getElementsByTag("title").text()).isEqualTo("Saml Processing...");
         return page.getElementsByAttributeValue("name", "SAMLResponse").val();

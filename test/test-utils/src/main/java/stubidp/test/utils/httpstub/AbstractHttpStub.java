@@ -6,13 +6,13 @@ import org.eclipse.jetty.server.ServerConnector;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-public abstract class AbstractHttpStub {
-    protected static final int RANDOM_PORT = 0;
-    protected final Server server;
-    protected final List<RecordedRequest> recordedRequests = new CopyOnWriteArrayList<>();
-    protected final List<RequestAndResponse> requestsAndResponses = new CopyOnWriteArrayList<>();
+abstract class AbstractHttpStub {
+    static final int RANDOM_PORT = 0;
+    private final Server server;
+    final List<RecordedRequest> recordedRequests = new CopyOnWriteArrayList<>();
+    final List<RequestAndResponse> requestsAndResponses = new CopyOnWriteArrayList<>();
 
-    public AbstractHttpStub(int port) {
+    AbstractHttpStub(int port) {
         server = new Server(port);
         server.setHandler(createHandler());
     }
@@ -59,5 +59,5 @@ public abstract class AbstractHttpStub {
         return recordedRequests.size();
     }
 
-    public abstract StubHandler createHandler();
+    protected abstract StubHandler createHandler();
 }

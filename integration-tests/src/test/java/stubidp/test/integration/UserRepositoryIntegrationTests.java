@@ -50,19 +50,19 @@ import static stubidp.utils.rest.common.HttpHeaders.PRAGMA_NO_CACHE_VALUE;
 @ExtendWith(DropwizardExtensionsSupport.class)
 public class UserRepositoryIntegrationTests extends IntegrationTestHelper {
 
-    public static final String IDP_NAME = "user-repository-idp";
-    public static final String DISPLAY_NAME = "User Repository Identity Service";
+    private static final String IDP_NAME = "user-repository-idp";
+    private static final String DISPLAY_NAME = "User Repository Identity Service";
     private static final String USERNAME = "integrationTestUser";
     private static final String PASSWORD = "integrationTestUserPassword";
 
-    public static final StubIdpAppExtension applicationRule = new StubIdpAppExtension(Map.ofEntries(Map.entry("isIdpEnabled", "true"), Map.entry("basicAuthEnabledForUserResource", "true")))
+    private static final StubIdpAppExtension applicationRule = new StubIdpAppExtension(Map.ofEntries(Map.entry("isIdpEnabled", "true"), Map.entry("basicAuthEnabledForUserResource", "true")))
             .withStubIdp(aStubIdp()
                     .withId(IDP_NAME)
                     .withDisplayName(DISPLAY_NAME)
                     .addUserCredentials(new TestUserCredentials(USERNAME, PASSWORD))
                     .build());
 
-    protected final Client client = JerseyClientBuilder.createClient().property(ClientProperties.FOLLOW_REDIRECTS, false);
+    private final Client client = JerseyClientBuilder.createClient().property(ClientProperties.FOLLOW_REDIRECTS, false);
 
     @BeforeEach
     void setUp() {
@@ -212,18 +212,18 @@ public class UserRepositoryIntegrationTests extends IntegrationTestHelper {
         return value.map(t -> new SimpleMdsValue<>(t, null, null, true));
     }
 
-    protected static class UserBuilder {
+    static class UserBuilder {
         private Optional<String> levelOfAssurance = Optional.ofNullable(AuthnContext.LEVEL_1.toString());
         private Optional<String> username = Optional.of("default-username");
         private final Optional<Address> address = Optional.ofNullable(anAddress().withLines(asList("line-1", "line-2")).build());
         private Optional<String> password = Optional.of("default-password");
         private Optional<String> pid = Optional.of("default-pid");
 
-        public static UserBuilder aUser() {
+        static UserBuilder aUser() {
             return new UserBuilder();
         }
 
-        public IdpUserDto build() {
+        IdpUserDto build() {
             return new IdpUserDto(
                     pid,
                     username.orElse(null),
@@ -237,22 +237,22 @@ public class UserRepositoryIntegrationTests extends IntegrationTestHelper {
                     levelOfAssurance.orElse(null));
         }
 
-        public UserBuilder withLevelOfAssurance(String levelOfAssurance) {
+        UserBuilder withLevelOfAssurance(String levelOfAssurance) {
             this.levelOfAssurance = Optional.ofNullable(levelOfAssurance);
             return this;
         }
 
-        public UserBuilder withUsername(String username) {
+        UserBuilder withUsername(String username) {
             this.username = Optional.ofNullable(username);
             return this;
         }
 
-        public UserBuilder withPassword(String password) {
+        UserBuilder withPassword(String password) {
             this.password = Optional.ofNullable(password);
             return this;
         }
 
-        public UserBuilder withPid(String pid) {
+        UserBuilder withPid(String pid) {
             this.pid = Optional.ofNullable(pid);
             return this;
         }

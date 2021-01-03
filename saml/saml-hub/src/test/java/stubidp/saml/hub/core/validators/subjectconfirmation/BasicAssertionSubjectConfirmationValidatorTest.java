@@ -20,19 +20,19 @@ public class BasicAssertionSubjectConfirmationValidatorTest extends OpenSAMLRunn
     private final BasicAssertionSubjectConfirmationValidator validator = new BasicAssertionSubjectConfirmationValidator();
 
     @Test
-    public void validate_shouldThrowExceptionWhenSubjectConfirmationDataElementIsMissing() {
+    void validate_shouldThrowExceptionWhenSubjectConfirmationDataElementIsMissing() {
         SubjectConfirmation subjectConfirmation = aSubjectConfirmation().withSubjectConfirmationData(null).build();
         assertExceptionMessage(subjectConfirmation, SamlTransformationErrorFactory.missingSubjectConfirmationData());
     }
 
     @Test
-    public void validate_shouldThrowExceptionWhenSubjectConfirmationDataRecipientAttributeIsMissing() {
+    void validate_shouldThrowExceptionWhenSubjectConfirmationDataRecipientAttributeIsMissing() {
         final SubjectConfirmation subjectConfirmation = aSubjectConfirmation().withSubjectConfirmationData(createSubjectConfirmationDataBuilder().withRecipient(null).build()).build();
         assertExceptionMessage(subjectConfirmation, SamlTransformationErrorFactory.missingBearerRecipient());
     }
 
     @Test
-    public void validate_shouldThrowExceptionWhenSubjectConfirmationDataNotOnOrAfterAttributeIsMissing() {
+    void validate_shouldThrowExceptionWhenSubjectConfirmationDataNotOnOrAfterAttributeIsMissing() {
         final SubjectConfirmation subjectConfirmation = aSubjectConfirmation()
                 .withSubjectConfirmationData(createSubjectConfirmationDataBuilder().withNotOnOrAfter(null).build())
                 .build();
@@ -41,7 +41,7 @@ public class BasicAssertionSubjectConfirmationValidatorTest extends OpenSAMLRunn
     }
 
     @Test
-    public void validate_shouldThrowExceptionWhenSubjectConfirmationDataNotOnOrAfterIsNow() {
+    void validate_shouldThrowExceptionWhenSubjectConfirmationDataNotOnOrAfterIsNow() {
         Instant expiredTime = Instant.now().atZone(ZoneId.of("UTC")).minusHours(1).toInstant();
         final SubjectConfirmation subjectConfirmation = aSubjectConfirmation()
                 .withSubjectConfirmationData(createSubjectConfirmationDataBuilder().withNotOnOrAfter(expiredTime).build())
@@ -51,7 +51,7 @@ public class BasicAssertionSubjectConfirmationValidatorTest extends OpenSAMLRunn
     }
 
     @Test
-    public void validate_shouldThrowExceptionWhenSubjectConfirmationDataNotOnOrAfterHasBeenExceeded() {
+    void validate_shouldThrowExceptionWhenSubjectConfirmationDataNotOnOrAfterHasBeenExceeded() {
         Instant expiredTime = Instant.now().atZone(ZoneId.of("UTC")).minusHours(1).toInstant();
         final SubjectConfirmation subjectConfirmation = aSubjectConfirmation()
                 .withSubjectConfirmationData(createSubjectConfirmationDataBuilder().withNotOnOrAfter(expiredTime).build())
@@ -61,7 +61,7 @@ public class BasicAssertionSubjectConfirmationValidatorTest extends OpenSAMLRunn
     }
 
     @Test
-    public void validate_shouldThrowExceptionWhenSubjectConfirmationDataNotBeforeAttributeIsSet() {
+    void validate_shouldThrowExceptionWhenSubjectConfirmationDataNotBeforeAttributeIsSet() {
         final SubjectConfirmation subjectConfirmation = aSubjectConfirmation()
                 .withSubjectConfirmationData(createSubjectConfirmationDataBuilder().withNotBefore(Instant.now()).build())
                 .build();
@@ -69,14 +69,14 @@ public class BasicAssertionSubjectConfirmationValidatorTest extends OpenSAMLRunn
     }
 
     @Test
-    public void validate_shouldDoNothingIfSubjectConfirmationDataHasAnAddressElement() {
+    void validate_shouldDoNothingIfSubjectConfirmationDataHasAnAddressElement() {
         final SubjectConfirmationData subjectConfirmationData = createSubjectConfirmationDataBuilder().withAddress("address").build();
         final SubjectConfirmation subjectConfirmation = aSubjectConfirmation().withSubjectConfirmationData(subjectConfirmationData).build();
         validator.validate(subjectConfirmation);
     }
 
     @Test
-    public void validate_shouldThrowExceptionIfSubjectConfirmationDataInResponseToAttributeIsMissing() {
+    void validate_shouldThrowExceptionIfSubjectConfirmationDataInResponseToAttributeIsMissing() {
         final SubjectConfirmation subjectConfirmation = aSubjectConfirmation().withSubjectConfirmationData(SubjectConfirmationDataBuilder.aSubjectConfirmationData().withInResponseTo(null).build()).build();
         assertExceptionMessage(subjectConfirmation, SamlTransformationErrorFactory.missingBearerInResponseTo());
     }

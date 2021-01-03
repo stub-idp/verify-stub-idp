@@ -2,6 +2,7 @@
 module stubidp.trust.anchor {
     exports stubidp.eidas.trustanchor;
 
+    opens stubidp.eidas.metadata;
     opens stubidp.eidas.trustanchor;
 
     requires transitive com.nimbusds.jose.jwt;

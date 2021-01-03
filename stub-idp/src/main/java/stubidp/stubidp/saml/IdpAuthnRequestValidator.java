@@ -60,7 +60,7 @@ public class IdpAuthnRequestValidator extends BaseAuthnRequestValidator {
         }
     }
 
-    public static void validateKeyInfo(SignableSAMLObject signableSAMLObject) {
+    private static void validateKeyInfo(SignableSAMLObject signableSAMLObject) {
         if (Objects.nonNull(signableSAMLObject.getSignature().getKeyInfo())) {
             throw new InvalidAuthnRequestException("KeyInfo was not null");
         }

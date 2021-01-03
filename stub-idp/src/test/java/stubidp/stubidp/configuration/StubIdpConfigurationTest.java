@@ -14,7 +14,7 @@ public class StubIdpConfigurationTest {
         StubIdpConfiguration.class, newValidator(), newObjectMapper(), "dw.");
 
     @Test
-    public void shouldNotAllowNullValues() {
+    void shouldNotAllowNullValues() {
         final Exception e = Assertions.assertThrows(Exception.class, () -> factory.build(new StringConfigurationSourceProvider("url: "), ""));
 
         assertThat(e.getMessage()).contains("assertionLifetime must not be null");

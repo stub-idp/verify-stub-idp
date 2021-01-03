@@ -39,7 +39,7 @@ import static org.mockito.Mockito.when;
 
 // "work around" https://bugs.openjdk.java.net/browse/JDK-7133447
 @DisabledOnOs(OS.MAC)
-public class StubIdpsFileListenerTest {
+class StubIdpsFileListenerTest {
 
     private final File YML_FILE;
     private final Duration refreshDuration = Duration.ofMillis(5);
@@ -47,7 +47,7 @@ public class StubIdpsFileListenerTest {
     private StubIdpsFileListener stubIdpsFileListener;
     private IdpStubsRepository idpStubsRepository;
 
-    public StubIdpsFileListenerTest() {
+    StubIdpsFileListenerTest() {
         try {
             YML_FILE = File.createTempFile("test-stub-idps", "yml");
         } catch (IOException e) {
@@ -56,7 +56,7 @@ public class StubIdpsFileListenerTest {
     }
 
     @BeforeEach
-    public void setup() throws Exception {
+    void setup() throws Exception {
         StubIdp testStubIdp = new TestStubIdp("a", "b", "c", List.of(), false);
         createYamlFile(testStubIdp);
         final StubIdpConfiguration stubIdpConfiguration = mock(StubIdpConfiguration.class);
@@ -70,7 +70,7 @@ public class StubIdpsFileListenerTest {
     }
 
     @Test
-    public void verifyIdaStubsRepositoryIsUpdatedOnFileChange() throws Exception {
+    void verifyIdaStubsRepositoryIsUpdatedOnFileChange() throws Exception {
         StubIdp changedTestStubIdp = new TestStubIdp("e", "f", "g", List.of(), false);
         createYamlFile(changedTestStubIdp);
         stubIdpsFileListener.run();
@@ -85,7 +85,7 @@ public class StubIdpsFileListenerTest {
     }
 
     @Test
-    public void verifyIdaStubsRepositoryIsUpdatedEvenIfPreviousFileChangeWasInvalid() throws Exception {
+    void verifyIdaStubsRepositoryIsUpdatedEvenIfPreviousFileChangeWasInvalid() throws Exception {
         ensureInvalidStubIdpsConfigWasWritten();
         stubIdpsFileListener.run();
         StubIdp changedTestStubIdp = new TestStubIdp("m", "n", "o", List.of(), false);

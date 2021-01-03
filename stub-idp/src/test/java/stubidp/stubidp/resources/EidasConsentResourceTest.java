@@ -60,7 +60,7 @@ public class EidasConsentResourceTest {
     private StubCountry stubCountry;
 
     @BeforeEach
-    public void setUp(){
+    void setUp(){
         resource = new EidasConsentResource(sessionRepository, rsaSha256AuthnResponseService, rsaSsaPssAuthnResponseService, samlResponseRedirectViewFactory, stubCountryRepository);
 
         EidasAuthnRequest eidasAuthnRequest = new EidasAuthnRequest("request-id", "issuer", "destination", "loa", Collections.emptyList());
@@ -70,7 +70,7 @@ public class EidasConsentResourceTest {
     }
 
     @Test
-    public void getShouldReturnASuccessfulResponseWhenSessionIsValid() {
+    void getShouldReturnASuccessfulResponseWhenSessionIsValid() {
         when(sessionRepository.get(SESSION_ID)).thenReturn(Optional.of(session));
         when(stubCountryRepository.getStubCountryWithFriendlyId(EidasScheme.fromString(SCHEME_NAME).get())).thenReturn(stubCountry);
 
@@ -80,7 +80,7 @@ public class EidasConsentResourceTest {
     }
 
     @Test
-    public void postShouldReturnASuccessfulResponseWithRsaSha256SigningAlgorithmWhenSessionIsValid() {
+    void postShouldReturnASuccessfulResponseWithRsaSha256SigningAlgorithmWhenSessionIsValid() {
         when(sessionRepository.deleteAndGet(SESSION_ID)).thenReturn(Optional.of(session));
         SamlResponseFromValue<org.opensaml.saml.saml2.core.Response> samlResponse = new SamlResponseFromValue<>(null, (r) -> null, null, null);
         when(rsaSha256AuthnResponseService.getSuccessResponse(session, SCHEME_NAME)).thenReturn(samlResponse);
@@ -93,7 +93,7 @@ public class EidasConsentResourceTest {
     }
 
     @Test
-    public void postShouldReturnASuccessfulResponseWithRsaSsaPsaSigningAlgorithmWhenSessionIsValid() {
+    void postShouldReturnASuccessfulResponseWithRsaSsaPsaSigningAlgorithmWhenSessionIsValid() {
         when(sessionRepository.deleteAndGet(SESSION_ID)).thenReturn(Optional.of(session));
         SamlResponseFromValue<org.opensaml.saml.saml2.core.Response> samlResponse = new SamlResponseFromValue<>(null, (r) -> null, null, null);
         when(rsaSsaPssAuthnResponseService.getSuccessResponse(session, SCHEME_NAME)).thenReturn(samlResponse);
@@ -106,12 +106,12 @@ public class EidasConsentResourceTest {
     }
 
     @Test
-    public void postShouldThrowAnExceptionWhenAnInvalidSigningAlgorithmIsUsed() {
+    void postShouldThrowAnExceptionWhenAnInvalidSigningAlgorithmIsUsed() {
         Assertions.assertThrows(InvalidSigningAlgorithmException.class, () -> resource.consent(SCHEME_NAME, "rsa-sha384","submit", SESSION_ID));
     }
 
     @Test
-    public void shouldThrowAGenericStubIdpExceptionWhenSessionIsEmpty() {
+    void shouldThrowAGenericStubIdpExceptionWhenSessionIsEmpty() {
         Assertions.assertThrows(GenericStubIdpException.class, () -> resource.get(SCHEME_NAME, null));
     }
 

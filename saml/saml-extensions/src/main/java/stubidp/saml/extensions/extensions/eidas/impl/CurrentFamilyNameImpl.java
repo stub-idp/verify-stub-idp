@@ -18,7 +18,7 @@ public class CurrentFamilyNameImpl extends AbstractTransliterableString implemen
      * @param elementLocalName the local name of the XML element this Object represents
      * @param namespacePrefix the prefix for the given namespace
      */
-    protected CurrentFamilyNameImpl(String namespaceURI, String elementLocalName, String namespacePrefix) {
+    CurrentFamilyNameImpl(String namespaceURI, String elementLocalName, String namespacePrefix) {
         super(namespaceURI, elementLocalName, namespacePrefix);
     }
 

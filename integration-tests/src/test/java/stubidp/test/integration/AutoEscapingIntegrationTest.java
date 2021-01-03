@@ -33,7 +33,7 @@ public class AutoEscapingIntegrationTest extends IntegrationTestHelper {
             IDP_NAME,
             applicationRule.getLocalPort());
 
-    public static final StubIdpAppExtension applicationRule = new StubIdpAppExtension(Map.ofEntries(Map.entry("secureCookieConfiguration.secure", "false")))
+    private static final StubIdpAppExtension applicationRule = new StubIdpAppExtension(Map.ofEntries(Map.entry("secureCookieConfiguration.secure", "false")))
             .withStubIdp(aStubIdp().withId(IDP_NAME).withDisplayName(DISPLAY_NAME).build());
 
     @BeforeEach

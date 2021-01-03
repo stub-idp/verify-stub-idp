@@ -46,7 +46,7 @@ public class CountryMetadataBuilderTest extends OpenSAMLRunner {
     private static final Pattern PATTERN = Pattern.compile("\\s");
 
     @BeforeEach
-    public void setup() {
+    void setup() {
         IdaSamlBootstrap.bootstrap();
     }
 
@@ -82,7 +82,7 @@ public class CountryMetadataBuilderTest extends OpenSAMLRunner {
     }
 
     @Test
-    public void shouldGenerateEntityDescriptor() throws CertificateEncodingException, MarshallingException, SecurityException, SignatureException {
+    void shouldGenerateEntityDescriptor() throws CertificateEncodingException, MarshallingException, SecurityException, SignatureException {
         EntityDescriptor metadata = getMetadata();
         assertThat(metadata).isNotNull();
         assertThat(metadata.getValidUntil()).isNotNull();
@@ -92,7 +92,7 @@ public class CountryMetadataBuilderTest extends OpenSAMLRunner {
     }
 
     @Test
-    public void shouldGenerateIdpSSODescriptor() throws MarshallingException, SecurityException, SignatureException, CertificateEncodingException {
+    void shouldGenerateIdpSSODescriptor() throws MarshallingException, SecurityException, SignatureException, CertificateEncodingException {
         EntityDescriptor metadata = getMetadata();
         assertThat(metadata).isNotNull();
 
@@ -102,7 +102,7 @@ public class CountryMetadataBuilderTest extends OpenSAMLRunner {
     }
 
     @Test
-    public void shouldGenerateCertificatesInsideDescriptor() throws CertificateEncodingException, MarshallingException, SecurityException, SignatureException {
+    void shouldGenerateCertificatesInsideDescriptor() throws CertificateEncodingException, MarshallingException, SecurityException, SignatureException {
         EntityDescriptor metadata = getMetadata();
         assertThat(metadata).isNotNull();
 
@@ -119,13 +119,13 @@ public class CountryMetadataBuilderTest extends OpenSAMLRunner {
     }
 
     @Test
-    public void shouldSignDescriptor() throws CertificateEncodingException, MarshallingException, SecurityException, SignatureException {
+    void shouldSignDescriptor() throws CertificateEncodingException, MarshallingException, SecurityException, SignatureException {
         EntityDescriptor metadata = getMetadata();
         verify(metadataSigner, times(1)).sign(metadata);
     }
 
     @Test
-    public void shouldNotContainOtherServiceElements() throws CertificateEncodingException, MarshallingException, SecurityException, SignatureException {
+    void shouldNotContainOtherServiceElements() throws CertificateEncodingException, MarshallingException, SecurityException, SignatureException {
         EntityDescriptor metadata = getMetadata();
         assertThat(metadata).isNotNull();
 

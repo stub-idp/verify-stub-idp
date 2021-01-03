@@ -24,18 +24,18 @@ class DuplicateAuthnRequestValidatorTest extends OpenSAMLRunner {
     private DuplicateAuthnRequestValidator duplicateAuthnRequestValidator;
 
     @BeforeEach
-    public void initialiseTestSubject() {
+    void initialiseTestSubject() {
         duplicateIds = new ConcurrentHashMap<>();
         idExpirationCache = new ConcurrentMapIdExpirationCache<>(duplicateIds);
     }
 
     @AfterEach
-    public void unfreezeTime() {
+    void unfreezeTime() {
         clock = Clock.systemUTC();
     }
 
     @Test
-    public void valid_shouldThrowAnExceptionIfTheAuthnRequestIsADuplicateOfAPreviousOne() {
+    void valid_shouldThrowAnExceptionIfTheAuthnRequestIsADuplicateOfAPreviousOne() {
         final String duplicateRequestId = "duplicate-id";
         duplicateAuthnRequestValidator = new DuplicateAuthnRequestValidator(idExpirationCache, samlEngineConfiguration, clock);
         duplicateAuthnRequestValidator.valid(duplicateRequestId);
@@ -44,7 +44,7 @@ class DuplicateAuthnRequestValidatorTest extends OpenSAMLRunner {
     }
 
     @Test
-    public void valid_shouldPassIfTheAuthnRequestIsNotADuplicateOfAPreviousOne() {
+    void valid_shouldPassIfTheAuthnRequestIsNotADuplicateOfAPreviousOne() {
         duplicateAuthnRequestValidator = new DuplicateAuthnRequestValidator(idExpirationCache, samlEngineConfiguration, clock);
         duplicateAuthnRequestValidator.valid("some-request-id");
         boolean isValid = duplicateAuthnRequestValidator.valid("another-request-id");
@@ -52,7 +52,7 @@ class DuplicateAuthnRequestValidatorTest extends OpenSAMLRunner {
     }
 
     @Test
-    public void valid_shouldPassIfTwoAuthnRequestsHaveTheSameIdButTheFirstAssertionHasExpired() {
+    void valid_shouldPassIfTwoAuthnRequestsHaveTheSameIdButTheFirstAssertionHasExpired() {
         final String duplicateRequestId = "duplicate-id";
         duplicateAuthnRequestValidator = new DuplicateAuthnRequestValidator(idExpirationCache, samlEngineConfiguration, clock);
         duplicateAuthnRequestValidator.valid(duplicateRequestId);
@@ -64,7 +64,7 @@ class DuplicateAuthnRequestValidatorTest extends OpenSAMLRunner {
     }
 
     @Test
-    public void valid_shouldFailIfAuthnRequestsReceivedWithSameIdAndFirstIdHasNotExpired() {
+    void valid_shouldFailIfAuthnRequestsReceivedWithSameIdAndFirstIdHasNotExpired() {
         final String duplicateRequestId = "duplicate-id";
         clock = Clock.fixed(Instant.now().atZone(ZoneId.of("UTC")).plusHours(EXPIRATION_HOURS).minusMinutes(1).toInstant(), ZoneId.of("UTC"));
         duplicateAuthnRequestValidator = new DuplicateAuthnRequestValidator(idExpirationCache, samlEngineConfiguration, clock);

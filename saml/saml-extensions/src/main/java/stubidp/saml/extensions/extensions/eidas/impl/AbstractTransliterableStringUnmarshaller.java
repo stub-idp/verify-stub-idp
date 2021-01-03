@@ -6,7 +6,7 @@ import org.opensaml.saml.common.AbstractSAMLObjectUnmarshaller;
 import org.w3c.dom.Attr;
 import stubidp.saml.extensions.extensions.eidas.TransliterableString;
 
-public abstract class AbstractTransliterableStringUnmarshaller extends AbstractSAMLObjectUnmarshaller {
+abstract class AbstractTransliterableStringUnmarshaller extends AbstractSAMLObjectUnmarshaller {
 
     /** {@inheritDoc} */
     protected void processAttribute(XMLObject samlObject, Attr attribute) throws UnmarshallingException {

@@ -32,26 +32,26 @@ public class CredentialFactorySignatureValidatorTest extends OpenSAMLRunner {
     private final CredentialFactorySignatureValidator credentialFactorySignatureValidator = new CredentialFactorySignatureValidator(credentialFactory);
 
     @Test
-    public void shouldAcceptSignedAssertions() throws Exception {
+    void shouldAcceptSignedAssertions() throws Exception {
         Credential signingCredential = new TestCredentialFactory(TestCertificateStrings.HUB_TEST_PUBLIC_SIGNING_CERT, TestCertificateStrings.HUB_TEST_PRIVATE_SIGNING_KEY).getSigningCredential();
         final Assertion assertion = AssertionBuilder.anAssertion().withSignature(SignatureBuilder.aSignature().withSigningCredential(signingCredential).build()).buildUnencrypted();
         assertThat(credentialFactorySignatureValidator.validate(assertion, issuerId, null)).isEqualTo(true);
     }
 
     @Test
-    public void shouldNotAcceptUnsignedAssertions() throws Exception {
+    void shouldNotAcceptUnsignedAssertions() throws Exception {
         assertThat(credentialFactorySignatureValidator.validate(AssertionBuilder.anAssertion().withoutSigning().buildUnencrypted(), issuerId, null)).isEqualTo(false);
     }
 
     @Test
-    public void shouldNotAcceptMissignedAssertions() throws Exception {
+    void shouldNotAcceptMissignedAssertions() throws Exception {
         Credential badSigningCredential = new TestCredentialFactory(TestCertificateStrings.UNCHAINED_PUBLIC_CERT, TestCertificateStrings.UNCHAINED_PRIVATE_KEY).getSigningCredential();
         final Assertion assertion = AssertionBuilder.anAssertion().withSignature(SignatureBuilder.aSignature().withSigningCredential(badSigningCredential).build()).buildUnencrypted();
         assertThat(credentialFactorySignatureValidator.validate(assertion, issuerId, null)).isEqualTo(false);
     }
 
     @Test
-    public void shouldSupportAnEntityWithMultipleSigningCertificates() throws Exception {
+    void shouldSupportAnEntityWithMultipleSigningCertificates() throws Exception {
         List<String> certificates = asList(TestCertificateStrings.HUB_TEST_PUBLIC_SIGNING_CERT, TestCertificateStrings.HUB_TEST_SECONDARY_PUBLIC_SIGNING_CERT);
         final Map<String, List<String>> publicKeys = Map.of(issuerId, certificates);
         final InjectableSigningKeyStore injectableSigningKeyStore = new InjectableSigningKeyStore(publicKeys);
@@ -74,7 +74,7 @@ public class CredentialFactorySignatureValidatorTest extends OpenSAMLRunner {
      * Signature algorithm should be valid.
      */
     @Test
-    public void shouldNotValidateBadSignatureAlgorithm() throws Exception {
+    void shouldNotValidateBadSignatureAlgorithm() throws Exception {
         URL authnRequestUrl = getClass().getClassLoader().getResource("authnRequestNormal.xml");//sha1 authnrequest
         String input = StringEncoding.toBase64Encoded(Resources.toString(authnRequestUrl, UTF_8));
         //md5 authnrequests throw an exception here as they are not allowed to be unmarshalled
@@ -86,7 +86,7 @@ public class CredentialFactorySignatureValidatorTest extends OpenSAMLRunner {
      * Signature object should exist.
      */
     @Test
-    public void shouldNotValidateMissingSignature() {
+    void shouldNotValidateMissingSignature() {
         Assertions.assertThrows(SignatureException.class, () -> validateAuthnRequestFile("authnRequestNoSignature.xml"));
     }
 
@@ -94,7 +94,7 @@ public class CredentialFactorySignatureValidatorTest extends OpenSAMLRunner {
      * Signature must be an immediate child of the SAML object.
      */
     @Test
-    public void shouldNotValidateSignatureNotImmediateChild() {
+    void shouldNotValidateSignatureNotImmediateChild() {
         Assertions.assertThrows(SignatureException.class, () -> validateAuthnRequestFile("authnRequestNotImmediateChild.xml"));
     }
 
@@ -102,7 +102,7 @@ public class CredentialFactorySignatureValidatorTest extends OpenSAMLRunner {
      * Signature should not contain more than one Reference.
      */
     @Test
-    public void shouldNotValidateSignatureTooManyReferences() {
+    void shouldNotValidateSignatureTooManyReferences() {
         Assertions.assertThrows(SignatureException.class, () -> validateAuthnRequestFile("authnRequestTooManyRefs.xml"));
     }
 
@@ -110,7 +110,7 @@ public class CredentialFactorySignatureValidatorTest extends OpenSAMLRunner {
      * Reference requires a valid URI pointing to a fragment ID.
      */
     @Test
-    public void shouldNotValidateSignatureBadReferenceURI() {
+    void shouldNotValidateSignatureBadReferenceURI() {
         Assertions.assertThrows(SignatureException.class, () -> validateAuthnRequestFile("authnRequestBadRefURI.xml"));
     }
 
@@ -118,7 +118,7 @@ public class CredentialFactorySignatureValidatorTest extends OpenSAMLRunner {
      * Reference URI should point to parent SAML object.
      */
     @Test
-    public void shouldNotValidateSignatureReferenceURINotParentID() {
+    void shouldNotValidateSignatureReferenceURINotParentID() {
         Assertions.assertThrows(SignatureException.class, () -> validateAuthnRequestFile("authnRequestRefURINotParentID.xml"));
     }
 
@@ -126,7 +126,7 @@ public class CredentialFactorySignatureValidatorTest extends OpenSAMLRunner {
      * Root SAML object should have an ID.
      */
     @Test
-    public void shouldNotValidateSignatureNoParentID() {
+    void shouldNotValidateSignatureNoParentID() {
         Assertions.assertThrows(SignatureException.class, () -> validateAuthnRequestFile("authnRequestNoParentID.xml"));
     }
 
@@ -134,7 +134,7 @@ public class CredentialFactorySignatureValidatorTest extends OpenSAMLRunner {
      * Signature must have Transforms defined.
      */
     @Test
-    public void shouldNotValidateSignatureNoTransforms() {
+    void shouldNotValidateSignatureNoTransforms() {
         Assertions.assertThrows(SignatureException.class, () -> validateAuthnRequestFile("authnRequestNoTransforms.xml"));
     }
 
@@ -142,7 +142,7 @@ public class CredentialFactorySignatureValidatorTest extends OpenSAMLRunner {
      * Signature should not have more than two Transforms.
      */
     @Test
-    public void shouldNotValidateSignatureTooManyTransforms() {
+    void shouldNotValidateSignatureTooManyTransforms() {
         Assertions.assertThrows(SignatureException.class, () -> validateAuthnRequestFile("authnRequestTooManyTransforms.xml"));
     }
 
@@ -150,7 +150,7 @@ public class CredentialFactorySignatureValidatorTest extends OpenSAMLRunner {
      * Signature must have enveloped-signature Transform.
      */
     @Test
-    public void shouldNotValidateSignatureNoEnvelopeTransform() {
+    void shouldNotValidateSignatureNoEnvelopeTransform() {
         Assertions.assertThrows(SignatureException.class, () -> validateAuthnRequestFile("authnRequestNoEnvTransform.xml"));
     }
 
@@ -158,7 +158,7 @@ public class CredentialFactorySignatureValidatorTest extends OpenSAMLRunner {
      * Signature must have a valid enveloped-signature Transform.
      */
     @Test
-    public void shouldNotValidateSignatureInvalidEnvelopeTransform() {
+    void shouldNotValidateSignatureInvalidEnvelopeTransform() {
         Assertions.assertThrows(SignatureException.class, () -> validateAuthnRequestFile("authnRequestInvalidEnvTransform.xml"));
     }
 
@@ -166,7 +166,7 @@ public class CredentialFactorySignatureValidatorTest extends OpenSAMLRunner {
      * Signature should not contain any Object children.
      */
     @Test
-    public void shouldNotValidateSignatureContainingObject() {
+    void shouldNotValidateSignatureContainingObject() {
         Assertions.assertThrows(SignatureException.class, () -> validateAuthnRequestFile("authnRequestSigContainsChildren.xml"));
     }
 

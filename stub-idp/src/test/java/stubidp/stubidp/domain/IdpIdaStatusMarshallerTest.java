@@ -19,19 +19,19 @@ public class IdpIdaStatusMarshallerTest extends OpenSAMLRunner {
     private static final IdpIdaStatusMarshaller marshaller = new IdpIdaStatusMarshaller(new OpenSamlXmlObjectFactory());
 
     @BeforeEach
-    public void setUp() {
+    void setUp() {
         IdaSamlBootstrap.bootstrap();
     }
 
     @Test
-    public void transform_shouldTransformSuccess() {
+    void transform_shouldTransformSuccess() {
         Status transformedStatus = marshaller.toSamlStatus(IdpIdaStatus.success());
 
         assertThat(transformedStatus.getStatusCode().getValue()).isEqualTo(StatusCode.SUCCESS);
     }
 
     @Test
-    public void transform_shouldTransformNoAuthenticationContext() {
+    void transform_shouldTransformNoAuthenticationContext() {
         Status transformedStatus = marshaller.toSamlStatus(IdpIdaStatus.noAuthenticationContext());
 
         assertThat(transformedStatus.getStatusCode().getValue()).isEqualTo(StatusCode.RESPONDER);
@@ -39,7 +39,7 @@ public class IdpIdaStatusMarshallerTest extends OpenSAMLRunner {
     }
 
     @Test
-    public void transform_shouldTransformAuthenticationPending() {
+    void transform_shouldTransformAuthenticationPending() {
         Status transformedStatus = marshaller.toSamlStatus(IdpIdaStatus.authenticationPending());
         StatusValue actual = (StatusValue) transformedStatus.getStatusDetail().getOrderedChildren().get(0);
 
@@ -49,7 +49,7 @@ public class IdpIdaStatusMarshallerTest extends OpenSAMLRunner {
     }
 
     @Test
-    public void transform_shouldTransformAuthnFailedWithNoSubStatus() {
+    void transform_shouldTransformAuthnFailedWithNoSubStatus() {
         Status transformedStatus = marshaller.toSamlStatus(IdpIdaStatus.authenticationFailed());
 
         assertThat(transformedStatus.getStatusCode().getValue()).isEqualTo(StatusCode.RESPONDER);
@@ -58,14 +58,14 @@ public class IdpIdaStatusMarshallerTest extends OpenSAMLRunner {
     }
 
     @Test
-    public void transform_shouldTransformRequesterError() {
+    void transform_shouldTransformRequesterError() {
         Status transformedStatus = marshaller.toSamlStatus(IdpIdaStatus.requesterError());
 
         assertThat(transformedStatus.getStatusCode().getValue()).isEqualTo(StatusCode.REQUESTER);
     }
 
     @Test
-    public void transform_shouldTransformRequesterErrorWithMessage() {
+    void transform_shouldTransformRequesterErrorWithMessage() {
         String message = "Oh dear";
         Status transformedStatus = marshaller.toSamlStatus(IdpIdaStatus.requesterError(Optional.of(message)));
 
@@ -74,14 +74,14 @@ public class IdpIdaStatusMarshallerTest extends OpenSAMLRunner {
     }
 
     @Test
-    public void shouldMarshallStatusDetailElementWhenInCancelStatus() {
+    void shouldMarshallStatusDetailElementWhenInCancelStatus() {
         Status status = marshaller.toSamlStatus(IdpIdaStatus.authenticationCancelled());
 
         assertThat(status.getStatusDetail()).isNotNull();
     }
 
     @Test
-    public void shouldMarshallStatusDetailWithStatusValueContainingAuthnCancelInCaseOfAuthenticationCancelled() {
+    void shouldMarshallStatusDetailWithStatusValueContainingAuthnCancelInCaseOfAuthenticationCancelled() {
         Status status = marshaller.toSamlStatus(IdpIdaStatus.authenticationCancelled());
 
         StatusValue actual = (StatusValue) status.getStatusDetail().getOrderedChildren().get(0);
@@ -91,7 +91,7 @@ public class IdpIdaStatusMarshallerTest extends OpenSAMLRunner {
     }
 
     @Test
-    public void shouldMarshallStatusDetailWithStatusValueContainingUpliftFailed() {
+    void shouldMarshallStatusDetailWithStatusValueContainingUpliftFailed() {
         Status status = marshaller.toSamlStatus(IdpIdaStatus.upliftFailed());
 
         StatusValue actual = (StatusValue) status.getStatusDetail().getOrderedChildren().get(0);
@@ -101,7 +101,7 @@ public class IdpIdaStatusMarshallerTest extends OpenSAMLRunner {
     }
 
     @Test
-    public void shouldMarshallStatusDetailWithASingleStatusValueElementInCaseOfAuthenticationCancelled() {
+    void shouldMarshallStatusDetailWithASingleStatusValueElementInCaseOfAuthenticationCancelled() {
         Status status = marshaller.toSamlStatus(IdpIdaStatus.authenticationCancelled());
 
         assertThat(status.getStatusDetail().getOrderedChildren()).hasSize(1);

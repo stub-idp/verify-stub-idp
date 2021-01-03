@@ -67,7 +67,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 @Retention(RUNTIME)
 @Documented
 @ExtendWith(CaptureSystemOutputExtension.class)
-public @interface CaptureSystemOutput {
+@interface CaptureSystemOutput {
 
     /**
      * {@code OutputCapture} captures output to {@code System.out} and {@code System.err}.

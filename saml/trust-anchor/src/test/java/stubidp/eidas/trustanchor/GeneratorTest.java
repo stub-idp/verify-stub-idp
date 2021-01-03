@@ -39,7 +39,7 @@ public class GeneratorTest {
     private X509Certificate certificateForSigning;
 
     @BeforeEach
-    public void setUp() {
+    void setUp() {
         PrivateKey privateKeyForSigning = new PrivateKeyFactory().createPrivateKey(Base64.getMimeDecoder().decode(TestCertificateStrings.METADATA_SIGNING_A_PRIVATE_KEY));
         certificateForSigning = new X509CertificateFactory().createCertificate(TestCertificateStrings.METADATA_SIGNING_A_PUBLIC_CERT);
         generator = new Generator(privateKeyForSigning, certificateForSigning);
@@ -48,7 +48,7 @@ public class GeneratorTest {
 
     @Test
     @SuppressWarnings("unchecked")
-    public void shouldHandleZeroInput() throws ParseException, JOSEException, CertificateEncodingException {
+    void shouldHandleZeroInput() throws ParseException, JOSEException, CertificateEncodingException {
         List<String> files = new ArrayList<>();
 
         JWSObject output = generator.generate(files);
@@ -60,7 +60,7 @@ public class GeneratorTest {
 
     @Test
     @SuppressWarnings({"unchecked", "cast"})
-    public void shouldHandleOneString() throws JOSEException, CertificateEncodingException {
+    void shouldHandleOneString() throws JOSEException, CertificateEncodingException {
         String countryPublicCert = CACertificates.TEST_ROOT_CA;
         X509Certificate countryCertificate = new X509CertificateFactory().createCertificate(countryPublicCert);
         HashMap<String, List<X509Certificate>> trustAnchorMap = new HashMap<>();
@@ -78,7 +78,7 @@ public class GeneratorTest {
 
     @Test
     @SuppressWarnings({"unchecked", "cast"})
-    public void shouldHandleChainOfCertificates() throws CertificateEncodingException, JOSEException {
+    void shouldHandleChainOfCertificates() throws CertificateEncodingException, JOSEException {
         List<String> certificates = asList(
             CACertificates.TEST_ROOT_CA,
             CACertificates.TEST_IDP_CA,
@@ -99,7 +99,7 @@ public class GeneratorTest {
     }
 
     @Test
-    public void shouldThrowOnMissingValue() {
+    void shouldThrowOnMissingValue() {
         List<String> valueList = asList("kty", "key_ops", "kid", "alg", "e", "n", "x5c");
 
         for (String attribute : valueList) {
@@ -111,7 +111,7 @@ public class GeneratorTest {
     }
 
     @Test
-    public void shouldThrowOnIncorrectValue() {
+    void shouldThrowOnIncorrectValue() {
         final Map<String, Object> incorrectValues = new HashMap<>(2);
         incorrectValues.put("alg","A128KW");
         incorrectValues.put("kty", "oct");
@@ -125,7 +125,7 @@ public class GeneratorTest {
     }
 
     @Test
-    public void shouldThrowOnIncorrectKeyopsValues() {
+    void shouldThrowOnIncorrectKeyopsValues() {
         List<Object> incorrectValues = asList(Collections.emptyList(), Collections.singletonList("sign"), asList("verify", "sign"), "verify");
 
         for (Object attribute: incorrectValues) {
@@ -136,7 +136,7 @@ public class GeneratorTest {
     }
 
     @Test
-    public void shouldThrowWhenCertificateDoesNotMatchKeyParameters() {
+    void shouldThrowWhenCertificateDoesNotMatchKeyParameters() {
         JSONObject jsonObject = createJsonObject();
         jsonObject.replace("x5c", Collections.singletonList(TestCertificateStrings.TEST_PUBLIC_CERT));
 
@@ -144,7 +144,7 @@ public class GeneratorTest {
     }
 
     @Test
-    public void shouldCheckAllX509Certificates(){
+    void shouldCheckAllX509Certificates(){
         JSONObject jsonObject = createJsonObject();
         jsonObject.replace("x5c", asList(TestCertificateStrings.UNCHAINED_PUBLIC_CERT, TestCertificateStrings.TEST_PUBLIC_CERT));
 
@@ -152,7 +152,7 @@ public class GeneratorTest {
     }
 
     @Test
-    public void shouldThrowWhenDateOfX509CertificateIsInvalid(){
+    void shouldThrowWhenDateOfX509CertificateIsInvalid(){
 
         String expiredCert = TestCertificateStrings.STUB_COUNTRY_PUBLIC_EXPIRED_CERT;
 
@@ -170,7 +170,7 @@ public class GeneratorTest {
     }
 
     @Test
-    public void shouldThrowOnOneInvalidKey() {
+    void shouldThrowOnOneInvalidKey() {
         List<String> files = new ArrayList<>();
         files.add(createJsonObject("https://1.generator.test").toJSONString());
         JSONObject invalidObject = createJsonObject("https://2.generator.test");
@@ -182,7 +182,7 @@ public class GeneratorTest {
 
     @Test
     @SuppressWarnings({"unchecked", "cast"})
-    public void shouldHandleMultipleStrings() throws ParseException, JOSEException, CertificateEncodingException {
+    void shouldHandleMultipleStrings() throws ParseException, JOSEException, CertificateEncodingException {
         List<String> files = new ArrayList<>();
         for (int i = 0; i < 1024; i++) {
             files.add(createJsonObject(String.format("https://%d.generator.test", i)).toJSONString());

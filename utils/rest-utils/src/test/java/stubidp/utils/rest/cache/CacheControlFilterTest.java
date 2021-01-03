@@ -20,7 +20,7 @@ public class CacheControlFilterTest {
     private CacheControlFilter filter;
 
     @BeforeEach
-    public void setUp() {
+    void setUp() {
         AssetCacheConfiguration assetCacheConfiguration = new AssetCacheConfiguration() {
             @Override
             public boolean shouldCacheAssets() {
@@ -41,7 +41,7 @@ public class CacheControlFilterTest {
     }
 
     @Test
-    public void doFilter_shouldSetHeadersToPreventCaching() throws Exception {
+    void doFilter_shouldSetHeadersToPreventCaching() throws Exception {
         HttpServletResponse response = mock(HttpServletResponse.class);
 
         HttpServletRequest mockRequest = mock(HttpServletRequest.class);
@@ -53,7 +53,7 @@ public class CacheControlFilterTest {
     }
 
     @Test
-    public void doFilter_shouldCallFilterChainAfterSettingHeaders() throws Exception {
+    void doFilter_shouldCallFilterChainAfterSettingHeaders() throws Exception {
         HttpServletResponse response = mock(HttpServletResponse.class);
         FilterChain chain = mock(FilterChain.class);
         doThrow(new IOException()).when(chain).doFilter(any(HttpServletRequest.class), any(HttpServletResponse.class));

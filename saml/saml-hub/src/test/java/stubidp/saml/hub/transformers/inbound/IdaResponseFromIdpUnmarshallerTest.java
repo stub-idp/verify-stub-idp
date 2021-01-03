@@ -26,7 +26,7 @@ import static stubidp.saml.test.builders.AttributeStatementBuilder.anAttributeSt
 import static stubidp.saml.test.builders.AuthnStatementBuilder.anAuthnStatement;
 
 @ExtendWith(MockitoExtension.class)
-public class IdaResponseFromIdpUnmarshallerTest extends OpenSAMLRunner {
+class IdaResponseFromIdpUnmarshallerTest extends OpenSAMLRunner {
 
     @Mock
     private IdpIdaStatusUnmarshaller statusUnmarshaller;
@@ -40,7 +40,7 @@ public class IdaResponseFromIdpUnmarshallerTest extends OpenSAMLRunner {
     private final Signature signature = SignatureBuilder.aSignature().build();
 
     @BeforeEach
-    public void setup() {
+    void setup() {
         when(response.getIssuer()).thenReturn(issuer);
         when(response.getDestination()).thenReturn("http://hello.local");
         when(response.getSignature()).thenReturn(signature);
@@ -48,7 +48,7 @@ public class IdaResponseFromIdpUnmarshallerTest extends OpenSAMLRunner {
     }
 
     @Test
-    public void transform_shouldTransformTheSamlResponseToIdaResponseByIdp() {
+    void transform_shouldTransformTheSamlResponseToIdaResponseByIdp() {
         Assertion mdsAssertion = anAssertion().addAttributeStatement(anAttributeStatement().build()).buildUnencrypted();
         Assertion authnStatementAssertion = anAssertion().addAuthnStatement(anAuthnStatement().build()).buildUnencrypted();
 

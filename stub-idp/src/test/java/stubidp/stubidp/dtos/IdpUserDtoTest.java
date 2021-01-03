@@ -27,14 +27,14 @@ public class IdpUserDtoTest {
 
     @Test
     @Disabled(value = "validates data that has been serialized with older code can still be read")
-    public void shouldDeSerialiseJsonToObjectWhenAllFieldsArePopulatedOldFormat() throws IOException {
+    void shouldDeSerialiseJsonToObjectWhenAllFieldsArePopulatedOldFormat() throws IOException {
         IdpUserDto idpUserDtoFromJson = objectMapper.readValue("{\"pid\":\"00754148-902f-4d94-b0db-cb1f7eb3fd84\",\"username\":\"user1\",\"password\":\"$2a$10$Dn3LpR9//dOJlnaHCMYMLutaWtEOphNbak9/jAWjaEc3Lt0H9jQy.\",\"firstName\":{\"value\":\"Fred\",\"from\":315532800000,\"to\":1356998400000,\"verified\":true},\"middleNames\":{\"value\":\"Flintstone\",\"from\":315532800000,\"to\":1356998400000,\"verified\":true},\"gender\":{\"value\":\"MALE\",\"from\":315532800000,\"to\":1356998400000,\"verified\":true},\"dateOfBirth\":{\"value\":[1970,1,1],\"from\":315532800000,\"to\":1356998400000,\"verified\":true},\"address\":{\"verified\":false,\"from\":978307200000,\"to\":1355270400000,\"postCode\":\"WC2B 6NH\",\"lines\":[\"Aviation House\",\"London\"],\"internationalPostCode\":null,\"uprn\":null},\"levelOfAssurance\":\"LEVEL_2\",\"surnames\":[{\"value\":\"Smith\",\"from\":315532800000,\"to\":1356998400000,\"verified\":true},{\"value\":\"Henry\",\"from\":315532800000,\"to\":1356998400000,\"verified\":true}]}", IdpUserDto.class);
         IdpUserDto idpuserDto = generateTestUserDto();
         assertThat(compareIdpUserDto(idpUserDtoFromJson, idpuserDto)).isTrue();
     }
 
     @Test
-    public void shouldDeSerialiseJsonToObjectWhenAllFieldsArePopulated() throws IOException {
+    void shouldDeSerialiseJsonToObjectWhenAllFieldsArePopulated() throws IOException {
         // NOTE: this is a change to the previous serialized data format
         IdpUserDto idpUserDtoFromJson = objectMapper.readValue("{\"pid\":\"00754148-902f-4d94-b0db-cb1f7eb3fd84\",\"username\":\"user1\",\"password\":\"$2a$10$Dn3LpR9//dOJlnaHCMYMLutaWtEOphNbak9/jAWjaEc3Lt0H9jQy.\",\"firstName\":{\"value\":\"Fred\",\"from\":315532800.000,\"to\":1356998400.000,\"verified\":true},\"middleNames\":{\"value\":\"Flintstone\",\"from\":315532800.000,\"to\":1356998400.000,\"verified\":true},\"gender\":{\"value\":\"MALE\",\"from\":315532800.000,\"to\":1356998400.000,\"verified\":true},\"dateOfBirth\":{\"value\":0,\"from\":315532800.000,\"to\":1356998400.000,\"verified\":true},\"address\":{\"verified\":false,\"from\":978307200.000,\"to\":1355270400.000,\"postCode\":\"WC2B 6NH\",\"lines\":[\"Aviation House\",\"London\"],\"internationalPostCode\":null,\"uprn\":null},\"levelOfAssurance\":\"LEVEL_2\",\"surnames\":[{\"value\":\"Smith\",\"from\":315532800.000,\"to\":1356998400.000,\"verified\":true},{\"value\":\"Henry\",\"from\":315532800.000,\"to\":1356998400.000,\"verified\":true}]}", IdpUserDto.class);
         IdpUserDto idpuserDto = generateTestUserDto();

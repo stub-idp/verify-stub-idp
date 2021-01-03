@@ -23,14 +23,14 @@ public class SamlRequestSignatureValidatorTest extends OpenSAMLRunner {
     private AuthnRequest authnRequest;
 
     @BeforeEach
-    public void setUp() {
+    void setUp() {
         samlMessageSignatureValidator = mock(SamlMessageSignatureValidator.class);
         requestSignatureValidator = new SamlRequestSignatureValidator<>(samlMessageSignatureValidator);
         authnRequest = mock(AuthnRequest.class);
     }
 
     @Test
-    public void validate_shouldDoNothingIfAuthnRequestSignatureIsValid() {
+    void validate_shouldDoNothingIfAuthnRequestSignatureIsValid() {
         when(samlMessageSignatureValidator.validate(authnRequest, SPSSODescriptor.DEFAULT_ELEMENT_NAME)).thenReturn(SamlValidationResponse.aValidResponse());
 
         requestSignatureValidator.validate(authnRequest, SPSSODescriptor.DEFAULT_ELEMENT_NAME);
@@ -39,7 +39,7 @@ public class SamlRequestSignatureValidatorTest extends OpenSAMLRunner {
     }
 
     @Test
-    public void validate_shouldThrowExceptionIfAuthnRequestSignatureIsInvalid() {
+    void validate_shouldThrowExceptionIfAuthnRequestSignatureIsInvalid() {
         SamlValidationResponse invalidResponse = SamlValidationResponse.anInvalidResponse(unableToDecrypt("Error"));
         when(samlMessageSignatureValidator.validate(authnRequest, SPSSODescriptor.DEFAULT_ELEMENT_NAME)).thenReturn(invalidResponse);
 

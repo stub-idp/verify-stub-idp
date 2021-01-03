@@ -14,13 +14,13 @@ import static org.mockito.Mockito.when;
 public class CertificateSorterTest {
 
     @Test
-    public void shouldReturnEmptyListWhenGivenEmptyList() {
+    void shouldReturnEmptyListWhenGivenEmptyList() {
         List<X509Certificate> sortedCerts = CertificateSorter.sort(List.of());
         assertThat(sortedCerts).isEmpty();
     }
 
     @Test
-    public void shouldReturnListWhenGivenSingleCert() {
+    void shouldReturnListWhenGivenSingleCert() {
         List<X509Certificate> testCertificates = List.of(mock(X509Certificate.class));
         List<X509Certificate> sortedCerts = CertificateSorter.sort(testCertificates);
 
@@ -28,7 +28,7 @@ public class CertificateSorterTest {
     }
 
     @Test
-    public void shouldReturnSameTwoCertListWhenGivenTwoCertsInOrder() {
+    void shouldReturnSameTwoCertListWhenGivenTwoCertsInOrder() {
         X509Certificate leafCert = mock(X509Certificate.class);
         X509Certificate parentCert = mock(X509Certificate.class);
         X500Principal x500Parent = new X500Principal(principalName("parent"));
@@ -45,7 +45,7 @@ public class CertificateSorterTest {
     }
 
     @Test
-    public void shouldReturnSortedTwoCertListWhenGivenTwoCertsNotInOrder() {
+    void shouldReturnSortedTwoCertListWhenGivenTwoCertsNotInOrder() {
         X509Certificate leafCert = mock(X509Certificate.class);
         X509Certificate parentCert = mock(X509Certificate.class);
         X500Principal x500Parent = new X500Principal(principalName("parent"));
@@ -63,7 +63,7 @@ public class CertificateSorterTest {
     }
 
     @Test
-    public void shouldReturnSortedThreeCertListWhenGivenThreeCertsInOrder() {
+    void shouldReturnSortedThreeCertListWhenGivenThreeCertsInOrder() {
         X509Certificate leafCert = mock(X509Certificate.class);
         X509Certificate intermediaryCert = mock(X509Certificate.class);
         X509Certificate parentCert = mock(X509Certificate.class);
@@ -84,7 +84,7 @@ public class CertificateSorterTest {
     }
 
     @Test
-    public void shouldReturnSortedThreeCertListWhenGivenThreeCertsNotInOrderWithIntermediaryAndParentSwapped() {
+    void shouldReturnSortedThreeCertListWhenGivenThreeCertsNotInOrderWithIntermediaryAndParentSwapped() {
         X509Certificate leafCert = mock(X509Certificate.class);
         X509Certificate intermediaryCert = mock(X509Certificate.class);
         X509Certificate parentCert = mock(X509Certificate.class);
@@ -106,7 +106,7 @@ public class CertificateSorterTest {
     }
 
     @Test
-    public void shouldReturnSortedThreeCertListWhenGivenThreeCertsNotInOrderWithLeafAndParentSwapped() {
+    void shouldReturnSortedThreeCertListWhenGivenThreeCertsNotInOrderWithLeafAndParentSwapped() {
         X509Certificate leafCert = mock(X509Certificate.class);
         X509Certificate intermediaryCert = mock(X509Certificate.class);
         X509Certificate parentCert = mock(X509Certificate.class);
@@ -128,7 +128,7 @@ public class CertificateSorterTest {
     }
 
     @Test
-    public void shouldReturnSortedThreeCertListWhenGivenThreeCertsNotInOrderWithLeafAndIntermediarySwapped() {
+    void shouldReturnSortedThreeCertListWhenGivenThreeCertsNotInOrderWithLeafAndIntermediarySwapped() {
         X509Certificate leafCert = mock(X509Certificate.class);
         X509Certificate intermediaryCert = mock(X509Certificate.class);
         X509Certificate parentCert = mock(X509Certificate.class);
@@ -150,7 +150,7 @@ public class CertificateSorterTest {
     }
 
     @Test
-    public void shouldThrowAnExceptionIfMoreThanOneLeafCerts() {
+    void shouldThrowAnExceptionIfMoreThanOneLeafCerts() {
         X509Certificate leafCert = mock(X509Certificate.class);
         X509Certificate surplusLeafCert = mock(X509Certificate.class);
         X509Certificate parentCert = mock(X509Certificate.class);
@@ -170,7 +170,7 @@ public class CertificateSorterTest {
     }
 
     @Test
-    public void shouldThrowAnExceptionIfDuplicateIssuerCerts() {
+    void shouldThrowAnExceptionIfDuplicateIssuerCerts() {
         X509Certificate leafCert = mock(X509Certificate.class);
         X509Certificate duplicateParentCert = mock(X509Certificate.class);
         X509Certificate parentCert = mock(X509Certificate.class);

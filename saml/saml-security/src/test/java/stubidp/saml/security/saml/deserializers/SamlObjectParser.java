@@ -25,7 +25,7 @@ public class SamlObjectParser {
     }
 
     @SuppressWarnings("unchecked")
-    public <T extends XMLObject> T getSamlObject(Element samlRootElement) throws UnmarshallingException {
+    private <T extends XMLObject> T getSamlObject(Element samlRootElement) throws UnmarshallingException {
         // Get appropriate unmarshaller
         UnmarshallerFactory unmarshallerFactory = XMLObjectProviderRegistrySupport.getUnmarshallerFactory();
         Unmarshaller unmarshaller = unmarshallerFactory.getUnmarshaller(samlRootElement);

@@ -29,13 +29,13 @@ public class HubAssertionUnmarshallerTest extends OpenSAMLRunner {
     private HubAssertionUnmarshaller hubAssertionUnmarshaller;
 
     @BeforeEach
-    public void setUp() {
+    void setUp() {
         hubAssertionUnmarshaller = new HubAssertionUnmarshaller(
                 assertionCycle3DatasetTransformer, HUB_ENTITY_ID);
     }
 
     @Test
-    public void transform_shouldDelegateCycle3DataTransformation() {
+    void transform_shouldDelegateCycle3DataTransformation() {
         Assertion cycle3Assertion = AssertionBuilder.aCycle3DatasetAssertion("name", "value").buildUnencrypted();
         Cycle3Dataset cycle3Data = Cycle3DatasetBuilder.aCycle3Dataset().addCycle3Data("name", "value").build();
         Mockito.when(assertionCycle3DatasetTransformer.createCycle3DataSet(cycle3Assertion)).thenReturn(cycle3Data);
@@ -47,7 +47,7 @@ public class HubAssertionUnmarshallerTest extends OpenSAMLRunner {
     }
 
     @Test
-    public void transform_shouldTransformSubjectConfirmationData() {
+    void transform_shouldTransformSubjectConfirmationData() {
         Assertion assertion = AssertionBuilder.anAssertion()
                 .withIssuer(IssuerBuilder.anIssuer().withIssuerId(HUB_ENTITY_ID).build())
                 .addAttributeStatement(AttributeStatementBuilder.anAttributeStatement().build()).buildUnencrypted();

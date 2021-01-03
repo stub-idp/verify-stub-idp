@@ -19,7 +19,7 @@ public class PersonIdentifierImpl extends XSAnyImpl implements PersonIdentifier 
      * @param elementLocalName the local name of the XML element this Object represents
      * @param namespacePrefix the prefix for the given namespace
      */
-    protected PersonIdentifierImpl(String namespaceURI, String elementLocalName, String namespacePrefix) {
+    PersonIdentifierImpl(String namespaceURI, String elementLocalName, String namespacePrefix) {
         super(namespaceURI, elementLocalName, namespacePrefix);
     }
 

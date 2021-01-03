@@ -40,7 +40,7 @@ public class AssertionDecrypterTest extends OpenSAMLRunner {
     private AssertionDecrypter assertionDecrypter;
 
     @BeforeEach
-    public void setup() {
+    void setup() {
         PublicKeyFactory publicKeyFactory = new PublicKeyFactory(new X509CertificateFactory());
         PrivateKey privateKey = new PrivateKeyFactory().createPrivateKey(Base64.getMimeDecoder().decode(TestCertificateStrings.PRIVATE_SIGNING_KEYS.get(
                 TestEntityIds.HUB_ENTITY_ID)));
@@ -60,14 +60,14 @@ public class AssertionDecrypterTest extends OpenSAMLRunner {
     }
 
     @Test
-    public void shouldConvertEncryptedAssertionIntoAssertion() throws Exception {
+    void shouldConvertEncryptedAssertionIntoAssertion() throws Exception {
         final Response response = responseForAssertion(anEncryptedAssertionBuilder().withPublicEncryptionCert(TestCertificateStrings.HUB_TEST_PUBLIC_ENCRYPTION_CERT).withId(assertionId).build());
         final List<Assertion> assertions = assertionDecrypter.decryptAssertions(new ValidatedResponse(response));
         assertThat(assertions.get(0).getID()).isEqualTo(assertionId);
     }
 
     @Test
-    public void throwsExceptionIfCannotDecryptAssertions() throws MarshallingException, SignatureException {
+    void throwsExceptionIfCannotDecryptAssertions() throws MarshallingException, SignatureException {
         final EncryptedAssertion badlyEncryptedAssertion = anEncryptedAssertionBuilder().withId(assertionId).withEncrypterCredential(
                 new TestCredentialFactory(TestCertificateStrings.STUB_IDP_PUBLIC_PRIMARY_CERT, null).getEncryptingCredential()).build();
 

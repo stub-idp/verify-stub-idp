@@ -49,9 +49,9 @@ public abstract class BaseAuthnRequestValidator {
 
     public static final Collector replayCacheCollector = new ReplayCacheCollector(concurrentMapIdExpirationCache).register();
 
-    protected final MetadataBackedSignatureValidator metadataBackedSignatureValidator;
+    final MetadataBackedSignatureValidator metadataBackedSignatureValidator;
 
-    public BaseAuthnRequestValidator(MetadataResolver metadataResolver, KeyStore trustStore) {
+    BaseAuthnRequestValidator(MetadataResolver metadataResolver, KeyStore trustStore) {
         this.metadataBackedSignatureValidator = getMetadataBackedSignatureValidator(metadataResolver, trustStore);
     }
 

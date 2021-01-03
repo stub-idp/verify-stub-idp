@@ -11,10 +11,10 @@ import stubidp.saml.test.OpenSAMLRunner;
 import static org.assertj.core.api.Assertions.assertThat;
 import static stubidp.saml.extensions.IdaConstants.EIDAS_NATURUAL_PREFIX;
 
-public class BirthNameMarshallerTest extends OpenSAMLRunner {
+class BirthNameMarshallerTest extends OpenSAMLRunner {
 
     @Test
-    public void shouldMarshallBirthName() throws Exception {
+    void shouldMarshallBirthName() throws Exception {
         final String fullName = "Sarah Jane Booth";
         final BirthName birthName = new BirthNameBuilder().buildObject();
         final Marshaller birthNameMarshaller = XMLObjectProviderRegistrySupport.getMarshallerFactory().getMarshaller(birthName);

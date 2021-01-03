@@ -71,7 +71,7 @@ public class PreRegistrationSteps {
         return userIsRedirectedTo(getUri(path));
     }
 
-    public PreRegistrationSteps userIsRedirectedTo(URI uri) {
+    private PreRegistrationSteps userIsRedirectedTo(URI uri) {
         assertThat(response.getStatus()).isEqualTo(Response.Status.SEE_OTHER.getStatusCode());
         String uriString = null;
         try {

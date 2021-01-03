@@ -15,11 +15,11 @@ import static stubidp.utils.security.security.Certificate.END_CERT;
 @ExtendWith(MockitoExtension.class)
 public class CertificateStoreTest {
 
-    PublicKeyFileConfiguration publicKeyConfiguration;
-    PublicKeyFileConfiguration publicKeyConfiguration2;
+    private PublicKeyFileConfiguration publicKeyConfiguration;
+    private PublicKeyFileConfiguration publicKeyConfiguration2;
 
     @BeforeEach
-    public void setup() {
+    void setup() {
         publicKeyConfiguration = getPublicKey("public_key.crt");
         publicKeyConfiguration2 = getPublicKey("public_key_2.crt");
     }
@@ -29,7 +29,7 @@ public class CertificateStoreTest {
     }
 
     @Test
-    public void getEncryptionCertificateValue_shouldStripOutHeadersIfPresent() {
+    void getEncryptionCertificateValue_shouldStripOutHeadersIfPresent() {
         CertificateStore certificateStore = new CertificateStore(List.of(publicKeyConfiguration), List.of(publicKeyConfiguration));
         String encryptionCertificateValue = certificateStore.getEncryptionCertificates().get(0).getCertificate();
 
@@ -39,7 +39,7 @@ public class CertificateStoreTest {
     }
 
     @Test
-    public void getEncryptionCertificateValue_shouldHandleMultipleCertificateValues() {
+    void getEncryptionCertificateValue_shouldHandleMultipleCertificateValues() {
         CertificateStore certificateStore = new CertificateStore(List.of(publicKeyConfiguration, publicKeyConfiguration2), List.of(publicKeyConfiguration));
         final List<Certificate> encryptionCertificates = certificateStore.getEncryptionCertificates();
 
@@ -53,7 +53,7 @@ public class CertificateStoreTest {
     }
 
     @Test
-    public void getSigningCertificateValue_shouldStripOutHeadersIfPresent() {
+    void getSigningCertificateValue_shouldStripOutHeadersIfPresent() {
         CertificateStore certificateStore = new CertificateStore(List.of(publicKeyConfiguration), List.of(publicKeyConfiguration2));
         List<Certificate> signingCertificateValues = certificateStore.getSigningCertificates();
 

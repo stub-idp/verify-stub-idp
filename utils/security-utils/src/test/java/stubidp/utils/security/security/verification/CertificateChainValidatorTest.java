@@ -26,13 +26,13 @@ public class CertificateChainValidatorTest {
     private CertificateChainValidator certificateChainValidator;
 
     @BeforeEach
-    public void setUp() {
+    void setUp() {
         x509CertificateFactory = new X509CertificateFactory();
         certificateChainValidator = new CertificateChainValidator(new PKIXParametersProvider(), x509CertificateFactory);
     }
 
     @Test
-    public void validate_shouldReturnValidForACertSignedByRootCACertInTrustStore() throws Exception {
+    void validate_shouldReturnValidForACertSignedByRootCACertInTrustStore() throws Exception {
         final X509Certificate intermediaryCACertificate = x509CertificateFactory.createCertificate(caCert);
         final CertificateValidity validate = certificateChainValidator.validate(intermediaryCACertificate, getTrustStore());
 
@@ -40,7 +40,7 @@ public class CertificateChainValidatorTest {
     }
 
     @Test
-    public void validate_shouldReturnValidForACertSignedByAnIntermediaryCACertSignedByRootCACertInTrustStore() throws Exception {
+    void validate_shouldReturnValidForACertSignedByAnIntermediaryCACertSignedByRootCACertInTrustStore() throws Exception {
         final X509Certificate encryptionCertificate = x509CertificateFactory.createCertificate(this.trustedCertString);
         final CertificateValidity validate = certificateChainValidator.validate(encryptionCertificate, getTrustStore());
 
@@ -48,7 +48,7 @@ public class CertificateChainValidatorTest {
     }
 
     @Test
-    public void validate_shouldReturnInvalidForACertSignedByAnUnknownRootCACert() throws Exception {
+    void validate_shouldReturnInvalidForACertSignedByAnUnknownRootCACert() throws Exception {
         final X509Certificate otherChildCertificate = x509CertificateFactory.createCertificate(childSignedByOtherRootCAString);
         CertificateValidity certificateValidity = certificateChainValidator.validate(otherChildCertificate, getTrustStore());
 
@@ -59,14 +59,14 @@ public class CertificateChainValidatorTest {
     }
 
     @Test
-    public void validate_shouldReturnValidForAValidCertWhenPassedInAString() throws Exception {
+    void validate_shouldReturnValidForAValidCertWhenPassedInAString() throws Exception {
         CertificateValidity certificateValidity = certificateChainValidator.validate(caCert, getTrustStore());
 
         assertThat(certificateValidity.isValid()).isTrue();
     }
 
     @Test
-    public void validate_shouldReturnInvalidForInvalidCertificateWhenPassedAString() throws Exception {
+    void validate_shouldReturnInvalidForInvalidCertificateWhenPassedAString() throws Exception {
         CertificateValidity certificateValidity = certificateChainValidator.validate(childSignedByOtherRootCAString, getTrustStore());
 
         assertThat(certificateValidity.isValid()).isEqualTo(false);
@@ -76,7 +76,7 @@ public class CertificateChainValidatorTest {
     }
 
     @Test
-    public void validate_shouldReturnInvalidForExpiredCertificate() throws Exception {
+    void validate_shouldReturnInvalidForExpiredCertificate() throws Exception {
         CertificateValidity certificateValidity = certificateChainValidator.validate(expiredCertString, getTrustStore());
 
         assertThat(certificateValidity.isValid()).isEqualTo(false);
@@ -86,7 +86,7 @@ public class CertificateChainValidatorTest {
 
     @Test
     @Disabled("This test often fails due to the OCSP server not being available. Card #1946 (and possibly others) are raised to investigate")
-    public void should_doAnOcspCheck() throws Exception {
+    void should_doAnOcspCheck() throws Exception {
         final X509Certificate encryptionCertificate = x509CertificateFactory.createCertificate(trustedCertString);
         CertificateChainValidator chainValidator = new CertificateChainValidator(new OCSPPKIXParametersProvider(), x509CertificateFactory);
         CertificateValidity validate = chainValidator.validate(encryptionCertificate, getTrustStore());
@@ -94,7 +94,7 @@ public class CertificateChainValidatorTest {
         assertThat(validate.isValid()).isEqualTo(true);
     }
 
-    public KeyStore getTrustStore() throws CertificateException, NoSuchAlgorithmException, IOException, KeyStoreException {
+    KeyStore getTrustStore() throws CertificateException, NoSuchAlgorithmException, IOException, KeyStoreException {
         KeyStore ks = KeyStore.getInstance(KeyStore.getDefaultType());
         ks.load(null, null);
         X509Certificate certificate = new X509CertificateFactory().createCertificate(caCert);

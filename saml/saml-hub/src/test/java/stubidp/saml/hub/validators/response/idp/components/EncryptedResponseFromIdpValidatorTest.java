@@ -33,31 +33,31 @@ import static stubidp.saml.test.builders.AssertionBuilder.anAssertion;
 import static stubidp.saml.test.builders.ResponseBuilder.aResponse;
 import static stubidp.saml.test.builders.StatusCodeBuilder.aStatusCode;
 
-public class EncryptedResponseFromIdpValidatorTest extends OpenSAMLRunner {
+class EncryptedResponseFromIdpValidatorTest extends OpenSAMLRunner {
 
     private EncryptedResponseFromIdpValidator<IdpIdaStatus.Status> validator;
 
     @BeforeEach
-    public void setup() {
+    void setup() {
         validator = new EncryptedResponseFromIdpValidator<>(new SamlStatusToIdaStatusCodeMapper());
     }
 
     @Test
-    public void validate_shouldThrowExceptionIfIdIsMissing() throws Exception {
+    void validate_shouldThrowExceptionIfIdIsMissing() throws Exception {
         Response response = aResponse().withId(null).build();
 
         assertValidationFailure(response, missingId());
     }
 
     @Test
-    public void validate_shouldThrowExceptionIfIssuerElementIsMissing() throws Exception {
+    void validate_shouldThrowExceptionIfIssuerElementIsMissing() throws Exception {
         Response response = aResponse().withIssuer(null).build();
 
         assertValidationFailure(response, missingIssuer());
     }
 
     @Test
-    public void validate_shouldThrowExceptionIfIssuerIdIsMissing() throws Exception {
+    void validate_shouldThrowExceptionIfIssuerIdIsMissing() throws Exception {
         Issuer issuer = anIssuer().withIssuerId(null).build();
         Response response = aResponse().withIssuer(issuer).build();
 
@@ -65,7 +65,7 @@ public class EncryptedResponseFromIdpValidatorTest extends OpenSAMLRunner {
     }
 
     @Test
-    public void validate_shouldThrowExceptionIfIssueInstantIsMissing() throws Exception {
+    void validate_shouldThrowExceptionIfIssueInstantIsMissing() throws Exception {
         String responseId = "test";
         Response response = aResponse().withId(responseId).withIssueInstant(null).build();
 
@@ -73,28 +73,28 @@ public class EncryptedResponseFromIdpValidatorTest extends OpenSAMLRunner {
     }
 
     @Test
-    public void validateRequest_shouldNotErrorIfRequestIsSigned() throws Exception {
+    void validateRequest_shouldNotErrorIfRequestIsSigned() throws Exception {
         Response response = ResponseValidatorTestHelper.getResponseBuilderWithTwoAssertions().build();
 
         validator.validate(response);
     }
 
     @Test
-    public void validateRequest_shouldThrowExceptionIfResponseDoesNotContainASignature() throws Exception {
+    void validateRequest_shouldThrowExceptionIfResponseDoesNotContainASignature() throws Exception {
         Response response = aResponse().withoutSignatureElement().build();
 
         assertValidationFailure(response, missingSignature());
     }
 
     @Test
-    public void validateRequest_shouldThrowExceptionIfResponseIsNotSigned() throws Exception {
+    void validateRequest_shouldThrowExceptionIfResponseIsNotSigned() throws Exception {
         Response response = aResponse().withoutSigning().build();
 
         assertValidationFailure(response, signatureNotSigned());
     }
 
     @Test
-    public void validateIssuer_shouldThrowExceptionIfFormatAttributeHasInvalidValue() throws Exception {
+    void validateIssuer_shouldThrowExceptionIfFormatAttributeHasInvalidValue() throws Exception {
         String invalidFormat = "goo";
         Issuer issuer = anIssuer().withFormat(invalidFormat).build();
         Response response = aResponse().withIssuer(issuer).build();
@@ -106,7 +106,7 @@ public class EncryptedResponseFromIdpValidatorTest extends OpenSAMLRunner {
     }
 
     @Test
-    public void validateIssuer_shouldNotErrorIfFormatAttributeIsMissing() throws Exception {
+    void validateIssuer_shouldNotErrorIfFormatAttributeIsMissing() throws Exception {
         Issuer issuer = anIssuer().withFormat(null).build();
         Response response = ResponseValidatorTestHelper.getResponseBuilderWithTwoAssertions().withIssuer(issuer).build();
 
@@ -114,7 +114,7 @@ public class EncryptedResponseFromIdpValidatorTest extends OpenSAMLRunner {
     }
 
     @Test
-    public void validateIssuer_shouldNotErrorIfFormatAttributeHasValidValue() throws Exception {
+    void validateIssuer_shouldNotErrorIfFormatAttributeHasValidValue() throws Exception {
         Issuer issuer = anIssuer().withFormat(NameIDType.ENTITY).build();
         Response response = ResponseValidatorTestHelper.getResponseBuilderWithTwoAssertions().withIssuer(issuer).build();
 
@@ -122,21 +122,21 @@ public class EncryptedResponseFromIdpValidatorTest extends OpenSAMLRunner {
     }
 
     @Test
-    public void validateResponse_shouldThrowExceptionIfResponseHasUnencryptedAssertion() throws Exception {
+    void validateResponse_shouldThrowExceptionIfResponseHasUnencryptedAssertion() throws Exception {
         Response response = aResponse().addAssertion(anAssertion().buildUnencrypted()).build();
 
         assertValidationFailure(response, SamlTransformationErrorFactory.unencryptedAssertion());
     }
 
     @Test
-    public void validateResponse_shouldThrowExceptionForSuccessResponsesWithNoAssertions() throws Exception {
+    void validateResponse_shouldThrowExceptionForSuccessResponsesWithNoAssertions() throws Exception {
         Response response = aResponse().withNoDefaultAssertion().build();
 
         assertValidationFailure(response, SamlTransformationErrorFactory.missingSuccessUnEncryptedAssertions());
     }
 
     @Test
-    public void validateResponse_shouldThrowExceptionForFailureResponsesWithAssertions() throws Exception {
+    void validateResponse_shouldThrowExceptionForFailureResponsesWithAssertions() throws Exception {
         Status status = ResponseValidatorTestHelper.createStatus(StatusCode.RESPONDER, ResponseValidatorTestHelper.createSubStatusCode(StatusCode.AUTHN_FAILED));
         Response response = aResponse().withStatus(status).build();
 
@@ -144,14 +144,14 @@ public class EncryptedResponseFromIdpValidatorTest extends OpenSAMLRunner {
     }
 
     @Test
-    public void validateResponse_shouldThrowExceptionIfThereIsNoInResponseToAttribute() throws Exception {
+    void validateResponse_shouldThrowExceptionIfThereIsNoInResponseToAttribute() throws Exception {
         Response response = aResponse().withInResponseTo(null).build();
 
         assertValidationFailure(response, SamlTransformationErrorFactory.missingInResponseTo());
     }
 
     @Test
-    public void validateStatus_shouldNotErrorIfStatusIsResponderWithSubStatusAuthnFailed() throws Exception {
+    void validateStatus_shouldNotErrorIfStatusIsResponderWithSubStatusAuthnFailed() throws Exception {
         Status status = ResponseValidatorTestHelper.createStatus(StatusCode.RESPONDER, ResponseValidatorTestHelper.createSubStatusCode(StatusCode.AUTHN_FAILED));
         Response response = aResponse().withStatus(status).withNoDefaultAssertion().build();
 
@@ -159,7 +159,7 @@ public class EncryptedResponseFromIdpValidatorTest extends OpenSAMLRunner {
     }
 
     @Test
-    public void validateStatus_shouldNotErrorIfStatusIsResponderWithSubStatusNoAuthnContext() throws Exception {
+    void validateStatus_shouldNotErrorIfStatusIsResponderWithSubStatusNoAuthnContext() throws Exception {
         Status status = ResponseValidatorTestHelper.createStatus(StatusCode.RESPONDER, ResponseValidatorTestHelper.createSubStatusCode(StatusCode.NO_AUTHN_CONTEXT));
         Response response = aResponse().withStatus(status).withNoDefaultAssertion().build();
 
@@ -167,7 +167,7 @@ public class EncryptedResponseFromIdpValidatorTest extends OpenSAMLRunner {
     }
 
     @Test
-    public void validateStatus_shouldNotErrorIfStatusIsRequesterWithNoSubStatus() throws Exception {
+    void validateStatus_shouldNotErrorIfStatusIsRequesterWithNoSubStatus() throws Exception {
         Status status = ResponseValidatorTestHelper.createStatus(StatusCode.REQUESTER);
         Response response = aResponse().withStatus(status).withNoDefaultAssertion().build();
 
@@ -175,7 +175,7 @@ public class EncryptedResponseFromIdpValidatorTest extends OpenSAMLRunner {
     }
 
     @Test
-    public void validateStatus_shouldThrowExceptionIfStatusIsResponderWithNoSubStatus() throws Exception {
+    void validateStatus_shouldThrowExceptionIfStatusIsResponderWithNoSubStatus() throws Exception {
         Status status = ResponseValidatorTestHelper.createStatus(StatusCode.RESPONDER);
         Response response = aResponse().withStatus(status).withNoDefaultAssertion().build();
 
@@ -183,7 +183,7 @@ public class EncryptedResponseFromIdpValidatorTest extends OpenSAMLRunner {
     }
 
     @Test
-    public void validateStatus_shouldNotErrorIfStatusIsSuccessWithNoSubStatus() throws Exception {
+    void validateStatus_shouldNotErrorIfStatusIsSuccessWithNoSubStatus() throws Exception {
         Status status = ResponseValidatorTestHelper.createStatus(StatusCode.SUCCESS);
         Response response = ResponseValidatorTestHelper.getResponseBuilderWithTwoAssertions().withStatus(status).build();
 
@@ -191,7 +191,7 @@ public class EncryptedResponseFromIdpValidatorTest extends OpenSAMLRunner {
     }
 
     @Test
-    public void validateStatus_shouldThrowExceptionIfTheStatusIsInvalid() throws Exception {
+    void validateStatus_shouldThrowExceptionIfTheStatusIsInvalid() throws Exception {
         String anInvalidStatusCode = "This is wrong";
         Status status = ResponseValidatorTestHelper.createStatus(anInvalidStatusCode);
         Response response = aResponse().withStatus(status).build();
@@ -200,7 +200,7 @@ public class EncryptedResponseFromIdpValidatorTest extends OpenSAMLRunner {
     }
 
     @Test
-    public void validateStatus_shouldThrowExceptionIfSuccessHasASubStatus() throws Exception {
+    void validateStatus_shouldThrowExceptionIfSuccessHasASubStatus() throws Exception {
         StatusCode subStatusCode = ResponseValidatorTestHelper.createSubStatusCode();
         Status status = ResponseValidatorTestHelper.createStatus(StatusCode.SUCCESS, subStatusCode);
         Response response = aResponse().withStatus(status).build();
@@ -209,7 +209,7 @@ public class EncryptedResponseFromIdpValidatorTest extends OpenSAMLRunner {
     }
 
     @Test
-    public void validateStatus_shouldThrowExceptionIfRequesterHasASubStatus() throws Exception {
+    void validateStatus_shouldThrowExceptionIfRequesterHasASubStatus() throws Exception {
         StatusCode subStatusCode = ResponseValidatorTestHelper.createSubStatusCode();
         Status status = ResponseValidatorTestHelper.createStatus(StatusCode.REQUESTER, subStatusCode);
         Response response = aResponse().withStatus(status).build();
@@ -218,7 +218,7 @@ public class EncryptedResponseFromIdpValidatorTest extends OpenSAMLRunner {
     }
 
     @Test
-    public void validateStatus_shouldThrowExceptionIfAuthnFailedHasASubSubStatus() throws Exception {
+    void validateStatus_shouldThrowExceptionIfAuthnFailedHasASubSubStatus() throws Exception {
         StatusCode subStatusCode = aStatusCode()
             .withValue(StatusCode.AUTHN_FAILED)
             .withSubStatusCode(ResponseValidatorTestHelper.createSubStatusCode())
@@ -231,7 +231,7 @@ public class EncryptedResponseFromIdpValidatorTest extends OpenSAMLRunner {
     }
 
     @Test
-    public void validate_shouldThrowIfResponseContainsTooManyAssertions() throws Exception {
+    void validate_shouldThrowIfResponseContainsTooManyAssertions() throws Exception {
         EncryptedAssertion assertion = anAssertion().build();
         Response response = ResponseValidatorTestHelper.getResponseBuilderWithTwoAssertions().addEncryptedAssertion(assertion).build();
 
@@ -239,7 +239,7 @@ public class EncryptedResponseFromIdpValidatorTest extends OpenSAMLRunner {
     }
 
     @Test
-    public void validate_shouldThrowIfResponseContainsTooFewAssertions() throws Exception {
+    void validate_shouldThrowIfResponseContainsTooFewAssertions() throws Exception {
         EncryptedAssertion assertion = anAssertion().build();
         Response response = aResponse().addEncryptedAssertion(assertion).build();
 

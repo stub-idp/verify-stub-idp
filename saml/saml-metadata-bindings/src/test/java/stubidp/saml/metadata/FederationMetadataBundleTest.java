@@ -43,11 +43,11 @@ public class FederationMetadataBundleTest extends OpenSAMLRunner {
     private static final String VERIFY_METADATA_PATH = "/saml/metadata/sp";
     private static final HttpStubRule verifyMetadataServer = new HttpStubRule();
     @RegisterExtension
-    public static final KeyStoreRule metadataKeyStoreRule;
+    static final KeyStoreRule metadataKeyStoreRule;
     @RegisterExtension
-    public static final KeyStoreRule hubKeyStoreRule;
+    static final KeyStoreRule hubKeyStoreRule;
     @RegisterExtension
-    public static final KeyStoreRule idpKeyStoreRule;
+    static final KeyStoreRule idpKeyStoreRule;
 
     static {
         try {
@@ -65,7 +65,7 @@ public class FederationMetadataBundleTest extends OpenSAMLRunner {
         verifyMetadataServer.register(VERIFY_METADATA_PATH, 200, APPLICATION_SAMLMETADATA_XML, new MetadataFactory().defaultMetadata());
     }
 
-    public static final DropwizardAppExtension<TestConfiguration> APPLICATION_DROPWIZARD_APP_RULE = new DropwizardAppExtension<>(
+    private static final DropwizardAppExtension<TestConfiguration> APPLICATION_DROPWIZARD_APP_RULE = new DropwizardAppExtension<>(
         TestApplication.class,
         ResourceHelpers.resourceFilePath("test-app.yml"),
         ConfigOverride.config("metadata.uri", "http://localhost:" + verifyMetadataServer.getPort() + VERIFY_METADATA_PATH),
@@ -81,7 +81,7 @@ public class FederationMetadataBundleTest extends OpenSAMLRunner {
     private static Client client;
 
     @BeforeAll
-    public static void setUp() {
+    static void setUp() {
         client = new JerseyClientBuilder(APPLICATION_DROPWIZARD_APP_RULE.getEnvironment())
                 .withProperty(ClientProperties.CONNECT_TIMEOUT, 10*1000) // for my slow chromebook
                 .withProperty(ClientProperties.READ_TIMEOUT, 10*1000) // for my slow chromebook
@@ -89,7 +89,7 @@ public class FederationMetadataBundleTest extends OpenSAMLRunner {
     }
 
     @Test
-    public void shouldReadMetadataFromMetadataServerUsingTrustStoreBackedMetadataConfiguration() {
+    void shouldReadMetadataFromMetadataServerUsingTrustStoreBackedMetadataConfiguration() {
         Response response = client.target("http://localhost:" + APPLICATION_DROPWIZARD_APP_RULE.getLocalPort() +"/foo").request().get();
         assertThat(response.readEntity(String.class)).isEqualTo(TestEntityIds.HUB_ENTITY_ID);
     }
@@ -98,7 +98,7 @@ public class FederationMetadataBundleTest extends OpenSAMLRunner {
         @JsonProperty("metadata")
         private MultiTrustStoresBackedMetadataConfiguration metadataConfiguration;
 
-        public Optional<MetadataResolverConfiguration> getMetadataConfiguration() {
+        Optional<MetadataResolverConfiguration> getMetadataConfiguration() {
             return Optional.ofNullable(metadataConfiguration);
         }
     }

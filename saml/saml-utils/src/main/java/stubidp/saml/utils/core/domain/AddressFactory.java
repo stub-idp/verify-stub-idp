@@ -37,7 +37,7 @@ public class AddressFactory {
         return addresses;
     }
 
-    public static Address create(stubidp.saml.extensions.extensions.Address addressAttributeValue) {
+    private static Address create(stubidp.saml.extensions.extensions.Address addressAttributeValue) {
         List<String> lines = new ArrayList<>();
         for (Line originalLine : addressAttributeValue.getLines()) {
             lines.add(originalLine.getValue());

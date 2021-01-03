@@ -25,7 +25,7 @@ public class MetadataSignatureValidatorTest {
     private X509Certificate wrongCertificate;
 
     @BeforeEach
-    public void setUp() throws Exception {
+    void setUp() throws Exception {
         Logger root = (Logger) LoggerFactory.getLogger(Logger.ROOT_LOGGER_NAME);
         root.setLevel(Level.OFF);
 
@@ -37,7 +37,7 @@ public class MetadataSignatureValidatorTest {
     }
 
     @Test
-    public void shouldReturnTrueIfSignatureMatchesKeyPair() throws Exception {
+    void shouldReturnTrueIfSignatureMatchesKeyPair() throws Exception {
         SignableSAMLObject signedMetadataSaml = loadMetadataAndSign("metadata/unsigned/metadata.xml", certificateForSigning);
 
         MetadataSignatureValidator signatureValidator = new MetadataSignatureValidator(certificateForSigning.getPublicKey(), privateKeyForSigning);
@@ -47,7 +47,7 @@ public class MetadataSignatureValidatorTest {
     }
 
     @Test
-    public void shouldReturnFalseIfSignatureDoesNotMatchKeyPair() throws Exception {
+    void shouldReturnFalseIfSignatureDoesNotMatchKeyPair() throws Exception {
         SignableSAMLObject signedMetadataSaml = loadMetadataAndSign("metadata/unsigned/metadata.xml", wrongCertificate);
 
         MetadataSignatureValidator signatureValidator = new MetadataSignatureValidator(wrongCertificate.getPublicKey(), privateKeyForSigning);

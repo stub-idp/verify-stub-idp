@@ -61,7 +61,7 @@ public abstract class AbstractHardCodedKeyStore implements InternalPublicKeyStor
         }
     }
 
-    public PublicKey getPrimaryEncryptionKeyForEntity(String entityId) {
+    private PublicKey getPrimaryEncryptionKeyForEntity(String entityId) {
         String cert = TestCertificateStrings.getPrimaryPublicEncryptionCert(entityId);
         return publicKeyFactory.createPublicKey(cert);
     }

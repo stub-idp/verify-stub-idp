@@ -48,7 +48,7 @@ public class IdpMetadataPublicKeyStoreTest extends OpenSAMLRunner {
     private static MetadataResolver metadataResolver;
 
     @BeforeAll
-    public static void setUp() {
+    static void setUp() {
         metadataResolver = initializeMetadata();
     }
 
@@ -106,7 +106,7 @@ public class IdpMetadataPublicKeyStoreTest extends OpenSAMLRunner {
     }
 
     @Test
-    public void shouldReturnTheSigningKeysForAnEntity() throws Exception {
+    void shouldReturnTheSigningKeysForAnEntity() throws Exception {
         IdpMetadataPublicKeyStore idpMetadataPublicKeyStore = new IdpMetadataPublicKeyStore(metadataResolver);
 
         PublicKey expectedPublicKey = getX509Key(TestCertificateStrings.STUB_IDP_PUBLIC_PRIMARY_CERT);
@@ -114,13 +114,13 @@ public class IdpMetadataPublicKeyStoreTest extends OpenSAMLRunner {
     }
 
     @Test
-    public void shouldRaiseAnExceptionWhenThereIsNoEntityDescriptor() {
+    void shouldRaiseAnExceptionWhenThereIsNoEntityDescriptor() {
         IdpMetadataPublicKeyStore idpMetadataPublicKeyStore = new IdpMetadataPublicKeyStore(metadataResolver);
         Assertions.assertThrows(NoKeyConfiguredForEntityException.class, () -> idpMetadataPublicKeyStore.getVerifyingKeysForEntity("my-invented-entity-id"));
     }
 
     @Test
-    public void shouldRaiseAnExceptionWhenAttemptingToRetrieveAnSPSSOFromMetadata() {
+    void shouldRaiseAnExceptionWhenAttemptingToRetrieveAnSPSSOFromMetadata() {
         IdpMetadataPublicKeyStore idpMetadataPublicKeyStore = new IdpMetadataPublicKeyStore(metadataResolver);
         Assertions.assertThrows(NoKeyConfiguredForEntityException.class, () -> idpMetadataPublicKeyStore.getVerifyingKeysForEntity("https://signin.service.gov.uk"));
     }

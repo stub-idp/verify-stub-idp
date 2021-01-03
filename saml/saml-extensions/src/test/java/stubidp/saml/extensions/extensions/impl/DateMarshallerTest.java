@@ -16,19 +16,19 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static stubidp.saml.extensions.IdaConstants.IDA_NS;
 import static stubidp.saml.extensions.IdaConstants.IDA_PREFIX;
 
-public class DateMarshallerTest extends OpenSAMLRunner {
+class DateMarshallerTest extends OpenSAMLRunner {
 
     private Marshaller marshaller;
     private Date date;
 
     @BeforeEach
-    public void setUp() {
+    void setUp() {
         date = new DateBuilder().buildObject();
         marshaller = XMLObjectProviderRegistrySupport.getMarshallerFactory().getMarshaller(date);
     }
 
     @Test
-    public void marshall_shouldMarshallDateTime() throws Exception {
+    void marshall_shouldMarshallDateTime() throws Exception {
         final String text = "1984-02-28T00:00";
         final String datetimeValue = LocalDateTime.parse(text).toString();
         date.setValue(datetimeValue);
@@ -42,7 +42,7 @@ public class DateMarshallerTest extends OpenSAMLRunner {
     }
 
     @Test
-    public void marshall_shouldMarshallFromDateInCorrectFormat() throws Exception {
+    void marshall_shouldMarshallFromDateInCorrectFormat() throws Exception {
         String fromDate = "2012-02-09";
         date.setFrom(BaseMdsSamlObjectUnmarshaller.InstantFromDate.of(fromDate));
 
@@ -52,7 +52,7 @@ public class DateMarshallerTest extends OpenSAMLRunner {
     }
 
     @Test
-    public void marshall_shouldMarshallFromDateWithNamespacePrefix() throws Exception {
+    void marshall_shouldMarshallFromDateWithNamespacePrefix() throws Exception {
         date.setFrom(BaseMdsSamlObjectUnmarshaller.InstantFromDate.of("2012-02-09"));
 
         Element marshalledElement = marshaller.marshall(date);
@@ -61,7 +61,7 @@ public class DateMarshallerTest extends OpenSAMLRunner {
     }
 
     @Test
-    public void marshall_shouldMarshallToDateInCorrectFormat() throws Exception {
+    void marshall_shouldMarshallToDateInCorrectFormat() throws Exception {
         String toDate = "2012-02-09";
         date.setTo(BaseMdsSamlObjectUnmarshaller.InstantFromDate.of(toDate));
 
@@ -71,7 +71,7 @@ public class DateMarshallerTest extends OpenSAMLRunner {
     }
 
     @Test
-    public void marshall_shouldMarshallToDateWithNamespacePrefix() throws Exception {
+    void marshall_shouldMarshallToDateWithNamespacePrefix() throws Exception {
         date.setTo(BaseMdsSamlObjectUnmarshaller.InstantFromDate.of("2012-02-09"));
 
         Element marshalledElement = marshaller.marshall(date);
@@ -80,24 +80,24 @@ public class DateMarshallerTest extends OpenSAMLRunner {
     }
 
     @Test
-    public void marshall_shouldMarshallVerifiedWhenTrue() throws Exception {
+    void marshall_shouldMarshallVerifiedWhenTrue() throws Exception {
         checkMarshallingVerifiedAttributeWithValue(true);
     }
 
     @Test
-    public void marshall_shouldMarshallVerifiedWhenFalse() throws Exception {
+    void marshall_shouldMarshallVerifiedWhenFalse() throws Exception {
         checkMarshallingVerifiedAttributeWithValue(false);
     }
 
     @Test
-    public void marshall_shouldEnsureXsiNamespaceDefinitionIsInluded() throws Exception {
+    void marshall_shouldEnsureXsiNamespaceDefinitionIsInluded() throws Exception {
         Element marshalledElement = marshaller.marshall(new DateBuilder().buildObject());
 
         assertThat(marshalledElement.hasAttributeNS(XMLConstants.XMLNS_NS, XMLConstants.XSI_PREFIX)).isTrue();
     }
 
     @Test
-    public void marshall_shouldMarshallVerifiedWithPrefix() throws MarshallingException {
+    void marshall_shouldMarshallVerifiedWithPrefix() throws MarshallingException {
         date.setVerified(true);
 
         Element marshalledElement = marshaller.marshall(date);

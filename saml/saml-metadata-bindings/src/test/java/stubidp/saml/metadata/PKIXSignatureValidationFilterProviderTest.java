@@ -60,43 +60,43 @@ public class PKIXSignatureValidationFilterProviderTest {
     }
 
     @BeforeEach
-    public void setUp() throws Exception {
+    void setUp() throws Exception {
         IdaSamlBootstrap.bootstrap();
         trustStore = loadKeyStore(Collections.singletonList(CACertificates.TEST_METADATA_CA));
         signatureValidationFilter = new PKIXSignatureValidationFilterProvider(trustStore).get();
     }
 
     @Test
-    public void shouldFailValidationIfKeystoreIsEmpty() throws Exception {
+    void shouldFailValidationIfKeystoreIsEmpty() throws Exception {
         trustStore = loadKeyStore(Collections.emptyList());
         signatureValidationFilter = new PKIXSignatureValidationFilterProvider(trustStore).get();
         assertThatThrownBy(()-> validateMetadata(metadataFactory.defaultMetadata())).isInstanceOf(FilterException.class);
     }
 
     @Test
-    public void shouldFailToFilterMetadataWithNoSignature() {
+    void shouldFailToFilterMetadataWithNoSignature() {
         assertThatThrownBy(()-> validateMetadata(metadataFactory.unsignedMetadata())).isInstanceOf(FilterException.class);
     }
 
     @Test
-    public void shouldSucceedLoadingValidMetadataAgainstCertificatesFromTheConfiguration() throws Exception {
+    void shouldSucceedLoadingValidMetadataAgainstCertificatesFromTheConfiguration() throws Exception {
         XMLObject metadata = validateMetadata(metadataFactory.defaultMetadata());
         assertThat(metadata).isNotNull().withFailMessage("Metadata should not be filtered out");
     }
 
     @Test
-    public void shouldSucceedLoadingValidMetadataWhenSignedWithAlternateCertificate() throws Exception {
+    void shouldSucceedLoadingValidMetadataWhenSignedWithAlternateCertificate() throws Exception {
         XMLObject metadata = validateMetadata(metadataFactory.signedMetadata(TestCertificateStrings.METADATA_SIGNING_B_PUBLIC_CERT, TestCertificateStrings.METADATA_SIGNING_B_PRIVATE_KEY));
         assertThat(metadata).isNotNull().withFailMessage("Metadata should not be filtered out");
     }
 
     @Test
-    public void shouldErrorLoadingInvalidMetadataWhenSignedWithCertificateIssuedByOtherCA() {
+    void shouldErrorLoadingInvalidMetadataWhenSignedWithCertificateIssuedByOtherCA() {
         assertThatThrownBy(()-> validateMetadata(metadataFactory.signedMetadata(TestCertificateStrings.HUB_TEST_PUBLIC_SIGNING_CERT, TestCertificateStrings.HUB_TEST_PRIVATE_SIGNING_KEY))).isInstanceOf(FilterException.class);
     }
 
     @Test
-    public void shouldLoadMetadataWhenSignedWithGoodSignatureAlgorithm() throws Exception {
+    void shouldLoadMetadataWhenSignedWithGoodSignatureAlgorithm() throws Exception {
         Signature signature = SignatureBuilder.aSignature()
                 .withSignatureAlgorithm(new SignatureRSASHA256())
                 .withX509Data(TestCertificateStrings.METADATA_SIGNING_A_PUBLIC_CERT)
@@ -107,7 +107,7 @@ public class PKIXSignatureValidationFilterProviderTest {
     }
 
     @Test
-    public void shouldErrorLoadingInvalidMetadataWhenSignedWithBadSignatureAlgorithm() {
+    void shouldErrorLoadingInvalidMetadataWhenSignedWithBadSignatureAlgorithm() {
         Signature signature = SignatureBuilder.aSignature()
                 .withSignatureAlgorithm(new SignatureRSASHA1())
                 .withX509Data(TestCertificateStrings.METADATA_SIGNING_A_PUBLIC_CERT)
@@ -118,7 +118,7 @@ public class PKIXSignatureValidationFilterProviderTest {
     }
 
     @Test
-    public void shouldSucceedLoadingMetadataWhenSignedWithGoodDigestAlgorithm() throws Exception {
+    void shouldSucceedLoadingMetadataWhenSignedWithGoodDigestAlgorithm() throws Exception {
         DigestSHA256 digestAlgorithm = new DigestSHA256();
 
         String id = UUID.randomUUID().toString();
@@ -131,7 +131,7 @@ public class PKIXSignatureValidationFilterProviderTest {
     }
 
     @Test
-    public void shouldErrorLoadingInvalidMetadataWhenSignedWithBadDigestAlgorithm() {
+    void shouldErrorLoadingInvalidMetadataWhenSignedWithBadDigestAlgorithm() {
         String id = UUID.randomUUID().toString();
         Signature signature = SignatureBuilder.aSignature()
                 .withDigestAlgorithm(id, new DigestMD5())
@@ -143,7 +143,7 @@ public class PKIXSignatureValidationFilterProviderTest {
     }
 
     @Test
-    public void shouldErrorLoadingMetadataWhenTrustStoreOnlyContainsRootCertificate() throws Exception {
+    void shouldErrorLoadingMetadataWhenTrustStoreOnlyContainsRootCertificate() throws Exception {
         trustStore = loadKeyStore(Collections.singletonList(CACertificates.TEST_ROOT_CA));
         signatureValidationFilter = new PKIXSignatureValidationFilterProvider(trustStore).get();
 
@@ -158,7 +158,7 @@ public class PKIXSignatureValidationFilterProviderTest {
     }
 
     @Test
-    public void shouldErrorLoadingInvalidMetadataAgainstCertificatesFromTheConfiguration() {
+    void shouldErrorLoadingInvalidMetadataAgainstCertificatesFromTheConfiguration() {
         String metadataContent = metadataFactory.signedMetadata(TestCertificateStrings.UNCHAINED_PUBLIC_CERT, TestCertificateStrings.UNCHAINED_PRIVATE_KEY);
         assertThatThrownBy(()-> validateMetadata(metadataContent)).isInstanceOf(FilterException.class);
     }

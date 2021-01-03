@@ -12,9 +12,9 @@ import stubidp.saml.security.EntityToEncryptForLocator;
 import java.util.List;
 
 public abstract class AbstractAssertionEncrypter<T> {
-    protected final EncryptionCredentialResolver credentialResolver;
-    protected final EncrypterFactory encrypterFactory;
-    protected final EntityToEncryptForLocator entityToEncryptForLocator;
+    private final EncryptionCredentialResolver credentialResolver;
+    private final EncrypterFactory encrypterFactory;
+    private final EntityToEncryptForLocator entityToEncryptForLocator;
 
     public AbstractAssertionEncrypter(
             final EncrypterFactory encrypterFactory,

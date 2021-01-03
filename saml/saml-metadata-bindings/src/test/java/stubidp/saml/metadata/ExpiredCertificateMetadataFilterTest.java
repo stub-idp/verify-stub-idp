@@ -23,12 +23,12 @@ public class ExpiredCertificateMetadataFilterTest {
     private final OpenSamlXMLObjectUnmarshaller<XMLObject> unmarshaller = new OpenSamlXMLObjectUnmarshaller<>(new SamlObjectParser());
 
     @BeforeAll
-    public static void setUp() throws Exception {
+    static void setUp() throws Exception {
         InitializationService.initialize();
     }
 
     @Test
-    public void shouldFailToFilterLoadingValidMetadataWhenSignedWithExpiredCertificate() {
+    void shouldFailToFilterLoadingValidMetadataWhenSignedWithExpiredCertificate() {
         Clock clock = Clock.fixed(Instant.now().atZone(ZoneId.of("UTC")).plusYears(1000).toInstant(), ZoneId.of("UTC"));
         metadataFilter = new ExpiredCertificateMetadataFilter(clock);
         String signedMetadata = metadataFactory.signedMetadata(TestCertificateStrings.METADATA_SIGNING_A_PUBLIC_CERT, TestCertificateStrings.METADATA_SIGNING_A_PRIVATE_KEY);
@@ -37,7 +37,7 @@ public class ExpiredCertificateMetadataFilterTest {
     }
 
     @Test
-    public void shouldFailToFilterLoadingValidMetadataWhenSignedWithNotYetValidCertificate() {
+    void shouldFailToFilterLoadingValidMetadataWhenSignedWithNotYetValidCertificate() {
         Clock clock = Clock.fixed(Instant.now().atZone(ZoneId.of("UTC")).plusYears(1000).toInstant(), ZoneId.of("UTC"));
         metadataFilter = new ExpiredCertificateMetadataFilter(clock);
         String signedMetadata = metadataFactory.signedMetadata(TestCertificateStrings.METADATA_SIGNING_A_PUBLIC_CERT, TestCertificateStrings.METADATA_SIGNING_A_PRIVATE_KEY);
@@ -46,7 +46,7 @@ public class ExpiredCertificateMetadataFilterTest {
     }
 
     @Test
-    public void shouldFilterMetadataSuccessfully() throws Exception {
+    void shouldFilterMetadataSuccessfully() throws Exception {
         metadataFilter = new ExpiredCertificateMetadataFilter();
         String signedMetadata = metadataFactory.signedMetadata(TestCertificateStrings.METADATA_SIGNING_A_PUBLIC_CERT, TestCertificateStrings.METADATA_SIGNING_A_PRIVATE_KEY);
         XMLObject metadata = unmarshaller.fromString(signedMetadata);

@@ -4,7 +4,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
-public abstract class FileUtils {
+abstract class FileUtils {
 
     private static final int BUFFER_SIZE = 4096;
 

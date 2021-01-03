@@ -25,7 +25,7 @@ public class SignatureFactoryTest extends OpenSAMLRunner {
     private DigestAlgorithm digestAlgorithm;
 
     @Test
-    public void shouldThrowExceptionWhenNoSigningCerts() {
+    void shouldThrowExceptionWhenNoSigningCerts() {
         SignatureFactory signatureFactory = new SignatureFactory(true, idaKeyStoreCredentialRetriever, signatureAlgorithm, digestAlgorithm);
 
         when(idaKeyStoreCredentialRetriever.getSigningCredential()).thenReturn(null);

@@ -16,7 +16,7 @@ public class IpFromXForwardedForHeaderTest {
     HttpServletRequest httpServletRequest;
 
     @Test
-    public void getPrincipalIpAddress_shouldReturnXForwardFromWhenExists(){
+    void getPrincipalIpAddress_shouldReturnXForwardFromWhenExists(){
         String expectedPrincipalIp = "PrincipalIp";
         when(httpServletRequest.getHeader(HttpHeaders.X_FORWARDED_FOR)).thenReturn(expectedPrincipalIp);
 
@@ -27,7 +27,7 @@ public class IpFromXForwardedForHeaderTest {
     }
 
     @Test
-    public void getPrincipalIpAddress_shouldReturnNotPresentWhenHeaderMissing(){
+    void getPrincipalIpAddress_shouldReturnNotPresentWhenHeaderMissing(){
         IpFromXForwardedForHeader ipFromXForwardedForHeader = new IpFromXForwardedForHeader();
 
         String actualPrincipalIpAddress = ipFromXForwardedForHeader.getPrincipalIpAddress(httpServletRequest);

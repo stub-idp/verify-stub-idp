@@ -37,14 +37,14 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static stubidp.test.devpki.TestCertificateStrings.HUB_TEST_PRIVATE_ENCRYPTION_KEY;
 import static stubidp.test.devpki.TestCertificateStrings.HUB_TEST_PUBLIC_ENCRYPTION_CERT;
 
-public class AuthnRequestFromRelyingPartyUnmarshallerTest extends OpenSAMLRunner {
+class AuthnRequestFromRelyingPartyUnmarshallerTest extends OpenSAMLRunner {
 
     private final BasicCredential basicCredential = createBasicCredential();
     private final Encrypter encrypter = new EncrypterFactory().createEncrypter(basicCredential);
     private final AuthnRequestFromRelyingPartyUnmarshaller unmarshaller = new AuthnRequestFromRelyingPartyUnmarshaller(new DecrypterFactory().createDecrypter(List.of(basicCredential)));;
 
     @Test
-    public void fromSamlMessage_shouldMapAuthnRequestToAuthnRequestFromRelyingParty() throws Exception {
+    void fromSamlMessage_shouldMapAuthnRequestToAuthnRequestFromRelyingParty() throws Exception {
         Instant issueInstant = Instant.now();
         SignatureImpl signature = new SignatureBuilder().buildObject();
 
@@ -78,7 +78,7 @@ public class AuthnRequestFromRelyingPartyUnmarshallerTest extends OpenSAMLRunner
     }
 
     @Test
-    public void fromSamlMessage_shouldNotComplainWhenThereIsNoExtensionsElement() {
+    void fromSamlMessage_shouldNotComplainWhenThereIsNoExtensionsElement() {
         AuthnRequest authnRequest = new AuthnRequestBuilder().buildObject();
         authnRequest.setIssuer(new IssuerBuilder().buildObject());
         authnRequest.setDestination("http://example.local");
@@ -89,7 +89,7 @@ public class AuthnRequestFromRelyingPartyUnmarshallerTest extends OpenSAMLRunner
     }
 
     @Test
-    public void fromSamlMessage_shouldNotComplainWhenExceptionDuringDecryption() throws Exception {
+    void fromSamlMessage_shouldNotComplainWhenExceptionDuringDecryption() throws Exception {
         AuthnRequest authnRequest = new AuthnRequestBuilder().buildObject();
         authnRequest.setIssuer(new IssuerBuilder().buildObject());
         authnRequest.setDestination("http://example.local");

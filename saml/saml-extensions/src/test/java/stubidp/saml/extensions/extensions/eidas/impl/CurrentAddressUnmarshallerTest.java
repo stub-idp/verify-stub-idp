@@ -7,9 +7,9 @@ import stubidp.saml.test.OpenSAMLRunner;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class CurrentAddressUnmarshallerTest extends OpenSAMLRunner {
+class CurrentAddressUnmarshallerTest extends OpenSAMLRunner {
     @Test
-    public void shouldUnmarshallCurrentFamilyName() throws Exception {
+    void shouldUnmarshallCurrentFamilyName() throws Exception {
         final CurrentAddress currentAddress = Utils.unmarshall("" +
                 "<saml2:AttributeValue " +
                 "   xmlns:eidas-natural=\"http://eidas.europa.eu/attributes/naturalperson\"\n " +

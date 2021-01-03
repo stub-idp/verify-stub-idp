@@ -15,7 +15,7 @@ public class PrivateKeyFileConfigurationTest {
     private final ObjectMapper objectMapper = new ObjectMapper();
 
     @Test
-    public void should_loadPrivateKeyFromJSON() throws Exception {
+    void should_loadPrivateKeyFromJSON() throws Exception {
         String path = getClass().getClassLoader().getResource("private_key.pk8").getPath();
         PrivateKeyConfiguration privateKeyFileConfiguration = objectMapper.readValue("{\"type\": \"file\", \"keyFile\": \"" + path + "\"}", PrivateKeyConfiguration.class);
 
@@ -23,7 +23,7 @@ public class PrivateKeyFileConfigurationTest {
     }
 
     @Test
-    public void should_loadPrivateKeyWhenUsingAliases() throws Exception {
+    void should_loadPrivateKeyWhenUsingAliases() throws Exception {
         String path = getClass().getClassLoader().getResource("private_key.pk8").getPath();
         List<String> aliases = Arrays.asList("key", "keyFile");
 
@@ -34,20 +34,20 @@ public class PrivateKeyFileConfigurationTest {
     }
 
     @Test
-    public void should_ThrowExceptionWhenFileDoesNotExist() {
+    void should_ThrowExceptionWhenFileDoesNotExist() {
         final ValueInstantiationException exception = Assertions.assertThrows(ValueInstantiationException.class, () -> objectMapper.readValue("{\"keyFile\": \"/foo/bar\"}", PrivateKeyConfiguration.class));
         assertThat(exception.getMessage()).contains("NoSuchFileException");
     }
 
     @Test
-    public void should_ThrowExceptionWhenFileDoesNotContainAPrivateKey() {
+    void should_ThrowExceptionWhenFileDoesNotContainAPrivateKey() {
         String path = getClass().getClassLoader().getResource("empty_file").getPath();
         final ValueInstantiationException exception = Assertions.assertThrows(ValueInstantiationException.class, () -> objectMapper.readValue("{\"keyFile\": \"" + path + "\"}", PrivateKeyConfiguration.class));
         assertThat(exception.getMessage()).contains("InvalidKeySpecException");
     }
 
     @Test
-    public void should_throwAnExceptionWhenIncorrectJSONKeySpecified() {
+    void should_throwAnExceptionWhenIncorrectJSONKeySpecified() {
         String path = getClass().getClassLoader().getResource("empty_file").getPath();
         Assertions.assertThrows(ValueInstantiationException.class, () -> objectMapper.readValue("{\"privateKeyFoo\": \"" + path + "\"}", PrivateKeyConfiguration.class));
     }

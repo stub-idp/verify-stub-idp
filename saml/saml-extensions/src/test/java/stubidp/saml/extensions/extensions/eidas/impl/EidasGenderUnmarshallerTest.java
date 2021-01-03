@@ -7,9 +7,9 @@ import stubidp.saml.test.OpenSAMLRunner;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class EidasGenderUnmarshallerTest extends OpenSAMLRunner {
+class EidasGenderUnmarshallerTest extends OpenSAMLRunner {
     @Test
-    public void shouldUnmarshallGender() throws Exception {
+    void shouldUnmarshallGender() throws Exception {
         final EidasGender eidasGender = Utils.unmarshall("" +
                 "<saml2:AttributeValue " +
                 "   xmlns:eidas-natural=\"http://eidas.europa.eu/attributes/naturalperson\"\n " +

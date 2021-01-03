@@ -30,12 +30,12 @@ public class EidasAuthnRequestTest extends OpenSAMLRunner {
     private AuthnRequest authnRequest;
 
     @BeforeEach
-    public void setUp(){
+    void setUp(){
         IdaSamlBootstrap.bootstrap();
     }
 
     @Test
-    public void shouldConvertAuthnRequestToEidasAuthnRequest() {
+    void shouldConvertAuthnRequestToEidasAuthnRequest() {
         authnRequest = AuthnRequestBuilder.anAuthnRequest()
                 .withIssuer(
                         IssuerBuilder.anIssuer().withIssuerId("issuer-id").build()

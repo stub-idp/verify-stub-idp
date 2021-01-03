@@ -60,7 +60,7 @@ public class NonSuccessAuthnResponseServiceTest {
     private ArgumentCaptor<OutboundResponseFromIdp> captor;
 
     @BeforeEach
-    public void createResource() {
+    void createResource() {
         nonSuccessAuthnResponseService = new NonSuccessAuthnResponseService(
                 new IdGenerator(),
                 idpStubsRepository,
@@ -74,7 +74,7 @@ public class NonSuccessAuthnResponseServiceTest {
     }
 
     @Test
-    public void shouldBuildAuthnPending(){
+    void shouldBuildAuthnPending(){
         nonSuccessAuthnResponseService.generateAuthnPending(IDP_NAME, REQUEST_ID, RELAY_STATE).getResponseString();
 
         verify(transformer).apply(captor.capture());
@@ -82,7 +82,7 @@ public class NonSuccessAuthnResponseServiceTest {
     }
 
     @Test
-    public void shouldBuildNoAuthnContext(){
+    void shouldBuildNoAuthnContext(){
         nonSuccessAuthnResponseService.generateNoAuthnContext(IDP_NAME, REQUEST_ID, RELAY_STATE).getResponseString();
 
         verify(transformer).apply(captor.capture());
@@ -90,7 +90,7 @@ public class NonSuccessAuthnResponseServiceTest {
     }
 
     @Test
-    public void shouldBuildUpliftFailed(){
+    void shouldBuildUpliftFailed(){
         nonSuccessAuthnResponseService.generateUpliftFailed(IDP_NAME, REQUEST_ID, RELAY_STATE).getResponseString();
 
         verify(transformer).apply(captor.capture());
@@ -98,7 +98,7 @@ public class NonSuccessAuthnResponseServiceTest {
     }
 
     @Test
-    public void shouldBuildNoAuthnCancel(){
+    void shouldBuildNoAuthnCancel(){
         nonSuccessAuthnResponseService.generateAuthnCancel(IDP_NAME, REQUEST_ID, RELAY_STATE).getResponseString();
 
         verify(transformer).apply(captor.capture());
@@ -106,7 +106,7 @@ public class NonSuccessAuthnResponseServiceTest {
     }
 
     @Test
-    public void shouldBuildNoAuthnFailed(){
+    void shouldBuildNoAuthnFailed(){
         nonSuccessAuthnResponseService.generateAuthnFailed(IDP_NAME, REQUEST_ID, RELAY_STATE).getResponseString();
 
         verify(transformer).apply(captor.capture());
@@ -114,7 +114,7 @@ public class NonSuccessAuthnResponseServiceTest {
     }
 
     @Test
-    public void shouldBuildRequesterError(){
+    void shouldBuildRequesterError(){
         nonSuccessAuthnResponseService.generateRequesterError(REQUEST_ID, "error", IDP_NAME, RELAY_STATE).getResponseString();
 
         verify(transformer).apply(captor.capture());
@@ -122,7 +122,7 @@ public class NonSuccessAuthnResponseServiceTest {
     }
 
     @Test
-    public void shouldBuildFraudResponse(){
+    void shouldBuildFraudResponse(){
         IdpSession session = new IdpSession(SessionId.createNewSessionId(),
                 IdaAuthnRequestFromHub.createRequestReceivedFromHub(REQUEST_ID, HUB_URI.toString(), List.of(LEVEL_2), false, Instant.now(), AuthnContextComparisonTypeEnumeration.EXACT),
                 RELAY_STATE, null, null, null, null, null, null);

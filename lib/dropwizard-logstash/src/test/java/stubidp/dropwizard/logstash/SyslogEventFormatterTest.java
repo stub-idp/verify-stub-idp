@@ -24,7 +24,7 @@ public class SyslogEventFormatterTest {
 
     private static final StackTraceElement[] STACK_TRACE_ELEMENTS = {};
 
-    public SyslogEventFormatter formatter;
+    private SyslogEventFormatter formatter;
     private final String hostname = "test-hostname";
     private final String tag = "test-tag";
 
@@ -32,12 +32,12 @@ public class SyslogEventFormatterTest {
     private Layout<ILoggingEvent> layout;
 
     @BeforeEach
-    public void setUp() {
+    void setUp() {
         formatter = new SyslogEventFormatter(SyslogAppenderFactory.Facility.LOCAL1, hostname, tag, layout);
     }
 
     @Test
-    public void format_shouldPrefixWithExpectedPriorityWhenFacilityIsLocal1AndEventSeverityIsWarning() {
+    void format_shouldPrefixWithExpectedPriorityWhenFacilityIsLocal1AndEventSeverityIsWarning() {
         final LoggingEvent loggingEvent = createLoggingEvent(Level.WARN);
 
         final String formattedEvent = formatter.format(loggingEvent);
@@ -46,7 +46,7 @@ public class SyslogEventFormatterTest {
     }
 
     @Test
-    public void format_shouldIncludeTimestampInIso8601Format() {
+    void format_shouldIncludeTimestampInIso8601Format() {
         final String time = "2009-06-15T13:45:30.000Z";
         final Clock clock = Clock.fixed(Instant.parse(time).atZone(ZoneId.of("UTC")).toInstant(), ZoneId.of("UTC"));
         final ILoggingEvent event = createLoggingEvent();
@@ -58,21 +58,21 @@ public class SyslogEventFormatterTest {
     }
 
     @Test
-    public void format_shouldIncludeHostname() {
+    void format_shouldIncludeHostname() {
         final String formattedEvent = formatter.format(createLoggingEvent());
 
         assertThat(formattedEvent).contains(hostname);
     }
 
     @Test
-    public void format_shouldIncludeTag() {
+    void format_shouldIncludeTag() {
         final String formattedEvent = formatter.format(createLoggingEvent());
 
         assertThat(formattedEvent).contains(tag);
     }
 
     @Test
-    public void format_shouldIncludeEventAsJson() {
+    void format_shouldIncludeEventAsJson() {
         final ILoggingEvent event = createLoggingEvent();
         when(layout.doLayout(event)).thenReturn("formatted event");
 

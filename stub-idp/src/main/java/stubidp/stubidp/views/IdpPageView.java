@@ -11,12 +11,12 @@ import java.util.Optional;
 public class IdpPageView extends View implements CSRFView {
     private final String subPageTemplateName;
     private final String name;
-    protected final String idpId;
+    final String idpId;
     private final String errorMessage;
     private final String assetId;
     private final Optional<String> csrfToken;
 
-    public IdpPageView(String subPageTemplateName, String name, String idpId, String errorMessage, String assetId, Optional<String> csrfToken) {
+    IdpPageView(String subPageTemplateName, String name, String idpId, String errorMessage, String assetId, Optional<String> csrfToken) {
         super("idpPage.ftl", StandardCharsets.UTF_8);
 
         this.subPageTemplateName = subPageTemplateName;

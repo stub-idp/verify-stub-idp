@@ -27,7 +27,7 @@ import static stubidp.saml.test.builders.StatusBuilder.aStatus;
 import static stubidp.saml.test.builders.StatusCodeBuilder.aStatusCode;
 
 @ExtendWith(MockitoExtension.class)
-public class ResponseAssertionsFromMatchingServiceValidatorTest extends OpenSAMLRunner {
+class ResponseAssertionsFromMatchingServiceValidatorTest extends OpenSAMLRunner {
 
     @Mock
     private IdentityProviderAssertionValidator assertionValidator;
@@ -35,12 +35,12 @@ public class ResponseAssertionsFromMatchingServiceValidatorTest extends OpenSAML
     private ResponseAssertionsFromMatchingServiceValidator validator;
 
     @BeforeEach
-    public void setUp() {
+    void setUp() {
         validator = new ResponseAssertionsFromMatchingServiceValidator(assertionValidator, TestEntityIds.HUB_ENTITY_ID);
     }
 
     @Test
-    public void validate_shouldThrowExceptionIfAssertionDoesNotContainAnAuthnContext() throws Exception {
+    void validate_shouldThrowExceptionIfAssertionDoesNotContainAnAuthnContext() throws Exception {
         String requestId = "some-request-id";
         final Response response = aResponse()
                 .withInResponseTo(requestId)
@@ -51,7 +51,7 @@ public class ResponseAssertionsFromMatchingServiceValidatorTest extends OpenSAML
     }
 
     @Test
-    public void validate_shouldThrowExceptionIfAssertionDoesNotContainAnAuthnStatement() throws Exception {
+    void validate_shouldThrowExceptionIfAssertionDoesNotContainAnAuthnStatement() throws Exception {
         String requestId = "some-request-id";
         final Response response = aResponse()
                 .withInResponseTo(requestId)
@@ -60,7 +60,7 @@ public class ResponseAssertionsFromMatchingServiceValidatorTest extends OpenSAML
     }
 
     @Test
-    public void validate_shouldNotThrowExceptionIfResponseIsANoMatch() throws Exception {
+    void validate_shouldNotThrowExceptionIfResponseIsANoMatch() throws Exception {
         String requestId = "some-request-id";
         final Response response = aResponse()
                 .withStatus(aStatus().withStatusCode(aStatusCode().withValue(StatusCode.RESPONDER).build()).build())

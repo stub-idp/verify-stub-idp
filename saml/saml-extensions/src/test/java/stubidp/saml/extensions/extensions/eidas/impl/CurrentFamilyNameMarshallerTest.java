@@ -14,19 +14,19 @@ import stubidp.saml.test.OpenSAMLRunner;
 import static org.assertj.core.api.Assertions.assertThat;
 import static stubidp.saml.extensions.IdaConstants.EIDAS_NATURUAL_PREFIX;
 
-public class CurrentFamilyNameMarshallerTest extends OpenSAMLRunner {
+class CurrentFamilyNameMarshallerTest extends OpenSAMLRunner {
 
     private CurrentFamilyName currentFamilyName;
     private Marshaller currentFamilyNameMarshaller;
 
     @BeforeEach
-    public void setUp() {
+    void setUp() {
         currentFamilyName = new CurrentFamilyNameBuilder().buildObject();
         currentFamilyNameMarshaller = XMLObjectProviderRegistrySupport.getMarshallerFactory().getMarshaller(currentFamilyName);
     }
 
     @Test
-    public void shouldMarshallCurrentFamilyName() throws Exception {
+    void shouldMarshallCurrentFamilyName() throws Exception {
         final String familyName = "Garcia";
         currentFamilyName.setFamilyName(familyName);
 
@@ -38,7 +38,7 @@ public class CurrentFamilyNameMarshallerTest extends OpenSAMLRunner {
     }
 
     @Test
-    public void shouldMarshallWhenIsLatinScriptIsTrue() throws Exception {
+    void shouldMarshallWhenIsLatinScriptIsTrue() throws Exception {
         currentFamilyName.setIsLatinScript(true);
 
         final Element marshalledElement = currentFamilyNameMarshaller.marshall(currentFamilyName);
@@ -47,7 +47,7 @@ public class CurrentFamilyNameMarshallerTest extends OpenSAMLRunner {
     }
 
     @Test
-    public void shouldMarshallWhenIsLatinScriptIsFalse() throws Exception {
+    void shouldMarshallWhenIsLatinScriptIsFalse() throws Exception {
         currentFamilyName.setIsLatinScript(false);
 
         final Element marshalledElement = currentFamilyNameMarshaller.marshall(currentFamilyName);

@@ -32,13 +32,13 @@ public class SamlAssertionsSignatureValidatorTest extends OpenSAMLRunner {
     private SamlAssertionsSignatureValidator samlAssertionsSignatureValidator;
 
     @BeforeEach
-    public void initSpy() {
+    void initSpy() {
         samlMessageSignatureValidator = spy(new SamlMessageSignatureValidator(signatureValidator));
         samlAssertionsSignatureValidator = new SamlAssertionsSignatureValidator(samlMessageSignatureValidator);
     }
 
     @Test
-    public void shouldValidateAllAssertions() {
+    void shouldValidateAllAssertions() {
         final Assertion assertion1 = AssertionBuilder.anAuthnStatementAssertion().buildUnencrypted();
         final Assertion assertion2 = AssertionBuilder.anAssertion().buildUnencrypted();
         final List<Assertion> assertions = asList(assertion1, assertion2);
@@ -50,7 +50,7 @@ public class SamlAssertionsSignatureValidatorTest extends OpenSAMLRunner {
     }
 
     @Test
-    public void shouldFailOnFirstBadlySignedAssertion() {
+    void shouldFailOnFirstBadlySignedAssertion() {
         final Assertion assertion1 = AssertionBuilder.anAssertion().withoutSigning().buildUnencrypted();
         final Assertion assertion2 = AssertionBuilder.anAuthnStatementAssertion().buildUnencrypted();
         final List<Assertion> assertions = asList(assertion1, assertion2);
@@ -62,7 +62,7 @@ public class SamlAssertionsSignatureValidatorTest extends OpenSAMLRunner {
     }
 
     @Test
-    public void shouldFailOnAssertionSignedWithWrongIssuer() {
+    void shouldFailOnAssertionSignedWithWrongIssuer() {
         final Assertion assertion = AssertionBuilder.anAuthnStatementAssertion().buildUnencrypted();
         when(samlMessageSignatureValidator.validate(assertion, IDPSSODescriptor.DEFAULT_ELEMENT_NAME)).thenReturn(SamlValidationResponse.aValidResponse());
 

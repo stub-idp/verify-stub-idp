@@ -21,12 +21,12 @@ public class KeyDescriptorFinderTest extends OpenSAMLRunner {
     private KeyDescriptorFinder finder;
 
     @BeforeEach
-    public void setup() {
+    void setup() {
         finder = new KeyDescriptorFinder();
     }
 
     @Test
-    public void find_shouldFindKeyDescriptorWithMatchingUsageAndEntityId() {
+    void find_shouldFindKeyDescriptorWithMatchingUsageAndEntityId() {
         final String entityId = UUID.randomUUID().toString();
         final KeyDescriptor desiredKeyDescriptor = KeyDescriptorBuilder.aKeyDescriptor().withKeyInfo(aKeyInfo().withKeyName(entityId).build()).withUse(UsageType.SIGNING.toString()).build();
 
@@ -37,7 +37,7 @@ public class KeyDescriptorFinderTest extends OpenSAMLRunner {
     }
 
     @Test
-    public void find_shouldFindKeyDescriptorWithMatchingUsageWhenItHasNoKeyName() {
+    void find_shouldFindKeyDescriptorWithMatchingUsageWhenItHasNoKeyName() {
         final String entityId = UUID.randomUUID().toString();
         final KeyDescriptor desiredKeyDescriptor = KeyDescriptorBuilder.aKeyDescriptor().withKeyInfo(aKeyInfo().withKeyName(null).build()).withUse(UsageType.SIGNING.toString()).build();
 
@@ -48,7 +48,7 @@ public class KeyDescriptorFinderTest extends OpenSAMLRunner {
     }
 
     @Test
-    public void find_shouldFindKeyDescriptorWithMatchingUsageWhenKeyNameIsPresentAndExpectedEntityIdIsNull() {
+    void find_shouldFindKeyDescriptorWithMatchingUsageWhenKeyNameIsPresentAndExpectedEntityIdIsNull() {
         final KeyDescriptor desiredKeyDescriptor = KeyDescriptorBuilder.aKeyDescriptor().withKeyInfo(aKeyInfo().withKeyName("foo").build()).withUse(UsageType.SIGNING.toString()).build();
 
         final KeyDescriptor result =
@@ -58,7 +58,7 @@ public class KeyDescriptorFinderTest extends OpenSAMLRunner {
     }
 
     @Test
-    public void find_shouldThrowExceptionWhenSigningCertificateIsNotPresent() {
+    void find_shouldThrowExceptionWhenSigningCertificateIsNotPresent() {
         final KeyDescriptor keyDescriptor = KeyDescriptorBuilder.aKeyDescriptor().withUse(UsageType.ENCRYPTION.toString()).build();
 
         SamlTransformationErrorManagerTestHelper.validateFail(
@@ -67,7 +67,7 @@ public class KeyDescriptorFinderTest extends OpenSAMLRunner {
     }
 
     @Test
-    public void find_shouldThrowExceptionWhenEncryptionCertificateIsNotPresent() {
+    void find_shouldThrowExceptionWhenEncryptionCertificateIsNotPresent() {
         final KeyDescriptor keyDescriptor = KeyDescriptorBuilder.aKeyDescriptor().withUse(UsageType.SIGNING.toString()).build();
 
         SamlTransformationErrorManagerTestHelper.validateFail(
@@ -77,7 +77,7 @@ public class KeyDescriptorFinderTest extends OpenSAMLRunner {
     }
 
     @Test
-    public void find_shouldThrowExceptionWhenKeyNameIsPresentButDoesNotMatchExpectedEntityId() {
+    void find_shouldThrowExceptionWhenKeyNameIsPresentButDoesNotMatchExpectedEntityId() {
         final KeyDescriptor keyDescriptor = KeyDescriptorBuilder.aKeyDescriptor().withUse(UsageType.SIGNING.toString()).build();
 
         SamlTransformationErrorManagerTestHelper.validateFail(

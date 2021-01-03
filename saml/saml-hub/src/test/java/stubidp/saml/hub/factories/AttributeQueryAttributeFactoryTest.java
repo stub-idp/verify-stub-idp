@@ -9,17 +9,17 @@ import stubidp.saml.utils.core.OpenSamlXmlObjectFactory;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class AttributeQueryAttributeFactoryTest extends OpenSAMLRunner {
+class AttributeQueryAttributeFactoryTest extends OpenSAMLRunner {
 
     private AttributeQueryAttributeFactory attributeQueryAttributeFactory;
 
     @BeforeEach
-    public void setUp() {
+    void setUp() {
         attributeQueryAttributeFactory = new AttributeQueryAttributeFactory(new OpenSamlXmlObjectFactory());
     }
 
     @Test
-    public void createAttribute_shouldPopulateAttributeNameFromUserAccountCreationAttributeValue(){
+    void createAttribute_shouldPopulateAttributeNameFromUserAccountCreationAttributeValue(){
         UserAccountCreationAttribute userAccountCreationAttribute = UserAccountCreationAttribute.CURRENT_ADDRESS;
 
         Attribute attribute = attributeQueryAttributeFactory.createAttribute(userAccountCreationAttribute);
@@ -28,7 +28,7 @@ public class AttributeQueryAttributeFactoryTest extends OpenSAMLRunner {
     }
 
     @Test
-    public void createAttribute_shouldPopulateAttributeNameFormatWithUnspecifiedFormat(){
+    void createAttribute_shouldPopulateAttributeNameFormatWithUnspecifiedFormat(){
         UserAccountCreationAttribute userAccountCreationAttribute = UserAccountCreationAttribute.CURRENT_ADDRESS;
 
         Attribute attribute = attributeQueryAttributeFactory.createAttribute(userAccountCreationAttribute);
@@ -37,7 +37,7 @@ public class AttributeQueryAttributeFactoryTest extends OpenSAMLRunner {
     }
 
     @Test
-    public void createAttribute_shouldNotSetFriendlyName(){
+    void createAttribute_shouldNotSetFriendlyName(){
         UserAccountCreationAttribute userAccountCreationAttribute = UserAccountCreationAttribute.CURRENT_ADDRESS;
 
         Attribute attribute = attributeQueryAttributeFactory.createAttribute(userAccountCreationAttribute);

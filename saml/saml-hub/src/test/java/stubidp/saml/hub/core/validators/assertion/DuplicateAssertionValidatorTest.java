@@ -30,7 +30,7 @@ public class DuplicateAssertionValidatorTest extends OpenSAMLRunner {
     private DuplicateAssertionValidator duplicateAssertionValidator;
 
     @BeforeEach
-    public void setUp() {
+    void setUp() {
         duplicateIds = new ConcurrentHashMap<>();
         duplicateIds.put("duplicate", Instant.now().atZone(ZoneId.of("UTC")).plusMinutes(5).toInstant());
         duplicateIds.put("expired-duplicate", Instant.now().atZone(ZoneId.of("UTC")).minusMinutes(2).toInstant());
@@ -40,13 +40,13 @@ public class DuplicateAssertionValidatorTest extends OpenSAMLRunner {
     }
 
     @Test
-    public void validateAuthnStatementAssertion_shouldPassIfTheAssertionIsNotADuplicateOfAPreviousOne() {
+    void validateAuthnStatementAssertion_shouldPassIfTheAssertionIsNotADuplicateOfAPreviousOne() {
         Assertion assertion = anAssertion().withId("not-duplicate").buildUnencrypted();
         duplicateAssertionValidator.validateAuthnStatementAssertion(assertion);
     }
 
     @Test
-    public void validateAuthnStatementAssertion_shouldPassIfTwoAssertionsHaveTheSameIdButTheFirstAssertionHasExpired() {
+    void validateAuthnStatementAssertion_shouldPassIfTwoAssertionsHaveTheSameIdButTheFirstAssertionHasExpired() {
         Instant futureDate = Instant.now().atZone(ZoneId.of("UTC")).plusMinutes(6).toInstant();
 
         Assertion assertion = createAssertion("expired-duplicate", futureDate);
@@ -56,7 +56,7 @@ public class DuplicateAssertionValidatorTest extends OpenSAMLRunner {
     }
 
     @Test
-    public void validateAuthnStatementAssertion_shouldThrowAnExceptionIfTheAssertionIsADuplicateOfAPreviousOne() {
+    void validateAuthnStatementAssertion_shouldThrowAnExceptionIfTheAssertionIsADuplicateOfAPreviousOne() {
         Assertion assertion = anAssertion().withId("duplicate").buildUnencrypted();
         validateFail(
             ()-> duplicateAssertionValidator.validateAuthnStatementAssertion(assertion),
@@ -65,7 +65,7 @@ public class DuplicateAssertionValidatorTest extends OpenSAMLRunner {
     }
 
     @Test
-    public void validateAuthnStatementAssertion_shouldStoreTheAssertionIdIfNotADuplicate() {
+    void validateAuthnStatementAssertion_shouldStoreTheAssertionIdIfNotADuplicate() {
         Instant futureDate = Instant.now().atZone(ZoneId.of("UTC")).plusMinutes(6).toInstant();
 
         Assertion assertion = createAssertion("new-id", futureDate);
@@ -75,13 +75,13 @@ public class DuplicateAssertionValidatorTest extends OpenSAMLRunner {
     }
 
     @Test
-    public void validateMatchingDataSetAssertion_shouldPassIfTheAssertionIsNotADuplicateOfAPreviousOne() {
+    void validateMatchingDataSetAssertion_shouldPassIfTheAssertionIsNotADuplicateOfAPreviousOne() {
         Assertion assertion = anAssertion().withId("not-duplicate").buildUnencrypted();
         duplicateAssertionValidator.validateMatchingDataSetAssertion(assertion, "issuer");
     }
 
     @Test
-    public void validateMatchingDataSetAssertion_shouldPassIfTwoAssertionsHaveTheSameIdButTheFirstAssertionHasExpired() {
+    void validateMatchingDataSetAssertion_shouldPassIfTwoAssertionsHaveTheSameIdButTheFirstAssertionHasExpired() {
         Instant futureDate = Instant.now().atZone(ZoneId.of("UTC")).plusMinutes(6).toInstant();
 
         Assertion assertion = createAssertion("expired-duplicate", futureDate);
@@ -91,7 +91,7 @@ public class DuplicateAssertionValidatorTest extends OpenSAMLRunner {
     }
 
     @Test
-    public void validateMatchingDataSetAssertion_shouldThrowAnExceptionIfTheAssertionIsADuplicateOfAPreviousOne() {
+    void validateMatchingDataSetAssertion_shouldThrowAnExceptionIfTheAssertionIsADuplicateOfAPreviousOne() {
         Assertion assertion = anAssertion().withId("duplicate").buildUnencrypted();
         validateFail(
             ()-> duplicateAssertionValidator.validateMatchingDataSetAssertion(assertion, "issuer"),
@@ -100,7 +100,7 @@ public class DuplicateAssertionValidatorTest extends OpenSAMLRunner {
     }
 
     @Test
-    public void validateMatchingDataSetAssertion_shouldStoreTheAssertionIdIfNotADuplicate() {
+    void validateMatchingDataSetAssertion_shouldStoreTheAssertionIdIfNotADuplicate() {
         Instant futureDate = Instant.now().atZone(ZoneId.of("UTC")).plusMinutes(6).toInstant();
 
         Assertion assertion = createAssertion("new-id", futureDate);

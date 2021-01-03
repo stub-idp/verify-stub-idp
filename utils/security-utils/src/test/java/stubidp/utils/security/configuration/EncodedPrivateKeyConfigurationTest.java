@@ -18,25 +18,25 @@ public class EncodedPrivateKeyConfigurationTest {
     private final ObjectMapper objectMapper = new ObjectMapper();
 
     @Test
-    public void should_loadPrivateKeyFromJSON() throws Exception {
+    void should_loadPrivateKeyFromJSON() throws Exception {
         String jsonConfig = "{\"type\": \"encoded\", \"key\": \"" + getKeyAsBase64() + "\"}";
         PrivateKeyConfiguration configuration = objectMapper.readValue(jsonConfig, PrivateKeyConfiguration.class);
         assertThat(configuration.getPrivateKey().getAlgorithm()).isEqualTo("RSA");
     }
 
     @Test
-    public void should_ThrowExceptionWhenKeyIsNotBase64() {
+    void should_ThrowExceptionWhenKeyIsNotBase64() {
         Assertions.assertThrows(ValueInstantiationException.class, () -> objectMapper.configure(DeserializationFeature.FAIL_ON_INVALID_SUBTYPE, false).readValue("{\"type\": \"encoded\", \"key\": \"not-a-key\"}", PrivateKeyConfiguration.class));
     }
 
     @Test
-    public void should_ThrowExceptionWhenKeyIsNotAValidKey() {
+    void should_ThrowExceptionWhenKeyIsNotAValidKey() {
         final ValueInstantiationException exception = Assertions.assertThrows(ValueInstantiationException.class, () -> objectMapper.configure(DeserializationFeature.FAIL_ON_INVALID_SUBTYPE, false).readValue("{\"type\": \"encoded\", \"key\": \"dGVzdAo=\"}", PrivateKeyConfiguration.class));
         assertThat(exception.getMessage()).contains("InvalidKeySpecException");
     }
 
     @Test
-    public void should_throwAnExceptionWhenIncorrectFieldSpecified() {
+    void should_throwAnExceptionWhenIncorrectFieldSpecified() {
         Assertions.assertThrows(ValueInstantiationException.class, () -> objectMapper.readValue("{\"privateKeyFoo\": \"" + "foobar" + "\"}", PrivateKeyConfiguration.class));
     }
 

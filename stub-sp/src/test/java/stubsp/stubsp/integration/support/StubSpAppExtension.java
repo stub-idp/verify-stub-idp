@@ -114,7 +114,7 @@ public class StubSpAppExtension extends DropwizardAppExtension<StubSpConfigurati
         this(Map.of());
     }
 
-    public StubSpAppExtension(Map<String, String> configOverrides) {
+    private StubSpAppExtension(Map<String, String> configOverrides) {
         super(StubSpApplication.class, "../configuration/stub-sp.yml", withDefaultOverrides(configOverrides));
     }
 

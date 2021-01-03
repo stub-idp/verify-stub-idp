@@ -10,7 +10,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Locale;
 
-public class MockHttpServletResponse implements HttpServletResponse {
+class MockHttpServletResponse implements HttpServletResponse {
 	private final List<String> headerNames = new ArrayList<>();
 	private final List<String> headerValues = new ArrayList<>();
 	private PrintWriter pw;

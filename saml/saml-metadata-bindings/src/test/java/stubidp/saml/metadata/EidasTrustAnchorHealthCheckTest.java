@@ -32,12 +32,12 @@ public class EidasTrustAnchorHealthCheckTest {
     private EidasTrustAnchorHealthCheck eidasTrustAnchorHealthCheck;
 
     @BeforeEach
-    public void setUp(){
+    void setUp(){
         eidasTrustAnchorHealthCheck = new EidasTrustAnchorHealthCheck(metadataResolverRepository);
     }
 
     @Test
-    public void shouldReturnHealthyWhenNoTrustAnchorsAreFound() {
+    void shouldReturnHealthyWhenNoTrustAnchorsAreFound() {
         Result result = eidasTrustAnchorHealthCheck.check();
 
         assertThat(result.isHealthy()).isTrue();
@@ -45,7 +45,7 @@ public class EidasTrustAnchorHealthCheckTest {
 
     @Test
     @SuppressWarnings("unchecked")
-    public void shouldReturnUnhealthyWhenAnyMetadataResolversDontContainMetadataMatchingTheEntityId() throws Exception {
+    void shouldReturnUnhealthyWhenAnyMetadataResolversDontContainMetadataMatchingTheEntityId() throws Exception {
         String entityId1 = "entityId1";
         String entityId2 = "entityId2";
         String entityId3 = "entityId3";
@@ -74,7 +74,7 @@ public class EidasTrustAnchorHealthCheckTest {
 
     @Test
     @SuppressWarnings("unchecked")
-    public void shouldReturnUnhealthyMetadataResolversAreMissing() throws Exception {
+    void shouldReturnUnhealthyMetadataResolversAreMissing() throws Exception {
         String entityId1 = "entityId1";
         String entityId2 = "entityId2";
         String entityId3 = "entityId3";
@@ -96,7 +96,7 @@ public class EidasTrustAnchorHealthCheckTest {
     }
 
     @Test
-    public void shouldReturnHealthyWhenAllMetadataResolversAreHealthy() throws Exception {
+    void shouldReturnHealthyWhenAllMetadataResolversAreHealthy() throws Exception {
         String entityId1 = "entityId1";
         String entityId2 = "entityId2";
         List<String> entityIds = asList(entityId1, entityId2);

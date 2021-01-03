@@ -7,6 +7,7 @@ module stubidp.security.utils {
 
     opens stubidp.utils.security.configuration; // for jackson classpath scanning (in tests)
     opens stubidp.utils.security.security; // for tests too
+    opens stubidp.utils.security.security.verification;
 
     requires com.fasterxml.jackson.annotation;
     requires org.slf4j;

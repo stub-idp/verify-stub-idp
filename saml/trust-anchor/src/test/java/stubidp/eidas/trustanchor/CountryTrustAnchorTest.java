@@ -19,13 +19,13 @@ public class CountryTrustAnchorTest {
     private final List<X509Certificate> invalidCertChain = createInvalidCertChain();
 
     @Test
-    public void makeThrowsExceptionIfIncludesInvalidCertificate() {
+    void makeThrowsExceptionIfIncludesInvalidCertificate() {
         final IllegalArgumentException e = Assertions.assertThrows(IllegalArgumentException.class, () -> CountryTrustAnchor.make(invalidCertChain, "key-id"));
         assertThat(e.getMessage()).startsWith("Managed to generate an invalid anchor: Certificate CN=IDA Stub Country Signing Dev");
     }
 
     @Test
-    public void makeValidationCanBeOverRidden() {
+    void makeValidationCanBeOverRidden() {
         JWK trustAnchorKey = CountryTrustAnchor.make(invalidCertChain, "key-id", false);
 
         assertThat(trustAnchorKey.getKeyID()).isEqualTo("key-id");

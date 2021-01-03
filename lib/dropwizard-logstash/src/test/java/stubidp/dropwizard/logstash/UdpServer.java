@@ -13,7 +13,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-public class UdpServer {
+class UdpServer {
 
     private Thread thread;
     private volatile DatagramSocket serverSocket;

@@ -34,7 +34,7 @@ public class JDBIIdpSessionRepositoryTest {
 	private final String DATABASE_URL = "jdbc:h2:mem:test;MODE=PostgreSQL;DB_CLOSE_DELAY=-1";
 	
 	@BeforeEach
-	public void setUp() {
+    void setUp() {
 		new DatabaseMigrationRunner().runMigration(DATABASE_URL);
 
 		jdbi = Jdbi.create(DATABASE_URL);
@@ -42,12 +42,12 @@ public class JDBIIdpSessionRepositoryTest {
 	}
 
 	@AfterEach
-	public void afterEach() {
+    void afterEach() {
 		CollectorRegistry.defaultRegistry.clear();
 	}
 
 	@Test
-	public void testSessionDeletion() throws InterruptedException {
+    void testSessionDeletion() throws InterruptedException {
 		// force clear all sessions from the test database
 		repository.deleteSessionsOlderThan(Duration.ZERO);
 		// this is not ideal - and could be flaky.
@@ -73,7 +73,7 @@ public class JDBIIdpSessionRepositoryTest {
 	}
 
 	@Test
-	public void createSession_shouldCreateIdpSessionAndStoreInDatabase() {
+    void createSession_shouldCreateIdpSessionAndStoreInDatabase() {
 		Instant authnRequestIssueTime = getLocalDateTime(2018, 4, 25, 11, 24, 0);
 		IdaAuthnRequestFromHub authnRequest = new IdaAuthnRequestFromHub("155a37d3-5a9d-4cd0-b68a-158717b85202", "test-issuer", authnRequestIssueTime, Collections.emptyList(), Optional.empty(), null, null, AuthnContextComparisonTypeEnumeration.EXACT);
 		IdpSession session = createSession(authnRequest);
@@ -95,7 +95,7 @@ public class JDBIIdpSessionRepositoryTest {
 	}
 	
 	@Test
-	public void get_shouldReturnEmptyOptional_whenSessionDoesNotExist() {
+    void get_shouldReturnEmptyOptional_whenSessionDoesNotExist() {
 		SessionId nonExistentSessionId = SessionId.createNewSessionId();
 		
 		Optional<IdpSession> result = repository.get(nonExistentSessionId);
@@ -104,7 +104,7 @@ public class JDBIIdpSessionRepositoryTest {
 	}
 	
 	@Test
-	public void get_shouldReturnPopulatedIdpSession_whenSessionExists() {
+    void get_shouldReturnPopulatedIdpSession_whenSessionExists() {
 		Instant authnRequestIssueTime = getLocalDateTime(2018, 4, 25, 11, 24, 0);
 		IdaAuthnRequestFromHub authnRequest = new IdaAuthnRequestFromHub("155a37d3-5a9d-4cd0-b68a-158717b85202", "test-issuer", authnRequestIssueTime, Collections.emptyList(), Optional.empty(), null, null, AuthnContextComparisonTypeEnumeration.EXACT);
 		IdpSession expectedSession = createSession(authnRequest);
@@ -118,7 +118,7 @@ public class JDBIIdpSessionRepositoryTest {
 	}
 	
 	@Test
-	public void updateSession_shouldNotThrowException_whenSessionDoesNotExist() {
+    void updateSession_shouldNotThrowException_whenSessionDoesNotExist() {
 		Instant authnRequestIssueTime = getLocalDateTime(2018, 4, 25, 11, 24, 0);
 		IdaAuthnRequestFromHub authnRequest = new IdaAuthnRequestFromHub("155a37d3-5a9d-4cd0-b68a-158717b85202", "test-issuer", authnRequestIssueTime, Collections.emptyList(), Optional.empty(), null, null, AuthnContextComparisonTypeEnumeration.EXACT);
 		IdpSession session = createSession(authnRequest);
@@ -130,7 +130,7 @@ public class JDBIIdpSessionRepositoryTest {
 	}
 	
 	@Test
-	public void updateSession_shouldUpdateStoredSessionInDatabase_whenSessionExists() {
+    void updateSession_shouldUpdateStoredSessionInDatabase_whenSessionExists() {
 		Instant authnRequestIssueTime = getLocalDateTime(2018, 4, 25, 11, 24, 0);
 		IdaAuthnRequestFromHub authnRequest = new IdaAuthnRequestFromHub("155a37d3-5a9d-4cd0-b68a-158717b85202", "test-issuer", authnRequestIssueTime, Collections.emptyList(), Optional.empty(), null, null, AuthnContextComparisonTypeEnumeration.EXACT);
 		IdpSession session = createSession(authnRequest);
@@ -144,7 +144,7 @@ public class JDBIIdpSessionRepositoryTest {
 	}
 
 	@Test
-	public void deleteSession_shouldDeleteSessionFromDatabase_whenSessionExists() {
+    void deleteSession_shouldDeleteSessionFromDatabase_whenSessionExists() {
 		Instant authnRequestIssueTime = getLocalDateTime(2018, 4, 25, 11, 24, 0);
 		IdaAuthnRequestFromHub authnRequest = new IdaAuthnRequestFromHub("155a37d3-5a9d-4cd0-b68a-158717b85202", "test-issuer", authnRequestIssueTime, Collections.emptyList(), Optional.empty(), null, null, AuthnContextComparisonTypeEnumeration.EXACT);
 		IdpSession session = createSession(authnRequest);

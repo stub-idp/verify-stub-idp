@@ -21,7 +21,7 @@ import static stubidp.saml.test.builders.ResponseBuilder.aResponse;
 import static stubidp.saml.test.builders.ResponseForHubBuilder.anAuthnResponse;
 
 @ExtendWith(MockitoExtension.class)
-public class OutboundResponseFromHubToSamlResponseTransformerTest extends OpenSAMLRunner {
+class OutboundResponseFromHubToSamlResponseTransformerTest extends OpenSAMLRunner {
 
     @Mock
     private TransactionIdaStatusMarshaller statusMarshaller = null;
@@ -31,13 +31,13 @@ public class OutboundResponseFromHubToSamlResponseTransformerTest extends OpenSA
     private OutboundResponseFromHubToSamlResponseTransformer transformer;
 
     @BeforeEach
-    public void setup() {
+    void setup() {
         OpenSamlXmlObjectFactory openSamlXmlObjectFactory = new OpenSamlXmlObjectFactory();
         transformer = new OutboundResponseFromHubToSamlResponseTransformer(statusMarshaller, openSamlXmlObjectFactory, encryptedAssertionUnmarshaller);
     }
 
     @Test
-    public void transformAssertions_shouldTransformMatchingServiceAssertions() throws Exception {
+    void transformAssertions_shouldTransformMatchingServiceAssertions() throws Exception {
         PassthroughAssertion matchingServiceAssertion = PassthroughAssertionBuilder.aPassthroughAssertion().buildMatchingServiceAssertion();
         Response transformedResponse = aResponse().withNoDefaultAssertion().build();
         EncryptedAssertion transformedMatchingDatasetAssertion = anAssertion().build();

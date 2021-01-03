@@ -15,24 +15,24 @@ public class IssuerValidatorTest extends OpenSAMLRunner {
     private IssuerValidator validator;
 
     @BeforeEach
-    public void setUp() {
+    void setUp() {
         validator = new IssuerValidator();
     }
 
     @Test
-    public void validate_shouldThrowExceptionIfIssuerElementIsMissing() {
+    void validate_shouldThrowExceptionIfIssuerElementIsMissing() {
         assertExceptionMessage(null, SamlTransformationErrorFactory.missingIssuer());
     }
 
     @Test
-    public void validate_shouldThrowExceptionIfIssuerIdIsMissing() {
+    void validate_shouldThrowExceptionIfIssuerIdIsMissing() {
         Issuer assertionIssuer = IssuerBuilder.anIssuer().withIssuerId(null).build();
 
         assertExceptionMessage(assertionIssuer, SamlTransformationErrorFactory.emptyIssuer());
     }
 
     @Test
-    public void validate_shouldThrowExceptionIfIssuerFormatAttributeHasInvalidValue() {
+    void validate_shouldThrowExceptionIfIssuerFormatAttributeHasInvalidValue() {
         String invalidFormat = "invalid";
         Issuer assertionIssuer = IssuerBuilder.anIssuer().withFormat(invalidFormat).build();
 
@@ -40,14 +40,14 @@ public class IssuerValidatorTest extends OpenSAMLRunner {
     }
 
     @Test
-    public void validate_shouldDoNothingIfIssuerFormatAttributeIsMissing() {
+    void validate_shouldDoNothingIfIssuerFormatAttributeIsMissing() {
         Issuer assertionIssuer = IssuerBuilder.anIssuer().withFormat(null).build();
 
         validator.validate(assertionIssuer);
     }
 
     @Test
-    public void validate_shouldDoNothingIfIssuerFormatAttributeHasValidValue() {
+    void validate_shouldDoNothingIfIssuerFormatAttributeHasValidValue() {
         Issuer assertionIssuer = IssuerBuilder.anIssuer().withFormat(NameIDType.ENTITY).build();
 
         validator.validate(assertionIssuer);

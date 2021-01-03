@@ -11,13 +11,13 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-public class HmacValidatorTest {
+class HmacValidatorTest {
 
     @Mock
     private HmacDigest hmacDigest;
 
     @Test
-    public void shouldReturnTrueWhenSessionCookieAndSecureCookieMatchUp() {
+    void shouldReturnTrueWhenSessionCookieAndSecureCookieMatchUp() {
         SessionId sessionId = SessionId.createNewSessionId();
         String secureCookie = "secure-cookie";
         String hmacDouble = "hmac-double";
@@ -29,7 +29,7 @@ public class HmacValidatorTest {
     }
 
     @Test
-    public void shouldReturnFalseWhenSessionCookieAndSecureCookieDontMatchUp() {
+    void shouldReturnFalseWhenSessionCookieAndSecureCookieDontMatchUp() {
         SessionId sessionId = SessionId.createNewSessionId();
         String secureCookie = "secure-cookie";
         when(hmacDigest.digest(sessionId.getSessionId())).thenReturn("session-id-hmac");

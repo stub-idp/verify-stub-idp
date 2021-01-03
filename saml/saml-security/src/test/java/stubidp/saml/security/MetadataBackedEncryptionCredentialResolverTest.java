@@ -35,7 +35,7 @@ public class MetadataBackedEncryptionCredentialResolverTest {
     private MetadataCredentialResolver metadataCredentialResolver;
 
     @BeforeEach
-    public void beforeAll() throws Exception {
+    void beforeAll() throws Exception {
         InitializationService.initialize();
 
         StringBackedMetadataResolver metadataResolver = new StringBackedMetadataResolver(loadMetadata());
@@ -87,13 +87,13 @@ public class MetadataBackedEncryptionCredentialResolverTest {
     }
 
     @Test
-    public void shouldSupportResolvingCredentialsFromKeysInMetadata() throws Exception {
+    void shouldSupportResolvingCredentialsFromKeysInMetadata() throws Exception {
         PublicKey publicKey = TestCredentialFactory.createPublicKey(TestCertificateStrings.HUB_TEST_PUBLIC_ENCRYPTION_CERT);
         assertThat(new MetadataBackedEncryptionCredentialResolver(metadataCredentialResolver, SPSSODescriptor.DEFAULT_ELEMENT_NAME).getEncryptingCredential(HUB_ENTITY_ID).getPublicKey()).isEqualTo(publicKey);
     }
 
     @Test
-    public void shouldFailToResolveAndThrowIfEntityIsNotFound() {
+    void shouldFailToResolveAndThrowIfEntityIsNotFound() {
         assertThatThrownBy(() -> new MetadataBackedEncryptionCredentialResolver(metadataCredentialResolver, IDPSSODescriptor.DEFAULT_ELEMENT_NAME).getEncryptingCredential(HUB_ENTITY_ID)).isExactlyInstanceOf(MetadataBackedEncryptionCredentialResolver.CredentialMissingInMetadataException.class)
           .hasMessage("No public key for entity-id: \""+ HUB_ENTITY_ID + "\" could be found in the metadata. Metadata could be expired, invalid, or missing entities");
         assertThatThrownBy(() -> new MetadataBackedEncryptionCredentialResolver(metadataCredentialResolver, IDPSSODescriptor.DEFAULT_ELEMENT_NAME).getEncryptingCredential(STUB_IDP_ONE)).isExactlyInstanceOf(MetadataBackedEncryptionCredentialResolver.CredentialMissingInMetadataException.class)

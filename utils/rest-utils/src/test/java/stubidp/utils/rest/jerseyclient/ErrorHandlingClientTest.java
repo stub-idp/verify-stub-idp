@@ -44,12 +44,12 @@ public class ErrorHandlingClientTest {
     private final URI testUri = URI.create("/some-uri");
 
     @BeforeEach
-    public void setup() {
+    void setup() {
         errorHandlingClient = new ErrorHandlingClient(client);
     }
 
     @Test
-    public void getWithCookiesAndHeaders_shouldAddCookiesAndHeadersToRequest() {
+    void getWithCookiesAndHeaders_shouldAddCookiesAndHeadersToRequest() {
         final Cookie cookie = new Cookie("cookie", "monster");
         final List<Cookie> cookies = List.of(cookie);
         final String headerName = "X-Clacks-Overhead";
@@ -70,14 +70,14 @@ public class ErrorHandlingClientTest {
     }
 
     @Test
-    public void get_shouldThrowApplicationExceptionWhenAWireProblemOccurs() {
+    void get_shouldThrowApplicationExceptionWhenAWireProblemOccurs() {
         when(client.target(testUri)).thenThrow(new ProcessingException(""));
 
         Assertions.assertThrows(ApplicationException.class, () -> errorHandlingClient.get(testUri));
     }
 
     @Test
-    public void postWithHeaders_shouldAddHeadersToRequest() {
+    void postWithHeaders_shouldAddHeadersToRequest() {
         final String headerName = "X-Clacks-Overhead";
         final String headerValue = "GNU Terry Pratchett";
         final Map<String, String> headers = Map.of(headerName, headerValue);
@@ -94,7 +94,7 @@ public class ErrorHandlingClientTest {
     }
 
     @Test
-    public void shouldRetryPostRequestIfConfigured() {
+    void shouldRetryPostRequestIfConfigured() {
         when(client.target(any(URI.class))).thenReturn(webTarget);
         when(webTarget.request(MediaType.APPLICATION_JSON_TYPE)).thenReturn(webTargetBuilder);
         when(webTargetBuilder.post(Entity.json(""))).thenThrow(RuntimeException.class);
@@ -106,7 +106,7 @@ public class ErrorHandlingClientTest {
     }
 
     @Test
-    public void shouldRetryGetRequestIfConfigured() {
+    void shouldRetryGetRequestIfConfigured() {
         when(client.target(any(URI.class))).thenReturn(webTarget);
         when(webTarget.request()).thenReturn(webTargetBuilder);
         when(webTargetBuilder.accept(ArgumentMatchers.<MediaType>any())).thenReturn(webTargetBuilder);
@@ -119,7 +119,7 @@ public class ErrorHandlingClientTest {
     }
 
     @Test
-    public void post_shouldThrowApplicationExceptionWhenAWireProblemOccurs() {
+    void post_shouldThrowApplicationExceptionWhenAWireProblemOccurs() {
         when(client.target(testUri)).thenThrow(new ProcessingException(""));
 
         Assertions.assertThrows(ApplicationException.class, () -> errorHandlingClient.post(testUri, ""));

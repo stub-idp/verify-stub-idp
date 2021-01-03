@@ -34,12 +34,12 @@ public class CountryTrustAnchorValidatorTest {
     private CountryTrustAnchorValidator testValidator;
 
     @BeforeEach
-    public void setup() {
+    void setup() {
         testValidator = new CountryTrustAnchorValidator(mockValidator);
     }
 
     @Test
-    public void validRSATrustAnchorShouldRaiseNoExceptions() {
+    void validRSATrustAnchorShouldRaiseNoExceptions() {
         RSAKey validTrustAnchor = getValidRSATrustAnchor();
         Collection<String> errors = testValidator.findErrors(validTrustAnchor);
 
@@ -47,7 +47,7 @@ public class CountryTrustAnchorValidatorTest {
     }
 
     @Test
-    public void validEC256TrustAnchorShouldRaiseNoExceptions() {
+    void validEC256TrustAnchorShouldRaiseNoExceptions() {
         ECKey validTrustAnchor = getValidECTrustAnchor(Curve.P_256);
         Collection<String> errors = testValidator.findErrors(validTrustAnchor);
 
@@ -55,7 +55,7 @@ public class CountryTrustAnchorValidatorTest {
     }
 
     @Test
-    public void validEC384TrustAnchorShouldRaiseNoExceptions() {
+    void validEC384TrustAnchorShouldRaiseNoExceptions() {
         ECKey validTrustAnchor = getValidECTrustAnchor(Curve.P_384);
         Collection<String> errors = testValidator.findErrors(validTrustAnchor);
 
@@ -63,7 +63,7 @@ public class CountryTrustAnchorValidatorTest {
     }
 
     @Test
-    public void validEC521TrustAnchorShouldRaiseNoExceptions() {
+    void validEC521TrustAnchorShouldRaiseNoExceptions() {
         ECKey validTrustAnchor = getValidECTrustAnchor(Curve.P_521);
         Collection<String> errors = testValidator.findErrors(validTrustAnchor);
 

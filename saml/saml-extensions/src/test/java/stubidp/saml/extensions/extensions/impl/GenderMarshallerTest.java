@@ -14,19 +14,19 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static stubidp.saml.extensions.IdaConstants.IDA_NS;
 import static stubidp.saml.extensions.IdaConstants.IDA_PREFIX;
 
-public class GenderMarshallerTest extends OpenSAMLRunner {
+class GenderMarshallerTest extends OpenSAMLRunner {
 
     private Marshaller marshaller;
     private Gender gender;
 
     @BeforeEach
-    public void setUp() {
+    void setUp() {
         gender = new GenderBuilder().buildObject();
         marshaller = XMLObjectProviderRegistrySupport.getMarshallerFactory().getMarshaller(gender);
     }
 
     @Test
-    public void marshall_shouldMarshallPersonName() throws Exception {
+    void marshall_shouldMarshallPersonName() throws Exception {
         String name = "John";
         gender.setValue(name);
 
@@ -39,14 +39,14 @@ public class GenderMarshallerTest extends OpenSAMLRunner {
     }
 
     @Test
-    public void marshall_shouldEnsureXsiNamespaceDefinitionIsInluded() throws Exception {
+    void marshall_shouldEnsureXsiNamespaceDefinitionIsInluded() throws Exception {
         Element marshalledElement = marshaller.marshall(new GenderBuilder().buildObject());
 
         assertThat(marshalledElement.hasAttributeNS(XMLConstants.XMLNS_NS, XMLConstants.XSI_PREFIX)).isTrue();
     }
 
     @Test
-    public void marshall_shouldMarshallFromDateInCorrectFormat() throws Exception {
+    void marshall_shouldMarshallFromDateInCorrectFormat() throws Exception {
         String fromDate = "2012-02-09";
         gender.setFrom(BaseMdsSamlObjectUnmarshaller.InstantFromDate.of(fromDate));
 
@@ -56,7 +56,7 @@ public class GenderMarshallerTest extends OpenSAMLRunner {
     }
 
     @Test
-    public void marshall_shouldMarshallFromDateWithNamespacePrefix() throws Exception {
+    void marshall_shouldMarshallFromDateWithNamespacePrefix() throws Exception {
         gender.setFrom(BaseMdsSamlObjectUnmarshaller.InstantFromDate.of("2012-02-09"));
 
         Element marshalledElement = marshaller.marshall(gender);
@@ -65,7 +65,7 @@ public class GenderMarshallerTest extends OpenSAMLRunner {
     }
 
     @Test
-    public void marshall_shouldMarshallToDateInCorrectFormat() throws Exception {
+    void marshall_shouldMarshallToDateInCorrectFormat() throws Exception {
         String toDate = "2012-02-09";
         final Gender personName = new GenderBuilder().buildObject();
         personName.setTo(BaseMdsSamlObjectUnmarshaller.InstantFromDate.of(toDate));
@@ -76,7 +76,7 @@ public class GenderMarshallerTest extends OpenSAMLRunner {
     }
 
     @Test
-    public void marshall_shouldMarshallToDateWithNamespacePrefix() throws Exception {
+    void marshall_shouldMarshallToDateWithNamespacePrefix() throws Exception {
         gender.setTo(BaseMdsSamlObjectUnmarshaller.InstantFromDate.of("2012-02-09"));
 
         Element marshalledElement = marshaller.marshall(gender);
@@ -85,17 +85,17 @@ public class GenderMarshallerTest extends OpenSAMLRunner {
     }
 
     @Test
-    public void marshall_shouldMarshallVerifiedWhenTrue() throws Exception {
+    void marshall_shouldMarshallVerifiedWhenTrue() throws Exception {
         checkMarshallingVerifiedAttributeWithValue(true);
     }
 
     @Test
-    public void marshall_shouldMarshallVerifiedWhenFalse() throws Exception {
+    void marshall_shouldMarshallVerifiedWhenFalse() throws Exception {
         checkMarshallingVerifiedAttributeWithValue(false);
     }
 
     @Test
-    public void marshall_shouldMarshallVerifiedWithNamespacePrefix() throws Exception {
+    void marshall_shouldMarshallVerifiedWithNamespacePrefix() throws Exception {
         gender.setVerified(true);
 
         Element marshalledElement = marshaller.marshall(gender);

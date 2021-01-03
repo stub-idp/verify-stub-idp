@@ -18,27 +18,27 @@ class AuthnRequestIssueInstantValidatorTest {
     private final Clock clock = Clock.fixed(Instant.now(), ZoneId.of("UTC"));
 
     @BeforeEach
-    public void setup() {
+    void setup() {
         SamlAuthnRequestValidityDurationConfiguration samlAuthnRequestValidityDurationConfiguration = () -> Duration.ofMinutes(AUTHN_REQUEST_VALIDITY_MINS);
         authnRequestIssueInstantValidator = new AuthnRequestIssueInstantValidator(samlAuthnRequestValidityDurationConfiguration, clock);
     }
 
     @Test
-    public void validate_shouldReturnFalseIfIssueInstantMoreThan5MinutesAgo() {
+    void validate_shouldReturnFalseIfIssueInstantMoreThan5MinutesAgo() {
         Instant issueInstant = Instant.now(clock).atZone(ZoneId.of("UTC")).minusMinutes(AUTHN_REQUEST_VALIDITY_MINS).minusSeconds(1).toInstant();
         boolean validity = authnRequestIssueInstantValidator.isValid(issueInstant);
         assertThat(validity).isEqualTo(false);
     }
 
     @Test
-    public void validate_shouldReturnTrueIfIssueInstant5MinsAgo() {
+    void validate_shouldReturnTrueIfIssueInstant5MinsAgo() {
         Instant issueInstant = Instant.now(clock).atZone(ZoneId.of("UTC")).minusMinutes(AUTHN_REQUEST_VALIDITY_MINS).toInstant();
         boolean validity = authnRequestIssueInstantValidator.isValid(issueInstant);
         assertThat(validity).isEqualTo(true);
     }
 
     @Test
-    public void validate_shouldReturnTrueIfIssueInstantLessThan5MinsAgo() {
+    void validate_shouldReturnTrueIfIssueInstantLessThan5MinsAgo() {
         Instant issueInstant = Instant.now(clock).atZone(ZoneId.of("UTC")).minusMinutes(AUTHN_REQUEST_VALIDITY_MINS).plusSeconds(1).toInstant();
         boolean validity = authnRequestIssueInstantValidator.isValid(issueInstant);
         assertThat(validity).isEqualTo(true);

@@ -11,24 +11,24 @@ import stubidp.saml.domain.assertions.TransactionIdaStatus;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class TransactionIdaStatusMarshallerTest extends OpenSAMLRunner {
+class TransactionIdaStatusMarshallerTest extends OpenSAMLRunner {
 
     private TransactionIdaStatusMarshaller marshaller;
 
     @BeforeEach
-    public void setUp() {
+    void setUp() {
         marshaller = new TransactionIdaStatusMarshaller(new OpenSamlXmlObjectFactory());
     }
 
     @Test
-    public void toSamlStatus_shouldTransformSuccess() {
+    void toSamlStatus_shouldTransformSuccess() {
         Status transformedStatus = marshaller.toSamlStatus(TransactionIdaStatus.Success);
 
         assertThat(transformedStatus.getStatusCode().getValue()).isEqualTo(StatusCode.SUCCESS);
     }
 
     @Test
-    public void toSamlStatus_shouldTransformNoAuthenticationContext() {
+    void toSamlStatus_shouldTransformNoAuthenticationContext() {
         Status transformedStatus = marshaller.toSamlStatus(TransactionIdaStatus.NoAuthenticationContext);
 
         assertThat(transformedStatus.getStatusCode().getValue()).isEqualTo(StatusCode.RESPONDER);
@@ -36,7 +36,7 @@ public class TransactionIdaStatusMarshallerTest extends OpenSAMLRunner {
     }
 
     @Test
-    public void toSamlStatus_shouldTransformAuthnFailedWithNoSubStatus() {
+    void toSamlStatus_shouldTransformAuthnFailedWithNoSubStatus() {
         Status transformedStatus = marshaller.toSamlStatus(TransactionIdaStatus.AuthenticationFailed);
 
         assertThat(transformedStatus.getStatusCode().getValue()).isEqualTo(StatusCode.RESPONDER);
@@ -45,7 +45,7 @@ public class TransactionIdaStatusMarshallerTest extends OpenSAMLRunner {
     }
 
     @Test
-    public void toSamlStatus_shouldTransformRequesterError() {
+    void toSamlStatus_shouldTransformRequesterError() {
         Status transformedStatus = marshaller.toSamlStatus(TransactionIdaStatus.RequesterError);
 
         assertThat(transformedStatus.getStatusCode().getValue()).isEqualTo(StatusCode.RESPONDER);
@@ -53,7 +53,7 @@ public class TransactionIdaStatusMarshallerTest extends OpenSAMLRunner {
     }
 
     @Test
-    public void toSamlStatus_shouldTransformNoMatchingServiceMatchMayRetry() {
+    void toSamlStatus_shouldTransformNoMatchingServiceMatchMayRetry() {
         Status transformedStatus = marshaller.toSamlStatus(TransactionIdaStatus.NoMatchingServiceMatchFromHub);
 
         assertThat(transformedStatus.getStatusCode().getValue()).isEqualTo(StatusCode.SUCCESS);

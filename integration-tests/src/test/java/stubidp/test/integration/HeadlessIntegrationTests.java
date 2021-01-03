@@ -45,14 +45,14 @@ public class HeadlessIntegrationTests extends IntegrationTestHelper {
             applicationRule.getHubKeyStore(),
             applicationRule.getEidasKeyStore());
 
-    public static final StubIdpAppExtension applicationRule = new StubIdpAppExtension(Map.ofEntries(
+    private static final StubIdpAppExtension applicationRule = new StubIdpAppExtension(Map.ofEntries(
             Map.entry("isHeadlessIdpEnabled", "true"),
             Map.entry("isPrometheusEnabled", "true"),
             Map.entry("isIdpEnabled", "false")))
             .withStubIdp(aStubIdp().withId(IDP_NAME).withDisplayName(DISPLAY_NAME).build());
 
     @BeforeEach
-    public void refreshMetadata() {
+    void refreshMetadata() {
         client.target("http://localhost:"+applicationRule.getAdminPort()+"/tasks/metadata-refresh").request().post(Entity.text(""));
     }
 
@@ -63,7 +63,7 @@ public class HeadlessIntegrationTests extends IntegrationTestHelper {
         zzz_checkMetrics();
     }
 
-    public void zzz_checkMetrics() {
+    void zzz_checkMetrics() {
         Response response = client.target(UriBuilder.fromUri("http://localhost:" + applicationRule.getAdminPort())
                 .path(PROMETHEUS_METRICS_RESOURCE)
                 .build()).request().get();

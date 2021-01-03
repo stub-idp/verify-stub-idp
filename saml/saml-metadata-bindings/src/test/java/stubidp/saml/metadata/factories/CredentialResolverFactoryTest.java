@@ -27,7 +27,7 @@ public class CredentialResolverFactoryTest {
     private static DOMMetadataResolver metadataResolver;
 
     @BeforeAll
-    public static void beforeAll() throws Exception {
+    static void beforeAll() throws Exception {
         InitializationService.initialize();
 
         //has Hub's entity ID
@@ -40,7 +40,7 @@ public class CredentialResolverFactoryTest {
     }
 
     @Test
-    public void shouldSupportResolvingCredentialsFromKeysInMetadata() throws Exception {
+    void shouldSupportResolvingCredentialsFromKeysInMetadata() throws Exception {
         MetadataCredentialResolver metadataCredentialResolver = new CredentialResolverFactory().create(metadataResolver);
         CriteriaSet trustBasisCriteria = new CriteriaSet();
         trustBasisCriteria.add(new EntityIdCriterion(TestEntityIds.HUB_ENTITY_ID));
@@ -52,7 +52,7 @@ public class CredentialResolverFactoryTest {
     }
 
     @Test
-    public void shouldFailToResolveIfEnttiyIsNotFound() throws Exception {
+    void shouldFailToResolveIfEnttiyIsNotFound() throws Exception {
         MetadataCredentialResolver metadataCredentialResolver = new CredentialResolverFactory().create(metadataResolver);
 
         CriteriaSet trustBasisCriteria = new CriteriaSet();

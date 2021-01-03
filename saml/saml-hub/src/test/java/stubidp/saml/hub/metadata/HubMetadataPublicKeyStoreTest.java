@@ -31,7 +31,7 @@ public class HubMetadataPublicKeyStoreTest extends OpenSAMLRunner {
     private static MetadataResolver emptyMetadataResolver;
 
     @BeforeAll
-    public static void setUp() throws Exception {
+    static void setUp() throws Exception {
         MetadataFactory metadataFactory = new MetadataFactory();
         metadataResolver = initializeMetadata(metadataFactory.defaultMetadata());
         invalidMetadataResolver = initializeMetadata(metadataFactory.expiredMetadata());
@@ -57,21 +57,21 @@ public class HubMetadataPublicKeyStoreTest extends OpenSAMLRunner {
     }
 
     @Test
-    public void shouldReturnTheSigningPublicKeysForTheHub() throws Exception {
+    void shouldReturnTheSigningPublicKeysForTheHub() throws Exception {
         HubMetadataPublicKeyStore hubMetadataPublicKeyStore = new HubMetadataPublicKeyStore(metadataResolver, new PublicKeyFactory(), TestEntityIds.HUB_ENTITY_ID);
         List<PublicKey> verifyingKeysForEntity = hubMetadataPublicKeyStore.getVerifyingKeysForEntity();
         assertThat(verifyingKeysForEntity).containsOnly(getX509Key(TestCertificateStrings.HUB_TEST_PUBLIC_SIGNING_CERT), getX509Key(TestCertificateStrings.HUB_TEST_SECONDARY_PUBLIC_SIGNING_CERT));
     }
 
     @Test
-    public void shouldErrorWhenMetadataIsInvalid() throws Exception {
+    void shouldErrorWhenMetadataIsInvalid() throws Exception {
         HubMetadataPublicKeyStore hubMetadataPublicKeyStore = new HubMetadataPublicKeyStore(invalidMetadataResolver, new PublicKeyFactory(), TestEntityIds.HUB_ENTITY_ID);
         final HubEntityMissingException e = Assertions.assertThrows(HubEntityMissingException.class, hubMetadataPublicKeyStore::getVerifyingKeysForEntity);
         assertThat(e).hasMessage("The HUB entity-id: \"https://signin.service.gov.uk\" could not be found in the metadata. Metadata could be expired, invalid, or missing entities");
     }
 
     @Test
-    public void shouldErrorWhenMetadataIsEmpty() throws Exception {
+    void shouldErrorWhenMetadataIsEmpty() throws Exception {
         HubMetadataPublicKeyStore hubMetadataPublicKeyStore = new HubMetadataPublicKeyStore(emptyMetadataResolver, new PublicKeyFactory(), TestEntityIds.HUB_ENTITY_ID);
         final HubEntityMissingException e = Assertions.assertThrows(HubEntityMissingException.class, hubMetadataPublicKeyStore::getVerifyingKeysForEntity);
         assertThat(e).hasMessage("The HUB entity-id: \"https://signin.service.gov.uk\" could not be found in the metadata. Metadata could be expired, invalid, or missing entities");

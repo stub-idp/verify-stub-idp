@@ -54,12 +54,12 @@ public class EidasProxyNodeServiceMetadataResourceTest {
     private CountryMetadataBuilder countryMetadataBuilder;
 
     @BeforeAll
-    public static void classSetUp() {
+    static void classSetUp() {
         IdaSamlBootstrap.bootstrap();
     }
 
     @BeforeEach
-    public void setUp() throws URISyntaxException {
+    void setUp() throws URISyntaxException {
         validCountryUri = new URI(MessageFormat.format(METADATA_URL_PATTERN, VALID_COUNTRY));
         resource = new EidasProxyNodeServiceMetadataResource(idaKeyStore, METADATA_URL_PATTERN, SSO_URL_PATTERN, countryMetadataBuilder);
         entityDescriptor = (EntityDescriptor) XMLObjectProviderRegistrySupport.getBuilderFactory()
@@ -67,12 +67,12 @@ public class EidasProxyNodeServiceMetadataResourceTest {
     }
 
     @Test
-    public void getShouldReturnAnErrorWhenIdpIsUnknown() {
+    void getShouldReturnAnErrorWhenIdpIsUnknown() {
         Assertions.assertThrows(InvalidEidasSchemeException.class, () -> resource.getMetadata(INVALID_COUNTRY));
     }
 
     @Test
-    public void getShouldReturnADocumentWhenIdpIsKnown() throws URISyntaxException, SecurityException, CertificateEncodingException, SignatureException, MarshallingException {
+    void getShouldReturnADocumentWhenIdpIsKnown() throws URISyntaxException, SecurityException, CertificateEncodingException, SignatureException, MarshallingException {
         when(idaKeyStore.getSigningCertificate()).thenReturn(signingCertificate);
         when(countryMetadataBuilder.createEntityDescriptorForProxyNodeService(any(), any(), any(), any())).thenReturn(entityDescriptor);;
 
@@ -85,7 +85,7 @@ public class EidasProxyNodeServiceMetadataResourceTest {
     }
 
     @Test
-    public void getShouldReturnNotFoundWhenIdpIsNullOrEmpty() throws CertificateEncodingException, MarshallingException, SecurityException, SignatureException {
+    void getShouldReturnNotFoundWhenIdpIsNullOrEmpty() throws CertificateEncodingException, MarshallingException, SecurityException, SignatureException {
         Response response = resource.getMetadata(null);
         assertThat(response.getStatus()).isEqualTo(Response.Status.NOT_FOUND.getStatusCode());
         assertThat(response.getEntity()).isEqualTo(null);

@@ -47,7 +47,7 @@ public class CSRFViewRenderer extends FreemarkerViewRenderer {
     }
 
     private static class MyAttributes extends Attributes {
-        public MyAttributes(View view) {
+        MyAttributes(View view) {
             put("name", AbstractCSRFCheckProtectionFilter.CSRF_PROTECT_FORM_KEY);
             put("id", AbstractCSRFCheckProtectionFilter.CSRF_PROTECT_FORM_KEY);
             put("value", ((CSRFView) view).getCsrfToken().get());

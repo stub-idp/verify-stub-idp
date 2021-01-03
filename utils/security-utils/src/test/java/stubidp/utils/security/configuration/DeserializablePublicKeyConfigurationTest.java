@@ -21,25 +21,25 @@ public class DeserializablePublicKeyConfigurationTest {
     private final String CERT_NAME = "public_key.crt";
 
     @Test
-    public void shouldDefaultToFileType() throws Exception {
+    void shouldDefaultToFileType() throws Exception {
         DeserializablePublicKeyConfiguration publicKeyConfiguration = objectMapper.readValue("{\"cert\": \"" + getCertPath() + "\", \"name\": \"someId\"}", DeserializablePublicKeyConfiguration.class);
         assertThat(publicKeyConfiguration.getClass()).isEqualTo(PublicKeyFileConfiguration.class);
     }
 
     @Test
-    public void shouldUseFileTypeWhenSpecified() throws Exception {
+    void shouldUseFileTypeWhenSpecified() throws Exception {
         DeserializablePublicKeyConfiguration publicKeyConfiguration = objectMapper.readValue("{\"type\": \"file\", \"cert\": \"" + getCertPath() + "\", \"name\": \"someId\"}", DeserializablePublicKeyConfiguration.class);
         assertThat(publicKeyConfiguration.getClass()).isEqualTo(PublicKeyFileConfiguration.class);
     }
 
     @Test
-    public void shouldUseEncodedTypeWhenSpecified() throws Exception {
+    void shouldUseEncodedTypeWhenSpecified() throws Exception {
         DeserializablePublicKeyConfiguration publicKeyConfiguration = objectMapper.readValue("{\"type\": \"encoded\", \"cert\": \"" + getBase64Cert() + "\", \"name\": \"someId\"}", DeserializablePublicKeyConfiguration.class);
         assertThat(publicKeyConfiguration.getClass()).isEqualTo(EncodedCertificateConfiguration.class);
     }
 
     @Test
-    public void shouldUseX509TypeWhenSpecified() throws Exception {
+    void shouldUseX509TypeWhenSpecified() throws Exception {
         DeserializablePublicKeyConfiguration publicKeyConfiguration = objectMapper.readValue("{\"type\": \"x509\", \"cert\": \"" + getStrippedCert() + "\", \"name\": \"someId\"}", DeserializablePublicKeyConfiguration.class);
         assertThat(publicKeyConfiguration.getClass()).isEqualTo(X509CertificateConfiguration.class);
     }

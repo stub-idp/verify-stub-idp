@@ -7,7 +7,7 @@ public abstract class AbstractTransliterableString extends XSAnyImpl implements 
 
     private Boolean isLatinScript = true;
 
-    protected AbstractTransliterableString(String namespaceURI, String elementLocalName, String namespacePrefix) {
+    AbstractTransliterableString(String namespaceURI, String elementLocalName, String namespacePrefix) {
         super(namespaceURI, elementLocalName, namespacePrefix);
     }
 

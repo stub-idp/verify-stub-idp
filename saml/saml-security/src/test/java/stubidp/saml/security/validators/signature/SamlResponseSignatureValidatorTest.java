@@ -28,14 +28,14 @@ public class SamlResponseSignatureValidatorTest extends OpenSAMLRunner {
     private Response response;
 
     @BeforeEach
-    public void setUp() {
+    void setUp() {
         samlMessageSignatureValidator = mock(SamlMessageSignatureValidator.class);
         responseSignatureValidator = new SamlResponseSignatureValidator(samlMessageSignatureValidator);
         response = mock(Response.class);
     }
 
     @Test
-    public void validate_shouldDoNothingIfResponseSignatureIsValid() {
+    void validate_shouldDoNothingIfResponseSignatureIsValid() {
         when(samlMessageSignatureValidator.validate(response, SPSSODescriptor.DEFAULT_ELEMENT_NAME)).thenReturn(SamlValidationResponse.aValidResponse());
         when(response.getID()).thenReturn(RESPONSE_ID);
         
@@ -46,7 +46,7 @@ public class SamlResponseSignatureValidatorTest extends OpenSAMLRunner {
     }
 
     @Test
-    public void validate_shouldThrowExceptionIfResponseSignatureIsInvalid() {
+    void validate_shouldThrowExceptionIfResponseSignatureIsInvalid() {
         SamlValidationResponse invalidResponse = SamlValidationResponse.anInvalidResponse(unableToDecrypt("Error"));
         when(samlMessageSignatureValidator.validate(response, SPSSODescriptor.DEFAULT_ELEMENT_NAME)).thenReturn(invalidResponse);
 

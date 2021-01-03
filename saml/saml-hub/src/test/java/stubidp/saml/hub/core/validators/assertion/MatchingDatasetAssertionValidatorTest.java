@@ -41,12 +41,12 @@ public class MatchingDatasetAssertionValidatorTest extends OpenSAMLRunner {
     private MatchingDatasetAssertionValidator validator;
 
     @BeforeEach
-    public void setUp() {
+    void setUp() {
         validator = new MatchingDatasetAssertionValidator(duplicateAssertionValidator);
     }
 
     @Test
-    public void validate_shouldThrowExceptionWhenNameIsNotRecognised() {
+    void validate_shouldThrowExceptionWhenNameIsNotRecognised() {
         Attribute attribute = aSimpleStringAttribute().withName("dummy attribute").build();
         AttributeStatement attributeStatement = anEmptyMatchingDatasetAttributeStatement_1_1().addCustomAttribute(attribute).build();
         Assertion assertion = anAssertion().addAttributeStatement(attributeStatement).buildUnencrypted();
@@ -58,7 +58,7 @@ public class MatchingDatasetAssertionValidatorTest extends OpenSAMLRunner {
     }
 
     @Test
-    public void validate_shouldNotThrowAnExceptionWhenFirstnameIsPresent_ProfileV1_1() {
+    void validate_shouldNotThrowAnExceptionWhenFirstnameIsPresent_ProfileV1_1() {
         AttributeStatement attributeStatement = anEmptyMatchingDatasetAttributeStatement_1_1().withFirstname(aPersonName_1_1().buildAsFirstname()).build();
         Assertion matchingDatasetAssertion = anAssertion().addAttributeStatement(attributeStatement).buildUnencrypted();
 
@@ -66,7 +66,7 @@ public class MatchingDatasetAssertionValidatorTest extends OpenSAMLRunner {
     }
 
     @Test
-    public void validate_shouldNotThrowAnExceptionWhenMiddleNameIsPresent_ProfileV1_1() {
+    void validate_shouldNotThrowAnExceptionWhenMiddleNameIsPresent_ProfileV1_1() {
         AttributeStatement attributeStatement = anEmptyMatchingDatasetAttributeStatement_1_1().withMiddleNames(aPersonName_1_1().buildAsMiddlename()).build();
         Assertion matchingDatasetAssertion = anAssertion().addAttributeStatement(attributeStatement).buildUnencrypted();
 
@@ -74,7 +74,7 @@ public class MatchingDatasetAssertionValidatorTest extends OpenSAMLRunner {
     }
 
     @Test
-    public void validate_shouldNotThrowAnExceptionWhenSurNameIsPresent_ProfileV1_1() {
+    void validate_shouldNotThrowAnExceptionWhenSurNameIsPresent_ProfileV1_1() {
         AttributeStatement attributeStatement = anEmptyMatchingDatasetAttributeStatement_1_1().withSurname(aPersonName_1_1().buildAsSurname()).build();
         Assertion matchingDatasetAssertion = anAssertion().addAttributeStatement(attributeStatement).buildUnencrypted();
 
@@ -82,7 +82,7 @@ public class MatchingDatasetAssertionValidatorTest extends OpenSAMLRunner {
     }
 
     @Test
-    public void validate_shouldNotThrowAnExceptionWhenDateOfBirthIsPresent_ProfileV1_1() {
+    void validate_shouldNotThrowAnExceptionWhenDateOfBirthIsPresent_ProfileV1_1() {
         AttributeStatement attributeStatement = anEmptyMatchingDatasetAttributeStatement_1_1().withDateOfBirth().build();
         Assertion matchingDatasetAssertion = anAssertion().addAttributeStatement(attributeStatement).buildUnencrypted();
 
@@ -90,7 +90,7 @@ public class MatchingDatasetAssertionValidatorTest extends OpenSAMLRunner {
     }
 
     @Test
-    public void validate_shouldNotThrowAnExceptionWhenGenderIsPresent_ProfileV1_1() {
+    void validate_shouldNotThrowAnExceptionWhenGenderIsPresent_ProfileV1_1() {
         AttributeStatement attributeStatement = anEmptyMatchingDatasetAttributeStatement_1_1().withGender().build();
         Assertion matchingDatasetAssertion = anAssertion().addAttributeStatement(attributeStatement).buildUnencrypted();
 
@@ -98,7 +98,7 @@ public class MatchingDatasetAssertionValidatorTest extends OpenSAMLRunner {
     }
 
     @Test
-    public void validate_shouldNotThrowAnExceptionWhenCurrentAddressIsPresent_ProfileV1_1() {
+    void validate_shouldNotThrowAnExceptionWhenCurrentAddressIsPresent_ProfileV1_1() {
         AttributeStatement attributeStatement = anEmptyMatchingDatasetAttributeStatement_1_1().withCurrentAddress().build();
         Assertion matchingDatasetAssertion = anAssertion().addAttributeStatement(attributeStatement).buildUnencrypted();
 
@@ -106,7 +106,7 @@ public class MatchingDatasetAssertionValidatorTest extends OpenSAMLRunner {
     }
 
     @Test
-    public void validate_shouldNotThrowAnExceptionWhenPreviousAddressIsPresent_ProfileV1_1() {
+    void validate_shouldNotThrowAnExceptionWhenPreviousAddressIsPresent_ProfileV1_1() {
         AttributeStatement attributeStatement = anEmptyMatchingDatasetAttributeStatement_1_1().addPreviousAddress().build();
         Assertion matchingDatasetAssertion = anAssertion().addAttributeStatement(attributeStatement).buildUnencrypted();
 
@@ -114,7 +114,7 @@ public class MatchingDatasetAssertionValidatorTest extends OpenSAMLRunner {
     }
 
     @Test
-    public void validate_shouldThrowExceptionWhenNoAttributesArePresent() {
+    void validate_shouldThrowExceptionWhenNoAttributesArePresent() {
         AttributeStatement attributeStatement = anEmptyMatchingDatasetAttributeStatement_1_1().build();
         Assertion matchingDatasetAssertion = anAssertion().addAttributeStatement(attributeStatement).buildUnencrypted();
 
@@ -125,7 +125,7 @@ public class MatchingDatasetAssertionValidatorTest extends OpenSAMLRunner {
     }
 
     @Test
-    public void validate_shouldThrowExceptionWhenNoAttributeStatementsArePresent() {
+    void validate_shouldThrowExceptionWhenNoAttributeStatementsArePresent() {
         Assertion matchingDatasetAssertion = anAssertion().buildUnencrypted();
 
         validateFail(
@@ -135,7 +135,7 @@ public class MatchingDatasetAssertionValidatorTest extends OpenSAMLRunner {
     }
 
     @Test
-    public void validate_shouldThrowExceptionWhenMultipleAttributeStatementsArePresent() {
+    void validate_shouldThrowExceptionWhenMultipleAttributeStatementsArePresent() {
         AttributeStatement attributeStatement = anEmptyMatchingDatasetAttributeStatement_1_1().build();
         Assertion matchingDatasetAssertion = anAssertion()
                 .addAttributeStatement(attributeStatement)
@@ -149,7 +149,7 @@ public class MatchingDatasetAssertionValidatorTest extends OpenSAMLRunner {
     }
 
     @Test
-    public void validate_shouldThrowExceptionWhenAttributeIsMissingValue() {
+    void validate_shouldThrowExceptionWhenAttributeIsMissingValue() {
         Attribute attribute = aPersonName_1_1()
                 .buildAsFirstnameWithNoAttributeValues();
         AttributeStatement attributeStatement = aMatchingDatasetAttributeStatement_1_1()
@@ -166,7 +166,7 @@ public class MatchingDatasetAssertionValidatorTest extends OpenSAMLRunner {
     }
 
     @Test
-    public void validate_shouldThrowExceptionWhenAttributeValueIsIncorrectType() {
+    void validate_shouldThrowExceptionWhenAttributeValueIsIncorrectType() {
         Attribute attribute = aSimpleStringAttribute().withName(IdaConstants.Attributes_1_1.Firstname.NAME).withSimpleStringValue("Joe").build();
         AttributeStatement attributeStatement = aMatchingDatasetAttributeStatement_1_1()
                 .withFirstname(attribute)
@@ -182,7 +182,7 @@ public class MatchingDatasetAssertionValidatorTest extends OpenSAMLRunner {
     }
 
     @Test
-    public void validate_shouldNotThrowExceptionWhenAttributeValueVerifiedIsAbsent() {
+    void validate_shouldNotThrowExceptionWhenAttributeValueVerifiedIsAbsent() {
         Attribute attribute = aPersonName_1_1().addValue(aPersonNameValue().withVerified(null).build()).buildAsFirstname();
         AttributeStatement attributeStatement = aMatchingDatasetAttributeStatement_1_1()
                 .withFirstname(attribute)
@@ -195,7 +195,7 @@ public class MatchingDatasetAssertionValidatorTest extends OpenSAMLRunner {
     }
 
     @Test
-    public void validate_shouldNotThrowExceptionWhenAttributeValueToDateIsAbsent() {
+    void validate_shouldNotThrowExceptionWhenAttributeValueToDateIsAbsent() {
         Attribute attribute = aPersonName_1_1().addValue(aPersonNameValue().withTo(null).build()).buildAsFirstname();
         AttributeStatement attributeStatement = aMatchingDatasetAttributeStatement_1_1()
                 .withFirstname(attribute)
@@ -208,7 +208,7 @@ public class MatchingDatasetAssertionValidatorTest extends OpenSAMLRunner {
     }
 
     @Test
-    public void validate_shouldNotThrowExceptionWhenAttributeValueFromDateIsAbsent() {
+    void validate_shouldNotThrowExceptionWhenAttributeValueFromDateIsAbsent() {
         Attribute attribute = aPersonName_1_1().addValue(aPersonNameValue().withFrom(null).build()).buildAsFirstname();
         AttributeStatement attributeStatement = aMatchingDatasetAttributeStatement_1_1()
                 .withFirstname(attribute)
@@ -221,7 +221,7 @@ public class MatchingDatasetAssertionValidatorTest extends OpenSAMLRunner {
     }
 
     @Test
-    public void validate_shouldThrowExceptionWhenAttributeValueTypeIsValidButIncorrectForAttribute() {
+    void validate_shouldThrowExceptionWhenAttributeValueTypeIsValidButIncorrectForAttribute() {
         Attribute attribute = aPersonName_1_1().addValue(aPersonNameValue().withFrom(null).build()).buildAsFirstname();
         attribute.setName(IdaConstants.Attributes_1_1.DateOfBirth.NAME);
         AttributeStatement attributeStatement = aMatchingDatasetAttributeStatement_1_1()
@@ -238,7 +238,7 @@ public class MatchingDatasetAssertionValidatorTest extends OpenSAMLRunner {
     }
 
     @Test
-    public void validate_shouldValidateForDuplicateIds() {
+    void validate_shouldValidateForDuplicateIds() {
         AttributeStatement attributeStatement = anEmptyMatchingDatasetAttributeStatement_1_1().withFirstname(aPersonName_1_1().buildAsFirstname()).build();
         Assertion matchingDatasetAssertion = anAssertion().addAttributeStatement(attributeStatement).buildUnencrypted();
         validator.validate(matchingDatasetAssertion, RESPONSE_ISSUER_ID);

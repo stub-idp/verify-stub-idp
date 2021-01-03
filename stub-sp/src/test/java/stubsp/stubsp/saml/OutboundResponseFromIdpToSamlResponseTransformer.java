@@ -13,7 +13,7 @@ import stubidp.saml.utils.core.transformers.outbound.IdaResponseToSamlResponseTr
 
 import java.util.Optional;
 
-public class OutboundResponseFromIdpToSamlResponseTransformer extends IdaResponseToSamlResponseTransformer<OutboundResponseFromIdp> {
+class OutboundResponseFromIdpToSamlResponseTransformer extends IdaResponseToSamlResponseTransformer<OutboundResponseFromIdp> {
 
     private static final Logger LOG = LoggerFactory.getLogger(OutboundResponseFromIdpToSamlResponseTransformer.class);
     private final IdentityProviderAssertionToAssertionTransformer assertionTransformer;

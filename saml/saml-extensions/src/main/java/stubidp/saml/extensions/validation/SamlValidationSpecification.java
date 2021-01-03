@@ -7,9 +7,9 @@ public abstract class SamlValidationSpecification {
     private final String message;
     private final boolean contextExpected;
 
-    public abstract SamlDocumentReference documentReference();
+    protected abstract SamlDocumentReference documentReference();
 
-    protected SamlValidationSpecification(String message, boolean contextExpected) {
+    SamlValidationSpecification(String message, boolean contextExpected) {
         this.message = message;
         this.contextExpected = contextExpected;
     }

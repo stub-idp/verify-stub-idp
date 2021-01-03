@@ -28,7 +28,7 @@ public class JDBIUserRepositoryTest {
     private UserMapper userMapper;
 
     @BeforeEach
-    public void setUp() {
+    void setUp() {
         String url = "jdbc:h2:mem:test;MODE=PostgreSQL;DB_CLOSE_DELAY=-1";
         jdbi = Jdbi.create(url);
         new DatabaseMigrationRunner().runMigration(url);
@@ -37,12 +37,12 @@ public class JDBIUserRepositoryTest {
     }
 
     @AfterEach
-    public void afterEach() {
+    void afterEach() {
         CollectorRegistry.defaultRegistry.clear();
     }
 
     @Test
-    public void addOrUpdateUserForIdpShouldAddRecordIfUserDoesNotExist() {
+    void addOrUpdateUserForIdpShouldAddRecordIfUserDoesNotExist() {
         ensureNoUserExistsFor("some-idp-friendly-id");
 
         DatabaseIdpUser idpUser = IdpUserBuilder.anIdpUser()
@@ -58,7 +58,7 @@ public class JDBIUserRepositoryTest {
     }
 
     @Test
-    public void addOrUpdateUserForIdpShouldUpdateRecordIfUserAlreadyExists() {
+    void addOrUpdateUserForIdpShouldUpdateRecordIfUserAlreadyExists() {
         DatabaseIdpUser someUser = IdpUserBuilder.anIdpUser()
             .withUsername("some-username")
             .withPassword("some-password")
@@ -81,7 +81,7 @@ public class JDBIUserRepositoryTest {
     }
 
     @Test
-    public void deleteUserFromIdpShouldDeleteGivenUserFromGivenIdp() {
+    void deleteUserFromIdpShouldDeleteGivenUserFromGivenIdp() {
         DatabaseIdpUser someUser = IdpUserBuilder.anIdpUser()
             .withUsername("some-username")
             .build();
@@ -96,7 +96,7 @@ public class JDBIUserRepositoryTest {
     }
 
     @Test
-    public void getUsersForIdpShouldReturnAllUsersForGivenIdp() {
+    void getUsersForIdpShouldReturnAllUsersForGivenIdp() {
         ensureNoUserExistsFor("some-idp-friendly-id");
 
         DatabaseIdpUser firstUser = IdpUserBuilder.anIdpUser().withUsername("first-username").build();
@@ -111,7 +111,7 @@ public class JDBIUserRepositoryTest {
     }
 
     @Test
-    public void addOrUpdateUserForStubCountryShouldAddRecordIfUserDoesNotExist(){
+    void addOrUpdateUserForStubCountryShouldAddRecordIfUserDoesNotExist(){
         ensureNoUserExistsFor("stub-country-friendly-id");
 
         DatabaseEidasUser eidasUser = new DatabaseEidasUser("some-username", null, "some-password", createMdsValue("firstName"), Optional.of(createMdsValue("firstNameNonLatin")), createMdsValue("surname"), Optional.of(createMdsValue("surnameNonLatin")), createMdsValue(Instant.now()), AuthnContext.LEVEL_2);

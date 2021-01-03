@@ -64,7 +64,7 @@ public class EidasTrustAnchorResolverTest {
     private final X509CertificateFactory certificateFactory = new X509CertificateFactory();
 
     @BeforeEach
-    public void setUp() throws URISyntaxException, KeyStoreException, CertificateException, NoSuchAlgorithmException, IOException {
+    void setUp() throws URISyntaxException, KeyStoreException, CertificateException, NoSuchAlgorithmException, IOException {
         URI uri = new URI("https://govukverify-trust-anchor-dev.s3.amazonaws.com/devTrustAnchor");
         privateSigningKey = new PrivateKeyFactory().createPrivateKey(Base64.getMimeDecoder().decode(TestCertificateStrings.METADATA_SIGNING_A_PRIVATE_KEY));
         publicSigningCert = new X509CertificateFactory().createCertificate(TestCertificateStrings.METADATA_SIGNING_A_PUBLIC_CERT);
@@ -81,7 +81,7 @@ public class EidasTrustAnchorResolverTest {
     }
 
     @Test
-    public void shouldReturnTrustAnchorsIfResponseIsValid() throws ParseException, SignatureException, JOSEException, CertificateException {
+    void shouldReturnTrustAnchorsIfResponseIsValid() throws ParseException, SignatureException, JOSEException, CertificateException {
         when(trustAnchorResponse.readEntity(String.class)).thenReturn(createJwsWithACountryTrustAnchor(privateSigningKey));
 
         List<JWK> result = eidasTrustAnchorResolver.getTrustAnchors();
@@ -91,7 +91,7 @@ public class EidasTrustAnchorResolverTest {
     }
 
     @Test
-    public void shouldThrowSignatureExceptionIfResponseIsNotSignedWithExpectedKey() throws ParseException, JOSEException, CertificateEncodingException {
+    void shouldThrowSignatureExceptionIfResponseIsNotSignedWithExpectedKey() throws ParseException, JOSEException, CertificateEncodingException {
         PrivateKey unexpectedPrivateKey = new PrivateKeyFactory().createPrivateKey(Base64.getMimeDecoder().decode(TestCertificateStrings.TEST_PRIVATE_KEY));
         when(trustAnchorResponse.readEntity(String.class)).thenReturn(createJwsWithACountryTrustAnchor(unexpectedPrivateKey));
 
@@ -99,7 +99,7 @@ public class EidasTrustAnchorResolverTest {
     }
 
     @Test
-    public void shouldThrowCertificateExceptionIfSigningCertIsNotTrusted() throws ParseException, JOSEException, CertificateEncodingException, KeyStoreException {
+    void shouldThrowCertificateExceptionIfSigningCertIsNotTrusted() throws ParseException, JOSEException, CertificateEncodingException, KeyStoreException {
         when(trustAnchorResponse.readEntity(String.class)).thenReturn(createJwsWithACountryTrustAnchor(privateSigningKey));
 
         trustStore.deleteEntry("signing_cert_ca");

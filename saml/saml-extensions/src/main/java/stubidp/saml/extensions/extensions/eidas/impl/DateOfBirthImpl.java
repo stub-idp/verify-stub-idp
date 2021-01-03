@@ -20,7 +20,7 @@ public class DateOfBirthImpl extends XSAnyImpl implements DateOfBirth {
      * @param elementLocalName the local name of the XML element this Object represents
      * @param namespacePrefix the prefix for the given namespace
      */
-    protected DateOfBirthImpl(String namespaceURI, String elementLocalName, String namespacePrefix) {
+    DateOfBirthImpl(String namespaceURI, String elementLocalName, String namespacePrefix) {
         super(namespaceURI, elementLocalName, namespacePrefix);
     }
 

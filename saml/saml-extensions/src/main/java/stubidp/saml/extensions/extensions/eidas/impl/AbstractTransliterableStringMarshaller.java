@@ -6,7 +6,7 @@ import org.opensaml.saml.common.AbstractSAMLObjectMarshaller;
 import org.w3c.dom.Element;
 import stubidp.saml.extensions.extensions.eidas.TransliterableString;
 
-public abstract class AbstractTransliterableStringMarshaller extends AbstractSAMLObjectMarshaller {
+abstract class AbstractTransliterableStringMarshaller extends AbstractSAMLObjectMarshaller {
 
     /** {@inheritDoc} */
     protected void marshallAttributes(XMLObject samlObject, Element domElement) throws MarshallingException {

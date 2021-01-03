@@ -11,7 +11,7 @@ public class StringEncoding {
 
     private StringEncoding() {}
 
-    public static final String ENCODING = "UTF-8";
+    private static final String ENCODING = "UTF-8";
 
     public static String toBase64Encoded(String unencodedString) {
         return Base64.getMimeEncoder().encodeToString(unencodedString.getBytes(UTF_8));
@@ -39,7 +39,7 @@ public class StringEncoding {
         return encodedValue;
     }
 
-    public static String urlDecode(String input) {
+    private static String urlDecode(String input) {
         String decodedValue;
         try {
             decodedValue = URLDecoder.decode(input, ENCODING);

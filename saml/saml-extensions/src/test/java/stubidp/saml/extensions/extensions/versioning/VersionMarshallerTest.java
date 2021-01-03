@@ -9,12 +9,12 @@ import stubidp.saml.test.OpenSAMLRunner;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class VersionMarshallerTest extends OpenSAMLRunner {
+class VersionMarshallerTest extends OpenSAMLRunner {
 
     private final VersionMarshaller versionMarshaller = new VersionMarshaller();
 
     @Test
-    public void shouldMarshallVersion() throws Exception {
+    void shouldMarshallVersion() throws Exception {
         Version version = new VersionBuilder().buildObject();
         ApplicationVersion applicationVersion = new ApplicationVersionBuilder().buildObject();
         applicationVersion.setValue("some-version-value");

@@ -7,10 +7,10 @@ import stubidp.saml.test.OpenSAMLRunner;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class VersionUnmarshallerTest extends OpenSAMLRunner {
+class VersionUnmarshallerTest extends OpenSAMLRunner {
 
     @Test
-    public void shouldUnMarshallVersion() throws Exception {
+    void shouldUnMarshallVersion() throws Exception {
         Version versionAttributeValue = Utils.unmarshall("" +
             "<saml2:AttributeValue " +
             "           xmlns:saml2=\"urn:oasis:names:tc:SAML:2.0:assertion\" " +

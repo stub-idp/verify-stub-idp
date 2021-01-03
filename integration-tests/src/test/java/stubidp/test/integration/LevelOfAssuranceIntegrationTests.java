@@ -28,12 +28,12 @@ import static stubidp.test.integration.support.StubIdpBuilder.aStubIdp;
 @ExtendWith(DropwizardExtensionsSupport.class)
 public class LevelOfAssuranceIntegrationTests extends IntegrationTestHelper {
 
-    public static final String IDP_NAME = "loa-idp";
-    public static final String DISPLAY_NAME = "Level Of Assurance Identity Service";
+    private static final String IDP_NAME = "loa-idp";
+    private static final String DISPLAY_NAME = "Level Of Assurance Identity Service";
 
     private final Client client = JerseyClientBuilder.createClient().property(ClientProperties.FOLLOW_REDIRECTS, false);
 
-    public static final StubIdpAppExtension applicationRule = new StubIdpAppExtension()
+    private static final StubIdpAppExtension applicationRule = new StubIdpAppExtension()
             .withStubIdp(aStubIdp().withId(IDP_NAME).withDisplayName(DISPLAY_NAME).build());
 
     private final AuthnRequestSteps authnRequestSteps = new AuthnRequestSteps(
@@ -42,12 +42,12 @@ public class LevelOfAssuranceIntegrationTests extends IntegrationTestHelper {
             applicationRule.getLocalPort());
 
     @BeforeEach
-    public void refreshMetadata() {
+    void refreshMetadata() {
         client.target("http://localhost:"+applicationRule.getAdminPort()+"/tasks/metadata-refresh").request().post(Entity.text(""));
     }
 
     @Test
-    public void debugPageShowsAuthnContextsAndComparisonTypeTest() {
+    void debugPageShowsAuthnContextsAndComparisonTypeTest() {
         final AuthnRequestSteps.Cookies cookies = authnRequestSteps.userPostsAuthnRequestToStubIdp("hint");
 
         Response response = aUserVisitsTheDebugPage(IDP_NAME, cookies);
@@ -65,7 +65,7 @@ public class LevelOfAssuranceIntegrationTests extends IntegrationTestHelper {
                 .map(Element::text).collect(Collectors.toList());
     }
 
-    public Response aUserVisitsTheDebugPage(String idp, AuthnRequestSteps.Cookies cookies) {
+    Response aUserVisitsTheDebugPage(String idp, AuthnRequestSteps.Cookies cookies) {
         return client.target(getDebugPath(idp))
                 .request()
                 .cookie(StubIdpCookieNames.SESSION_COOKIE_NAME, cookies.getSessionId())

@@ -13,7 +13,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-public class EncryptedAssertionUnmarshallerTest extends OpenSAMLRunner {
+class EncryptedAssertionUnmarshallerTest extends OpenSAMLRunner {
 
     private static final String ENCRYPTED_ASSERTION_BLOB = "BLOB";
 
@@ -21,7 +21,7 @@ public class EncryptedAssertionUnmarshallerTest extends OpenSAMLRunner {
     public StringToOpenSamlObjectTransformer<EncryptedAssertion> stringToEncryptedAssertionTransformer;
 
     @Test
-    public void shouldCreateAEncryptedAssertionObjectFromAGivenString() {
+    void shouldCreateAEncryptedAssertionObjectFromAGivenString() {
         EncryptedAssertionUnmarshaller encryptedAssertionUnmarshaller = new EncryptedAssertionUnmarshaller(stringToEncryptedAssertionTransformer);
         final EncryptedAssertion expected = new EncryptedAssertionBuilder().buildObject();
         when(stringToEncryptedAssertionTransformer.apply(ENCRYPTED_ASSERTION_BLOB)).thenReturn(expected);

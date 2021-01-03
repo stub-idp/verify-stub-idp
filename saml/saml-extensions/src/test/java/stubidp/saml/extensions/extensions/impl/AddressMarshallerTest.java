@@ -21,7 +21,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static stubidp.saml.extensions.IdaConstants.IDA_NS;
 import static stubidp.saml.extensions.IdaConstants.IDA_PREFIX;
 
-public class AddressMarshallerTest extends OpenSAMLRunner {
+class AddressMarshallerTest extends OpenSAMLRunner {
 
     private static final String FROM_DATE = "2011-10-20";
     private static final String TO_DATE = "2012-12-20";
@@ -34,14 +34,14 @@ public class AddressMarshallerTest extends OpenSAMLRunner {
     private Address address;
 
     @BeforeEach
-    public void before() {
+    void before() {
         address = createAddress();
         marshaller = XMLObjectProviderRegistrySupport.getMarshallerFactory().getMarshaller(address);
         assertThat(marshaller).isNotNull();
     }
 
     @Test
-    public void marshall_shouldMarshallAddress() throws Exception {
+    void marshall_shouldMarshallAddress() throws Exception {
         Element addressElement = marshaller.marshall(address);
 
         assertThat(addressElement.getNamespaceURI()).isEqualTo(Address.DEFAULT_ELEMENT_NAME.getNamespaceURI());
@@ -69,7 +69,7 @@ public class AddressMarshallerTest extends OpenSAMLRunner {
     }
 
     @Test
-    public void marshall_shouldNotAddFromDateAttributeWhenNoFromDateIsSet() throws Exception {
+    void marshall_shouldNotAddFromDateAttributeWhenNoFromDateIsSet() throws Exception {
         address.setFrom(null);
         Element addressElement = marshaller.marshall(address);
 
@@ -77,7 +77,7 @@ public class AddressMarshallerTest extends OpenSAMLRunner {
     }
 
     @Test
-    public void marshall_shouldNotAddToDateAttributeWhenNoToDateIsSet() throws Exception {
+    void marshall_shouldNotAddToDateAttributeWhenNoToDateIsSet() throws Exception {
         address.setTo(null);
         Element addressElement = marshaller.marshall(address);
 
@@ -85,14 +85,14 @@ public class AddressMarshallerTest extends OpenSAMLRunner {
     }
 
     @Test
-    public void marshall_shouldEnsureXsiNamespaceDefinitionIsIncluded() throws Exception {
+    void marshall_shouldEnsureXsiNamespaceDefinitionIsIncluded() throws Exception {
         Element marshalledElement = marshaller.marshall(new AddressBuilder().buildObject());
 
         assertThat(marshalledElement.hasAttributeNS(XMLConstants.XMLNS_NS, XMLConstants.XSI_PREFIX)).isTrue();
     }
 
     @Test
-    public void marshall_shouldMarshallFromDateInCorrectFormat() throws Exception {
+    void marshall_shouldMarshallFromDateInCorrectFormat() throws Exception {
         String fromDate = "2012-02-09";
         address.setFrom(BaseMdsSamlObjectUnmarshaller.InstantFromDate.of(fromDate));
 
@@ -102,7 +102,7 @@ public class AddressMarshallerTest extends OpenSAMLRunner {
     }
 
     @Test
-    public void marshall_shouldMarshallFromDateWithNamespacePrefix() throws Exception {
+    void marshall_shouldMarshallFromDateWithNamespacePrefix() throws Exception {
         address.setFrom(BaseMdsSamlObjectUnmarshaller.InstantFromDate.of("2012-02-09"));
 
         Element marshalledElement = marshaller.marshall(address);
@@ -111,7 +111,7 @@ public class AddressMarshallerTest extends OpenSAMLRunner {
     }
 
     @Test
-    public void marshall_shouldMarshallToDateInCorrectFormat() throws Exception {
+    void marshall_shouldMarshallToDateInCorrectFormat() throws Exception {
         String toDate = "2012-02-09";
         address.setTo(BaseMdsSamlObjectUnmarshaller.InstantFromDate.of(toDate));
 
@@ -121,7 +121,7 @@ public class AddressMarshallerTest extends OpenSAMLRunner {
     }
 
     @Test
-    public void marshall_shouldMarshallToDateWithNamespacePrefix() throws Exception {
+    void marshall_shouldMarshallToDateWithNamespacePrefix() throws Exception {
         address.setTo(BaseMdsSamlObjectUnmarshaller.InstantFromDate.of("2012-02-09"));
 
         Element marshalledElement = marshaller.marshall(address);
@@ -130,17 +130,17 @@ public class AddressMarshallerTest extends OpenSAMLRunner {
     }
 
     @Test
-    public void marshall_shouldMarshallVerifiedWhenFalse() throws Exception {
+    void marshall_shouldMarshallVerifiedWhenFalse() throws Exception {
         checkMarshallingVerifiedAttributeWithValue(false);
     }
 
     @Test
-    public void marshall_shouldMarshallVerifiedWhenTrue() throws Exception {
+    void marshall_shouldMarshallVerifiedWhenTrue() throws Exception {
         checkMarshallingVerifiedAttributeWithValue(true);
     }
 
     @Test
-    public void marshall_shouldMarshallVerifiedWithNamespacePrefix() throws MarshallingException {
+    void marshall_shouldMarshallVerifiedWithNamespacePrefix() throws MarshallingException {
         address.setVerified(true);
 
         Element marshalledElement = marshaller.marshall(address);
@@ -157,7 +157,7 @@ public class AddressMarshallerTest extends OpenSAMLRunner {
     }
 
     @Test
-    public void marshall_shouldNotAddPostCodeElementWhenNotSet() throws Exception {
+    void marshall_shouldNotAddPostCodeElementWhenNotSet() throws Exception {
         address.setPostCode(null);
 
         Element addressElement = marshaller.marshall(address);
@@ -167,7 +167,7 @@ public class AddressMarshallerTest extends OpenSAMLRunner {
     }
 
     @Test
-    public void marshall_shouldNotAddInternationalPostCodeElementWhenNotSet() throws Exception {
+    void marshall_shouldNotAddInternationalPostCodeElementWhenNotSet() throws Exception {
         address.setInternationalPostCode(null);
 
         Element addressElement = marshaller.marshall(address);
@@ -177,7 +177,7 @@ public class AddressMarshallerTest extends OpenSAMLRunner {
     }
 
     @Test
-    public void marshall_shouldNotAddUPRNElementWhenNotSet() throws Exception {
+    void marshall_shouldNotAddUPRNElementWhenNotSet() throws Exception {
         address.setUPRN(null);
 
         Element addressElement = marshaller.marshall(address);

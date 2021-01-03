@@ -26,7 +26,7 @@ public class SignatureWithKeyInfoFactoryTest extends OpenSAMLRunner {
     private PublicKeyFactory publicKeyFactory;
 
 	@Test
-    public void shouldCreateMultipleSignaturesWithoutThrowingExceptions() {
+    void shouldCreateMultipleSignaturesWithoutThrowingExceptions() {
         final String id = UUID.randomUUID().toString();
         publicKeyFactory = new PublicKeyFactory(new X509CertificateFactory());
         PrivateKey privateKey = new PrivateKeyFactory().createPrivateKey(Base64.getMimeDecoder().decode(TestCertificateStrings.PRIVATE_SIGNING_KEYS.get(

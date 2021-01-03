@@ -21,29 +21,29 @@ public class AssertionSubjectValidatorTest extends OpenSAMLRunner {
     private static AssertionSubjectValidator validator;
 
     @BeforeEach
-    public void setup() {
+    void setup() {
         validator = new AssertionSubjectValidator();
     }
 
     @Test
-    public void validate_shouldThrowExceptionIfSubjectElementIsMissing() {
+    void validate_shouldThrowExceptionIfSubjectElementIsMissing() {
         assertExceptionMessage(null, ResponseProcessingValidationSpecification.class, SamlTransformationErrorFactory.missingAssertionSubject(ASSERTION_ID));
     }
 
     @Test
-    public void validate_shouldThrowExceptionIfSubjectNameIdIsMissing() {
+    void validate_shouldThrowExceptionIfSubjectNameIdIsMissing() {
         final Subject subject = aSubject().withNameId(null).build();
         assertExceptionMessage(subject, ResponseProcessingValidationSpecification.class, SamlTransformationErrorFactory.assertionSubjectHasNoNameID(ASSERTION_ID));
     }
 
     @Test
-    public void validate_shouldThrowExceptionIfSubjectNameIdFormatAttributeIsMissing() {
+    void validate_shouldThrowExceptionIfSubjectNameIdFormatAttributeIsMissing() {
         final Subject subject = aSubject().withNameId(NameIdBuilder.aNameId().withFormat(null).build()).build();
         assertExceptionMessage(subject, ResponseProcessingValidationSpecification.class, SamlTransformationErrorFactory.missingAssertionSubjectNameIDFormat(ASSERTION_ID));
     }
 
     @Test
-    public void validate_shouldSuccessfullyValidateMultipleNameIdFormats() {
+    void validate_shouldSuccessfullyValidateMultipleNameIdFormats() {
         Subject subject = aSubject().withNameId(NameIdBuilder.aNameId().withFormat(NameIDType.PERSISTENT).build()).build();
         assertThat(subject.getNameID().getFormat()).isEqualTo(NameIDType.PERSISTENT);
 
@@ -52,12 +52,12 @@ public class AssertionSubjectValidatorTest extends OpenSAMLRunner {
     }
 
     @Test
-    public void validate_shouldThrowExceptionIfSubjectNameIdFormatAttributeHasInvalidValue() {
+    void validate_shouldThrowExceptionIfSubjectNameIdFormatAttributeHasInvalidValue() {
         final Subject subject = aSubject().withNameId(NameIdBuilder.aNameId().withFormat("Invalid").build()).build();
         assertExceptionMessage(subject, ResponseProcessingValidationSpecification.class, SamlTransformationErrorFactory.illegalAssertionSubjectNameIDFormat(ASSERTION_ID, subject.getNameID().getFormat()));
     }
 
-    public static void assertExceptionMessage(
+    static void assertExceptionMessage(
             final Subject subject,
             Class<? extends SamlValidationSpecificationFailure> errorClass,
             SamlValidationSpecificationFailure failure) {

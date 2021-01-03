@@ -27,12 +27,12 @@ public class AssertionAttributeStatementValidatorTest extends OpenSAMLRunner {
     private final OpenSamlXmlObjectFactory openSamlXmlObjectFactory = new OpenSamlXmlObjectFactory();
 
     @BeforeEach
-    public void setUp() {
+    void setUp() {
         validator = new AssertionAttributeStatementValidator();
     }
 
     @Test
-    public void validate_shouldThrowWhenAttributesIsNotEnGb() {
+    void validate_shouldThrowWhenAttributesIsNotEnGb() {
         Attribute validAttributeOne = aSimpleStringAttribute().build();
         PersonName validFirstNameAttribute = openSamlXmlObjectFactory.createPersonNameAttributeValue("Dave");
         validAttributeOne.getAttributeValues().add(validFirstNameAttribute);
@@ -61,7 +61,7 @@ public class AssertionAttributeStatementValidatorTest extends OpenSAMLRunner {
     }
 
     @Test
-    public void validate_shouldThrowWhenFraudEventNotCorrect() {
+    void validate_shouldThrowWhenFraudEventNotCorrect() {
         final Assertion assertion = AssertionBuilder.anAssertion()
                 .addAttributeStatement(anAttributeStatement().addAttribute(IdpFraudEventIdAttributeBuilder.anIdpFraudEventIdAttribute().buildInvalidAttribute()).build())
                 .buildUnencrypted();

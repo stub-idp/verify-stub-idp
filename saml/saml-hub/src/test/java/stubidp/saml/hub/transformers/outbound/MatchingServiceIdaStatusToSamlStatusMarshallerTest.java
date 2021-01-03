@@ -12,17 +12,17 @@ import stubidp.saml.utils.hub.transformers.outbound.MatchingServiceIdaStatusMars
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class MatchingServiceIdaStatusToSamlStatusMarshallerTest extends OpenSAMLRunner {
+class MatchingServiceIdaStatusToSamlStatusMarshallerTest extends OpenSAMLRunner {
 
     private stubidp.saml.utils.hub.transformers.outbound.MatchingServiceIdaStatusMarshaller marshaller;
 
     @BeforeEach
-    public void setUp() {
+    void setUp() {
         marshaller = new MatchingServiceIdaStatusMarshaller(new OpenSamlXmlObjectFactory());
     }
 
     @Test
-    public void toSamlStatus_shouldTransformMatchingServiceMatch() {
+    void toSamlStatus_shouldTransformMatchingServiceMatch() {
         Status transformedStatus = marshaller.toSamlStatus(MatchingServiceIdaStatus.MatchingServiceMatch);
 
         assertThat(transformedStatus.getStatusCode().getValue()).isEqualTo(StatusCode.SUCCESS);
@@ -31,7 +31,7 @@ public class MatchingServiceIdaStatusToSamlStatusMarshallerTest extends OpenSAML
     }
 
     @Test
-    public void toSamlStatus_shouldTransformNoMatchingServiceMatch() {
+    void toSamlStatus_shouldTransformNoMatchingServiceMatch() {
         Status transformedStatus = marshaller.toSamlStatus(MatchingServiceIdaStatus.NoMatchingServiceMatchFromMatchingService);
 
         assertThat(transformedStatus.getStatusCode().getValue()).isEqualTo(StatusCode.RESPONDER);
@@ -40,7 +40,7 @@ public class MatchingServiceIdaStatusToSamlStatusMarshallerTest extends OpenSAML
     }
 
     @Test
-    public void toSamlStatus_shouldTransformRequesterError() {
+    void toSamlStatus_shouldTransformRequesterError() {
         Status transformedStatus = marshaller.toSamlStatus(MatchingServiceIdaStatus.RequesterError);
 
         assertThat(transformedStatus.getStatusCode().getValue()).isEqualTo(StatusCode.REQUESTER);

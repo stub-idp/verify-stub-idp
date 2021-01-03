@@ -19,13 +19,13 @@ import static stubidp.metrics.prometheus.config.TestResource.TEST_RESOURCE_PATH;
 @ExtendWith(DropwizardExtensionsSupport.class)
 public class PrometheusBundleTest {
 
-    public static final DropwizardAppExtension<TestConfiguration> appRuleWithMetrics = new DropwizardAppExtension<>(TestApplication.class, null,
+    private static final DropwizardAppExtension<TestConfiguration> appRuleWithMetrics = new DropwizardAppExtension<>(TestApplication.class, null,
             ConfigOverride.config("logging.level", "WARN"),
             ConfigOverride.config("server.applicationConnectors[0].port", "0"),
             ConfigOverride.config("server.adminConnectors[0].port", "0"),
             ConfigOverride.config("prometheusEnabled", "true"));
 
-    public static final DropwizardAppExtension<TestConfiguration> appRuleWithoutMetrics = new DropwizardAppExtension<>(TestApplication.class, null,
+    private static final DropwizardAppExtension<TestConfiguration> appRuleWithoutMetrics = new DropwizardAppExtension<>(TestApplication.class, null,
             ConfigOverride.config("logging.level", "WARN"),
             ConfigOverride.config("server.applicationConnectors[0].port", "0"),
             ConfigOverride.config("server.adminConnectors[0].port", "0"),
@@ -34,7 +34,7 @@ public class PrometheusBundleTest {
     private final Client client = new JerseyClientBuilder().build();
 
     @Test
-    public void aDropwizardResourceTimerMetricIsLogged() {
+    void aDropwizardResourceTimerMetricIsLogged() {
         Response response = client.target("http://localhost:" + appRuleWithMetrics.getAdminPort() + PrometheusBundle.PROMETHEUS_METRICS_RESOURCE)
                 .request()
                 .get();
@@ -55,7 +55,7 @@ public class PrometheusBundleTest {
     }
 
     @Test
-    public void noDropwizardJvmMetricsAreLogged() {
+    void noDropwizardJvmMetricsAreLogged() {
         final Response response = client.target("http://localhost:" + appRuleWithMetrics.getAdminPort() + PrometheusBundle.PROMETHEUS_METRICS_RESOURCE)
                 .request()
                 .get();
@@ -68,7 +68,7 @@ public class PrometheusBundleTest {
     }
 
     @Test
-    public void metricsAreNotPresentWhenMetricsAreDisabled() {
+    void metricsAreNotPresentWhenMetricsAreDisabled() {
         final Response response = client.target("http://localhost:" + appRuleWithoutMetrics.getAdminPort() + PrometheusBundle.PROMETHEUS_METRICS_RESOURCE)
                 .request()
                 .get();

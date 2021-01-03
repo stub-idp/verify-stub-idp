@@ -19,7 +19,7 @@ public class EidasGenderImpl extends XSAnyImpl implements EidasGender {
      * @param elementLocalName the local name of the XML element this Object represents
      * @param namespacePrefix the prefix for the given namespace
      */
-    protected EidasGenderImpl(String namespaceURI, String elementLocalName, String namespacePrefix) {
+    EidasGenderImpl(String namespaceURI, String elementLocalName, String namespacePrefix) {
         super(namespaceURI, elementLocalName, namespacePrefix);
     }
 

@@ -58,7 +58,7 @@ public class UserLogsInIntegrationTests extends IntegrationTestHelper {
             applicationRule.getEidasKeyStore(),
             checkKeyInfo);
 
-    public static final StubIdpAppExtension applicationRule = new StubIdpAppExtension(Map.ofEntries(Map.entry("isPrometheusEnabled", "true")))
+    private static final StubIdpAppExtension applicationRule = new StubIdpAppExtension(Map.ofEntries(Map.entry("isPrometheusEnabled", "true")))
             .withStubIdp(aStubIdp()
                     .withId(IDP_NAME)
                     .withDisplayName(DISPLAY_NAME)

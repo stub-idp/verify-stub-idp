@@ -35,13 +35,13 @@ public class SyslogAppenderTest {
     private SyslogOutputStream outputStream;
 
     @BeforeEach
-    public void setUp() {
+    void setUp() {
         appender = new SyslogAppender(syslogEventFormatter, outputStream);
         appender.start();
     }
 
     @Test
-    public void doAppend_shouldConvertEventToLogstashFormat() throws Exception {
+    void doAppend_shouldConvertEventToLogstashFormat() throws Exception {
         final String syslogMessage = UUID.randomUUID().toString();
         final ILoggingEvent event = mock(ILoggingEvent.class);
         when(syslogEventFormatter.format(event)).thenReturn(syslogMessage);
@@ -52,7 +52,7 @@ public class SyslogAppenderTest {
     }
 
     @Test
-    public void doAppend_shouldDoNothingIfAppenderHasNotBeenStarted() throws Exception {
+    void doAppend_shouldDoNothingIfAppenderHasNotBeenStarted() throws Exception {
         appender = new SyslogAppender(syslogEventFormatter, outputStream);
 
         appender.append(mock(ILoggingEvent.class));
@@ -61,7 +61,7 @@ public class SyslogAppenderTest {
     }
 
     @Test
-    public void doAppend_shouldRecordAnErrorWhenWritingToSyslogFails() throws Exception {
+    void doAppend_shouldRecordAnErrorWhenWritingToSyslogFails() throws Exception {
         when(syslogEventFormatter.format(any(ILoggingEvent.class))).thenReturn("");
         final IOException ioError = new IOException();
         doThrow(ioError).when(outputStream).write(any());

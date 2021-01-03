@@ -18,7 +18,7 @@ import stubidp.saml.domain.matching.assertions.MatchingServiceAssertion;
 import javax.inject.Inject;
 import java.util.List;
 
-public class MatchingServiceAssertionToAssertionTransformer {
+class MatchingServiceAssertionToAssertionTransformer {
 
     private final OpenSamlXmlObjectFactory openSamlXmlObjectFactory;
     private final MatchingServiceAuthnStatementToAuthnStatementTransformer matchingServiceAuthnStatementToAuthnStatementTransformer;

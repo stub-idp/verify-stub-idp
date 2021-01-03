@@ -21,7 +21,7 @@ public class ExpectedRequestTest {
     private RecordedRequest receivedRequest;
 
     @Test
-    public void shouldApplyIfPathIsNullInExpectedRequest() {
+    void shouldApplyIfPathIsNullInExpectedRequest() {
         assertThat(new ExpectedRequest(null, null, null, null).applies(receivedRequest)).isTrue();
         verify(receivedRequest, never()).getPath();
         verify(receivedRequest, never()).getMethod();
@@ -30,49 +30,49 @@ public class ExpectedRequestTest {
     }
 
     @Test
-    public void shouldApplyIfPathSetInExpectedRequestAndMatchesReceivedRequestPath() {
+    void shouldApplyIfPathSetInExpectedRequestAndMatchesReceivedRequestPath() {
         when(receivedRequest.getPath()).thenReturn("/some/path/to/foo");
         assertThat(new ExpectedRequest("/some/path/to/foo", null, null, null).applies(receivedRequest)).isTrue();
         verify(receivedRequest, times(1)).getPath();
     }
 
     @Test
-    public void shouldNotApplyIfPathSetInExpectedRequestAndDoesntMatchesReceivedRequestPath() {
+    void shouldNotApplyIfPathSetInExpectedRequestAndDoesntMatchesReceivedRequestPath() {
         when(receivedRequest.getPath()).thenReturn("/some/path/to/foo");
         assertThat(new ExpectedRequest("/some/path/to/bar", null, null, null).applies(receivedRequest)).isFalse();
         verify(receivedRequest, times(1)).getPath();
     }
 
     @Test
-    public void shouldApplyIfMethodSetInExpectedRequestAndMatchesReceivedRequestMethod() {
+    void shouldApplyIfMethodSetInExpectedRequestAndMatchesReceivedRequestMethod() {
         when(receivedRequest.getMethod()).thenReturn("GET");
         assertThat(new ExpectedRequest(null, "GET", null, null).applies(receivedRequest)).isTrue();
         verify(receivedRequest, times(1)).getMethod();
     }
 
     @Test
-    public void shouldNotApplyIfMethodSetInExpectedRequestAndDoesntMatchesReceivedRequestMethod() {
+    void shouldNotApplyIfMethodSetInExpectedRequestAndDoesntMatchesReceivedRequestMethod() {
         when(receivedRequest.getMethod()).thenReturn("GET");
         assertThat(new ExpectedRequest(null, "POST", null, null).applies(receivedRequest)).isFalse();
         verify(receivedRequest, times(1)).getMethod();
     }
 
     @Test
-    public void shouldApplyIfBodySetInExpectedRequestAndMatchesReceivedRequestEntity() {
+    void shouldApplyIfBodySetInExpectedRequestAndMatchesReceivedRequestEntity() {
         when(receivedRequest.getEntityBytes()).thenReturn("any-body".getBytes());
         assertThat(new ExpectedRequest(null, null, null, "any-body").applies(receivedRequest)).isTrue();
         verify(receivedRequest, times(1)).getEntityBytes();
     }
 
     @Test
-    public void shouldNotApplyIfBodySetInExpectedRequestAndDoesntMatchesReceivedRequestEntity() {
+    void shouldNotApplyIfBodySetInExpectedRequestAndDoesntMatchesReceivedRequestEntity() {
         when(receivedRequest.getEntityBytes()).thenReturn("any-body".getBytes());
         assertThat(new ExpectedRequest(null, null, null, "some-body").applies(receivedRequest)).isFalse();
         verify(receivedRequest, times(1)).getEntityBytes();
     }
 
     @Test
-    public void shouldApplyIfHeadersSetInExpectedRequestAreAllFoundInReceivedRequestHeaders() {
+    void shouldApplyIfHeadersSetInExpectedRequestAreAllFoundInReceivedRequestHeaders() {
         final Map<String, List<String>> sentHeaders = Map.of("Key1", List.of("Value1", "Value3"), "Key2", List.of("Value2"));
         when(receivedRequest.getHeaders()).thenReturn(sentHeaders);
         Map<String, List<String>> requiredHeaders = Map.of("Key2", List.of("Value2"), "Key1", List.of("Value1", "Value3"));
@@ -81,7 +81,7 @@ public class ExpectedRequestTest {
     }
 
     @Test
-    public void shouldApplyIfHeadersSetInExpectedRequestAreEmpty() {
+    void shouldApplyIfHeadersSetInExpectedRequestAreEmpty() {
         final Map<String, List<String>> sentHeaders = Map.of("Key1", List.of("Value1", "Value3"), "Key2", List.of("Value2"));
         when(receivedRequest.getHeaders()).thenReturn(sentHeaders);
         Map<String, List<String>> requiredHeaders = Map.of();
@@ -90,7 +90,7 @@ public class ExpectedRequestTest {
     }
 
     @Test
-    public void shouldNotApplyIfHeadersSetInExpectedRequestAreNotAllFoundInReceivedRequestHeaders() {
+    void shouldNotApplyIfHeadersSetInExpectedRequestAreNotAllFoundInReceivedRequestHeaders() {
         final Map<String, List<String>> sentHeaders = Map.of("Key1", List.of("Value1", "Value3"), "Key2", List.of("Value2"));
         when(receivedRequest.getHeaders()).thenReturn(sentHeaders);
         Map<String, List<String>> requiredHeaders = Map.of("Key2", List.of("Value2"), "Key1", List.of("Value1", "Value3"), "Key3", List.of("Value4"));

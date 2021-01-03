@@ -41,7 +41,7 @@ public class FederationMetadataWithoutTrustStoresBundleTest {
     private static final String VERIFY_METADATA_PATH = "/saml/metadata/sp";
     private static final HttpStubRule verifyMetadataServer = new HttpStubRule();
     @RegisterExtension
-    public static final KeyStoreRule metadataKeyStoreRule;
+    static final KeyStoreRule metadataKeyStoreRule;
 
     static {
         try {
@@ -55,7 +55,7 @@ public class FederationMetadataWithoutTrustStoresBundleTest {
         verifyMetadataServer.register(VERIFY_METADATA_PATH, 200, APPLICATION_SAMLMETADATA_XML, new MetadataFactory().defaultMetadata());
     }
 
-    public static final DropwizardAppExtension<TestConfiguration> APPLICATION_DROPWIZARD_APP_RULE = new DropwizardAppExtension<>(
+    private static final DropwizardAppExtension<TestConfiguration> APPLICATION_DROPWIZARD_APP_RULE = new DropwizardAppExtension<>(
         TestApplication.class,
         ResourceHelpers.resourceFilePath("test-app.yml"),
         ConfigOverride.config("metadata.uri", "http://localhost:" + verifyMetadataServer.getPort() + VERIFY_METADATA_PATH),
@@ -67,12 +67,12 @@ public class FederationMetadataWithoutTrustStoresBundleTest {
     private static Client client;
 
     @BeforeAll
-    public static void setUp() {
+    static void setUp() {
         client = new JerseyClientBuilder(APPLICATION_DROPWIZARD_APP_RULE.getEnvironment()).build(FederationMetadataWithoutTrustStoresBundleTest.class.getName() + "2");
     }
 
     @Test
-    public void shouldReadMetadataFromMetadataServerUsingTrustStoreBackedMetadataConfiguration() {
+    void shouldReadMetadataFromMetadataServerUsingTrustStoreBackedMetadataConfiguration() {
         Response response = client.target("http://localhost:" + APPLICATION_DROPWIZARD_APP_RULE.getLocalPort() +"/foo").request().get();
         assertThat(response.readEntity(String.class)).isEqualTo(TestEntityIds.HUB_ENTITY_ID);
     }
@@ -81,7 +81,7 @@ public class FederationMetadataWithoutTrustStoresBundleTest {
         @JsonProperty("metadata")
         private TrustStoreBackedMetadataConfiguration metadataConfiguration;
 
-        public Optional<MetadataResolverConfiguration> getMetadataConfiguration() {
+        Optional<MetadataResolverConfiguration> getMetadataConfiguration() {
             return Optional.ofNullable(metadataConfiguration);
         }
     }

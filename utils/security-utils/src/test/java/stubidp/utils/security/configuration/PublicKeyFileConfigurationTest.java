@@ -15,7 +15,7 @@ public class PublicKeyFileConfigurationTest {
     private final ObjectMapper objectMapper = new ObjectMapper();
 
     @Test
-    public void should_loadPublicKeyFromJSON() throws Exception {
+    void should_loadPublicKeyFromJSON() throws Exception {
         String path = getClass().getClassLoader().getResource("public_key.crt").getPath();
         DeserializablePublicKeyConfiguration publicKeyConfiguration = objectMapper.readValue("{\"type\": \"file\", \"cert\": \"" + path + "\", \"name\": \"someId\"}", DeserializablePublicKeyConfiguration.class);
 
@@ -23,7 +23,7 @@ public class PublicKeyFileConfigurationTest {
     }
 
     @Test
-    public void should_loadPublicKeyWhenUsingAliases() throws Exception {
+    void should_loadPublicKeyWhenUsingAliases() throws Exception {
         String path = getClass().getClassLoader().getResource("public_key.crt").getPath();
         List<String> aliases = Arrays.asList("cert", "certFile");
 
@@ -37,20 +37,20 @@ public class PublicKeyFileConfigurationTest {
     }
 
     @Test
-    public void should_ThrowExceptionWhenFileDoesNotExist() {
+    void should_ThrowExceptionWhenFileDoesNotExist() {
         final ValueInstantiationException exception = Assertions.assertThrows(ValueInstantiationException.class, () -> objectMapper.readValue("{\"type\": \"file\", \"cert\": \"/foo/bar\", \"name\": \"someId\"}", DeserializablePublicKeyConfiguration.class));
         assertThat(exception.getMessage()).contains("NoSuchFileException");
     }
 
     @Test
-    public void should_ThrowExceptionWhenFileDoesNotContainAPublicKey() {
+    void should_ThrowExceptionWhenFileDoesNotContainAPublicKey() {
         String path = getClass().getClassLoader().getResource("empty_file").getPath();
         final ValueInstantiationException exception = Assertions.assertThrows(ValueInstantiationException.class, () -> objectMapper.readValue("{\"type\": \"file\", \"cert\": \"" + path + "\", \"name\": \"someId\"}", DeserializablePublicKeyConfiguration.class));
         assertThat(exception.getMessage()).contains("Unable to load certificate");
     }
 
     @Test
-    public void should_ThrowExceptionWhenIncorrectKeySpecified() {
+    void should_ThrowExceptionWhenIncorrectKeySpecified() {
         String path = getClass().getClassLoader().getResource("empty_file").getPath();
         Assertions.assertThrows(ValueInstantiationException.class, () -> objectMapper.readValue("{\"type\": \"file\", \"certFoo\": \"" + path + "\", \"name\": \"someId\"}", DeserializablePublicKeyConfiguration.class));
     }

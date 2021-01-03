@@ -20,12 +20,12 @@ public class OutboundAssertionToSubjectTransformerTest extends OpenSAMLRunner {
     private OutboundAssertionToSubjectTransformer transformer;
 
     @BeforeEach
-    public void setup() {
+    void setup() {
         transformer = new OutboundAssertionToSubjectTransformer(new OpenSamlXmlObjectFactory());
     }
 
     @Test
-    public void transform_shouldAddSubjectConfirmationData() {
+    void transform_shouldAddSubjectConfirmationData() {
         HubAssertion assertion = HubAssertionBuilder.aHubAssertion().build();
 
         final Subject subject = transformer.transform(assertion);
@@ -39,7 +39,7 @@ public class OutboundAssertionToSubjectTransformerTest extends OpenSAMLRunner {
     }
 
     @Test
-    public void transform_shouldTransformPersistentId() {
+    void transform_shouldTransformPersistentId() {
         PersistentId persistentId = PersistentIdBuilder.aPersistentId().build();
         HubAssertion assertion = HubAssertionBuilder.aHubAssertion().withPersistentId(persistentId).build();
 
