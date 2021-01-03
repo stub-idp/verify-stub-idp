@@ -7,19 +7,19 @@ import stubidp.utils.rest.configuration.ServiceStatus;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class SetServiceUnavailableTaskTest {
+class SetServiceUnavailableTaskTest {
 
-    ServiceStatus instance;
-    SetServiceUnavailableTask setServiceUnavailableTask;
+    private ServiceStatus instance;
+    private SetServiceUnavailableTask setServiceUnavailableTask;
 
     @BeforeEach
-    public void setUp() {
+    void setUp() {
         instance = ServiceStatus.getInstance();
         setServiceUnavailableTask = new SetServiceUnavailableTask(instance);
     }
 
     @Test
-    public void shouldCreateSetServiceTaskAndReturnFalseWhenExecuted() throws Exception {
+    void shouldCreateSetServiceTaskAndReturnFalseWhenExecuted() {
         assertThat(setServiceUnavailableTask.getName()).isEqualTo("set-service-unavailable");
         assertThat(instance.isServerStatusOK()).isEqualTo(true);
         setServiceUnavailableTask.execute(null, null);
@@ -27,7 +27,7 @@ public class SetServiceUnavailableTaskTest {
     }
 
     @AfterEach
-    public void tearDown(){
+    void tearDown(){
         instance.setServiceStatus(true);
     }
 }

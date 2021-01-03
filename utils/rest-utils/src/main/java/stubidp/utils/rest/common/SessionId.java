@@ -29,7 +29,7 @@ public class SessionId {
     }
 
     @Override
-    @JsonValue(true)
+    @JsonValue()
     public String toString() {
         return sessionId;
     }

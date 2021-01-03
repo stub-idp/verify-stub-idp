@@ -10,7 +10,6 @@ import java.security.PrivateKey;
 preventing us from deserializing directly to one of the JsonSubTypes when there is a defaultImpl
 defined. This can be avoided by only ever to deserialize to the super type (PrivateKeyConfiguration) */
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME,
-        include = JsonTypeInfo.As.PROPERTY,
         property = "type",
         defaultImpl = PrivateKeyFileConfiguration.class)
 @JsonSubTypes({

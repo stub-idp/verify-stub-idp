@@ -186,7 +186,7 @@ public class AddressMarshallerTest extends OpenSAMLRunner {
         assertThat(uprnElements.getLength()).isEqualTo(0);
     }
 
-    private Address createAddress() {
+    private static Address createAddress() {
         Address address = new AddressImpl(SAMLConstants.SAML20_NS, Address.DEFAULT_ELEMENT_LOCAL_NAME, SAMLConstants.SAML20_PREFIX);
         address.setFrom(BaseMdsSamlObjectUnmarshaller.InstantFromDate.of(FROM_DATE));
         address.setTo(BaseMdsSamlObjectUnmarshaller.InstantFromDate.of(TO_DATE));

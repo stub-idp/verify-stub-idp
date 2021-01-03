@@ -123,7 +123,7 @@ public class ConsentResourceTest {
                 Collections.singletonList(createMdsValue("Griffin")),
                 Optional.of(createMdsValue(Gender.NOT_SPECIFIED)),
                 Collections.singletonList(createMdsValue(BaseMdsSamlObjectUnmarshaller.InstantFromDate.of("1983-06-21"))),
-                Collections.singletonList(new AddressFactory().createNoDates(Collections.singletonList("Lion's Head Inn"), "1A 2BC", null, null, true)),
+                Collections.singletonList(AddressFactory.createNoDates(Collections.singletonList("Lion's Head Inn"), "1A 2BC", null, null, true)),
                 levelOfAssurance));
     }
 

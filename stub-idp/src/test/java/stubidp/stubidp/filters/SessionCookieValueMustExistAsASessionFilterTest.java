@@ -26,7 +26,7 @@ import static stubidp.stubidp.cookies.StubIdpCookieNames.SESSION_COOKIE_NAME;
 import static stubidp.stubidp.filters.SessionCookieValueMustExistAsASessionFilter.NO_CURRENT_SESSION_COOKIE_VALUE;
 
 @ExtendWith(MockitoExtension.class)
-public class SessionCookieValueMustExistAsASessionFilterTest {
+class SessionCookieValueMustExistAsASessionFilterTest {
 
     private final boolean isSecureCookieEnabled = true;
     @Mock
@@ -69,7 +69,7 @@ public class SessionCookieValueMustExistAsASessionFilterTest {
     }
 
     @Test
-    public void shouldReturnSessionIdWhenCheckingNotRequiredButSessionCookieAndSecureCookieMatchUp() throws Exception {
+    public void shouldReturnSessionIdWhenCheckingNotRequiredButSessionCookieAndSecureCookieMatchUp() {
         SessionId sessionId = SessionId.createNewSessionId();
         Map<String, Cookie> cookies = Map.of(SESSION_COOKIE_NAME, new NewCookie(SESSION_COOKIE_NAME, sessionId.toString()), SECURE_COOKIE_NAME, new NewCookie(SECURE_COOKIE_NAME, "secure-cookie"));
         when(containerRequestContext.getCookies()).thenReturn(cookies);
@@ -141,7 +141,7 @@ public class SessionCookieValueMustExistAsASessionFilterTest {
     }
 
     @Test
-    public void shouldIgnoreSecureCookieIfSecureCookiesNotEnabled() throws Exception {
+    public void shouldIgnoreSecureCookieIfSecureCookiesNotEnabled() {
         SessionId sessionId = SessionId.createNewSessionId();
         Map<String, Cookie> cookies = Map.of(
                 SESSION_COOKIE_NAME, new NewCookie(SESSION_COOKIE_NAME, sessionId.toString()),

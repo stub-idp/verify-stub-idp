@@ -80,7 +80,7 @@ public class AddressUnmarshallerTest extends OpenSAMLRunner {
         assertThat(address.getVerified()).isEqualTo(false);
     }
 
-    private String createAddressXmlString(
+    private static String createAddressXmlString(
             String line1Value,
             String line2Value,
             String internationalPostCodeValue,

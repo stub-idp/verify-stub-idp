@@ -15,7 +15,6 @@ import stubidp.saml.security.validators.ValidatedResponse;
 import stubidp.saml.security.validators.encryptedelementtype.EncryptionAlgorithmValidator;
 import stubidp.saml.test.OpenSAMLRunner;
 import stubidp.saml.test.TestCredentialFactory;
-import stubidp.saml.test.builders.EncryptedAssertionBuilder;
 import stubidp.test.devpki.TestCertificateStrings;
 import stubidp.test.devpki.TestEntityIds;
 import stubidp.utils.security.security.PrivateKeyFactory;

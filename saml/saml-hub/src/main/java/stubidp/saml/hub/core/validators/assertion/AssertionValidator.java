@@ -15,7 +15,7 @@ public class AssertionValidator {
 
     private final IssuerValidator issuerValidator;
     private final AssertionSubjectValidator subjectValidator;
-    final AssertionAttributeStatementValidator assertionAttributeStatementValidator;
+    protected final AssertionAttributeStatementValidator assertionAttributeStatementValidator;
     private final BasicAssertionSubjectConfirmationValidator basicAssertionSubjectConfirmationValidator;
     private final boolean signedAssertions;
 

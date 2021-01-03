@@ -10,7 +10,6 @@ import org.opensaml.saml.saml2.core.Response;
 import org.opensaml.saml.saml2.metadata.IDPSSODescriptor;
 import stubidp.saml.domain.assertions.IdpIdaStatus;
 import stubidp.saml.hub.core.validators.DestinationValidator;
-import stubidp.saml.hub.domain.CountryAuthenticationStatus;
 import stubidp.saml.hub.validators.response.idp.components.EncryptedResponseFromIdpValidator;
 import stubidp.saml.hub.validators.response.idp.components.ResponseAssertionsFromIdpValidator;
 import stubidp.saml.security.AssertionDecrypter;

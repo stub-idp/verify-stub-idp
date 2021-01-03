@@ -126,7 +126,7 @@ public abstract class AbstractCSRFCheckProtectionFilter implements ContainerRequ
         return new SessionId(sessionCookie.get());
     }
 
-    private String getValueOfPossiblyNullCookie(Map<String, Cookie> cookies, String cookieName) {
+    private static String getValueOfPossiblyNullCookie(Map<String, Cookie> cookies, String cookieName) {
         return cookies.containsKey(cookieName) ? cookies.get(cookieName).getValue() : null;
     }
 

@@ -39,9 +39,9 @@ final class HardCodedTestUserList {
                         .withSurname("Bauer")
                         .withGender(Gender.MALE)
                         .withDateOfBirth("1984-02-29")
-                        .withAddresses(List.of(new AddressFactory().createNoDates(Collections.singletonList("1 Two St"), "1A 2BC", null, null, true),
-                                new AddressFactory().create(Collections.singletonList("221b Baker St."), "W4 1SH", null, null, dateToInstant("2007-09-27"), dateToInstant("2007-09-28"), true),
-                                new AddressFactory().create(Collections.singletonList("1 Goose Lane"), "M1 2FG", null, null, dateToInstant("2006-09-29"), dateToInstant("2006-09-08"), false)))
+                        .withAddresses(List.of(AddressFactory.createNoDates(Collections.singletonList("1 Two St"), "1A 2BC", null, null, true),
+                                AddressFactory.create(Collections.singletonList("221b Baker St."), "W4 1SH", null, null, dateToInstant("2007-09-27"), dateToInstant("2007-09-28"), true),
+                                AddressFactory.create(Collections.singletonList("1 Goose Lane"), "M1 2FG", null, null, dateToInstant("2006-09-29"), dateToInstant("2006-09-08"), false)))
                         .withAuthnContext(AuthnContext.LEVEL_2)
                         .build(),
 
@@ -53,7 +53,7 @@ final class HardCodedTestUserList {
                         .withSurname("McFly")
                         .withGender(Gender.FEMALE)
                         .withDateOfBirth("1968-06-12")
-                        .withAddress(new AddressFactory().createNoDates(Collections.singletonList("1 Two St"), "1A 2BC", null, null, true))
+                        .withAddress(AddressFactory.createNoDates(Collections.singletonList("1 Two St"), "1A 2BC", null, null, true))
                         .withAuthnContext(AuthnContext.LEVEL_2)
                         .build(),
 
@@ -64,8 +64,8 @@ final class HardCodedTestUserList {
                         .withSurname("Griffin")
                         .withGender(Gender.NOT_SPECIFIED)
                         .withDateOfBirth("1983-06-21")
-                        .withAddresses(List.of(new AddressFactory().create(Collections.singletonList("Lion's Head Inn"), "1A 2BC", null, null, Instant.now().atZone(ZoneId.of("UTC")).minusYears(1).toInstant(), null, true),
-                                new AddressFactory().create(Collections.singletonList("Ye Olde Inn"), "1A 2BB", null, null, Instant.now().atZone(ZoneId.of("UTC")).minusYears(3).toInstant(), Instant.now().atZone(ZoneId.of("UTC")).minusYears(1).toInstant(), false)))
+                        .withAddresses(List.of(AddressFactory.create(Collections.singletonList("Lion's Head Inn"), "1A 2BC", null, null, Instant.now().atZone(ZoneId.of("UTC")).minusYears(1).toInstant(), null, true),
+                                AddressFactory.create(Collections.singletonList("Ye Olde Inn"), "1A 2BB", null, null, Instant.now().atZone(ZoneId.of("UTC")).minusYears(3).toInstant(), Instant.now().atZone(ZoneId.of("UTC")).minusYears(1).toInstant(), false)))
                         .withAuthnContext(AuthnContext.LEVEL_2)
                         .build(),
 
@@ -77,7 +77,7 @@ final class HardCodedTestUserList {
                                 new SimpleMdsValue<>("Barnes", dateToInstant("2006-09-29"), dateToInstant("2006-09-08"), true)))
                         .withGender(Gender.NOT_SPECIFIED)
                         .withDateOfBirth("1822-11-27")
-                        .withAddress(new AddressFactory().createNoDates(Collections.singletonList("10 Two St"), "1A 2BC", null, null, true))
+                        .withAddress(AddressFactory.createNoDates(Collections.singletonList("10 Two St"), "1A 2BC", null, null, true))
                         .withAuthnContext(AuthnContext.LEVEL_2)
                         .build(),
 
@@ -102,8 +102,8 @@ final class HardCodedTestUserList {
                         .withGender(Gender.MALE)
                         .withDatesOfBirth(List.of(createCurrentMdsValue(dateToInstant("1984-02-29"), true),
                                 createOldMdsValue(dateToInstant("1984-03-01"), true)))
-                        .withAddresses(List.of(new AddressFactory().create(Collections.singletonList("1 Two St"), "1A 2BC", "Something", "dummy uprn", Instant.now(), Instant.now(), true),
-                                new AddressFactory().create(Collections.singletonList("2 Three St"), "1B 2CD", "Something else", "dummy second uprn", Instant.now(), Instant.now(), true)))
+                        .withAddresses(List.of(AddressFactory.create(Collections.singletonList("1 Two St"), "1A 2BC", "Something", "dummy uprn", Instant.now(), Instant.now(), true),
+                                AddressFactory.create(Collections.singletonList("2 Three St"), "1B 2CD", "Something else", "dummy second uprn", Instant.now(), Instant.now(), true)))
                         .withAuthnContext(AuthnContext.LEVEL_2)
                         .build(),
 
@@ -115,8 +115,8 @@ final class HardCodedTestUserList {
                         .withSurname("Rabbit", false)
                         .withGender(Gender.FEMALE, false)
                         .withDateOfBirth("1960-03-23", false)
-                        .withAddresses(List.of(new AddressFactory().create(Collections.singletonList("1 Two St"), "1A 2BC", "Something", "dummy uprn", Instant.now(), null, false),
-                                new AddressFactory().create(Collections.singletonList("2 Three St"), "1B 2CD", "Something else", "dummy second uprn", Instant.now(), Instant.now(), false)))
+                        .withAddresses(List.of(AddressFactory.create(Collections.singletonList("1 Two St"), "1A 2BC", "Something", "dummy uprn", Instant.now(), null, false),
+                                AddressFactory.create(Collections.singletonList("2 Three St"), "1B 2CD", "Something else", "dummy second uprn", Instant.now(), Instant.now(), false)))
                         .withAuthnContext(AuthnContext.LEVEL_1)
                         .build(),
 
@@ -128,8 +128,8 @@ final class HardCodedTestUserList {
                         .withSurname("Rabbit")
                         .withGender(Gender.MALE)
                         .withDateOfBirth("1958-04-09")
-                        .withAddresses(List.of(new AddressFactory().create(Collections.singletonList("1 Two St"), "1A 2BC", "Something", "dummy uprn", Instant.now(), Instant.now(), true),
-                                new AddressFactory().create(Collections.singletonList("2 Three St"), "1B 2CD", "Something else", "dummy second uprn", Instant.now(), Instant.now(), true)))
+                        .withAddresses(List.of(AddressFactory.create(Collections.singletonList("1 Two St"), "1A 2BC", "Something", "dummy uprn", Instant.now(), Instant.now(), true),
+                                AddressFactory.create(Collections.singletonList("2 Three St"), "1B 2CD", "Something else", "dummy second uprn", Instant.now(), Instant.now(), true)))
                         .withAuthnContext(AuthnContext.LEVEL_2)
                         .build(),
 
@@ -141,8 +141,8 @@ final class HardCodedTestUserList {
                         .withSurname("Eagle")
                         .withGender(Gender.FEMALE)
                         .withDateOfBirth("1969-07-20")
-                        .withAddresses(List.of(new AddressFactory().create(Collections.singletonList("1 Four St"), "1A 2BD", "Something", "dummy uprn", Instant.now(), null, true),
-                                new AddressFactory().create(Collections.singletonList("2 Five St"), "1B 2RD", "Something else", "dummy second uprn", Instant.now(), Instant.now(), true)))
+                        .withAddresses(List.of(AddressFactory.create(Collections.singletonList("1 Four St"), "1A 2BD", "Something", "dummy uprn", Instant.now(), null, true),
+                                AddressFactory.create(Collections.singletonList("2 Five St"), "1B 2RD", "Something else", "dummy second uprn", Instant.now(), Instant.now(), true)))
                         .withAuthnContext(AuthnContext.LEVEL_3)
                         .build(),
 
@@ -154,8 +154,8 @@ final class HardCodedTestUserList {
                         .withSurname("Nummy")
                         .withGender(Gender.MALE)
                         .withDateOfBirth("1958-04-09")
-                        .withAddresses(List.of(new AddressFactory().create(Collections.singletonList("1 Two St"), "1A 2BC", "Something", "dummy uprn", Instant.now(), Instant.now(), true),
-                                new AddressFactory().create(Collections.singletonList("2 Three St"), "1B 2CD", "Something else", "dummy second uprn", Instant.now(), Instant.now(), true)))
+                        .withAddresses(List.of(AddressFactory.create(Collections.singletonList("1 Two St"), "1A 2BC", "Something", "dummy uprn", Instant.now(), Instant.now(), true),
+                                AddressFactory.create(Collections.singletonList("2 Three St"), "1B 2CD", "Something else", "dummy second uprn", Instant.now(), Instant.now(), true)))
                         .withAuthnContext(AuthnContext.LEVEL_X)
                         .build(),
 
@@ -167,7 +167,7 @@ final class HardCodedTestUserList {
                         .withSurname("🙃")
                         .withGender(Gender.FEMALE)
                         .withDateOfBirth("1968-06-12")
-                        .withAddresses(Collections.singletonList(new AddressFactory().createNoDates(List.of("🏠"), "🏘", null, null, true)))
+                        .withAddresses(Collections.singletonList(AddressFactory.createNoDates(List.of("🏠"), "🏘", null, null, true)))
                         .withAuthnContext(AuthnContext.LEVEL_2)
                         .build(),
 
@@ -180,7 +180,7 @@ final class HardCodedTestUserList {
                         .withSurname("Bloggs")
                         .withGender(Gender.NOT_SPECIFIED)
                         .withDateOfBirth("1970-01-01")
-                        .withAddresses(List.of(new AddressFactory().create(List.of("The White Chapel Building, 10 Whitechapel High St", "London", "United Kingdom"), "E1 8DX",
+                        .withAddresses(List.of(AddressFactory.create(List.of("The White Chapel Building, 10 Whitechapel High St", "London", "United Kingdom"), "E1 8DX",
                                 null, null, Instant.now().atZone(ZoneId.of("UTC")).minusYears(1).toInstant(), null, true)))
                         .withAuthnContext(AuthnContext.LEVEL_2)
                         .build()

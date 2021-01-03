@@ -222,7 +222,7 @@ public class AnalyticsReporterTest {
         checkQueryParam(query, "url", expected);
     }
 
-    private void checkURIBase(String uri, String expected) {
+    private static void checkURIBase(String uri, String expected) {
         assertThat(uri.indexOf(expected)).isEqualTo(0);
     }
 
@@ -235,16 +235,16 @@ public class AnalyticsReporterTest {
                 expected, query).isTrue();
     }
 
-    private void checkQueryParam(URIBuilder uriBuilder, String name, String expected) {
+    private static void checkQueryParam(URIBuilder uriBuilder, String name, String expected) {
         assertThat(uriBuilder.getQueryParams().contains(new BasicNameValuePair(name, expected))).as("Looking for param %s with value %s", name, expected).isTrue();
     }
 
-    private boolean queryContains(String query, String name, String expectedValue) {
+    private static boolean queryContains(String query, String name, String expectedValue) {
         String match = name + "=" + expectedValue;
         return List.of(query.split("&")).stream().anyMatch(match::equals);
     }
 
-    private void checkQueryParamMissing(String query, String name) {
+    private static void checkQueryParamMissing(String query, String name) {
         assertThat(query.contains(name + "=")).isFalse();
     }
 

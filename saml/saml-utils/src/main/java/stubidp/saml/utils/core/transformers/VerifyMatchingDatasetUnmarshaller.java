@@ -23,11 +23,8 @@ import static java.text.MessageFormat.format;
 public class VerifyMatchingDatasetUnmarshaller extends MatchingDatasetUnmarshaller {
 
     private static final Logger LOG = LoggerFactory.getLogger(VerifyMatchingDatasetUnmarshaller.class);
-    private final AddressFactory addressFactory;
 
-    public VerifyMatchingDatasetUnmarshaller(AddressFactory addressFactory) {
-        this.addressFactory = addressFactory;
-    }
+    public VerifyMatchingDatasetUnmarshaller() {}
 
     protected void transformAttribute(Attribute attribute, MatchingDatasetBuilder datasetBuilder) {
         switch (attribute.getName()) {
@@ -53,12 +50,12 @@ public class VerifyMatchingDatasetUnmarshaller extends MatchingDatasetUnmarshall
                 break;
 
             case IdaConstants.Attributes_1_1.CurrentAddress.NAME:
-                List<Address> transformedCurrentAddresses = addressFactory.create(attribute);
+                List<Address> transformedCurrentAddresses = AddressFactory.create(attribute);
                 datasetBuilder.addCurrentAddresses(transformedCurrentAddresses);
                 break;
 
             case IdaConstants.Attributes_1_1.PreviousAddress.NAME:
-                List<Address> transformedPreviousAddresses = addressFactory.create(attribute);
+                List<Address> transformedPreviousAddresses = AddressFactory.create(attribute);
                 datasetBuilder.addPreviousAddresses(transformedPreviousAddresses);
                 break;
 

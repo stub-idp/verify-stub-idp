@@ -61,7 +61,7 @@ public class AnalyticsReporter {
         }
     }
 
-    private Optional<String> getVisitorId(ContainerRequest context) {
+    private static Optional<String> getVisitorId(ContainerRequest context) {
         return Optional.ofNullable(context.getCookies().get(PIWIK_VISITOR_ID)).map(Cookie::getValue);
     }
 

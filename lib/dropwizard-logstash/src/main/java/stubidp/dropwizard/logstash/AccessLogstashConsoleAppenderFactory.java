@@ -28,6 +28,7 @@ import stubidp.dropwizard.logstash.typed.BytesField;
 import stubidp.dropwizard.logstash.typed.MillisecondsField;
 
 import java.io.IOException;
+import java.util.regex.Pattern;
 
 /**
  * Resets the field names to be modern (post-2013) logstash style
@@ -67,7 +68,7 @@ public class AccessLogstashConsoleAppenderFactory extends ConsoleAppenderFactory
             topLevel.addProvider(accessProvider());
         }
 
-        private JsonProvider<IAccessEvent> accessProvider() {
+        private static JsonProvider<IAccessEvent> accessProvider() {
             final AbstractNestedJsonProvider<IAccessEvent> access = new IAccessEventAbstractNestedJsonProvider();
             access.setFieldName("access");
             final JsonProviders<IAccessEvent> accessProviders = access.getProviders();
@@ -130,14 +131,17 @@ public class AccessLogstashConsoleAppenderFactory extends ConsoleAppenderFactory
     }
 
     public static class UrlJsonProvider extends AbstractJsonProvider<IAccessEvent> {
+        private static final Pattern FIRST_LINE_WITHOUT_METHOD_PATTERN = Pattern.compile("^[A-Z]* ");
+        private static final Pattern URL_PATTERN = Pattern.compile(" HTTP/.*$");
+
         @Override
         public void writeTo(JsonGenerator generator, IAccessEvent event) throws IOException {
-            String firstLineWithoutMethod = firstLineOfRequest(event).replaceFirst("^[A-Z]* ", "");
-            String requestedUrl = firstLineWithoutMethod.replaceFirst(" HTTP/.*$", "");
+            String firstLineWithoutMethod = FIRST_LINE_WITHOUT_METHOD_PATTERN.matcher(firstLineOfRequest(event)).replaceFirst("");
+            String requestedUrl = URL_PATTERN.matcher(firstLineWithoutMethod).replaceFirst("");
             generator.writeStringField("url", requestedUrl);
         }
 
-        private String firstLineOfRequest(IAccessEvent event) {
+        private static String firstLineOfRequest(IAccessEvent event) {
             // This method is *terribly* named. It doesn't return a URL at all, but
             // rather the first line of the HTTP request.  For example, it might
             // return "GET /foo/bar?baz HTTP/1.1".

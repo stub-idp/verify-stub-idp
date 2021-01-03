@@ -154,8 +154,6 @@ public class RegistrationPageResource {
                     return createErrorResponse(ErrorMessageType.INVALID_SESSION_ID, idpName);
                 } catch (IncompleteRegistrationException e) {
                     return createErrorResponse(ErrorMessageType.INCOMPLETE_REGISTRATION, idpName);
-                } catch (InvalidDateException e) {
-                    return createErrorResponse(ErrorMessageType.INVALID_DATE, idpName);
                 } catch (UsernameAlreadyTakenException e) {
                     return createErrorResponse(ErrorMessageType.USERNAME_ALREADY_TAKEN, idpName);
                 } catch (InvalidUsernameOrPasswordException e) {
@@ -209,8 +207,6 @@ public class RegistrationPageResource {
                     return createErrorResponse(ErrorMessageType.INVALID_SESSION_ID, idpName);
                 } catch (IncompleteRegistrationException e) {
                     return createErrorResponse(ErrorMessageType.INCOMPLETE_REGISTRATION, idpName);
-                } catch (InvalidDateException e) {
-                    return createErrorResponse(ErrorMessageType.INVALID_DATE, idpName);
                 } catch (UsernameAlreadyTakenException e) {
                     return createErrorResponse(ErrorMessageType.USERNAME_ALREADY_TAKEN, idpName);
                 } catch (InvalidUsernameOrPasswordException e) {

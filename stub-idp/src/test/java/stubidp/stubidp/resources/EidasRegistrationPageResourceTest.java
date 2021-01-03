@@ -89,7 +89,7 @@ class EidasRegistrationPageResourceTest {
     }
 
     @Test
-    void shouldHaveStatusSuccessResponseWhenUserRegisters() throws InvalidSessionIdException, IncompleteRegistrationException, InvalidDateException, UsernameAlreadyTakenException, InvalidUsernameOrPasswordException {
+    void shouldHaveStatusSuccessResponseWhenUserRegisters() throws InvalidSessionIdException, IncompleteRegistrationException, UsernameAlreadyTakenException, InvalidUsernameOrPasswordException {
 
         final Response response = resource.post(STUB_COUNTRY, "bob", "", "jones", "", "2000-01-01", "username", "password", LEVEL_2, Register, Optional.of(SignAssertions.signAssertions), SESSION_ID);
 

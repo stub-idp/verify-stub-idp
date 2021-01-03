@@ -19,7 +19,7 @@ public class CertificateStoreTest {
     PublicKeyFileConfiguration publicKeyConfiguration2;
 
     @BeforeEach
-    public void setup() throws Exception {
+    public void setup() {
         publicKeyConfiguration = getPublicKey("public_key.crt");
         publicKeyConfiguration2 = getPublicKey("public_key_2.crt");
     }

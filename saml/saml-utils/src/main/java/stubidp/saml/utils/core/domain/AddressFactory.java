@@ -11,21 +11,24 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class AddressFactory {
-    public Address create(List<String> lines, String postCode, String internationalPostCode, String uprn, String from, String to, boolean isVerified) {
+
+    private AddressFactory() {}
+
+    public static Address create(List<String> lines, String postCode, String internationalPostCode, String uprn, String from, String to, boolean isVerified) {
         Instant fromInstant = BaseMdsSamlObjectUnmarshaller.InstantFromDate.of(from);
         Instant toInstant = BaseMdsSamlObjectUnmarshaller.InstantFromDate.of(to);
         return new Address(lines, postCode, internationalPostCode, uprn, fromInstant, toInstant, isVerified);
     }
 
-    public Address create(List<String> lines, String postCode, String internationalPostCode, String uprn, Instant from, Instant to, boolean isVerified) {
+    public static Address create(List<String> lines, String postCode, String internationalPostCode, String uprn, Instant from, Instant to, boolean isVerified) {
         return new Address(lines, postCode, internationalPostCode, uprn, from, to, isVerified);
     }
 
-    public Address createNoDates(List<String> lines, String postCode, String internationalPostCode, String uprn, boolean isVerified) {
+    public static Address createNoDates(List<String> lines, String postCode, String internationalPostCode, String uprn, boolean isVerified) {
         return new Address(lines, postCode, internationalPostCode, uprn, null, null, isVerified);
     }
 
-    public List<Address> create(Attribute attribute) {
+    public static List<Address> create(Attribute attribute) {
         List<Address> addresses = new ArrayList<>();
         for (XMLObject xmlObject : attribute.getAttributeValues()) {
             stubidp.saml.extensions.extensions.Address address = (stubidp.saml.extensions.extensions.Address) xmlObject;
@@ -34,7 +37,7 @@ public class AddressFactory {
         return addresses;
     }
 
-    public Address create(stubidp.saml.extensions.extensions.Address addressAttributeValue) {
+    public static Address create(stubidp.saml.extensions.extensions.Address addressAttributeValue) {
         List<String> lines = new ArrayList<>();
         for (Line originalLine : addressAttributeValue.getLines()) {
             lines.add(originalLine.getValue());

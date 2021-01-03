@@ -7,7 +7,6 @@ import org.opensaml.core.xml.config.XMLObjectProviderRegistrySupport;
 import org.opensaml.core.xml.io.Marshaller;
 import org.opensaml.core.xml.io.MarshallingException;
 import org.w3c.dom.Element;
-import stubidp.saml.extensions.IdaConstants;
 import stubidp.saml.extensions.extensions.PersonName;
 import stubidp.saml.test.OpenSAMLRunner;
 

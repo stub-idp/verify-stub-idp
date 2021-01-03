@@ -50,7 +50,7 @@ public class CountryMetadataBuilder {
         URI ssoEndpoint,
         java.security.cert.Certificate signingCertificate,
         java.security.cert.Certificate encryptingCertificate
-    ) throws MarshallingException, SecurityException, SignatureException, CertificateEncodingException {
+    ) throws MarshallingException, SignatureException, CertificateEncodingException {
         EntityDescriptor entityDescriptor = createElement(EntityDescriptor.DEFAULT_ELEMENT_NAME, EntityDescriptor.TYPE_NAME);
         entityDescriptor.setEntityID(entityId.toString());
         entityDescriptor.setValidUntil(Instant.now().plus(validity));

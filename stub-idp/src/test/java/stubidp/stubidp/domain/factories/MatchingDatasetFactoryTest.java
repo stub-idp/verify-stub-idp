@@ -21,8 +21,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class MatchingDatasetFactoryTest {
 
-    private static final Address currentAddress = new AddressFactory().create(Collections.singletonList("1 Two St"), "1A 2BC", "Something", "dummy uprn", Instant.now(), null, true);
-    private static final Address previousAddress = new AddressFactory().create(Collections.singletonList("2 Three St"), "1B 2CD", "Something else", "dummy second uprn", Instant.now(), Instant.now(), true);
+    private static final Address currentAddress = AddressFactory.create(Collections.singletonList("1 Two St"), "1A 2BC", "Something", "dummy uprn", Instant.now(), null, true);
+    private static final Address previousAddress = AddressFactory.create(Collections.singletonList("2 Three St"), "1B 2CD", "Something else", "dummy second uprn", Instant.now(), Instant.now(), true);
     public static final DatabaseIdpUser completeUser = new DatabaseIdpUser(
             "idpuser-complete",
             UUID.randomUUID().toString(),

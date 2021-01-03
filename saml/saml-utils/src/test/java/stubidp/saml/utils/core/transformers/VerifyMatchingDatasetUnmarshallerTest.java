@@ -1,6 +1,5 @@
 package stubidp.saml.utils.core.transformers;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.opensaml.saml.saml2.core.Assertion;
 import org.opensaml.saml.saml2.core.Attribute;
@@ -12,7 +11,6 @@ import stubidp.saml.extensions.extensions.Gender;
 import stubidp.saml.extensions.extensions.PersonName;
 import stubidp.saml.extensions.extensions.impl.BaseMdsSamlObjectUnmarshaller;
 import stubidp.saml.test.OpenSAMLRunner;
-import stubidp.saml.utils.core.domain.AddressFactory;
 import stubidp.saml.test.builders.AddressAttributeBuilder_1_1;
 import stubidp.saml.test.builders.AddressAttributeValueBuilder_1_1;
 import stubidp.saml.test.builders.AssertionBuilder;
@@ -29,17 +27,12 @@ import java.util.Collections;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class VerifyMatchingDatasetUnmarshallerTest extends OpenSAMLRunner {
+class VerifyMatchingDatasetUnmarshallerTest extends OpenSAMLRunner {
 
-    private VerifyMatchingDatasetUnmarshaller unmarshaller;
-
-    @BeforeEach
-    public void setUp() {
-        this.unmarshaller = new VerifyMatchingDatasetUnmarshaller(new AddressFactory());
-    }
+    private final VerifyMatchingDatasetUnmarshaller unmarshaller = new VerifyMatchingDatasetUnmarshaller();
 
     @Test
-    public void transform_shouldTransformAnAssertionIntoAMatchingDataset_1_1() {
+    void transform_shouldTransformAnAssertionIntoAMatchingDataset_1_1() {
         Attribute firstname = PersonNameAttributeBuilder_1_1.aPersonName_1_1().addValue(PersonNameAttributeValueBuilder.aPersonNameValue().withValue("Bob").withFrom(BaseMdsSamlObjectUnmarshaller.InstantFromDate.of("2000-03-05")).withTo(BaseMdsSamlObjectUnmarshaller.InstantFromDate.of("2001-02-06")).withVerified(true).build()).buildAsFirstname();
         Attribute middlenames = PersonNameAttributeBuilder_1_1.aPersonName_1_1().addValue(PersonNameAttributeValueBuilder.aPersonNameValue().withValue("foo").withFrom(BaseMdsSamlObjectUnmarshaller.InstantFromDate.of("2000-03-05")).withTo(BaseMdsSamlObjectUnmarshaller.InstantFromDate.of("2001-02-06")).withVerified(true).build()).buildAsMiddlename();
         Attribute surname = PersonNameAttributeBuilder_1_1.aPersonName_1_1().addValue(PersonNameAttributeValueBuilder.aPersonNameValue().withValue("Bobbins").withFrom(BaseMdsSamlObjectUnmarshaller.InstantFromDate.of("2000-03-05")).withTo(BaseMdsSamlObjectUnmarshaller.InstantFromDate.of("2001-02-06")).withVerified(true).build()).buildAsSurname();
@@ -102,7 +95,7 @@ public class VerifyMatchingDatasetUnmarshallerTest extends OpenSAMLRunner {
     }
 
     @Test
-    public void transform_shoulHandleWhenMatchingDatasetIsPresentAndToDateIsMissingFromCurrentAddress() {
+    void transform_shoulHandleWhenMatchingDatasetIsPresentAndToDateIsMissingFromCurrentAddress() {
         Attribute currentAddress = AddressAttributeBuilder_1_1.anAddressAttribute().addAddress(AddressAttributeValueBuilder_1_1.anAddressAttributeValue().withTo(null).build()).buildCurrentAddress();
         Assertion assertion = AssertionBuilder.aMatchingDatasetAssertion(
                 PersonNameAttributeBuilder_1_1.aPersonName_1_1().buildAsFirstname(),
@@ -120,7 +113,7 @@ public class VerifyMatchingDatasetUnmarshallerTest extends OpenSAMLRunner {
     }
 
     @Test
-    public void transform_shoulHandleWhenMatchingDatasetIsPresentAndToDateIsMissingFromPreviousAddress() {
+    void transform_shoulHandleWhenMatchingDatasetIsPresentAndToDateIsMissingFromPreviousAddress() {
         Assertion assertion = AssertionBuilder.aMatchingDatasetAssertion(
                 PersonNameAttributeBuilder_1_1.aPersonName_1_1().buildAsFirstname(),
                 PersonNameAttributeBuilder_1_1.aPersonName_1_1().buildAsMiddlename(),
@@ -136,7 +129,7 @@ public class VerifyMatchingDatasetUnmarshallerTest extends OpenSAMLRunner {
     }
 
     @Test
-    public void transform_shoulHandleWhenMatchingDatasetIsPresentAndToDateIsMissingFromFirstName() {
+    void transform_shoulHandleWhenMatchingDatasetIsPresentAndToDateIsMissingFromFirstName() {
         Attribute firstName = PersonNameAttributeBuilder_1_1.aPersonName_1_1().addValue(PersonNameAttributeValueBuilder.aPersonNameValue().withTo(null).build()).buildAsFirstname();
         Assertion assertion = AssertionBuilder.aMatchingDatasetAssertion(
                 firstName,
@@ -154,7 +147,7 @@ public class VerifyMatchingDatasetUnmarshallerTest extends OpenSAMLRunner {
     }
 
     @Test
-    public void transform_shoulHandleWhenMatchingDatasetIsPresentAndToDateIsPresentInFirstName() {
+    void transform_shoulHandleWhenMatchingDatasetIsPresentAndToDateIsPresentInFirstName() {
         Attribute firstName = PersonNameAttributeBuilder_1_1.aPersonName_1_1().addValue(PersonNameAttributeValueBuilder.aPersonNameValue().withTo(BaseMdsSamlObjectUnmarshaller.InstantFromDate.of("1066-01-05")).build()).buildAsFirstname();
         Assertion assertion = AssertionBuilder.aMatchingDatasetAssertion(
                 firstName,
@@ -172,7 +165,7 @@ public class VerifyMatchingDatasetUnmarshallerTest extends OpenSAMLRunner {
     }
 
     @Test
-    public void transform_shouldMapMultipleFirstNames() {
+    void transform_shouldMapMultipleFirstNames() {
         Attribute firstName = PersonNameAttributeBuilder_1_1.aPersonName_1_1()
                 .addValue(PersonNameAttributeValueBuilder.aPersonNameValue().withValue("name1").build())
                 .addValue(PersonNameAttributeValueBuilder.aPersonNameValue().withValue("name2").build())
@@ -189,7 +182,7 @@ public class VerifyMatchingDatasetUnmarshallerTest extends OpenSAMLRunner {
         assertThat(matchingDataset.getFirstNames().size()).isEqualTo(2);
     }
     @Test
-    public void transform_shouldMapMultipleSurnames() {
+    void transform_shouldMapMultipleSurnames() {
         Attribute surName = PersonNameAttributeBuilder_1_1.aPersonName_1_1()
                 .addValue(PersonNameAttributeValueBuilder.aPersonNameValue().withValue("name1").build())
                 .addValue(PersonNameAttributeValueBuilder.aPersonNameValue().withValue("name2").build())
@@ -207,7 +200,7 @@ public class VerifyMatchingDatasetUnmarshallerTest extends OpenSAMLRunner {
     }
 
     @Test
-    public void transform_shouldMapMultipleMiddleNames() {
+    void transform_shouldMapMultipleMiddleNames() {
         Attribute middleName = PersonNameAttributeBuilder_1_1.aPersonName_1_1()
                 .addValue(PersonNameAttributeValueBuilder.aPersonNameValue().withValue("name1").build())
                 .addValue(PersonNameAttributeValueBuilder.aPersonNameValue().withValue("name2").build())
@@ -225,7 +218,7 @@ public class VerifyMatchingDatasetUnmarshallerTest extends OpenSAMLRunner {
     }
 
     @Test
-    public void transform_shouldMapMultipleBirthdates() {
+    void transform_shouldMapMultipleBirthdates() {
         Attribute attribute = DateAttributeBuilder_1_1.aDate_1_1().addValue(DateAttributeValueBuilder.aDateValue().withValue("2012-12-12").build()).addValue(DateAttributeValueBuilder.aDateValue().withValue("2011-12-12").build()).buildAsDateOfBirth();
 
         AttributeStatement attributeStatementBuilder = AttributeStatementBuilder.anAttributeStatement().addAttribute(attribute).build();
@@ -240,7 +233,7 @@ public class VerifyMatchingDatasetUnmarshallerTest extends OpenSAMLRunner {
     }
 
     @Test
-    public void transform_shouldMapMultipleCurrentAddresses() {
+    void transform_shouldMapMultipleCurrentAddresses() {
         Attribute attribute = AddressAttributeBuilder_1_1.anAddressAttribute().addAddress(AddressAttributeValueBuilder_1_1.anAddressAttributeValue().build()).addAddress(AddressAttributeValueBuilder_1_1.anAddressAttributeValue().build()).buildCurrentAddress();
 
         AttributeStatement attributeStatementBuilder = AttributeStatementBuilder.anAttributeStatement().addAttribute(attribute).build();
@@ -255,7 +248,7 @@ public class VerifyMatchingDatasetUnmarshallerTest extends OpenSAMLRunner {
     }
 
     @Test
-    public void transform_shouldMapMultiplePreviousAddresses() {
+    void transform_shouldMapMultiplePreviousAddresses() {
         Attribute attribute = AddressAttributeBuilder_1_1.anAddressAttribute().addAddress(AddressAttributeValueBuilder_1_1.anAddressAttributeValue().build()).addAddress(AddressAttributeValueBuilder_1_1.anAddressAttributeValue().build()).buildPreviousAddress();
 
         AttributeStatement attributeStatementBuilder = AttributeStatementBuilder.anAttributeStatement().addAttribute(attribute).build();

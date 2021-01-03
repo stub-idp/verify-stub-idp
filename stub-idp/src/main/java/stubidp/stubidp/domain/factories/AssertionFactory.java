@@ -23,7 +23,7 @@ public class AssertionFactory {
         this.assertionRestrictionsFactory = assertionRestrictionsFactory;
     }
 
-    private PersistentId createPersistentId(String persistentId) {
+    private static PersistentId createPersistentId(String persistentId) {
         return new PersistentId(persistentId);
     }
 

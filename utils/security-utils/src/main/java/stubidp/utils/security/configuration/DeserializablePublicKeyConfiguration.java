@@ -14,7 +14,6 @@ import java.security.cert.CertificateFactory;
 preventing us from deserializing directly to one of the JsonSubTypes when there is a defaultImpl
 defined. This can be avoided by only ever to deserialize to the super type (DeserializablePublicKeyConfiguration) */
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME,
-    include = JsonTypeInfo.As.PROPERTY,
     property = "type",
     defaultImpl = PublicKeyFileConfiguration.class)
 @JsonSubTypes({

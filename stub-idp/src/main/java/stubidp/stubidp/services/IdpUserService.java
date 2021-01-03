@@ -52,7 +52,7 @@ public class IdpUserService {
                                                 String dateOfBirth,
                                                 Optional<Gender> gender,
                                                 String username, String password,
-                                                SessionId idpSessionId) throws InvalidSessionIdException, IncompleteRegistrationException, InvalidDateException, UsernameAlreadyTakenException, InvalidUsernameOrPasswordException {
+                                                SessionId idpSessionId) throws InvalidSessionIdException, IncompleteRegistrationException, UsernameAlreadyTakenException, InvalidUsernameOrPasswordException {
         Idp idp = idpStubsRepository.getIdpWithFriendlyId(idpName);
         DatabaseIdpUser user = createUserInIdp(firstname, surname, addressLine1, addressLine2, addressTown, addressPostCode, levelOfAssurance, dateOfBirth, gender, username, password, idp);
         attachIdpUserToSession(Optional.ofNullable(user), idpSessionId);
@@ -64,7 +64,7 @@ public class IdpUserService {
                                                 AuthnContext levelOfAssurance,
                                                 String dateOfBirth,
                                                 String username, String password
-                                                ) throws IncompleteRegistrationException, InvalidDateException, UsernameAlreadyTakenException {
+                                                ) throws IncompleteRegistrationException, UsernameAlreadyTakenException {
         Idp idp = idpStubsRepository.getIdpWithFriendlyId(idpName);
         return createUserInIdp(firstname, surname, addressLine1, addressLine2, addressTown, addressPostCode, levelOfAssurance, dateOfBirth, Optional.empty(), username, password, idp);
     }

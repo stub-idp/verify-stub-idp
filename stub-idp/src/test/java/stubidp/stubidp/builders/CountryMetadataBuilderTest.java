@@ -32,6 +32,7 @@ import java.time.Duration;
 import java.time.Instant;
 import java.time.ZoneId;
 import java.util.Optional;
+import java.util.regex.Pattern;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
@@ -41,6 +42,8 @@ import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 public class CountryMetadataBuilderTest extends OpenSAMLRunner {
+
+    private static final Pattern PATTERN = Pattern.compile("\\s");
 
     @BeforeEach
     public void setup() {
@@ -69,7 +72,7 @@ public class CountryMetadataBuilderTest extends OpenSAMLRunner {
     }
 
     private String prepareCertString(String cert) {
-        return cert.replaceAll("\\s", "");
+        return PATTERN.matcher(cert).replaceAll("");
     }
 
     private EntityDescriptor getMetadata() throws CertificateEncodingException, MarshallingException, SecurityException, SignatureException {

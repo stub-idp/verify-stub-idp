@@ -5,7 +5,6 @@ import org.opensaml.saml.saml2.core.StatusCode;
 import stubidp.saml.domain.IdaStatus;
 import stubidp.saml.extensions.domain.SamlStatusCode;
 
-import java.text.MessageFormat;
 import java.util.Map;
 
 import static java.text.MessageFormat.format;

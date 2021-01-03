@@ -2,7 +2,7 @@ package stubidp.utils.rest.configuration;
 
 public class ServiceStatus {
     private static ServiceStatus instance;
-    private static Object lock = new Object();
+    private static final Object lock = new Object();
     private volatile boolean serverStatus = true;
 
     private ServiceStatus() {

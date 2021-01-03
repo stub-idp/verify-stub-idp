@@ -10,7 +10,6 @@ import javax.validation.constraints.NotNull;
 import java.security.KeyStore;
 
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME,
-        include = JsonTypeInfo.As.PROPERTY,
         property = "type",
         defaultImpl = FileBackedTrustStoreConfiguration.class)
 @JsonSubTypes({
