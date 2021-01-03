@@ -13,6 +13,9 @@ import org.w3c.dom.Element;
 import java.io.StringReader;
 
 public class Utils {
+
+    private Utils() {}
+
     @SuppressWarnings("unchecked")
     public static <T extends SAMLObject> T unmarshall(String assertion) throws XMLParserException, UnmarshallingException, ComponentInitializationException {
         // Get parser pool manager

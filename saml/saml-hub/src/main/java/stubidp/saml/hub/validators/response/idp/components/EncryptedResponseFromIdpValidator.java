@@ -18,8 +18,7 @@ import java.util.Optional;
 
 import static stubidp.saml.security.validators.signature.SamlSignatureUtil.isSignaturePresent;
 
-@SuppressWarnings("rawtypes")
-public class EncryptedResponseFromIdpValidator<T extends Enum> {
+public class EncryptedResponseFromIdpValidator<T> {
     private static final int SUB_STATUS_CODE_LIMIT = 1;
     private final SamlStatusToAuthenticationStatusCodeMapper<T> statusCodeMapper;
 
@@ -27,12 +26,12 @@ public class EncryptedResponseFromIdpValidator<T extends Enum> {
         this.statusCodeMapper = statusCodeMapper;
     }
 
-    protected void validateAssertionPresence(Response response) {
+    private void validateAssertionPresence(Response response) {
         if (!response.getAssertions().isEmpty()) {
             throw new SamlValidationException(SamlTransformationErrorFactory.unencryptedAssertion());
         }
 
-        boolean responseWasSuccessful = response.getStatus().getStatusCode().getValue().equals(StatusCode.SUCCESS);
+        final boolean responseWasSuccessful = response.getStatus().getStatusCode().getValue().equals(StatusCode.SUCCESS);
         List<EncryptedAssertion> encryptedAssertions = response.getEncryptedAssertions();
 
         if (responseWasSuccessful && encryptedAssertions.isEmpty()) {

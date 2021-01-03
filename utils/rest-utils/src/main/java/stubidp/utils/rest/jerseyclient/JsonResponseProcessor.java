@@ -30,14 +30,13 @@ public class JsonResponseProcessor {
         this.objectMapper = objectMapper;
     }
 
-    @SuppressWarnings("unchecked")
-    public <T> T getJsonEntity(URI uri, GenericType<T> genericType, Class<T> clazz, Response clientResponse) {
+    <T> T getJsonEntity(URI uri, GenericType<T> genericType, Class<T> clazz, Response clientResponse) {
         final Response successResponse = filterErrorResponses(uri, clientResponse);
         try (clientResponse) {
             if ((clazz == Response.class) || (genericType != null && genericType.getRawType() == Response.class)) {
                 throw createUnauditedException(ExceptionType.INVALID_CLIENTRESPONSE_PARAM, UUID.randomUUID());
             } else if (clazz == null && genericType == null) {
-                return (T) new Object();
+                return null;
             }
             return getEntity(genericType, clazz, successResponse);
         }

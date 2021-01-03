@@ -17,13 +17,14 @@ import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.isA;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static stubidp.utils.rest.exceptions.ApplicationException.createExceptionFromErrorStatusDto;
 
-public class JsonResponseProcessorTest {
+class JsonResponseProcessorTest {
 
     private final URI uri = URI.create("http://somedomain.com");
     private final UUID errorId = UUID.randomUUID();
@@ -32,12 +33,12 @@ public class JsonResponseProcessorTest {
     private JsonResponseProcessor responseProcessor;
 
     @BeforeEach
-    public void setUp() {
+    void setUp() {
         responseProcessor = new JsonResponseProcessor(new ObjectMapper());
     }
 
     @Test
-    public void getJsonEntity_shouldThrowExceptionBasedOnErrorStatusDtoIfOneIsReturned() throws Exception {
+    void getJsonEntity_shouldThrowExceptionBasedOnErrorStatusDtoIfOneIsReturned() throws Exception {
         Response response = createMockResponse(400, ErrorStatusDto.createAuditedErrorStatus(errorId, exceptionType));
 
         final ApplicationException e = Assertions.assertThrows(ApplicationException.class, () -> responseProcessor.getJsonEntity(uri, null, Object.class, response));
@@ -49,7 +50,7 @@ public class JsonResponseProcessorTest {
     }
 
     @Test
-    public void getJson_shouldThrowUnauditedErrorExceptionIfClientErrorResponseEntityAsStringIsReturned() throws Exception {
+    void getJson_shouldThrowUnauditedErrorExceptionIfClientErrorResponseEntityAsStringIsReturned() throws Exception {
         Response response = createMockResponse(400, "Some Entity");
         ApplicationException applicationException = createExceptionFromErrorStatusDto(
                 ErrorStatusDto.createUnauditedErrorStatus(UUID.randomUUID(),
@@ -67,7 +68,7 @@ public class JsonResponseProcessorTest {
     }
 
     @Test
-    public void getJson_shouldReturnApplicationExceptionWithErrorStatusDtoIfResponseContainsMalformedErrorStatusDtoJsonString() throws Exception {
+    void getJson_shouldReturnApplicationExceptionWithErrorStatusDtoIfResponseContainsMalformedErrorStatusDtoJsonString() throws Exception {
         Response clientResponse = createMockResponse(400, "{\"extra\":\"shouldn't be here\",\"audited\":true,\"errorId\":\"1357ad59-5652-4bde-ac19-593c2316a389\",\"exceptionType\":\"INVALID_SAML\",\"clientMessage\":\"\"}");
         ApplicationException applicationException = createExceptionFromErrorStatusDto(
                 ErrorStatusDto.createUnauditedErrorStatus(UUID.randomUUID(),
@@ -85,7 +86,7 @@ public class JsonResponseProcessorTest {
     }
 
     @Test
-    public void getJson_shouldThrowUnauditedErrorExceptionIfServerErrorResponseAsStringIsReturned() throws Exception {
+    void getJson_shouldThrowUnauditedErrorExceptionIfServerErrorResponseAsStringIsReturned() throws Exception {
         Response clientResponse = createMockResponse(500, "There has been some internal server error");
 
         final ApplicationException e = Assertions.assertThrows(ApplicationException.class, () -> responseProcessor.getJsonEntity(uri, null, Object.class, clientResponse));
@@ -96,7 +97,7 @@ public class JsonResponseProcessorTest {
     }
 
     @Test
-    public void getJson_shouldThrowWhenResponseIsRequested() throws Exception {
+    void getJson_shouldThrowWhenResponseIsRequested() throws Exception {
         Response clientResponse = createMockResponse(200, "some entity");
 
         final ApplicationException e = Assertions.assertThrows(ApplicationException.class, () -> responseProcessor.getJsonEntity(uri, null, Response.class, clientResponse));
@@ -105,7 +106,7 @@ public class JsonResponseProcessorTest {
     }
 
     @Test
-    public void getJson_shouldThrowWhenResponseGenericTypeIsRequested() throws Exception {
+    void getJson_shouldThrowWhenResponseGenericTypeIsRequested() throws Exception {
         Response clientResponse = createMockResponse(200, "some entity");
 
         final ApplicationException e = Assertions.assertThrows(ApplicationException.class, () -> responseProcessor.getJsonEntity(uri, new GenericType<Response>(){}, null, clientResponse));
@@ -114,7 +115,7 @@ public class JsonResponseProcessorTest {
     }
 
     @Test
-    public void getJsonEntity_shouldCloseResponse() throws Exception {
+    void getJsonEntity_shouldCloseResponse() throws Exception {
         Response clientResponse = createMockResponse(200, "some entity");
 
         responseProcessor.getJsonEntity(uri, null, String.class, clientResponse);
@@ -123,17 +124,17 @@ public class JsonResponseProcessorTest {
     }
 
     @Test
-    public void getJsonEntity_shouldReturnEmptyStringWhenNoClassNorGenericTypeSupplied() throws Exception {
+    void getJsonEntity_shouldReturnEmptyStringWhenNoClassNorGenericTypeSupplied() throws Exception {
         responseProcessor.getJsonEntity(uri, null, null, createMockResponse(200, "some entity"));
     }
 
     @Test
-    public void getJsonEntity_shouldThrowWhenNoEntityPresent() {
+    void getJsonEntity_shouldThrowWhenNoEntityPresent() {
         Assertions.assertThrows(IllegalArgumentException.class, () -> responseProcessor.getJsonEntity(uri, null, String.class, createMock204Response()));
     }
 
     @Test
-    public void getJsonEntity_shouldThrowWhenGettingEntityFails() {
+    void getJsonEntity_shouldThrowWhenGettingEntityFails() {
         final ApplicationException e = Assertions.assertThrows(ApplicationException.class, () -> responseProcessor.getJsonEntity(uri, null, String.class, createResponseWithBadEntity()));
 
         assertThat(e.getExceptionType()).isEqualTo(ExceptionType.NETWORK_ERROR);

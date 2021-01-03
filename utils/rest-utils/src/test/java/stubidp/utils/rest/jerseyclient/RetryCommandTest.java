@@ -15,13 +15,12 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-@SuppressWarnings({"all", "rawtypes"})
-public class RetryCommandTest {
+class RetryCommandTest {
 
-    private class DummyClass { <T> T function() { return null; } }
+    private static class DummyClass { <T> T function() { return null; } }
 
     @Test
-    public void shouldRetryIfFirstAttemptFails() {
+    void shouldRetryIfFirstAttemptFails() {
         RetryCommand<String> retryCommand = new RetryCommand<>(2);
 
         DummyClass dummy = mock(DummyClass.class);
@@ -34,7 +33,7 @@ public class RetryCommandTest {
     }
 
     @Test
-    public void shouldNotRetryIfRetryCountIs0() {
+    void shouldNotRetryIfRetryCountIs0() {
         RetryCommand<String> retryCommand = new RetryCommand<>(0);
 
         DummyClass dummy = mock(DummyClass.class);
@@ -44,7 +43,7 @@ public class RetryCommandTest {
     }
 
     @Test
-    public void shouldNotRetryIfFirstRequestSucceeds() {
+    void shouldNotRetryIfFirstRequestSucceeds() {
         RetryCommand<String> retryCommand = new RetryCommand<>(2);
 
         DummyClass dummy = mock(DummyClass.class);
@@ -57,7 +56,7 @@ public class RetryCommandTest {
     }
 
     @Test
-    public void shouldThrowProcessingExceptionIfMaxRetriesExceeded(){
+    void shouldThrowProcessingExceptionIfMaxRetriesExceeded(){
         RetryCommand<String> retryCommand = new RetryCommand<>(2);
 
         DummyClass dummy = mock(DummyClass.class);
@@ -71,7 +70,7 @@ public class RetryCommandTest {
     }
 
     @Test
-    public void shouldRetryOnSpecificExceptionIfSpecified() {
+    void shouldRetryOnSpecificExceptionIfSpecified() {
         RetryCommand<String> retryCommand = new RetryCommand<>(2, NotAuthorizedException.class);
 
         DummyClass dummy = mock(DummyClass.class);
@@ -86,7 +85,7 @@ public class RetryCommandTest {
     }
 
     @Test
-    public void shouldThrowExceptionIfDoesNotMatchSpecifiedException() {
+    void shouldThrowExceptionIfDoesNotMatchSpecifiedException() {
         RetryCommand<String> retryCommand = new RetryCommand<>(2, NotAuthorizedException.class);
 
         DummyClass dummy = mock(DummyClass.class);
@@ -98,10 +97,9 @@ public class RetryCommandTest {
     }
 
     @Test
-    @SuppressWarnings("unchecked")
-    public void shouldMarkRetryMeterWhenRetrying() {
+    void shouldMarkRetryMeterWhenRetrying() {
         Meter retryMeter = mock(Meter.class);
-        RetryCommand retryCommand = new RetryCommand(2, retryMeter);
+        RetryCommand<DummyClass> retryCommand = new RetryCommand<>(2, retryMeter);
 
         DummyClass dummy = mock(DummyClass.class);
         when(dummy.function())
@@ -114,10 +112,9 @@ public class RetryCommandTest {
     }
 
     @Test
-    @SuppressWarnings("unchecked")
-    public void shouldNotMarkRetryMeterWhenRetryingNotNeeded() {
+    void shouldNotMarkRetryMeterWhenRetryingNotNeeded() {
         Meter retryMeter = mock(Meter.class);
-        RetryCommand retryCommand = new RetryCommand(2, retryMeter);
+        RetryCommand<DummyClass> retryCommand = new RetryCommand<>(2, retryMeter);
 
         DummyClass dummy = mock(DummyClass.class);
         when(dummy.function()).thenReturn("SUCCESS");
@@ -128,7 +125,7 @@ public class RetryCommandTest {
     }
 
     @Test
-    public void shouldNotErrorIfNoRetryMeterSpecified() {
+    void shouldNotErrorIfNoRetryMeterSpecified() {
         RetryCommand<String> retryCommand = new RetryCommand<>(2);
 
         DummyClass dummy = mock(DummyClass.class);

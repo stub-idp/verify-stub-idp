@@ -8,6 +8,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.opensaml.saml.saml2.core.Assertion;
 import org.opensaml.saml.saml2.core.Response;
 import org.opensaml.saml.saml2.metadata.IDPSSODescriptor;
+import stubidp.saml.domain.assertions.IdpIdaStatus;
 import stubidp.saml.hub.core.validators.DestinationValidator;
 import stubidp.saml.hub.domain.CountryAuthenticationStatus;
 import stubidp.saml.hub.validators.response.idp.components.EncryptedResponseFromIdpValidator;
@@ -33,7 +34,7 @@ public class IdpResponseValidatorTest {
     @Mock
     private SamlAssertionsSignatureValidator samlAssertionsSignatureValidator;
     @Mock
-    private EncryptedResponseFromIdpValidator<CountryAuthenticationStatus.Status> encryptedResponseFromIdpValidator;
+    private EncryptedResponseFromIdpValidator<IdpIdaStatus.Status> encryptedResponseFromIdpValidator;
     @Mock
     private DestinationValidator responseDestinationValidator;
     @Mock

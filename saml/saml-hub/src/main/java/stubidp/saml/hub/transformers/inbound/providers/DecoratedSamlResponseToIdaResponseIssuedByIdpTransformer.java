@@ -1,6 +1,7 @@
 package stubidp.saml.hub.transformers.inbound.providers;
 
 import org.opensaml.saml.saml2.core.Response;
+import stubidp.saml.domain.assertions.IdpIdaStatus;
 import stubidp.saml.domain.response.InboundResponseFromIdp;
 import stubidp.saml.hub.core.validators.DestinationValidator;
 import stubidp.saml.hub.transformers.inbound.IdaResponseFromIdpUnmarshaller;
@@ -27,7 +28,7 @@ public class DecoratedSamlResponseToIdaResponseIssuedByIdpTransformer<T extends 
             SamlResponseSignatureValidator samlResponseSignatureValidator,
             AssertionDecrypter assertionDecrypter,
             SamlAssertionsSignatureValidator samlAssertionsSignatureValidator,
-            @SuppressWarnings("rawtypes") EncryptedResponseFromIdpValidator responseFromIdpValidator,
+            EncryptedResponseFromIdpValidator<IdpIdaStatus.Status> responseFromIdpValidator,
             DestinationValidator responseDestinationValidator,
             ResponseAssertionsFromIdpValidator responseAssertionsFromIdpValidator) {
 

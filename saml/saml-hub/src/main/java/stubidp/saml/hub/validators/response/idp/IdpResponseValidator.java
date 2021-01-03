@@ -3,6 +3,7 @@ package stubidp.saml.hub.validators.response.idp;
 import org.opensaml.saml.saml2.core.Assertion;
 import org.opensaml.saml.saml2.core.Response;
 import org.opensaml.saml.saml2.metadata.IDPSSODescriptor;
+import stubidp.saml.domain.assertions.IdpIdaStatus;
 import stubidp.saml.hub.core.validators.DestinationValidator;
 import stubidp.saml.hub.validators.response.idp.components.EncryptedResponseFromIdpValidator;
 import stubidp.saml.hub.validators.response.idp.components.ResponseAssertionsFromIdpValidator;
@@ -18,8 +19,7 @@ public class IdpResponseValidator {
     private final SamlResponseSignatureValidator samlResponseSignatureValidator;
     private final AssertionDecrypter assertionDecrypter;
     private final SamlAssertionsSignatureValidator samlAssertionsSignatureValidator;
-    @SuppressWarnings("rawtypes")
-    private final EncryptedResponseFromIdpValidator responseFromIdpValidator;
+    private final EncryptedResponseFromIdpValidator<IdpIdaStatus.Status> responseFromIdpValidator;
     private final DestinationValidator responseDestinationValidator;
     private final ResponseAssertionsFromIdpValidator responseAssertionsFromIdpValidator;
     private ValidatedResponse validatedResponse;
@@ -28,8 +28,7 @@ public class IdpResponseValidator {
     public IdpResponseValidator(SamlResponseSignatureValidator samlResponseSignatureValidator,
                                 AssertionDecrypter assertionDecrypter,
                                 SamlAssertionsSignatureValidator samlAssertionsSignatureValidator,
-                                @SuppressWarnings("rawtypes")
-                                EncryptedResponseFromIdpValidator responseFromIdpValidator,
+                                EncryptedResponseFromIdpValidator<IdpIdaStatus.Status> responseFromIdpValidator,
                                 DestinationValidator responseDestinationValidator,
                                 ResponseAssertionsFromIdpValidator responseAssertionsFromIdpValidator) {
         this.samlResponseSignatureValidator = samlResponseSignatureValidator;

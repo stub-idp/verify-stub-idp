@@ -9,69 +9,70 @@ import java.util.function.Supplier;
 
 import static java.lang.String.format;
 
-@SuppressWarnings("rawtypes")
 public class RetryCommand<T> {
 
     private static final Logger LOG = LoggerFactory.getLogger(RetryCommand.class);
 
     private int retryCounter;
     private final int maxRetries;
-    private final Class exceptionClass;
+    private final Class<? extends Exception> exceptionClass;
     private final Meter retryMeter;
 
-    public RetryCommand(int maxRetries) {
+    RetryCommand(int maxRetries) {
         this(maxRetries, Exception.class, null);
     }
 
-    public RetryCommand(int maxRetries, Class exceptionClass) {
+    RetryCommand(int maxRetries, Class<? extends Exception> exceptionClass) {
         this(maxRetries, exceptionClass, null);
     }
 
-    public RetryCommand(int maxRetries, Meter retryMeter) {
+    RetryCommand(int maxRetries, Meter retryMeter) {
         this(maxRetries, Exception.class, retryMeter);
     }
 
-    public RetryCommand(int maxRetries, Class exceptionClass, Meter retryMeter) {
+    private RetryCommand(int maxRetries, Class<? extends Exception> exceptionClass, Meter retryMeter) {
         this.exceptionClass = exceptionClass;
         this.retryMeter = retryMeter;
         this.retryCounter = 0;
         this.maxRetries = maxRetries;
     }
 
-    public T execute(Supplier<T> function) {
+    T execute(Supplier<T> function) {
         try {
             return function.get();
         } catch (Exception e) {
-            if(!exceptionClass.isInstance(e)) throw e;
-            if(retryCounter >= maxRetries) return failAndStopRetry(e, function);
+            if(!exceptionClass.isInstance(e)) {
+                throw e;
+            }
+            if(retryCounter >= maxRetries) {
+                return failAndStopRetry(e, function);
+            }
 
-            if(retryCounter == 0) { logInitialFail(e, function); }
-            else { logRetryFail(e, function); }
+            if(0 == retryCounter) {
+                logInitialFail(e, function);
+            } else {
+                logRetryFail(e, function);
+            }
 
             retryCounter++;
-            if(retryMeter != null) retryMeter.mark();
+            if(null != retryMeter) {
+                retryMeter.mark();
+            }
 
             return execute(function);
         }
     }
 
     private void logRetryFail(Exception e, Supplier<T> function) {
-        LOG.debug(format("Command %s failed on retry %d of %d.",
-                function.toString(),
-                retryCounter,
-                maxRetries), e);
+        LOG.debug(format("Command %s failed on retry %d of %d.", function, retryCounter, maxRetries), e);
     }
 
     private void logInitialFail(Exception e, Supplier<T> function) {
-        LOG.debug(format("Command %s failed, will be retried %d times.",
-                function.toString(),
-                maxRetries), e);
+        LOG.debug(format("Command %s failed, will be retried %d times.", function, maxRetries), e);
     }
 
     private T failAndStopRetry(Exception e, Supplier<T> function) {
         LOG.debug("Max retries exceeded for " + function.toString());
-        throw new ProcessingException(format("Command %s failed on all of %d retries.",
-                function.toString(),
-                maxRetries), e);
+        throw new ProcessingException(format("Command %s failed on all of %d retries.", function, maxRetries), e);
     }
 }

@@ -1,5 +1,6 @@
 package stubidp.saml.hub.core.transformers.outbound.decorators;
 
+import org.opensaml.core.xml.XMLObject;
 import org.opensaml.saml.saml2.core.Assertion;
 import org.opensaml.saml.saml2.core.AttributeQuery;
 import org.opensaml.saml.saml2.core.EncryptedAssertion;
@@ -36,7 +37,7 @@ public class SamlAttributeQueryAssertionEncrypter extends AbstractAssertionEncry
                 .get(0)
                 .getSubjectConfirmationData();
 
-        return (List<EncryptedAssertion>) (List<?>)
+        return (List<EncryptedAssertion>) (List<? extends XMLObject>)
                 subjectConfirmationData.getUnknownXMLObjects(Assertion.DEFAULT_ELEMENT_NAME);
     }
 
@@ -47,7 +48,7 @@ public class SamlAttributeQueryAssertionEncrypter extends AbstractAssertionEncry
                 .getSubjectConfirmations()
                 .get(0)
                 .getSubjectConfirmationData();
-        return (List<Assertion>) (List<?>)
+        return (List<Assertion>) (List<? extends XMLObject>)
                 subjectConfirmationData.getUnknownXMLObjects(Assertion.DEFAULT_ELEMENT_NAME);
     }
 }

@@ -4,28 +4,27 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.jar.Manifest;
 
-@SuppressWarnings({"rawtypes"})
-public class ManifestReader {
+class ManifestReader {
 
     private static final String MANIFEST_FILE_LOCATION = "/META-INF/MANIFEST.MF";
 
-    public String getAttributeValueFor(Class classInJar, String attributeName) throws IOException {
+    String getAttributeValueFor(Class<?> classInJar, String attributeName) throws IOException {
         String attributeValue = getManifestFor(classInJar).getMainAttributes().getValue(attributeName);
 
-        if (attributeValue == null || attributeValue.isEmpty()) {
+        if (null == attributeValue || attributeValue.isEmpty()) {
             throw new IOException("Unknown attribute name");
         }
 
         return attributeValue;
     }
 
-    private Manifest getManifestFor(Class clazz) throws IOException {
+    private Manifest getManifestFor(Class<?> clazz) throws IOException {
         String manifestFilePath = getManifestFilePath(clazz);
 
         return new Manifest(new URL(manifestFilePath).openStream());
     }
 
-    private String getManifestFilePath(Class clazz) throws IOException {
+    private String getManifestFilePath(Class<?> clazz) throws IOException {
         String simpleName = clazz.getSimpleName() + ".class";
         String pathToClass = clazz.getResource(simpleName).toString();
         String pathToJar = pathToClass.substring(0, pathToClass.lastIndexOf('!') + 1);

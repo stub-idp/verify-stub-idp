@@ -10,8 +10,7 @@ import java.util.Optional;
 
 import static java.text.MessageFormat.format;
 
-@SuppressWarnings("rawtypes")
-public abstract class AuthenticationStatusUnmarshallerBase<T extends Enum, U extends IdaStatus> {
+public abstract class AuthenticationStatusUnmarshallerBase<T, U extends IdaStatus> {
 
     private final SamlStatusToAuthenticationStatusCodeMapper<T> statusMapper;
     private final AuthenticationStatusFactory<T, U> statusFactory;
@@ -31,13 +30,12 @@ public abstract class AuthenticationStatusUnmarshallerBase<T extends Enum, U ext
     }
 
     private T getStatus(final Status samlStatus) {
-        return statusMapper.map(samlStatus).orElseThrow(() -> new IllegalStateException(
-                format("Could not map status to an IdaStatus: {0}", SerializeSupport.nodeToString(samlStatus.getDOM()))
-        ));
+        return statusMapper.map(samlStatus)
+                .orElseThrow(() -> new IllegalStateException(format("Could not map status to an IdaStatus: {0}", SerializeSupport.nodeToString(samlStatus.getDOM()))));
     }
 
     private Optional<String> getStatusMessage(final Status samlStatus) {
         final StatusMessage statusMessage = samlStatus.getStatusMessage();
-        return statusMessage != null ? Optional.of(statusMessage.getValue()) : Optional.empty();
+        return null != statusMessage ? Optional.of(statusMessage.getValue()) : Optional.empty();
     }
 }

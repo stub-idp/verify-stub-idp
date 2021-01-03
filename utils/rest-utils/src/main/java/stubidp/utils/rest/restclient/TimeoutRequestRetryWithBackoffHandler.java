@@ -18,27 +18,27 @@ import java.util.List;
 
 import static java.text.MessageFormat.format;
 
-@SuppressWarnings("rawtypes")
 public class TimeoutRequestRetryWithBackoffHandler implements HttpRequestRetryHandler {
     private static final Logger LOG = LoggerFactory.getLogger(TimeoutRequestRetryWithBackoffHandler.class);
     private final int numRetries;
     private final Duration retryBackoffPeriod;
-    private final List<Class> defaultRetryExceptions = Arrays.asList(new Class[]{ ConnectTimeoutException.class, SocketTimeoutException.class}) ;
-    private List<Class> retryExceptions;
+    private final List<Class<? extends Exception>> defaultRetryExceptions = List.of(ConnectTimeoutException.class, SocketTimeoutException.class);
+    private List<Class<? extends Exception>> retryExceptions;
 
-    public TimeoutRequestRetryWithBackoffHandler(int numRetries, Duration retryBackoffPeriod) {
+    TimeoutRequestRetryWithBackoffHandler(int numRetries, Duration retryBackoffPeriod) {
         this.numRetries = numRetries;
         this.retryBackoffPeriod = retryBackoffPeriod;
         this.retryExceptions = defaultRetryExceptions;
     }
 
-    public TimeoutRequestRetryWithBackoffHandler(int numRetries, Duration retryBackoffPeriod,List<String> retryExceptionNames) {
+    @SuppressWarnings("unchecked")
+    TimeoutRequestRetryWithBackoffHandler(int numRetries, Duration retryBackoffPeriod, List<String> retryExceptionNames) {
         this(numRetries, retryBackoffPeriod);
-        if (retryExceptions != null) {
+        if (null != retryExceptions) {
             this.retryExceptions = new ArrayList<>();
-            for(String className : retryExceptionNames) {
+            for(final String className : retryExceptionNames) {
                 try {
-                    this.retryExceptions.add(Class.forName(className));
+                    this.retryExceptions.add((Class<? extends Exception>) Class.forName(className));
                 } catch(ClassNotFoundException e) {
                     LOG.error(format("Class {0} specified in exception class name list does not exist", className));
                 }

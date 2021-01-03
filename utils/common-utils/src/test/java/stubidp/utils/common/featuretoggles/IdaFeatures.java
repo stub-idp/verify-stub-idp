@@ -1,7 +1,5 @@
 package stubidp.utils.common.featuretoggles;
 
-import stubidp.utils.common.featuretoggles.Feature;
-
 public enum IdaFeatures implements Feature {
 
     UIRework,

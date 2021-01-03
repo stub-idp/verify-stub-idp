@@ -12,6 +12,7 @@ import org.opensaml.saml.saml2.metadata.IDPSSODescriptor;
 import org.opensaml.xmlsec.encryption.support.EncryptionConstants;
 import org.slf4j.event.Level;
 import stubidp.saml.domain.assertions.IdentityProviderAssertion;
+import stubidp.saml.domain.assertions.IdpIdaStatus;
 import stubidp.saml.domain.configuration.SamlConfiguration;
 import stubidp.saml.domain.response.InboundResponseFromIdp;
 import stubidp.saml.extensions.validation.SamlTransformationErrorException;
@@ -30,6 +31,7 @@ import stubidp.saml.hub.metadata.IdpMetadataPublicKeyStore;
 import stubidp.saml.hub.transformers.inbound.IdaResponseFromIdpUnmarshaller;
 import stubidp.saml.hub.transformers.inbound.IdpIdaStatusUnmarshaller;
 import stubidp.saml.hub.transformers.inbound.SamlStatusToCountryAuthenticationStatusCodeMapper;
+import stubidp.saml.hub.transformers.inbound.SamlStatusToIdaStatusCodeMapper;
 import stubidp.saml.hub.transformers.inbound.providers.DecoratedSamlResponseToIdaResponseIssuedByIdpTransformer;
 import stubidp.saml.hub.validators.authnrequest.ConcurrentMapIdExpirationCache;
 import stubidp.saml.hub.validators.response.common.ResponseSizeValidator;
@@ -316,7 +318,7 @@ public class SamlResponseDecrypter {
                 new SamlResponseSignatureValidator(new SamlMessageSignatureValidator(new CredentialFactorySignatureValidator(credentialFactory))),
                 new AssertionDecrypter(new EncryptionAlgorithmValidator(), new DecrypterFactory().createDecrypter(storeCredentialRetriever.getDecryptingCredentials())),
                 new SamlAssertionsSignatureValidator(new SamlMessageSignatureValidator(new CredentialFactorySignatureValidator(credentialFactory))),
-                new EncryptedResponseFromIdpValidator<>(new SamlStatusToCountryAuthenticationStatusCodeMapper()),
+                new EncryptedResponseFromIdpValidator<>(new SamlStatusToIdaStatusCodeMapper()),
                 new DestinationValidator(UriBuilder.fromUri(spAssertionConsumerServices).replacePath(null).build(), spAssertionConsumerServices.getPath()),
                 new ResponseAssertionsFromIdpValidator(
                         new IdentityProviderAssertionValidator(
