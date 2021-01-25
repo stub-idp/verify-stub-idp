@@ -70,4 +70,7 @@ public class DebugPageView extends IdpPageView {
 
     public UUID getSingleIdpJourneyId() { return session.getSingleIdpJourneyId().orElse(null); }
 
+    public String getStartTime() {
+        return session.getStartTime();
+    }
 }

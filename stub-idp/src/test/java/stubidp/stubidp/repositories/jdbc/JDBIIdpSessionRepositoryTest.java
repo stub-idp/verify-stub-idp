@@ -1,5 +1,9 @@
 package stubidp.stubidp.repositories.jdbc;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import io.prometheus.client.CollectorRegistry;
 import org.jdbi.v3.core.Jdbi;
 import org.junit.jupiter.api.AfterEach;
@@ -27,12 +31,13 @@ import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class JDBIIdpSessionRepositoryTest {
+class JDBIIdpSessionRepositoryTest {
 
+	private final String PASSWORD = "12345678";
 	private Jdbi jdbi;
 	private JDBIIdpSessionRepository repository;
 	private final String DATABASE_URL = "jdbc:h2:mem:test;MODE=PostgreSQL;DB_CLOSE_DELAY=-1";
-	
+
 	@BeforeEach
     void setUp() {
 		new DatabaseMigrationRunner().runMigration(DATABASE_URL);
@@ -73,24 +78,26 @@ public class JDBIIdpSessionRepositoryTest {
 	}
 
 	@Test
-    void createSession_shouldCreateIdpSessionAndStoreInDatabase() {
+    void createSession_shouldCreateIdpSessionAndStoreInDatabase() throws JsonProcessingException {
 		Instant authnRequestIssueTime = getLocalDateTime(2018, 4, 25, 11, 24, 0);
 		IdaAuthnRequestFromHub authnRequest = new IdaAuthnRequestFromHub("155a37d3-5a9d-4cd0-b68a-158717b85202", "test-issuer", authnRequestIssueTime, Collections.emptyList(), Optional.empty(), null, null, AuthnContextComparisonTypeEnumeration.EXACT);
 		IdpSession session = createSession(authnRequest);
 		SessionId insertedSessionId = repository.createSession(session);
-		String expectedSerializedSessionStart = "{{\"sessionId\":\""+ insertedSessionId.getSessionId() +"\",\"idaAuthnRequestFromHub\":{\"id\":\"155a37d3-5a9d-4cd0-b68a-158717b85202\",\"issuer\":\"test-issuer\",\"issueInstant\":1524655440.000000000,\"levelsOfAssurance\":[],\"forceAuthentication\":null,\"sessionExpiryTimestamp\":null,\"comparisonType\":\"EXACT\",\"destination\":null},\"relayState\":\"test-relay-state\",\"validHints\":[],\"invalidHints\":[],\"languageHint\":null,\"registration\":null,\"singleIdpJourneyId\":null,\"csrfToken\":null,\"idpUser\":{\"username\":\"jobloggs\",\"persistentId\":\"persistentId\",\"password\":";
-		String expectedSerializedSessionEnd = ",\"firstnames\":[{\"value\":\"Joe\",\"from\":null,\"to\":null,\"verified\":true}],\"middleNames\":[],\"surnames\":[{\"value\":\"Bloggs\",\"from\":null,\"to\":null,\"verified\":true}],\"gender\":{\"value\":\"MALE\",\"from\":null,\"to\":null,\"verified\":true},\"dateOfBirths\":[{\"value\":1524655440.000000000,\"from\":null,\"to\":null,\"verified\":true}],\"addresses\":[{\"lines\":[],\"postCode\":null,\"internationalPostCode\":null,\"uprn\":null,\"from\":978307200.000000000,\"to\":null,\"verified\":false}],\"levelOfAssurance\":\"LEVEL_1\"}}}";
 
 		jdbi.useHandle(handle -> {
 			Optional<String> result = handle.select("select session_data from stub_idp_session where session_id = ?", insertedSessionId.toString())
 				.mapTo(String.class)
 				.findFirst();
 				
-			assertThat(result.isPresent()).isEqualTo(true);
+			assertThat(result).isPresent();
 			// skip the password
-			assertThat(result.get()).startsWith(expectedSerializedSessionStart);
-			assertThat(result.get()).endsWith(expectedSerializedSessionEnd);
-			assertThat(result.get()).doesNotContain("12345678"); //password should be hashed
+			assertThat(result.get()).doesNotContain(PASSWORD); //password should be hashed
+
+			ObjectMapper objectMapper = new ObjectMapper()
+					.registerModule(new JavaTimeModule())
+					.registerModule(new Jdk8Module());
+			IdpSession actual = objectMapper.readValue(result.get().substring(1, result.get().length() - 1), IdpSession.class);
+			assertThat(actual).isEqualTo(session);
 		});
 	}
 	
@@ -156,9 +163,9 @@ public class JDBIIdpSessionRepositoryTest {
 	}
 	
 	private IdpSession createSession(IdaAuthnRequestFromHub authnRequestFromHub) {
-		IdpSession session = new IdpSession(SessionId.createNewSessionId(), authnRequestFromHub, "test-relay-state", Collections.emptyList(), Collections.emptyList(), Optional.empty(), Optional.empty(), Optional.empty(), null);
+		IdpSession session = new IdpSession(SessionId.createNewSessionId(), Instant.now(), authnRequestFromHub, "test-relay-state", Collections.emptyList(), Collections.emptyList(), Optional.empty(), Optional.empty(), Optional.empty(), null);
 		// TODO: add addresses to IdpUser below once Address has a equals() method implemented.
-		session.setIdpUser(Optional.of(new DatabaseIdpUser("jobloggs", "persistentId", "12345678",
+		session.setIdpUser(Optional.of(new DatabaseIdpUser("jobloggs", "persistentId", PASSWORD,
 				Collections.singletonList(new SimpleMdsValue<>("Joe", null, null, true)),
 				Collections.emptyList(),
 				Collections.singletonList(new SimpleMdsValue<>("Bloggs", null, null, true)),

@@ -29,6 +29,7 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriBuilder;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.time.Instant;
 import java.util.Collections;
 import java.util.Optional;
 
@@ -75,7 +76,7 @@ class EidasLoginPageResourceTest {
         SamlMessageRedirectViewFactory samlResponseRedirectViewFactory = new SamlMessageRedirectViewFactory(cookieNames);
         resource = new EidasLoginPageResource(sessionRepository, eidasSuccessAuthnResponseService, samlResponseRedirectViewFactory, stubCountryRepository, stubCountryService);
         EidasAuthnRequest eidasAuthnRequest = new EidasAuthnRequest("request-id", "issuer", "destination", "loa", Collections.emptyList());
-        session = new EidasSession(SESSION_ID, eidasAuthnRequest, null, null, null, Optional.empty(), Optional.empty());
+        session = new EidasSession(SESSION_ID, Instant.now(), eidasAuthnRequest, null, null, null, Optional.empty(), Optional.empty());
     }
 
     @Test

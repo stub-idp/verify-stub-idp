@@ -20,7 +20,9 @@
         Stub-IDP sessionId is "${sessionId}".
     </p>
 
-
+    <p id="idp-session-start-time">
+        Stub-IDP session start time is "${startTime}".
+    </p>
 
     <#if idaAuthnRequestFromHub??>
         <p id="registration">

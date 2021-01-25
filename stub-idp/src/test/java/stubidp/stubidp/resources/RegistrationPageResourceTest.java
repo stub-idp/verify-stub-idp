@@ -24,6 +24,7 @@ import stubidp.utils.rest.common.SessionId;
 
 import javax.ws.rs.core.Response;
 import java.net.URI;
+import java.time.Instant;
 import java.util.Optional;
 import java.util.function.Function;
 
@@ -74,8 +75,8 @@ public class RegistrationPageResourceTest {
 
     @Test
     void shouldHaveStatusAuthnCancelledResponseWhenUserCancels() {
-        when(idpSessionRepository.get(SESSION_ID)).thenReturn(Optional.of(new IdpSession(SESSION_ID, idaAuthnRequestFromHub, RELAY_STATE, null, null, null, null, null, null)));
-        when(idpSessionRepository.deleteAndGet(SESSION_ID)).thenReturn(Optional.of(new IdpSession(SESSION_ID, idaAuthnRequestFromHub, RELAY_STATE, null, null, null, null, null, null)));
+        when(idpSessionRepository.get(SESSION_ID)).thenReturn(Optional.of(new IdpSession(SESSION_ID, Instant.now(), idaAuthnRequestFromHub, RELAY_STATE, null, null, null, null, null, null)));
+        when(idpSessionRepository.deleteAndGet(SESSION_ID)).thenReturn(Optional.of(new IdpSession(SESSION_ID, Instant.now(), idaAuthnRequestFromHub, RELAY_STATE, null, null, null, null, null, null)));
         when(idaAuthnRequestFromHub.getId()).thenReturn(SAML_REQUEST_ID);
         when(nonSuccessAuthnResponseService.generateAuthnCancel(anyString(), anyString(), eq(RELAY_STATE))).thenReturn(new SamlResponseFromValue<>("saml", Function.identity(), RELAY_STATE, URI.create("uri")));
         when(cookieNames.getSessionCookieName()).thenReturn("sessionCookieName");

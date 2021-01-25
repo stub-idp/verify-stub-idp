@@ -35,7 +35,9 @@ public class EidasDebugPageView extends IdpPageView {
     }
 
     public List<String> getRequestedAttributes() {
-        return session.getEidasAuthnRequest().getAttributes().stream().map(a -> format("attribute: {0}, required: {1}", a.getName(), a.isRequired())).collect(Collectors.toList());
+        return session.getEidasAuthnRequest().getAttributes().stream()
+                .map(a -> format("attribute: {0}, required: {1}", a.getName(), a.isRequired()))
+                .collect(Collectors.toList());
     }
 
     public String getRequestedLevelOfAssurance() {
@@ -48,5 +50,9 @@ public class EidasDebugPageView extends IdpPageView {
 
     public String getAuthnRequestIssuer() {
         return session.getEidasAuthnRequest().getIssuer();
+    }
+
+    public String getStartTime() {
+        return session.getStartTime();
     }
 }

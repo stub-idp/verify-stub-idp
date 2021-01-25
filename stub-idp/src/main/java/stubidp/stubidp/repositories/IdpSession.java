@@ -8,7 +8,9 @@ import stubidp.stubidp.domain.IdpLanguageHint;
 import stubidp.utils.rest.common.SessionId;
 import stubidp.saml.domain.request.IdaAuthnRequestFromHub;
 
+import java.time.Instant;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -19,6 +21,7 @@ public class IdpSession extends Session {
 
 	@JsonCreator
 	public IdpSession(@JsonProperty("sessionId") SessionId sessionId,
+					  @JsonProperty("startTime") Instant startTime,
 					  @JsonProperty("idaAuthnRequestFromHub") IdaAuthnRequestFromHub idaAuthnRequestFromHub,
 					  @JsonProperty("relayState") String relayState,
 					  @JsonProperty("validHints") List<IdpHint> validHints,
@@ -27,25 +30,26 @@ public class IdpSession extends Session {
 					  @JsonProperty("registration") Optional<Boolean> registration,
 				      @JsonProperty("singleIdpJourneyId") Optional<UUID> singleIdpJourneyId,
 					  @JsonProperty("csrfToken") String csrfToken) {
-		super(sessionId, relayState, validHints, invalidHints, languageHint, registration, csrfToken);
+		super(sessionId, startTime, relayState, validHints, invalidHints, languageHint, registration, csrfToken);
 		this.idaAuthnRequestFromHub = idaAuthnRequestFromHub;
 		this.singleIdpJourneyId = singleIdpJourneyId;
 	}
 
 	public IdpSession(SessionId sessionId,
+					  Instant startTime,
 					  IdaAuthnRequestFromHub idaAuthnRequestFromHub,
 					  String relayState,
 					  List<IdpHint> validHints,
 					  List<String> invalidHints,
 					  Optional<IdpLanguageHint> languageHint,
 					  Optional<Boolean> registration) {
-		super(sessionId, relayState, validHints, invalidHints, languageHint, registration, null);
+		super(sessionId, startTime, relayState, validHints, invalidHints, languageHint, registration, null);
 		this.idaAuthnRequestFromHub = idaAuthnRequestFromHub;
 		this.singleIdpJourneyId = Optional.empty();
 	}
 
 	public IdpSession(SessionId sessionId) {
-		this(sessionId, null, null, null, null, null, null);
+		this(sessionId, Instant.now(), null, null, null, null, null, null);
 	}
 
 	public IdaAuthnRequestFromHub getIdaAuthnRequestFromHub() {
@@ -62,5 +66,28 @@ public class IdpSession extends Session {
 
 	public Optional<UUID> getSingleIdpJourneyId() {
 		return singleIdpJourneyId;
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+		if (!super.equals(o)) return false;
+		IdpSession that = (IdpSession) o;
+		return Objects.equals(idaAuthnRequestFromHub, that.idaAuthnRequestFromHub) && Objects.equals(idpUser, that.idpUser) && Objects.equals(singleIdpJourneyId, that.singleIdpJourneyId);
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(super.hashCode(), idaAuthnRequestFromHub, idpUser, singleIdpJourneyId);
+	}
+
+	@Override
+	public String toString() {
+		return "IdpSession{" +
+				"idaAuthnRequestFromHub=" + idaAuthnRequestFromHub +
+				", idpUser=" + idpUser +
+				", singleIdpJourneyId=" + singleIdpJourneyId +
+				'}';
 	}
 }

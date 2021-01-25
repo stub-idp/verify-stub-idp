@@ -103,4 +103,17 @@ public class Address implements MdsAttributeValue, Serializable {
     public int hashCode() {
         return Objects.hash(verified, from, to, postCode, lines, internationalPostCode, uprn);
     }
+
+    @Override
+    public String toString() {
+        return "Address{" +
+                "verified=" + verified +
+                ", from=" + from +
+                ", to=" + to +
+                ", postCode=" + postCode +
+                ", lines=" + lines +
+                ", internationalPostCode=" + internationalPostCode +
+                ", uprn=" + uprn +
+                '}';
+    }
 }

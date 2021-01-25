@@ -15,6 +15,7 @@ import stubidp.stubidp.views.DebugPageView;
 import stubidp.utils.rest.common.SessionId;
 
 import javax.ws.rs.core.Response;
+import java.time.Instant;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -49,7 +50,7 @@ public class DebugPageResourceTest {
 
     @Test
     void shouldHaveNullJourneyIdInPageViewWhenNoIdReceived() {
-        when(sessionRepository.get(SESSION_ID)).thenReturn(Optional.ofNullable(new IdpSession(SESSION_ID, idaAuthnRequestFromHub, RELAY_STATE, null, null, null, null, Optional.empty(), null)));
+        when(sessionRepository.get(SESSION_ID)).thenReturn(Optional.ofNullable(new IdpSession(SESSION_ID, Instant.now(), idaAuthnRequestFromHub, RELAY_STATE, null, null, null, null, Optional.empty(), null)));
 
         Response response = resource.get(IDP_NAME, SESSION_ID);
 
@@ -60,7 +61,7 @@ public class DebugPageResourceTest {
     @Test
     void shouldHaveJourneyIdInPageViewWhenIdReceived() {
         UUID uuid = UUID.randomUUID();
-        when(sessionRepository.get(SESSION_ID)).thenReturn(Optional.ofNullable(new IdpSession(SESSION_ID, idaAuthnRequestFromHub, RELAY_STATE, null, null, null, null, Optional.ofNullable(uuid), null)));
+        when(sessionRepository.get(SESSION_ID)).thenReturn(Optional.ofNullable(new IdpSession(SESSION_ID, Instant.now(), idaAuthnRequestFromHub, RELAY_STATE, null, null, null, null, Optional.ofNullable(uuid), null)));
 
         Response response = resource.get(IDP_NAME, SESSION_ID);
 

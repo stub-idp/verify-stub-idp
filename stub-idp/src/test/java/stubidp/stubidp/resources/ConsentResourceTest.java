@@ -26,6 +26,7 @@ import stubidp.test.devpki.TestEntityIds;
 import stubidp.utils.rest.common.SessionId;
 
 import javax.ws.rs.core.Response;
+import java.time.Instant;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -66,7 +67,7 @@ public class ConsentResourceTest {
     void shouldWarnUserIfLOAIsTooLow() {
         final SessionId idpSessionId = SessionId.createNewSessionId();
 
-        IdpSession session = new IdpSession(idpSessionId, idaAuthnRequestFromHub, RELAY_STATE, null, null, null, null, null, null);
+        IdpSession session = new IdpSession(idpSessionId, Instant.now(), idaAuthnRequestFromHub, RELAY_STATE, null, null, null, null, null, null);
         session.setIdpUser(newUser(AuthnContext.LEVEL_1));
         when(sessionRepository.get(idpSessionId)).thenReturn(Optional.of(session));
 
@@ -83,7 +84,7 @@ public class ConsentResourceTest {
     void shouldWarnUserIfLOAIsTooLowWhenMultipleValuesPresent() {
         final SessionId idpSessionId = SessionId.createNewSessionId();
 
-        IdpSession session = new IdpSession(idpSessionId, idaAuthnRequestFromHub, RELAY_STATE, null, null, null, null, null, null);
+        IdpSession session = new IdpSession(idpSessionId, Instant.now(), idaAuthnRequestFromHub, RELAY_STATE, null, null, null, null, null, null);
         session.setIdpUser(newUser(AuthnContext.LEVEL_1));
         when(sessionRepository.get(idpSessionId)).thenReturn(Optional.of(session));
 
@@ -100,7 +101,7 @@ public class ConsentResourceTest {
     void shouldNotWarnUserIfLOAIsOk() {
         final SessionId idpSessionId = SessionId.createNewSessionId();
 
-        IdpSession session = new IdpSession(idpSessionId, idaAuthnRequestFromHub, RELAY_STATE, null, null, null, null, null, null);
+        IdpSession session = new IdpSession(idpSessionId, Instant.now(), idaAuthnRequestFromHub, RELAY_STATE, null, null, null, null, null, null);
         session.setIdpUser(newUser(AuthnContext.LEVEL_2));
         when(sessionRepository.get(idpSessionId)).thenReturn(Optional.of(session));
 

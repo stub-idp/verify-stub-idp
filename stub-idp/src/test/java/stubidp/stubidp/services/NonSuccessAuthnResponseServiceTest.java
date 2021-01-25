@@ -123,7 +123,7 @@ public class NonSuccessAuthnResponseServiceTest {
 
     @Test
     void shouldBuildFraudResponse(){
-        IdpSession session = new IdpSession(SessionId.createNewSessionId(),
+        IdpSession session = new IdpSession(SessionId.createNewSessionId(), Instant.now(),
                 IdaAuthnRequestFromHub.createRequestReceivedFromHub(REQUEST_ID, HUB_URI.toString(), List.of(LEVEL_2), false, Instant.now(), AuthnContextComparisonTypeEnumeration.EXACT),
                 RELAY_STATE, null, null, null, null, null, null);
         nonSuccessAuthnResponseService.generateFraudResponse(IDP_NAME, REQUEST_ID, FraudIndicator.FI01, "ipAddress", session).getResponseString();

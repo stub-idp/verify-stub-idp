@@ -22,6 +22,7 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
+import java.time.Instant;
 import java.util.Optional;
 
 @Path(Urls.HEADLESS_ROOT)
@@ -78,7 +79,7 @@ public class HeadlessIdpResource {
 
         final Optional<DatabaseIdpUser> idpUser = idpStubsRepository.getIdpWithFriendlyId(IDP_NAME).getUser(username, "bar");
 
-        final IdpSession session = new IdpSession(SessionId.createNewSessionId(), idaRequestFromHub, relayState, null, null, null, null, null, null);
+        final IdpSession session = new IdpSession(SessionId.createNewSessionId(), Instant.now(), idaRequestFromHub, relayState, null, null, null, null, null, null);
         session.setIdpUser(idpUser);
 
         final SamlResponse successResponse = successAuthnResponseService.getSuccessResponse(false, httpServletRequest.getRemoteAddr(), IDP_NAME, session);

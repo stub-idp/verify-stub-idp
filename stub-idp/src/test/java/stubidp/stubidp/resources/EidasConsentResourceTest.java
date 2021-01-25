@@ -22,6 +22,7 @@ import stubidp.stubidp.services.EidasAuthnResponseService;
 import stubidp.utils.rest.common.SessionId;
 
 import javax.ws.rs.core.Response;
+import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.Collections;
@@ -64,7 +65,7 @@ public class EidasConsentResourceTest {
         resource = new EidasConsentResource(sessionRepository, rsaSha256AuthnResponseService, rsaSsaPssAuthnResponseService, samlResponseRedirectViewFactory, stubCountryRepository);
 
         EidasAuthnRequest eidasAuthnRequest = new EidasAuthnRequest("request-id", "issuer", "destination", "loa", Collections.emptyList());
-        session = new EidasSession(SESSION_ID, eidasAuthnRequest, null, null, null, null, null);
+        session = new EidasSession(SESSION_ID, Instant.now(), eidasAuthnRequest, null, null, null, null, null);
         EidasUser user = new EidasUser("Jane", Optional.empty(), "Doe", Optional.empty(), "pid", LocalDate.of(1990, 1, 2).atStartOfDay().atZone(ZoneId.of("UTC")).toInstant(), null, null);
         session.setEidasUser(user);
     }

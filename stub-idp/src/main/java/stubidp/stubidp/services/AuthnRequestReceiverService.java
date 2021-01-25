@@ -22,6 +22,7 @@ import stubidp.utils.rest.common.SessionId;
 import javax.inject.Inject;
 import javax.ws.rs.core.UriBuilder;
 import java.net.URI;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -93,7 +94,7 @@ public class AuthnRequestReceiverService {
         AuthnRequest authnRequest = idpAuthnRequestValidator.transformAndValidate(idpName, samlRequest);
         final IdaAuthnRequestFromHub idaRequestFromHub = authnRequestToIdaRequestFromHubTransformer.apply(authnRequest);
         successfulVerifyAuthnRequests.inc();
-        IdpSession session = new IdpSession(SessionId.createNewSessionId(), idaRequestFromHub, relayState, validHints, invalidHints, languageHint, registration, singleIdpJourneyId, null);
+        IdpSession session = new IdpSession(SessionId.createNewSessionId(), Instant.now(), idaRequestFromHub, relayState, validHints, invalidHints, languageHint, registration, singleIdpJourneyId, null);
         final SessionId idpSessionId = idpSessionRepository.createSession(session);
 
         UriBuilder uriBuilder;
@@ -110,7 +111,7 @@ public class AuthnRequestReceiverService {
         AuthnRequest authnRequest = eidasAuthnRequestValidator.transformAndValidate(schemeId, samlRequest);
         EidasAuthnRequest eidasAuthnRequest = EidasAuthnRequest.buildFromAuthnRequest(authnRequest);
         successfulEidasAuthnRequests.inc();
-        EidasSession session = new EidasSession(SessionId.createNewSessionId(), eidasAuthnRequest, relayState, Collections.emptyList(), Collections.emptyList(), languageHint, Optional.empty(), null, true);
+        EidasSession session = new EidasSession(SessionId.createNewSessionId(), Instant.now(), eidasAuthnRequest, relayState, Collections.emptyList(), Collections.emptyList(), languageHint, Optional.empty(), null, true);
         final SessionId idpSessionId = eidasSessionRepository.createSession(session);
 
         UriBuilder uriBuilder = UriBuilder.fromPath(Urls.EIDAS_LOGIN_RESOURCE);

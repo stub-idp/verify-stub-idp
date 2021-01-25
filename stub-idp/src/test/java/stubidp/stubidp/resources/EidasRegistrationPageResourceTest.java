@@ -26,6 +26,7 @@ import stubidp.utils.rest.common.SessionId;
 
 import javax.ws.rs.core.Response;
 import java.net.URI;
+import java.time.Instant;
 import java.util.Optional;
 import java.util.function.Function;
 
@@ -72,14 +73,14 @@ class EidasRegistrationPageResourceTest {
                 sessionRepository
         );
 
-        eidasSession = new EidasSession(SESSION_ID, eidasAuthnRequest, RELAY_STATE, null, null, null, null);
+        eidasSession = new EidasSession(SESSION_ID, Instant.now(), eidasAuthnRequest, RELAY_STATE, null, null, null, null);
         when(sessionRepository.get(SESSION_ID)).thenReturn(Optional.ofNullable(eidasSession));
         when(eidasAuthnRequest.getRequestId()).thenReturn(SAML_REQUEST_ID);
     }
 
     @Test
     void shouldHaveStatusAuthnCancelledResponseWhenUserCancels(){
-        when(sessionRepository.deleteAndGet(SESSION_ID)).thenReturn(Optional.of(new EidasSession(SESSION_ID, eidasAuthnRequest, RELAY_STATE, null, null, null, null)));
+        when(sessionRepository.deleteAndGet(SESSION_ID)).thenReturn(Optional.of(new EidasSession(SESSION_ID, Instant.now(), eidasAuthnRequest, RELAY_STATE, null, null, null, null)));
         when(nonSuccessAuthnResponseService.generateAuthnCancel(anyString(), anyString(), eq(RELAY_STATE))).thenReturn(new SamlResponseFromValue<>("saml", Function.identity(), RELAY_STATE, URI.create("uri")));
         when(cookieNames.getSessionCookieName()).thenReturn("sessionCookieName");
 
