@@ -17,7 +17,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static stubidp.metrics.prometheus.config.TestResource.TEST_RESOURCE_PATH;
 
 @ExtendWith(DropwizardExtensionsSupport.class)
-public class PrometheusBundleTest {
+class PrometheusBundleTest {
 
     private static final DropwizardAppExtension<TestConfiguration> appRuleWithMetrics = new DropwizardAppExtension<>(TestApplication.class, null,
             ConfigOverride.config("logging.level", "WARN"),
