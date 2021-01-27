@@ -26,7 +26,6 @@ import java.util.stream.Collectors
 import javax.ws.rs.client.Client
 import javax.ws.rs.client.Entity
 import javax.ws.rs.core.UriBuilder
-import kotlin.jvm.Throws
 
 @ExtendWith(DropwizardExtensionsSupport::class)
 class UserLogsInIntegrationTests : IntegrationTestHelper() {
@@ -51,13 +50,13 @@ class UserLogsInIntegrationTests : IntegrationTestHelper() {
 
     //    @Test
     //    @Order(Integer.MAX_VALUE)
-    fun zzz_checkMetrics() {
+    private fun zzz_checkMetrics() {
         val response = client.target(UriBuilder.fromUri("http://localhost:" + applicationRule.adminPort)
                 .path(PrometheusBundle.PROMETHEUS_METRICS_RESOURCE)
                 .build()).request().get()
         Assertions.assertThat(response.status).isEqualTo(200)
         val entity = response.readEntity(String::class.java)
-        val metrics = java.util.List.of(*entity.split(System.lineSeparator().toRegex()).toTypedArray()).stream().filter { s: String -> s.startsWith("stubidp_") }.collect(Collectors.toList())
+        val metrics = listOf(*entity.split(System.lineSeparator().toRegex()).toTypedArray()).stream().filter { s: String -> s.startsWith("stubidp_") }.collect(Collectors.toList())
         metricsContains(metrics, "stubidp_verify_receivedAuthnRequests_total 7.0")
         //        metricsContains(metrics, "stubidp_eidas_receivedAuthnRequests_total");
         metricsContains(metrics, "stubidp_verify_successfulAuthnRequests_total 6.0")
@@ -73,13 +72,13 @@ class UserLogsInIntegrationTests : IntegrationTestHelper() {
     }
 
     private fun metricsContains(metrics: List<String>, metric: String) {
-        Assertions.assertThat(metrics.stream().anyMatch { m: String -> m.startsWith(metric) }).withFailMessage(MessageFormat.format("{0} not in {1}", metric, metrics)).isTrue()
+        Assertions.assertThat(metrics.stream().anyMatch { m: String -> m.startsWith(metric) }).withFailMessage(MessageFormat.format("{0} not in {1}", metric, metrics)).isTrue
     }
 
     @Test
     @Order(1)
     fun incorrectlySignedAuthnRequestFailsTest() {
-        val response = authnRequestSteps.userPostsAuthnRequestToStubIdpReturnResponse(java.util.List.of(), Optional.empty(), Optional.empty(), true, Optional.empty())
+        val response = authnRequestSteps.userPostsAuthnRequestToStubIdpReturnResponse(listOf(), Optional.empty(), Optional.empty(), true, Optional.empty())
         Assertions.assertThat(response.status).isEqualTo(500)
     }
 
@@ -181,7 +180,7 @@ class UserLogsInIntegrationTests : IntegrationTestHelper() {
         private const val IDP_NAME = "stub-idp-one"
         private const val DISPLAY_NAME = "User Login Identity Service"
         private const val checkKeyInfo = true
-        val applicationRule = StubIdpAppExtension(java.util.Map.ofEntries<String, String>(java.util.Map.entry<String, String>("isPrometheusEnabled", "true")))
+        val applicationRule = StubIdpAppExtension(java.util.Map.ofEntries<String, String>(java.util.Map.entry("isPrometheusEnabled", "true")))
                 .withStubIdp(StubIdpBuilder.aStubIdp()
                         .withId(IDP_NAME)
                         .withDisplayName(DISPLAY_NAME)

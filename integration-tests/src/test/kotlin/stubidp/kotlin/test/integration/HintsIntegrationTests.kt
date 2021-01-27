@@ -40,7 +40,7 @@ class HintsIntegrationTests : IntegrationTestHelper() {
 
     @Test
     fun debugPageShowsHintsTest() {
-        val hints = java.util.List.of(IdpHint.has_apps.name, "snakes", "plane")
+        val hints = listOf(IdpHint.has_apps.name, "snakes", "plane")
         val registration = Optional.of(true)
         val language = Optional.empty<String>()
         val cookies = authnRequestSteps!!.userPostsAuthnRequestToStubIdp(hints, language, registration, Optional.empty())
@@ -55,7 +55,7 @@ class HintsIntegrationTests : IntegrationTestHelper() {
 
     @Test
     fun debugPageShowsLanguageHintTest() {
-        val hints = java.util.List.of<String>()
+        val hints = listOf<String>()
         val registration = Optional.empty<Boolean>()
         val language = Optional.of("cy")
         val cookies = authnRequestSteps!!.userPostsAuthnRequestToStubIdp(hints, language, registration, Optional.empty())
@@ -74,7 +74,7 @@ class HintsIntegrationTests : IntegrationTestHelper() {
                 .map { obj: Element -> obj.text() }.collect(Collectors.toList())
     }
 
-    fun aUserVisitsTheDebugPage(idp: String, cookies: AuthnRequestSteps.Cookies): Response {
+    private fun aUserVisitsTheDebugPage(idp: String, cookies: AuthnRequestSteps.Cookies): Response {
         return client.target(getDebugPath(idp))
                 .request()
                 .cookie(StubIdpCookieNames.SESSION_COOKIE_NAME, cookies.sessionId)

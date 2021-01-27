@@ -27,12 +27,12 @@ public interface PersonIdentifier extends AttributeValue {
      *
      * @return the person identifier
      */
-    public String getPersonIdentifier();
+    String getPersonIdentifier();
 
     /**
      * Set the person identifier.
      *
      * @param personIdentifier the person identifier
      */
-    public void setPersonIdentifier(String personIdentifier);
+    void setPersonIdentifier(String personIdentifier);
 }

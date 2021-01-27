@@ -27,12 +27,12 @@ public interface EidasGender extends AttributeValue {
      *
      * @return the gender value
      */
-    public String getValue();
+    String getValue();
 
     /**
      * Set the gender value.
      *
      * @param gender the gender value
      */
-    public void setValue(String gender);
+    void setValue(String gender);
 }

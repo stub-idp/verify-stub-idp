@@ -87,7 +87,7 @@ public class RegistrationPageResourceTest {
     }
 
     @Test
-    void shouldHaveResponseStatusRedirectWhenUserRegisters() throws InvalidSessionIdException, IncompleteRegistrationException, InvalidDateException, UsernameAlreadyTakenException, InvalidUsernameOrPasswordException {
+    void shouldHaveResponseStatusRedirectWhenUserRegisters() throws InvalidSessionIdException, IncompleteRegistrationException, UsernameAlreadyTakenException, InvalidUsernameOrPasswordException {
         when(idaAuthnRequestFromHub.getId()).thenReturn(SAML_REQUEST_ID);
         when(idpSessionRepository.get(SESSION_ID)).thenReturn(Optional.of(idpSession));
         when(idpSession.getIdaAuthnRequestFromHub()).thenReturn(idaAuthnRequestFromHub);
@@ -99,7 +99,7 @@ public class RegistrationPageResourceTest {
     }
 
     @Test
-    void shouldHaveResponseStatusRedirectWhenUserPreRegisters() throws InvalidSessionIdException, IncompleteRegistrationException, InvalidDateException, UsernameAlreadyTakenException, InvalidUsernameOrPasswordException {
+    void shouldHaveResponseStatusRedirectWhenUserPreRegisters() throws InvalidSessionIdException, IncompleteRegistrationException, UsernameAlreadyTakenException, InvalidUsernameOrPasswordException {
         when(idpSessionRepository.get(SESSION_ID)).thenReturn(Optional.of(idpSession));
         when(idpSession.getIdaAuthnRequestFromHub()).thenReturn(null);
         final Response response = resource.post(IDP_NAME, "bob", "jones", "address line 1", "address line 2", "address town", "address postcode", "2000-01-01", false, null, "username", "password", LEVEL_2, Register, SESSION_ID);

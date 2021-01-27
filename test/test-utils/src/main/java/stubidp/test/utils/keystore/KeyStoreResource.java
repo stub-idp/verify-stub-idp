@@ -95,7 +95,7 @@ public class KeyStoreResource implements ManagedFileResource {
     }
 
     private void writeKeyStore() {
-        try (FileOutputStream fos = new FileOutputStream(getFile());) {
+        try (FileOutputStream fos = new FileOutputStream(getFile())) {
             keyStore.store(fos, getPassword().toCharArray());
         } catch (IOException | KeyStoreException | NoSuchAlgorithmException | CertificateException e) {
             throw new RuntimeException(e);

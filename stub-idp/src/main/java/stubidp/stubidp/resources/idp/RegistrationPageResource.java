@@ -10,7 +10,6 @@ import stubidp.stubidp.cookies.StubIdpCookieNames;
 import stubidp.stubidp.domain.SubmitButtonValue;
 import stubidp.stubidp.exceptions.GenericStubIdpException;
 import stubidp.stubidp.exceptions.IncompleteRegistrationException;
-import stubidp.stubidp.exceptions.InvalidDateException;
 import stubidp.stubidp.exceptions.InvalidSessionIdException;
 import stubidp.stubidp.exceptions.InvalidUsernameOrPasswordException;
 import stubidp.stubidp.exceptions.UsernameAlreadyTakenException;

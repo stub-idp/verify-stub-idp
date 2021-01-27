@@ -41,7 +41,7 @@ class AuthnRequestFromRelyingPartyUnmarshallerTest extends OpenSAMLRunner {
 
     private final BasicCredential basicCredential = createBasicCredential();
     private final Encrypter encrypter = new EncrypterFactory().createEncrypter(basicCredential);
-    private final AuthnRequestFromRelyingPartyUnmarshaller unmarshaller = new AuthnRequestFromRelyingPartyUnmarshaller(new DecrypterFactory().createDecrypter(List.of(basicCredential)));;
+    private final AuthnRequestFromRelyingPartyUnmarshaller unmarshaller = new AuthnRequestFromRelyingPartyUnmarshaller(new DecrypterFactory().createDecrypter(List.of(basicCredential)));
 
     @Test
     void fromSamlMessage_shouldMapAuthnRequestToAuthnRequestFromRelyingParty() throws Exception {

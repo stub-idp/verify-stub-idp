@@ -71,7 +71,7 @@ public class EidasAuthnRequestFromHubToAuthnRequestTransformer implements Functi
     private RequestedAuthnContext getRequestedAuthnContext(EidasAuthnRequestFromHub originalRequestToCountry) throws IllegalStateException {
         RequestedAuthnContext requestedAuthnContext = samlObjectFactory.createRequestedAuthnContext(MINIMUM_AUTHNCONTEXT);
 
-        String levelOfAssuranceRequested = null;
+        final String levelOfAssuranceRequested;
         try {
             AuthnContext lowestAuthnContext = originalRequestToCountry.getLevelsOfAssurance().stream()
                 .min(AuthnContext::compareTo)

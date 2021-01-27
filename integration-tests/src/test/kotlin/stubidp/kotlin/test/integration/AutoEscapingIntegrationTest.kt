@@ -52,7 +52,7 @@ class AutoEscapingIntegrationTest : IntegrationTestHelper() {
     companion object {
         private const val IDP_NAME = "auto-escaping-idp"
         private const val DISPLAY_NAME = "Auto-Escaping Identity Service"
-        val applicationRule = StubIdpAppExtension(java.util.Map.ofEntries<String, String>(java.util.Map.entry<String, String>("secureCookieConfiguration.secure", "false")))
+        val applicationRule = StubIdpAppExtension(java.util.Map.ofEntries<String, String>(java.util.Map.entry("secureCookieConfiguration.secure", "false")))
                 .withStubIdp(StubIdpBuilder.aStubIdp().withId(IDP_NAME).withDisplayName(DISPLAY_NAME).build())
     }
 }

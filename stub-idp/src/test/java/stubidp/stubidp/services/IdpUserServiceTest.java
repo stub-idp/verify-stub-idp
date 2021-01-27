@@ -73,7 +73,7 @@ class IdpUserServiceTest {
     }
 
     @Test
-    void shouldHaveStatusSuccessResponseWhenUserRegisters() throws InvalidSessionIdException, IncompleteRegistrationException, InvalidDateException, UsernameAlreadyTakenException, InvalidUsernameOrPasswordException {
+    void shouldHaveStatusSuccessResponseWhenUserRegisters() throws InvalidSessionIdException, IncompleteRegistrationException, UsernameAlreadyTakenException, InvalidUsernameOrPasswordException {
         IdpSession session = new IdpSession(SessionId.createNewSessionId(), Instant.now(), idaAuthnRequestFromHubOptional, "test-relay-state", Collections.emptyList(), Collections.emptyList(), Optional.empty(), Optional.empty(), Optional.empty(), null);
         when(sessionRepository.get(SESSION_ID)).thenReturn(Optional.of(new IdpSession(SESSION_ID, Instant.now(), idaAuthnRequestFromHubOptional, RELAY_STATE, null, null, null, null, null, null)));
         when(idpStubsRepository.getIdpWithFriendlyId(IDP_NAME)).thenReturn(idp);

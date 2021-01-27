@@ -72,7 +72,7 @@ public class IdpMetadataBuilder {
 
     private EntitiesDescriptor createMetadata(List<Idp> idps) throws MarshallingException, SignatureException {
         final Instant validUntil = Instant.now().plus(validity);
-        EntitiesDescriptor entitiesDescriptor = new EntitiesDescriptorBuilder().buildObject();;
+        EntitiesDescriptor entitiesDescriptor = new EntitiesDescriptorBuilder().buildObject();
         entitiesDescriptor.setValidUntil(validUntil);
         entitiesDescriptor.setID("STUB-IDP");
         for(Idp idp : idps) {

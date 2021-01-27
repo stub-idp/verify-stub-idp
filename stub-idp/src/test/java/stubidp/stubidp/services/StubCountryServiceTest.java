@@ -13,7 +13,6 @@ import stubidp.stubidp.domain.DatabaseEidasUser;
 import stubidp.stubidp.domain.EidasAuthnRequest;
 import stubidp.stubidp.domain.EidasScheme;
 import stubidp.stubidp.exceptions.IncompleteRegistrationException;
-import stubidp.stubidp.exceptions.InvalidDateException;
 import stubidp.stubidp.exceptions.InvalidSessionIdException;
 import stubidp.stubidp.exceptions.InvalidUsernameOrPasswordException;
 import stubidp.stubidp.exceptions.UsernameAlreadyTakenException;

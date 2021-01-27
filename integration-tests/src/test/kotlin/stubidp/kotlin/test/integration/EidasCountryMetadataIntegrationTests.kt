@@ -54,8 +54,8 @@ class EidasCountryMetadataIntegrationTests : IntegrationTestHelper() {
         private const val COUNTRY_NAME = "stub-country"
         const val DISPLAY_NAME = "User Repository Identity Service"
         val applicationRule = StubIdpAppExtension(java.util.Map.ofEntries<String, String>(
-                java.util.Map.entry<String, String>("europeanIdentity.enabled", "true"),
-                java.util.Map.entry<String, String>("isIdpEnabled", "false")))
+                java.util.Map.entry("europeanIdentity.enabled", "true"),
+                java.util.Map.entry("isIdpEnabled", "false")))
                 .withStubIdp(StubIdpBuilder.aStubIdp()
                         .withId(COUNTRY_NAME)
                         .withDisplayName(DISPLAY_NAME)

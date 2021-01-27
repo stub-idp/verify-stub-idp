@@ -27,12 +27,12 @@ public interface CurrentAddress extends AttributeValue {
      *
      * @return the address
      */
-    public String getCurrentAddress();
+    String getCurrentAddress();
 
     /**
      * Sets the address.
      *
      * @param address the address
      */
-    public void setCurrentAddress(String address);
+    void setCurrentAddress(String address);
 }

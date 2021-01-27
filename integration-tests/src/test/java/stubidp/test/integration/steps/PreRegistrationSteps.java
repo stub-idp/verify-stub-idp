@@ -15,6 +15,7 @@ import javax.ws.rs.core.UriBuilder;
 import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.Map;
 import java.util.Objects;
@@ -74,11 +75,7 @@ public class PreRegistrationSteps {
     private PreRegistrationSteps userIsRedirectedTo(URI uri) {
         assertThat(response.getStatus()).isEqualTo(Response.Status.SEE_OTHER.getStatusCode());
         String uriString = null;
-        try {
-            uriString = URLDecoder.decode(uri.toString(), "UTF-8");
-        } catch (UnsupportedEncodingException e) {
-            fail("URI couldn't be decoded");
-        }
+        uriString = URLDecoder.decode(uri.toString(), StandardCharsets.UTF_8);
         assertThat(response.getLocation().toString()).isEqualTo(uriString);
         return this;
     }

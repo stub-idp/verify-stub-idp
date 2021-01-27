@@ -27,12 +27,12 @@ public interface BirthName extends AttributeValue {
      *
      * @return the birth name
      */
-    public String getBirthName();
+    String getBirthName();
 
     /**
      * Set the birth name.
      *
      * @param birthName the birth name
      */
-    public void setBirthName(String birthName);
+    void setBirthName(String birthName);
 }

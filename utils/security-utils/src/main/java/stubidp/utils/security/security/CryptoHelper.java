@@ -8,6 +8,7 @@ import javax.crypto.Cipher;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 import java.io.UnsupportedEncodingException;
+import java.nio.charset.StandardCharsets;
 import java.security.GeneralSecurityException;
 import java.security.InvalidKeyException;
 import java.security.SecureRandom;
@@ -45,7 +46,6 @@ public class CryptoHelper {
      */
     static final int KEY_AND_NONCE_AND_IV_LENGTH_IN_BYTES = 16;
 
-    private static final String UTF8 = "UTF-8";
     private static final String CIPHER_SUITE = "AES/CBC/PKCS5Padding";
     private static final int PADDED_LENGTH = 512 + KEY_AND_NONCE_AND_IV_LENGTH_IN_BYTES;
 
@@ -123,11 +123,11 @@ public class CryptoHelper {
     }
 
     private byte[] bytes(String string) throws UnsupportedEncodingException {
-        return string.getBytes(UTF8);
+        return string.getBytes(StandardCharsets.UTF_8);
     }
 
     private String string(byte[] bytes) throws UnsupportedEncodingException {
-        return new String(bytes, UTF8);
+        return new String(bytes, StandardCharsets.UTF_8);
     }
 
     private byte[] addNonceAndPadding(byte[] withoutNonce) {

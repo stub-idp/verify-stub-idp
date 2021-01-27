@@ -43,7 +43,7 @@ public class MetadataBackedEncryptionCredentialResolver implements EncryptionCre
 
         public CredentialMissingInMetadataException(String receivedId) {
            super(MessageFormat.format(PATTERN, receivedId));
-        };
+        }
 
     }
 }

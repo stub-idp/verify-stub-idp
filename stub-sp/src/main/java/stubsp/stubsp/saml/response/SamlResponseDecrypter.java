@@ -55,7 +55,6 @@ import stubidp.saml.serializers.deserializers.StringToOpenSamlObjectTransformer;
 import stubidp.saml.serializers.deserializers.parser.SamlObjectParser;
 import stubidp.saml.serializers.deserializers.validators.Base64StringDecoder;
 import stubidp.saml.serializers.deserializers.validators.NotNullSamlStringValidator;
-import stubidp.saml.utils.core.domain.AddressFactory;
 import stubidp.saml.utils.core.transformers.AuthnContextFactory;
 import stubidp.saml.utils.core.transformers.EidasMatchingDatasetUnmarshaller;
 import stubidp.saml.utils.core.transformers.IdentityProviderAssertionUnmarshaller;

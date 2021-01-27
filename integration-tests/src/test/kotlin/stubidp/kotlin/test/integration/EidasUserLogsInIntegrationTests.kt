@@ -9,14 +9,14 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import org.opensaml.saml.saml2.core.Attribute
 import org.opensaml.saml.saml2.core.StatusCode
+import stubidp.kotlin.test.integration.steps.AuthnRequestSteps
+import stubidp.kotlin.test.integration.support.IntegrationTestHelper
+import stubidp.kotlin.test.integration.support.StubIdpAppExtension
 import stubidp.saml.extensions.IdaConstants
 import stubidp.saml.hub.domain.LevelOfAssurance
 import stubidp.stubidp.Urls
 import stubidp.stubidp.domain.EidasScheme
 import stubidp.stubidp.resources.eidas.EidasConsentResource
-import stubidp.kotlin.test.integration.steps.AuthnRequestSteps
-import stubidp.kotlin.test.integration.support.IntegrationTestHelper
-import stubidp.kotlin.test.integration.support.StubIdpAppExtension
 import stubsp.stubsp.saml.response.SamlResponseDecrypter
 import java.text.MessageFormat
 import java.util.Optional
@@ -101,7 +101,7 @@ class EidasUserLogsInIntegrationTests : IntegrationTestHelper() {
         Assertions.assertThat(inboundResponseFromCountry.status.statusCode.value).isEqualTo(StatusCode.SUCCESS)
         Assertions.assertThat(inboundResponseFromCountry.validatedIdentityAssertion.authnStatements.size).isEqualTo(1)
         Assertions.assertThat(LevelOfAssurance.fromString(inboundResponseFromCountry.validatedIdentityAssertion.authnStatements[0].authnContext.authnContextClassRef.uri)).isEqualTo(LevelOfAssurance.SUBSTANTIAL)
-        Assertions.assertThat(inboundResponseFromCountry.validatedIdentityAssertion.isSigned).isTrue()
+        Assertions.assertThat(inboundResponseFromCountry.validatedIdentityAssertion.isSigned).isTrue
         Assertions.assertThat(inboundResponseFromCountry.validatedIdentityAssertion.attributeStatements.size).isEqualTo(1)
         val attributes = inboundResponseFromCountry.validatedIdentityAssertion.attributeStatements[0].attributes
         // stub-country can currently only return these 4 attributes
@@ -125,7 +125,7 @@ class EidasUserLogsInIntegrationTests : IntegrationTestHelper() {
         Assertions.assertThat(inboundResponseFromCountry.status.statusCode.value).isEqualTo(StatusCode.SUCCESS)
         Assertions.assertThat(inboundResponseFromCountry.validatedIdentityAssertion.authnStatements.size).isEqualTo(1)
         Assertions.assertThat(LevelOfAssurance.fromString(inboundResponseFromCountry.validatedIdentityAssertion.authnStatements[0].authnContext.authnContextClassRef.uri)).isEqualTo(LevelOfAssurance.SUBSTANTIAL)
-        Assertions.assertThat(inboundResponseFromCountry.validatedIdentityAssertion.isSigned).isFalse()
+        Assertions.assertThat(inboundResponseFromCountry.validatedIdentityAssertion.isSigned).isFalse
         Assertions.assertThat(inboundResponseFromCountry.validatedIdentityAssertion.attributeStatements.size).isEqualTo(1)
         val attributes = inboundResponseFromCountry.validatedIdentityAssertion.attributeStatements[0].attributes
         // stub-country can currently only return these 4 attributes
@@ -141,7 +141,7 @@ class EidasUserLogsInIntegrationTests : IntegrationTestHelper() {
 
     companion object {
         val applicationRule = StubIdpAppExtension(java.util.Map.ofEntries<String, String>(
-                java.util.Map.entry<String, String>("europeanIdentity.enabled", "true"),
-                java.util.Map.entry<String, String>("isIdpEnabled", "false")))
+                java.util.Map.entry("europeanIdentity.enabled", "true"),
+                java.util.Map.entry("isIdpEnabled", "false")))
     }
 }

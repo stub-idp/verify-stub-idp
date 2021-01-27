@@ -26,12 +26,12 @@ public interface CurrentGivenName extends TransliterableString {
      *
      * @return the given name
      */
-    public String getFirstName();
+    String getFirstName();
 
     /**
      * Set the given name.
      *
      * @param firstName the given name
      */
-    public void setFirstName(String firstName);
+    void setFirstName(String firstName);
 }

@@ -26,12 +26,12 @@ public interface CurrentFamilyName extends TransliterableString {
      *
      * @return the family name
      */
-    public String getFamilyName();
+    String getFamilyName();
 
     /**
      * Set the family name.
      *
      * @param familyName the family name
      */
-    public void setFamilyName(String familyName);
+    void setFamilyName(String familyName);
 }

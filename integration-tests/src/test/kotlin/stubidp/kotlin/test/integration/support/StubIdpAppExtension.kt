@@ -8,7 +8,6 @@ import io.dropwizard.testing.junit5.DropwizardAppExtension
 import io.prometheus.client.Collector
 import io.prometheus.client.CollectorRegistry
 import io.prometheus.client.Counter
-import org.apache.log4j.Logger
 import org.opensaml.core.config.InitializationService
 import org.opensaml.core.xml.io.MarshallingException
 import org.opensaml.saml.saml2.metadata.EntityDescriptor
@@ -55,7 +54,6 @@ import java.util.UUID
 import java.util.function.Consumer
 import java.util.stream.Collectors
 import javax.ws.rs.core.UriBuilder
-import kotlin.jvm.Throws
 
 class StubIdpAppExtension @JvmOverloads constructor(configOverrides: Map<String?, String?> = java.util.Map.of()) : DropwizardAppExtension<StubIdpConfiguration?>(StubIdpApplication::class.java, "../configuration/stub-idp.yml", *withDefaultOverrides(configOverrides)) {
     private val stubIdps: MutableList<StubIdp> = ArrayList()
@@ -109,7 +107,7 @@ class StubIdpAppExtension @JvmOverloads constructor(configOverrides: Map<String?
     @get:Throws(MarshallingException::class, SignatureException::class)
     private val eidasMetadata: String
         get() {
-            val entityDescriptorList = java.util.List.of(EntityDescriptorBuilder.anEntityDescriptor()
+            val entityDescriptorList = listOf(EntityDescriptorBuilder.anEntityDescriptor()
                     .withEntityId(TestEntityIds.HUB_CONNECTOR_ENTITY_ID)
                     .withSpSsoDescriptor(SPSSODescriptorBuilder.anSpServiceDescriptor()
                             .withoutDefaultEncryptionKey()
@@ -132,7 +130,7 @@ class StubIdpAppExtension @JvmOverloads constructor(configOverrides: Map<String?
     }
 
     private fun resetStaticMetrics() {
-        val countersToReset = java.util.List.of(AuthnRequestReceiverService.successfulEidasAuthnRequests,
+        val countersToReset = listOf(AuthnRequestReceiverService.successfulEidasAuthnRequests,
                 AuthnRequestReceiverService.successfulVerifyAuthnRequests,
                 SuccessAuthnResponseService.sentVerifyAuthnResponses,
                 EidasAuthnResponseService.sentEidasAuthnFailureResponses,
@@ -167,13 +165,10 @@ class StubIdpAppExtension @JvmOverloads constructor(configOverrides: Map<String?
     val verifyMetadataPath: URI
         get() = URI.create("http://localhost:" + verifyMetadataServer.port + VERIFY_METADATA_PATH)
 
-    val eidasMetadataPath: URI
-        get() = URI.create("http://localhost:" + eidasMetadataServer.port + EIDAS_METADATA_PATH)
-
     val assertionConsumerServices: URI
         get() = UriBuilder.fromUri("https://somedomain/destination").build()
 
-    private class TestIdpStubsConfiguration internal constructor(idps: List<StubIdp>?) : IdpStubsConfiguration() {
+    private class TestIdpStubsConfiguration(idps: List<StubIdp>?) : IdpStubsConfiguration() {
         init {
             stubIdps = idps
         }
@@ -183,7 +178,7 @@ class StubIdpAppExtension @JvmOverloads constructor(configOverrides: Map<String?
         get() {
             val privateKey = PrivateKeyFactory().createPrivateKey(Base64.getDecoder().decode(TestCertificateStrings.HUB_TEST_PRIVATE_ENCRYPTION_KEY))
             val publicKey = PublicKeyFactory(X509CertificateFactory()).createPublicKey(TestCertificateStrings.HUB_TEST_PUBLIC_ENCRYPTION_CERT)
-            val encryptionKeys = java.util.List.of(KeyPair(publicKey, privateKey))
+            val encryptionKeys = listOf(KeyPair(publicKey, privateKey))
             return IdaKeyStore(null, encryptionKeys)
         }
 
@@ -191,12 +186,11 @@ class StubIdpAppExtension @JvmOverloads constructor(configOverrides: Map<String?
         get() {
             val privateKey = PrivateKeyFactory().createPrivateKey(Base64.getDecoder().decode(TestCertificateStrings.HUB_CONNECTOR_TEST_PRIVATE_ENCRYPTION_KEY))
             val publicKey = PublicKeyFactory(X509CertificateFactory()).createPublicKey(TestCertificateStrings.HUB_CONNECTOR_TEST_PUBLIC_SIGNING_CERT)
-            val encryptionKeys = java.util.List.of(KeyPair(publicKey, privateKey))
+            val encryptionKeys = listOf(KeyPair(publicKey, privateKey))
             return IdaKeyStore(null, encryptionKeys)
         }
 
     companion object {
-        private val LOG = Logger.getLogger(StubIdpAppExtension::class.java)
         private const val VERIFY_METADATA_PATH = "/saml/metadata/sp"
         private const val EIDAS_METADATA_PATH = "/saml/metadata/eidas/connector"
         const val SP_ENTITY_ID = "http://localhost/stubsp/SAML2/metadata/federation"

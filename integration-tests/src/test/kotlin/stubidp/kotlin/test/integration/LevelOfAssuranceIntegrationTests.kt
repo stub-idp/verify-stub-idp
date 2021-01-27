@@ -21,7 +21,6 @@ import javax.ws.rs.client.Client
 import javax.ws.rs.client.Entity
 import javax.ws.rs.core.Response
 import javax.ws.rs.core.UriBuilder
-import kotlin.jvm.Throws
 
 @ExtendWith(DropwizardExtensionsSupport::class)
 class LevelOfAssuranceIntegrationTests : IntegrationTestHelper() {
@@ -53,7 +52,7 @@ class LevelOfAssuranceIntegrationTests : IntegrationTestHelper() {
                 .map { obj: Element -> obj.text() }.collect(Collectors.toList())
     }
 
-    fun aUserVisitsTheDebugPage(idp: String, cookies: AuthnRequestSteps.Cookies): Response {
+    private fun aUserVisitsTheDebugPage(idp: String, cookies: AuthnRequestSteps.Cookies): Response {
         return client.target(getDebugPath(idp))
                 .request()
                 .cookie(StubIdpCookieNames.SESSION_COOKIE_NAME, cookies.sessionId)

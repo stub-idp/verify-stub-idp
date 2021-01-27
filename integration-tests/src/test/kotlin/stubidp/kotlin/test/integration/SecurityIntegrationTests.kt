@@ -100,9 +100,9 @@ class SecurityIntegrationTests : IntegrationTestHelper() {
                 .withSigningCertificate(TestCertificateStrings.HUB_TEST_PUBLIC_SIGNING_CERT)
                 .withEntityId(StubIdpAppExtension.SP_ENTITY_ID)
                 .build()
-        var response = authnRequestSteps.postAuthnRequest(java.util.List.of<String>(), Optional.empty(), Optional.empty(), authnRequest, Optional.empty(), Urls.IDP_SAML2_SSO_RESOURCE)
+        var response = authnRequestSteps.postAuthnRequest(listOf<String>(), Optional.empty(), Optional.empty(), authnRequest, Optional.empty(), Urls.IDP_SAML2_SSO_RESOURCE)
         Assertions.assertThat(response.status).isEqualTo(303)
-        response = authnRequestSteps.postAuthnRequest(java.util.List.of<String>(), Optional.empty(), Optional.empty(), authnRequest, Optional.empty(), Urls.IDP_SAML2_SSO_RESOURCE)
+        response = authnRequestSteps.postAuthnRequest(listOf<String>(), Optional.empty(), Optional.empty(), authnRequest, Optional.empty(), Urls.IDP_SAML2_SSO_RESOURCE)
         Assertions.assertThat(response.status).isEqualTo(500)
     }
 
@@ -121,21 +121,21 @@ class SecurityIntegrationTests : IntegrationTestHelper() {
     }
     
     private fun checkSecurityHeaders(headers: MultivaluedMap<String, Any>) {
-        Assertions.assertThat(headers.containsKey("X-Frame-Options")).isTrue()
-        Assertions.assertThat(headers.get("X-Frame-Options")!!.size).isEqualTo(1)
-        Assertions.assertThat(headers.get("X-Frame-Options")!!.get(0)).isEqualTo("DENY")
-        Assertions.assertThat(headers.containsKey("X-XSS-Protection")).isTrue()
-        Assertions.assertThat(headers.get("X-XSS-Protection")!!.size).isEqualTo(1)
-        Assertions.assertThat(headers.get("X-XSS-Protection")!!.get(0)).isEqualTo("1; mode=block")
-        Assertions.assertThat(headers.containsKey("X-Content-Type-Options")).isTrue()
-        Assertions.assertThat(headers.get("X-Content-Type-Options")!!.get(0)).isEqualTo("nosniff")
-        Assertions.assertThat(headers.get("X-Content-Type-Options")!!.size).isEqualTo(1)
-        Assertions.assertThat(headers.containsKey("Referrer-Policy")).isTrue()
-        Assertions.assertThat(headers.get("Referrer-Policy")!!.get(0)).isEqualTo("strict-origin-when-cross-origin")
-        Assertions.assertThat(headers.get("Referrer-Policy")!!.size).isEqualTo(1)
-        Assertions.assertThat(headers.containsKey("Content-Security-Policy")).isTrue()
-        Assertions.assertThat(headers.get("Content-Security-Policy")!!.size).isEqualTo(1)
-        Assertions.assertThat(headers.get("Content-Security-Policy")!!.get(0)).isEqualTo("default-src 'self'; font-src data:; img-src 'self'; object-src 'none'; style-src 'self' 'unsafe-inline'; script-src 'self';")
+        Assertions.assertThat(headers.containsKey("X-Frame-Options")).isTrue
+        Assertions.assertThat(headers["X-Frame-Options"]!!.size).isEqualTo(1)
+        Assertions.assertThat(headers["X-Frame-Options"]!![0]).isEqualTo("DENY")
+        Assertions.assertThat(headers.containsKey("X-XSS-Protection")).isTrue
+        Assertions.assertThat(headers["X-XSS-Protection"]!!.size).isEqualTo(1)
+        Assertions.assertThat(headers["X-XSS-Protection"]!![0]).isEqualTo("1; mode=block")
+        Assertions.assertThat(headers.containsKey("X-Content-Type-Options")).isTrue
+        Assertions.assertThat(headers["X-Content-Type-Options"]!![0]).isEqualTo("nosniff")
+        Assertions.assertThat(headers["X-Content-Type-Options"]!!.size).isEqualTo(1)
+        Assertions.assertThat(headers.containsKey("Referrer-Policy")).isTrue
+        Assertions.assertThat(headers["Referrer-Policy"]!![0]).isEqualTo("strict-origin-when-cross-origin")
+        Assertions.assertThat(headers["Referrer-Policy"]!!.size).isEqualTo(1)
+        Assertions.assertThat(headers.containsKey("Content-Security-Policy")).isTrue
+        Assertions.assertThat(headers["Content-Security-Policy"]!!.size).isEqualTo(1)
+        Assertions.assertThat(headers["Content-Security-Policy"]!![0]).isEqualTo("default-src 'self'; font-src data:; img-src 'self'; object-src 'none'; style-src 'self' 'unsafe-inline'; script-src 'self';")
     }
 
     companion object {

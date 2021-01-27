@@ -25,7 +25,6 @@ import stubidp.utils.rest.common.HttpHeaders
 import java.io.IOException
 import java.text.MessageFormat
 import java.time.Instant
-import java.util.Arrays
 import java.util.Optional
 import javax.ws.rs.client.Client
 import javax.ws.rs.client.Entity
@@ -34,11 +33,10 @@ import javax.ws.rs.core.GenericType
 import javax.ws.rs.core.MediaType
 import javax.ws.rs.core.Response
 import javax.ws.rs.core.UriBuilder
-import kotlin.jvm.Throws
 
 @ExtendWith(DropwizardExtensionsSupport::class)
 class UserRepositoryIntegrationTests : IntegrationTestHelper() {
-    protected var client: Client = JerseyClientBuilder.createClient().property(ClientProperties.FOLLOW_REDIRECTS, false)
+    private var client: Client = JerseyClientBuilder.createClient().property(ClientProperties.FOLLOW_REDIRECTS, false)
 
     @BeforeEach
     fun setUp() {
@@ -56,12 +54,12 @@ class UserRepositoryIntegrationTests : IntegrationTestHelper() {
         var response = client.target(getAddAllUsersPath(IDP_NAME))
                 .request()
                 .accept(MediaType.APPLICATION_JSON_TYPE)
-                .post(Entity.entity(getJson(java.util.List.of(user)), MediaType.APPLICATION_JSON_TYPE))
+                .post(Entity.entity(getJson(listOf(user)), MediaType.APPLICATION_JSON_TYPE))
         Assertions.assertThat(response.status).isEqualTo(Response.Status.UNAUTHORIZED.statusCode)
         response = client.target(getDeleteUserPath(IDP_NAME))
                 .request()
                 .accept(MediaType.APPLICATION_JSON_TYPE)
-                .post(Entity.entity(getJson(java.util.List.of(user)), MediaType.APPLICATION_JSON_TYPE))
+                .post(Entity.entity(getJson(listOf(user)), MediaType.APPLICATION_JSON_TYPE))
         Assertions.assertThat(response.status).isEqualTo(Response.Status.UNAUTHORIZED.statusCode)
     }
 
@@ -76,7 +74,7 @@ class UserRepositoryIntegrationTests : IntegrationTestHelper() {
                 createOptionalMdsValue(Optional.of("some user middlename")), listOf(SimpleMdsValueBuilder.aSimpleMdsValue<String>().withValue("some user addSurname").build()),
                 createOptionalMdsValue(Optional.of(Gender.FEMALE)),
                 createOptionalMdsValue(Optional.of(Instant.now())),
-                Optional.ofNullable(AddressBuilder.anAddress().withLines(Arrays.asList("blah", "blah2")).withPostCode("WC1V7AA").withVerified(true).build()),
+                Optional.ofNullable(AddressBuilder.anAddress().withLines(listOf("blah", "blah2")).withPostCode("WC1V7AA").withVerified(true).build()),
                 AuthnContext.LEVEL_4.toString()
         )
         aUserIsCreatedForIdp(IDP_NAME, user)
@@ -96,7 +94,7 @@ class UserRepositoryIntegrationTests : IntegrationTestHelper() {
         Assertions.assertThat(returnedUser.address.get().lines[1]).isEqualTo(user.address.get().lines[1])
         Assertions.assertThat(returnedUser.address.get().postCode).isEqualTo(user.address.get().postCode)
         Assertions.assertThat(returnedUser.address.get().isVerified).isEqualTo(user.address.get().isVerified)
-        Assertions.assertThat(BCryptHelper.alreadyCrypted(returnedUser.password)).isTrue()
+        Assertions.assertThat(BCryptHelper.alreadyCrypted(returnedUser.password)).isTrue
         Assertions.assertThat(returnedUser.levelOfAssurance).isEqualTo(user.levelOfAssurance)
     }
 
@@ -130,7 +128,7 @@ class UserRepositoryIntegrationTests : IntegrationTestHelper() {
         val user = UserBuilder.aUser().withPid(null).build()
         aUserIsCreatedForIdp(IDP_NAME, user)
         val returnedUser = readEntity(aUserIsRequestedForIdp(user.username, IDP_NAME))
-        Assertions.assertThat(returnedUser.pid.isPresent).isTrue()
+        Assertions.assertThat(returnedUser.pid.isPresent).isTrue
     }
 
     @Test
@@ -139,7 +137,7 @@ class UserRepositoryIntegrationTests : IntegrationTestHelper() {
         val user = UserBuilder.aUser().withLevelOfAssurance(null).build()
         val response = aUserIsCreatedForIdpWithoutResponseChecking(IDP_NAME, user)
         Assertions.assertThat(response.status).isEqualTo(Response.Status.BAD_REQUEST.statusCode)
-        Assertions.assertThat<String>(response.readEntity<List<String>>(object : GenericType<List<String>>() {})).containsOnly("Level of Assurance was not specified.")
+        Assertions.assertThat(response.readEntity(object : GenericType<List<String>>() {})).containsOnly("Level of Assurance was not specified.")
     }
 
     @Test
@@ -148,7 +146,7 @@ class UserRepositoryIntegrationTests : IntegrationTestHelper() {
         val user = UserBuilder.aUser().withUsername(null).build()
         val response = aUserIsCreatedForIdpWithoutResponseChecking(IDP_NAME, user)
         Assertions.assertThat(response.status).isEqualTo(Response.Status.BAD_REQUEST.statusCode)
-        Assertions.assertThat<String>(response.readEntity<List<String>>(object : GenericType<List<String>>() {})).containsOnly("Username was not specified or was empty.")
+        Assertions.assertThat(response.readEntity(object : GenericType<List<String>>() {})).containsOnly("Username was not specified or was empty.")
     }
 
     @Test
@@ -157,7 +155,7 @@ class UserRepositoryIntegrationTests : IntegrationTestHelper() {
         val user = UserBuilder.aUser().withPassword(null).build()
         val response = aUserIsCreatedForIdpWithoutResponseChecking(IDP_NAME, user)
         Assertions.assertThat(response.status).isEqualTo(Response.Status.BAD_REQUEST.statusCode)
-        Assertions.assertThat<String>(response.readEntity<List<String>>(object : GenericType<List<String>>() {})).containsOnly("Password was not specified or was empty.")
+        Assertions.assertThat(response.readEntity(object : GenericType<List<String>>() {})).containsOnly("Password was not specified or was empty.")
     }
 
     // convert object to json using apprule's object mapper because it can serialize guava correctly
@@ -178,7 +176,7 @@ class UserRepositoryIntegrationTests : IntegrationTestHelper() {
     class UserBuilder {
         private var levelOfAssurance: Optional<String> = Optional.ofNullable(AuthnContext.LEVEL_1.toString())
         private var username: Optional<String> = Optional.of("default-username")
-        private val address = Optional.ofNullable(AddressBuilder.anAddress().withLines(Arrays.asList("line-1", "line-2")).build())
+        private val address = Optional.ofNullable(AddressBuilder.anAddress().withLines(listOf("line-1", "line-2")).build())
         private var password: Optional<String> = Optional.of("default-password")
         private var pid = Optional.of("default-pid")
         fun build(): IdpUserDto {
@@ -234,7 +232,7 @@ class UserRepositoryIntegrationTests : IntegrationTestHelper() {
 
     @Throws(JsonProcessingException::class)
     fun someUsersAreCreatedForIdp(idpFriendlyId: String, vararg users: IdpUserDto?): Response {
-        return createARequest(getAddAllUsersPath(idpFriendlyId)).post(Entity.entity(getJson(Arrays.asList(*users)), MediaType.APPLICATION_JSON_TYPE))
+        return createARequest(getAddAllUsersPath(idpFriendlyId)).post(Entity.entity(getJson(listOf(*users)), MediaType.APPLICATION_JSON_TYPE))
     }
 
     @Throws(JsonProcessingException::class)
@@ -243,7 +241,7 @@ class UserRepositoryIntegrationTests : IntegrationTestHelper() {
         Assertions.assertThat(response.status).isEqualTo(200)
     }
 
-    fun aUserIsRequestedForIdp(username: String, idpFriendlyId: String): Response {
+    private fun aUserIsRequestedForIdp(username: String, idpFriendlyId: String): Response {
         return createARequest(getUserPath(username, idpFriendlyId)).get()
     }
 
@@ -276,7 +274,7 @@ class UserRepositoryIntegrationTests : IntegrationTestHelper() {
         const val DISPLAY_NAME = "User Repository Identity Service"
         private const val USERNAME = "integrationTestUser"
         private const val PASSWORD = "integrationTestUserPassword"
-        val applicationRule = StubIdpAppExtension(java.util.Map.ofEntries<String, String>(java.util.Map.entry<String, String>("isIdpEnabled", "true"), java.util.Map.entry<String, String>("basicAuthEnabledForUserResource", "true")))
+        val applicationRule = StubIdpAppExtension(java.util.Map.ofEntries<String, String>(java.util.Map.entry("isIdpEnabled", "true"), java.util.Map.entry("basicAuthEnabledForUserResource", "true")))
                 .withStubIdp(StubIdpBuilder.aStubIdp()
                         .withId(IDP_NAME)
                         .withDisplayName(DISPLAY_NAME)

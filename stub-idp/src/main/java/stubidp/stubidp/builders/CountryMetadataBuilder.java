@@ -10,7 +10,6 @@ import org.opensaml.saml.saml2.metadata.IDPSSODescriptor;
 import org.opensaml.saml.saml2.metadata.RoleDescriptor;
 import org.opensaml.saml.saml2.metadata.SingleSignOnService;
 import org.opensaml.saml.saml2.metadata.impl.SingleSignOnServiceBuilder;
-import org.opensaml.security.SecurityException;
 import org.opensaml.xmlsec.signature.support.SignatureException;
 import stubidp.saml.utils.core.api.CoreTransformersFactory;
 import stubidp.saml.utils.metadata.transformers.KeyDescriptorsUnmarshaller;

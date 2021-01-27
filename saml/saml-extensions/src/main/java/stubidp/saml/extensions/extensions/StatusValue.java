@@ -4,9 +4,9 @@ import javax.xml.namespace.QName;
 
 public interface StatusValue extends StringValueSamlObject {
 
-    public static String CANCEL = "authn-cancel";
-    public static String PENDING = "loa-pending";
-    public static String UPLIFT_FAILED = "uplift-failed";
+    String CANCEL = "authn-cancel";
+    String PENDING = "loa-pending";
+    String UPLIFT_FAILED = "uplift-failed";
 
     /** Element local name. */
     String DEFAULT_ELEMENT_LOCAL_NAME = "StatusValue";

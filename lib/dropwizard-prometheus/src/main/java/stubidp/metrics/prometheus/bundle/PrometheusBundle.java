@@ -1,13 +1,6 @@
 package stubidp.metrics.prometheus.bundle;
 
-import com.codahale.metrics.Counter;
-import com.codahale.metrics.Gauge;
-import com.codahale.metrics.Histogram;
-import com.codahale.metrics.Meter;
 import com.codahale.metrics.Metric;
-import com.codahale.metrics.MetricFilter;
-import com.codahale.metrics.MetricRegistry;
-import com.codahale.metrics.Timer;
 import io.dropwizard.ConfiguredBundle;
 import io.dropwizard.setup.Environment;
 import io.prometheus.client.CollectorRegistry;
@@ -15,8 +8,6 @@ import io.prometheus.client.dropwizard.DropwizardExports;
 import io.prometheus.client.exporter.MetricsServlet;
 import io.prometheus.client.hotspot.DefaultExports;
 import stubidp.metrics.prometheus.config.PrometheusConfiguration;
-
-import java.util.SortedMap;
 
 /**
  * PrometheusBundle

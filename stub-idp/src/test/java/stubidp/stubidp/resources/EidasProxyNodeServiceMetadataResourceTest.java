@@ -72,9 +72,9 @@ public class EidasProxyNodeServiceMetadataResourceTest {
     }
 
     @Test
-    void getShouldReturnADocumentWhenIdpIsKnown() throws URISyntaxException, SecurityException, CertificateEncodingException, SignatureException, MarshallingException {
+    void getShouldReturnADocumentWhenIdpIsKnown() throws URISyntaxException, CertificateEncodingException, SignatureException, MarshallingException {
         when(idaKeyStore.getSigningCertificate()).thenReturn(signingCertificate);
-        when(countryMetadataBuilder.createEntityDescriptorForProxyNodeService(any(), any(), any(), any())).thenReturn(entityDescriptor);;
+        when(countryMetadataBuilder.createEntityDescriptorForProxyNodeService(any(), any(), any(), any())).thenReturn(entityDescriptor);
 
         final Response response = resource.getMetadata(VALID_COUNTRY);
 
@@ -85,7 +85,7 @@ public class EidasProxyNodeServiceMetadataResourceTest {
     }
 
     @Test
-    void getShouldReturnNotFoundWhenIdpIsNullOrEmpty() throws CertificateEncodingException, MarshallingException, SecurityException, SignatureException {
+    void getShouldReturnNotFoundWhenIdpIsNullOrEmpty() throws CertificateEncodingException, MarshallingException, SignatureException {
         Response response = resource.getMetadata(null);
         assertThat(response.getStatus()).isEqualTo(Response.Status.NOT_FOUND.getStatusCode());
         assertThat(response.getEntity()).isEqualTo(null);

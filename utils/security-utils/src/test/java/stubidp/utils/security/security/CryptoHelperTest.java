@@ -4,6 +4,7 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Base64;
 import java.util.Collections;
 import java.util.HashMap;
@@ -52,7 +53,7 @@ public class CryptoHelperTest {
 
     @Test
     void testEncryptedDataShouldNotContainUnencryptedData() {
-        final String encrypted = unbase64(cryptoHelper.encrypt_yesIKnowThisCryptoCodeHasNotBeenAudited(EXAMPLE_IDP).get()).toString();
+        final String encrypted = Arrays.toString(unbase64(cryptoHelper.encrypt_yesIKnowThisCryptoCodeHasNotBeenAudited(EXAMPLE_IDP).get()));
         assertThat(encrypted).doesNotContain(EXAMPLE_IDP);
     }
 

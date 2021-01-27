@@ -75,7 +75,7 @@ public class CountryMetadataBuilderTest extends OpenSAMLRunner {
         return PATTERN.matcher(cert).replaceAll("");
     }
 
-    private EntityDescriptor getMetadata() throws CertificateEncodingException, MarshallingException, SecurityException, SignatureException {
+    private EntityDescriptor getMetadata() throws CertificateEncodingException, MarshallingException, SignatureException {
         when(metadataSigner.sign(any(EntityDescriptor.class))).thenAnswer(i -> i.getArguments()[0]);
         CountryMetadataBuilder countryMetadataBuilder = new CountryMetadataBuilder(Duration.ofHours(1), metadataSigner);
         return countryMetadataBuilder.createEntityDescriptorForProxyNodeService(ENTITY_ID, SSO_URL, SIGNING_CERTIFICATE, ENCRYPTING_CERTIFICATE);

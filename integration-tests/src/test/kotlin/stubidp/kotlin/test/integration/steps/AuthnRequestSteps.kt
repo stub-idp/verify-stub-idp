@@ -3,6 +3,7 @@ package stubidp.kotlin.test.integration.steps
 import org.assertj.core.api.Assertions
 import org.jsoup.Jsoup
 import org.opensaml.security.credential.Credential
+import stubidp.kotlin.test.integration.support.StubIdpAppExtension
 import stubidp.saml.extensions.IdaConstants
 import stubidp.saml.security.IdaKeyStore
 import stubidp.saml.test.TestCredentialFactory
@@ -14,7 +15,6 @@ import stubidp.stubidp.repositories.StubCountryRepository
 import stubidp.stubidp.views.SignAssertions
 import stubidp.test.devpki.TestCertificateStrings
 import stubidp.test.devpki.TestEntityIds
-import stubidp.kotlin.test.integration.support.StubIdpAppExtension
 import stubidp.utils.security.security.PrivateKeyFactory
 import stubidp.utils.security.security.PublicKeyFactory
 import stubidp.utils.security.security.X509CertificateFactory
@@ -37,11 +37,11 @@ class AuthnRequestSteps(private val client: Client, private val idpName: String,
     class Cookies(val sessionId: String, val secure: String?)
 
     fun userPostsAuthnRequestToStubIdp(relayState: Optional<String>): Cookies {
-        return userPostsAuthnRequestToStubIdp(java.util.List.of(), Optional.empty(), Optional.empty(), relayState)
+        return userPostsAuthnRequestToStubIdp(listOf(), Optional.empty(), Optional.empty(), relayState)
     }
 
     fun userPostsAuthnRequestToStubIdp(hint: String?): Cookies {
-        return userPostsAuthnRequestToStubIdp(java.util.List.of(hint), Optional.empty(), Optional.empty(), Optional.empty())
+        return userPostsAuthnRequestToStubIdp(listOf(hint), Optional.empty(), Optional.empty(), Optional.empty())
     }
 
     fun userPostsAuthnRequestToStubIdpReturnResponse(hints: List<String?>, language: Optional<String>, registration: Optional<Boolean>, withInvalidKey: Boolean, relayState: Optional<String>): Response {
@@ -58,7 +58,7 @@ class AuthnRequestSteps(private val client: Client, private val idpName: String,
                 .withDestination(UriBuilder.fromUri("http://localhost:" + port + Urls.IDP_SAML2_SSO_RESOURCE).build(idpName).toASCIIString())
                 .withSigningCredential(signingCredential)
                 .withSigningCertificate(signingCertificate)
-                .withEntityId(StubIdpAppExtension.Companion.SP_ENTITY_ID)
+                .withEntityId(StubIdpAppExtension.SP_ENTITY_ID)
                 .build()
         return postAuthnRequest(hints, language, registration, authnRequest, relayState, Urls.IDP_SAML2_SSO_RESOURCE)
     }
@@ -69,7 +69,7 @@ class AuthnRequestSteps(private val client: Client, private val idpName: String,
                 .withDestination(headlessResource)
                 .withSigningCredential(TestCredentialFactory(TestCertificateStrings.HUB_TEST_PUBLIC_SIGNING_CERT, TestCertificateStrings.HUB_TEST_PRIVATE_SIGNING_KEY).signingCredential)
                 .withSigningCertificate(TestCertificateStrings.HUB_TEST_PUBLIC_SIGNING_CERT)
-                .withEntityId(StubIdpAppExtension.Companion.SP_ENTITY_ID)
+                .withEntityId(StubIdpAppExtension.SP_ENTITY_ID)
                 .build()
         val form = Form()
         form.param(Urls.CYCLE3_PARAM, java.lang.Boolean.toString(isCycle3))
@@ -96,7 +96,7 @@ class AuthnRequestSteps(private val client: Client, private val idpName: String,
     }
 
     @JvmOverloads
-    fun userPostsAuthnRequestToStubIdp(hints: List<String?> = java.util.List.of(), language: Optional<String> = Optional.empty(), registration: Optional<Boolean> = Optional.empty(), relayState: Optional<String> = Optional.empty()): Cookies {
+    fun userPostsAuthnRequestToStubIdp(hints: List<String?> = listOf(), language: Optional<String> = Optional.empty(), registration: Optional<Boolean> = Optional.empty(), relayState: Optional<String> = Optional.empty()): Cookies {
         val response = userPostsAuthnRequestToStubIdpReturnResponse(hints, language, registration, false, relayState)
         Assertions.assertThat(response.status).isEqualTo(303)
         if (registration.isPresent && registration.get()) {
@@ -108,11 +108,12 @@ class AuthnRequestSteps(private val client: Client, private val idpName: String,
     }
 
     fun userPostsEidasAuthnRequestToStubIdp(): Cookies {
-        return userPostsEidasAuthnRequestToStubIdpWithAttribute(false, false, true, Optional.empty())
-    }
-
-    fun userPostsEidasAuthnRequestToStubIdpWithAttribute(requestAddress: Boolean, requestGender: Boolean): Cookies {
-        return userPostsEidasAuthnRequestToStubIdpWithAttribute(requestAddress, requestGender, true, Optional.empty())
+        return userPostsEidasAuthnRequestToStubIdpWithAttribute(
+            requestAddress = false,
+            requestGender = false,
+            withKeyInfo = true,
+            relayState = Optional.empty()
+        )
     }
 
     fun userPostsEidasAuthnRequestToStubIdpWithAttribute(requestAddress: Boolean, requestGender: Boolean, relayState: Optional<String>): Cookies {
@@ -143,13 +144,13 @@ class AuthnRequestSteps(private val client: Client, private val idpName: String,
         eidasAuthnRequestBuilder.withKeyStore(if (withInvalidKey) createInvalidIdaKeyStore() else createValidIdaKeyStore())
         eidasAuthnRequestBuilder.withDestination(UriBuilder.fromUri("http://localhost:" + port + Urls.EIDAS_SAML2_SSO_RESOURCE).build(idpName).toASCIIString())
         val authnRequest = eidasAuthnRequestBuilder.build()
-        return postAuthnRequest(java.util.List.of(), Optional.empty(), Optional.empty(), authnRequest, relayState, Urls.EIDAS_SAML2_SSO_RESOURCE)
+        return postAuthnRequest(listOf(), Optional.empty(), Optional.empty(), authnRequest, relayState, Urls.EIDAS_SAML2_SSO_RESOURCE)
     }
 
     private fun getCookiesAndFollowRedirect(responseWithCookies: Response): Cookies {
         val sessionCookie = responseWithCookies.cookies[StubIdpCookieNames.SESSION_COOKIE_NAME]
         Assertions.assertThat(sessionCookie).isNotNull
-        Assertions.assertThat(sessionCookie!!.value).isNotNull()
+        Assertions.assertThat(sessionCookie!!.value).isNotNull
         val sessionCookieValue = sessionCookie.value
         val secureCookie = responseWithCookies.cookies[StubIdpCookieNames.SECURE_COOKIE_NAME]
         val secureCookieValue = secureCookie?.value

@@ -1,6 +1,6 @@
 package stubidp.test.utils.helpers;
 
 public interface ManagedFileResource {
-    public void create();
-    public void delete();
+    void create();
+    void delete();
 }

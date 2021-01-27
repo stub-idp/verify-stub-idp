@@ -27,12 +27,12 @@ public interface PlaceOfBirth extends AttributeValue {
      *
      * @return the place of birth
      */
-    public String getPlaceOfBirth();
+    String getPlaceOfBirth();
 
     /**
      * Set the place of birth.
      *
      * @param placeOfBirth the given name
      */
-    public void setPlaceOfBirth(String placeOfBirth);
+    void setPlaceOfBirth(String placeOfBirth);
 }

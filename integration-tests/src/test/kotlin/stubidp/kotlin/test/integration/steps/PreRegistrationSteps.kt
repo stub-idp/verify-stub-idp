@@ -2,9 +2,9 @@ package stubidp.kotlin.test.integration.steps
 
 import org.assertj.core.api.Assertions
 import org.jsoup.Jsoup
+import stubidp.kotlin.test.integration.support.StubIdpAppExtension
 import stubidp.shared.csrf.AbstractCSRFCheckProtectionFilter
 import stubidp.stubidp.Urls
-import stubidp.kotlin.test.integration.support.StubIdpAppExtension
 import java.io.UnsupportedEncodingException
 import java.net.URI
 import java.net.URLDecoder
@@ -19,19 +19,10 @@ import javax.ws.rs.core.UriBuilder
 
 class PreRegistrationSteps(private val client: Client, private val applicationRule: StubIdpAppExtension) {
     private var response: Response? = null
-    val cookies: Cookies
+    val cookies: Cookies = Cookies()
     var csrfToken: String? = null
         private set
     private var responseEntity: String? = null
-    fun userNavigatesTo(path: String): PreRegistrationSteps {
-        response = client.target(getUri(path))
-                .request()
-                .cookie(cookies.sessionCookie)
-                .cookie(cookies.secureCookie)
-                .get()
-        cookies.extractCookies(response)
-        return this
-    }
 
     fun userSuccessfullyNavigatesTo(path: String): PreRegistrationSteps {
         response = client.target(getUri(path))
@@ -39,7 +30,7 @@ class PreRegistrationSteps(private val client: Client, private val applicationRu
                 .cookie(cookies.sessionCookie)
                 .cookie(cookies.secureCookie)
                 .get()
-        Assertions.assertThat(response?.getStatus()).isEqualTo(Response.Status.OK.statusCode)
+        Assertions.assertThat(response?.status).isEqualTo(Response.Status.OK.statusCode)
         responseEntity = response?.readEntity(String::class.java)
         val entity = Jsoup.parse(responseEntity)
         val csrfElement = entity.getElementById(AbstractCSRFCheckProtectionFilter.CSRF_PROTECT_FORM_KEY)
@@ -54,7 +45,7 @@ class PreRegistrationSteps(private val client: Client, private val applicationRu
         return userIsRedirectedTo(getUri(path))
     }
 
-    fun userIsRedirectedTo(uri: URI): PreRegistrationSteps {
+    private fun userIsRedirectedTo(uri: URI): PreRegistrationSteps {
         Assertions.assertThat(response!!.status).isEqualTo(Response.Status.SEE_OTHER.statusCode)
         var uriString: String? = null
         try {
@@ -86,10 +77,6 @@ class PreRegistrationSteps(private val client: Client, private val applicationRu
         return postFormTo(form, path)
     }
 
-    fun userSubmitsFormTo(form: Form, uri: URI): PreRegistrationSteps {
-        return postFormTo(form, uri)
-    }
-
     fun clientPostsFormData(form: Form, path: String): PreRegistrationSteps {
         return postFormTo(form, path)
     }
@@ -116,7 +103,7 @@ class PreRegistrationSteps(private val client: Client, private val applicationRu
     private fun getUri(path: String): URI {
         return UriBuilder.fromUri("http://localhost:" + applicationRule.localPort)
                 .path(path)
-                .buildFromMap(java.util.Map.of<String, String?>(Urls.IDP_ID_PARAM, IDP_NAME))
+                .buildFromMap(java.util.Map.of(Urls.IDP_ID_PARAM, IDP_NAME))
     }
 
     companion object {
@@ -124,7 +111,4 @@ class PreRegistrationSteps(private val client: Client, private val applicationRu
         private const val DISPLAY_NAME = "Stub Idp One Pre-Register"
     }
 
-    init {
-        cookies = Cookies()
-    }
 }

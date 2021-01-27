@@ -5,6 +5,7 @@ import stubidp.utils.security.configuration.SecureCookieKeyStore;
 import javax.crypto.Mac;
 import javax.inject.Inject;
 import java.io.UnsupportedEncodingException;
+import java.nio.charset.StandardCharsets;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 
@@ -34,11 +35,7 @@ public class HmacDigest {
         }
 
         byte[] bytes;
-        try {
-            bytes = mac.doFinal(toEncode.getBytes("UTF-8"));
-        } catch (UnsupportedEncodingException e) {
-            throw new RuntimeException(e);
-        }
+        bytes = mac.doFinal(toEncode.getBytes(StandardCharsets.UTF_8));
 
         return StringEncoding.toBase64Encoded(bytes);
     }

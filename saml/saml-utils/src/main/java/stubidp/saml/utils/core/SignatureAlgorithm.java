@@ -26,5 +26,5 @@ public enum SignatureAlgorithm {
         public String toString() {
             return SignatureConstants.ALGO_ID_SIGNATURE_RSA_SHA512;
         }
-    };
+    }
 }
