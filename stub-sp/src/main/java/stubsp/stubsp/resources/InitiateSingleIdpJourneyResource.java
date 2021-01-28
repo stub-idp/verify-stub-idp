@@ -5,7 +5,7 @@ import stubsp.stubsp.services.InitiateSingleIdpJourneyService;
 import stubsp.stubsp.views.SecureView;
 
 import javax.inject.Inject;
-import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
@@ -22,7 +22,7 @@ public class InitiateSingleIdpJourneyResource {
         this.initiateSingleIdpJourneyService = initiateSingleIdpJourneyService;
     }
 
-    @GET
+    @POST
     public SecureView getSecureView() {
         return null;
     }
