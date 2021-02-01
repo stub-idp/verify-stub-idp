@@ -8,19 +8,19 @@ import org.junit.jupiter.api.Test;
 import static java.text.MessageFormat.format;
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class JadeModelFactoryTest {
+class JadeModelFactoryTest {
 
     public final String EXPECTED_KEY = "customStringField";
 
     public JadeModelFactory factory;
 
     @BeforeEach
-    public void setUp() throws Exception {
+    void setUp() {
         factory = new JadeModelFactory();
     }
 
     @Test
-    public void createModel_shouldIncludePublicGettersInCustomView() throws Exception {
+    void createModel_shouldIncludePublicGettersInCustomView() {
         CustomJadeView view = new CustomJadeView("");
 
         JadeModel model = factory.createModel(view);
@@ -30,7 +30,7 @@ public class JadeModelFactoryTest {
     }
 
     @Test
-    public void createModel_shouldIncludeInheritedGetters() throws Exception {
+    void createModel_shouldIncludeInheritedGetters() {
         CustomJadeSubview view = new CustomJadeSubview("");
 
         JadeModel model = factory.createModel(view);
@@ -40,7 +40,7 @@ public class JadeModelFactoryTest {
     }
 
     @Test
-    public void createModel_shouldExcludeGettersThatTakeParams() throws Exception {
+    void createModel_shouldExcludeGettersThatTakeParams() {
         final String excludedKey = "withParam";
         final String excludedValue = "value to exclude";
         View view = new CustomJadeView("") {
@@ -57,7 +57,7 @@ public class JadeModelFactoryTest {
     }
 
     @Test
-    public void createModel_shouldExcludeMethodsWithoutGetPrefix() throws Exception {
+    void createModel_shouldExcludeMethodsWithoutGetPrefix() {
         final String excludedKey = "aGetMethod";
         final String excludedValue = "expectedValue to exclude";
         View view = new CustomJadeView("") {
@@ -74,7 +74,7 @@ public class JadeModelFactoryTest {
     }
 
     @Test
-    public void createModel_shouldExcludeProtectedMethods() throws Exception {
+    void createModel_shouldExcludeProtectedMethods() {
         final String exludedKey = "protected";
         final String excludedValue = "excluded value";
         View view = new CustomJadeView("") {
