@@ -1,6 +1,5 @@
 package uk.gov.ida.shared.dropwizard.jade;
 
-import com.google.common.base.Charsets;
 import de.neuland.jade4j.JadeConfiguration;
 import de.neuland.jade4j.exceptions.JadeException;
 import de.neuland.jade4j.model.JadeModel;
@@ -13,6 +12,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.Locale;
 import java.util.Map;
 
@@ -40,7 +40,7 @@ public class JadeViewRenderer implements ViewRenderer {
             final OutputStream output) throws IOException {
 
         JadeModel model = new JadeModelFactory().createModel(view);
-        final Charset charset = view.getCharset().orElse(Charsets.UTF_8);
+        final Charset charset = view.getCharset().orElse(StandardCharsets.UTF_8);
         try {
             final JadeTemplate template = configuration.getTemplate(view.getTemplateName());
             try (OutputStreamWriter writer = new OutputStreamWriter(output, charset)) {

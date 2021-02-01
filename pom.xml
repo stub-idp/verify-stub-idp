@@ -33,6 +33,7 @@
         <flyway.version>7.5.4</flyway.version>
         <freemarker.version>2.3.31</freemarker.version>
         <jackson.version>2.12.1</jackson.version>
+        <jade4j.version>0.4.0</jade4j.version>
         <jakarta_activation.version>1.2.2</jakarta_activation.version>
         <jakarta_inject.version>1.0.1</jakarta_inject.version>
         <jakarta_validation.version>2.0.2</jakarta_validation.version>
@@ -70,6 +71,7 @@
         <module>shared-lib</module>
         <module>stub-idp</module>
         <module>stub-sp</module>
+        <module>lib/dropwizard-jade</module>
         <module>lib/dropwizard-logstash</module>
         <module>lib/dropwizard-prometheus</module>
         <module>saml/saml-domain</module>

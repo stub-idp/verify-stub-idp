@@ -2,8 +2,8 @@ package uk.gov.ida.shared.dropwizard.jade;
 
 import de.neuland.jade4j.model.JadeModel;
 import io.dropwizard.views.View;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import static java.text.MessageFormat.format;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -14,7 +14,7 @@ public class JadeModelFactoryTest {
 
     public JadeModelFactory factory;
 
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
         factory = new JadeModelFactory();
     }

@@ -1,6 +1,5 @@
 package uk.gov.ida.shared.dropwizard.jade;
 
-import com.google.common.base.Throwables;
 import de.neuland.jade4j.model.JadeModel;
 import io.dropwizard.views.View;
 import org.apache.commons.lang3.text.WordUtils;
@@ -23,7 +22,7 @@ public class JadeModelFactory {
             final View view,
             final JadeModel jadeModel) {
 
-        Class clazz = view.getClass();
+        Class<?> clazz = view.getClass();
         while (!clazz.equals(View.class)) {
             addMethodsFromClass(jadeModel, view, clazz);
             clazz = clazz.getSuperclass();
@@ -33,7 +32,7 @@ public class JadeModelFactory {
     private void addMethodsFromClass(
             final JadeModel jadeModel,
             final View view,
-            final Class clazz) {
+            final Class<?> clazz) {
 
         Method[] methods = clazz.getMethods();
         for (Method method : methods) {
@@ -54,7 +53,7 @@ public class JadeModelFactory {
         } catch (IllegalAccessException e) {
             throw new IllegalStateException("Error: Failed to access public getter.");
         } catch (InvocationTargetException e) {
-            Throwables.propagate(e.getCause());
+            throw new RuntimeException(e.getCause());
         }
     }
 
