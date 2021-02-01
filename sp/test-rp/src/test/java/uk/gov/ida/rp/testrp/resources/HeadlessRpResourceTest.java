@@ -1,14 +1,12 @@
 package uk.gov.ida.rp.testrp.resources;
 
-import com.squarespace.jersey2.guice.JerseyGuiceUtils;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
+import stubidp.saml.domain.assertions.TransactionIdaStatus;
 import uk.gov.ida.rp.testrp.controllogic.AuthnRequestSenderHandler;
-import uk.gov.ida.saml.core.domain.TransactionIdaStatus;
 import uk.gov.ida.saml.idp.stub.domain.InboundResponseFromHub;
 
 import javax.ws.rs.core.Response;
@@ -17,13 +15,8 @@ import java.util.function.Function;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class HeadlessRpResourceTest {
-
-    @BeforeClass
-    public static void doALittleHackToMakeGuicierHappyForSomeReason() {
-        JerseyGuiceUtils.reset();
-    }
 
     private HeadlessRpResource resource;
 
@@ -34,7 +27,7 @@ public class HeadlessRpResourceTest {
     @Mock
     private InboundResponseFromHub inboundResponseFromHub;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         this.resource = new HeadlessRpResource(samlResponseDeserialiser, authnRequestSenderHandler);
     }

@@ -4,7 +4,7 @@ import com.github.tomakehurst.wiremock.WireMockServer;
 import com.github.tomakehurst.wiremock.client.WireMock;
 import io.dropwizard.testing.ResourceHelpers;
 import org.apache.commons.io.FileUtils;
-import uk.gov.ida.saml.core.test.TestCertificateStrings;
+import stubidp.test.devpki.TestCertificateStrings;
 
 import java.io.File;
 import java.io.IOException;
@@ -30,6 +30,7 @@ public class MsaStubRule {
                 .dynamicHttpsPort()
                 .dynamicPort()
                 .keystorePath("test_keys/dev_service_ssl.ks")
+                .keyManagerPassword("marshmallow")
                 .keystorePassword("marshmallow"));
 
         server.stubFor(WireMock.get(urlEqualTo("/metadata"))

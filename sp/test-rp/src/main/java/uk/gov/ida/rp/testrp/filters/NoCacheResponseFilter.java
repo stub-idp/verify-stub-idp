@@ -5,10 +5,10 @@ import javax.ws.rs.container.ContainerResponseContext;
 import javax.ws.rs.container.ContainerResponseFilter;
 import javax.ws.rs.core.MediaType;
 
-import static uk.gov.ida.common.HttpHeaders.CACHE_CONTROL_KEY;
-import static uk.gov.ida.common.HttpHeaders.CACHE_CONTROL_NO_CACHE_VALUE;
-import static uk.gov.ida.common.HttpHeaders.PRAGMA_KEY;
-import static uk.gov.ida.common.HttpHeaders.PRAGMA_NO_CACHE_VALUE;
+import static stubidp.utils.rest.common.HttpHeaders.CACHE_CONTROL_KEY;
+import static stubidp.utils.rest.common.HttpHeaders.CACHE_CONTROL_NO_CACHE_VALUE;
+import static stubidp.utils.rest.common.HttpHeaders.PRAGMA_KEY;
+import static stubidp.utils.rest.common.HttpHeaders.PRAGMA_NO_CACHE_VALUE;
 
 public class NoCacheResponseFilter implements ContainerResponseFilter {
     @Override

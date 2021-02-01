@@ -1,14 +1,14 @@
 package uk.gov.ida.rp.testrp.resources;
 
-import com.squarespace.jersey2.guice.JerseyGuiceUtils;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import io.dropwizard.testing.junit5.DropwizardExtensionsSupport;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentMatchers;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
-import uk.gov.ida.common.SessionId;
+import org.mockito.junit.jupiter.MockitoExtension;
+import stubidp.saml.domain.assertions.TransactionIdaStatus;
+import stubidp.utils.rest.common.SessionId;
 import uk.gov.ida.rp.testrp.builders.AccessTokenBuilder;
 import uk.gov.ida.rp.testrp.contract.LevelOfAssuranceDto;
 import uk.gov.ida.rp.testrp.domain.AccessToken;
@@ -18,7 +18,6 @@ import uk.gov.ida.rp.testrp.repositories.Session;
 import uk.gov.ida.rp.testrp.repositories.SessionRepository;
 import uk.gov.ida.rp.testrp.tokenservice.TokenService;
 import uk.gov.ida.rp.testrp.views.TestRpSuccessPageView;
-import uk.gov.ida.saml.core.domain.TransactionIdaStatus;
 
 import java.net.URI;
 import java.util.Optional;
@@ -28,13 +27,8 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static uk.gov.ida.rp.testrp.builders.TestRpConfigurationBuilder.aTestRpConfiguration;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith({MockitoExtension.class, DropwizardExtensionsSupport.class})
 public class TestRpResourceTest {
-
-    @BeforeClass
-    public static void doALittleHackToMakeGuicierHappyForSomeReason() {
-        JerseyGuiceUtils.reset();
-    }
 
     @Mock
     private SessionRepository sessionRepository;
@@ -45,7 +39,7 @@ public class TestRpResourceTest {
 
     private TestRpResource resource;
 
-    @Before
+    @BeforeEach
     public void setErrorMessageGeneratorDummyErrorMessage() {
         PageErrorMessageDetails nullErrorMessage = new PageErrorMessageDetails(Optional.empty(), Optional.empty());
         when(pageErrorMessageDetailsFactory.getErrorMessage(ArgumentMatchers.<Optional<TransactionIdaStatus>>any())).thenReturn(nullErrorMessage);

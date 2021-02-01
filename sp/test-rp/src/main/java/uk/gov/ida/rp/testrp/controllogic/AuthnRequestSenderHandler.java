@@ -8,13 +8,13 @@ import org.opensaml.saml.metadata.resolver.MetadataResolver;
 import org.opensaml.saml.saml2.metadata.EntityDescriptor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import uk.gov.ida.common.SessionId;
+import stubidp.saml.domain.request.AuthnRequestFromTransaction;
+import stubidp.utils.rest.common.SessionId;
 import uk.gov.ida.rp.testrp.TestRpConfiguration;
 import uk.gov.ida.rp.testrp.domain.AccessToken;
 import uk.gov.ida.rp.testrp.domain.JourneyHint;
 import uk.gov.ida.rp.testrp.repositories.SessionRepository;
 import uk.gov.ida.rp.testrp.views.SamlAuthnRequestRedirectViewFactory;
-import uk.gov.ida.saml.hub.domain.AuthnRequestFromTransaction;
 
 import javax.inject.Inject;
 import javax.ws.rs.core.Response;

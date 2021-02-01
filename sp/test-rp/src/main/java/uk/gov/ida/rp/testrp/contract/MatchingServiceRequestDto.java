@@ -1,13 +1,12 @@
 package uk.gov.ida.rp.testrp.contract;
 
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import org.apache.commons.lang.builder.EqualsBuilder;
-import org.apache.commons.lang.builder.HashCodeBuilder;
+import com.fasterxml.jackson.annotation.JsonInclude;
 
+import java.util.Objects;
 import java.util.Optional;
 
 // CAUTION!!! CHANGES TO THIS CLASS WILL IMPACT MSA USERS
-@JsonSerialize(include= JsonSerialize.Inclusion.NON_NULL)
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class MatchingServiceRequestDto {
 
     private UniversalMatchingDatasetDto matchingDataset;
@@ -59,7 +58,15 @@ public class MatchingServiceRequestDto {
 
     @Override
     public boolean equals(Object o) {
-        return EqualsBuilder.reflectionEquals(this, o);
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        MatchingServiceRequestDto that = (MatchingServiceRequestDto) o;
+        return Objects.equals(matchingDataset, that.matchingDataset) && Objects.equals(cycle3Dataset, that.cycle3Dataset) && Objects.equals(hashedPid, that.hashedPid) && Objects.equals(matchId, that.matchId) && levelOfAssurance == that.levelOfAssurance;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(matchingDataset, cycle3Dataset, hashedPid, matchId, levelOfAssurance);
     }
 
     @Override
@@ -71,10 +78,5 @@ public class MatchingServiceRequestDto {
                 ", matchId='" + matchId + '\'' +
                 ", levelOfAssurance=" + levelOfAssurance +
                 '}';
-    }
-
-    @Override
-    public int hashCode() {
-        return HashCodeBuilder.reflectionHashCode(this);
     }
 }

@@ -1,23 +1,23 @@
 package uk.gov.ida.rp.testrp.authentication;
 
 import net.shibboleth.utilities.java.support.resolver.CriteriaSet;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.opensaml.saml.metadata.resolver.MetadataResolver;
 import org.opensaml.saml.saml2.metadata.EntityDescriptor;
 import org.opensaml.saml.saml2.metadata.IDPSSODescriptor;
 import org.opensaml.saml.saml2.metadata.SingleSignOnService;
-import uk.gov.ida.common.SessionId;
+import stubidp.saml.domain.request.AuthnRequestFromTransaction;
+import stubidp.utils.rest.common.SessionId;
 import uk.gov.ida.rp.testrp.TestRpConfiguration;
 import uk.gov.ida.rp.testrp.controllogic.AuthnRequestSenderHandler;
 import uk.gov.ida.rp.testrp.repositories.SessionRepository;
-import uk.gov.ida.rp.testrp.saml.configuration.SamlConfiguration;
+import uk.gov.ida.rp.testrp.saml.configuration.SamlConfigurationImpl;
 import uk.gov.ida.rp.testrp.views.SamlAuthnRequestRedirectViewFactory;
-import uk.gov.ida.saml.hub.domain.AuthnRequestFromTransaction;
 
 import java.net.URI;
 import java.util.Collections;
@@ -31,7 +31,7 @@ import static org.mockito.Mockito.anyString;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class AuthnRequestSenderHandlerTest {
 
     private AuthnRequestSenderHandler manager;
@@ -53,14 +53,14 @@ public class AuthnRequestSenderHandlerTest {
     @Mock
     private SingleSignOnService ssoService;
     @Mock
-    private SamlConfiguration samlConfiguration;
+    private SamlConfigurationImpl samlConfiguration;
 
     private String hubSsoEndpoint = "http://samlendpoint.com";
     private URI requestUri;
     private String rpName = "some-rp-name";
     private boolean forceAuthentication = false;
 
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
         this.requestUri = new URI("http://request.uri");
         this.manager = new AuthnRequestSenderHandler(
@@ -97,7 +97,7 @@ public class AuthnRequestSenderHandlerTest {
         final String issuerId = "entity-id-with-format-param-%s";
         final String expectedIssuerId = "entity-id-with-format-param-some-rp-name";
         ArgumentCaptor<AuthnRequestFromTransaction> captor = ArgumentCaptor.forClass(AuthnRequestFromTransaction.class);
-        when(configuration.getSamlConfiguration()).thenReturn(new TestSamlConfiguration(issuerId));
+        when(configuration.getSamlConfiguration()).thenReturn(new TestSamlConfigurationImpl(issuerId));
 
         this.manager.sendAuthnRequest(requestUri, Optional.empty(), rpName, Optional.empty(), Optional.empty(), forceAuthentication, false, false);
 
@@ -110,7 +110,7 @@ public class AuthnRequestSenderHandlerTest {
     public void sendAuthnRequest_shouldForceAuthenticationIfRequired() throws Exception {
         final String issuerId = "entity-id-with-format-param-%s";
         ArgumentCaptor<AuthnRequestFromTransaction> captor = ArgumentCaptor.forClass(AuthnRequestFromTransaction.class);
-        when(configuration.getSamlConfiguration()).thenReturn(new TestSamlConfiguration(issuerId));
+        when(configuration.getSamlConfiguration()).thenReturn(new TestSamlConfigurationImpl(issuerId));
         boolean forceAuthn = true;
         this.manager.sendAuthnRequest(requestUri, Optional.empty(), rpName, Optional.empty(), Optional.empty(), forceAuthn, false, false);
 
@@ -118,8 +118,8 @@ public class AuthnRequestSenderHandlerTest {
         assertThat(captor.getValue().getForceAuthentication().get()).isEqualTo(forceAuthn);
     }
 
-    public class TestSamlConfiguration extends SamlConfiguration {
-        public TestSamlConfiguration(String issuer) {
+    public class TestSamlConfigurationImpl extends SamlConfigurationImpl {
+        public TestSamlConfigurationImpl(String issuer) {
             this.entityId = issuer;
         }
     }

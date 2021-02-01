@@ -13,8 +13,8 @@ import com.nimbusds.jose.crypto.RSASSAVerifier;
 import com.nimbusds.jose.jwk.RSAKey;
 import com.nimbusds.jwt.SignedJWT;
 import io.dropwizard.jackson.Jackson;
-import org.apache.log4j.Logger;
-import org.joda.time.DateTime;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import uk.gov.ida.rp.testrp.TestRpConfiguration;
 import uk.gov.ida.rp.testrp.domain.AccessToken;
 import uk.gov.ida.rp.testrp.exceptions.CouldNotInstantiateVerifierException;
@@ -29,13 +29,14 @@ import javax.inject.Inject;
 import java.io.IOException;
 import java.security.interfaces.RSAPublicKey;
 import java.text.ParseException;
+import java.time.Instant;
 import java.util.Optional;
 
 import static java.text.MessageFormat.format;
 
 public class TokenService {
 
-    private static final Logger LOG = Logger.getLogger(TokenService.class);
+    private static final Logger LOG = LoggerFactory.getLogger(TokenService.class);
 
     private final TestRpConfiguration configuration;
 
@@ -58,7 +59,7 @@ public class TokenService {
     }
 
     public AccessToken generate(GenerateTokenRequestDto generateTokenDto) {
-        if (generateTokenDto.getValidUntil().isBefore(DateTime.now())) {
+        if (generateTokenDto.getValidUntil().isBefore(Instant.now())) {
             throw new TokenGenerationException(format("Cannot create token with validUntil in past: %s", generateTokenDto.getValidUntil()));
         }
 
@@ -102,7 +103,7 @@ public class TokenService {
 
         TokenDto tokenDto;
         try {
-            tokenDto = objectMapper.readValue(jwsObject.getPayload().toJSONObject().toJSONString(), TokenDto.class);
+            tokenDto = objectMapper.readValue(jwsObject.getPayload().toString(), TokenDto.class);
         } catch (IOException e) {
             throw new CouldNotParseTokenPayloadException("possibly missing required fields");
         }
@@ -112,7 +113,7 @@ public class TokenService {
             return new TokenValidationResponse(false);
         }
 
-        if(tokenDto.getValidUntil().isAfterNow()) {
+        if(tokenDto.getValidUntil().isAfter(Instant.now())) {
             return new TokenValidationResponse(true);
         } else {
             LOG.warn(format("Attempt to use expired token issued to {0}, valid until {1}, epoch {2}", tokenDto.getIssuedTo(), tokenDto.getValidUntil(), tokenDto.getEpoch()));

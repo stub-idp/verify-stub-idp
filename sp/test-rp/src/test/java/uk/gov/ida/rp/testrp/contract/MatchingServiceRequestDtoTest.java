@@ -4,21 +4,20 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.util.StdDateFormat;
 import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableMap;
 import io.dropwizard.jackson.Jackson;
 import io.dropwizard.testing.FixtureHelpers;
 import org.assertj.core.api.Assertions;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
-import org.junit.Before;
-import org.junit.Test;
-import uk.gov.ida.rp.testrp.builders.UniversalAddressDtoBuilder;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import uk.gov.ida.rp.testrp.builders.SimpleMdsValueDtoBuilder;
+import uk.gov.ida.rp.testrp.builders.UniversalAddressDtoBuilder;
 
 import java.io.IOException;
 import java.util.Arrays;
-import java.util.Collections;
+import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import static uk.gov.ida.rp.testrp.builders.UniversalMatchingDatasetDtoBuilder.aUniversalMatchingDatasetDto;
@@ -32,7 +31,7 @@ public class MatchingServiceRequestDtoTest {
 
     private ObjectMapper objectMapper;
 
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
         objectMapper = Jackson.newObjectMapper().setDateFormat(StdDateFormat.getDateInstance());
         objectMapper.registerModule(new Jdk8Module());
@@ -69,7 +68,7 @@ public class MatchingServiceRequestDtoTest {
 
     private MatchingServiceRequestDto getMatchingServiceRequestDto(boolean withNonLatinScriptNames) {
         LevelOfAssuranceDto levelOfAssurance = LevelOfAssuranceDto.LEVEL_1;
-        Cycle3DatasetDto cycle3DatasetDto = Cycle3DatasetDto.createFromData(ImmutableMap.of("NI", "1234"));
+        Cycle3DatasetDto cycle3DatasetDto = Cycle3DatasetDto.createFromData(Map.of("NI", "1234"));
         DateTime dateTime = DateTime.parse("2014-02-01T01:02:03.567Z");
 
         UniversalMatchingDatasetDto universalDataset = aUniversalMatchingDatasetDto()
@@ -98,7 +97,7 @@ public class MatchingServiceRequestDtoTest {
         return new UniversalAddressDtoBuilder()
                 .withFrom(dateTime)
                 .withInternationalPostCode("123")
-                .withLines(ImmutableList.of("a", "b")).withPostCode(postcode)
+                .withLines(List.of("a", "b")).withPostCode(postcode)
                 .withTo(dateTime)
                 .withUPRN("urpn")
                 .withVerified(true)

@@ -1,10 +1,10 @@
 package uk.gov.ida.rp.testrp;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import stubidp.saml.domain.assertions.TransactionIdaStatus;
 import uk.gov.ida.rp.testrp.domain.PageErrorMessageDetails;
 import uk.gov.ida.rp.testrp.domain.PageErrorMessageDetailsFactory;
-import uk.gov.ida.saml.core.domain.TransactionIdaStatus;
 
 import java.util.Optional;
 
@@ -15,7 +15,7 @@ public class PageErrorMessageDetailsFactoryTest {
 
     private PageErrorMessageDetailsFactory pageErrorMessageDetailsFactory;
 
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
         pageErrorMessageDetailsFactory = new PageErrorMessageDetailsFactory();
     }

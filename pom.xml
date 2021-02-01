@@ -64,6 +64,7 @@
         <h2.version>1.4.200</h2.version>
         <junit.version>5.7.1</junit.version>
         <mockito.version>3.9.0</mockito.version>
+        <wiremock.version>2.27.2</wiremock.version>
     </properties>
 
     <modules>
@@ -82,6 +83,7 @@
         <module>saml/saml-serializers</module>
         <module>saml/saml-utils</module>
         <module>saml/trust-anchor</module>
+        <module>sp/test-rp</module>
         <module>test/dev-pki</module>
         <module>test/saml-test</module>
         <module>test/test-utils</module>

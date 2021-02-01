@@ -1,9 +1,9 @@
 package uk.gov.ida.rp.testrp.domain;
 
-import uk.gov.ida.common.SessionId;
+import stubidp.saml.domain.assertions.AuthnContext;
+import stubidp.saml.domain.assertions.TransactionIdaStatus;
+import stubidp.utils.rest.common.SessionId;
 import uk.gov.ida.rp.testrp.repositories.Session;
-import uk.gov.ida.saml.core.domain.AuthnContext;
-import uk.gov.ida.saml.core.domain.TransactionIdaStatus;
 
 import java.net.URI;
 import java.util.List;

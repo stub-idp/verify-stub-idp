@@ -9,9 +9,11 @@ import org.apache.http.impl.conn.SystemDefaultRoutePlanner;
 import stubidp.utils.rest.configuration.JerseyClientWithRetryBackoffConfiguration;
 
 import javax.inject.Provider;
+import javax.inject.Singleton;
 import javax.ws.rs.client.Client;
 import java.net.ProxySelector;
 
+@Singleton
 public class ClientProvider implements Provider<Client> {
 
     private final Client client;

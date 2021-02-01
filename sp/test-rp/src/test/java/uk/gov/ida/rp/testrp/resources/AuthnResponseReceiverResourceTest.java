@@ -1,19 +1,17 @@
 package uk.gov.ida.rp.testrp.resources;
 
-import com.google.common.collect.ImmutableList;
-import com.squarespace.jersey2.guice.JerseyGuiceUtils;
-import org.junit.BeforeClass;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
-import uk.gov.ida.common.SessionId;
+import org.mockito.junit.jupiter.MockitoExtension;
+import stubidp.saml.domain.assertions.TransactionIdaStatus;
+import stubidp.utils.rest.common.SessionId;
 import uk.gov.ida.rp.testrp.TestRpConfiguration;
 import uk.gov.ida.rp.testrp.controllogic.AuthnResponseReceiverHandler;
 import uk.gov.ida.rp.testrp.domain.ResponseFromHub;
-import uk.gov.ida.saml.core.domain.TransactionIdaStatus;
 
 import javax.ws.rs.core.Response;
+import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -21,13 +19,8 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.when;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class AuthnResponseReceiverResourceTest {
-
-    @BeforeClass
-    public static void doALittleHackToMakeGuicierHappyForSomeReason() {
-        JerseyGuiceUtils.reset();
-    }
 
     @Mock
     private AuthnResponseReceiverHandler authnResponseReceiverHandler;
@@ -39,7 +32,7 @@ public class AuthnResponseReceiverResourceTest {
         String samlResponse = "no-authn-context-saml-response";
         ResponseFromHub responseFromHub = new ResponseFromHub(
                 TransactionIdaStatus.NoAuthenticationContext,
-                ImmutableList.of(),
+                List.of(),
                 Optional.empty(),
                 Optional.empty(),
                 Optional.empty(),

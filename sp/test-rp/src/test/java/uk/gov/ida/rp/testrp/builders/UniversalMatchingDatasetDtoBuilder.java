@@ -1,6 +1,7 @@
 package uk.gov.ida.rp.testrp.builders;
 
 import org.joda.time.LocalDate;
+import stubidp.saml.domain.assertions.Gender;
 import uk.gov.ida.rp.testrp.contract.GenderDto;
 import uk.gov.ida.rp.testrp.contract.SimpleMdsValueDto;
 import uk.gov.ida.rp.testrp.contract.TransliterableMdsValueDto;
@@ -79,12 +80,12 @@ public class UniversalMatchingDatasetDtoBuilder {
         return this;
     }
 
-    public UniversalMatchingDatasetDtoBuilder withSurnames(List surnames) {
+    public UniversalMatchingDatasetDtoBuilder withSurnames(List<TransliterableMdsValueDto> surnames) {
         this.surnames = surnames;
         return this;
     }
 
-    public UniversalMatchingDatasetDtoBuilder withGender(SimpleMdsValueDto gender) {
+    public UniversalMatchingDatasetDtoBuilder withGender(SimpleMdsValueDto<GenderDto> gender) {
         this.gender = gender;
         return this;
     }

@@ -4,17 +4,18 @@ import io.dropwizard.client.JerseyClientBuilder;
 import io.dropwizard.client.JerseyClientConfiguration;
 import io.dropwizard.testing.ConfigOverride;
 import io.dropwizard.testing.ResourceHelpers;
+import io.dropwizard.testing.junit5.DropwizardExtensionsSupport;
 import io.dropwizard.util.Duration;
-import org.junit.BeforeClass;
-import org.junit.ClassRule;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.opensaml.core.xml.io.MarshallingException;
 import org.opensaml.xmlsec.signature.support.SignatureException;
+import stubidp.utils.rest.jerseyclient.JerseyClientConfigurationBuilder;
 import uk.gov.ida.integrationTest.support.IntegrationTestHelper;
 import uk.gov.ida.integrationTest.support.JourneyHelper;
 import uk.gov.ida.integrationTest.support.RequestParamHelper;
 import uk.gov.ida.integrationTest.support.TestRpAppRule;
-import uk.gov.ida.jerseyclient.JerseyClientConfigurationBuilder;
 import uk.gov.ida.rp.testrp.Urls;
 import uk.gov.ida.rp.testrp.domain.JourneyHint;
 
@@ -26,17 +27,17 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static uk.gov.ida.rp.testrp.Urls.Cookies.TEST_RP_SESSION_COOKIE_NAME;
 import static uk.gov.ida.rp.testrp.Urls.Params.JOURNEY_HINT_PARAM;
 
+@ExtendWith(DropwizardExtensionsSupport.class)
 public class FullJourneyAppRuleTests extends IntegrationTestHelper {
     private static Client client;
     private static JourneyHelper journeyHelper;
 
-    @ClassRule
     public static TestRpAppRule testRp = TestRpAppRule.newTestRpAppRule(
             ConfigOverride.config("clientTrustStoreConfiguration.path", ResourceHelpers.resourceFilePath("ida_truststore.ts")),
             ConfigOverride.config("msaMetadataUri", "http://localhost:"+getMsaStubRule().getPort()+"/metadata"),
             ConfigOverride.config("allowInsecureMetadataLocation", "true"));
 
-    @BeforeClass
+    @BeforeAll
     public static void beforeClass() {
         JerseyClientConfiguration jerseyClientConfiguration = JerseyClientConfigurationBuilder.aJerseyClientConfiguration().withTimeout(Duration.seconds(20)).build();
         client = new JerseyClientBuilder(testRp.getEnvironment()).using(jerseyClientConfiguration).build(FullJourneyAppRuleTests.class.getSimpleName());

@@ -4,7 +4,6 @@ import org.glassfish.jersey.client.ClientProperties;
 import org.opensaml.core.xml.io.MarshallingException;
 import org.opensaml.xmlsec.signature.support.SignatureException;
 import org.w3c.dom.Document;
-import uk.gov.ida.common.SessionId;
 import uk.gov.ida.rp.testrp.Urls;
 import uk.gov.ida.rp.testrp.contract.MatchingServiceRequestDto;
 import uk.gov.ida.rp.testrp.contract.MatchingServiceResponseDto;
@@ -24,7 +23,6 @@ import java.util.Optional;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.fail;
 import static uk.gov.ida.integrationTest.support.HubResponseFactory.getSignedResponse;
 import static uk.gov.ida.rp.testrp.Urls.Cookies.TEST_RP_SESSION_COOKIE_NAME;
 import static uk.gov.ida.rp.testrp.builders.Cycle3DatasetDtoBuilder.aCycle3DatasetDto;

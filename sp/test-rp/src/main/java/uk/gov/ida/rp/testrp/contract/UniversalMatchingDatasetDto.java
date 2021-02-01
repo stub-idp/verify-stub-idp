@@ -1,13 +1,11 @@
 package uk.gov.ida.rp.testrp.contract;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-import org.apache.commons.lang.builder.EqualsBuilder;
-import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.joda.time.LocalDate;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class UniversalMatchingDatasetDto {
@@ -63,12 +61,15 @@ public class UniversalMatchingDatasetDto {
 
     @Override
     public boolean equals(Object o) {
-        return EqualsBuilder.reflectionEquals(this, o);
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        UniversalMatchingDatasetDto that = (UniversalMatchingDatasetDto) o;
+        return Objects.equals(addresses, that.addresses) && Objects.equals(dateOfBirth, that.dateOfBirth) && Objects.equals(gender, that.gender) && Objects.equals(firstName, that.firstName) && Objects.equals(middleNames, that.middleNames) && Objects.equals(surnames, that.surnames);
     }
 
     @Override
     public int hashCode() {
-        return HashCodeBuilder.reflectionHashCode(this);
+        return Objects.hash(addresses, dateOfBirth, gender, firstName, middleNames, surnames);
     }
 
     @Override

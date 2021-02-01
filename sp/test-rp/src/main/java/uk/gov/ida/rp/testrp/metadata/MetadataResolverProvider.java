@@ -1,18 +1,18 @@
 package uk.gov.ida.rp.testrp.metadata;
 
-import com.google.common.base.Throwables;
 import net.shibboleth.utilities.java.support.component.ComponentInitializationException;
 import net.shibboleth.utilities.java.support.xml.BasicParserPool;
 import org.opensaml.core.config.InitializationException;
 import org.opensaml.core.config.InitializationService;
 import org.opensaml.saml.metadata.resolver.MetadataResolver;
+import stubidp.saml.metadata.JerseyClientMetadataResolver;
 import uk.gov.ida.rp.testrp.TestRpConfiguration;
 import uk.gov.ida.rp.testrp.exceptions.InsecureMetadataException;
-import uk.gov.ida.saml.metadata.JerseyClientMetadataResolver;
 
 import javax.inject.Inject;
 import javax.inject.Provider;
 import javax.ws.rs.client.Client;
+import java.time.Duration;
 import java.util.Timer;
 
 public class MetadataResolverProvider implements Provider<MetadataResolver> {
@@ -40,15 +40,14 @@ public class MetadataResolverProvider implements Provider<MetadataResolver> {
             metadataResolver.setParserPool(pool);
             metadataResolver.setRequireValidMetadata(true);
             metadataResolver.setFailFastInitialization(false);
-            metadataResolver.setMaxRefreshDelay(600000);
-            metadataResolver.setMinRefreshDelay(2000);
+            metadataResolver.setMaxRefreshDelay(Duration.ofMillis(600000));
+            metadataResolver.setMinRefreshDelay(Duration.ofMillis(2000));
             metadataResolver.setId("metadataProvider");
             metadataResolver.initialize();
             return metadataResolver;
         } catch (ComponentInitializationException | InitializationException e) {
-            Throwables.propagate(e);
+            throw new RuntimeException(e);
         }
-        return null;
     }
 
     private boolean insecureConnectionNotAllowed() {

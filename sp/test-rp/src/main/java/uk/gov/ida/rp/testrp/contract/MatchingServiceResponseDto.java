@@ -1,7 +1,6 @@
 package uk.gov.ida.rp.testrp.contract;
 
-import org.apache.commons.lang.builder.EqualsBuilder;
-import org.apache.commons.lang.builder.HashCodeBuilder;
+import java.util.Objects;
 
 public class MatchingServiceResponseDto {
     public static final String MATCH = "match";
@@ -26,11 +25,14 @@ public class MatchingServiceResponseDto {
 
     @Override
     public boolean equals(Object o) {
-        return EqualsBuilder.reflectionEquals(this, o);
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        MatchingServiceResponseDto that = (MatchingServiceResponseDto) o;
+        return Objects.equals(result, that.result);
     }
 
     @Override
     public int hashCode() {
-        return HashCodeBuilder.reflectionHashCode(this);
+        return Objects.hash(result);
     }
 }

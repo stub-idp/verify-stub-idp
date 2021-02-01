@@ -15,17 +15,17 @@ html(lang="en")
     +stylesheetLinkTag("ida-sample-rp","screen")
     +stylesheetLinkTag("fonts","all")
 
-    link(rel="shortcut icon", href="#{imagesBase}/favicon.ico", type="image/x-icon")
+    link(rel="shortcut icon", href="/#{imagesBase}/favicon.ico", type="image/x-icon")
     //-<!-- For third-generation iPad with high-resolution Retina display: -->
-    link(rel="apple-touch-icon-precomposed", sizes="144x144", href="#{imagesBase}/apple-touch-icon-144x144.png")
+    link(rel="apple-touch-icon-precomposed", sizes="144x144", href="/#{imagesBase}/apple-touch-icon-144x144.png")
     //-<!-- For iPhone with high-resolution Retina display: -->
-    link(rel="apple-touch-icon-precomposed", sizes="114x114", href="#{imagesBase}/apple-touch-icon-114x114.png")
+    link(rel="apple-touch-icon-precomposed", sizes="114x114", href="/#{imagesBase}/apple-touch-icon-114x114.png")
     //-<!-- For first- and second-generation iPad: -->
-    link( rel="apple-touch-icon-precomposed", sizes="72x72", href="#{imagesBase}/apple-touch-icon-72x72.png")
+    link( rel="apple-touch-icon-precomposed", sizes="72x72", href="/#{imagesBase}/apple-touch-icon-72x72.png")
     //-<!-- For non-Retina iPhone, iPod Touch, and Android 2.1+ devices: -->
-    link(rel="apple-touch-icon-precomposed", href="#{imagesBase}/apple-touch-icon-57x57.png")
+    link(rel="apple-touch-icon-precomposed", href="/#{imagesBase}/apple-touch-icon-57x57.png")
     meta(name="viewport", content="width=device-width, initial-scale=1")
-    meta(property="og:image", content="#{imagesBase}/opengraph-image.png")
+    meta(property="og:image", content="/#{imagesBase}/opengraph-image.png")
     block headerScripts
   body(class="#{bodyClass}")
     span#cross-gov-ga-tracker-id.hidden
@@ -43,7 +43,7 @@ html(lang="en")
         .header-global
           .header-logo
             a#logo.content(href="https://www.gov.uk/", title="Go to the GOV.UK homepage")
-              img(src="#{imagesBase}/gov.uk_logotype_crown.png")
+              img(src="/#{imagesBase}/gov.uk_logotype_crown.png")
               | GOV.UK
 
     #global-cookie-message
@@ -80,7 +80,7 @@ html(lang="en")
           if isUserAuthenticated
             p
               form(method="POST", action="/test-rp/logout")
-                input(class="button color-cancel")#logout.back(type="submit", value="Logout")
+                input(class="button color-cancel", type="submit", value="Logout")#logout.back
 
     footer#footer.group.js-footer(role="contentinfo")
       .footer-wrapper
@@ -102,7 +102,7 @@ html(lang="en")
             .open-government-licence
               h2
                 a(href="http://www.nationalarchives.gov.uk/doc/open-government-licence/version/2")
-                  img(src="#{imagesBase}/open-government-licence_2x.png", alt="OGL")
+                  img(src="/#{imagesBase}/open-government-licence_2x.png", alt="OGL")
               p All content is available under the <a href="http://www.nationalarchives.gov.uk/doc/open-government-licence/version/2">Open Government Licence v2.0</a>, except where otherwise stated
           .copyright
             a(href="http://www.nationalarchives.gov.uk/information-management/our-services/crown-copyright.htm")&copy; Crown Copyright

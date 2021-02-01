@@ -4,14 +4,14 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.dropwizard.Configuration;
 import io.dropwizard.client.JerseyClientConfiguration;
-import uk.gov.ida.cache.AssetCacheConfiguration;
-import uk.gov.ida.common.ServiceInfoConfiguration;
-import uk.gov.ida.common.shared.configuration.DeserializablePublicKeyConfiguration;
-import uk.gov.ida.common.shared.configuration.PrivateKeyConfiguration;
-import uk.gov.ida.configuration.ServiceNameConfiguration;
-import uk.gov.ida.restclient.RestfulClientConfiguration;
-import uk.gov.ida.rp.testrp.saml.configuration.SamlConfiguration;
-import uk.gov.ida.saml.metadata.TrustStoreConfiguration;
+import stubidp.saml.metadata.TrustStoreConfiguration;
+import stubidp.utils.rest.cache.AssetCacheConfiguration;
+import stubidp.utils.rest.common.ServiceInfoConfiguration;
+import stubidp.utils.rest.configuration.ServiceNameConfiguration;
+import stubidp.utils.rest.restclient.RestfulClientConfiguration;
+import stubidp.utils.security.configuration.DeserializablePublicKeyConfiguration;
+import stubidp.utils.security.configuration.PrivateKeyConfiguration;
+import uk.gov.ida.rp.testrp.saml.configuration.SamlConfigurationImpl;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
@@ -83,7 +83,7 @@ public class TestRpConfiguration extends Configuration implements AssetCacheConf
     @NotNull
     @JsonProperty
     @Valid
-    protected SamlConfiguration saml;
+    protected SamlConfigurationImpl saml;
 
     @NotNull
     @JsonProperty
@@ -136,7 +136,6 @@ public class TestRpConfiguration extends Configuration implements AssetCacheConf
     @JsonProperty
     protected String crossGovGaTrackerId = "";
 
-
     protected TestRpConfiguration() {}
 
     public String getHubEntityId() {
@@ -188,7 +187,7 @@ public class TestRpConfiguration extends Configuration implements AssetCacheConf
         return msaEntityId;
     }
 
-    public SamlConfiguration getSamlConfiguration() {
+    public SamlConfigurationImpl getSamlConfiguration() {
         return saml;
     }
 

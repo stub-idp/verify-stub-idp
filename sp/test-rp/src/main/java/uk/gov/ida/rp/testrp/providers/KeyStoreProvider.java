@@ -1,9 +1,9 @@
 package uk.gov.ida.rp.testrp.providers;
 
-import com.google.inject.Inject;
-import com.google.inject.Provider;
-import uk.gov.ida.saml.metadata.TrustStoreConfiguration;
+import stubidp.saml.metadata.TrustStoreConfiguration;
 
+import javax.inject.Inject;
+import javax.inject.Provider;
 import java.security.KeyStore;
 
 public class KeyStoreProvider implements Provider<KeyStore> {

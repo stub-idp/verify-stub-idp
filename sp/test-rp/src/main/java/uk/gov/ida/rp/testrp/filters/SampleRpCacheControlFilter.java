@@ -1,7 +1,7 @@
 package uk.gov.ida.rp.testrp.filters;
 
-import uk.gov.ida.cache.AssetCacheConfiguration;
-import uk.gov.ida.cache.CacheControlFilter;
+import stubidp.utils.rest.cache.AssetCacheConfiguration;
+import stubidp.utils.rest.cache.CacheControlFilter;
 
 import javax.inject.Inject;
 

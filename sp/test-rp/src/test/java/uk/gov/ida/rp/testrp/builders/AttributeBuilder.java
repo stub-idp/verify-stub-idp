@@ -2,10 +2,9 @@ package uk.gov.ida.rp.testrp.builders;
 
 import org.opensaml.saml.saml2.core.Attribute;
 import org.opensaml.saml.saml2.core.impl.AttributeImpl;
-import uk.gov.ida.saml.core.extensions.Line;
-import uk.gov.ida.saml.core.extensions.impl.AddressImpl;
-import uk.gov.ida.saml.core.extensions.impl.LineImpl;
-import uk.gov.ida.saml.core.extensions.impl.PersonNameImpl;
+import stubidp.saml.extensions.extensions.impl.AddressImpl;
+import stubidp.saml.extensions.extensions.impl.LineImpl;
+import stubidp.saml.extensions.extensions.impl.PersonNameImpl;
 
 import java.util.List;
 

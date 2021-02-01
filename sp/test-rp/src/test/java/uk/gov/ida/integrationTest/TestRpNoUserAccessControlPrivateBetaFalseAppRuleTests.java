@@ -4,13 +4,14 @@ import io.dropwizard.client.JerseyClientBuilder;
 import io.dropwizard.client.JerseyClientConfiguration;
 import io.dropwizard.testing.ConfigOverride;
 import io.dropwizard.testing.ResourceHelpers;
+import io.dropwizard.testing.junit5.DropwizardExtensionsSupport;
 import io.dropwizard.util.Duration;
-import org.junit.BeforeClass;
-import org.junit.ClassRule;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import stubidp.utils.rest.jerseyclient.JerseyClientConfigurationBuilder;
 import uk.gov.ida.integrationTest.support.IntegrationTestHelper;
 import uk.gov.ida.integrationTest.support.TestRpAppRule;
-import uk.gov.ida.jerseyclient.JerseyClientConfigurationBuilder;
 import uk.gov.ida.rp.testrp.Urls;
 
 import javax.ws.rs.client.Client;
@@ -20,18 +21,18 @@ import java.net.URI;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+@ExtendWith(DropwizardExtensionsSupport.class)
 public class TestRpNoUserAccessControlPrivateBetaFalseAppRuleTests extends IntegrationTestHelper {
 
     private static Client client;
 
     private static final String AUTHORIZED_TOKEN_VALUE = "foovalue";
 
-    @ClassRule
     public static TestRpAppRule testRp = TestRpAppRule.newTestRpAppRule(
             ConfigOverride.config("clientTrustStoreConfiguration.path", ResourceHelpers.resourceFilePath("ida_truststore.ts"))
     );
 
-    @BeforeClass
+    @BeforeAll
     public static void beforeClass() {
         JerseyClientConfiguration jerseyClientConfiguration = JerseyClientConfigurationBuilder.aJerseyClientConfiguration().withTimeout(Duration.seconds(20)).build();
         client = new JerseyClientBuilder(testRp.getEnvironment()).using(jerseyClientConfiguration).build(TestRpNoUserAccessControlPrivateBetaFalseAppRuleTests.class.getSimpleName());

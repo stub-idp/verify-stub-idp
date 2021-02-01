@@ -1,6 +1,6 @@
 package uk.gov.ida.rp.testrp.saml.locators;
 
-import uk.gov.ida.saml.security.EntityToEncryptForLocator;
+import stubidp.saml.security.EntityToEncryptForLocator;
 
 import javax.inject.Inject;
 import javax.inject.Named;

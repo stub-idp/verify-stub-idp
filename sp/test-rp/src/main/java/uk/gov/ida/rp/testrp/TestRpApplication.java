@@ -1,11 +1,7 @@
 package uk.gov.ida.rp.testrp;
 
 import com.fasterxml.jackson.databind.util.StdDateFormat;
-import com.google.common.base.Throwables;
-import com.google.common.collect.ImmutableMap;
-import com.hubspot.dropwizard.guicier.DropwizardModule;
-import com.hubspot.dropwizard.guicier.GuiceBundle;
-import com.squarespace.jersey2.guice.JerseyGuiceUtils;
+import freemarker.template.Configuration;
 import io.dropwizard.Application;
 import io.dropwizard.assets.AssetsBundle;
 import io.dropwizard.configuration.EnvironmentVariableSubstitutor;
@@ -14,10 +10,13 @@ import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
 import io.dropwizard.views.ViewBundle;
 import io.dropwizard.views.freemarker.FreemarkerViewRenderer;
-import uk.gov.ida.bundles.LoggingBundle;
-import uk.gov.ida.bundles.MonitoringBundle;
-import uk.gov.ida.bundles.ServiceStatusBundle;
-import uk.gov.ida.filters.AcceptLanguageFilter;
+import stubidp.saml.extensions.IdaSamlBootstrap;
+import stubidp.saml.metadata.MetadataHealthCheck;
+import stubidp.saml.metadata.MetadataRefreshTask;
+import stubidp.utils.rest.bundles.LoggingBundle;
+import stubidp.utils.rest.bundles.MonitoringBundle;
+import stubidp.utils.rest.bundles.ServiceStatusBundle;
+import stubidp.utils.rest.filters.AcceptLanguageFilter;
 import uk.gov.ida.rp.testrp.authentication.TestRpAuthProvider;
 import uk.gov.ida.rp.testrp.exceptions.InvalidAccessTokenExceptionMapper;
 import uk.gov.ida.rp.testrp.exceptions.TokenServiceUnavailableExceptionMapper;
@@ -30,8 +29,6 @@ import uk.gov.ida.rp.testrp.resources.HeadlessRpResource;
 import uk.gov.ida.rp.testrp.resources.LocalMatchingServiceResource;
 import uk.gov.ida.rp.testrp.resources.TestRpResource;
 import uk.gov.ida.rp.testrp.resources.TokenResource;
-import uk.gov.ida.saml.core.IdaSamlBootstrap;
-import uk.gov.ida.saml.metadata.MetadataHealthCheck;
 
 import javax.servlet.DispatcherType;
 import javax.servlet.FilterRegistration;
@@ -40,12 +37,7 @@ import java.util.Map;
 
 public class TestRpApplication extends Application<TestRpConfiguration> {
 
-    private GuiceBundle<TestRpConfiguration> guiceBundle;
-
     public static void main(String[] args) {
-        // running this method here stops the odd exceptions/double-initialisation that happens without it
-        // - it's the same fix that was required in the tests...
-        JerseyGuiceUtils.reset();
 
         try {
             if (args == null || args.length == 0) {
@@ -60,7 +52,7 @@ public class TestRpApplication extends Application<TestRpConfiguration> {
                 new TestRpApplication().run(args);
             }
         } catch (Exception e) {
-            throw Throwables.propagate(e);
+            throw new RuntimeException(e);
         }
     }
 
@@ -74,28 +66,19 @@ public class TestRpApplication extends Application<TestRpConfiguration> {
                         )
                 );
 
-        guiceBundle = GuiceBundle
-                .defaultBuilder(getConfigurationClass())
-                .modules(
-                        new DropwizardModule(),
-                        new TestRpModule()
-                )
-                .build();
-        bootstrap.addBundle(guiceBundle);
-
-        bootstrap.addBundle(new ServiceStatusBundle());
+        bootstrap.addBundle(new ServiceStatusBundle<>());
         bootstrap.addBundle(new MonitoringBundle());
-        bootstrap.addBundle(new ViewBundle<TestRpConfiguration>() {
+        bootstrap.addBundle(new ViewBundle<>() {
             @Override
             public Map<String, Map<String, String>> getViewConfiguration(TestRpConfiguration config) {
                 // beware: this is to force enable escaping of unsanitised user input
-                return ImmutableMap.of(new FreemarkerViewRenderer().getConfigurationKey(),
-                        ImmutableMap.of(
+                return Map.of(new FreemarkerViewRenderer(Configuration.DEFAULT_INCOMPATIBLE_IMPROVEMENTS).getConfigurationKey(),
+                        Map.of(
                                 "output_format", "HTMLOutputFormat"
                         ));
             }
         });
-        bootstrap.addBundle(new LoggingBundle());
+        bootstrap.addBundle(new LoggingBundle<>());
         bootstrap.addBundle(new AssetsBundle("/assets/", "/assets/"));
         bootstrap.setConfigurationSourceProvider(new SubstitutingSourceProvider(bootstrap.getConfigurationSourceProvider(), new EnvironmentVariableSubstitutor(false)));
 
@@ -114,7 +97,10 @@ public class TestRpApplication extends Application<TestRpConfiguration> {
         cacheControlFilter.addMappingForUrlPatterns(EnumSet.allOf(DispatcherType.class), true, "/test-rp", "/headless-rp");
         environment.servlets().addFilter("Remove Accept-Language headers", AcceptLanguageFilter.class).addMappingForUrlPatterns(EnumSet.allOf(DispatcherType.class), true, "/*");
 
+        final TestRpBinder binder = new TestRpBinder(configuration, environment);
+        environment.jersey().register(binder);
         environment.jersey().register(TestRpAuthProvider.createBinder());
+        environment.admin().addTask(new MetadataRefreshTask(binder.getMetadataResolver()));
 
         environment.getObjectMapper().setDateFormat(new StdDateFormat());
 
@@ -135,7 +121,7 @@ public class TestRpApplication extends Application<TestRpConfiguration> {
         environment.jersey().register(SecurityHeadersFilter.class);
 
         //health checks
-        environment.healthChecks().register("metadata", guiceBundle.getInjector().getInstance(MetadataHealthCheck.class));
+        environment.healthChecks().register("metadata", new MetadataHealthCheck(binder.getMetadataResolver(), "msa-metadata", configuration.getMsaEntityId()));
     }
 
 }

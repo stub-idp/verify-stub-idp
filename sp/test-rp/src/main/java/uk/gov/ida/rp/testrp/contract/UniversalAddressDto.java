@@ -1,17 +1,14 @@
 package uk.gov.ida.rp.testrp.contract;
 
 import com.fasterxml.jackson.annotation.JsonAlias;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import org.apache.commons.lang.builder.EqualsBuilder;
-import org.apache.commons.lang.builder.HashCodeBuilder;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import org.joda.time.DateTime;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
-@JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
-@JsonDeserialize()
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class UniversalAddressDto {
     private boolean verified;
 
@@ -77,12 +74,15 @@ public class UniversalAddressDto {
 
     @Override
     public boolean equals(Object o) {
-        return EqualsBuilder.reflectionEquals(this, o);
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        UniversalAddressDto that = (UniversalAddressDto) o;
+        return verified == that.verified && Objects.equals(from, that.from) && Objects.equals(to, that.to) && Objects.equals(postCode, that.postCode) && Objects.equals(lines, that.lines) && Objects.equals(internationalPostCode, that.internationalPostCode) && Objects.equals(uprn, that.uprn);
     }
 
     @Override
     public int hashCode() {
-        return HashCodeBuilder.reflectionHashCode(this);
+        return Objects.hash(verified, from, to, postCode, lines, internationalPostCode, uprn);
     }
 
     @Override

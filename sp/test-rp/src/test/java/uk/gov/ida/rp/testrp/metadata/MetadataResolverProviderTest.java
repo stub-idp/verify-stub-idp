@@ -1,17 +1,14 @@
 package uk.gov.ida.rp.testrp.metadata;
 
-import com.google.common.base.Throwables;
-import com.squarespace.jersey2.guice.JerseyGuiceUtils;
 import net.shibboleth.utilities.java.support.resolver.CriteriaSet;
 import org.apache.commons.io.FileUtils;
 import org.apache.http.conn.ssl.NoopHostnameVerifier;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.opensaml.core.criterion.EntityIdCriterion;
 import org.opensaml.saml.saml2.metadata.EntityDescriptor;
 import uk.gov.ida.rp.testrp.MsaStubRule;
@@ -25,19 +22,15 @@ import java.net.URI;
 import java.security.KeyStore;
 
 import static junit.framework.TestCase.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.when;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class MetadataResolverProviderTest {
-
-    @BeforeClass
-    public static void doALittleHackToMakeGuicierHappyForSomeReason() {
-        JerseyGuiceUtils.reset();
-    }
 
     public static MsaStubRule msaStubRule = new MsaStubRule("metadata.xml");
 
-    @AfterClass
+    @AfterAll
     public static void tearDown() {
         msaStubRule.stop();
     }
@@ -47,7 +40,7 @@ public class MetadataResolverProviderTest {
 
     private static Client client = ClientBuilder.newBuilder().hostnameVerifier(new NoopHostnameVerifier()).trustStore(createKeyStore()).build();
 
-    @Before
+    @BeforeEach
     public void setUp() {
         System.setProperty("https.protocols", "TLSv1.2");
     }
@@ -71,14 +64,14 @@ public class MetadataResolverProviderTest {
         assertCanQueryMetadata(provider);
     }
 
-    @Test(expected = InsecureMetadataException.class)
+    @Test
     public void shouldThrowExceptionWhenPerformingHttpRequestWhenInsecureMetadataFlagIsFalse() {
         when(configuration.getMsaMetadataUri()).thenReturn(URI.create("http://localhost:"+msaStubRule.getPort()+"/metadata"));
         when(configuration.getAllowInsecureMetadataLocation()).thenReturn(false);
 
         MetadataResolverProvider provider = new MetadataResolverProvider(client, configuration);
 
-        provider.get();
+        assertThrows(InsecureMetadataException.class, provider::get);
     }
 
     @Test
@@ -104,7 +97,7 @@ public class MetadataResolverProviderTest {
             ks = KeyStore.getInstance("JKS");
             ks.load(FileUtils.openInputStream(new File("test_keys/dev_service_ssl.ks")), "marshmallow".toCharArray());
         } catch (Exception e) {
-            Throwables.propagate(e);
+            throw new RuntimeException(e);
         }
         return ks;
     }

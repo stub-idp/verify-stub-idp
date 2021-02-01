@@ -1,14 +1,12 @@
 package uk.gov.ida.rp.testrp.controllogic;
 
-import com.squarespace.jersey2.guice.JerseyGuiceUtils;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
-import uk.gov.ida.common.SessionId;
+import org.mockito.junit.jupiter.MockitoExtension;
+import stubidp.utils.rest.common.SessionId;
 import uk.gov.ida.rp.testrp.contract.Cycle3DatasetDto;
 import uk.gov.ida.rp.testrp.contract.LevelOfAssuranceDto;
 import uk.gov.ida.rp.testrp.builders.UniversalMatchingDatasetDtoBuilder;
@@ -38,20 +36,15 @@ import static uk.gov.ida.rp.testrp.builders.UniversalMatchingDatasetDtoBuilder.a
 import static uk.gov.ida.rp.testrp.contract.MatchingServiceResponseDto.MATCH;
 import static uk.gov.ida.rp.testrp.contract.MatchingServiceResponseDto.NO_MATCH;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class TestRpMatchingServiceRequestHandlerTest {
-
-    @BeforeClass
-    public static void doALittleHackToMakeGuicierHappyForSomeReason() {
-        JerseyGuiceUtils.reset();
-    }
 
     @Mock
     private SessionRepository sessionRepository = mock(SessionRepository.class);
 
     private MatchingServiceRequestHandler matchingServiceRequestHandler;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         matchingServiceRequestHandler = new MatchingServiceRequestHandler(sessionRepository);
     }

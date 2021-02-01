@@ -1,13 +1,19 @@
 package uk.gov.ida.rp.testrp.domain;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class AccessToken {
     @JsonProperty
     private final String tokenValue;
 
-    public AccessToken(final String tokenValue) {
+    @JsonCreator
+    public AccessToken(@JsonProperty("tokenValue") String tokenValue) {
         this.tokenValue = tokenValue;
+    }
+
+    public String getTokenValue() {
+        return tokenValue;
     }
 
     @Override

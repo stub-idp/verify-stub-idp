@@ -1,13 +1,13 @@
 package uk.gov.ida.rp.testrp.builders;
 
-import uk.gov.ida.saml.core.domain.AuthnContext;
-import uk.gov.ida.saml.core.domain.FraudDetectedDetails;
-import uk.gov.ida.saml.core.domain.PassthroughAssertion;
-import uk.gov.ida.saml.core.domain.PersistentId;
+import stubidp.saml.domain.assertions.AuthnContext;
+import stubidp.saml.domain.assertions.FraudDetectedDetails;
+import stubidp.saml.domain.assertions.PassthroughAssertion;
+import stubidp.saml.domain.assertions.PersistentId;
 
 import java.util.Optional;
 
-import static uk.gov.ida.saml.core.test.builders.PersistentIdBuilder.aPersistentId;
+import static stubidp.saml.test.builders.PersistentIdBuilder.aPersistentId;
 
 public class PassthroughAssertionBuilder {
 

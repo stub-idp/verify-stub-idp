@@ -44,21 +44,26 @@ serviceInfo:
   name: test-rp
 
 privateSigningKeyConfiguration:
-  keyFile: override_this_signing.pk8
+  type: file
+  key: override_this_signing.pk8
 
 publicSigningCert:
-  certFile: override_this_signing.crt
+  type: file
+  cert: override_this_signing.crt
   name: someId
 
 privateEncryptionKeyConfiguration:
-  keyFile: override_this_encryption.pk8
+  type: file
+  key: override_this_encryption.pk8
 
 publicEncryptionCert:
-  certFile: override_this_encryption.crt
+  type: file
+  cert: override_this_encryption.crt
   name: someId
 
 clientTrustStoreConfiguration:
-  storeUri: client_truststore.ts
+  type: file
+  store: client_truststore.ts
   password: marshmallow
 
 javascriptPath: /assets/javascripts

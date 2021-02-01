@@ -3,10 +3,10 @@ package uk.gov.ida.rp.testrp.authentication;
 import com.google.common.base.Strings;
 import io.dropwizard.auth.AuthenticationException;
 import org.apache.commons.lang3.EnumUtils;
-import org.glassfish.jersey.server.internal.inject.AbstractContainerRequestValueFactory;
+import org.glassfish.jersey.server.ContainerRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import uk.gov.ida.common.SessionId;
+import stubidp.utils.rest.common.SessionId;
 import uk.gov.ida.rp.testrp.TestRpConfiguration;
 import uk.gov.ida.rp.testrp.controllogic.AuthnRequestSenderHandler;
 import uk.gov.ida.rp.testrp.domain.AccessToken;
@@ -15,9 +15,6 @@ import uk.gov.ida.rp.testrp.repositories.Session;
 import uk.gov.ida.rp.testrp.tokenservice.TokenService;
 
 import javax.ws.rs.WebApplicationException;
-import javax.ws.rs.container.ContainerRequestContext;
-import javax.ws.rs.container.ResourceContext;
-import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Cookie;
 import javax.ws.rs.core.Response;
 import java.util.Map;
@@ -31,7 +28,7 @@ import static uk.gov.ida.rp.testrp.Urls.Params.NO_MATCH;
 import static uk.gov.ida.rp.testrp.Urls.Params.RP_NAME_PARAM;
 import static uk.gov.ida.rp.testrp.tokenservice.AccessTokenCookieName.ACCESS_TOKEN_COOKIE_NAME;
 
-public class SessionFactory extends AbstractContainerRequestValueFactory<Session> {
+public class SessionFactory {
 
     private static final Logger LOG = LoggerFactory.getLogger(SessionFactory.class);
 
@@ -39,27 +36,25 @@ public class SessionFactory extends AbstractContainerRequestValueFactory<Session
     private final SimpleAuthenticator authenticator;
     private final AuthnRequestSenderHandler authnRequestManager;
     private final String rpName;
-
-    @Context
-    protected ResourceContext context = null;
-    private TokenService tokenService;
+    private final TokenService tokenService;
+    private final ContainerRequest containerRequest;
 
     public SessionFactory(
             SimpleAuthenticator authenticator,
             TestRpConfiguration configuration,
             AuthnRequestSenderHandler authnRequestManager,
-            TokenService tokenService) {
+            TokenService tokenService,
+            ContainerRequest containerRequest) {
         this.authenticator = authenticator;
         this.configuration = configuration;
         this.authnRequestManager = authnRequestManager;
         this.tokenService = tokenService;
+        this.containerRequest = containerRequest;
         this.rpName = "test-rp";
     }
 
-    @Override
     public Session provide() {
         Optional<AccessToken> accessToken = Optional.empty();
-        final ContainerRequestContext containerRequest = context.getResource(ContainerRequestContext.class);
         Map<String, Cookie> cookieNameValueMap = containerRequest.getCookies();
         if (cookieNameValueMap != null && cookieNameValueMap.containsKey(ACCESS_TOKEN_COOKIE_NAME)) {
             accessToken = Optional.of(new AccessToken(cookieNameValueMap.get(ACCESS_TOKEN_COOKIE_NAME).getValue()));
@@ -100,12 +95,12 @@ public class SessionFactory extends AbstractContainerRequestValueFactory<Session
     }
 
     private Optional<String> getQueryParam(String queryParam) {
-        String value = context.getResource(ContainerRequestContext.class).getUriInfo().getQueryParameters().getFirst(queryParam);
+        String value = containerRequest.getUriInfo().getQueryParameters().getFirst(queryParam);
         return Strings.isNullOrEmpty(value) ? Optional.empty() : Optional.of(value);
     }
 
     private boolean containsQueryParam(String queryParam) {
-        return context.getResource(ContainerRequestContext.class).getUriInfo().getQueryParameters().containsKey(queryParam);
+        return containerRequest.getUriInfo().getQueryParameters().containsKey(queryParam);
     }
 
     public Session getUser(
@@ -115,8 +110,6 @@ public class SessionFactory extends AbstractContainerRequestValueFactory<Session
             boolean forceAuthentication,
             boolean forceLMSNoMatch,
             boolean forceLMSUserAccountCreationFail) {
-
-        final ContainerRequestContext containerRequest = context.getResource(ContainerRequestContext.class);
 
         try {
             Map<String, Cookie> cookieNameValueMap = containerRequest.getCookies();

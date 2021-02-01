@@ -1,13 +1,13 @@
 package uk.gov.ida.saml.idp.stub.domain;
 
-import org.joda.time.DateTime;
 import org.opensaml.saml.saml2.core.Attribute;
-import uk.gov.ida.saml.core.domain.AuthnContext;
-import uk.gov.ida.saml.core.domain.IdaSamlResponse;
-import uk.gov.ida.saml.core.domain.PersistentId;
-import uk.gov.ida.saml.core.domain.TransactionIdaStatus;
+import stubidp.saml.domain.assertions.AuthnContext;
+import stubidp.saml.domain.assertions.PersistentId;
+import stubidp.saml.domain.assertions.TransactionIdaStatus;
+import stubidp.saml.domain.response.IdaSamlResponse;
 
 import java.net.URI;
+import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
 
@@ -18,7 +18,7 @@ public class InboundResponseFromHub extends IdaSamlResponse {
     private final Optional<AuthnContext> authnContext;
 
     public InboundResponseFromHub(String responseId,
-                                  DateTime issueInstant,
+                                  Instant issueInstant,
                                   String inResponseTo,
                                   String issuer,
                                   URI destination,

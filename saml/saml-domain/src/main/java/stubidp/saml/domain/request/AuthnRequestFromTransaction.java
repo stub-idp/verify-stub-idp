@@ -2,6 +2,7 @@ package stubidp.saml.domain.request;
 
 import org.opensaml.xmlsec.signature.Signature;
 import stubidp.saml.domain.IdaSamlMessage;
+import stubidp.saml.support.IdGenerator;
 
 import java.net.URI;
 import java.time.Instant;
@@ -34,20 +35,39 @@ public class AuthnRequestFromTransaction extends IdaSamlMessage {
     }
 
     public static AuthnRequestFromTransaction createRequestReceivedFromTransaction(
-        String id,
-        String issuerId,
-        Instant issueInstant,
-        boolean forceAuthentication,
-        Optional<URI> assertionConsumerServiceUrl,
-        Optional<Integer> assertionConsumerServiceIndex,
-        Optional<Signature> signature,
-        URI destination) {
+            String id,
+            String issuerId,
+            Instant issueInstant,
+            boolean forceAuthentication,
+            Optional<URI> assertionConsumerServiceUrl,
+            Optional<Integer> assertionConsumerServiceIndex,
+            Optional<Signature> signature,
+            URI destination) {
 
         return new AuthnRequestFromTransaction(
                 id,
                 issuerId,
                 issueInstant,
                 Optional.of(forceAuthentication),
+                assertionConsumerServiceUrl,
+                assertionConsumerServiceIndex,
+                signature,
+                destination);
+    }
+
+    public static AuthnRequestFromTransaction createRequestToSendToHub(
+            String issuerId,
+            boolean forceAuthentication,
+            Optional<URI> assertionConsumerServiceUrl,
+            Optional<Integer> assertionConsumerServiceIndex,
+            Optional<Signature> signature,
+            URI destination) {
+
+        return createRequestReceivedFromTransaction(
+                IdGenerator.getId(),
+                issuerId,
+                Instant.now(),
+                forceAuthentication,
                 assertionConsumerServiceUrl,
                 assertionConsumerServiceIndex,
                 signature,

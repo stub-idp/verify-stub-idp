@@ -1,6 +1,5 @@
 package uk.gov.ida.rp.testrp.views;
 
-import com.google.common.base.Charsets;
 import freemarker.cache.NullCacheStorage;
 import freemarker.template.Configuration;
 import freemarker.template.DefaultObjectWrapper;
@@ -13,6 +12,7 @@ import uk.gov.ida.shared.dropwizard.jade.JadeViewRenderer;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
+import java.nio.charset.StandardCharsets;
 import java.util.Locale;
 
 public class NonCachingFreemarkerViewRenderer extends JadeViewRenderer {
@@ -27,12 +27,12 @@ public class NonCachingFreemarkerViewRenderer extends JadeViewRenderer {
                        Locale locale,
                        OutputStream output) throws IOException {
         try {
-            final Configuration configuration = new Configuration();
+            final Configuration configuration = new Configuration(Configuration.DEFAULT_INCOMPATIBLE_IMPROVEMENTS);
             configuration.setClassForTemplateLoading(view.getClass(), "/");
             configuration.setCacheStorage(new NullCacheStorage());
-            configuration.setTemplateUpdateDelay(1);
-            configuration.setObjectWrapper(new DefaultObjectWrapper());
-            configuration.setDefaultEncoding(Charsets.UTF_8.name());
+            configuration.setTemplateUpdateDelayMilliseconds(1000);
+            configuration.setObjectWrapper(new DefaultObjectWrapper(Configuration.DEFAULT_INCOMPATIBLE_IMPROVEMENTS));
+            configuration.setDefaultEncoding(StandardCharsets.UTF_8.name());
             configuration.removeTemplateFromCache(view.getTemplateName(), locale);
             final Template template = configuration.getTemplate(view.getTemplateName(), locale);
             template.process(view, new OutputStreamWriter(output, template.getEncoding()));

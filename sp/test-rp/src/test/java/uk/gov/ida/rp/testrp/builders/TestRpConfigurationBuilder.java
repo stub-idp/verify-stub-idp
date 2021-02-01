@@ -1,25 +1,25 @@
 package uk.gov.ida.rp.testrp.builders;
 
 import io.dropwizard.client.JerseyClientConfiguration;
-import uk.gov.ida.common.ServiceInfoConfiguration;
+import stubidp.saml.metadata.TrustStoreConfiguration;
+import stubidp.utils.rest.common.ServiceInfoConfiguration;
 import uk.gov.ida.rp.testrp.EntityId;
 import uk.gov.ida.rp.testrp.TestRpConfiguration;
-import uk.gov.ida.rp.testrp.saml.configuration.SamlConfiguration;
-import uk.gov.ida.saml.metadata.TrustStoreConfiguration;
+import uk.gov.ida.rp.testrp.saml.configuration.SamlConfigurationImpl;
 
 import static org.mockito.Mockito.mock;
-import static uk.gov.ida.common.ServiceInfoConfigurationBuilder.aServiceInfo;
-import static uk.gov.ida.jerseyclient.JerseyClientConfigurationBuilder.aJerseyClientConfiguration;
+import static stubidp.utils.rest.common.ServiceInfoConfigurationBuilder.aServiceInfo;
+import static stubidp.utils.rest.jerseyclient.JerseyClientConfigurationBuilder.aJerseyClientConfiguration;
 
 public class TestRpConfigurationBuilder {
 
-    public class TestSamlConfiguration extends SamlConfiguration {
-        public TestSamlConfiguration(String issuer) {
+    public class TestSamlConfigurationImpl extends SamlConfigurationImpl {
+        public TestSamlConfigurationImpl(String issuer) {
             this.entityId = issuer;
         }
     }
 
-    private SamlConfiguration samlConfiguration = new TestSamlConfiguration(EntityId.TEST_RP);
+    private SamlConfigurationImpl samlConfiguration = new TestSamlConfigurationImpl(EntityId.TEST_RP);
     private Boolean privateBetaUserAccessRestrictionEnabled = true;
 
     public static TestRpConfigurationBuilder aTestRpConfiguration() {
@@ -54,7 +54,7 @@ public class TestRpConfigurationBuilder {
                 JerseyClientConfiguration httpClient,
                 ServiceInfoConfiguration serviceInfo,
                 TrustStoreConfiguration clientTrustStoreConfiguration,
-                SamlConfiguration saml,
+                SamlConfigurationImpl saml,
                 String cookieName,
                 Boolean dontCacheFreemarkerTemplates,
                 Boolean forceAuthentication,

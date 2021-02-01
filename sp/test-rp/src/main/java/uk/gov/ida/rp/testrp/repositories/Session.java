@@ -1,11 +1,12 @@
 package uk.gov.ida.rp.testrp.repositories;
 
-import uk.gov.ida.common.SessionId;
+import stubidp.utils.rest.common.SessionId;
 import uk.gov.ida.rp.testrp.domain.JourneyHint;
 
 import javax.ws.rs.core.UriBuilder;
 import java.net.URI;
 import java.security.Principal;
+import java.util.Objects;
 import java.util.Optional;
 
 import static uk.gov.ida.rp.testrp.Urls.Params.JOURNEY_HINT_PARAM;
@@ -62,39 +63,29 @@ public class Session implements Principal {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-
         Session session = (Session) o;
-
-        if (forceAuthentication != session.forceAuthentication) return false;
-        if (forceLMSUserAccountCreationFail != session.forceLMSUserAccountCreationFail) return false;
-        if (forceLMSNoMatch != session.forceLMSNoMatch) return false;
-        if (!requestId.equals(session.requestId)) return false;
-        if (!sessionId.equals(session.sessionId)) return false;
-        if (!issuerId.equals(session.issuerId)) return false;
-        if (!assertionConsumerServiceIndex.equals(session.assertionConsumerServiceIndex)) return false;
-        if (!journeyHint.equals(session.journeyHint)) return false;
-        if (!pathUserWasTryingToAccess.equals(session.pathUserWasTryingToAccess)) return false;
-        return matchedHashedPidForSession.equals(session.matchedHashedPidForSession);
+        return forceAuthentication == session.forceAuthentication && forceLMSUserAccountCreationFail == session.forceLMSUserAccountCreationFail && forceLMSNoMatch == session.forceLMSNoMatch && Objects.equals(requestId, session.requestId) && Objects.equals(sessionId, session.sessionId) && Objects.equals(issuerId, session.issuerId) && Objects.equals(assertionConsumerServiceIndex, session.assertionConsumerServiceIndex) && Objects.equals(journeyHint, session.journeyHint) && Objects.equals(pathUserWasTryingToAccess, session.pathUserWasTryingToAccess) && Objects.equals(matchedHashedPidForSession, session.matchedHashedPidForSession);
     }
 
     @Override
     public int hashCode() {
-        int result = requestId.hashCode();
-        result = 31 * result + sessionId.hashCode();
-        result = 31 * result + issuerId.hashCode();
-        result = 31 * result + assertionConsumerServiceIndex.hashCode();
-        result = 31 * result + journeyHint.hashCode();
-        result = 31 * result + (forceAuthentication ? 1 : 0);
-        result = 31 * result + (forceLMSUserAccountCreationFail ? 1 : 0);
-        result = 31 * result + (forceLMSNoMatch ? 1 : 0);
-        result = 31 * result + pathUserWasTryingToAccess.hashCode();
-        result = 31 * result + matchedHashedPidForSession.hashCode();
-        return result;
+        return Objects.hash(requestId, sessionId, issuerId, assertionConsumerServiceIndex, journeyHint, forceAuthentication, forceLMSUserAccountCreationFail, forceLMSNoMatch, pathUserWasTryingToAccess, matchedHashedPidForSession);
     }
 
     @Override
     public String toString() {
-        return null;
+        return "Session{" +
+                "requestId='" + requestId + '\'' +
+                ", sessionId=" + sessionId +
+                ", issuerId='" + issuerId + '\'' +
+                ", assertionConsumerServiceIndex=" + assertionConsumerServiceIndex +
+                ", journeyHint=" + journeyHint +
+                ", forceAuthentication=" + forceAuthentication +
+                ", forceLMSUserAccountCreationFail=" + forceLMSUserAccountCreationFail +
+                ", forceLMSNoMatch=" + forceLMSNoMatch +
+                ", pathUserWasTryingToAccess=" + pathUserWasTryingToAccess +
+                ", matchedHashedPidForSession=" + matchedHashedPidForSession +
+                '}';
     }
 
     @Override

@@ -23,7 +23,7 @@ public class AddressImpl extends XSAnyImpl implements Address {
     private UPRN uprn;
     private boolean verified;
 
-    AddressImpl(String namespaceURI, String localName, String namespacePrefix) {
+    protected AddressImpl(String namespaceURI, String localName, String namespacePrefix) {
         this(namespaceURI, localName, namespacePrefix, Address.TYPE_NAME);
     }
 

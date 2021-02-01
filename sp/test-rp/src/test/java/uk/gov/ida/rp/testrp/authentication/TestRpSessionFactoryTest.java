@@ -1,14 +1,15 @@
 package uk.gov.ida.rp.testrp.authentication;
 
-import com.squarespace.jersey2.guice.JerseyGuiceUtils;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+
+import io.dropwizard.auth.AuthenticationException;
+import org.glassfish.jersey.server.ContainerRequest;
+import org.glassfish.jersey.server.ExtendedUriInfo;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
-import uk.gov.ida.common.SessionId;
+import org.mockito.junit.jupiter.MockitoExtension;
+import stubidp.utils.rest.common.SessionId;
 import uk.gov.ida.rp.testrp.TestRpConfiguration;
 import uk.gov.ida.rp.testrp.controllogic.AuthnRequestSenderHandler;
 import uk.gov.ida.rp.testrp.domain.JourneyHint;
@@ -16,20 +17,18 @@ import uk.gov.ida.rp.testrp.repositories.Session;
 import uk.gov.ida.rp.testrp.tokenservice.TokenService;
 
 import javax.ws.rs.WebApplicationException;
-import javax.ws.rs.container.ContainerRequestContext;
 import javax.ws.rs.container.ResourceContext;
 import javax.ws.rs.core.Cookie;
 import javax.ws.rs.core.MultivaluedHashMap;
 import javax.ws.rs.core.Response;
-import javax.ws.rs.core.UriInfo;
-import java.lang.reflect.Field;
 import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
-import static java.util.Collections.nCopies;
 import static java.util.Collections.singletonList;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyBoolean;
 import static org.mockito.ArgumentMatchers.anyString;
@@ -38,13 +37,8 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static uk.gov.ida.rp.testrp.Urls.Cookies.TEST_RP_SESSION_COOKIE_NAME;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class TestRpSessionFactoryTest {
-
-    @BeforeClass
-    public static void doALittleHackToMakeGuicierHappyForSomeReason() {
-        JerseyGuiceUtils.reset();
-    }
 
     private SessionFactory factory;
 
@@ -64,10 +58,10 @@ public class TestRpSessionFactoryTest {
     private ResourceContext resourceContext;
 
     @Mock
-    private ContainerRequestContext containerRequestContext;
+    private ContainerRequest containerRequest;
 
     @Mock
-    private UriInfo uriInfo;
+    private ExtendedUriInfo uriInfo;
 
     private final Session expectedSession = new Session(
             SessionId.createNewSessionId(),
@@ -80,43 +74,39 @@ public class TestRpSessionFactoryTest {
             false,
             false);
 
-    @Before
+    @BeforeEach
     public void before() throws Exception {
-        // https://github.com/HubSpot/dropwizard-guice/issues/95#issuecomment-274851181
-        JerseyGuiceUtils.reset();
-
-        when(resourceContext.getResource(ContainerRequestContext.class)).thenReturn(containerRequestContext);
-        when(containerRequestContext.getUriInfo()).thenReturn(uriInfo);
-        when(containerRequestContext.getUriInfo().getRequestUri()).thenReturn(new URI("http://uri"));
+        when(containerRequest.getUriInfo()).thenReturn(uriInfo);
         when(uriInfo.getQueryParameters()).thenReturn(new MultivaluedHashMap<>());
 
-        when(authenticator.authenticate(any())).thenReturn(Optional.of(expectedSession));
 
         factory = new SessionFactory(authenticator,
                 configuration,
                 authnRequestManager,
-                tokenService);
-
-        setContextUsingReflection(factory);
+                tokenService,
+                containerRequest);
     }
 
     @Test
-    public void shouldProvideASession() {
+    public void shouldProvideASession() throws AuthenticationException {
         Map<String, Cookie> cookieMap = new HashMap<>();
         Cookie theUserCookieValue = new Cookie(TEST_RP_SESSION_COOKIE_NAME, expectedSession.getSessionId().getSessionId());
         cookieMap.put(TEST_RP_SESSION_COOKIE_NAME, theUserCookieValue);
-        when(containerRequestContext.getCookies()).thenReturn(cookieMap);
+        when(containerRequest.getCookies()).thenReturn(cookieMap);
+        when(authenticator.authenticate(any())).thenReturn(Optional.of(expectedSession));
 
         Session session = factory.provide();
-        Assert.assertEquals(expectedSession, session);
+        assertThat(session).isEqualTo(expectedSession);
     }
 
     @Test
-    public void shouldSendAuthnRequestWithEidasFlagWhenQueryStringContainsEidas() {
+    public void shouldSendAuthnRequestWithEidasFlagWhenQueryStringContainsEidas() throws URISyntaxException {
         MultivaluedHashMap<String, String> queryParams = new MultivaluedHashMap<>();
         queryParams.put("eidas", singletonList("true"));
 
         when(uriInfo.getQueryParameters()).thenReturn(queryParams);
+        when(uriInfo.getRequestUri()).thenReturn(new URI("http://uri"));
+        when(containerRequest.getUriInfo()).thenReturn(uriInfo);
 
         Response response = null;
         try {
@@ -124,7 +114,7 @@ public class TestRpSessionFactoryTest {
         } catch (WebApplicationException wae){
             response = wae.getResponse();
         }
-        Assert.assertNotNull(response);
+        assertThat(response).isNotNull();
 
         verify(authnRequestManager).sendAuthnRequest(any(URI.class),
                 any(),
@@ -137,12 +127,4 @@ public class TestRpSessionFactoryTest {
         );
     }
 
-    /**
-     * use reflection to set context - see http://stackoverflow.com/a/29133704/442256
-     */
-    private void setContextUsingReflection(SessionFactory factory) throws Exception {
-        Field context = SessionFactory.class.getDeclaredField("context");
-        context.setAccessible(true);
-        context.set(factory, resourceContext);
-    }
 }

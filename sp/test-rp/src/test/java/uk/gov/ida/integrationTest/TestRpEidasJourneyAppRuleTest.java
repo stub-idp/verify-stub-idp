@@ -4,13 +4,14 @@ import io.dropwizard.client.JerseyClientBuilder;
 import io.dropwizard.client.JerseyClientConfiguration;
 import io.dropwizard.testing.ConfigOverride;
 import io.dropwizard.testing.ResourceHelpers;
+import io.dropwizard.testing.junit5.DropwizardExtensionsSupport;
 import io.dropwizard.util.Duration;
-import org.junit.BeforeClass;
-import org.junit.ClassRule;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import stubidp.utils.rest.jerseyclient.JerseyClientConfigurationBuilder;
 import uk.gov.ida.integrationTest.support.IntegrationTestHelper;
 import uk.gov.ida.integrationTest.support.TestRpAppRule;
-import uk.gov.ida.jerseyclient.JerseyClientConfigurationBuilder;
 import uk.gov.ida.rp.testrp.Urls;
 
 import javax.ws.rs.client.Client;
@@ -18,19 +19,18 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.net.URI;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.assertj.core.api.Assertions.assertThat;
 
-public class TestRpEidasJourneyAppRuleTest extends IntegrationTestHelper {
+@ExtendWith(DropwizardExtensionsSupport.class)
+class TestRpEidasJourneyAppRuleTest extends IntegrationTestHelper {
     private static Client client;
 
-    @ClassRule
     public static TestRpAppRule testRp = TestRpAppRule.newTestRpAppRule(
         ConfigOverride.config("clientTrustStoreConfiguration.path", ResourceHelpers.resourceFilePath("ida_truststore.ts")),
             ConfigOverride.config("msaMetadataUri", "http://localhost:"+getMsaStubRule().getPort()+"/metadata"),
         ConfigOverride.config("allowInsecureMetadataLocation", "true"));
 
-    @BeforeClass
+    @BeforeAll
     public static void beforeClass() {
         JerseyClientConfiguration jerseyClientConfiguration = JerseyClientConfigurationBuilder.aJerseyClientConfiguration().withTimeout(Duration.seconds(20)).build();
         client = new JerseyClientBuilder(testRp.getEnvironment()).using(jerseyClientConfiguration).build(TestRpResourceAppRuleTests.class.getSimpleName());
@@ -47,7 +47,7 @@ public class TestRpEidasJourneyAppRuleTest extends IntegrationTestHelper {
             .get(Response.class);
 
         String html = response.readEntity(String.class);
-        assertTrue(html.contains("value=\"eidas_sign_in\""));
+        assertThat(html).contains("value=\"eidas_sign_in\"");
     }
 
     @Test
@@ -61,7 +61,7 @@ public class TestRpEidasJourneyAppRuleTest extends IntegrationTestHelper {
 
         String html = response.readEntity(String.class);
 
-        assertTrue(html.contains("value=\"uk_idp_start\""));
+        assertThat(html).contains("value=\"uk_idp_start\"");
     }
 
     @Test
@@ -75,11 +75,11 @@ public class TestRpEidasJourneyAppRuleTest extends IntegrationTestHelper {
 
         String html = response.readEntity(String.class);
 
-        assertFalse(html.contains("value=\"submission_confirmation\""));
-        assertFalse(html.contains("value=\"registration\""));
-        assertFalse(html.contains("value=\"uk_idp_sign_in\""));
-        assertFalse(html.contains("value=\"uk_idp_start\""));
-        assertFalse(html.contains("value=\"eidas_sign_in\""));
-        assertFalse(html.contains("value=\"unspecified\""));
+        assertThat(html).doesNotContain("value=\"submission_confirmation\"");
+        assertThat(html).doesNotContain("value=\"registration\"");
+        assertThat(html).doesNotContain("value=\"uk_idp_sign_in\"");
+        assertThat(html).doesNotContain("value=\"uk_idp_start\"");
+        assertThat(html).doesNotContain("value=\"eidas_sign_in\"");
+        assertThat(html).doesNotContain("value=\"unspecified\"");
     }
 }

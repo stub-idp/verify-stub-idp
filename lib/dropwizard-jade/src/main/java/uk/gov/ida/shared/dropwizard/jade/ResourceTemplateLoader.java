@@ -12,11 +12,12 @@ import static java.text.MessageFormat.format;
 
 public class ResourceTemplateLoader implements TemplateLoader {
 
-    private static final String JADE_SUFFIX = ".jade";
+    private static final String JADE = "jade";
+    private static final String JADE_SUFFIX = "."+JADE;
 
     @Override
     public String getExtension() {
-        return JADE_SUFFIX;
+        return JADE;
     }
 
     @Override

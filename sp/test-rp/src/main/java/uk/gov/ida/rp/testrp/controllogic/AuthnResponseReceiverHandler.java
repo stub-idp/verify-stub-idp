@@ -1,18 +1,17 @@
 package uk.gov.ida.rp.testrp.controllogic;
 
 import com.google.common.base.Joiner;
-import com.google.common.collect.ImmutableList;
 import org.opensaml.core.xml.XMLObject;
 import org.opensaml.saml.saml2.core.Attribute;
-import uk.gov.ida.common.SessionId;
+import stubidp.saml.domain.assertions.TransactionIdaStatus;
+import stubidp.saml.extensions.extensions.StringValueSamlObject;
+import stubidp.saml.extensions.extensions.Verified;
+import stubidp.saml.extensions.extensions.impl.AddressImpl;
+import stubidp.saml.extensions.extensions.impl.VerifiedImpl;
+import stubidp.utils.rest.common.SessionId;
 import uk.gov.ida.rp.testrp.domain.ResponseFromHub;
 import uk.gov.ida.rp.testrp.repositories.Session;
 import uk.gov.ida.rp.testrp.repositories.SessionRepository;
-import uk.gov.ida.saml.core.domain.TransactionIdaStatus;
-import uk.gov.ida.saml.core.extensions.StringValueSamlObject;
-import uk.gov.ida.saml.core.extensions.Verified;
-import uk.gov.ida.saml.core.extensions.impl.AddressImpl;
-import uk.gov.ida.saml.core.extensions.impl.VerifiedImpl;
 import uk.gov.ida.saml.idp.stub.domain.InboundResponseFromHub;
 
 import javax.inject.Inject;
@@ -56,10 +55,10 @@ public class AuthnResponseReceiverHandler {
             }
 
             URI location = session.getPathUserWasTryingToAccess();
-            return new ResponseFromHub(idpResponse.getStatus(), ImmutableList.of(), Optional.ofNullable(location), Optional.ofNullable(session), relayState, idpResponse.getAuthnContext());
+            return new ResponseFromHub(idpResponse.getStatus(), List.of(), Optional.ofNullable(location), Optional.ofNullable(session), relayState, idpResponse.getAuthnContext());
         }
         // not success, not a new user, no relay state
-        return new ResponseFromHub(idpResponse.getStatus(), ImmutableList.of(), Optional.empty(), Optional.empty(), Optional.empty(), Optional.empty());
+        return new ResponseFromHub(idpResponse.getStatus(), List.of(), Optional.empty(), Optional.empty(), Optional.empty(), Optional.empty());
     }
 
     private List<String> getAttributes(InboundResponseFromHub idpResponse) {

@@ -1,6 +1,6 @@
 package uk.gov.ida.rp.testrp.domain;
 
-import uk.gov.ida.saml.core.domain.TransactionIdaStatus;
+import stubidp.saml.domain.assertions.TransactionIdaStatus;
 
 import javax.inject.Inject;
 import java.util.Optional;

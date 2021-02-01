@@ -1,13 +1,12 @@
 package uk.gov.ida.rp.testrp.resources;
 
-import org.apache.http.client.utils.URIBuilder;
-import uk.gov.ida.common.SessionId;
+import stubidp.saml.domain.assertions.TransactionIdaStatus;
+import stubidp.utils.rest.common.SessionId;
 import uk.gov.ida.rp.testrp.TestRpConfiguration;
 import uk.gov.ida.rp.testrp.Urls;
 import uk.gov.ida.rp.testrp.controllogic.AuthnResponseReceiverHandler;
 import uk.gov.ida.rp.testrp.domain.ResponseFromHub;
 import uk.gov.ida.rp.testrp.views.TestRpUserAccountCreatedView;
-import uk.gov.ida.saml.core.domain.TransactionIdaStatus;
 
 import javax.inject.Inject;
 import javax.validation.constraints.NotNull;

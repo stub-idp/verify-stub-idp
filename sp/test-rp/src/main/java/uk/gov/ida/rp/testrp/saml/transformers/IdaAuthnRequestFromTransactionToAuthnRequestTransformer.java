@@ -1,9 +1,9 @@
 package uk.gov.ida.rp.testrp.saml.transformers;
 
 import org.opensaml.saml.saml2.core.AuthnRequest;
-import uk.gov.ida.saml.core.OpenSamlXmlObjectFactory;
-import uk.gov.ida.saml.hub.domain.AuthnRequestFromTransaction;
-import uk.gov.ida.saml.hub.transformers.outbound.IdaAuthnRequestToAuthnRequestTransformer;
+import stubidp.saml.domain.request.AuthnRequestFromTransaction;
+import stubidp.saml.hub.transformers.outbound.IdaAuthnRequestToAuthnRequestTransformer;
+import stubidp.saml.utils.core.OpenSamlXmlObjectFactory;
 
 import javax.inject.Inject;
 

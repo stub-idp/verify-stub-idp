@@ -1,11 +1,11 @@
 package uk.gov.ida.rp.testrp.contract;
 
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import org.apache.commons.lang.builder.EqualsBuilder;
-import org.apache.commons.lang.builder.HashCodeBuilder;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import org.joda.time.DateTime;
 
-@JsonSerialize(include= JsonSerialize.Inclusion.NON_NULL)
+import java.util.Objects;
+
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class SimpleMdsValueDto<T> {
 
     private T value;
@@ -43,12 +43,15 @@ public class SimpleMdsValueDto<T> {
 
     @Override
     public boolean equals(Object o) {
-        return EqualsBuilder.reflectionEquals(this, o);
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        SimpleMdsValueDto<?> that = (SimpleMdsValueDto<?>) o;
+        return verified == that.verified && Objects.equals(value, that.value) && Objects.equals(from, that.from) && Objects.equals(to, that.to);
     }
 
     @Override
     public int hashCode() {
-        return HashCodeBuilder.reflectionHashCode(this);
+        return Objects.hash(value, from, to, verified);
     }
 
     @Override

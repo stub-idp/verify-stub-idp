@@ -1,7 +1,7 @@
 package uk.gov.ida.rp.testrp.views;
 
 import io.dropwizard.views.View;
-import uk.gov.ida.common.SessionId;
+import stubidp.utils.rest.common.SessionId;
 import uk.gov.ida.rp.testrp.domain.JourneyHint;
 
 import java.net.URI;

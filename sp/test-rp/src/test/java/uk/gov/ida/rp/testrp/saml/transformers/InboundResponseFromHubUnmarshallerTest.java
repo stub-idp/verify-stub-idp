@@ -1,36 +1,37 @@
 package uk.gov.ida.rp.testrp.saml.transformers;
 
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.opensaml.saml.saml2.core.Assertion;
 import org.opensaml.saml.saml2.core.Attribute;
 import org.opensaml.saml.saml2.core.Response;
 import org.opensaml.saml.saml2.core.Status;
-import uk.gov.ida.saml.core.domain.PassthroughAssertion;
-import uk.gov.ida.saml.core.domain.TransactionIdaStatus;
-import uk.gov.ida.saml.core.test.OpenSAMLMockitoRunner;
-import uk.gov.ida.saml.hub.transformers.inbound.PassthroughAssertionUnmarshaller;
-import uk.gov.ida.saml.hub.transformers.inbound.TransactionIdaStatusUnmarshaller;
+import stubidp.saml.domain.assertions.PassthroughAssertion;
+import stubidp.saml.domain.assertions.TransactionIdaStatus;
+import stubidp.saml.hub.transformers.inbound.PassthroughAssertionUnmarshaller;
+import stubidp.saml.hub.transformers.inbound.TransactionIdaStatusUnmarshaller;
+import stubidp.saml.security.validators.ValidatedAssertions;
+import stubidp.saml.security.validators.ValidatedResponse;
+import stubidp.saml.test.OpenSAMLRunner;
 import uk.gov.ida.saml.idp.stub.domain.InboundResponseFromHub;
-import uk.gov.ida.saml.security.validators.ValidatedAssertions;
-import uk.gov.ida.saml.security.validators.ValidatedResponse;
 
 import java.util.Collections;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
+import static stubidp.saml.test.builders.AssertionBuilder.anAssertion;
+import static stubidp.saml.test.builders.AttributeStatementBuilder.anAttributeStatement;
+import static stubidp.saml.test.builders.PersistentIdBuilder.aPersistentId;
+import static stubidp.saml.test.builders.PersonNameAttributeBuilder_1_1.aPersonName_1_1;
+import static stubidp.saml.test.builders.ResponseBuilder.aResponse;
 import static uk.gov.ida.rp.testrp.builders.PassthroughAssertionBuilder.aPassthroughAssertion;
-import static uk.gov.ida.saml.core.test.builders.AssertionBuilder.anAssertion;
-import static uk.gov.ida.saml.core.test.builders.AttributeStatementBuilder.anAttributeStatement;
-import static uk.gov.ida.saml.core.test.builders.PersistentIdBuilder.aPersistentId;
-import static uk.gov.ida.saml.core.test.builders.PersonNameAttributeBuilder_1_1.aPersonName_1_1;
-import static uk.gov.ida.saml.core.test.builders.ResponseBuilder.aResponse;
 
-@RunWith(OpenSAMLMockitoRunner.class)
-public class InboundResponseFromHubUnmarshallerTest {
+@ExtendWith(MockitoExtension.class)
+public class InboundResponseFromHubUnmarshallerTest extends OpenSAMLRunner {
 
     @Mock
     private TransactionIdaStatusUnmarshaller statusUnmarshaller;
@@ -39,7 +40,7 @@ public class InboundResponseFromHubUnmarshallerTest {
 
     private InboundResponseFromHubUnmarshaller unmarshaller;
 
-    @Before
+    @BeforeEach
     public void setup() {
         unmarshaller = new InboundResponseFromHubUnmarshaller(statusUnmarshaller, assertionUnmarshaller);
     }

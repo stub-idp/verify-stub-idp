@@ -1,7 +1,7 @@
 package uk.gov.ida.rp.testrp.views;
 
 import com.google.common.net.HttpHeaders;
-import uk.gov.ida.common.SessionId;
+import stubidp.utils.rest.common.SessionId;
 import uk.gov.ida.rp.testrp.TestRpConfiguration;
 import uk.gov.ida.rp.testrp.domain.JourneyHint;
 

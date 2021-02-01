@@ -2,7 +2,7 @@ package uk.gov.ida.rp.testrp.authentication;
 
 import io.dropwizard.auth.AuthenticationException;
 import io.dropwizard.auth.Authenticator;
-import uk.gov.ida.common.SessionId;
+import stubidp.utils.rest.common.SessionId;
 import uk.gov.ida.rp.testrp.repositories.Session;
 import uk.gov.ida.rp.testrp.repositories.SessionRepository;
 

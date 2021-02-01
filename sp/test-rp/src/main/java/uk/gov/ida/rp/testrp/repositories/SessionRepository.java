@@ -1,13 +1,14 @@
 package uk.gov.ida.rp.testrp.repositories;
 
-import com.google.common.cache.Cache;
-import com.google.common.cache.CacheBuilder;
-import uk.gov.ida.common.SessionId;
+import com.github.benmanes.caffeine.cache.Cache;
+import com.github.benmanes.caffeine.cache.Caffeine;
+import stubidp.utils.rest.common.SessionId;
 import uk.gov.ida.rp.testrp.contract.UnknownUserCreationResponseDto;
 import uk.gov.ida.rp.testrp.domain.JourneyHint;
 
 import javax.inject.Inject;
 import javax.inject.Named;
+import javax.inject.Singleton;
 import java.net.URI;
 import java.util.Optional;
 import java.util.concurrent.TimeUnit;
@@ -15,13 +16,14 @@ import java.util.concurrent.TimeUnit;
 import static uk.gov.ida.rp.testrp.contract.UnknownUserCreationResponseDto.FAILURE_RESPONSE;
 import static uk.gov.ida.rp.testrp.contract.UnknownUserCreationResponseDto.SUCCESS_RESPONSE;
 
+@Singleton
 public class SessionRepository {
 
-    private Cache<SessionId, Session> sessions;
+    private final Cache<SessionId, Session> sessions;
 
     @Inject
     public SessionRepository(@Named("sessionCacheTimeoutInMinutes") Integer sessionCacheTimeoutInMinutes) {
-        this.sessions = CacheBuilder.newBuilder()
+        this.sessions = Caffeine.newBuilder()
                 .expireAfterWrite(sessionCacheTimeoutInMinutes, TimeUnit.MINUTES)
                 .build();
     }

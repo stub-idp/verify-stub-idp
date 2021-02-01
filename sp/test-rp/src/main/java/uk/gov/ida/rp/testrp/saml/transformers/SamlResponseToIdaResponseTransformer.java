@@ -4,12 +4,12 @@ import org.opensaml.saml.saml2.core.Assertion;
 import org.opensaml.saml.saml2.core.Response;
 import org.opensaml.saml.saml2.metadata.AttributeAuthorityDescriptor;
 import org.opensaml.saml.saml2.metadata.SPSSODescriptor;
+import stubidp.saml.security.AssertionDecrypter;
+import stubidp.saml.security.SamlAssertionsSignatureValidator;
+import stubidp.saml.security.validators.ValidatedAssertions;
+import stubidp.saml.security.validators.ValidatedResponse;
+import stubidp.saml.security.validators.signature.SamlResponseSignatureValidator;
 import uk.gov.ida.saml.idp.stub.domain.InboundResponseFromHub;
-import uk.gov.ida.saml.security.AssertionDecrypter;
-import uk.gov.ida.saml.security.SamlAssertionsSignatureValidator;
-import uk.gov.ida.saml.security.validators.ValidatedAssertions;
-import uk.gov.ida.saml.security.validators.ValidatedResponse;
-import uk.gov.ida.saml.security.validators.signature.SamlResponseSignatureValidator;
 
 import java.util.List;
 import java.util.function.Function;

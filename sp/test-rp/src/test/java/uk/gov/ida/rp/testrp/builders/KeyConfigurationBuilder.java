@@ -1,7 +1,6 @@
 package uk.gov.ida.rp.testrp.builders;
 
-
-import uk.gov.ida.common.shared.configuration.KeyConfiguration;
+import stubidp.utils.security.configuration.KeyConfiguration;
 
 public class KeyConfigurationBuilder {
 

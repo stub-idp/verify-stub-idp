@@ -1,7 +1,8 @@
 package uk.gov.ida.rp.testrp.resources;
 
 import io.dropwizard.auth.Auth;
-import uk.gov.ida.common.SessionId;
+import stubidp.saml.domain.assertions.TransactionIdaStatus;
+import stubidp.utils.rest.common.SessionId;
 import uk.gov.ida.rp.testrp.TestRpConfiguration;
 import uk.gov.ida.rp.testrp.Urls;
 import uk.gov.ida.rp.testrp.contract.LevelOfAssuranceDto;
@@ -13,7 +14,6 @@ import uk.gov.ida.rp.testrp.repositories.SessionRepository;
 import uk.gov.ida.rp.testrp.tokenservice.TokenService;
 import uk.gov.ida.rp.testrp.views.TestRpLandingPageView;
 import uk.gov.ida.rp.testrp.views.TestRpSuccessPageView;
-import uk.gov.ida.saml.core.domain.TransactionIdaStatus;
 
 import javax.inject.Inject;
 import javax.ws.rs.CookieParam;

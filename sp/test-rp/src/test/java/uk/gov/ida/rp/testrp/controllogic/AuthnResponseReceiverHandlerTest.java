@@ -1,25 +1,25 @@
 package uk.gov.ida.rp.testrp.controllogic;
 
-import com.squarespace.jersey2.guice.JerseyGuiceUtils;
 import org.joda.time.DateTime;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.opensaml.core.config.InitializationException;
 import org.opensaml.saml.saml2.core.Attribute;
-import uk.gov.ida.common.SessionId;
+import stubidp.saml.domain.assertions.AuthnContext;
+import stubidp.saml.domain.assertions.PersistentId;
+import stubidp.saml.domain.assertions.TransactionIdaStatus;
+import stubidp.utils.rest.common.SessionId;
 import uk.gov.ida.rp.testrp.domain.ResponseFromHub;
 import uk.gov.ida.rp.testrp.repositories.Session;
 import uk.gov.ida.rp.testrp.repositories.SessionRepository;
-import uk.gov.ida.saml.core.domain.AuthnContext;
-import uk.gov.ida.saml.core.domain.PersistentId;
-import uk.gov.ida.saml.core.domain.TransactionIdaStatus;
 import uk.gov.ida.saml.idp.stub.domain.InboundResponseFromHub;
 
 import java.net.URI;
+import java.time.Instant;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -31,22 +31,11 @@ import static org.mockito.Mockito.when;
 import static org.opensaml.core.config.InitializationService.initialize;
 import static uk.gov.ida.rp.testrp.builders.AttributeBuilder.anAttribute;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class AuthnResponseReceiverHandlerTest {
 
-    /*
-    This is a workaround until the following fix is made:
-        https://github.com/Squarespace/jersey2-guice/pull/39
-    See here for workaround:
-        https://github.com/dropwizard/dropwizard/issues/1772
-     */
-    static {
-        JerseyGuiceUtils.install((s, serviceLocator) -> null);
-    }
-
-    @BeforeClass
+    @BeforeAll
     public static void beforeClass() throws InitializationException {
-        JerseyGuiceUtils.reset();
         initialize();
     }
 
@@ -74,14 +63,14 @@ public class AuthnResponseReceiverHandlerTest {
 
     private AuthnResponseReceiverHandler authnResponseReceiverHandler;
 
-    @Before
+    @BeforeEach
     public void before() {
         authnResponseReceiverHandler = new AuthnResponseReceiverHandler(sessionRepository, samlResponseDeserialiser);
     }
 
     @Test
     public void testSuccessResponse() {
-        InboundResponseFromHub inboundResponseFromHub = new InboundResponseFromHub(RESPONSE_ID, DateTime.now(), REQUEST_ID, ISSUER, DESTINATION, Optional.empty(), TransactionIdaStatus.Success, Optional.of(new PersistentId("persistentId")), Optional.of(AuthnContext.LEVEL_2));
+        InboundResponseFromHub inboundResponseFromHub = new InboundResponseFromHub(RESPONSE_ID, Instant.now(), REQUEST_ID, ISSUER, DESTINATION, Optional.empty(), TransactionIdaStatus.Success, Optional.of(new PersistentId("persistentId")), Optional.of(AuthnContext.LEVEL_2));
         when(samlResponseDeserialiser.apply(samlResponse)).thenReturn(inboundResponseFromHub);
         when(sessionRepository.getSession(SESSION_ID)).thenReturn(Optional.ofNullable(SESSION));
 
@@ -102,7 +91,7 @@ public class AuthnResponseReceiverHandlerTest {
                 anAttribute().withSurname("obo"),
                 anAttribute().withAddressHistory(Arrays.asList("Aviation House", "Whitechapel building")
         )));
-        InboundResponseFromHub inboundResponseFromHub = new InboundResponseFromHub(RESPONSE_ID, DateTime.now(), REQUEST_ID, ISSUER, DESTINATION, Optional.ofNullable(attributes), TransactionIdaStatus.Success, Optional.of(new PersistentId("persistentId")), Optional.of(AuthnContext.LEVEL_2));
+        InboundResponseFromHub inboundResponseFromHub = new InboundResponseFromHub(RESPONSE_ID, Instant.now(), REQUEST_ID, ISSUER, DESTINATION, Optional.ofNullable(attributes), TransactionIdaStatus.Success, Optional.of(new PersistentId("persistentId")), Optional.of(AuthnContext.LEVEL_2));
         when(samlResponseDeserialiser.apply(samlResponse)).thenReturn(inboundResponseFromHub);
         when(sessionRepository.getSession(SESSION_ID)).thenReturn(Optional.ofNullable(SESSION));
 
@@ -118,7 +107,7 @@ public class AuthnResponseReceiverHandlerTest {
 
     @Test
     public void testNonSuccessResponse() {
-        InboundResponseFromHub inboundResponseFromHub = new InboundResponseFromHub(RESPONSE_ID, DateTime.now(), REQUEST_ID, ISSUER, DESTINATION, Optional.empty(), TransactionIdaStatus.NoAuthenticationContext, Optional.empty(), Optional.empty());
+        InboundResponseFromHub inboundResponseFromHub = new InboundResponseFromHub(RESPONSE_ID, Instant.now(), REQUEST_ID, ISSUER, DESTINATION, Optional.empty(), TransactionIdaStatus.NoAuthenticationContext, Optional.empty(), Optional.empty());
         when(samlResponseDeserialiser.apply(samlResponse)).thenReturn(inboundResponseFromHub);
 
         final ResponseFromHub responseFromHub = authnResponseReceiverHandler.handleResponse(samlResponse, Optional.empty());
