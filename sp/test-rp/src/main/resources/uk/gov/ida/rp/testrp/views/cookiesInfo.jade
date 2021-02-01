@@ -1,0 +1,47 @@
+extends layout/layout
+block vars
+  - pageTitle = "Cookies - Test RP"
+  - bodyClass = "home"
+  - showRelatedContent = true
+block h1
+  | Cookies
+block content
+  article(role="article")
+    .summary
+      p Test RP puts small files (known as 'cookies') onto your computer to collect information about how you browse the site.
+      p Cookies are used to:
+      ul
+        li measure how you use the website so it can be updated and improved based on your needs
+        li remember the notifications you've seen so that we don't show them to you again
+      p Test RP cookies aren't used to identify you personally.
+      p You'll normally see a message on the site before we store a cookie on your computer.
+      p
+        | Find out more about
+        a(href='http://www.aboutcookies.org/', rel='external') how to manage cookies.
+      h2 How cookies are used in the Test RP
+      p A cookie that tracks your beta user invitation code.
+      table
+        thead
+          tr
+            th Name
+            th Purpose
+            th Expires
+        tbody
+          tr
+            td test-rp-session
+            td Maintains your session as you navigate through Test RP.
+            td When you close your browser.
+          tr
+            td token
+            td Stores your beta user invitation code.
+            td When you close your browser.
+          tr
+            td seen_cookie_message
+            td Saves a message to let us know that you have seen our cookie message.
+            td 1 month.
+
+block relatedContent
+    h2 More about identity assurance
+    nav
+        ul(role="navigation")
+            include layout/side_links

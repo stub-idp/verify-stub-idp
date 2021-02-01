@@ -1,0 +1,21 @@
+extends layout/layout
+block vars
+    - pageTitle = "Identity Assurance Test Service - Please Retry - GOV.UK"
+    - bodyClass = "error"
+    - showRelatedContent = true
+block h1
+    | Identity Assurance Test Service
+block content
+    article(role="article")
+        .summary
+            p
+                = "If you continue to have problems then please contact us , at "
+                a(href='mailto:idasupport@digital.cabinet-office.gov.uk') email
+                |.
+            p
+                a(href='http://identityassurance.blog.gov.uk') Read more about the Identity Assurance Service on our blog.
+block relatedContent
+    h2 More about identity assurance
+    nav
+        ul(role="navigation")
+            include layout/side_links

@@ -1,0 +1,94 @@
+server:
+  applicationConnectors:
+    - type: http
+      port: ${TEST_RP_PORT:-50130}
+  adminConnectors:
+    - type: http
+      port: 50131
+
+  requestLog:
+    appenders:
+      - type: console
+      - type: file
+        currentLogFilename: ${LOG_PATH}/debug/test-rp_access.log
+        archivedLogFilenamePattern: ${LOG_PATH}/debug/test-rp_access.log.%d.gz
+        archivedFileCount: 7
+      - type: logstash-file
+        currentLogFilename: ${LOG_PATH}/test-rp_access.log
+        archivedLogFilenamePattern: ${LOG_PATH}/test-rp_access.log.%d.gz
+        archivedFileCount: 7
+      - type: logstash-syslog
+        facility: local2
+        tag: test-rp
+
+dontCacheFreemarkerTemplates: true
+cookieName: test-rp-session
+
+saml:
+  entityId: ${TEST_RP_ENTITY_ID:-http://www.%s.gov.uk/SAML2/MD}
+
+httpClient:
+  timeout: 60s
+  timeToLive: 10m
+  connectionTimeout: 4s
+
+allowInsecureMetadataLocation: true
+msaMetadataUri: ${MSA_METADATA_URL}
+
+msaEntityId: ${MSA_ENTITY_ID:-http://dev-rp-ms.local/SAML2/MD}
+hubEntityId: ${METADATA_ENTITY_ID}
+
+forceAuthentication: false
+
+serviceInfo:
+  name: test-rp
+
+privateEncryptionKeyConfiguration:
+  type: ${KEY_TYPE:-file}
+  key: ${TEST_RP_ENCRYPTION_KEY}
+
+publicEncryptionCert:
+  type: ${CERT_TYPE:-file}
+  cert: ${TEST_RP_ENCRYPTION_CERT}
+  name: test-rp-encryption-cert
+
+privateSigningKeyConfiguration:
+  type: ${KEY_TYPE:-file}
+  key: ${TEST_RP_SIGNING_KEY}
+
+publicSigningCert:
+  type: ${CERT_TYPE:-file}
+  cert: ${TEST_RP_SIGNING_CERT}
+  name: test-rp-signing-cert
+
+clientTrustStoreConfiguration:
+  type: ${TRUSTSTORE_TYPE:-file}
+  store: ${TRUSTSTORE}
+  password: ${TRUSTSTORE_PASSWORD}
+
+logging:
+  level: INFO
+  appenders:
+    - type: console
+    - type: file
+      currentLogFilename: ${LOG_PATH}/debug/test-rp.log
+      archivedLogFilenamePattern: ${LOG_PATH}/debug/test-rp.log.%d.gz
+      archivedFileCount: 7
+      logFormat: '%-5p [%d{ISO8601,UTC}] %c: %X{logPrefix}%m%n%xEx'
+    - type: logstash-file
+      currentLogFilename: ${LOG_PATH}/test-rp.log
+      archivedLogFilenamePattern: ${LOG_PATH}/test-rp.log.%d.gz
+      archivedFileCount: 7
+    - type: logstash-syslog
+      facility: local2
+      tag: test-rp
+
+javascriptPath: /assets/javascripts
+stylesheetsPath: /assets/stylesheets
+imagesPath: /assets/images
+
+privateBetaUserAccessRestrictionEnabled: ${TEST_RP_PRIVATE_BETA_USER_ACCESS_RESTRICTION_ENABLED:-false}
+
+shouldShowStartWithEidasButton: ${TEST_RP_SHOULD_SHOW_START_WITH_EIDAS_BUTTON:-true}
+
+crossGovGaTrackerId: ${CROSS_GOV_GA_TRACKER_ID:-UA-XXXXX-Y}

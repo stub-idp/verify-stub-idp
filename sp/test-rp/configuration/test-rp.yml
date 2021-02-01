@@ -1,0 +1,79 @@
+server:
+  applicationConnectors:
+    - type: http
+      port: ${PORT:-50130}
+  adminConnectors:
+    - type: http
+      port: 50131
+
+  requestLog:
+    type: classic
+    appenders:
+      - type: console
+
+transactionHost: ${TEST_RP_URL}
+dontCacheFreemarkerTemplates: false
+
+cookieName: test-rp-session
+
+saml:
+  entityId: ${TEST_RP_ENTITY_ID:-http://www.%s.gov.uk/SAML2/MD}
+  expectedDestination: ${TEST_RP_URL}
+
+httpClient:
+  timeout: 60s
+  timeToLive: 10m
+  connectionTimeout: 4s
+  tls:
+    protocol: TLSv1.2
+    trustSelfSignedCertificates: true
+    verifyHostname: false
+
+allowInsecureMetadataLocation: true
+
+msaMetadataUri: ${TEST_RP_MSA_METADATA_URL}
+
+msaEntityId: ${MSA_ENTITY_ID:-http://www.test-rp-ms.gov.uk/SAML2/MD}
+hubEntityId: ${METADATA_ENTITY_ID}
+
+forceAuthentication: false
+
+serviceInfo:
+  name: test-rp
+
+privateEncryptionKeyConfiguration:
+  type: encoded
+  key: ${ENCRYPTION_KEY}
+
+publicEncryptionCert:
+  type: encoded
+  cert: ${ENCRYPTION_CERT}
+  name: unusedButCurrentlyRequired
+
+privateSigningKeyConfiguration:
+  type: encoded
+  key: ${SIGNING_KEY}
+
+publicSigningCert:
+  type: encoded
+  cert: ${SIGNING_CERT}
+  name: unusedButCurrentlyRequired
+
+clientTrustStoreConfiguration:
+  path: ${TRUSTSTORE_PATH}
+  password: ${TRUSTSTORE_PASSWORD}
+
+logging:
+  level: INFO
+  appenders:
+    - type: console
+
+javascriptPath: /assets/javascripts
+stylesheetsPath: /assets/stylesheets
+imagesPath: /assets/images
+
+privateBetaUserAccessRestrictionEnabled: ${PRIVATE_BETA_USER_ACCESS_RESTRICTION_ENABLED}
+
+shouldShowStartWithEidasButton: ${SHOULD_SHOW_START_WITH_EIDAS_BUTTON}
+
+crossGovGaTrackerId: ${CROSS_GOV_GA_TRACKER_ID:-UA-XXXXX-Y}

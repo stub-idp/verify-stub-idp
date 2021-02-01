@@ -1,0 +1,29 @@
+extends layout/layout
+
+block vars
+  - pageTitle = "Your identity has been confirmed - GOV.UK"
+  - bodyClass = "success"
+
+block h1
+  | Your identity has been confirmed
+
+block content
+  .application-notice.success-notice
+    p We can tell that it's really you and that your identity has been confirmed.
+  article(role="article")
+    if null != loa
+        p#levelOfAssurance You've reached the end of the test service with a level of assurance #{loa}.
+    p Because this is a test service, we haven't stored any of your information.
+    p However, the identity profile you created is real, and still has your information. In the future, you will be able to use it and sign in to access services on GOV.UK.
+    p You can now close this page.
+
+    form(action='/test-rp/success', method='get')
+        input(type="hidden", value="#{rpName}", name="rp-name")
+        input(type="hidden", value="submission_confirmation", name="journey_hint")
+        input.button.confirm-id(type="submit", value="Confirm Identity")
+
+block relatedContent
+  h2 More about identity assurance
+  nav
+    ul(role="navigation")
+      include layout/side_links

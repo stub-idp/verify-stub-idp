@@ -1,0 +1,17 @@
+extends layout/layout
+
+block vars
+  - pageTitle = "User Account created at TestRp"
+  - bodyClass = "home"
+  - showRelatedContent = false
+
+block h1
+  | Your user account has been created
+
+block content
+    ul
+      each attribute in attributes
+        li=attribute
+
+    p#levelOfAssurance
+      | With a level of assurance #{loa}

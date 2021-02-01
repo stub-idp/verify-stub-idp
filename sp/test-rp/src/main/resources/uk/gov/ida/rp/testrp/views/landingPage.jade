@@ -1,0 +1,85 @@
+extends layout/layout
+
+block vars
+  - pageTitle = "Test GOV.UK Verify user journeys - GOV.UK"
+  - bodyClass = "home"
+  - showRelatedContent = true
+
+block h1
+  | Test GOV.UK Verify user journeys
+
+block content
+  article(role="article")
+    .summary
+      p This service allows you to test different GOV.UK Verify user journeys. Throughout the journey being tested, this service will stand in for a government service that uses GOV.UK Verify.
+    p You can use this service to test the following user journeys: 
+    ul
+      li creating a new identity account with an identity provider
+      li single IDP journey (creating an identity account following a prompt by a specific identity provider)
+      li signing in with an existing identity account
+      li pausing the verification process and continuing it later
+    h2 Before you start
+    p 
+      = "This page represents the start page of a "
+      a(href="https://www.gov.uk/government/publications/introducing-govuk-verify/introducing-govuk-verify#government-services") government service that uses GOV.UK Verify 
+      |  - this is how users start the process of verifying their identity with an identity provider.
+    p This is a test environment - you cannot use this service to create a real identity account.
+    h2 Additional options
+    p Use these options to change the user journey this service will test.
+    p You can use this service to test a journey that:
+    form(action='/test-rp/success', method='get')
+      p
+        input.no-match(type="checkbox", name="no-match")
+        | does not match a user against an existing database (creates an account)
+
+      p
+        input.fail-account-creation(type="checkbox", name="fail-account-creation")
+        | fails to create a user account
+      br
+      p You can also use it to test a journey with a service that:
+      p
+        input#loa1-rp(type="radio", name="rp-name-radio", value="loa1-test-rp")
+        | accepts identities to LOA 1 (by default, this service will test LOA 2 journeys)
+
+      p
+        input#loa2-loa1-rp(type="radio", name="rp-name-radio", value="loa2-loa1-test-rp")
+        | prefers LOA 2 identities but will accept LOA 1
+
+      p
+        input#forceauthn-noc3-rp(type="radio", name="rp-name-radio", value="test-rp-noc3")
+        | uses ForceAuthn and no cycle3
+
+      p
+        input#not-signed-by-hub-rp(type="radio", name="rp-name-radio", value="test-rp-not-signed-by-hub")
+        | uses Simpleflow (Shibboleth), not signed by hub
+
+      p
+        input#non-eidas-rp(type="radio", name="rp-name-radio", value="test-rp-non-eidas")
+        | is not set up to use eIDAS
+
+      p
+        label(for="rp-name") Overridden RP Name
+        input#rp-name(type="textbox", name="rp-name")
+      h3 Journey hint
+      p This tells GOV.UK Verify about the user journey. Choosing one of the options will trigger a specific type of user journey.
+      p
+        select(name="journey_hint")
+          option(value="none", selected="true") None
+          option(value="submission_confirmation") Non-repudiation
+          option(value="registration") Registration
+          option(value="uk_idp_sign_in") Sign-in with Verify
+          option(value="uk_idp_start") Start Sign in with GOV.UK Verify
+          option(value="eidas_sign_in") Sign-in with eIDAS
+          option(value="unspecified") Unspecified
+      
+      p
+        input.button.get-started(type="submit", value="Start")
+
+  script(src='/assets/scripts/set-rp-name.js')
+
+block relatedContent
+  h2 More about identity assurance
+  nav
+    ul(role="navigation")
+      include layout/side_links
+

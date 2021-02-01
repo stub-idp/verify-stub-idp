@@ -1,0 +1,9 @@
+
+.color-cancel {
+  background-color: #df3034;
+  box-shadow: 0 3px 0 #bf1d21, 0 8px 10px rgba(0, 0, 0, 0.05);
+}
+
+.color-cancel:hover, .color-cancel:active {
+  background-color: #e65c5f;
+}

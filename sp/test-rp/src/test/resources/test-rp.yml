@@ -1,0 +1,74 @@
+server:
+  applicationConnectors:
+    - type: http
+      port: 0
+  adminConnectors:
+    - type: http
+      port: 0
+  requestLog:
+    appenders:
+      - type: console
+
+logging:
+  level: INFO
+  appenders:
+    - type: console
+
+transactionHost: http://localhost:50130
+dontCacheFreemarkerTemplates: true
+
+cookieName: test-rp-session
+
+saml:
+  entityId: http://www.{0}.gov.uk/SAML2/MD
+  expectedDestination: http://localhost
+
+httpClient:
+  timeout: 2s
+  timeToLive: 10m
+  cookiesEnabled: false
+  connectionTimeout: 1s
+  tls:
+    protocol: TLSv1.2
+    verifyHostname: false
+    trustStorePath: test_keys/dev_service_ssl.ts
+    trustStorePassword: marshmallow
+
+msaMetadataUri: https://localhost:50210/matching-service/SAML2/metadata
+
+msaEntityId: http://www.test-rp-ms.gov.uk/SAML2/MD
+
+forceAuthentication: false
+
+serviceInfo:
+  name: test-rp
+
+privateSigningKeyConfiguration:
+  keyFile: override_this_signing.pk8
+
+publicSigningCert:
+  certFile: override_this_signing.crt
+  name: someId
+
+privateEncryptionKeyConfiguration:
+  keyFile: override_this_encryption.pk8
+
+publicEncryptionCert:
+  certFile: override_this_encryption.crt
+  name: someId
+
+clientTrustStoreConfiguration:
+  storeUri: client_truststore.ts
+  password: marshmallow
+
+javascriptPath: /assets/javascripts
+stylesheetsPath: /assets/stylesheets
+imagesPath: /assets/images
+
+privateBetaUserAccessRestrictionEnabled: false
+
+assets:
+  overrides:
+    /assets: test-rp/build/resources/main/assets
+
+shouldShowStartWithEidasButton: true

@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<md:EntitiesDescriptor xmlns:md="urn:oasis:names:tc:SAML:2.0:metadata" validUntil="2116-10-07T12:06:06.749Z">
+    <md:EntityDescriptor xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" entityID="http://www.test-rp-ms.gov.uk/SAML2/MD" xsi:type="md:EntityDescriptorType">
+        <md:AttributeAuthorityDescriptor protocolSupportEnumeration="urn:oasis:names:tc:SAML:2.0:protocol">
+            <md:KeyDescriptor use="signing" xsi:type="md:KeyDescriptorType">
+                <ds:KeyInfo xmlns:ds="http://www.w3.org/2000/09/xmldsig#" xsi:type="ds:KeyInfoType">
+                    <ds:KeyName>http://www.test-rp-ms.gov.uk/SAML2/MD</ds:KeyName>
+                    <ds:X509Data xsi:type="ds:X509DataType">
+                        <ds:X509Certificate>%MSA_SIGNING%</ds:X509Certificate>
+                    </ds:X509Data>
+                </ds:KeyInfo>
+            </md:KeyDescriptor>
+            <md:KeyDescriptor use="encryption" xsi:type="md:KeyDescriptorType">
+                <ds:KeyInfo xmlns:ds="http://www.w3.org/2000/09/xmldsig#" xsi:type="ds:KeyInfoType">
+                    <ds:KeyName>http://www.test-rp-ms.gov.uk/SAML2/MD</ds:KeyName>
+                    <ds:X509Data xsi:type="ds:X509DataType">
+                        <ds:X509Certificate>%MSA_ENCRYPTION%</ds:X509Certificate>
+                    </ds:X509Data>
+                </ds:KeyInfo>
+            </md:KeyDescriptor>
+            <md:AttributeService Binding="urn:oasis:names:tc:SAML:2.0:bindings:SOAP" Location="http://localhost:50210/matching-service/POST"/>
+        </md:AttributeAuthorityDescriptor>
+        <md:IDPSSODescriptor protocolSupportEnumeration="urn:oasis:names:tc:SAML:2.0:protocol" xsi:type="md:IDPSSODescriptorType">
+            <md:KeyDescriptor use="signing" xsi:type="md:KeyDescriptorType">
+                <ds:KeyInfo xmlns:ds="http://www.w3.org/2000/09/xmldsig#" xsi:type="ds:KeyInfoType">
+                    <ds:KeyName>http://www.test-rp-ms.gov.uk/SAML2/MD</ds:KeyName>
+                    <ds:X509Data xsi:type="ds:X509DataType">
+                        <ds:X509Certificate>%MSA_SIGNING%</ds:X509Certificate>
+                    </ds:X509Data>
+                </ds:KeyInfo>
+            </md:KeyDescriptor>
+            <md:SingleSignOnService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST" Location="http://localhost:50300/SAML2/SSO" xsi:type="md:EndpointType"/>
+        </md:IDPSSODescriptor>
+    </md:EntityDescriptor>
+    <md:EntityDescriptor xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" ID="VERIFY-HUB" entityID="https://signin.service.gov.uk" xsi:type="md:EntityDescriptorType">
+        <md:SPSSODescriptor protocolSupportEnumeration="urn:oasis:names:tc:SAML:2.0:protocol" xsi:type="md:SPSSODescriptorType">
+            <md:KeyDescriptor use="encryption" xsi:type="md:KeyDescriptorType">
+                <ds:KeyInfo xmlns:ds="http://www.w3.org/2000/09/xmldsig#" xsi:type="ds:KeyInfoType">
+                    <ds:KeyName xmlns:xs="http://www.w3.org/2001/XMLSchema">https://signin.service.gov.uk</ds:KeyName>
+                    <ds:X509Data xsi:type="ds:X509DataType">
+                        <ds:X509Certificate>%HUB_ENCRYPTION%</ds:X509Certificate>
+                    </ds:X509Data>
+                </ds:KeyInfo>
+            </md:KeyDescriptor>
+            <md:KeyDescriptor use="signing" xsi:type="md:KeyDescriptorType">
+                <ds:KeyInfo xmlns:ds="http://www.w3.org/2000/09/xmldsig#" xsi:type="ds:KeyInfoType">
+                    <ds:KeyName xmlns:xs="http://www.w3.org/2001/XMLSchema">https://signin.service.gov.uk</ds:KeyName>
+                    <ds:X509Data xsi:type="ds:X509DataType">
+                        <ds:X509Certificate>%HUB_SIGNING_ONE%</ds:X509Certificate>
+                    </ds:X509Data>
+                </ds:KeyInfo>
+            </md:KeyDescriptor>
+            <md:KeyDescriptor use="signing" xsi:type="md:KeyDescriptorType">
+                <ds:KeyInfo xmlns:ds="http://www.w3.org/2000/09/xmldsig#" xsi:type="ds:KeyInfoType">
+                    <ds:KeyName xmlns:xs="http://www.w3.org/2001/XMLSchema">https://signin.service.gov.uk/another-key</ds:KeyName>
+                    <ds:X509Data xsi:type="ds:X509DataType">
+                        <ds:X509Certificate>%HUB_SIGNING_TWO%</ds:X509Certificate>
+                    </ds:X509Data>
+                </ds:KeyInfo>
+            </md:KeyDescriptor>
+            <md:AssertionConsumerService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST" Location="http://localhost:50300/SAML2/SSO/Response/POST" index="1" isDefault="true" xsi:type="md:IndexedEndpointType"/>
+        </md:SPSSODescriptor>
+        <md:Organization xsi:type="md:OrganizationType">
+            <md:OrganizationName xml:lang="en-GB" xsi:type="md:localizedNameType">GOV.UK</md:OrganizationName>
+            <md:OrganizationDisplayName xml:lang="en-GB" xsi:type="md:localizedNameType">GOV.UK</md:OrganizationDisplayName>
+            <md:OrganizationURL xml:lang="en-GB" xsi:type="md:localizedURIType">https://www.gov.uk</md:OrganizationURL>
+        </md:Organization>
+    </md:EntityDescriptor>
+</md:EntitiesDescriptor>

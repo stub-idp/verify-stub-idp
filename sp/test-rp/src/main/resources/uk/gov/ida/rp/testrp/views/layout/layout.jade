@@ -1,0 +1,113 @@
+include ../mixins/helpers
+
+- var pageTitle = "GOV.UK - The best place to find government services and information"
+- var bodyClass = ""
+- var showRelatedContent = false
+block vars
+
+doctype
+html(lang="en")
+  head
+    meta(http-equiv="content-type", content="text/html; charset=UTF-8")
+    title=pageTitle
+
+    +stylesheetLinkTag("govuk-template","screen")
+    +stylesheetLinkTag("ida-sample-rp","screen")
+    +stylesheetLinkTag("fonts","all")
+
+    link(rel="shortcut icon", href="#{imagesBase}/favicon.ico", type="image/x-icon")
+    //-<!-- For third-generation iPad with high-resolution Retina display: -->
+    link(rel="apple-touch-icon-precomposed", sizes="144x144", href="#{imagesBase}/apple-touch-icon-144x144.png")
+    //-<!-- For iPhone with high-resolution Retina display: -->
+    link(rel="apple-touch-icon-precomposed", sizes="114x114", href="#{imagesBase}/apple-touch-icon-114x114.png")
+    //-<!-- For first- and second-generation iPad: -->
+    link( rel="apple-touch-icon-precomposed", sizes="72x72", href="#{imagesBase}/apple-touch-icon-72x72.png")
+    //-<!-- For non-Retina iPhone, iPod Touch, and Android 2.1+ devices: -->
+    link(rel="apple-touch-icon-precomposed", href="#{imagesBase}/apple-touch-icon-57x57.png")
+    meta(name="viewport", content="width=device-width, initial-scale=1")
+    meta(property="og:image", content="#{imagesBase}/opengraph-image.png")
+    block headerScripts
+  body(class="#{bodyClass}")
+    span#cross-gov-ga-tracker-id.hidden
+      #{ crossGovGaTrackerId }
+
+    script(src='/assets/scripts/js-enabled.js')
+    script(src='/assets/scripts/ga.js')
+
+    #skiplink-container
+      div
+        a(href="#content", class="skiplink") Skip to main content
+
+    header(role="banner", id="global-header")
+      .header-wrapper
+        .header-global
+          .header-logo
+            a#logo.content(href="https://www.gov.uk/", title="Go to the GOV.UK homepage")
+              img(src="#{imagesBase}/gov.uk_logotype_crown.png")
+              | GOV.UK
+
+    #global-cookie-message
+      p GOV.UK uses cookies to make the site simpler. <a href="/test-rp/cookies">Find out more about cookies</a></p>
+
+
+    #content.inner.container(role="main")
+
+      .full-width
+        header.page-header
+          div
+            h1
+              span
+                block h1_span
+              block h1
+
+        .article-container
+
+          if errorMessage.isPresent()
+            .application-notice.error-notice
+              if errorHeader.isPresent()
+                h2.title #{errorHeader.get()}
+              p #{errorMessage.get()}
+
+          block content
+
+          if showTestContent
+            block testContent
+
+          if showRelatedContent
+            .related-content
+              block relatedContent
+
+          if isUserAuthenticated
+            p
+              form(method="POST", action="/test-rp/logout")
+                input(class="button color-cancel")#logout.back(type="submit", value="Logout")
+
+    footer#footer.group.js-footer(role="contentinfo")
+      .footer-wrapper
+        .footer-meta
+          .footer-meta-inner
+            h2.visuallyhidden Support links
+            ul
+              li
+                a(href="https://www.gov.uk/help") Help
+              li
+                a(href="/test-rp/cookies") Cookies
+              li
+                a(href="https://www.gov.uk/contact/govuk") Contact
+              li
+                a(href="https://github.com/alphagov/verify-test-rp") Source Code
+              li
+                | Built by the #{''}
+                a(href="https://gds.blog.gov.uk") Government Digital Service
+            .open-government-licence
+              h2
+                a(href="http://www.nationalarchives.gov.uk/doc/open-government-licence/version/2")
+                  img(src="#{imagesBase}/open-government-licence_2x.png", alt="OGL")
+              p All content is available under the <a href="http://www.nationalarchives.gov.uk/doc/open-government-licence/version/2">Open Government Licence v2.0</a>, except where otherwise stated
+          .copyright
+            a(href="http://www.nationalarchives.gov.uk/information-management/our-services/crown-copyright.htm")&copy; Crown Copyright
+
+
+    #global-app-error.app-error.hidden
+
+    block footerScripts
