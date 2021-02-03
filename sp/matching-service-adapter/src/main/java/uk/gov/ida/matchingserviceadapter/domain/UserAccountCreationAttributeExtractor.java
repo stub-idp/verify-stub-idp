@@ -1,8 +1,8 @@
 package uk.gov.ida.matchingserviceadapter.domain;
 
 import org.opensaml.saml.saml2.core.Attribute;
-import uk.gov.ida.saml.core.domain.Cycle3Dataset;
-import uk.gov.ida.saml.core.domain.MatchingDataset;
+import stubidp.saml.domain.assertions.Cycle3Dataset;
+import stubidp.saml.domain.assertions.MatchingDataset;
 
 import javax.inject.Inject;
 import java.util.List;

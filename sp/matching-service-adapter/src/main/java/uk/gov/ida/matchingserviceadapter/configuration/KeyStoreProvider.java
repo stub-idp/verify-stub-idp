@@ -1,6 +1,6 @@
 package uk.gov.ida.matchingserviceadapter.configuration;
 
-import uk.gov.ida.saml.metadata.TrustStoreConfiguration;
+import stubidp.saml.metadata.TrustStoreConfiguration;
 
 import javax.inject.Inject;
 import javax.inject.Provider;

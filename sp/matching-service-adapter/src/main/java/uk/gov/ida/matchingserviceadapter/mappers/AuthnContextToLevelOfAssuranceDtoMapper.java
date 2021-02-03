@@ -1,7 +1,7 @@
 package uk.gov.ida.matchingserviceadapter.mappers;
 
+import stubidp.saml.domain.assertions.AuthnContext;
 import uk.gov.ida.matchingserviceadapter.rest.matchingservice.LevelOfAssuranceDto;
-import uk.gov.ida.saml.core.domain.AuthnContext;
 
 public class AuthnContextToLevelOfAssuranceDtoMapper {
 

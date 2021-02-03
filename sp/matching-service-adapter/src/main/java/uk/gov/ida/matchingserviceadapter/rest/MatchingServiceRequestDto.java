@@ -1,13 +1,11 @@
 package uk.gov.ida.matchingserviceadapter.rest;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import org.apache.commons.lang.builder.EqualsBuilder;
-import org.apache.commons.lang.builder.HashCodeBuilder;
 import uk.gov.ida.matchingserviceadapter.rest.matchingservice.Cycle3DatasetDto;
 import uk.gov.ida.matchingserviceadapter.rest.matchingservice.LevelOfAssuranceDto;
 
+import java.util.Objects;
 import java.util.Optional;
-
 
 // CAUTION!!! CHANGES TO THIS CLASS WILL IMPACT MSA USERS
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
@@ -50,11 +48,14 @@ public abstract class MatchingServiceRequestDto {
 
     @Override
     public boolean equals(Object o) {
-        return EqualsBuilder.reflectionEquals(this, o);
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        MatchingServiceRequestDto that = (MatchingServiceRequestDto) o;
+        return Objects.equals(cycle3Dataset, that.cycle3Dataset) && Objects.equals(hashedPid, that.hashedPid) && Objects.equals(matchId, that.matchId) && levelOfAssurance == that.levelOfAssurance;
     }
 
     @Override
     public int hashCode() {
-        return HashCodeBuilder.reflectionHashCode(this);
+        return Objects.hash(cycle3Dataset, hashedPid, matchId, levelOfAssurance);
     }
 }

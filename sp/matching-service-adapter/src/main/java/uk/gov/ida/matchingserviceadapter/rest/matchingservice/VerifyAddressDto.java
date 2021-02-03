@@ -1,17 +1,16 @@
 package uk.gov.ida.matchingserviceadapter.rest.matchingservice;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import org.apache.commons.lang.builder.EqualsBuilder;
-import org.apache.commons.lang.builder.HashCodeBuilder;
-import org.joda.time.DateTime;
 
+import java.time.LocalDate;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 public class VerifyAddressDto extends AddressDto {
-    private DateTime fromDate;
-    private Optional<DateTime> toDate = Optional.empty();
+    private LocalDate fromDate;
+    private Optional<LocalDate> toDate = Optional.empty();
 
     @SuppressWarnings("unused") // needed for JAXB
     private VerifyAddressDto() {
@@ -23,8 +22,8 @@ public class VerifyAddressDto extends AddressDto {
             Optional<String> postCode,
             Optional<String> internationalPostCode,
             Optional<String> uprn,
-            DateTime fromDate,
-            Optional<DateTime> toDate,
+            LocalDate fromDate,
+            Optional<LocalDate> toDate,
             boolean verified) {
 
         super(lines, postCode, internationalPostCode, uprn, verified);
@@ -32,21 +31,25 @@ public class VerifyAddressDto extends AddressDto {
         this.toDate = toDate;
     }
 
-    public DateTime getFromDate() {
+    public LocalDate getFromDate() {
         return fromDate;
     }
 
-    public Optional<DateTime> getToDate() {
+    public Optional<LocalDate> getToDate() {
         return toDate;
     }
 
     @Override
     public boolean equals(Object o) {
-        return EqualsBuilder.reflectionEquals(this, o);
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
+        VerifyAddressDto that = (VerifyAddressDto) o;
+        return Objects.equals(fromDate, that.fromDate) && Objects.equals(toDate, that.toDate);
     }
 
     @Override
     public int hashCode() {
-        return HashCodeBuilder.reflectionHashCode(this);
+        return Objects.hash(super.hashCode(), fromDate, toDate);
     }
 }

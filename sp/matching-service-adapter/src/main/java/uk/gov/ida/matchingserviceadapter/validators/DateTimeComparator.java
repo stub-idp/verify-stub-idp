@@ -1,37 +1,44 @@
 package uk.gov.ida.matchingserviceadapter.validators;
 
-import org.joda.time.DateTime;
-import org.joda.time.Duration;
+import java.time.Clock;
+import java.time.Duration;
+import java.time.Instant;
 
 public class DateTimeComparator {
 
+    private final Duration clockSkew;
+    private final Clock clock;
+
     public DateTimeComparator(Duration clockSkew) {
-        this.clockSkew = clockSkew;
+        this(clockSkew, Clock.systemUTC());
     }
 
-    private final Duration clockSkew;
+    DateTimeComparator(Duration clockSkew, Clock clock) {
+        this.clockSkew = clockSkew;
+        this.clock = clock;
+    }
 
-    public boolean isAfterFuzzy(DateTime source, DateTime target) {
+    public boolean isAfterFuzzy(Instant source, Instant target) {
         return source.isAfter(target.minus(clockSkew));
     }
 
-    public boolean isBeforeFuzzy(DateTime source, DateTime target) {
+    public boolean isBeforeFuzzy(Instant source, Instant target) {
         return source.isBefore(target.plus(clockSkew));
     }
 
-    public boolean isBeforeNow(DateTime dateTime) {
-        return isBeforeFuzzy(dateTime, DateTime.now());
+    public boolean isBeforeNow(Instant dateTime) {
+        return isBeforeFuzzy(dateTime, Instant.now(clock));
     }
 
-    public boolean isAfterNow(DateTime dateTime) {
-        return isAfterFuzzy(dateTime, DateTime.now());
+    public boolean isAfterNow(Instant dateTime) {
+        return isAfterFuzzy(dateTime, Instant.now(clock));
     }
 
-    public boolean isAfterSkewedNow(DateTime dateTime){
+    public boolean isAfterSkewedNow(Instant dateTime){
         return !isBeforeNow(dateTime);
     }
 
-    public boolean isBeforeSkewedNow(DateTime dateTime){
+    public boolean isBeforeSkewedNow(Instant dateTime){
         return !isAfterNow(dateTime);
     }
 

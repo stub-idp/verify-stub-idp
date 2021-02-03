@@ -1,55 +1,55 @@
 package uk.gov.ida.matchingserviceadapter.validator;
 
-import org.joda.time.DateTime;
-import org.joda.time.Duration;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.ExpectedException;
-import uk.gov.ida.matchingserviceadapter.validators.DateTimeComparator;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.junit.jupiter.MockitoExtension;
+import stubidp.saml.utils.core.validation.SamlResponseValidationException;
 import uk.gov.ida.matchingserviceadapter.validators.AssertionTimeRestrictionValidator;
-import uk.gov.ida.saml.core.validation.SamlResponseValidationException;
+import uk.gov.ida.matchingserviceadapter.validators.DateTimeComparator;
 
-import static org.joda.time.DateTimeZone.UTC;
-import static org.joda.time.format.ISODateTimeFormat.dateHourMinuteSecond;
+import java.time.Duration;
+import java.time.Instant;
 
+import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
+
+@ExtendWith(MockitoExtension.class)
 public class TimeRestrictionValidatorTest {
 
     private DateTimeComparator dateTimeComparator;
 
     private AssertionTimeRestrictionValidator validator;
 
-    @Rule
-    public ExpectedException exception = ExpectedException.none();
-
-    @Before
+    @BeforeEach
     public void setUp() {
-        dateTimeComparator = new DateTimeComparator(new Duration(5000)  );
+        dateTimeComparator = new DateTimeComparator(Duration.ofMillis(5000));
 
         validator = new AssertionTimeRestrictionValidator(dateTimeComparator);
     }
 
     @Test
     public void validateNotOnOrAfterShouldThrowExceptionWhenNotOnOrAfterIsBeforeNow() {
-        DateTime notOnOrAfter = new DateTime();
-        exception.expect(SamlResponseValidationException.class);
-        exception.expectMessage(String.format(
-            "Assertion is not valid on or after %s",
-            notOnOrAfter.withZone(UTC).toString(dateHourMinuteSecond())
-        ));
+        Instant notOnOrAfter = Instant.now();
+        String errorMessage = String.format(
+                "Assertion is not valid on or after %s",
+                notOnOrAfter.toString()
+        );
 
-        validator.validateNotOnOrAfter(notOnOrAfter);
+        assertThatExceptionOfType(SamlResponseValidationException.class)
+                .isThrownBy(() -> validator.validateNotOnOrAfter(notOnOrAfter))
+                .withMessage(errorMessage);
     }
 
     @Test
     public void validateNotBeforeShouldThrowExceptionWhenNotBeforeIsAfterNow() {
-        DateTime notBefore = new DateTime().plus(6000);
-        exception.expect(SamlResponseValidationException.class);
-        exception.expectMessage(String.format(
-            "Assertion is not valid before %s",
-            notBefore.withZone(UTC).toString(dateHourMinuteSecond())
-        ));
+        Instant notBefore = Instant.now().plusMillis(6000);
+        String errorMessage = String.format(
+                "Assertion is not valid before %s",
+                notBefore.toString()
+        );
 
-        validator.validateNotBefore(notBefore);
+        assertThatExceptionOfType(SamlResponseValidationException.class)
+                .isThrownBy(() -> validator.validateNotBefore(notBefore))
+                .withMessage(errorMessage);
     }
 }

@@ -1,17 +1,15 @@
 package uk.gov.ida.matchingserviceadapter.validators;
 
-import com.google.inject.Inject;
-import org.joda.time.DateTime;
-import org.joda.time.Duration;
-import org.joda.time.format.PeriodFormat;
-import uk.gov.ida.saml.core.validation.SamlResponseValidationException;
+import stubidp.saml.utils.core.validation.SamlResponseValidationException;
 
-import static org.joda.time.DateTimeZone.UTC;
-import static org.joda.time.format.ISODateTimeFormat.dateHourMinuteSecond;
+import javax.inject.Inject;
+import java.time.Duration;
+import java.time.Instant;
+import java.time.ZoneId;
 
 public class InstantValidator {
 
-    private static final Duration MAXIMUM_INSTANT_AGE = Duration.standardMinutes(5);
+    private static final Duration MAXIMUM_INSTANT_AGE = Duration.ofMinutes(5);
     private final DateTimeComparator dateTimeComparator;
 
     @Inject
@@ -19,18 +17,17 @@ public class InstantValidator {
         this.dateTimeComparator = dateTimeComparator;
     }
 
-    public void validate(DateTime instant, String instantName) {
-        Duration age = new Duration(instant, DateTime.now());
-        if (age.isLongerThan(MAXIMUM_INSTANT_AGE)) {
-            throw new SamlResponseValidationException(String.format("%s is too far in the past %s",
-                    instantName,
-                    PeriodFormat.getDefault().print(age.toPeriod())));
-        }
-
+    public void validate(Instant instant, String instantName) {
         if (dateTimeComparator.isAfterSkewedNow(instant)) {
             throw new SamlResponseValidationException(String.format("%s is in the future %s",
                     instantName,
-                    instant.withZone(UTC).toString(dateHourMinuteSecond())));
+                    instant.toString()));
+        }
+
+        if (!dateTimeComparator.isBeforeFuzzy(Instant.now(), instant.plus(MAXIMUM_INSTANT_AGE))) {
+            throw new SamlResponseValidationException(String.format("%s is too far in the past %s",
+                    instantName,
+                    instant.toString()));
         }
     }
 }

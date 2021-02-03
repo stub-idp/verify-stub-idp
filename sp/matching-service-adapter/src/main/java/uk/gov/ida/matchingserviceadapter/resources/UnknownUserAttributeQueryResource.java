@@ -1,13 +1,17 @@
 package uk.gov.ida.matchingserviceadapter.resources;
 
 import com.codahale.metrics.annotation.Timed;
-import com.google.inject.Inject;
 import org.opensaml.saml.saml2.core.Assertion;
 import org.opensaml.saml.saml2.core.AttributeQuery;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import stubidp.saml.extensions.validation.SamlTransformationErrorException;
+import stubidp.saml.security.AssertionDecrypter;
+import stubidp.saml.serializers.deserializers.ElementToOpenSamlXMLObjectTransformer;
+import stubidp.saml.utils.core.validation.SamlResponseValidationException;
+import stubidp.utils.common.xml.XmlUtils;
 import uk.gov.ida.matchingserviceadapter.domain.AssertionData;
 import uk.gov.ida.matchingserviceadapter.domain.EncryptedAssertionContainer;
 import uk.gov.ida.matchingserviceadapter.domain.OutboundResponseFromUnknownUserCreationService;
@@ -22,11 +26,8 @@ import uk.gov.ida.matchingserviceadapter.rest.soap.SoapMessageManager;
 import uk.gov.ida.matchingserviceadapter.saml.SamlOverSoapException;
 import uk.gov.ida.matchingserviceadapter.services.AttributeQueryService;
 import uk.gov.ida.matchingserviceadapter.services.UnknownUserResponseGenerator;
-import uk.gov.ida.saml.core.validation.SamlResponseValidationException;
-import uk.gov.ida.saml.core.validation.SamlTransformationErrorException;
-import uk.gov.ida.saml.deserializers.ElementToOpenSamlXMLObjectTransformer;
-import uk.gov.ida.saml.security.AssertionDecrypter;
 
+import javax.inject.Inject;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -73,7 +74,7 @@ public class UnknownUserAttributeQueryResource {
     @POST
     @Timed(name= Urls.SOAP_TIMED_GROUP)
     public Response receiveUnknownUserRequest(Document attributeQueryDocument) {
-        LOG.debug("Unknown User AttributeQuery POSTED: {}", attributeQueryDocument);
+        LOG.debug("Unknown User AttributeQuery POSTED: {}", XmlUtils.writeToString(attributeQueryDocument));
 
         AttributeQuery attributeQuery = unwrapAttributeQuery(attributeQueryDocument);
         List<Assertion> assertions;

@@ -1,11 +1,12 @@
 package uk.gov.ida.matchingserviceadapter.services;
 
-import com.google.inject.Inject;
-import org.joda.time.DateTime;
 import org.opensaml.saml.saml2.core.Attribute;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import uk.gov.ida.common.shared.security.IdGenerator;
+import stubidp.saml.domain.assertions.AssertionRestrictions;
+import stubidp.saml.domain.assertions.PersistentId;
+import stubidp.saml.domain.matching.assertions.MatchingServiceAuthnStatement;
+import stubidp.utils.security.security.IdGenerator;
 import uk.gov.ida.matchingserviceadapter.MatchingServiceAdapterConfiguration;
 import uk.gov.ida.matchingserviceadapter.configuration.AssertionLifetimeConfiguration;
 import uk.gov.ida.matchingserviceadapter.domain.AssertionData;
@@ -13,10 +14,10 @@ import uk.gov.ida.matchingserviceadapter.domain.MatchingServiceAssertion;
 import uk.gov.ida.matchingserviceadapter.domain.OutboundResponseFromUnknownUserCreationService;
 import uk.gov.ida.matchingserviceadapter.domain.UserAccountCreationAttributeExtractor;
 import uk.gov.ida.matchingserviceadapter.rest.UnknownUserCreationResponseDto;
-import uk.gov.ida.saml.core.domain.AssertionRestrictions;
-import uk.gov.ida.saml.core.domain.MatchingServiceAuthnStatement;
-import uk.gov.ida.saml.core.domain.PersistentId;
 
+import javax.inject.Inject;
+import java.time.Clock;
+import java.time.Instant;
 import java.util.List;
 
 public class UnknownUserResponseGenerator {
@@ -26,6 +27,7 @@ public class UnknownUserResponseGenerator {
     private final AssertionLifetimeConfiguration assertionLifetimeConfiguration;
     private final UserAccountCreationAttributeExtractor userAccountCreationAttributeExtractor;
     private final IdGenerator idGenerator;
+    private final Clock clock;
 
     @Inject
     public UnknownUserResponseGenerator(
@@ -33,10 +35,20 @@ public class UnknownUserResponseGenerator {
             AssertionLifetimeConfiguration assertionLifetimeConfiguration,
             UserAccountCreationAttributeExtractor userAccountCreationAttributeExtractor,
             IdGenerator idGenerator) {
+        this(matchingServiceAdapterConfiguration, assertionLifetimeConfiguration, userAccountCreationAttributeExtractor, idGenerator, Clock.systemUTC());
+    }
+
+    UnknownUserResponseGenerator(
+            MatchingServiceAdapterConfiguration matchingServiceAdapterConfiguration,
+            AssertionLifetimeConfiguration assertionLifetimeConfiguration,
+            UserAccountCreationAttributeExtractor userAccountCreationAttributeExtractor,
+            IdGenerator idGenerator,
+            Clock clock) {
         this.matchingServiceAdapterConfiguration = matchingServiceAdapterConfiguration;
         this.assertionLifetimeConfiguration = assertionLifetimeConfiguration;
         this.userAccountCreationAttributeExtractor = userAccountCreationAttributeExtractor;
         this.idGenerator = idGenerator;
+        this.clock = clock;
     }
 
     public OutboundResponseFromUnknownUserCreationService getMatchingServiceResponse(
@@ -63,14 +75,14 @@ public class UnknownUserResponseGenerator {
         }
 
         AssertionRestrictions assertionRestrictions = new AssertionRestrictions(
-            DateTime.now().plus(assertionLifetimeConfiguration.getAssertionLifetime().toMilliseconds()),
+            Instant.now(clock).plusMillis(assertionLifetimeConfiguration.getAssertionLifetime().toMilliseconds()),
             requestId,
             assertionConsumerServiceUrl);
 
         MatchingServiceAssertion assertion = new MatchingServiceAssertion(
                 idGenerator.getId(),
                 matchingServiceAdapterConfiguration.getEntityId(),
-                DateTime.now(),
+                Instant.now(clock),
                 new PersistentId(hashPid),
                 assertionRestrictions,
                 MatchingServiceAuthnStatement.createIdaAuthnStatement(assertionData.getLevelOfAssurance()),

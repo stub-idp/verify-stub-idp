@@ -1,13 +1,13 @@
 package uk.gov.ida.matchingserviceadapter.resources;
 
-import com.google.inject.Inject;
 import net.shibboleth.utilities.java.support.resolver.ResolverException;
 import org.w3c.dom.Document;
-import uk.gov.ida.Constants;
+import stubidp.saml.constants.Constants;
 import uk.gov.ida.matchingserviceadapter.exceptions.FederationMetadataLoadingException;
 import uk.gov.ida.matchingserviceadapter.repositories.MatchingServiceAdapterMetadataRepository;
 import uk.gov.ida.matchingserviceadapter.rest.Urls;
 
+import javax.inject.Inject;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;

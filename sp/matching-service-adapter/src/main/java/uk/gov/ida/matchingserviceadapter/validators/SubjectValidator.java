@@ -1,13 +1,13 @@
 package uk.gov.ida.matchingserviceadapter.validators;
 
-import com.google.inject.Inject;
-import org.joda.time.DateTime;
 import org.opensaml.saml.saml2.core.NameIDType;
 import org.opensaml.saml.saml2.core.Subject;
 import org.opensaml.saml.saml2.core.SubjectConfirmation;
 import org.opensaml.saml.saml2.core.SubjectConfirmationData;
-import uk.gov.ida.saml.core.validation.SamlResponseValidationException;
+import stubidp.saml.utils.core.validation.SamlResponseValidationException;
 
+import javax.inject.Inject;
+import java.time.Instant;
 import java.util.stream.Stream;
 
 public class SubjectValidator {
@@ -36,7 +36,7 @@ public class SubjectValidator {
             throw new SamlResponseValidationException("Subject confirmation data is missing from the assertion.");
         }
 
-        DateTime notOnOrAfter = subjectConfirmationData.getNotOnOrAfter();
+        Instant notOnOrAfter = subjectConfirmationData.getNotOnOrAfter();
         if (notOnOrAfter == null) {
             throw new SamlResponseValidationException("Subject confirmation data must contain 'NotOnOrAfter'.");
         }

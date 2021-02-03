@@ -1,22 +1,22 @@
 package uk.gov.ida.matchingserviceadapter.rest.matchingservice;
 
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import org.apache.commons.lang.builder.EqualsBuilder;
-import org.apache.commons.lang.builder.HashCodeBuilder;
-import org.joda.time.DateTime;
+import com.fasterxml.jackson.annotation.JsonInclude;
 
-@JsonSerialize(include= JsonSerialize.Inclusion.NON_NULL)
+import java.time.LocalDate;
+import java.util.Objects;
+
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class SimpleMdsValueDto<T> {
 
     private T value;
-    private DateTime from;
-    private DateTime to;
+    private LocalDate from;
+    private LocalDate to;
     private boolean verified;
 
     @SuppressWarnings("unused") // needed for JAXB
     public SimpleMdsValueDto() {}
 
-    public SimpleMdsValueDto(T value, DateTime from, DateTime to, boolean verified) {
+    public SimpleMdsValueDto(T value, LocalDate from, LocalDate to, boolean verified) {
         this.value = value;
         this.from = from;
         this.to = to;
@@ -27,11 +27,11 @@ public class SimpleMdsValueDto<T> {
         return value;
     }
 
-    public DateTime getFrom() {
+    public LocalDate getFrom() {
         return from;
     }
 
-    public DateTime getTo() {
+    public LocalDate getTo() {
         return to;
     }
 
@@ -41,11 +41,14 @@ public class SimpleMdsValueDto<T> {
 
     @Override
     public boolean equals(Object o) {
-        return EqualsBuilder.reflectionEquals(this, o);
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        SimpleMdsValueDto<?> that = (SimpleMdsValueDto<?>) o;
+        return verified == that.verified && Objects.equals(value, that.value) && Objects.equals(from, that.from) && Objects.equals(to, that.to);
     }
 
     @Override
     public int hashCode() {
-        return HashCodeBuilder.reflectionHashCode(this);
+        return Objects.hash(value, from, to, verified);
     }
 }

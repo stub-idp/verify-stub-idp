@@ -1,11 +1,11 @@
 package uk.gov.ida.matchingserviceadapter.proxies;
 
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
-import uk.gov.ida.jerseyclient.JsonClient;
+import org.mockito.junit.jupiter.MockitoExtension;
+import stubidp.utils.rest.jerseyclient.JsonClient;
 import uk.gov.ida.matchingserviceadapter.MatchingServiceAdapterConfiguration;
 import uk.gov.ida.matchingserviceadapter.rest.MatchingServiceResponseDto;
 import uk.gov.ida.matchingserviceadapter.rest.UnknownUserCreationRequestDto;
@@ -21,7 +21,7 @@ import static uk.gov.ida.matchingserviceadapter.builders.MatchingServiceResponse
 import static uk.gov.ida.matchingserviceadapter.builders.UnknownUserCreationRequestDtoBuilder.anUnknnownUserCreationRequestDto;
 import static uk.gov.ida.matchingserviceadapter.builders.UnknownUserCreationResponseDtoBuilder.anUnknownUserCreationResponseDto;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class MatchingServiceProxyImplTest {
 
     @Mock
@@ -32,7 +32,7 @@ public class MatchingServiceProxyImplTest {
 
     private MatchingServiceProxyImpl proxy;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         proxy = new MatchingServiceProxyImpl(client, configuration);
     }
@@ -51,7 +51,7 @@ public class MatchingServiceProxyImplTest {
 
         MatchingServiceResponseDto actualResponse = proxy.makeMatchingServiceRequest(verifyMatchingServiceRequestDto);
 
-        assertThat(actualResponse).isEqualToComparingFieldByField(expectedResponse);
+        assertThat(actualResponse).usingRecursiveComparison().isEqualTo(expectedResponse);
     }
 
     @Test
@@ -69,6 +69,6 @@ public class MatchingServiceProxyImplTest {
 
         UnknownUserCreationResponseDto response = proxy.makeUnknownUserCreationRequest(request);
 
-        assertThat(response).isEqualToComparingFieldByField(expectedResponse);
+        assertThat(response).usingRecursiveComparison().isEqualTo(expectedResponse);
     }
 }

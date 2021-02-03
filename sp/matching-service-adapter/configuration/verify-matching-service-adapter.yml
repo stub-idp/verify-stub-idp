@@ -19,6 +19,7 @@ hub:
 
 metadata:
   url: ${METADATA_URL:-http://localhost:55000/metadata.xml}
+  expectedEntityId: https://signin.service.gov.uk
   jerseyClientName: metadata-client
   trustStore:
     type: encoded

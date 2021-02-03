@@ -1,12 +1,11 @@
 package uk.gov.ida.matchingserviceadapter.rest.matchingservice;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import org.apache.commons.lang.builder.EqualsBuilder;
-import org.apache.commons.lang.builder.HashCodeBuilder;
-import org.joda.time.LocalDate;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 // CAUTION!!! CHANGES TO THIS CLASS WILL IMPACT MSA USERS
@@ -38,11 +37,15 @@ public class VerifyMatchingDatasetDto extends MatchingDatasetDto {
 
     @Override
     public boolean equals(Object o) {
-        return EqualsBuilder.reflectionEquals(this, o);
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
+        VerifyMatchingDatasetDto that = (VerifyMatchingDatasetDto) o;
+        return Objects.equals(addresses, that.addresses);
     }
 
     @Override
     public int hashCode() {
-        return HashCodeBuilder.reflectionHashCode(this);
+        return Objects.hash(super.hashCode(), addresses);
     }
 }

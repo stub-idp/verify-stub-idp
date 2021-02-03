@@ -1,7 +1,7 @@
 package uk.gov.ida.matchingserviceadapter;
 
-import uk.gov.ida.saml.core.domain.MdsAttributeValue;
-import uk.gov.ida.saml.core.domain.SimpleMdsValue;
+import stubidp.saml.domain.assertions.MdsAttributeValue;
+import stubidp.saml.domain.assertions.SimpleMdsValue;
 
 import java.util.Comparator;
 

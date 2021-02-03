@@ -1,9 +1,7 @@
 package uk.gov.ida.matchingserviceadapter.rest.matchingservice;
 
-import org.apache.commons.lang.builder.EqualsBuilder;
-import org.apache.commons.lang.builder.HashCodeBuilder;
-
 import java.util.Map;
+import java.util.Objects;
 
 // CAUTION!!! CHANGES TO THIS CLASS WILL IMPACT MSA USERS
 public class Cycle3DatasetDto {
@@ -26,11 +24,14 @@ public class Cycle3DatasetDto {
 
     @Override
     public boolean equals(Object o) {
-        return EqualsBuilder.reflectionEquals(this, o);
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Cycle3DatasetDto that = (Cycle3DatasetDto) o;
+        return Objects.equals(attributes, that.attributes);
     }
 
     @Override
     public int hashCode() {
-        return HashCodeBuilder.reflectionHashCode(this);
+        return Objects.hash(attributes);
     }
 }

@@ -6,6 +6,9 @@ import stubidp.saml.extensions.extensions.eidas.CountrySamlResponse;
 
 public class CountrySamlResponseUnmarshaller extends AbstractSAMLObjectUnmarshaller {
 
+    public CountrySamlResponseUnmarshaller() {
+    }
+
     @Override
     protected void processElementContent(XMLObject samlObject, String elementContent) {
         CountrySamlResponse countrySamlResponse = (CountrySamlResponse) samlObject;

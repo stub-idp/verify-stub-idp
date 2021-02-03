@@ -4,11 +4,11 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.jar.Manifest;
 
-class ManifestReader {
+public class ManifestReader {
 
     private static final String MANIFEST_FILE_LOCATION = "/META-INF/MANIFEST.MF";
 
-    String getAttributeValueFor(Class<?> classInJar, String attributeName) throws IOException {
+    public String getAttributeValueFor(Class<?> classInJar, String attributeName) throws IOException {
         String attributeValue = getManifestFor(classInJar).getMainAttributes().getValue(attributeName);
 
         if (null == attributeValue || attributeValue.isEmpty()) {

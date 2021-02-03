@@ -1,22 +1,20 @@
 package uk.gov.ida.matchingserviceadapter.saml.factories;
 
-
-import org.joda.time.LocalDate;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
 import org.opensaml.saml.saml2.core.Attribute;
+import stubidp.saml.domain.assertions.Address;
+import stubidp.saml.domain.assertions.SimpleMdsValue;
+import stubidp.saml.extensions.extensions.impl.AddressImpl;
+import stubidp.saml.extensions.extensions.impl.StringBasedMdsAttributeValueImpl;
+import stubidp.saml.extensions.extensions.impl.StringValueSamlObjectImpl;
+import stubidp.saml.extensions.extensions.impl.VerifiedImpl;
+import stubidp.saml.test.OpenSAMLRunner;
+import stubidp.saml.utils.core.OpenSamlXmlObjectFactory;
 import uk.gov.ida.matchingserviceadapter.builders.AddressBuilder;
 import uk.gov.ida.matchingserviceadapter.builders.SimpleMdsValueBuilder;
 import uk.gov.ida.matchingserviceadapter.domain.UserAccountCreationAttribute;
-import uk.gov.ida.saml.core.domain.Address;
-import uk.gov.ida.saml.core.domain.SimpleMdsValue;
-import uk.gov.ida.saml.core.OpenSamlXmlObjectFactory;
-import uk.gov.ida.saml.core.extensions.impl.AddressImpl;
-import uk.gov.ida.saml.core.extensions.impl.StringBasedMdsAttributeValueImpl;
-import uk.gov.ida.saml.core.extensions.impl.StringValueSamlObjectImpl;
-import uk.gov.ida.saml.core.extensions.impl.VerifiedImpl;
-import uk.gov.ida.saml.core.test.OpenSAMLRunner;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -24,8 +22,7 @@ import java.util.function.Function;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@RunWith(OpenSAMLRunner.class)
-public class UserAccountCreationAttributeFactoryTest {
+public class UserAccountCreationAttributeFactoryTest extends OpenSAMLRunner {
 
     private final UserAccountCreationAttributeFactory factory = new UserAccountCreationAttributeFactory(new OpenSamlXmlObjectFactory());
 
@@ -104,7 +101,7 @@ public class UserAccountCreationAttributeFactoryTest {
         Attribute attribute = attributeFunction.apply(mdsValue);
 
         assertThat(attribute.getName()).isEqualTo(attributeName);
-        E attributeValueAsType = (E) attribute.getAttributeValues().get(0);
+        StringValueSamlObjectImpl attributeValueAsType = (StringValueSamlObjectImpl) attribute.getAttributeValues().get(0);
         assertThat(attributeValueAsType.getValue()).isEqualTo(attributeValue.toString());
     }
 

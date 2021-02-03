@@ -4,14 +4,15 @@ import com.fasterxml.jackson.annotation.JsonAlias;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.dropwizard.client.JerseyClientConfiguration;
+import stubidp.saml.metadata.TrustStoreBackedMetadataConfiguration;
+import stubidp.saml.metadata.TrustStoreConfiguration;
+import stubidp.saml.metadata.exception.EmptyTrustStoreException;
 import uk.gov.ida.matchingserviceadapter.exceptions.UninitialisedKeyStoreException;
-import uk.gov.ida.saml.metadata.TrustStoreBackedMetadataConfiguration;
-import uk.gov.ida.saml.metadata.TrustStoreConfiguration;
-import uk.gov.ida.saml.metadata.exception.EmptyTrustStoreException;
 
 import java.net.URI;
 import java.security.KeyStore;
 import java.security.KeyStoreException;
+import java.time.Duration;
 import java.util.Optional;
 
 public class MatchingServiceAdapterMetadataConfiguration extends TrustStoreBackedMetadataConfiguration {
@@ -22,14 +23,14 @@ public class MatchingServiceAdapterMetadataConfiguration extends TrustStoreBacke
 
     private final TrustStoreConfiguration idpTrustStore;
 
-    private TrustStoreConfiguration metadataTrustStore;
+    private final TrustStoreConfiguration metadataTrustStore;
 
     @JsonCreator
     @SuppressWarnings("PMD.ExcessiveParameterList")
     public MatchingServiceAdapterMetadataConfiguration(
         @JsonProperty("uri") @JsonAlias({ "url" }) URI uri,
-        @JsonProperty("minRefreshDelay") Long minRefreshDelay,
-        @JsonProperty("maxRefreshDelay") Long maxRefreshDelay,
+        @JsonProperty("minRefreshDelay") Duration minRefreshDelay,
+        @JsonProperty("maxRefreshDelay") Duration maxRefreshDelay,
         @JsonProperty("expectedEntityId") String expectedEntityId,
         @JsonProperty("client") JerseyClientConfiguration client,
         @JsonProperty("jerseyClientName") String jerseyClientName,
@@ -65,7 +66,7 @@ public class MatchingServiceAdapterMetadataConfiguration extends TrustStoreBacke
     }
 
     @Override
-    public Optional<KeyStore> getHubTrustStore() {
+    public Optional<KeyStore> getSpTrustStore() {
         return Optional.of(
             validateTruststore(
                 Optional.ofNullable(hubTrustStore)

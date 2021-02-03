@@ -1,9 +1,9 @@
 package uk.gov.ida.matchingserviceadapter.builders;
 
-import org.joda.time.DateTime;
 import uk.gov.ida.matchingserviceadapter.rest.matchingservice.UniversalAddressDto;
 import uk.gov.ida.matchingserviceadapter.rest.matchingservice.VerifyAddressDto;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -13,8 +13,8 @@ public class AddressDtoBuilder {
     private Optional<String> postCode = Optional.empty();
     private Optional<String> internationalPostCode = Optional.empty();
     private Optional<String> uprn = Optional.empty();
-    private DateTime fromDate = DateTime.parse("2001-01-01");
-    private Optional<DateTime> toDate = Optional.empty();
+    private LocalDate fromDate = LocalDate.parse("2001-01-01");
+    private Optional<LocalDate> toDate = Optional.empty();
     private boolean verified = false;
 
     public VerifyAddressDto buildVerifyAddressDto() {
@@ -59,12 +59,12 @@ public class AddressDtoBuilder {
         return this;
     }
 
-    public AddressDtoBuilder withFromDate(final DateTime fromDate) {
+    public AddressDtoBuilder withFromDate(final LocalDate fromDate) {
         this.fromDate = fromDate;
         return this;
     }
 
-    public AddressDtoBuilder withToDate(final DateTime toDate) {
+    public AddressDtoBuilder withToDate(final LocalDate toDate) {
         this.toDate = Optional.ofNullable(toDate);
         return this;
     }

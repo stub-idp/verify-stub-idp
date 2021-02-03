@@ -1,26 +1,26 @@
 package uk.gov.ida.matchingserviceadapter.services;
 
-import com.google.inject.name.Named;
 import org.opensaml.saml.saml2.core.Assertion;
 import org.opensaml.saml.saml2.core.AuthnStatement;
 import org.opensaml.saml.saml2.metadata.IDPSSODescriptor;
+import stubidp.saml.extensions.IdaConstants;
+import stubidp.saml.metadata.MetadataResolverRepository;
+import stubidp.saml.security.MetadataBackedSignatureValidator;
+import stubidp.saml.security.SamlAssertionsSignatureValidator;
+import stubidp.saml.security.SamlMessageSignatureValidator;
+import stubidp.saml.utils.core.transformers.AuthnContextFactory;
+import stubidp.saml.utils.core.transformers.EidasMatchingDatasetUnmarshaller;
+import stubidp.saml.utils.core.transformers.EidasUnsignedMatchingDatasetUnmarshaller;
+import stubidp.saml.utils.core.transformers.MatchingDatasetUnmarshaller;
+import stubidp.saml.utils.core.transformers.inbound.Cycle3DatasetFactory;
+import stubidp.saml.utils.core.validation.SamlResponseValidationException;
 import uk.gov.ida.matchingserviceadapter.domain.AssertionData;
 import uk.gov.ida.matchingserviceadapter.validators.CountryConditionsValidator;
 import uk.gov.ida.matchingserviceadapter.validators.InstantValidator;
 import uk.gov.ida.matchingserviceadapter.validators.SubjectValidator;
-import uk.gov.ida.saml.core.IdaConstants;
-import uk.gov.ida.saml.core.transformers.AuthnContextFactory;
-import uk.gov.ida.saml.core.transformers.EidasMatchingDatasetUnmarshaller;
-import uk.gov.ida.saml.core.transformers.EidasUnsignedMatchingDatasetUnmarshaller;
-import uk.gov.ida.saml.core.transformers.MatchingDatasetUnmarshaller;
-import uk.gov.ida.saml.core.transformers.inbound.Cycle3DatasetFactory;
-import uk.gov.ida.saml.core.validation.SamlResponseValidationException;
-import uk.gov.ida.saml.metadata.MetadataResolverRepository;
-import uk.gov.ida.saml.security.MetadataBackedSignatureValidator;
-import uk.gov.ida.saml.security.SamlAssertionsSignatureValidator;
-import uk.gov.ida.saml.security.SamlMessageSignatureValidator;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 import java.util.List;
 import java.util.Optional;
 
@@ -81,7 +81,7 @@ public class EidasAssertionService extends AssertionService {
             .findFirst();
 
         AuthnStatement authnStatement = countryAssertion.getAuthnStatements().get(0);
-        String levelOfAssurance = authnStatement.getAuthnContext().getAuthnContextClassRef().getAuthnContextClassRef();
+        String levelOfAssurance = authnStatement.getAuthnContext().getAuthnContextClassRef().getURI();
         MatchingDatasetUnmarshaller unmarshaller = getUnmarshaller(countryAssertion);
         return new AssertionData(
                 countryAssertion.getIssuer().getValue(),

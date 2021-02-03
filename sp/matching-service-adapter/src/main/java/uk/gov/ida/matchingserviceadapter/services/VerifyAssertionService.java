@@ -3,17 +3,17 @@ package uk.gov.ida.matchingserviceadapter.services;
 import org.opensaml.saml.saml2.core.Assertion;
 import org.opensaml.saml.saml2.core.AuthnStatement;
 import org.opensaml.saml.saml2.metadata.IDPSSODescriptor;
+import stubidp.saml.security.SamlAssertionsSignatureValidator;
+import stubidp.saml.utils.core.transformers.AuthnContextFactory;
+import stubidp.saml.utils.core.transformers.VerifyMatchingDatasetUnmarshaller;
+import stubidp.saml.utils.core.transformers.inbound.Cycle3DatasetFactory;
+import stubidp.saml.utils.core.validation.SamlResponseValidationException;
 import uk.gov.ida.matchingserviceadapter.domain.AssertionClassification;
 import uk.gov.ida.matchingserviceadapter.domain.AssertionClassifier;
 import uk.gov.ida.matchingserviceadapter.domain.AssertionData;
 import uk.gov.ida.matchingserviceadapter.validators.IdpConditionsValidator;
 import uk.gov.ida.matchingserviceadapter.validators.InstantValidator;
 import uk.gov.ida.matchingserviceadapter.validators.SubjectValidator;
-import uk.gov.ida.saml.core.transformers.AuthnContextFactory;
-import uk.gov.ida.saml.core.transformers.VerifyMatchingDatasetUnmarshaller;
-import uk.gov.ida.saml.core.transformers.inbound.Cycle3DatasetFactory;
-import uk.gov.ida.saml.core.validation.SamlResponseValidationException;
-import uk.gov.ida.saml.security.SamlAssertionsSignatureValidator;
 
 import java.util.List;
 import java.util.Map;
@@ -21,17 +21,17 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static java.util.Collections.emptyList;
+import static stubidp.saml.extensions.validation.errors.GenericHubProfileValidationSpecification.MISMATCHED_ISSUERS;
+import static stubidp.saml.extensions.validation.errors.GenericHubProfileValidationSpecification.MISMATCHED_PIDS;
 import static uk.gov.ida.matchingserviceadapter.domain.AssertionClassification.AUTHN_ASSERTION;
 import static uk.gov.ida.matchingserviceadapter.domain.AssertionClassification.MDS_ASSERTION;
 import static uk.gov.ida.matchingserviceadapter.domain.AssertionClassification.CYCLE_3_ASSERTION;
-import static uk.gov.ida.saml.core.validation.errors.GenericHubProfileValidationSpecification.MISMATCHED_ISSUERS;
-import static uk.gov.ida.saml.core.validation.errors.GenericHubProfileValidationSpecification.MISMATCHED_PIDS;
 
 public class VerifyAssertionService extends AssertionService {
 
-    private String hubEntityId;
+    private final String hubEntityId;
     private final VerifyMatchingDatasetUnmarshaller matchingDatasetUnmarshaller;
-    private AuthnContextFactory authnContextFactory = new AuthnContextFactory();
+    private final AuthnContextFactory authnContextFactory = new AuthnContextFactory();
     private final AssertionClassifier assertionClassifier;
 
     public VerifyAssertionService(InstantValidator instantValidator,
@@ -87,7 +87,7 @@ public class VerifyAssertionService extends AssertionService {
                 .collect(Collectors.groupingBy(assertionClassifier::getClassification));
 
         AuthnStatement authnStatement = assertionMap.get(AUTHN_ASSERTION).get(0).getAuthnStatements().get(0);
-        String levelOfAssurance = authnStatement.getAuthnContext().getAuthnContextClassRef().getAuthnContextClassRef();
+        String levelOfAssurance = authnStatement.getAuthnContext().getAuthnContextClassRef().getURI();
         Assertion mdsAssertion = assertionMap.get(MDS_ASSERTION).get(0);
 
         Optional<Assertion> cycle3Assertion = assertionMap.getOrDefault(CYCLE_3_ASSERTION, emptyList())

@@ -1,7 +1,6 @@
 package uk.gov.ida.matchingserviceadapter.builders;
 
-
-import uk.gov.ida.saml.core.domain.IpAddress;
+import stubidp.saml.domain.assertions.IpAddress;
 
 public class IpAddressBuilder {
 

@@ -14,10 +14,13 @@ import org.opensaml.saml.saml2.core.Issuer;
 import org.opensaml.saml.saml2.core.Subject;
 import org.opensaml.saml.saml2.encryption.Encrypter;
 import org.opensaml.security.credential.Credential;
+import org.opensaml.xmlsec.algorithm.descriptors.DigestSHA256;
+import org.opensaml.xmlsec.algorithm.descriptors.SignatureRSASHA256;
 import org.opensaml.xmlsec.encryption.support.DataEncryptionParameters;
 import org.opensaml.xmlsec.encryption.support.EncryptionConstants;
 import org.opensaml.xmlsec.encryption.support.EncryptionException;
 import org.opensaml.xmlsec.encryption.support.KeyEncryptionParameters;
+import org.opensaml.xmlsec.encryption.support.RSAOAEPParameters;
 import org.opensaml.xmlsec.signature.Signature;
 import org.opensaml.xmlsec.signature.support.SignatureException;
 import org.opensaml.xmlsec.signature.support.Signer;
@@ -54,51 +57,51 @@ public class AssertionBuilder {
 
     public static AssertionBuilder anEidasAssertion() {
         return anAssertion()
-            .withConditions(
-                ConditionsBuilder.aConditions()
-                .validFor(Duration.ofMinutes(10))
-                .restrictedToAudience(TestEntityIds.HUB_CONNECTOR_ENTITY_ID)
-                .build())
-            .withIssuer(
-                IssuerBuilder.anIssuer()
-                .withIssuerId(TestEntityIds.STUB_COUNTRY_ONE)
-                .build())
-            .addAttributeStatement(AttributeStatementBuilder.anEidasAttributeStatement().build())
-            .addAuthnStatement(AuthnStatementBuilder.anEidasAuthnStatement().build())
-            .withSubject(
-                    SubjectBuilder.aSubject()
-                    .withSubjectConfirmation(
-                        SubjectConfirmationBuilder.aSubjectConfirmation()
-                        .withSubjectConfirmationData(SubjectConfirmationDataBuilder.aSubjectConfirmationData().withRecipient(TestEntityIds.HUB_CONNECTOR_ENTITY_ID).build())
-                        .build())
-                    .build());
+                .withConditions(
+                        ConditionsBuilder.aConditions()
+                                .validFor(Duration.ofMinutes(10))
+                                .restrictedToAudience(TestEntityIds.HUB_CONNECTOR_ENTITY_ID)
+                                .build())
+                .withIssuer(
+                        IssuerBuilder.anIssuer()
+                                .withIssuerId(TestEntityIds.STUB_COUNTRY_ONE)
+                                .build())
+                .addAttributeStatement(AttributeStatementBuilder.anEidasAttributeStatement().build())
+                .addAuthnStatement(AuthnStatementBuilder.anEidasAuthnStatement().build())
+                .withSubject(
+                        SubjectBuilder.aSubject()
+                                .withSubjectConfirmation(
+                                        SubjectConfirmationBuilder.aSubjectConfirmation()
+                                                .withSubjectConfirmationData(SubjectConfirmationDataBuilder.aSubjectConfirmationData().withRecipient(TestEntityIds.HUB_CONNECTOR_ENTITY_ID).build())
+                                                .build())
+                                .build());
     }
 
     public static AssertionBuilder anAuthnStatementAssertion() {
         return anAssertion()
-            .addAuthnStatement(AuthnStatementBuilder.anAuthnStatement().build())
-            .addAttributeStatement(AttributeStatementBuilder.anAttributeStatement().addAttribute(IPAddressAttributeBuilder.anIPAddress().build()).build());
+                .addAuthnStatement(AuthnStatementBuilder.anAuthnStatement().build())
+                .addAttributeStatement(AttributeStatementBuilder.anAttributeStatement().addAttribute(IPAddressAttributeBuilder.anIPAddress().build()).build());
     }
 
     public static AssertionBuilder aMatchingDatasetAssertion(
-        Attribute firstName,
-        Attribute middlenames,
-        Attribute surname,
-        Attribute gender,
-        Attribute dateOfBirth,
-        Attribute currentAddress,
-        Attribute previousAddresses) {
+            Attribute firstName,
+            Attribute middlenames,
+            Attribute surname,
+            Attribute gender,
+            Attribute dateOfBirth,
+            Attribute currentAddress,
+            Attribute previousAddresses) {
         AttributeStatementBuilder attributeStatementBuilder = AttributeStatementBuilder.anAttributeStatement()
-            .addAttribute(firstName)
-            .addAttribute(middlenames)
-            .addAttribute(surname)
-            .addAttribute(gender)
-            .addAttribute(dateOfBirth)
-            .addAttribute(currentAddress)
-            .addAttribute(previousAddresses);
+                .addAttribute(firstName)
+                .addAttribute(middlenames)
+                .addAttribute(surname)
+                .addAttribute(gender)
+                .addAttribute(dateOfBirth)
+                .addAttribute(currentAddress)
+                .addAttribute(previousAddresses);
 
         return anAssertion()
-            .addAttributeStatement(attributeStatementBuilder.build());
+                .addAttributeStatement(attributeStatementBuilder.build());
     }
 
     public static AssertionBuilder anEidasMatchingDatasetAssertion(
@@ -116,28 +119,28 @@ public class AssertionBuilder {
             Attribute personalIdentifier,
             Optional<Attribute> gender) {
         AttributeStatementBuilder attributeStatementBuilder = AttributeStatementBuilder.anAttributeStatement()
-            .addAttribute(firstName)
-            .addAttribute(surname)
-            .addAttribute(dateOfBirth)
-            .addAttribute(personalIdentifier);
+                .addAttribute(firstName)
+                .addAttribute(surname)
+                .addAttribute(dateOfBirth)
+                .addAttribute(personalIdentifier);
 
         gender.ifPresent(attributeStatementBuilder::addAttribute);
 
         return anAssertion()
-            .addAttributeStatement(attributeStatementBuilder.build());
+                .addAttributeStatement(attributeStatementBuilder.build());
     }
 
     public static AssertionBuilder aCycle3DatasetAssertion(String name, String value) {
         SimpleStringAttributeBuilder attribute = SimpleStringAttributeBuilder.aSimpleStringAttribute()
-            .withName(name)
-            .withSimpleStringValue(value);
+                .withName(name)
+                .withSimpleStringValue(value);
 
         AttributeStatementBuilder attributeStatementBuilder = AttributeStatementBuilder.anAttributeStatement()
-            .addAttribute(attribute.build());
+                .addAttribute(attribute.build());
 
         return anAssertion()
-            .withIssuer(IssuerBuilder.anIssuer().withIssuerId(TestEntityIds.HUB_ENTITY_ID).build()) // Hub entity id defines the ability to parse an attribute query
-            .addAttributeStatement(attributeStatementBuilder.build());
+                .withIssuer(IssuerBuilder.anIssuer().withIssuerId(TestEntityIds.HUB_ENTITY_ID).build()) // Hub entity id defines the ability to parse an attribute query
+                .addAttributeStatement(attributeStatementBuilder.build());
     }
 
     public static AssertionBuilder aCycle3DatasetAssertion(List<Attribute> attributes) {
@@ -146,14 +149,14 @@ public class AssertionBuilder {
             attributeStatementBuilder.addAttribute(attribute);
         }
         return anAssertion()
-            .withIssuer(IssuerBuilder.anIssuer().withIssuerId(TestEntityIds.HUB_ENTITY_ID).build()) // Hub entity id defines the ability to parse an attribute query
-            .addAttributeStatement(attributeStatementBuilder.build());
+                .withIssuer(IssuerBuilder.anIssuer().withIssuerId(TestEntityIds.HUB_ENTITY_ID).build()) // Hub entity id defines the ability to parse an attribute query
+                .addAttributeStatement(attributeStatementBuilder.build());
     }
 
     public Assertion buildUnencrypted() {
         Assertion assertion = (Assertion) factory
-            .getBuilder(Assertion.DEFAULT_ELEMENT_NAME)
-            .buildObject(Assertion.DEFAULT_ELEMENT_NAME, Assertion.TYPE_NAME);
+                .getBuilder(Assertion.DEFAULT_ELEMENT_NAME)
+                .buildObject(Assertion.DEFAULT_ELEMENT_NAME, Assertion.TYPE_NAME);
 
         id.ifPresent(assertion::setID);
         assertion.setVersion(version);
@@ -214,6 +217,9 @@ public class AssertionBuilder {
         KeyEncryptionParameters kekParams = new KeyEncryptionParameters();
         kekParams.setEncryptionCredential(credential);
         kekParams.setAlgorithm(keyTransportEncryptionAlgorithm);
+        final RSAOAEPParameters params = new RSAOAEPParameters();
+        params.setDigestMethod(new DigestSHA256().getURI());
+        kekParams.setRSAOAEPParameters(params);
 
         Encrypter encrypter = new Encrypter(encParams, kekParams);
         encrypter.setKeyPlacement(Encrypter.KeyPlacement.PEER);

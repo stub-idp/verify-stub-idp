@@ -83,6 +83,7 @@
         <module>saml/saml-serializers</module>
         <module>saml/saml-utils</module>
         <module>saml/trust-anchor</module>
+        <module>sp/matching-service-adapter</module>
         <module>sp/test-rp</module>
         <module>test/dev-pki</module>
         <module>test/saml-test</module>

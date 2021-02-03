@@ -54,7 +54,6 @@ import uk.gov.ida.rp.testrp.saml.locators.TransactionHardCodedEntityToEncryptFor
 import uk.gov.ida.rp.testrp.saml.transformers.IdaAuthnRequestFromTransactionToAuthnRequestTransformer;
 import uk.gov.ida.rp.testrp.saml.transformers.InboundResponseFromHubUnmarshaller;
 import uk.gov.ida.rp.testrp.saml.transformers.SamlResponseToIdaResponseTransformer;
-import uk.gov.ida.rp.testrp.saml.validators.NoOpStringSizeValidator;
 import uk.gov.ida.rp.testrp.tokenservice.TokenService;
 import uk.gov.ida.rp.testrp.views.NonCachingFreemarkerViewRenderer;
 import uk.gov.ida.rp.testrp.views.SamlAuthnRequestRedirectViewFactory;

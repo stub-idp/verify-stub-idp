@@ -1,10 +1,9 @@
 package uk.gov.ida.matchingserviceadapter.exceptions;
 
-import com.squarespace.jersey2.guice.JerseyGuiceUtils;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import uk.gov.ida.matchingserviceadapter.MatchingServiceAdapterConfiguration;
@@ -18,12 +17,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class SamlOverSoapExceptionMapperTest {
-
-    static {
-        JerseyGuiceUtils.reset();
-    }
 
     @Mock
     private ExceptionResponseFactory exceptionResponseFactory;

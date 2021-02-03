@@ -1,8 +1,8 @@
 package uk.gov.ida.matchingserviceadapter.domain;
 
-import uk.gov.ida.saml.core.domain.AuthnContext;
-import uk.gov.ida.saml.core.domain.Cycle3Dataset;
-import uk.gov.ida.saml.core.domain.MatchingDataset;
+import stubidp.saml.domain.assertions.AuthnContext;
+import stubidp.saml.domain.assertions.Cycle3Dataset;
+import stubidp.saml.domain.assertions.MatchingDataset;
 
 import java.util.Optional;
 

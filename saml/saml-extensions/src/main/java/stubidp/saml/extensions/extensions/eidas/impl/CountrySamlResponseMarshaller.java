@@ -8,6 +8,9 @@ import stubidp.saml.extensions.extensions.eidas.CountrySamlResponse;
 
 public class CountrySamlResponseMarshaller extends AbstractSAMLObjectMarshaller {
 
+    public CountrySamlResponseMarshaller() {
+    }
+
     @Override
     protected void marshallElementContent(XMLObject samlObject, Element domElement) {
         CountrySamlResponse countrySamlResponse = (CountrySamlResponse) samlObject;

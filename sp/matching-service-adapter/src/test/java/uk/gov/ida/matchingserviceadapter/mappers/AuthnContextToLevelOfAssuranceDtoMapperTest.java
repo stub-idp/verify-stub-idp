@@ -1,10 +1,11 @@
 package uk.gov.ida.matchingserviceadapter.mappers;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
+import stubidp.saml.domain.assertions.AuthnContext;
 import uk.gov.ida.matchingserviceadapter.rest.matchingservice.LevelOfAssuranceDto;
-import uk.gov.ida.saml.core.domain.AuthnContext;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class AuthnContextToLevelOfAssuranceDtoMapperTest {
 
@@ -16,14 +17,16 @@ public class AuthnContextToLevelOfAssuranceDtoMapperTest {
         assertThat(AuthnContextToLevelOfAssuranceDtoMapper.map(AuthnContext.LEVEL_4)).isEqualTo(LevelOfAssuranceDto.LEVEL_4);
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void test_unExpectedLevels() {
-        AuthnContextToLevelOfAssuranceDtoMapper.map(AuthnContext.valueOf("LEVEL_11"));
+        assertThrows(IllegalArgumentException.class,
+                () -> AuthnContextToLevelOfAssuranceDtoMapper.map(AuthnContext.valueOf("LEVEL_11")));
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void test_unExpectedLevel_X() {
-        AuthnContextToLevelOfAssuranceDtoMapper.map(AuthnContext.LEVEL_X);
+        assertThrows(IllegalArgumentException.class,
+                () -> AuthnContextToLevelOfAssuranceDtoMapper.map(AuthnContext.LEVEL_X));
     }
 
 }

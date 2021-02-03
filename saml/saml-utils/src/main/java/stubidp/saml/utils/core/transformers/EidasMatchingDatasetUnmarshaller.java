@@ -15,6 +15,7 @@ import stubidp.saml.extensions.extensions.eidas.DateOfBirth;
 import stubidp.saml.extensions.extensions.eidas.PersonIdentifier;
 import stubidp.saml.extensions.extensions.eidas.TransliterableString;
 
+import javax.inject.Inject;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -25,10 +26,11 @@ import static java.text.MessageFormat.format;
 import static java.util.Collections.emptyList;
 import static java.util.Collections.singletonList;
 
-public class EidasMatchingDatasetUnmarshaller extends MatchingDatasetUnmarshaller{
+public class EidasMatchingDatasetUnmarshaller extends MatchingDatasetUnmarshaller {
 
     private static final Logger LOG = LoggerFactory.getLogger(EidasMatchingDatasetUnmarshaller.class);
 
+    @Inject
     public EidasMatchingDatasetUnmarshaller() {
     }
 
@@ -71,12 +73,11 @@ public class EidasMatchingDatasetUnmarshaller extends MatchingDatasetUnmarshalle
                 .findFirst()
                 .map(a -> ((PersonIdentifier)a.getAttributeValues().get(0)).getPersonIdentifier())
                 .orElseThrow(() -> {
-                    String errorMessage = "No PersonalIdentifier found in Matching Dataset Assertion";
+                    String errorMessage = "No PersonIdentifier found in Matching Dataset Assertion";
                     LOG.warn(errorMessage);
                     return new IllegalArgumentException(errorMessage);
                 });
     }
-
 
     private List<TransliterableMdsValue> transformEidasGivenNameAttribute(Attribute attribute) {
         Map<Boolean, List<CurrentGivenName>> attributeValueMap = attribute.getAttributeValues()

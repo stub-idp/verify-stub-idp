@@ -14,6 +14,7 @@ import stubidp.saml.extensions.IdaConstants;
 import stubidp.saml.utils.core.domain.AddressFactory;
 import stubidp.saml.extensions.extensions.PersonName;
 
+import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -24,6 +25,7 @@ public class VerifyMatchingDatasetUnmarshaller extends MatchingDatasetUnmarshall
 
     private static final Logger LOG = LoggerFactory.getLogger(VerifyMatchingDatasetUnmarshaller.class);
 
+    @Inject
     public VerifyMatchingDatasetUnmarshaller() {}
 
     protected void transformAttribute(Attribute attribute, MatchingDatasetBuilder datasetBuilder) {

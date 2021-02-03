@@ -1,13 +1,12 @@
 package uk.gov.ida.matchingserviceadapter.healthcheck;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-
 public class MatchingServiceAdapterHealthCheckTest {
 
-    private MatchingServiceAdapterHealthCheck healthCheck = new MatchingServiceAdapterHealthCheck();
+    private final MatchingServiceAdapterHealthCheck healthCheck = new MatchingServiceAdapterHealthCheck();
 
     @Test
     public void shouldReturnHealthy() {

@@ -1,15 +1,17 @@
 package uk.gov.ida.matchingserviceadapter.resources;
 
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.opensaml.saml.saml2.core.AttributeQuery;
 import org.opensaml.saml.saml2.core.Issuer;
 import org.slf4j.event.Level;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import stubidp.saml.extensions.validation.SamlTransformationErrorException;
+import stubidp.saml.security.AssertionDecrypter;
+import stubidp.saml.serializers.deserializers.ElementToOpenSamlXMLObjectTransformer;
 import uk.gov.ida.matchingserviceadapter.mappers.MatchingServiceRequestDtoMapper;
 import uk.gov.ida.matchingserviceadapter.mappers.MatchingServiceResponseDtoToOutboundResponseFromMatchingServiceMapper;
 import uk.gov.ida.matchingserviceadapter.proxies.MatchingServiceProxy;
@@ -19,19 +21,15 @@ import uk.gov.ida.matchingserviceadapter.saml.SamlOverSoapException;
 import uk.gov.ida.matchingserviceadapter.services.AttributeQueryService;
 import uk.gov.ida.matchingserviceadapter.services.MatchingResponseGenerator;
 import uk.gov.ida.matchingserviceadapter.services.UnknownUserResponseGenerator;
-import uk.gov.ida.saml.core.validation.SamlTransformationErrorException;
-import uk.gov.ida.saml.deserializers.ElementToOpenSamlXMLObjectTransformer;
-import uk.gov.ida.saml.security.AssertionDecrypter;
 
-import static org.mockito.Matchers.any;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
-import static org.mockito.MockitoAnnotations.initMocks;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class AttributeQueryHandlingTests {
 
     @Mock
@@ -45,11 +43,6 @@ public class AttributeQueryHandlingTests {
 
     @Mock
     private ElementToOpenSamlXMLObjectTransformer<AttributeQuery> unmarshaller;
-
-    @Before
-    public void setUp() {
-        initMocks(AttributeQueryHandlingTests.class);
-    }
 
     @Test
     public void matchingServiceResourceShouldNotDecryptAssertionsIfSignatureOnAttributeQueryInvalid() {

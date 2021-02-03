@@ -1,15 +1,21 @@
 package uk.gov.ida.matchingserviceadapter.services;
 
 import io.dropwizard.util.Duration;
-import org.joda.time.DateTime;
-import org.joda.time.LocalDate;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.opensaml.saml.saml2.core.Attribute;
-import uk.gov.ida.common.shared.security.IdGenerator;
+import stubidp.saml.domain.assertions.AuthnContext;
+import stubidp.saml.domain.assertions.Cycle3Dataset;
+import stubidp.saml.domain.assertions.Gender;
+import stubidp.saml.domain.assertions.MatchingDataset;
+import stubidp.saml.domain.matching.UnknownUserCreationIdaStatus;
+import stubidp.saml.extensions.extensions.StringValueSamlObject;
+import stubidp.saml.test.OpenSAMLRunner;
+import stubidp.saml.utils.core.OpenSamlXmlObjectFactory;
+import stubidp.utils.security.security.IdGenerator;
 import uk.gov.ida.matchingserviceadapter.MatchingServiceAdapterConfiguration;
 import uk.gov.ida.matchingserviceadapter.builders.SimpleMdsValueBuilder;
 import uk.gov.ida.matchingserviceadapter.configuration.AssertionLifetimeConfiguration;
@@ -18,16 +24,11 @@ import uk.gov.ida.matchingserviceadapter.domain.OutboundResponseFromUnknownUserC
 import uk.gov.ida.matchingserviceadapter.domain.UserAccountCreationAttribute;
 import uk.gov.ida.matchingserviceadapter.domain.UserAccountCreationAttributeExtractor;
 import uk.gov.ida.matchingserviceadapter.rest.UnknownUserCreationResponseDto;
-import uk.gov.ida.saml.core.OpenSamlXmlObjectFactory;
-import uk.gov.ida.saml.core.domain.AuthnContext;
-import uk.gov.ida.saml.core.domain.Cycle3Dataset;
-import uk.gov.ida.saml.core.domain.Gender;
-import uk.gov.ida.saml.core.domain.MatchingDataset;
-import uk.gov.ida.saml.core.domain.UnknownUserCreationIdaStatus;
-import uk.gov.ida.saml.core.extensions.StringValueSamlObject;
-import uk.gov.ida.saml.core.test.OpenSAMLMockitoRunner;
-import uk.gov.ida.shared.utils.datetime.DateTimeFreezer;
 
+import java.time.Clock;
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -39,6 +40,7 @@ import static java.util.Arrays.asList;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
+import static stubidp.saml.test.builders.MatchingDatasetBuilder.aMatchingDataset;
 import static uk.gov.ida.matchingserviceadapter.builders.AddressBuilder.aCurrentAddress;
 import static uk.gov.ida.matchingserviceadapter.builders.AddressBuilder.aHistoricalAddress;
 import static uk.gov.ida.matchingserviceadapter.domain.UserAccountCreationAttribute.ADDRESS_HISTORY;
@@ -55,10 +57,9 @@ import static uk.gov.ida.matchingserviceadapter.domain.UserAccountCreationAttrib
 import static uk.gov.ida.matchingserviceadapter.domain.UserAccountCreationAttribute.SURNAME_VERIFIED;
 import static uk.gov.ida.matchingserviceadapter.rest.UnknownUserCreationResponseDto.FAILURE;
 import static uk.gov.ida.matchingserviceadapter.rest.UnknownUserCreationResponseDto.SUCCESS;
-import static uk.gov.ida.saml.core.test.builders.MatchingDatasetBuilder.aMatchingDataset;
 
-@RunWith(OpenSAMLMockitoRunner.class)
-public class UnknownUserResponseGeneratorTest {
+@ExtendWith(MockitoExtension.class)
+public class UnknownUserResponseGeneratorTest extends OpenSAMLRunner {
 
     private static final String REQUEST_ID = "requestId";
     private static final String HASHED_PID = "hashedPid";
@@ -66,6 +67,7 @@ public class UnknownUserResponseGeneratorTest {
     private static final String AUTHN_REQUEST_ISSUER_ID = "authnRequestIssuerId";
     private static final String ENTITY_ID = "entityId";
     private static final String TEST_ID = "testId";
+
     @Mock
     private MatchingServiceAdapterConfiguration configuration;
 
@@ -77,32 +79,29 @@ public class UnknownUserResponseGeneratorTest {
 
     private UnknownUserResponseGenerator unknownUserResponseGenerator;
 
-    private OpenSamlXmlObjectFactory openSamlXmlObjectFactory = new OpenSamlXmlObjectFactory();
+    private final OpenSamlXmlObjectFactory openSamlXmlObjectFactory = new OpenSamlXmlObjectFactory();
 
-    @Before
+    private final Clock clock = Clock.fixed(Instant.now(), ZoneId.of("UTC"));
+
+    @BeforeEach
     public void setup() {
-        when(assertionLifetimeConfiguration.getAssertionLifetime()).thenReturn(Duration.days(2));
         when(configuration.getEntityId()).thenReturn(ENTITY_ID);
         when(idGenerator.getId()).thenReturn(TEST_ID);
 
         unknownUserResponseGenerator = new UnknownUserResponseGenerator(
-            configuration,
-            assertionLifetimeConfiguration,
-            new UserAccountCreationAttributeExtractor(),
-            idGenerator);
-
-        DateTimeFreezer.freezeTime();
-    }
-
-    @After
-    public void tearDown() {
-        DateTimeFreezer.unfreezeTime();
+                configuration,
+                assertionLifetimeConfiguration,
+                new UserAccountCreationAttributeExtractor(),
+                idGenerator,
+                clock);
     }
 
     @Test
     public void shouldReturnSuccessResponseWhenMatchingServiceReturnsSuccess() {
-        LocalDate dob = new LocalDate(1970, 1, 2);
-        LocalDate oldDob = new LocalDate(1970, 2, 1);
+        when(assertionLifetimeConfiguration.getAssertionLifetime()).thenReturn(Duration.days(2));
+
+        LocalDate dob = LocalDate.of(1970, 1, 2);
+        LocalDate oldDob = LocalDate.of(1970, 2, 1);
         MatchingDataset matchingDataset = aMatchingDataset()
                 .addFirstname(SimpleMdsValueBuilder.<String>aCurrentSimpleMdsValue().withValue("Joe").withVerifiedStatus(true).build())
                 .addFirstname(SimpleMdsValueBuilder.<String>aHistoricalSimpleMdsValue().withValue("Bob").build())
@@ -158,7 +157,7 @@ public class UnknownUserResponseGeneratorTest {
         assertThat(response.getMatchingServiceAssertion().get().getId()).isEqualTo(TEST_ID);
         assertThat(response.getMatchingServiceAssertion().get().getIssuerId()).isEqualTo(ENTITY_ID);
         assertThat(response.getMatchingServiceAssertion().get().getAssertionRestrictions().getInResponseTo()).isEqualTo(REQUEST_ID);
-        assertThat(response.getMatchingServiceAssertion().get().getAssertionRestrictions().getNotOnOrAfter()).isEqualTo(DateTime.now().plus(assertionLifetimeConfiguration.getAssertionLifetime().toMilliseconds()));
+        assertThat(response.getMatchingServiceAssertion().get().getAssertionRestrictions().getNotOnOrAfter()).isEqualTo(Instant.now(clock).plusMillis(assertionLifetimeConfiguration.getAssertionLifetime().toMilliseconds()));
         assertThat(response.getMatchingServiceAssertion().get().getAssertionRestrictions().getRecipient()).isEqualTo(ASSERTION_CONSUMER_SERVICE_URL);
 
         Map<String, String> expectedValues = new HashMap<String, String>();
@@ -178,9 +177,9 @@ public class UnknownUserResponseGeneratorTest {
         userAttributesForAccountCreation.stream()
                 .filter(a -> expectedValues.containsKey(a.getName()))
                 .forEach(a -> {
-            String attributeValue = ((StringValueSamlObject) a.getAttributeValues().get(0)).getValue();
-            assertThat(expectedValues.get(a.getName())).isEqualTo(attributeValue);
-        });
+                    String attributeValue = ((StringValueSamlObject) a.getAttributeValues().get(0)).getValue();
+                    assertThat(expectedValues.get(a.getName())).isEqualTo(attributeValue);
+                });
     }
 
     @Test

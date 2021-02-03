@@ -1,12 +1,11 @@
 package uk.gov.ida.matchingserviceadapter.rest;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import org.apache.commons.lang.builder.EqualsBuilder;
-import org.apache.commons.lang.builder.HashCodeBuilder;
 import uk.gov.ida.matchingserviceadapter.rest.matchingservice.Cycle3DatasetDto;
 import uk.gov.ida.matchingserviceadapter.rest.matchingservice.LevelOfAssuranceDto;
 import uk.gov.ida.matchingserviceadapter.rest.matchingservice.UniversalMatchingDatasetDto;
 
+import java.util.Objects;
 import java.util.Optional;
 
 
@@ -36,11 +35,15 @@ public class UniversalMatchingServiceRequestDto extends MatchingServiceRequestDt
 
     @Override
     public boolean equals(Object o) {
-        return EqualsBuilder.reflectionEquals(this, o);
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
+        UniversalMatchingServiceRequestDto that = (UniversalMatchingServiceRequestDto) o;
+        return Objects.equals(matchingDataset, that.matchingDataset);
     }
 
     @Override
     public int hashCode() {
-        return HashCodeBuilder.reflectionHashCode(this);
+        return Objects.hash(super.hashCode(), matchingDataset);
     }
 }

@@ -1,25 +1,23 @@
 package uk.gov.ida.matchingserviceadapter.saml.transformers.outbound.transformers;
 
-import com.google.common.collect.ImmutableList;
-import org.joda.time.LocalDate;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.opensaml.core.xml.XMLObject;
 import org.opensaml.saml.saml2.core.Assertion;
 import org.opensaml.saml.saml2.core.Attribute;
+import stubidp.saml.domain.assertions.SimpleMdsValue;
+import stubidp.saml.domain.assertions.TransliterableMdsValue;
+import stubidp.saml.extensions.extensions.StringValueSamlObject;
+import stubidp.saml.extensions.extensions.impl.VerifiedImpl;
+import stubidp.saml.utils.core.OpenSamlXmlObjectFactory;
+import stubidp.saml.utils.core.transformers.outbound.OutboundAssertionToSubjectTransformer;
 import uk.gov.ida.matchingserviceadapter.domain.MatchingServiceAssertion;
 import uk.gov.ida.matchingserviceadapter.domain.UserAccountCreationAttribute;
 import uk.gov.ida.matchingserviceadapter.saml.factories.UserAccountCreationAttributeFactory;
-import uk.gov.ida.saml.core.OpenSamlXmlObjectFactory;
-import uk.gov.ida.saml.core.domain.SimpleMdsValue;
-import uk.gov.ida.saml.core.domain.TransliterableMdsValue;
-import uk.gov.ida.saml.core.extensions.StringValueSamlObject;
-import uk.gov.ida.saml.core.extensions.impl.VerifiedImpl;
-import uk.gov.ida.saml.core.test.OpenSAMLRunner;
-import uk.gov.ida.saml.core.transformers.outbound.OutboundAssertionToSubjectTransformer;
-import uk.gov.ida.shared.utils.datetime.DateTimeFreezer;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,15 +27,14 @@ import static uk.gov.ida.matchingserviceadapter.domain.UserAccountCreationAttrib
 import static uk.gov.ida.matchingserviceadapter.domain.UserAccountCreationAttribute.FIRST_NAME;
 import static uk.gov.ida.matchingserviceadapter.domain.UserAccountCreationAttribute.MIDDLE_NAME_VERIFIED;
 
-@RunWith(OpenSAMLRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class AssertionServiceAssertionToAssertionTransformerTest {
 
     private MatchingServiceAssertionToAssertionTransformer transformer;
     private OpenSamlXmlObjectFactory openSamlXmlObjectFactory;
 
-    @Before
+    @BeforeEach
     public void setup() {
-        DateTimeFreezer.freezeTime();
         openSamlXmlObjectFactory = new OpenSamlXmlObjectFactory();
         transformer = new MatchingServiceAssertionToAssertionTransformer(
                 openSamlXmlObjectFactory,
@@ -50,7 +47,7 @@ public class AssertionServiceAssertionToAssertionTransformerTest {
         MatchingServiceAssertion matchingServiceAssertion = aMatchingServiceAssertion().build();
         Assertion assertion = transformer.apply(matchingServiceAssertion);
         assertThat(assertion.getAuthnStatements()).hasSize(1);
-        assertThat(assertion.getAuthnStatements().get(0).getAuthnContext().getAuthnContextClassRef().getAuthnContextClassRef()).isEqualTo(matchingServiceAssertion.getAuthnStatement().getAuthnContext().getUri());
+        assertThat(assertion.getAuthnStatements().get(0).getAuthnContext().getAuthnContextClassRef().getURI()).isEqualTo(matchingServiceAssertion.getAuthnStatement().getAuthnContext().getUri());
     }
 
     @Test
@@ -87,7 +84,7 @@ public class AssertionServiceAssertionToAssertionTransformerTest {
 
     @Test
     public void shouldTransformAssertionsWithDateOfBirthAttribute() {
-        LocalDate dob = new LocalDate(1980, 10, 30);
+        LocalDate dob = LocalDate.of(1980, 10, 30);
         Attribute attribute = new UserAccountCreationAttributeFactory(openSamlXmlObjectFactory).createUserAccountCreationDateOfBirthAttribute(
                 new SimpleMdsValue<>(dob, null, null, false));
 
@@ -110,7 +107,7 @@ public class AssertionServiceAssertionToAssertionTransformerTest {
 
     private Assertion transformAssertionWithAttribute(final Attribute attribute) {
         MatchingServiceAssertion matchingServiceAssertion = aMatchingServiceAssertion()
-                .withUserAttributesForAccountCreation(ImmutableList.of(attribute))
+                .withUserAttributesForAccountCreation(List.of(attribute))
                 .build();
         return transformer.apply(matchingServiceAssertion);
     }

@@ -1,9 +1,9 @@
 package uk.gov.ida.matchingserviceadapter.domain;
 
-import org.joda.time.DateTime;
-import uk.gov.ida.saml.core.domain.IdaMatchingServiceResponse;
-import uk.gov.ida.saml.core.domain.MatchingServiceIdaStatus;
+import stubidp.saml.domain.matching.IdaMatchingServiceResponse;
+import stubidp.saml.domain.matching.MatchingServiceIdaStatus;
 
+import java.time.Instant;
 import java.util.Optional;
 
 public class OutboundResponseFromMatchingService extends IdaMatchingServiceResponse {
@@ -15,7 +15,7 @@ public class OutboundResponseFromMatchingService extends IdaMatchingServiceRespo
             String responseId,
             String inResponseTo,
             String issuer,
-            DateTime issueInstant,
+            Instant issueInstant,
             MatchingServiceIdaStatus status,
             Optional<MatchingServiceAssertion> matchingServiceAssertion) {
 
@@ -38,7 +38,7 @@ public class OutboundResponseFromMatchingService extends IdaMatchingServiceRespo
                 responseId,
                 originalRequestId,
                 issuerId,
-                DateTime.now(),
+                Instant.now(),
                 MatchingServiceIdaStatus.MatchingServiceMatch,
                 Optional.ofNullable(assertion)
         );
@@ -52,7 +52,7 @@ public class OutboundResponseFromMatchingService extends IdaMatchingServiceRespo
                 responseId,
                 originalRequestId,
                 issuerId,
-                DateTime.now(),
+                Instant.now(),
                 MatchingServiceIdaStatus.NoMatchingServiceMatchFromMatchingService,
                 Optional.empty()
         );

@@ -1,10 +1,10 @@
 package uk.gov.ida.matchingserviceadapter.services;
 
-import org.joda.time.LocalDate;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.opensaml.saml.saml2.core.Assertion;
 import org.opensaml.saml.saml2.core.Attribute;
 import org.opensaml.security.credential.Credential;
@@ -13,26 +13,24 @@ import org.opensaml.security.credential.impl.StaticCredentialResolver;
 import org.opensaml.xmlsec.config.impl.DefaultSecurityConfigurationBootstrap;
 import org.opensaml.xmlsec.keyinfo.KeyInfoCredentialResolver;
 import org.opensaml.xmlsec.signature.support.impl.ExplicitKeySignatureTrustEngine;
+import stubidp.saml.extensions.IdaConstants;
+import stubidp.saml.metadata.MetadataResolverRepository;
+import stubidp.saml.security.SamlAssertionsSignatureValidator;
+import stubidp.saml.security.SigningCredentialFactory;
+import stubidp.saml.test.OpenSAMLRunner;
+import stubidp.saml.utils.core.OpenSamlXmlObjectFactory;
+import stubidp.saml.utils.core.transformers.EidasMatchingDatasetUnmarshaller;
+import stubidp.saml.utils.core.transformers.EidasUnsignedMatchingDatasetUnmarshaller;
+import stubidp.saml.utils.core.transformers.inbound.Cycle3DatasetFactory;
+import stubidp.saml.utils.core.validation.SamlResponseValidationException;
+import stubidp.test.devpki.TestEntityIds;
+import stubidp.test.security.HardCodedKeyStore;
 import uk.gov.ida.matchingserviceadapter.domain.AssertionData;
 import uk.gov.ida.matchingserviceadapter.validators.CountryConditionsValidator;
 import uk.gov.ida.matchingserviceadapter.validators.InstantValidator;
 import uk.gov.ida.matchingserviceadapter.validators.SubjectValidator;
-import uk.gov.ida.saml.core.IdaConstants;
-import uk.gov.ida.saml.core.IdaSamlBootstrap;
-import uk.gov.ida.saml.core.test.HardCodedKeyStore;
-import uk.gov.ida.saml.core.test.OpenSamlXmlObjectFactory;
-import uk.gov.ida.saml.core.test.TestEntityIds;
-import uk.gov.ida.saml.core.test.builders.AttributeStatementBuilder;
-import uk.gov.ida.saml.core.transformers.EidasMatchingDatasetUnmarshaller;
-import uk.gov.ida.saml.core.transformers.EidasUnsignedMatchingDatasetUnmarshaller;
-import uk.gov.ida.saml.core.transformers.inbound.Cycle3DatasetFactory;
-import uk.gov.ida.saml.core.validation.SamlResponseValidationException;
-import uk.gov.ida.saml.metadata.MetadataResolverRepository;
-import uk.gov.ida.saml.security.SamlAssertionsSignatureValidator;
-import uk.gov.ida.saml.security.SigningCredentialFactory;
-import uk.gov.ida.saml.security.validators.ValidatedAssertions;
-import uk.gov.ida.shared.utils.datetime.DateTimeFreezer;
 
+import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -40,22 +38,24 @@ import java.util.Optional;
 
 import static java.util.Arrays.asList;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import static org.mockito.MockitoAnnotations.initMocks;
+import static stubidp.saml.domain.assertions.AuthnContext.LEVEL_2;
+import static stubidp.saml.test.builders.AssertionBuilder.aCycle3DatasetAssertion;
+import static stubidp.saml.test.builders.AssertionBuilder.anEidasAssertion;
+import static stubidp.test.devpki.TestEntityIds.HUB_CONNECTOR_ENTITY_ID;
+import static stubidp.test.devpki.TestEntityIds.HUB_ENTITY_ID;
+import static stubidp.test.devpki.TestEntityIds.STUB_COUNTRY_ONE;
+import static uk.gov.ida.matchingserviceadapter.builders.AttributeStatementBuilder.anAttributeStatement;
 import static uk.gov.ida.matchingserviceadapter.services.AttributeQueryServiceTest.anEidasSignature;
-import static uk.gov.ida.saml.core.domain.AuthnContext.LEVEL_2;
-import static uk.gov.ida.saml.core.test.TestEntityIds.HUB_CONNECTOR_ENTITY_ID;
-import static uk.gov.ida.saml.core.test.TestEntityIds.HUB_ENTITY_ID;
-import static uk.gov.ida.saml.core.test.TestEntityIds.STUB_COUNTRY_ONE;
-import static uk.gov.ida.saml.core.test.builders.AssertionBuilder.aCycle3DatasetAssertion;
-import static uk.gov.ida.saml.core.test.builders.AssertionBuilder.anEidasAssertion;
 
-public class EidasAssertionServiceTest {
+@ExtendWith(MockitoExtension.class)
+public class EidasAssertionServiceTest extends OpenSAMLRunner {
 
     private EidasAssertionService eidasAssertionService;
 
@@ -77,10 +77,8 @@ public class EidasAssertionServiceTest {
     @Mock
     private EidasUnsignedMatchingDatasetUnmarshaller eidasUnsignedMatchingDatasetUnmarshaller;
 
-    @Before
-    public void setUp() {
-        IdaSamlBootstrap.bootstrap();
-        initMocks(this);
+    @BeforeEach
+    public void setUp() throws Exception {
         eidasAssertionService = new EidasAssertionService(
                 instantValidator,
                 subjectValidator,
@@ -93,18 +91,7 @@ public class EidasAssertionServiceTest {
                 new EidasMatchingDatasetUnmarshaller(),
                 eidasUnsignedMatchingDatasetUnmarshaller
         );
-        doNothing().when(instantValidator).validate(any(), any());
-        doNothing().when(subjectValidator).validate(any(), any());
-        doNothing().when(conditionsValidator).validate(any(), any());
-        when(hubSignatureValidator.validate(any(), any())).thenReturn(mock(ValidatedAssertions.class));
         when(metadataResolverRepository.getResolverEntityIds()).thenReturn(Collections.singletonList(STUB_COUNTRY_ONE));
-
-        DateTimeFreezer.freezeTime();
-    }
-
-    @After
-    public void tearDown() {
-        DateTimeFreezer.unfreezeTime();
     }
 
     @Test
@@ -124,34 +111,43 @@ public class EidasAssertionServiceTest {
 
     @Test
     public void shouldNotAttemptToValidateSignatureOnUnsignedAssertion() {
+        doNothing().when(instantValidator).validate(any(), any());
+        doNothing().when(subjectValidator).validate(any(), any());
+        doNothing().when(conditionsValidator).validate(any(), any());
         Attribute unsignedAssertions = new OpenSamlXmlObjectFactory().createAttribute();
         unsignedAssertions.setName(IdaConstants.Eidas_Attributes.UnsignedAssertions.EidasSamlResponse.NAME);
-
 
         Assertion eidasUnsignedAssertion = anEidasAssertion()
                 .withSignature(null)
                 .addAttributeStatement(
-                        new AttributeStatementBuilder()
+                        anAttributeStatement()
                                 .addAttribute(unsignedAssertions).build())
                 .buildUnencrypted();
-        eidasAssertionService.validate("bob", asList(eidasUnsignedAssertion));
+        eidasAssertionService.validate("bob", Collections.singletonList(eidasUnsignedAssertion));
         verify(metadataResolverRepository, never()).getSignatureTrustEngine(any(String.class));
     }
 
-    @Test(expected = SamlResponseValidationException.class)
+    @Test
     public void shouldNotAllowSignedAssertionContainingEidasSamlResponseAttribute() {
+        doNothing().when(instantValidator).validate(any(), any());
+        doNothing().when(subjectValidator).validate(any(), any());
+        doNothing().when(conditionsValidator).validate(any(), any());
         Attribute unsignedAssertions = new OpenSamlXmlObjectFactory().createAttribute();
         unsignedAssertions.setName(IdaConstants.Eidas_Attributes.UnsignedAssertions.EidasSamlResponse.NAME);
         Assertion eidasUnsignedAssertion = anEidasAssertion()
                 .addAttributeStatement(
-                        new AttributeStatementBuilder()
+                        anAttributeStatement()
                                 .addAttribute(unsignedAssertions).build())
                 .buildUnencrypted();
-        eidasAssertionService.validate("bob", asList(eidasUnsignedAssertion));
+        assertThrows(SamlResponseValidationException.class,
+                () -> eidasAssertionService.validate("bob", Collections.singletonList(eidasUnsignedAssertion)));
     }
 
     @Test
     public void shouldValidateSignatureOnSignedAssertion() {
+        doNothing().when(instantValidator).validate(any(), any());
+        doNothing().when(subjectValidator).validate(any(), any());
+        doNothing().when(conditionsValidator).validate(any(), any());
         ExplicitKeySignatureTrustEngine trustEngine = getExplicitKeySignatureTrustEngine();
         when(metadataResolverRepository.getSignatureTrustEngine(TestEntityIds.STUB_COUNTRY_ONE)).thenReturn(Optional.of(trustEngine));
         Assertion eidasAssertion = AttributeQueryServiceTest.anEidasAssertion("requestId", TestEntityIds.STUB_COUNTRY_ONE, anEidasSignature());
@@ -164,15 +160,14 @@ public class EidasAssertionServiceTest {
         Attribute unsignedAssertions = new OpenSamlXmlObjectFactory().createAttribute();
         unsignedAssertions.setName(IdaConstants.Eidas_Attributes.UnsignedAssertions.EidasSamlResponse.NAME);
 
-        List<Assertion> assertions = asList(anEidasAssertion().addAttributeStatement(
-                new AttributeStatementBuilder()
-                .addAttribute(unsignedAssertions)
+        List<Assertion> assertions = Collections.singletonList(anEidasAssertion().addAttributeStatement(
+                anAttributeStatement()
+                        .addAttribute(unsignedAssertions)
                         .build())
                 .buildUnencrypted());
         eidasAssertionService.translate(assertions);
         verify(eidasUnsignedMatchingDatasetUnmarshaller).fromAssertion(any(Assertion.class));
     }
-
 
     @Test
     public void shouldUseEidasMatchingDatasetUnmarshallerForSignedAssertions() {
@@ -190,7 +185,7 @@ public class EidasAssertionServiceTest {
                 eidasUnsignedMatchingDatasetUnmarshaller
         );
 
-        List<Assertion> assertions = asList(anEidasAssertion().buildUnencrypted());
+        List<Assertion> assertions = Collections.singletonList(anEidasAssertion().buildUnencrypted());
         eidasAssertionService.translate(assertions);
         verify(eidasMatchingDatasetUnmarshaller).fromAssertion(any(Assertion.class));
     }

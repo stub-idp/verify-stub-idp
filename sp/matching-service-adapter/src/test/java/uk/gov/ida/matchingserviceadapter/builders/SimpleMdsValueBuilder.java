@@ -1,18 +1,19 @@
 package uk.gov.ida.matchingserviceadapter.builders;
 
-import org.joda.time.DateTime;
-import uk.gov.ida.saml.core.domain.SimpleMdsValue;
+import stubidp.saml.domain.assertions.SimpleMdsValue;
+
+import java.time.LocalDate;
 
 public class SimpleMdsValueBuilder<T> {
 
-    public static final DateTime DEFAULT_FROM_DATE = DateTime.parse("2001-01-01");
-    public static final DateTime DEFAULT_HISTORICAL_TO_DATE = DateTime.parse("2001-01-01");
-    public static final DateTime DEFAULT_HISTORICAL_FROM_DATE = DateTime.parse("2000-01-01");
+    public static final LocalDate DEFAULT_FROM_DATE = LocalDate.parse("2001-01-01");
+    public static final LocalDate DEFAULT_HISTORICAL_TO_DATE = LocalDate.parse("2001-01-01");
+    public static final LocalDate DEFAULT_HISTORICAL_FROM_DATE = LocalDate.parse("2000-01-01");
 
     private T value;
 
-    private DateTime from;
-    private DateTime to;
+    private LocalDate from;
+    private LocalDate to;
     private boolean verified = false;
 
     public static <T> SimpleMdsValueBuilder<T> aCurrentSimpleMdsValue() {
@@ -36,12 +37,12 @@ public class SimpleMdsValueBuilder<T> {
         return this;
     }
 
-    public SimpleMdsValueBuilder<T> withFrom(DateTime from) {
+    public SimpleMdsValueBuilder<T> withFrom(LocalDate from) {
         this.from = from;
         return this;
     }
 
-    public SimpleMdsValueBuilder<T> withTo(DateTime to) {
+    public SimpleMdsValueBuilder<T> withTo(LocalDate to) {
         this.to = to;
         return this;
     }

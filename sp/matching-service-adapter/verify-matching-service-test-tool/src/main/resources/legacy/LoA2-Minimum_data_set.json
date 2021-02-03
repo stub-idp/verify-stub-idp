@@ -5,7 +5,7 @@
   "matchingDataset": {
     "addresses": [
       {
-        "fromDate": "2005-05-14T00:00:00.000Z",
+        "from": "2005-05-14",
         "internationalPostCode": "GB1 2PF",
         "lines": [
           "10 George Street"
@@ -25,7 +25,7 @@
     },
     "surnames": [
       {
-        "from": "2010-01-20T00:00:00.000Z",
+        "from": "2010-01-20",
         "value": "Dou",
         "verified": true
       }

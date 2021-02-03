@@ -5,7 +5,8 @@ import io.dropwizard.Configuration;
 import io.dropwizard.client.JerseyClientConfiguration;
 import io.dropwizard.client.ssl.TlsConfiguration;
 import io.dropwizard.util.Duration;
-import uk.gov.ida.configuration.ServiceNameConfiguration;
+import stubidp.saml.metadata.MetadataResolverConfiguration;
+import stubidp.utils.rest.configuration.ServiceNameConfiguration;
 import uk.gov.ida.matchingserviceadapter.configuration.AssertionLifetimeConfiguration;
 import uk.gov.ida.matchingserviceadapter.configuration.EuropeanIdentityConfiguration;
 import uk.gov.ida.matchingserviceadapter.configuration.HubConfiguration;
@@ -15,7 +16,6 @@ import uk.gov.ida.matchingserviceadapter.configuration.MatchingServiceAdapterEnv
 import uk.gov.ida.matchingserviceadapter.configuration.MatchingServiceAdapterMetadataConfiguration;
 import uk.gov.ida.matchingserviceadapter.configuration.ServiceInfo;
 import uk.gov.ida.matchingserviceadapter.configuration.SigningKeysConfiguration;
-import uk.gov.ida.saml.metadata.MetadataResolverConfiguration;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;

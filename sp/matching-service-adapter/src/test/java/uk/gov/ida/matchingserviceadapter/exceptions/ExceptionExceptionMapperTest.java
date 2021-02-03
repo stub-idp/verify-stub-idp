@@ -1,13 +1,11 @@
 package uk.gov.ida.matchingserviceadapter.exceptions;
 
-
-import com.squarespace.jersey2.guice.JerseyGuiceUtils;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
-import uk.gov.ida.common.ExceptionType;
-import uk.gov.ida.exceptions.ApplicationException;
+import org.mockito.junit.jupiter.MockitoExtension;
+import stubidp.utils.rest.common.ExceptionType;
+import stubidp.utils.rest.exceptions.ApplicationException;
 import uk.gov.ida.matchingserviceadapter.MatchingServiceAdapterConfiguration;
 
 import javax.ws.rs.core.Response;
@@ -15,12 +13,8 @@ import javax.ws.rs.core.Response;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class ExceptionExceptionMapperTest {
-
-    static {
-        JerseyGuiceUtils.reset();
-    }
 
     @Mock
     private MatchingServiceAdapterConfiguration configuration;
@@ -35,7 +29,7 @@ public class ExceptionExceptionMapperTest {
         Response response = exceptionExceptionMapper.toResponse(unauditedException);
 
         String responseBody = (String) response.getEntity();
-        assertThat(responseBody).contains("uk.gov.ida.exceptions.ApplicationException");
+        assertThat(responseBody).contains("stubidp.utils.rest.exceptions.ApplicationException");
         assertThat(responseBody).doesNotContain(causeMessage);
     }
 
@@ -49,7 +43,7 @@ public class ExceptionExceptionMapperTest {
         Response response = exceptionExceptionMapper.toResponse(unauditedException);
 
         String responseBody = (String) response.getEntity();
-        assertThat(responseBody).contains("uk.gov.ida.exceptions.ApplicationException");
+        assertThat(responseBody).contains("stubidp.utils.rest.exceptions.ApplicationException");
         assertThat(responseBody).contains(causeMessage);
     }
 }

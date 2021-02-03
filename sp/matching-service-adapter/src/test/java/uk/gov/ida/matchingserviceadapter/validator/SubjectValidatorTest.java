@@ -1,80 +1,69 @@
 package uk.gov.ida.matchingserviceadapter.validator;
 
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.ExpectedException;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.opensaml.saml.saml2.core.Subject;
 import org.opensaml.saml.saml2.core.SubjectConfirmation;
+import stubidp.saml.test.OpenSAMLRunner;
+import stubidp.saml.utils.core.validation.SamlResponseValidationException;
 import uk.gov.ida.matchingserviceadapter.validators.AssertionTimeRestrictionValidator;
 import uk.gov.ida.matchingserviceadapter.validators.SubjectValidator;
-import uk.gov.ida.saml.core.IdaSamlBootstrap;
-import uk.gov.ida.saml.core.validation.SamlResponseValidationException;
 
-import static uk.gov.ida.saml.core.test.builders.NameIdBuilder.aNameId;
-import static uk.gov.ida.saml.core.test.builders.SubjectBuilder.aSubject;
-import static uk.gov.ida.saml.core.test.builders.SubjectConfirmationBuilder.aSubjectConfirmation;
-import static uk.gov.ida.saml.core.test.builders.SubjectConfirmationDataBuilder.aSubjectConfirmationData;
+import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
+import static stubidp.saml.test.builders.NameIdBuilder.aNameId;
+import static stubidp.saml.test.builders.SubjectBuilder.aSubject;
+import static stubidp.saml.test.builders.SubjectConfirmationBuilder.aSubjectConfirmation;
+import static stubidp.saml.test.builders.SubjectConfirmationDataBuilder.aSubjectConfirmationData;
 
-@RunWith(MockitoJUnitRunner.class)
-public class SubjectValidatorTest {
+@ExtendWith(MockitoExtension.class)
+public class SubjectValidatorTest extends OpenSAMLRunner {
     private static final String IN_RESPONSE_TO = "_some-request-id";
     private SubjectValidator subjectValidator;
-
-    @Rule
-    public ExpectedException expectedException = ExpectedException.none();
 
     @Mock
     private AssertionTimeRestrictionValidator timeRestrictionValidator;
 
-    @Before
+    @BeforeEach
     public void setUp() {
-        IdaSamlBootstrap.bootstrap();
         subjectValidator = new SubjectValidator(timeRestrictionValidator);
     }
 
     @Test
     public void shouldThrowExceptionWhenSubjectIsMissing() {
-        expectedException.expect(SamlResponseValidationException.class);
-        expectedException.expectMessage("Subject is missing from the assertion.");
-
-        subjectValidator.validate(null, IN_RESPONSE_TO);
+        assertThatExceptionOfType(SamlResponseValidationException.class)
+                .isThrownBy(() -> subjectValidator.validate(null, IN_RESPONSE_TO))
+                .withMessage("Subject is missing from the assertion.");
     }
 
     @Test
     public void shouldThrowExceptionWhenSubjectConfirmationDataMissing() {
-        expectedException.expect(SamlResponseValidationException.class);
-        expectedException.expectMessage("Subject confirmation data is missing from the assertion.");
-
         Subject subject = aSubject()
                 .withSubjectConfirmation(aSubjectConfirmation().withSubjectConfirmationData(null).build())
                 .build();
 
-        subjectValidator.validate(subject, IN_RESPONSE_TO);
+        assertThatExceptionOfType(SamlResponseValidationException.class)
+                .isThrownBy(() -> subjectValidator.validate(subject, IN_RESPONSE_TO))
+                .withMessage("Subject confirmation data is missing from the assertion.");
     }
 
     @Test
     public void shouldThrowExceptionWhenSubjectConfirmationDataNotOnOrAfterIsMissing() {
-        expectedException.expect(SamlResponseValidationException.class);
-        expectedException.expectMessage("Subject confirmation data must contain 'NotOnOrAfter'.");
-
         SubjectConfirmation subjectConfirmation = aSubjectConfirmation().withSubjectConfirmationData(
                 aSubjectConfirmationData().withNotOnOrAfter(null).build()).build();
         Subject subject = aSubject()
                 .withSubjectConfirmation(subjectConfirmation)
                 .build();
 
-        subjectValidator.validate(subject, IN_RESPONSE_TO);
+        assertThatExceptionOfType(SamlResponseValidationException.class)
+                .isThrownBy(() -> subjectValidator.validate(subject, IN_RESPONSE_TO))
+                .withMessage("Subject confirmation data must contain 'NotOnOrAfter'.");
     }
 
     @Test
     public void shouldThrowExceptionWhenSubjectConfirmationDataHasNoInResponseTo() {
-        expectedException.expect(SamlResponseValidationException.class);
-        expectedException.expectMessage("Subject confirmation data must contain 'InResponseTo'.");
-
         SubjectConfirmation subjectConfirmation = aSubjectConfirmation().withSubjectConfirmationData(
                 aSubjectConfirmationData()
                         .withInResponseTo(null)
@@ -83,14 +72,13 @@ public class SubjectValidatorTest {
                 .withSubjectConfirmation(subjectConfirmation)
                 .build();
 
-        subjectValidator.validate(subject, IN_RESPONSE_TO);
+        assertThatExceptionOfType(SamlResponseValidationException.class)
+                .isThrownBy(() -> subjectValidator.validate(subject, IN_RESPONSE_TO))
+                .withMessage("Subject confirmation data must contain 'InResponseTo'.");
     }
 
     @Test
     public void shouldThrowExceptionWhenNameIdIsMissing() {
-        expectedException.expect(SamlResponseValidationException.class);
-        expectedException.expectMessage("NameID is missing from the subject of the assertion.");
-
         SubjectConfirmation subjectConfirmation = aSubjectConfirmation().withSubjectConfirmationData(
                 aSubjectConfirmationData()
                         .withInResponseTo(IN_RESPONSE_TO)
@@ -100,14 +88,13 @@ public class SubjectValidatorTest {
                 .withNameId(null)
                 .build();
 
-        subjectValidator.validate(subject, IN_RESPONSE_TO);
+        assertThatExceptionOfType(SamlResponseValidationException.class)
+                .isThrownBy(() -> subjectValidator.validate(subject, IN_RESPONSE_TO))
+                .withMessage("NameID is missing from the subject of the assertion.");
     }
 
     @Test
     public void shouldThrowExceptionWhenNameIdFormatIsMissing() {
-        expectedException.expect(SamlResponseValidationException.class);
-        expectedException.expectMessage("NameID format is missing or empty in the subject of the assertion.");
-
         SubjectConfirmation subjectConfirmation = aSubjectConfirmation().withSubjectConfirmationData(
                 aSubjectConfirmationData()
                         .withInResponseTo(IN_RESPONSE_TO)
@@ -117,14 +104,13 @@ public class SubjectValidatorTest {
                 .withNameId(aNameId().withFormat(null).build())
                 .build();
 
-        subjectValidator.validate(subject, IN_RESPONSE_TO);
+        assertThatExceptionOfType(SamlResponseValidationException.class)
+                .isThrownBy(() -> subjectValidator.validate(subject, IN_RESPONSE_TO))
+                .withMessage("NameID format is missing or empty in the subject of the assertion.");
     }
 
     @Test
     public void shouldThrowExceptionWhenNameIdFormatIsEmpty() {
-        expectedException.expect(SamlResponseValidationException.class);
-        expectedException.expectMessage("NameID format is missing or empty in the subject of the assertion.");
-
         SubjectConfirmation subjectConfirmation = aSubjectConfirmation().withSubjectConfirmationData(
                 aSubjectConfirmationData()
                         .withInResponseTo(IN_RESPONSE_TO)
@@ -134,14 +120,13 @@ public class SubjectValidatorTest {
                 .withNameId(aNameId().withFormat("").build())
                 .build();
 
-        subjectValidator.validate(subject, IN_RESPONSE_TO);
+        assertThatExceptionOfType(SamlResponseValidationException.class)
+                .isThrownBy(() -> subjectValidator.validate(subject, IN_RESPONSE_TO))
+                .withMessage("NameID format is missing or empty in the subject of the assertion.");
     }
 
     @Test
     public void shouldThrowExceptionWhenNameIdFormatIsNotValid() {
-        expectedException.expect(SamlResponseValidationException.class);
-        expectedException.expectMessage("NameID format is invalid in the subject of the assertion.");
-
         SubjectConfirmation subjectConfirmation = aSubjectConfirmation().withSubjectConfirmationData(
                 aSubjectConfirmationData()
                         .withInResponseTo(IN_RESPONSE_TO)
@@ -151,6 +136,8 @@ public class SubjectValidatorTest {
                 .withNameId(aNameId().withFormat("invalid-nameid-format").build())
                 .build();
 
-        subjectValidator.validate(subject, IN_RESPONSE_TO);
+        assertThatExceptionOfType(SamlResponseValidationException.class)
+                .isThrownBy(() -> subjectValidator.validate(subject, IN_RESPONSE_TO))
+                .withMessage("NameID format is invalid in the subject of the assertion.");
     }
 }

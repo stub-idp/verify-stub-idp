@@ -1,6 +1,6 @@
 package uk.gov.ida.matchingserviceadapter.configuration;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.security.KeyStoreException;
 import java.util.Collections;

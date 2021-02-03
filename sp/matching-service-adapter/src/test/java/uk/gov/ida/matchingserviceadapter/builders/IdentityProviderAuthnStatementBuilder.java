@@ -1,20 +1,21 @@
 package uk.gov.ida.matchingserviceadapter.builders;
 
-import com.google.common.base.Optional;
-import uk.gov.ida.saml.core.domain.AuthnContext;
-import uk.gov.ida.saml.core.domain.FraudAuthnDetails;
-import uk.gov.ida.saml.core.domain.IdentityProviderAuthnStatement;
-import uk.gov.ida.saml.core.domain.IpAddress;
+import stubidp.saml.domain.assertions.AuthnContext;
+import stubidp.saml.domain.assertions.FraudAuthnDetails;
+import stubidp.saml.domain.assertions.IdentityProviderAuthnStatement;
+import stubidp.saml.domain.assertions.IpAddress;
 
-import static com.google.common.base.Optional.fromNullable;
-import static uk.gov.ida.saml.core.domain.IdentityProviderAuthnStatement.createIdentityProviderAuthnStatement;
-import static uk.gov.ida.saml.core.domain.IdentityProviderAuthnStatement.createIdentityProviderFraudAuthnStatement;
+import java.util.Optional;
+
+import static java.util.Optional.ofNullable;
+import static stubidp.saml.domain.assertions.IdentityProviderAuthnStatement.createIdentityProviderAuthnStatement;
+import static stubidp.saml.domain.assertions.IdentityProviderAuthnStatement.createIdentityProviderFraudAuthnStatement;
 
 public class IdentityProviderAuthnStatementBuilder {
 
-    private Optional<FraudAuthnDetails> fraudAuthnDetails = Optional.absent();
+    private Optional<FraudAuthnDetails> fraudAuthnDetails = Optional.empty();
     private AuthnContext authnContext = AuthnContext.LEVEL_1;
-    private Optional<IpAddress> userIpAddress = fromNullable(IpAddressBuilder.anIpAddress().build());
+    private Optional<IpAddress> userIpAddress = ofNullable(IpAddressBuilder.anIpAddress().build());
 
     public static IdentityProviderAuthnStatementBuilder anIdentityProviderAuthnStatement() {
         return new IdentityProviderAuthnStatementBuilder();
@@ -22,9 +23,9 @@ public class IdentityProviderAuthnStatementBuilder {
 
     public IdentityProviderAuthnStatement build() {
         if (fraudAuthnDetails.isPresent()) {
-            return createIdentityProviderFraudAuthnStatement(fraudAuthnDetails.get(), userIpAddress.orNull());
+            return createIdentityProviderFraudAuthnStatement(fraudAuthnDetails.get(), userIpAddress.orElse(null));
         }
-        return createIdentityProviderAuthnStatement(authnContext, userIpAddress.orNull());
+        return createIdentityProviderAuthnStatement(authnContext, userIpAddress.orElse(null));
     }
 
     public IdentityProviderAuthnStatementBuilder withAuthnContext(AuthnContext authnContext) {
@@ -33,12 +34,12 @@ public class IdentityProviderAuthnStatementBuilder {
     }
 
     public IdentityProviderAuthnStatementBuilder withFraudDetails(FraudAuthnDetails fraudDetails) {
-        this.fraudAuthnDetails = Optional.fromNullable(fraudDetails);
+        this.fraudAuthnDetails = ofNullable(fraudDetails);
         return this;
     }
 
     public IdentityProviderAuthnStatementBuilder withUserIpAddress(IpAddress userIpAddress) {
-        this.userIpAddress = fromNullable(userIpAddress);
+        this.userIpAddress = ofNullable(userIpAddress);
         return this;
     }
 }

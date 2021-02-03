@@ -1,10 +1,9 @@
 package uk.gov.ida.matchingserviceadapter.builders;
 
-import uk.gov.ida.saml.core.domain.AuthnContext;
-import uk.gov.ida.saml.core.domain.MatchingServiceAuthnStatement;
+import stubidp.saml.domain.assertions.AuthnContext;
+import stubidp.saml.domain.matching.assertions.MatchingServiceAuthnStatement;
 
-import static uk.gov.ida.saml.core.domain.MatchingServiceAuthnStatement.createIdaAuthnStatement;
-
+import static stubidp.saml.domain.matching.assertions.MatchingServiceAuthnStatement.createIdaAuthnStatement;
 
 public class MatchingServiceAuthnStatementBuilder {
 

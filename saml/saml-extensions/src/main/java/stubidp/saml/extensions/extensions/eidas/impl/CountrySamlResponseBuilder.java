@@ -4,6 +4,10 @@ import org.opensaml.saml.common.AbstractSAMLObjectBuilder;
 import stubidp.saml.extensions.extensions.eidas.CountrySamlResponse;
 
 public class CountrySamlResponseBuilder extends AbstractSAMLObjectBuilder<CountrySamlResponse> {
+
+    public CountrySamlResponseBuilder() {
+    }
+
     @Override
     public CountrySamlResponse buildObject() { return buildObject(CountrySamlResponse.DEFAULT_ELEMENT_NAME, CountrySamlResponse.TYPE_NAME); }
 

@@ -1,17 +1,19 @@
 package uk.gov.ida.matchingserviceadapter.mappers;
 
-import com.google.inject.Inject;
-import org.joda.time.DateTime;
-import uk.gov.ida.common.shared.security.IdGenerator;
+import stubidp.saml.domain.assertions.AssertionRestrictions;
+import stubidp.saml.domain.assertions.AuthnContext;
+import stubidp.saml.domain.assertions.PersistentId;
+import stubidp.saml.domain.matching.assertions.MatchingServiceAuthnStatement;
+import stubidp.utils.security.security.IdGenerator;
 import uk.gov.ida.matchingserviceadapter.MatchingServiceAdapterConfiguration;
 import uk.gov.ida.matchingserviceadapter.configuration.AssertionLifetimeConfiguration;
 import uk.gov.ida.matchingserviceadapter.domain.MatchingServiceAssertion;
 import uk.gov.ida.matchingserviceadapter.domain.OutboundResponseFromMatchingService;
 import uk.gov.ida.matchingserviceadapter.rest.MatchingServiceResponseDto;
-import uk.gov.ida.saml.core.domain.AssertionRestrictions;
-import uk.gov.ida.saml.core.domain.AuthnContext;
-import uk.gov.ida.saml.core.domain.MatchingServiceAuthnStatement;
-import uk.gov.ida.saml.core.domain.PersistentId;
+
+import javax.inject.Inject;
+import java.time.Clock;
+import java.time.Instant;
 
 import static java.util.Collections.emptyList;
 
@@ -19,16 +21,25 @@ public class MatchingServiceResponseDtoToOutboundResponseFromMatchingServiceMapp
     private final MatchingServiceAdapterConfiguration configuration;
     private final AssertionLifetimeConfiguration assertionLifetimeConfiguration;
     private final IdGenerator idGenerator;
+    private final Clock clock;
 
     @Inject
     public MatchingServiceResponseDtoToOutboundResponseFromMatchingServiceMapper(
             MatchingServiceAdapterConfiguration configuration,
             AssertionLifetimeConfiguration assertionLifetimeConfiguration,
             IdGenerator idGenerator) {
+        this(configuration, assertionLifetimeConfiguration, idGenerator, Clock.systemUTC());
+    }
 
+    MatchingServiceResponseDtoToOutboundResponseFromMatchingServiceMapper(
+            MatchingServiceAdapterConfiguration configuration,
+            AssertionLifetimeConfiguration assertionLifetimeConfiguration,
+            IdGenerator idGenerator,
+            Clock clock) {
         this.configuration = configuration;
         this.assertionLifetimeConfiguration = assertionLifetimeConfiguration;
         this.idGenerator = idGenerator;
+        this.clock = clock;
     }
 
     public OutboundResponseFromMatchingService map(
@@ -59,14 +70,14 @@ public class MatchingServiceResponseDtoToOutboundResponseFromMatchingServiceMapp
         final String authnRequestIssuerId) {
 
         AssertionRestrictions assertionRestrictions = new AssertionRestrictions(
-                DateTime.now().plus(assertionLifetimeConfiguration.getAssertionLifetime().toMilliseconds()),
+                Instant.now(clock).plusMillis(assertionLifetimeConfiguration.getAssertionLifetime().toMilliseconds()),
                 requestId,
                 assertionConsumerServiceUrl);
 
         MatchingServiceAssertion assertion = new MatchingServiceAssertion(
                 idGenerator.getId(),
                 configuration.getEntityId(),
-                DateTime.now(),
+                Instant.now(clock),
                 new PersistentId(hashPid),
                 assertionRestrictions,
                 MatchingServiceAuthnStatement.createIdaAuthnStatement(authnContext),

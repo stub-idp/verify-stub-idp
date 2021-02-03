@@ -1,12 +1,13 @@
 package uk.gov.ida.matchingserviceadapter.validators;
 
-import com.google.inject.Inject;
 import org.opensaml.saml.saml2.core.AttributeQuery;
 import org.opensaml.saml.saml2.metadata.SPSSODescriptor;
-import uk.gov.ida.saml.core.validation.SamlTransformationErrorException;
-import uk.gov.ida.saml.core.validation.SamlValidationResponse;
-import uk.gov.ida.saml.core.validation.SamlValidationSpecificationFailure;
-import uk.gov.ida.saml.security.SamlMessageSignatureValidator;
+import stubidp.saml.extensions.validation.SamlTransformationErrorException;
+import stubidp.saml.extensions.validation.SamlValidationResponse;
+import stubidp.saml.extensions.validation.SamlValidationSpecificationFailure;
+import stubidp.saml.security.SamlMessageSignatureValidator;
+
+import javax.inject.Inject;
 
 public class AttributeQuerySignatureValidator {
 

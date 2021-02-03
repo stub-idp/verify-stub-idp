@@ -1,9 +1,7 @@
 package uk.gov.ida.matchingserviceadapter.repositories;
 
-import com.google.inject.Inject;
 import net.shibboleth.utilities.java.support.resolver.CriteriaSet;
 import net.shibboleth.utilities.java.support.resolver.ResolverException;
-import org.joda.time.DateTime;
 import org.opensaml.core.criterion.EntityIdCriterion;
 import org.opensaml.core.xml.XMLObjectBuilderFactory;
 import org.opensaml.core.xml.config.XMLObjectProviderRegistrySupport;
@@ -21,14 +19,18 @@ import org.opensaml.saml.saml2.metadata.impl.EntitiesDescriptorBuilder;
 import org.opensaml.saml.saml2.metadata.impl.SingleSignOnServiceBuilder;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
-import uk.gov.ida.common.shared.security.Certificate;
+import stubidp.saml.utils.core.OpenSamlXmlObjectFactory;
+import stubidp.saml.utils.metadata.transformers.KeyDescriptorsUnmarshaller;
+import stubidp.utils.security.security.Certificate;
 import uk.gov.ida.matchingserviceadapter.MatchingServiceAdapterConfiguration;
 import uk.gov.ida.matchingserviceadapter.configuration.CertificateStore;
 import uk.gov.ida.matchingserviceadapter.exceptions.FederationMetadataLoadingException;
-import uk.gov.ida.saml.core.OpenSamlXmlObjectFactory;
-import uk.gov.ida.saml.metadata.transformers.KeyDescriptorsUnmarshaller;
 
+import javax.inject.Inject;
 import javax.inject.Named;
+import java.time.Clock;
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -44,17 +46,28 @@ public class MatchingServiceAdapterMetadataRepository {
     private final MetadataResolver metadataResolver;
     private final MatchingServiceAdapterConfiguration matchingServiceAdapterConfiguration;
     private final String hubEntityId;
+    private final Clock clock;
 
     @Inject
     public MatchingServiceAdapterMetadataRepository(
-            MatchingServiceAdapterConfiguration msaConfiguration,
             KeyDescriptorsUnmarshaller keyDescriptorsUnmarshaller,
             Function<EntitiesDescriptor, Element> entitiesDescriptorElementTransformer,
             CertificateStore certificateStore,
             MetadataResolver metadataResolver,
             MatchingServiceAdapterConfiguration matchingServiceAdapterConfiguration,
             @Named("HubEntityId") String hubEntityId) {
+        this(matchingServiceAdapterConfiguration, keyDescriptorsUnmarshaller, entitiesDescriptorElementTransformer, certificateStore, metadataResolver, matchingServiceAdapterConfiguration, hubEntityId, Clock.systemUTC());
+    }
 
+    MatchingServiceAdapterMetadataRepository(
+            MatchingServiceAdapterConfiguration msaConfiguration,
+            KeyDescriptorsUnmarshaller keyDescriptorsUnmarshaller,
+            Function<EntitiesDescriptor, Element> entitiesDescriptorElementTransformer,
+            CertificateStore certificateStore,
+            MetadataResolver metadataResolver,
+            MatchingServiceAdapterConfiguration matchingServiceAdapterConfiguration,
+            @Named("HubEntityId") String hubEntityId,
+            Clock clock) {
         this.msaConfiguration = msaConfiguration;
         this.keyDescriptorsUnmarshaller = keyDescriptorsUnmarshaller;
         this.entitiesDescriptorElementTransformer = entitiesDescriptorElementTransformer;
@@ -62,6 +75,7 @@ public class MatchingServiceAdapterMetadataRepository {
         this.metadataResolver = metadataResolver;
         this.matchingServiceAdapterConfiguration = matchingServiceAdapterConfiguration;
         this.hubEntityId = hubEntityId;
+        this.clock = clock;
     }
 
     private EntityDescriptor createEntityDescriptor(String entityId) {
@@ -73,7 +87,7 @@ public class MatchingServiceAdapterMetadataRepository {
 
     public Document getMatchingServiceAdapterMetadata() throws ResolverException, FederationMetadataLoadingException {
         EntitiesDescriptor entitiesDescriptor = new EntitiesDescriptorBuilder().buildObject();
-        entitiesDescriptor.setValidUntil(DateTime.now().plusHours(1));
+        entitiesDescriptor.setValidUntil(Instant.now(clock).plus(1, ChronoUnit.HOURS));
 
         final EntityDescriptor msaEntityDescriptor = createEntityDescriptor(msaConfiguration.getEntityId());
         final OpenSamlXmlObjectFactory openSamlXmlObjectFactory = new OpenSamlXmlObjectFactory();

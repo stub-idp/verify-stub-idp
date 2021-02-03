@@ -12,6 +12,7 @@ import stubidp.saml.extensions.validation.SamlValidationResponse;
 import stubidp.saml.security.errors.SamlTransformationErrorFactory;
 import stubidp.saml.security.validators.signature.SamlSignatureUtil;
 
+import javax.inject.Inject;
 import javax.xml.namespace.QName;
 import java.util.Objects;
 import java.util.Optional;
@@ -25,6 +26,7 @@ public class SamlMessageSignatureValidator {
 
     private final SignatureValidator signatureValidator;
 
+    @Inject
     public SamlMessageSignatureValidator(SignatureValidator signatureValidator) {
         this.signatureValidator = signatureValidator;
     }

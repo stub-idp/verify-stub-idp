@@ -1,17 +1,16 @@
 package uk.gov.ida.matchingserviceadapter.rest.matchingservice;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.util.ISO8601DateFormat;
+import com.fasterxml.jackson.databind.util.StdDateFormat;
 import com.google.common.collect.ImmutableList;
 import io.dropwizard.jackson.Jackson;
-import org.joda.time.DateTime;
-import org.joda.time.LocalDate;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import uk.gov.ida.matchingserviceadapter.builders.AddressDtoBuilder;
 import uk.gov.ida.matchingserviceadapter.builders.SimpleMdsValueDtoBuilder;
 
 import java.io.IOException;
+import java.time.LocalDate;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static uk.gov.ida.matchingserviceadapter.builders.VerifyMatchingDatasetDtoBuilder.aVerifyMatchingDatasetDto;
@@ -20,12 +19,11 @@ import static uk.gov.ida.matchingserviceadapter.rest.JsonTestUtil.jsonFixture;
 public class VerifyMatchingDatasetDtoTest {
 
     private ObjectMapper objectMapper;
-    private static final DateTime date = DateTime.parse("2014-02-01T01:02:03.567Z");
+    private static final LocalDate date = LocalDate.parse("2014-02-01");
 
-
-    @Before
+    @BeforeEach
     public void setUp() {
-        objectMapper = Jackson.newObjectMapper().setDateFormat(ISO8601DateFormat.getDateInstance());
+        objectMapper = Jackson.newObjectMapper().setDateFormat(StdDateFormat.getDateInstance());
     }
 
     @Test
@@ -48,11 +46,11 @@ public class VerifyMatchingDatasetDtoTest {
         assertThat(deserializedValue).isEqualTo(expectedValue);
     }
 
-    private MatchingDatasetDto createVerifyMatchingDatasetDto(DateTime dateTime) {
+    private MatchingDatasetDto createVerifyMatchingDatasetDto(LocalDate dateTime) {
         return aVerifyMatchingDatasetDto()
                 .addSurname(getTransliterableMdsValue("walker", null, dateTime))
                 .withAddressHistory(ImmutableList.of(getAddressDto("EC2", dateTime), getAddressDto("WC1", dateTime)))
-                .withDateOfBirth(getSimpleMdsValue(LocalDate.fromDateFields(dateTime.toDate()), dateTime))
+                .withDateOfBirth(getSimpleMdsValue(dateTime, dateTime))
                 .withFirstname(getTransliterableMdsValue("walker", null, dateTime))
                 .withGender(getSimpleMdsValue(GenderDto.FEMALE, dateTime))
                 .withMiddleNames(getSimpleMdsValue("walker", dateTime))
@@ -64,7 +62,7 @@ public class VerifyMatchingDatasetDtoTest {
                 .build();
     }
 
-    private VerifyAddressDto getAddressDto(String postcode, DateTime dateTime) {
+    private VerifyAddressDto getAddressDto(String postcode, LocalDate dateTime) {
         return new AddressDtoBuilder()
                 .withFromDate(dateTime)
                 .withInternationalPostCode("123")
@@ -75,7 +73,7 @@ public class VerifyMatchingDatasetDtoTest {
                 .buildVerifyAddressDto();
     }
 
-    private <T> SimpleMdsValueDto<T> getSimpleMdsValue(T value, DateTime dateTime) {
+    private <T> SimpleMdsValueDto<T> getSimpleMdsValue(T value, LocalDate dateTime) {
         return new SimpleMdsValueDtoBuilder<T>()
                 .withFrom(dateTime)
                 .withTo(dateTime)
@@ -84,7 +82,7 @@ public class VerifyMatchingDatasetDtoTest {
                 .build();
     }
 
-    private TransliterableMdsValueDto getTransliterableMdsValue(String value, String nonLatinScriptValue, DateTime dateTime) {
+    private TransliterableMdsValueDto getTransliterableMdsValue(String value, String nonLatinScriptValue, LocalDate dateTime) {
         return new TransliterableMdsValueDto(value, nonLatinScriptValue, dateTime, dateTime, true);
     }
 

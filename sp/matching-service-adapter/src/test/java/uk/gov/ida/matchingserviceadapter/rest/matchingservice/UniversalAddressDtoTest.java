@@ -1,15 +1,15 @@
 package uk.gov.ida.matchingserviceadapter.rest.matchingservice;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.util.ISO8601DateFormat;
+import com.fasterxml.jackson.databind.util.StdDateFormat;
 import com.google.common.collect.ImmutableList;
 import io.dropwizard.jackson.Jackson;
-import org.joda.time.DateTime;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import uk.gov.ida.matchingserviceadapter.builders.AddressDtoBuilder;
 
 import java.io.IOException;
+import java.time.LocalDate;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static uk.gov.ida.matchingserviceadapter.rest.JsonTestUtil.jsonFixture;
@@ -17,12 +17,12 @@ import static uk.gov.ida.matchingserviceadapter.rest.JsonTestUtil.jsonFixture;
 public class UniversalAddressDtoTest {
 
     private ObjectMapper objectMapper;
-    private static final DateTime fromDate = DateTime.parse("2010-06-29T23:20:00.000Z");
-    private static final DateTime toDate = DateTime.parse("2014-02-01T01:02:03.567Z");
+    private static final LocalDate fromDate = LocalDate.parse("2010-06-29");
+    private static final LocalDate toDate = LocalDate.parse("2014-02-01");
 
-    @Before
+    @BeforeEach
     public void setUp() {
-        objectMapper = Jackson.newObjectMapper().setDateFormat(ISO8601DateFormat.getDateInstance());
+        objectMapper = Jackson.newObjectMapper().setDateFormat(StdDateFormat.getDateInstance());
     }
 
     @Test
@@ -46,7 +46,7 @@ public class UniversalAddressDtoTest {
         assertThat(deserializedValue).isEqualTo(expectedValue);
     }
 
-    private UniversalAddressDto createUniversalAddressDto(DateTime from, DateTime to) {
+    private UniversalAddressDto createUniversalAddressDto(LocalDate from, LocalDate to) {
         return new AddressDtoBuilder()
                 .withFromDate(from)
                 .withInternationalPostCode("EC-2")

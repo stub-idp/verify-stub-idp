@@ -355,7 +355,7 @@ public class OpenSamlXmlObjectFactory {
         final XMLObject xmlObject = builder.buildObject(Signature.DEFAULT_ELEMENT_NAME);
         Signature signature = (Signature) xmlObject;
 
-        signature.setSignatureAlgorithm(SignatureConstants.ALGO_ID_SIGNATURE_RSA);
+        signature.setSignatureAlgorithm(SignatureConstants.ALGO_ID_SIGNATURE_RSA_SHA256);
         signature.setCanonicalizationAlgorithm(SignatureConstants.ALGO_ID_C14N_EXCL_OMIT_COMMENTS);
         return signature;
     }

@@ -1,20 +1,20 @@
 package uk.gov.ida.matchingserviceadapter.domain;
 
-import com.google.common.collect.ImmutableList;
 import org.joda.time.LocalDate;
 import org.opensaml.saml.saml2.core.Attribute;
+import stubidp.saml.domain.assertions.Address;
+import stubidp.saml.domain.assertions.Cycle3Dataset;
+import stubidp.saml.domain.assertions.MatchingDataset;
+import stubidp.saml.domain.assertions.SimpleMdsValue;
+import stubidp.saml.domain.assertions.TransliterableMdsValue;
+import stubidp.saml.utils.core.OpenSamlXmlObjectFactory;
 import uk.gov.ida.matchingserviceadapter.ComparatorHelper;
 import uk.gov.ida.matchingserviceadapter.saml.factories.UserAccountCreationAttributeFactory;
-import uk.gov.ida.saml.core.OpenSamlXmlObjectFactory;
-import uk.gov.ida.saml.core.domain.Address;
-import uk.gov.ida.saml.core.domain.Cycle3Dataset;
-import uk.gov.ida.saml.core.domain.MatchingDataset;
-import uk.gov.ida.saml.core.domain.SimpleMdsValue;
-import uk.gov.ida.saml.core.domain.TransliterableMdsValue;
 
 import java.io.Serializable;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
@@ -88,7 +88,7 @@ public enum UserAccountCreationAttribute implements Serializable, AttributeExtra
         @Override
         public Optional<Attribute> transform(MatchingDataset matchingDataset, Optional<Cycle3Dataset> cycle3Dataset) {
             return getCurrentValue(matchingDataset.getDateOfBirths())
-                    .map((SimpleMdsValue<LocalDate> localDateSimpleMdsValue) ->
+                    .map(localDateSimpleMdsValue ->
                             userAccountCreationAttributeFactory.createUserAccountCreationVerifiedAttribute(
                                     UserAccountCreationAttribute.DATE_OF_BIRTH_VERIFIED,
                                     localDateSimpleMdsValue.isVerified()
@@ -120,7 +120,7 @@ public enum UserAccountCreationAttribute implements Serializable, AttributeExtra
         public Optional<Attribute> transform(MatchingDataset matchingDataset, Optional<Cycle3Dataset> cycle3Dataset) {
             List<Address> allAddresses = matchingDataset.getAddresses();
             return allAddresses.isEmpty() ? Optional.empty()
-                    : Optional.of(userAccountCreationAttributeFactory.createUserAccountCreationAddressHistoryAttribute(ImmutableList.copyOf(allAddresses)));
+                    : Optional.of(userAccountCreationAttributeFactory.createUserAccountCreationAddressHistoryAttribute(List.copyOf(allAddresses)));
         }
     },
     CYCLE_3("cycle_3") {
@@ -134,7 +134,7 @@ public enum UserAccountCreationAttribute implements Serializable, AttributeExtra
 
     private static final UserAccountCreationAttributeFactory userAccountCreationAttributeFactory = new UserAccountCreationAttributeFactory(new OpenSamlXmlObjectFactory());
 
-    private String attributeName;
+    private final String attributeName;
 
     UserAccountCreationAttribute(final String attributeName) {
         this.attributeName = attributeName;
@@ -152,7 +152,7 @@ public enum UserAccountCreationAttribute implements Serializable, AttributeExtra
     }
 
     private static Optional<Address> extractCurrentAddress(List<Address> addresses) {
-        Predicate<Address> addressPredicate = (Address candidateValue) -> candidateValue.getTo() == null || !candidateValue.getTo().isPresent();
+        Predicate<Address> addressPredicate = (Address candidateValue) -> candidateValue.getTo() == null;
         return addresses.stream().filter(addressPredicate).min(ComparatorHelper.attributeComparatorByVerified());
     }
 

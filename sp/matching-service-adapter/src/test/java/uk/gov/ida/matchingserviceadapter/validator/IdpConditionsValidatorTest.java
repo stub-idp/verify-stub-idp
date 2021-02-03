@@ -1,29 +1,30 @@
 package uk.gov.ida.matchingserviceadapter.validator;
 
-import com.google.common.collect.ImmutableList;
-import org.joda.time.DateTime;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.ExpectedException;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.opensaml.saml.saml2.core.AudienceRestriction;
 import org.opensaml.saml.saml2.core.Conditions;
 import org.opensaml.saml.saml2.core.OneTimeUse;
 import org.opensaml.saml.saml2.core.ProxyRestriction;
+import stubidp.saml.test.OpenSAMLRunner;
+import stubidp.saml.utils.core.validation.SamlResponseValidationException;
+import stubidp.saml.utils.core.validation.conditions.AudienceRestrictionValidator;
 import uk.gov.ida.matchingserviceadapter.validators.AssertionTimeRestrictionValidator;
 import uk.gov.ida.matchingserviceadapter.validators.IdpConditionsValidator;
-import uk.gov.ida.saml.core.IdaSamlBootstrap;
-import uk.gov.ida.saml.core.validation.SamlResponseValidationException;
-import uk.gov.ida.saml.core.validation.conditions.AudienceRestrictionValidator;
 
+import java.time.Instant;
 import java.util.List;
 
+import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import static uk.gov.ida.saml.core.test.builders.AudienceRestrictionBuilder.anAudienceRestriction;
+import static stubidp.saml.test.builders.AudienceRestrictionBuilder.anAudienceRestriction;
 
-public class IdpConditionsValidatorTest {
+@ExtendWith(MockitoExtension.class)
+public class IdpConditionsValidatorTest extends OpenSAMLRunner {
 
     private AssertionTimeRestrictionValidator timeRestrictionValidator;
     private AudienceRestrictionValidator audienceRestrictionValidator;
@@ -31,51 +32,43 @@ public class IdpConditionsValidatorTest {
 
     private IdpConditionsValidator validator;
 
-    @Rule
-    public ExpectedException expectedException = ExpectedException.none();
-
-    @Before
+    @BeforeEach
     public void setUp() {
         timeRestrictionValidator = mock(AssertionTimeRestrictionValidator.class);
         audienceRestrictionValidator = mock(AudienceRestrictionValidator.class);
         conditions = mock(Conditions.class);
 
         validator = new IdpConditionsValidator(timeRestrictionValidator, audienceRestrictionValidator);
-
-        IdaSamlBootstrap.bootstrap();
     }
 
     @Test
     public void shouldThrowExceptionWhenConditionsIsNull() {
-        expectedException.expect(SamlResponseValidationException.class);
-        expectedException.expectMessage("Conditions is missing from the assertion.");
-
-        validator.validate(null, "any-entity-id");
+        assertThatExceptionOfType(SamlResponseValidationException.class)
+                .isThrownBy(() -> validator.validate(null, "any-entity-id"))
+                .withMessage("Conditions is missing from the assertion.");
     }
 
     @Test
     public void shouldThrowExceptionWhenProxyRestrictionElementExists() {
-        expectedException.expect(SamlResponseValidationException.class);
-        expectedException.expectMessage("Conditions should not contain proxy restriction element.");
-
         when(conditions.getProxyRestriction()).thenReturn(mock(ProxyRestriction.class));
 
-        validator.validate(conditions, "any-entity-id");
+        assertThatExceptionOfType(SamlResponseValidationException.class)
+                .isThrownBy(() -> validator.validate(conditions, "any-entity-id"))
+                .withMessage("Conditions should not contain proxy restriction element.");
     }
 
     @Test
     public void shouldThrowExceptionWhenOneTimeUseElementExists() {
-        expectedException.expect(SamlResponseValidationException.class);
-        expectedException.expectMessage("Conditions should not contain one time use element.");
-
         when(conditions.getOneTimeUse()).thenReturn(mock(OneTimeUse.class));
 
-        validator.validate(conditions, "any-entity-id");
+        assertThatExceptionOfType(SamlResponseValidationException.class)
+                .isThrownBy(() -> validator.validate(conditions, "any-entity-id"))
+                .withMessage("Conditions should not contain one time use element.");
     }
 
     @Test
     public void shouldValidateNotOnOrAfterIfExists() {
-        DateTime notOnOrAfter = new DateTime();
+        Instant notOnOrAfter = Instant.now();
         when(conditions.getNotOnOrAfter()).thenReturn(notOnOrAfter);
 
         validator.validate(conditions, "any-entity-id");
@@ -85,7 +78,7 @@ public class IdpConditionsValidatorTest {
 
     @Test
     public void shouldNotValidateNotOnOrAfterIfExists() {
-        DateTime notOnOrAfter = null;
+        Instant notOnOrAfter = null;
         when(conditions.getNotOnOrAfter()).thenReturn(notOnOrAfter);
 
         validator.validate(conditions, "any-entity-id");
@@ -93,7 +86,7 @@ public class IdpConditionsValidatorTest {
 
     @Test
     public void shouldValidateConditionsNotBefore() {
-        DateTime notBefore = new DateTime();
+        Instant notBefore = Instant.now();
         when(conditions.getNotBefore()).thenReturn(notBefore);
 
         validator.validate(conditions, "any-entity-id");
@@ -103,7 +96,7 @@ public class IdpConditionsValidatorTest {
 
     @Test
     public void shouldValidateConditionsAudienceRestrictions() {
-        List<AudienceRestriction> audienceRestrictions = ImmutableList.of(anAudienceRestriction().build());
+        List<AudienceRestriction> audienceRestrictions = List.of(anAudienceRestriction().build());
         when(conditions.getAudienceRestrictions()).thenReturn(audienceRestrictions);
 
         validator.validate(conditions, "some-entity-id");

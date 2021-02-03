@@ -2,10 +2,10 @@ package uk.gov.ida.matchingserviceadapter.rest;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.util.ISO8601DateFormat;
+import com.fasterxml.jackson.databind.util.StdDateFormat;
 import io.dropwizard.jackson.Jackson;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 
@@ -16,9 +16,9 @@ public class AssertionServiceResponseDtoTest {
 
     private ObjectMapper objectMapper;
 
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
-        objectMapper = Jackson.newObjectMapper().setDateFormat(ISO8601DateFormat.getDateInstance());
+        objectMapper = Jackson.newObjectMapper().setDateFormat(StdDateFormat.getDateInstance());
     }
 
     @Test
@@ -34,7 +34,7 @@ public class AssertionServiceResponseDtoTest {
                 objectMapper.readValue(jsonFixture("matching-service-response.json"), MatchingServiceResponseDto.class);
 
         MatchingServiceResponseDto expectedValue = MatchingServiceResponseDto.MATCH_RESPONSE;
-        assertThat(deserializedValue).isEqualToComparingFieldByField(expectedValue);
+        assertThat(deserializedValue).usingRecursiveComparison().isEqualTo(expectedValue);
     }
 
     private String jsonFixture(String filename) throws IOException {

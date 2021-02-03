@@ -1,12 +1,12 @@
 package uk.gov.ida.matchingserviceadapter.domain;
 
-import org.joda.time.DateTime;
 import org.opensaml.saml.saml2.core.Attribute;
-import uk.gov.ida.saml.core.domain.AssertionRestrictions;
-import uk.gov.ida.saml.core.domain.MatchingServiceAuthnStatement;
-import uk.gov.ida.saml.core.domain.OutboundAssertion;
-import uk.gov.ida.saml.core.domain.PersistentId;
+import stubidp.saml.domain.assertions.AssertionRestrictions;
+import stubidp.saml.domain.assertions.OutboundAssertion;
+import stubidp.saml.domain.assertions.PersistentId;
+import stubidp.saml.domain.matching.assertions.MatchingServiceAuthnStatement;
 
+import java.time.Instant;
 import java.util.List;
 
 public class MatchingServiceAssertion extends OutboundAssertion {
@@ -17,7 +17,7 @@ public class MatchingServiceAssertion extends OutboundAssertion {
     public MatchingServiceAssertion(
             String id,
             String issuerId,
-            DateTime issueInstant,
+            Instant issueInstant,
             PersistentId persistentId,
             AssertionRestrictions assertionRestrictions,
             MatchingServiceAuthnStatement authnStatement,

@@ -1,19 +1,18 @@
 package uk.gov.ida.matchingserviceadapter.rest.matchingservice;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.util.ISO8601DateFormat;
+import com.fasterxml.jackson.databind.util.StdDateFormat;
 import com.google.common.collect.ImmutableList;
 import io.dropwizard.jackson.Jackson;
-import org.joda.time.DateTime;
-import org.joda.time.LocalDate;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import uk.gov.ida.matchingserviceadapter.builders.AddressDtoBuilder;
 import uk.gov.ida.matchingserviceadapter.builders.MatchingDatasetDtoBuilder;
 import uk.gov.ida.matchingserviceadapter.builders.SimpleMdsValueDtoBuilder;
 
 import java.io.IOException;
 import java.text.DateFormat;
+import java.time.LocalDate;
 import java.util.Collections;
 import java.util.Optional;
 
@@ -24,12 +23,12 @@ import static uk.gov.ida.matchingserviceadapter.rest.JsonTestUtil.jsonFixture;
 public class UniversalMatchingDatasetDtoTest {
 
     private ObjectMapper objectMapper;
-    private static final DateTime date = DateTime.parse("2014-02-01T01:02:03.567Z");
+    private static final LocalDate date = LocalDate.parse("2014-02-01");
 
-    @Before
+    @BeforeEach
     public void setUp() {
         DateFormat.getDateInstance();
-        objectMapper = Jackson.newObjectMapper().setDateFormat(ISO8601DateFormat.getDateInstance());
+        objectMapper = Jackson.newObjectMapper().setDateFormat(StdDateFormat.getDateInstance());
     }
 
     @Test
@@ -104,27 +103,27 @@ public class UniversalMatchingDatasetDtoTest {
         assertThat(deserializedValue).isEqualTo(expectedValue);
     }
 
-    private MatchingDatasetDto createUniversalMatchingDatasetDto_twoAddresses(DateTime dateTime) {
+    private MatchingDatasetDto createUniversalMatchingDatasetDto_twoAddresses(LocalDate dateTime) {
         return getMatchingDatasetDtoBuilderWithBasicDetails(dateTime)
                 .withAddressHistory(Optional.of(ImmutableList.of(getAddressDto("EC2", dateTime), getAddressDto("WC1", dateTime))))
                 .build();
     }
 
-    private MatchingDatasetDto createUniversalMatchingDatasetDto_emptyAddressesElement(DateTime dateTime) {
+    private MatchingDatasetDto createUniversalMatchingDatasetDto_emptyAddressesElement(LocalDate dateTime) {
         return getMatchingDatasetDtoBuilderWithBasicDetails(dateTime)
                 .withAddressHistory(Optional.of(Collections.emptyList()))
                 .build();
     }
 
-    private MatchingDatasetDto createUniversalMatchingDatasetDto_noAddresses(DateTime dateTime) {
+    private MatchingDatasetDto createUniversalMatchingDatasetDto_noAddresses(LocalDate dateTime) {
         return getMatchingDatasetDtoBuilderWithBasicDetails(dateTime)
                 .build();
     }
 
-    private MatchingDatasetDtoBuilder getMatchingDatasetDtoBuilderWithBasicDetails(DateTime dateTime) {
+    private MatchingDatasetDtoBuilder getMatchingDatasetDtoBuilderWithBasicDetails(LocalDate dateTime) {
         return aUniversalMatchingDatasetDto()
                 .addSurname(getTransliterableMdsValue("walker", null, dateTime))
-                .withDateOfBirth(getSimpleMdsValue(LocalDate.fromDateFields(dateTime.toDate()), dateTime))
+                .withDateOfBirth(getSimpleMdsValue(dateTime, dateTime))
                 .withFirstname(getTransliterableMdsValue("walker", null, dateTime))
                 .withGender(getSimpleMdsValue(GenderDto.FEMALE, dateTime))
                 .withMiddleNames(getSimpleMdsValue("walker", dateTime))
@@ -135,15 +134,15 @@ public class UniversalMatchingDatasetDtoTest {
                         ));
     }
 
-    private MatchingDatasetDto createMatchingDatasetDtoWithNonLatinNames(DateTime dateTime) {
+    private MatchingDatasetDto createMatchingDatasetDtoWithNonLatinNames(LocalDate dateTime) {
         return aUniversalMatchingDatasetDto()
                 .addSurname(getTransliterableMdsValue("smith", "σιδηρουργός", dateTime))
-                .withDateOfBirth(getSimpleMdsValue(LocalDate.fromDateFields(dateTime.toDate()), dateTime))
+                .withDateOfBirth(getSimpleMdsValue(dateTime, dateTime))
                 .withFirstname(getTransliterableMdsValue("walker", "περιπατητής", dateTime))
                 .build();
     }
 
-    private UniversalAddressDto getAddressDto(String postcode, DateTime dateTime) {
+    private UniversalAddressDto getAddressDto(String postcode, LocalDate dateTime) {
         return new AddressDtoBuilder()
                 .withFromDate(dateTime)
                 .withInternationalPostCode("123")
@@ -154,7 +153,7 @@ public class UniversalMatchingDatasetDtoTest {
                 .buildUniversalAddressDto();
     }
 
-    private <T> SimpleMdsValueDto<T> getSimpleMdsValue(T value, DateTime dateTime) {
+    private <T> SimpleMdsValueDto<T> getSimpleMdsValue(T value, LocalDate dateTime) {
         return new SimpleMdsValueDtoBuilder<T>()
                 .withFrom(dateTime)
                 .withTo(dateTime)
@@ -163,7 +162,7 @@ public class UniversalMatchingDatasetDtoTest {
                 .build();
     }
 
-    private TransliterableMdsValueDto getTransliterableMdsValue(String value, String nonLatinScriptValue, DateTime dateTime) {
+    private TransliterableMdsValueDto getTransliterableMdsValue(String value, String nonLatinScriptValue, LocalDate dateTime) {
         return new TransliterableMdsValueDto(value, nonLatinScriptValue, dateTime, dateTime, true);
     }
 

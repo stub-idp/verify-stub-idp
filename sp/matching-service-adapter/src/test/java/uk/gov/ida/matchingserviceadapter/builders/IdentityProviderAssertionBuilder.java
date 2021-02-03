@@ -1,13 +1,13 @@
 package uk.gov.ida.matchingserviceadapter.builders;
 
-import org.joda.time.DateTime;
-import uk.gov.ida.saml.core.domain.AssertionRestrictions;
-import uk.gov.ida.saml.core.domain.IdentityProviderAssertion;
-import uk.gov.ida.saml.core.domain.IdentityProviderAuthnStatement;
-import uk.gov.ida.saml.core.domain.MatchingDataset;
-import uk.gov.ida.saml.core.domain.PersistentId;
-import uk.gov.ida.saml.core.test.builders.AssertionRestrictionsBuilder;
+import stubidp.saml.domain.assertions.AssertionRestrictions;
+import stubidp.saml.domain.assertions.IdentityProviderAssertion;
+import stubidp.saml.domain.assertions.IdentityProviderAuthnStatement;
+import stubidp.saml.domain.assertions.MatchingDataset;
+import stubidp.saml.domain.assertions.PersistentId;
+import stubidp.saml.test.builders.AssertionRestrictionsBuilder;
 
+import java.time.Instant;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -15,7 +15,7 @@ public class IdentityProviderAssertionBuilder {
 
     private String id = "assertion-id" + UUID.randomUUID();
     private String issuerId = "assertion issuer id";
-    private DateTime issueInstant = DateTime.now();
+    private Instant issueInstant = Instant.now();
     private PersistentId persistentId = PersistentIdBuilder.aPersistentId().build();
     private AssertionRestrictions assertionRestrictions = AssertionRestrictionsBuilder.anAssertionRestrictions().build();
     private Optional<MatchingDataset> matchingDataset = Optional.empty();

@@ -1,34 +1,32 @@
 package uk.gov.ida.matchingserviceadapter.exceptions;
 
 import org.apache.commons.codec.binary.Base64;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
 import org.opensaml.core.xml.config.XMLObjectProviderRegistrySupport;
 import org.opensaml.saml.saml2.core.Response;
 import org.opensaml.saml.saml2.core.StatusCode;
 import org.w3c.dom.Element;
-import uk.gov.ida.common.shared.security.IdGenerator;
-import uk.gov.ida.common.shared.security.PrivateKeyFactory;
-import uk.gov.ida.common.shared.security.PublicKeyFactory;
-import uk.gov.ida.common.shared.security.X509CertificateFactory;
-import uk.gov.ida.saml.core.OpenSamlXmlObjectFactory;
-import uk.gov.ida.saml.core.test.OpenSAMLRunner;
-import uk.gov.ida.saml.core.test.TestCertificateStrings;
-import uk.gov.ida.saml.core.test.TestEntityIds;
-import uk.gov.ida.saml.security.IdaKeyStore;
-import uk.gov.ida.saml.security.IdaKeyStoreCredentialRetriever;
+import stubidp.saml.security.IdaKeyStore;
+import stubidp.saml.security.IdaKeyStoreCredentialRetriever;
+import stubidp.saml.test.OpenSAMLRunner;
+import stubidp.saml.utils.core.OpenSamlXmlObjectFactory;
+import stubidp.test.devpki.TestCertificateStrings;
+import stubidp.test.devpki.TestEntityIds;
+import stubidp.utils.security.security.IdGenerator;
+import stubidp.utils.security.security.PrivateKeyFactory;
+import stubidp.utils.security.security.PublicKeyFactory;
+import stubidp.utils.security.security.X509CertificateFactory;
 
 import java.security.KeyPair;
 import java.security.PrivateKey;
 import java.security.PublicKey;
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static uk.gov.ida.saml.core.test.TestCertificateStrings.TEST_ENTITY_ID;
+import static stubidp.test.devpki.TestCertificateStrings.TEST_ENTITY_ID;
 
-@RunWith(OpenSAMLRunner.class)
-public class ExceptionResponseFactoryTest {
+public class ExceptionResponseFactoryTest extends OpenSAMLRunner {
 
     @Test
     public void createResponseShouldReturnValidSamlResponse() throws Exception {
@@ -42,7 +40,7 @@ public class ExceptionResponseFactoryTest {
         KeyPair encryptionKeyPair = new KeyPair(publicEncryptionKey, privateEncryptionKey);
 
         KeyPair signingKeyPair = new KeyPair(publicKey, privateKey);
-        IdaKeyStore keyStore = new IdaKeyStore(signingKeyPair, Arrays.asList(encryptionKeyPair));
+        IdaKeyStore keyStore = new IdaKeyStore(signingKeyPair, Collections.singletonList(encryptionKeyPair));
         ExceptionResponseFactory exceptionResponseFactory = new ExceptionResponseFactory(new OpenSamlXmlObjectFactory(), new IdaKeyStoreCredentialRetriever(keyStore), new IdGenerator());
 
         String errorMessage = "some message";
@@ -52,7 +50,7 @@ public class ExceptionResponseFactoryTest {
         Response attributeQueryResponse = (Response) XMLObjectProviderRegistrySupport.getUnmarshallerFactory().getUnmarshaller(element).unmarshall(element);
 
         assertThat(attributeQueryResponse.getStatus().getStatusCode().getValue()).isEqualTo(StatusCode.REQUESTER);
-        assertThat(attributeQueryResponse.getStatus().getStatusMessage().getMessage()).isEqualTo(errorMessage);
+        assertThat(attributeQueryResponse.getStatus().getStatusMessage().getValue()).isEqualTo(errorMessage);
         assertThat(attributeQueryResponse.getInResponseTo()).isEqualTo(requestId);
         assertThat(attributeQueryResponse.getIssuer().getValue()).isEqualTo(TEST_ENTITY_ID);
     }

@@ -3,11 +3,11 @@ package uk.gov.ida.matchingserviceadapter.saml.transformers.outbound.transformer
 import org.opensaml.saml.saml2.core.Assertion;
 import org.opensaml.saml.saml2.core.Response;
 import org.opensaml.saml.saml2.core.Status;
+import stubidp.saml.hub.transformers.outbound.MatchingServiceIdaStatusMarshaller;
+import stubidp.saml.utils.core.OpenSamlXmlObjectFactory;
+import stubidp.saml.utils.core.transformers.outbound.IdaResponseToSamlResponseTransformer;
 import uk.gov.ida.matchingserviceadapter.domain.MatchingServiceAssertion;
 import uk.gov.ida.matchingserviceadapter.domain.OutboundResponseFromMatchingService;
-import uk.gov.ida.saml.core.OpenSamlXmlObjectFactory;
-import uk.gov.ida.saml.core.transformers.outbound.IdaResponseToSamlResponseTransformer;
-import uk.gov.ida.saml.hub.transformers.outbound.MatchingServiceIdaStatusMarshaller;
 
 import java.util.Optional;
 

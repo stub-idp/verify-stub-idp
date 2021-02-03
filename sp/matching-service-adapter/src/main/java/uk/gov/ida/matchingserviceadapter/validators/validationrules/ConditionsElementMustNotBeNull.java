@@ -1,8 +1,9 @@
 package uk.gov.ida.matchingserviceadapter.validators.validationrules;
 
 import org.opensaml.saml.saml2.core.Conditions;
-import uk.gov.ida.saml.core.validation.SamlResponseValidationException;
+import stubidp.saml.utils.core.validation.SamlResponseValidationException;
 
+import java.util.Objects;
 import java.util.function.Predicate;
 
 public class ConditionsElementMustNotBeNull extends ValidationRule<Conditions> {
@@ -11,7 +12,7 @@ public class ConditionsElementMustNotBeNull extends ValidationRule<Conditions> {
 
     @Override
     protected Predicate<Conditions> getPredicate() {
-        return (conditions) -> conditions != null;
+        return Objects::nonNull;
     }
 
     @Override

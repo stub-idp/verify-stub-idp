@@ -1,28 +1,23 @@
 package uk.gov.ida.matchingserviceadapter.saml;
 
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.ExpectedException;
-import org.junit.runner.RunWith;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.junit.jupiter.MockitoExtension;
+import stubidp.saml.domain.assertions.AuthnContext;
+import stubidp.saml.domain.assertions.PersistentId;
 import uk.gov.ida.matchingserviceadapter.exceptions.AuthnContextMissingException;
-import uk.gov.ida.matchingserviceadapter.saml.UserIdHashFactory;
-import uk.gov.ida.saml.core.domain.AuthnContext;
-import uk.gov.ida.saml.core.domain.PersistentId;
 
 import java.util.Arrays;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 import static uk.gov.ida.matchingserviceadapter.builders.PersistentIdBuilder.aPersistentId;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class UserIdHashFactoryTest {
 
     private static final String MSA_ENTITY_ID = "entity";
-
-    @Rule
-    public ExpectedException exception = ExpectedException.none();
 
     private UserIdHashFactory userIdHashFactory = new UserIdHashFactory(MSA_ENTITY_ID);
 
@@ -51,9 +46,8 @@ public class UserIdHashFactoryTest {
 
     @Test
     public void shouldThrowIfAuthnContextAbsent() {
-        exception.expect(AuthnContextMissingException.class);
-        exception.expectMessage(String.format("Authn context absent for persistent id %s", "pid"));
-
-        userIdHashFactory.hashId("", "pid", Optional.empty());
+        assertThatExceptionOfType(AuthnContextMissingException.class)
+                .isThrownBy(() -> userIdHashFactory.hashId("", "pid", Optional.empty()))
+                .withMessage(String.format("Authn context absent for persistent id %s", "pid"));
     }
 }

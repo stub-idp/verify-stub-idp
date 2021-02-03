@@ -1,20 +1,19 @@
 package uk.gov.ida.matchingserviceadapter.services;
 
-import com.squarespace.jersey2.guice.JerseyGuiceUtils;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.w3c.dom.Element;
+import stubidp.saml.test.OpenSAMLRunner;
+import stubidp.utils.common.manifest.ManifestReader;
 import uk.gov.ida.matchingserviceadapter.MatchingServiceAdapterConfiguration;
 import uk.gov.ida.matchingserviceadapter.domain.HealthCheckResponseFromMatchingService;
 import uk.gov.ida.matchingserviceadapter.domain.OutboundResponseFromMatchingService;
 import uk.gov.ida.matchingserviceadapter.rest.soap.SoapMessageManager;
-import uk.gov.ida.shared.utils.manifest.ManifestReader;
 
-import javax.ws.rs.core.Response;
 import java.io.IOException;
 import java.util.function.Function;
 
@@ -23,8 +22,8 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-@RunWith(MockitoJUnitRunner.class)
-public class MatchingResponseGeneratorTest {
+@ExtendWith(MockitoExtension.class)
+public class MatchingResponseGeneratorTest extends OpenSAMLRunner {
 
     private static final String ENTITY_ID = "entityId";
 
@@ -45,10 +44,8 @@ public class MatchingResponseGeneratorTest {
     @Mock
     private MatchingServiceAdapterConfiguration matchingServiceConfiguration;
 
-    @Before
+    @BeforeEach
     public void setUp() {
-        JerseyGuiceUtils.reset();
-
         matchingResponseGenerator = new MatchingResponseGenerator(
                 soapMessageManager,
                 responseElementTransformer,

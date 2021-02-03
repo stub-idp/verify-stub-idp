@@ -3,7 +3,7 @@ package stubidp.saml.metadata;
 import javax.xml.bind.DatatypeConverter;
 import java.nio.charset.StandardCharsets;
 
-class ResourceEncoder {
+public class ResourceEncoder {
 
     private ResourceEncoder() {}
 

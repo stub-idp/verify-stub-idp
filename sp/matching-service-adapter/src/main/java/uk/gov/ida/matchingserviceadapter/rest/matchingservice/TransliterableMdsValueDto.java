@@ -1,9 +1,10 @@
 package uk.gov.ida.matchingserviceadapter.rest.matchingservice;
 
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import org.joda.time.DateTime;
+import com.fasterxml.jackson.annotation.JsonInclude;
 
-@JsonSerialize(include= JsonSerialize.Inclusion.NON_NULL)
+import java.time.LocalDate;
+
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class TransliterableMdsValueDto extends SimpleMdsValueDto<String> {
 
     private String nonLatinScriptValue;
@@ -18,7 +19,7 @@ public class TransliterableMdsValueDto extends SimpleMdsValueDto<String> {
         this.nonLatinScriptValue = nonLatinScriptValue;
     }
 
-    public TransliterableMdsValueDto(String value, String nonLatinScriptValue, DateTime from, DateTime to, boolean verified) {
+    public TransliterableMdsValueDto(String value, String nonLatinScriptValue, LocalDate from, LocalDate to, boolean verified) {
         super(value, from, to, verified);
         this.nonLatinScriptValue = nonLatinScriptValue;
     }

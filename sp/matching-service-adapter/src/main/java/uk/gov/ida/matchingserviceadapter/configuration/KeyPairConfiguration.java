@@ -1,8 +1,8 @@
 package uk.gov.ida.matchingserviceadapter.configuration;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import uk.gov.ida.common.shared.configuration.DeserializablePublicKeyConfiguration;
-import uk.gov.ida.common.shared.configuration.PrivateKeyConfiguration;
+import stubidp.utils.security.configuration.DeserializablePublicKeyConfiguration;
+import stubidp.utils.security.configuration.PrivateKeyConfiguration;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;

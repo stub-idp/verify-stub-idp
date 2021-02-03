@@ -3,12 +3,12 @@ package uk.gov.ida.matchingserviceadapter.services;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.Element;
+import stubidp.utils.common.manifest.ManifestReader;
 import uk.gov.ida.matchingserviceadapter.MatchingServiceAdapterApplication;
 import uk.gov.ida.matchingserviceadapter.domain.HealthCheckResponseFromMatchingService;
 import uk.gov.ida.matchingserviceadapter.domain.OutboundResponseFromMatchingService;
 import uk.gov.ida.matchingserviceadapter.rest.soap.SoapMessageManager;
 import uk.gov.ida.matchingserviceadapter.MatchingServiceAdapterConfiguration;
-import uk.gov.ida.shared.utils.manifest.ManifestReader;
 
 import javax.ws.rs.core.Response;
 import java.io.IOException;

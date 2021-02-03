@@ -2,11 +2,11 @@ package uk.gov.ida.matchingserviceadapter.saml.transformers.outbound.transformer
 
 import org.opensaml.saml.saml2.core.Response;
 import org.opensaml.saml.saml2.core.Status;
+import stubidp.saml.domain.matching.MatchingServiceIdaStatus;
+import stubidp.saml.hub.transformers.outbound.MatchingServiceIdaStatusMarshaller;
+import stubidp.saml.utils.core.OpenSamlXmlObjectFactory;
+import stubidp.saml.utils.core.transformers.outbound.IdaResponseToSamlResponseTransformer;
 import uk.gov.ida.matchingserviceadapter.domain.HealthCheckResponseFromMatchingService;
-import uk.gov.ida.saml.core.OpenSamlXmlObjectFactory;
-import uk.gov.ida.saml.core.domain.MatchingServiceIdaStatus;
-import uk.gov.ida.saml.core.transformers.outbound.IdaResponseToSamlResponseTransformer;
-import uk.gov.ida.saml.hub.transformers.outbound.MatchingServiceIdaStatusMarshaller;
 
 public class HealthCheckResponseFromMatchingServiceTransformer extends IdaResponseToSamlResponseTransformer<HealthCheckResponseFromMatchingService> {
 

@@ -1,23 +1,22 @@
 package uk.gov.ida.matchingserviceadapter.saml.factories;
 
-import com.google.common.collect.ImmutableList;
-import org.joda.time.LocalDate;
 import org.opensaml.core.xml.XMLObject;
 import org.opensaml.saml.saml2.core.Attribute;
 import org.opensaml.saml.saml2.core.AttributeValue;
+import stubidp.saml.domain.assertions.Address;
+import stubidp.saml.domain.assertions.SimpleMdsValue;
+import stubidp.saml.extensions.extensions.Line;
+import stubidp.saml.extensions.extensions.StringBasedMdsAttributeValue;
+import stubidp.saml.utils.core.OpenSamlXmlObjectFactory;
 import uk.gov.ida.matchingserviceadapter.domain.UserAccountCreationAttribute;
-import uk.gov.ida.saml.core.OpenSamlXmlObjectFactory;
-import uk.gov.ida.saml.core.domain.Address;
-import uk.gov.ida.saml.core.domain.SimpleMdsValue;
-import uk.gov.ida.saml.core.extensions.Line;
-import uk.gov.ida.saml.core.extensions.StringBasedMdsAttributeValue;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Objects;
 
 import static java.util.Collections.singletonList;
-
 
 public class UserAccountCreationAttributeFactory {
 
@@ -43,7 +42,7 @@ public class UserAccountCreationAttributeFactory {
         return createAttribute(
                 UserAccountCreationAttribute.DATE_OF_BIRTH,
                 singletonList(createAttributeValueWithDates(
-                        openSamlXmlObjectFactory.createDateAttributeValue(dateOfBirth.getValue().toString("yyyy-MM-dd")),
+                        openSamlXmlObjectFactory.createDateAttributeValue(dateOfBirth.getValue().toString()),
                         dateOfBirth))
         );
     }
@@ -66,7 +65,7 @@ public class UserAccountCreationAttributeFactory {
 
     public Attribute createUserAccountCreationVerifiedAttribute(UserAccountCreationAttribute userAccountCreationAttribute, boolean verified) {
         return createAttribute(userAccountCreationAttribute,
-                ImmutableList.of(openSamlXmlObjectFactory.createVerifiedAttributeValue(verified))
+                List.of(openSamlXmlObjectFactory.createVerifiedAttributeValue(verified))
         );
     }
 
@@ -87,10 +86,10 @@ public class UserAccountCreationAttributeFactory {
 
     private AttributeValue createAddressAttributeValue(Address address) {
 
-        uk.gov.ida.saml.core.extensions.Address addressAttributeValue = openSamlXmlObjectFactory.createAddressAttributeValue();
+        stubidp.saml.extensions.extensions.Address addressAttributeValue = openSamlXmlObjectFactory.createAddressAttributeValue();
         addressAttributeValue.setFrom(address.getFrom());
-        if (address.getTo().isPresent()) {
-            addressAttributeValue.setTo(address.getTo().get());
+        if (Objects.nonNull(address.getTo())) {
+            addressAttributeValue.setTo(address.getTo());
         }
         for (String lineValue : address.getLines()) {
             Line line = openSamlXmlObjectFactory.createLine(lineValue);
@@ -110,7 +109,7 @@ public class UserAccountCreationAttributeFactory {
         return addressAttributeValue;
     }
 
-    private AttributeValue createAttributeValueWithDates(StringBasedMdsAttributeValue attributeValue, SimpleMdsValue value) {
+    private <T> AttributeValue createAttributeValueWithDates(StringBasedMdsAttributeValue attributeValue, SimpleMdsValue<T> value) {
         attributeValue.setFrom(value.getFrom());
         attributeValue.setTo(value.getTo());
         return attributeValue;

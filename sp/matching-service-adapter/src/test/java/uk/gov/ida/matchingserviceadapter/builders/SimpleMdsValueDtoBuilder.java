@@ -1,14 +1,15 @@
 package uk.gov.ida.matchingserviceadapter.builders;
 
-import org.joda.time.DateTime;
 import uk.gov.ida.matchingserviceadapter.rest.matchingservice.SimpleMdsValueDto;
+
+import java.time.LocalDate;
 
 public class SimpleMdsValueDtoBuilder<T> {
 
     private T value = null;
 
-    private DateTime from = DateTime.now().minusDays(5);
-    private DateTime to = DateTime.now().plusDays(5);
+    private LocalDate from = LocalDate.now().minusDays(5);
+    private LocalDate to = LocalDate.now().plusDays(5);
     private boolean verified = false;
 
     public static <T> SimpleMdsValueDtoBuilder<T> aSimpleMdsValueDto() {
@@ -24,12 +25,12 @@ public class SimpleMdsValueDtoBuilder<T> {
         return this;
     }
 
-    public SimpleMdsValueDtoBuilder<T> withFrom(DateTime from) {
+    public SimpleMdsValueDtoBuilder<T> withFrom(LocalDate from) {
         this.from = from;
         return this;
     }
 
-    public SimpleMdsValueDtoBuilder<T> withTo(DateTime to) {
+    public SimpleMdsValueDtoBuilder<T> withTo(LocalDate to) {
         this.to = to;
         return this;
     }

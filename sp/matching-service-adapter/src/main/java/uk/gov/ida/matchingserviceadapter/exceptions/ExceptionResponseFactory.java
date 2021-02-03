@@ -1,6 +1,5 @@
 package uk.gov.ida.matchingserviceadapter.exceptions;
 
-import com.google.inject.Inject;
 import org.opensaml.core.xml.config.XMLObjectProviderRegistrySupport;
 import org.opensaml.core.xml.io.MarshallingException;
 import org.opensaml.saml.saml2.core.Issuer;
@@ -11,9 +10,11 @@ import org.opensaml.xmlsec.signature.Signature;
 import org.opensaml.xmlsec.signature.support.SignatureException;
 import org.opensaml.xmlsec.signature.support.Signer;
 import org.w3c.dom.Element;
-import uk.gov.ida.common.shared.security.IdGenerator;
-import uk.gov.ida.saml.core.OpenSamlXmlObjectFactory;
-import uk.gov.ida.saml.security.IdaKeyStoreCredentialRetriever;
+import stubidp.saml.security.IdaKeyStoreCredentialRetriever;
+import stubidp.saml.utils.core.OpenSamlXmlObjectFactory;
+import stubidp.utils.security.security.IdGenerator;
+
+import javax.inject.Inject;
 
 public class ExceptionResponseFactory {
 
@@ -43,7 +44,7 @@ public class ExceptionResponseFactory {
         response.setStatus(status);
 
         StatusMessage statusMessage = factory.createStatusMessage();
-        statusMessage.setMessage(message);
+        statusMessage.setValue(message);
         status.setStatusMessage(statusMessage);
 
         Signature signature = factory.createSignature();

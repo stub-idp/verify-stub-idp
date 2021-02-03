@@ -21,7 +21,7 @@ public class AddressAttributeValueBuilder_1_1 {
 
     private boolean verified = false;
 
-    private AddressAttributeValueBuilder_1_1() {}
+    public AddressAttributeValueBuilder_1_1() {}
 
     public static AddressAttributeValueBuilder_1_1 anAddressAttributeValue() {
         return new AddressAttributeValueBuilder_1_1();

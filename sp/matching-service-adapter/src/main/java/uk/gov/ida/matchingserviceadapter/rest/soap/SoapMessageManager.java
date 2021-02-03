@@ -1,12 +1,12 @@
 package uk.gov.ida.matchingserviceadapter.rest.soap;
 
-import org.apache.ws.commons.util.NamespaceContextImpl;
+import net.shibboleth.utilities.java.support.xml.SimpleNamespaceContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import stubidp.utils.common.xml.XmlUtils;
 import uk.gov.ida.matchingserviceadapter.exceptions.SoapUnwrappingException;
-import uk.gov.ida.shared.utils.xml.XmlUtils;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.ParserConfigurationException;
@@ -14,9 +14,10 @@ import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
+import java.util.Map;
 
 import static java.text.MessageFormat.format;
-import static uk.gov.ida.shared.utils.xml.XmlUtils.newDocumentBuilder;
+import static stubidp.utils.common.xml.XmlUtils.newDocumentBuilder;
 
 public class SoapMessageManager {
     private static final String NEW_LINE = System.getProperty("line.separator");
@@ -47,11 +48,12 @@ public class SoapMessageManager {
 
     private Element unwrapSoapMessage(Element soapElement, SamlElementType samlElementType) {
         XPath xpath = XPathFactory.newInstance().newXPath();
-        NamespaceContextImpl context = new NamespaceContextImpl();
-        context.startPrefixMapping("soapenv", "http://schemas.xmlsoap.org/soap/envelope/");
-        context.startPrefixMapping("samlp", "urn:oasis:names:tc:SAML:2.0:protocol");
-        context.startPrefixMapping("saml", "urn:oasis:names:tc:SAML:2.0:assertion");
-        context.startPrefixMapping("ds", "http://www.w3.org/2000/09/xmldsig#");
+        SimpleNamespaceContext context = new SimpleNamespaceContext(Map.of(
+                "soapenv", "http://schemas.xmlsoap.org/soap/envelope/",
+                "samlp", "urn:oasis:names:tc:SAML:2.0:protocol",
+                "saml", "urn:oasis:names:tc:SAML:2.0:assertion",
+                "ds", "http://www.w3.org/2000/09/xmldsig#"
+        ));
         xpath.setNamespaceContext(context);
         try {
             String expression = "//samlp:" + samlElementType.getElementName();

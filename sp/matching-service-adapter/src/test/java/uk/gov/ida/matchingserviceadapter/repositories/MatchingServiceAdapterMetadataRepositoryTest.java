@@ -3,14 +3,12 @@ package uk.gov.ida.matchingserviceadapter.repositories;
 import net.shibboleth.utilities.java.support.resolver.CriteriaSet;
 import net.shibboleth.utilities.java.support.resolver.ResolverException;
 import net.shibboleth.utilities.java.support.xml.BasicParserPool;
-import org.joda.time.DateTime;
-import org.joda.time.DateTimeUtils;
-import org.joda.time.DateTimeZone;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.assertj.core.data.TemporalUnitWithinOffset;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.opensaml.core.criterion.EntityIdCriterion;
 import org.opensaml.core.xml.XMLObject;
 import org.opensaml.saml.common.xml.SAMLConstants;
@@ -20,35 +18,53 @@ import org.opensaml.saml.saml2.metadata.EntityDescriptor;
 import org.opensaml.saml.saml2.metadata.IDPSSODescriptor;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
-import uk.gov.ida.common.shared.security.Certificate;
+import stubidp.saml.security.StringBackedMetadataResolver;
+import stubidp.saml.serializers.deserializers.StringToOpenSamlObjectTransformer;
+import stubidp.saml.test.OpenSAMLRunner;
+import stubidp.saml.test.metadata.EntityDescriptorFactory;
+import stubidp.saml.utils.core.OpenSamlXmlObjectFactory;
+import stubidp.saml.utils.core.api.CoreTransformersFactory;
+import stubidp.saml.utils.metadata.transformers.KeyDescriptorsUnmarshaller;
+import stubidp.test.devpki.TestCertificateStrings;
+import stubidp.test.devpki.TestEntityIds;
+import stubidp.utils.security.security.Certificate;
 import uk.gov.ida.matchingserviceadapter.MatchingServiceAdapterConfiguration;
 import uk.gov.ida.matchingserviceadapter.configuration.CertificateStore;
 import uk.gov.ida.matchingserviceadapter.exceptions.FederationMetadataLoadingException;
-import uk.gov.ida.saml.core.OpenSamlXmlObjectFactory;
-import uk.gov.ida.saml.core.api.CoreTransformersFactory;
-import uk.gov.ida.saml.core.test.OpenSAMLMockitoRunner;
-import uk.gov.ida.saml.core.test.TestCertificateStrings;
-import uk.gov.ida.saml.core.test.TestEntityIds;
-import uk.gov.ida.saml.deserializers.StringToOpenSamlObjectTransformer;
-import uk.gov.ida.saml.metadata.StringBackedMetadataResolver;
-import uk.gov.ida.saml.metadata.test.factories.metadata.EntityDescriptorFactory;
-import uk.gov.ida.saml.metadata.transformers.KeyDescriptorsUnmarshaller;
-import uk.gov.ida.shared.utils.xml.XmlUtils;
 
 import java.net.URI;
+import java.time.Clock;
+import java.time.Instant;
+import java.time.ZoneId;
+import java.time.temporal.ChronoUnit;
+import java.util.Collections;
+import java.util.List;
 import java.util.function.Function;
 
-import static java.util.Arrays.asList;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 import static org.mockito.Mockito.when;
-import static uk.gov.ida.shared.utils.string.StringEncoding.toBase64Encoded;
-import static uk.gov.ida.shared.utils.xml.XmlUtils.writeToString;
+import static stubidp.utils.common.string.StringEncoding.toBase64Encoded;
+import static stubidp.utils.common.xml.XmlUtils.writeToString;
 
-@RunWith(OpenSAMLMockitoRunner.class)
-public class MatchingServiceAdapterMetadataRepositoryTest {
+@ExtendWith(MockitoExtension.class)
+public class MatchingServiceAdapterMetadataRepositoryTest extends OpenSAMLRunner {
+
+    private final String hubSsoEndPoint = "http://localhost:50300/SAML2/SSO";
+
+    private final Clock clock = Clock.fixed(Instant.now(), ZoneId.of("UTC"));
 
     @Mock
     private MatchingServiceAdapterConfiguration msaConfiguration;
+
+    @Mock
+    private MetadataResolver msaMetadataResolver;
+
+    @Mock
+    private CertificateStore certificateStore;
+
+    @Mock
+    private MatchingServiceAdapterConfiguration matchingServiceAdapterConfiguration;
 
     private KeyDescriptorsUnmarshaller keyDescriptorsUnmarshaller;
 
@@ -56,24 +72,13 @@ public class MatchingServiceAdapterMetadataRepositoryTest {
 
     private MatchingServiceAdapterMetadataRepository matchingServiceAdapterMetadataRepository;
 
-    @Mock
-    private MetadataResolver msaMetadataResolver;
+    private String entityId = "http://issuer";
 
-    @Mock
-    private CertificateStore certificateStore;
-    private String entityId;
-    private String hubSsoEndPoint = "http://localhost:50300/SAML2/SSO";
-
-    @Mock
-    private MatchingServiceAdapterConfiguration matchingServiceAdapterConfiguration;
-
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
-        entityId = "http://issuer";
         when(msaConfiguration.getEntityId()).thenReturn(entityId);
         when(msaConfiguration.getMatchingServiceAdapterExternalUrl()).thenReturn(URI.create("http://localhost"));
-        when(certificateStore.getEncryptionCertificates()).thenReturn(asList());
-        when(msaMetadataResolver.resolveSingle(new CriteriaSet(new EntityIdCriterion(TestEntityIds.HUB_ENTITY_ID)))).thenReturn(new EntityDescriptorFactory().hubEntityDescriptor());
+        when(certificateStore.getEncryptionCertificates()).thenReturn(Collections.emptyList());
         when(matchingServiceAdapterConfiguration.getHubSSOUri()).thenReturn(URI.create(hubSsoEndPoint));
         when(matchingServiceAdapterConfiguration.shouldRepublishHubCertificates()).thenReturn(false);
 
@@ -87,12 +92,8 @@ public class MatchingServiceAdapterMetadataRepositoryTest {
                 certificateStore,
                 msaMetadataResolver,
                 matchingServiceAdapterConfiguration,
-                TestEntityIds.HUB_ENTITY_ID);
-    }
-
-    @After
-    public void tearDown() throws Exception {
-        DateTimeUtils.setCurrentMillisSystem();
+                TestEntityIds.HUB_ENTITY_ID,
+                clock);
     }
 
     @Test
@@ -103,7 +104,7 @@ public class MatchingServiceAdapterMetadataRepositoryTest {
 
     @Test
     public void shouldHaveAnIDPSSODescriptor() throws ResolverException, FederationMetadataLoadingException {
-        when(certificateStore.getSigningCertificates()).thenReturn(asList(getCertificate()));
+        when(certificateStore.getSigningCertificates()).thenReturn(Collections.singletonList(getCertificate()));
 
         Document matchingServiceAdapterMetadata = matchingServiceAdapterMetadataRepository.getMatchingServiceAdapterMetadata();
         EntityDescriptor msa = getEntityDescriptor(matchingServiceAdapterMetadata, entityId);
@@ -122,7 +123,7 @@ public class MatchingServiceAdapterMetadataRepositoryTest {
 
     @Test
     public void shouldHaveOneSigningKeyDescriptorWhenMsaIsConfiguredWithNoSecondaryPublicSigningKey() throws Exception {
-        when(certificateStore.getSigningCertificates()).thenReturn(asList(getCertificate()));
+        when(certificateStore.getSigningCertificates()).thenReturn(Collections.singletonList(getCertificate()));
 
         Document matchingServiceAdapterMetadata = matchingServiceAdapterMetadataRepository.getMatchingServiceAdapterMetadata();
         EntityDescriptor msa = getEntityDescriptor(matchingServiceAdapterMetadata, entityId);
@@ -133,7 +134,7 @@ public class MatchingServiceAdapterMetadataRepositoryTest {
 
     @Test
     public void shouldHaveTwoSigningKeyDescriptorsWhenMsaIsConfiguredWithSecondaryPublicSigningKey() throws Exception {
-        when(certificateStore.getSigningCertificates()).thenReturn(asList(getCertificate(), getCertificate()));
+        when(certificateStore.getSigningCertificates()).thenReturn(List.of(getCertificate(), getCertificate()));
 
         Document matchingServiceAdapterMetadata = matchingServiceAdapterMetadataRepository.getMatchingServiceAdapterMetadata();
         EntityDescriptor msa = getEntityDescriptor(matchingServiceAdapterMetadata, entityId);
@@ -145,6 +146,8 @@ public class MatchingServiceAdapterMetadataRepositoryTest {
     @Test
     public void shouldReturnTheHubEntityDescriptorInMSAMetadataWhenConfiguredToDoSo() throws Exception {
         when(matchingServiceAdapterConfiguration.shouldRepublishHubCertificates()).thenReturn(true);
+        when(msaMetadataResolver.resolveSingle(new CriteriaSet(new EntityIdCriterion(TestEntityIds.HUB_ENTITY_ID)))).thenReturn(new EntityDescriptorFactory().hubEntityDescriptor());
+
         Document matchingServiceAdapterMetadata = matchingServiceAdapterMetadataRepository.getMatchingServiceAdapterMetadata();
         EntityDescriptor hub = getEntityDescriptor(matchingServiceAdapterMetadata, TestEntityIds.HUB_ENTITY_ID);
 
@@ -152,21 +155,23 @@ public class MatchingServiceAdapterMetadataRepositoryTest {
         assertThat(hub.getSPSSODescriptor(SAMLConstants.SAML20P_NS).getKeyDescriptors().size()).isEqualTo(3);
     }
 
-    @Test(expected = FederationMetadataLoadingException.class)
+    @Test
     public void shouldThrowAnExceptionIfFederationMetadataCannotBeLoadedORHubIsMissing() throws Exception {
         when(matchingServiceAdapterConfiguration.shouldRepublishHubCertificates()).thenReturn(true);
         when(msaMetadataResolver.resolveSingle(new CriteriaSet(new EntityIdCriterion(TestEntityIds.HUB_ENTITY_ID)))).thenReturn(null);
-        when(certificateStore.getSigningCertificates()).thenReturn(asList(getCertificate()));
+        when(certificateStore.getSigningCertificates()).thenReturn(Collections.singletonList(getCertificate()));
 
-        matchingServiceAdapterMetadataRepository.getMatchingServiceAdapterMetadata();
+        assertThatExceptionOfType(FederationMetadataLoadingException.class)
+                .isThrownBy(() -> matchingServiceAdapterMetadataRepository.getMatchingServiceAdapterMetadata());
     }
 
     @Test
     public void shouldBeAbleToLoadMSAMetadataUsingMetadataResolver() throws Exception {
         when(matchingServiceAdapterConfiguration.shouldRepublishHubCertificates()).thenReturn(true);
+        when(msaMetadataResolver.resolveSingle(new CriteriaSet(new EntityIdCriterion(TestEntityIds.HUB_ENTITY_ID)))).thenReturn(new EntityDescriptorFactory().hubEntityDescriptor());
 
         Document matchingServiceAdapterMetadata = matchingServiceAdapterMetadataRepository.getMatchingServiceAdapterMetadata();
-        String metadata = XmlUtils.writeToString(matchingServiceAdapterMetadata);
+        String metadata = writeToString(matchingServiceAdapterMetadata);
 
         StringBackedMetadataResolver stringBackedMetadataResolver = new StringBackedMetadataResolver(metadata);
         BasicParserPool pool = new BasicParserPool();
@@ -181,13 +186,12 @@ public class MatchingServiceAdapterMetadataRepositoryTest {
 
     @Test
     public void shouldGenerateMetadataValidFor1Hour() throws Exception {
-        DateTimeUtils.setCurrentMillisFixed(DateTime.now().getMillis());
-        when(certificateStore.getSigningCertificates()).thenReturn(asList(getCertificate()));
+        when(certificateStore.getSigningCertificates()).thenReturn(Collections.singletonList(getCertificate()));
 
         Document matchingServiceAdapterMetadata = matchingServiceAdapterMetadataRepository.getMatchingServiceAdapterMetadata();
         EntitiesDescriptor entitiesDescriptor = getEntitiesDescriptor(matchingServiceAdapterMetadata);
 
-        assertThat(entitiesDescriptor.getValidUntil()).isEqualTo(DateTime.now(DateTimeZone.UTC).plusHours(1));
+        assertThat(entitiesDescriptor.getValidUntil()).isCloseTo(Instant.now(clock).plus(1, ChronoUnit.HOURS), new TemporalUnitWithinOffset(10, ChronoUnit.SECONDS));
     }
 
     private Certificate getCertificate() {

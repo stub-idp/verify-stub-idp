@@ -1,8 +1,8 @@
 package uk.gov.ida.matchingserviceadapter.builders;
 
-import org.joda.time.DateTime;
-import uk.gov.ida.saml.core.domain.Address;
+import stubidp.saml.domain.assertions.Address;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -16,8 +16,8 @@ public class AddressBuilder {
     private Optional<String> postCode = Optional.empty();
     private Optional<String> internationalPostCode = Optional.empty();
     private Optional<String> uprn = Optional.empty();
-    private DateTime fromDate = DateTime.parse("2001-01-01");
-    private Optional<DateTime> toDate = Optional.empty();
+    private LocalDate fromDate = LocalDate.parse("2001-01-01");
+    private LocalDate toDate = null;
     private boolean verified = false;
 
     public static AddressBuilder aCurrentAddress() {
@@ -61,13 +61,13 @@ public class AddressBuilder {
         return this;
     }
 
-    public AddressBuilder withFromDate(final DateTime fromDate) {
+    public AddressBuilder withFromDate(final LocalDate fromDate) {
         this.fromDate = fromDate;
         return this;
     }
 
-    public AddressBuilder withToDate(final DateTime toDate) {
-        this.toDate = Optional.ofNullable(toDate);
+    public AddressBuilder withToDate(final LocalDate toDate) {
+        this.toDate = toDate;
         return this;
     }
 

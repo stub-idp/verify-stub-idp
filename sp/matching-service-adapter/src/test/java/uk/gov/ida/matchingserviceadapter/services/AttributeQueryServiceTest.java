@@ -1,17 +1,19 @@
 package uk.gov.ida.matchingserviceadapter.services;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.opensaml.saml.saml2.core.Assertion;
 import org.opensaml.saml.saml2.core.AttributeQuery;
 import org.opensaml.xmlsec.signature.Signature;
+import stubidp.saml.extensions.extensions.IdaAuthnContext;
+import stubidp.saml.test.OpenSAMLRunner;
+import stubidp.saml.test.TestCredentialFactory;
 import uk.gov.ida.matchingserviceadapter.saml.UserIdHashFactory;
 import uk.gov.ida.matchingserviceadapter.validators.AttributeQuerySignatureValidator;
 import uk.gov.ida.matchingserviceadapter.validators.InstantValidator;
-import uk.gov.ida.saml.core.IdaSamlBootstrap;
-import uk.gov.ida.saml.core.extensions.IdaAuthnContext;
-import uk.gov.ida.saml.core.test.TestCredentialFactory;
 
 import java.util.List;
 
@@ -23,27 +25,26 @@ import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-import static org.mockito.MockitoAnnotations.initMocks;
+import static stubidp.saml.test.builders.AssertionBuilder.anAssertion;
+import static stubidp.saml.test.builders.AttributeQueryBuilder.anAttributeQuery;
+import static stubidp.saml.test.builders.AuthnStatementBuilder.anEidasAuthnStatement;
+import static stubidp.saml.test.builders.ConditionsBuilder.aConditions;
+import static stubidp.saml.test.builders.IssuerBuilder.anIssuer;
+import static stubidp.saml.test.builders.SignatureBuilder.aSignature;
+import static stubidp.saml.test.builders.SubjectBuilder.aSubject;
+import static stubidp.saml.test.builders.SubjectConfirmationBuilder.aSubjectConfirmation;
+import static stubidp.saml.test.builders.SubjectConfirmationDataBuilder.aSubjectConfirmationData;
+import static stubidp.test.devpki.TestCertificateStrings.STUB_COUNTRY_PUBLIC_PRIMARY_CERT;
+import static stubidp.test.devpki.TestCertificateStrings.STUB_COUNTRY_PUBLIC_PRIMARY_PRIVATE_KEY;
+import static stubidp.test.devpki.TestEntityIds.HUB_ENTITY_ID;
+import static stubidp.test.devpki.TestEntityIds.STUB_COUNTRY_ONE;
+import static uk.gov.ida.matchingserviceadapter.builders.AttributeStatementBuilder.anEidasAttributeStatement;
 import static uk.gov.ida.matchingserviceadapter.services.VerifyAssertionServiceTest.aMatchingDatasetAssertionWithSignature;
 import static uk.gov.ida.matchingserviceadapter.services.VerifyAssertionServiceTest.anAuthnStatementAssertion;
 import static uk.gov.ida.matchingserviceadapter.services.VerifyAssertionServiceTest.anIdpSignature;
-import static uk.gov.ida.saml.core.test.TestCertificateStrings.STUB_COUNTRY_PUBLIC_PRIMARY_CERT;
-import static uk.gov.ida.saml.core.test.TestCertificateStrings.STUB_COUNTRY_PUBLIC_PRIMARY_PRIVATE_KEY;
-import static uk.gov.ida.saml.core.test.TestEntityIds.HUB_ENTITY_ID;
-import static uk.gov.ida.saml.core.test.TestEntityIds.STUB_COUNTRY_ONE;
-import static uk.gov.ida.saml.core.test.builders.AssertionBuilder.anAssertion;
-import static uk.gov.ida.saml.core.test.builders.AttributeQueryBuilder.anAttributeQuery;
-import static uk.gov.ida.saml.core.test.builders.AttributeStatementBuilder.anEidasAttributeStatement;
-import static uk.gov.ida.saml.core.test.builders.AuthnStatementBuilder.anEidasAuthnStatement;
-import static uk.gov.ida.saml.core.test.builders.ConditionsBuilder.aConditions;
-import static uk.gov.ida.saml.core.test.builders.IssuerBuilder.anIssuer;
-import static uk.gov.ida.saml.core.test.builders.SignatureBuilder.aSignature;
-import static uk.gov.ida.saml.core.test.builders.SubjectBuilder.aSubject;
-import static uk.gov.ida.saml.core.test.builders.SubjectConfirmationBuilder.aSubjectConfirmation;
-import static uk.gov.ida.saml.core.test.builders.SubjectConfirmationDataBuilder.aSubjectConfirmationData;
 
-public class AttributeQueryServiceTest {
+@ExtendWith(MockitoExtension.class)
+public class AttributeQueryServiceTest extends OpenSAMLRunner {
 
     private AttributeQueryService attributeQueryService;
 
@@ -64,10 +65,8 @@ public class AttributeQueryServiceTest {
 
     private Assertion eidasAssertion;
 
-    @Before
-    public void setUp() {
-        IdaSamlBootstrap.bootstrap();
-        initMocks(this);
+    @BeforeEach
+    public void setUp() throws Exception {
         attributeQueryService = new AttributeQueryService(
                 attributeQuerySignatureValidator,
                 instantValidator,
@@ -76,13 +75,14 @@ public class AttributeQueryServiceTest {
                 userIdHashFactory,
                 HUB_ENTITY_ID
         );
-        doNothing().when(attributeQuerySignatureValidator).validate(any());
-        doNothing().when(instantValidator).validate(any(), any());
         eidasAssertion = anEidasAssertion("requestId", STUB_COUNTRY_ONE, anEidasSignature());
-        when(eidasAssertionService.isCountryAssertion(eidasAssertion)).thenReturn(true);
     }
+
     @Test
     public void shouldValidateSignatureAndIssueInstant() {
+        doNothing().when(attributeQuerySignatureValidator).validate(any());
+        doNothing().when(instantValidator).validate(any(), any());
+
         AttributeQuery attributeQuery = anAttributeQuery().build();
 
         attributeQueryService.validate(attributeQuery);

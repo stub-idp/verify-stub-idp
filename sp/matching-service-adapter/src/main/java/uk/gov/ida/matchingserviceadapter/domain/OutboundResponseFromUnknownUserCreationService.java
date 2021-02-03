@@ -1,9 +1,9 @@
 package uk.gov.ida.matchingserviceadapter.domain;
 
-import org.joda.time.DateTime;
-import uk.gov.ida.saml.core.domain.IdaMatchingServiceResponse;
-import uk.gov.ida.saml.core.domain.UnknownUserCreationIdaStatus;
+import stubidp.saml.domain.matching.IdaMatchingServiceResponse;
+import stubidp.saml.domain.matching.UnknownUserCreationIdaStatus;
 
+import java.time.Instant;
 import java.util.Optional;
 
 public class OutboundResponseFromUnknownUserCreationService extends IdaMatchingServiceResponse {
@@ -14,7 +14,7 @@ public class OutboundResponseFromUnknownUserCreationService extends IdaMatchingS
             String responseId,
             String inResponseTo,
             String issuer,
-            DateTime issueInstant,
+            Instant issueInstant,
             UnknownUserCreationIdaStatus status,
             Optional<MatchingServiceAssertion> matchingServiceAssertion) {
         super(responseId, inResponseTo, issuer, issueInstant);
@@ -30,7 +30,7 @@ public class OutboundResponseFromUnknownUserCreationService extends IdaMatchingS
                 responseId,
                 originalRequestId,
                 issuerId,
-                DateTime.now(),
+                Instant.now(),
                 UnknownUserCreationIdaStatus.CreateFailure,
                 Optional.empty());
     }
@@ -43,7 +43,7 @@ public class OutboundResponseFromUnknownUserCreationService extends IdaMatchingS
                 responseId,
                 originalRequestId,
                 issuerId,
-                DateTime.now(),
+                Instant.now(),
                 UnknownUserCreationIdaStatus.NoAttributeFailure,
                 Optional.empty());
     }
@@ -57,7 +57,7 @@ public class OutboundResponseFromUnknownUserCreationService extends IdaMatchingS
                 responseId,
                 originalRequestId,
                 issuerId,
-                DateTime.now(),
+                Instant.now(),
                 UnknownUserCreationIdaStatus.Success,
                 Optional.ofNullable(assertion)
         );

@@ -2,7 +2,7 @@ package uk.gov.ida.matchingserviceadapter.domain;
 
 import org.opensaml.saml.saml2.core.AttributeQuery;
 import org.opensaml.saml.saml2.core.EncryptedAssertion;
-import uk.gov.ida.saml.security.validators.ValidatedEncryptedAssertionContainer;
+import stubidp.saml.security.validators.ValidatedEncryptedAssertionContainer;
 
 import java.util.List;
 import java.util.stream.Collectors;

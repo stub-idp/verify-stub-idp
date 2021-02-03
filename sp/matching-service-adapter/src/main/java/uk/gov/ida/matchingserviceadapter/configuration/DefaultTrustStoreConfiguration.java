@@ -1,8 +1,8 @@
 package uk.gov.ida.matchingserviceadapter.configuration;
 
 import io.dropwizard.servlets.assets.ResourceNotFoundException;
-import uk.gov.ida.saml.metadata.KeyStoreLoader;
-import uk.gov.ida.saml.metadata.TrustStoreConfiguration;
+import stubidp.saml.metadata.KeyStoreLoader;
+import stubidp.saml.metadata.TrustStoreConfiguration;
 
 import java.io.FileNotFoundException;
 import java.io.InputStream;

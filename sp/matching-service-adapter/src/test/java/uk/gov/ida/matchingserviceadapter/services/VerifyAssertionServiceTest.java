@@ -1,65 +1,63 @@
 package uk.gov.ida.matchingserviceadapter.services;
 
-import org.joda.time.DateTime;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.ExpectedException;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.opensaml.saml.common.SAMLVersion;
 import org.opensaml.saml.saml2.core.Assertion;
 import org.opensaml.saml.saml2.core.Attribute;
 import org.opensaml.saml.saml2.core.Subject;
 import org.opensaml.saml.saml2.metadata.IDPSSODescriptor;
 import org.opensaml.xmlsec.signature.Signature;
+import stubidp.saml.extensions.extensions.IdaAuthnContext;
+import stubidp.saml.security.SamlAssertionsSignatureValidator;
+import stubidp.saml.security.validators.ValidatedAssertions;
+import stubidp.saml.test.OpenSAMLRunner;
+import stubidp.saml.test.TestCredentialFactory;
+import stubidp.saml.test.builders.AssertionBuilder;
+import stubidp.saml.utils.core.transformers.VerifyMatchingDatasetUnmarshaller;
+import stubidp.saml.utils.core.transformers.inbound.Cycle3DatasetFactory;
+import stubidp.saml.utils.core.validation.SamlResponseValidationException;
 import uk.gov.ida.matchingserviceadapter.domain.AssertionData;
 import uk.gov.ida.matchingserviceadapter.validators.IdpConditionsValidator;
 import uk.gov.ida.matchingserviceadapter.validators.InstantValidator;
 import uk.gov.ida.matchingserviceadapter.validators.SubjectValidator;
-import uk.gov.ida.saml.core.IdaSamlBootstrap;
-import uk.gov.ida.saml.core.extensions.IdaAuthnContext;
-import uk.gov.ida.saml.core.test.TestCredentialFactory;
-import uk.gov.ida.saml.core.test.builders.AssertionBuilder;
-import uk.gov.ida.saml.core.transformers.VerifyMatchingDatasetUnmarshaller;
-import uk.gov.ida.saml.core.transformers.inbound.Cycle3DatasetFactory;
-import uk.gov.ida.saml.core.validation.SamlResponseValidationException;
-import uk.gov.ida.saml.security.SamlAssertionsSignatureValidator;
-import uk.gov.ida.saml.security.validators.ValidatedAssertions;
-import uk.gov.ida.shared.utils.datetime.DateTimeFreezer;
 
+import java.time.Instant;
 import java.util.List;
 
 import static java.util.Arrays.asList;
 import static java.util.Collections.emptyList;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Matchers.any;
-import static org.mockito.Mockito.doNothing;
+import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import static org.mockito.MockitoAnnotations.initMocks;
-import static uk.gov.ida.saml.core.domain.AuthnContext.LEVEL_2;
-import static uk.gov.ida.saml.core.test.TestCertificateStrings.STUB_IDP_PUBLIC_PRIMARY_CERT;
-import static uk.gov.ida.saml.core.test.TestCertificateStrings.STUB_IDP_PUBLIC_PRIMARY_PRIVATE_KEY;
-import static uk.gov.ida.saml.core.test.TestEntityIds.HUB_ENTITY_ID;
-import static uk.gov.ida.saml.core.test.TestEntityIds.STUB_IDP_ONE;
-import static uk.gov.ida.saml.core.test.builders.AssertionBuilder.aCycle3DatasetAssertion;
-import static uk.gov.ida.saml.core.test.builders.AssertionBuilder.anAssertion;
-import static uk.gov.ida.saml.core.test.builders.AttributeStatementBuilder.anAttributeStatement;
-import static uk.gov.ida.saml.core.test.builders.AuthnContextBuilder.anAuthnContext;
-import static uk.gov.ida.saml.core.test.builders.AuthnContextClassRefBuilder.anAuthnContextClassRef;
-import static uk.gov.ida.saml.core.test.builders.AuthnStatementBuilder.anAuthnStatement;
-import static uk.gov.ida.saml.core.test.builders.ConditionsBuilder.aConditions;
-import static uk.gov.ida.saml.core.test.builders.IPAddressAttributeBuilder.anIPAddress;
-import static uk.gov.ida.saml.core.test.builders.IssuerBuilder.anIssuer;
-import static uk.gov.ida.saml.core.test.builders.SignatureBuilder.aSignature;
-import static uk.gov.ida.saml.core.test.builders.SubjectBuilder.aSubject;
-import static uk.gov.ida.saml.core.test.builders.SubjectConfirmationBuilder.aSubjectConfirmation;
-import static uk.gov.ida.saml.core.test.builders.SubjectConfirmationDataBuilder.aSubjectConfirmationData;
+import static stubidp.saml.domain.assertions.AuthnContext.LEVEL_2;
+import static stubidp.saml.test.builders.AssertionBuilder.aCycle3DatasetAssertion;
+import static stubidp.saml.test.builders.AssertionBuilder.anAssertion;
+import static stubidp.saml.test.builders.AuthnContextBuilder.anAuthnContext;
+import static stubidp.saml.test.builders.AuthnContextClassRefBuilder.anAuthnContextClassRef;
+import static stubidp.saml.test.builders.AuthnStatementBuilder.anAuthnStatement;
+import static stubidp.saml.test.builders.ConditionsBuilder.aConditions;
+import static stubidp.saml.test.builders.IPAddressAttributeBuilder.anIPAddress;
+import static stubidp.saml.test.builders.IssuerBuilder.anIssuer;
+import static stubidp.saml.test.builders.SignatureBuilder.aSignature;
+import static stubidp.saml.test.builders.SubjectBuilder.aSubject;
+import static stubidp.saml.test.builders.SubjectConfirmationBuilder.aSubjectConfirmation;
+import static stubidp.saml.test.builders.SubjectConfirmationDataBuilder.aSubjectConfirmationData;
+import static stubidp.test.devpki.TestCertificateStrings.STUB_IDP_PUBLIC_PRIMARY_CERT;
+import static stubidp.test.devpki.TestCertificateStrings.STUB_IDP_PUBLIC_PRIMARY_PRIVATE_KEY;
+import static stubidp.test.devpki.TestEntityIds.HUB_ENTITY_ID;
+import static stubidp.test.devpki.TestEntityIds.STUB_IDP_ONE;
+import static uk.gov.ida.matchingserviceadapter.builders.AttributeStatementBuilder.anAttributeStatement;
 
-public class VerifyAssertionServiceTest {
+@ExtendWith(MockitoExtension.class)
+public class VerifyAssertionServiceTest extends OpenSAMLRunner {
 
     private VerifyAssertionService verifyAssertionService;
 
@@ -81,13 +79,8 @@ public class VerifyAssertionServiceTest {
     @Mock
     private Cycle3DatasetFactory cycle3DatasetFactory;
 
-    @Rule
-    public final ExpectedException exception = ExpectedException.none();
-
-    @Before
-    public void setUp() {
-        IdaSamlBootstrap.bootstrap();
-        initMocks(this);
+    @BeforeEach
+    public void setUp() throws Exception {
         verifyAssertionService = new VerifyAssertionService(
                 instantValidator,
                 subjectValidator,
@@ -97,27 +90,16 @@ public class VerifyAssertionServiceTest {
                 HUB_ENTITY_ID,
                 verifyMatchingDatasetUnmarshaller
         );
-        doNothing().when(instantValidator).validate(any(), any());
-        doNothing().when(subjectValidator).validate(any(), any());
-        doNothing().when(conditionsValidator).validate(any(), any());
-        when(hubSignatureValidator.validate(any(), any())).thenReturn(mock(ValidatedAssertions.class));
-
-        DateTimeFreezer.freezeTime();
     }
 
-    @After
-    public void tearDown() {
-        DateTimeFreezer.unfreezeTime();
-    }
-    
     @Test
     public void shouldThrowExceptionIfIssueInstantMissingWhenValidatingHubAssertion() {
         Assertion assertion = aMatchingDatasetAssertionWithSignature(emptyList(), anIdpSignature(), "requestId").buildUnencrypted();
         assertion.setIssueInstant(null);
 
-        exception.expect(SamlResponseValidationException.class);
-        exception.expectMessage("Assertion IssueInstant is missing.");
-        verifyAssertionService.validateHubAssertion(assertion, "not-used", "not-used", IDPSSODescriptor.DEFAULT_ELEMENT_NAME);
+        assertThatExceptionOfType(SamlResponseValidationException.class)
+                .isThrownBy(() -> verifyAssertionService.validateHubAssertion(assertion, "not-used", "not-used", IDPSSODescriptor.DEFAULT_ELEMENT_NAME))
+                .withMessage("Assertion IssueInstant is missing.");
     }
 
     @Test
@@ -125,9 +107,9 @@ public class VerifyAssertionServiceTest {
         Assertion assertion = aMatchingDatasetAssertionWithSignature(emptyList(), anIdpSignature(), "requestId").buildUnencrypted();
         assertion.setID(null);
 
-        exception.expect(SamlResponseValidationException.class);
-        exception.expectMessage("Assertion Id is missing or blank.");
-        verifyAssertionService.validateHubAssertion(assertion, "not-used", "not-used", IDPSSODescriptor.DEFAULT_ELEMENT_NAME);
+        assertThatExceptionOfType(SamlResponseValidationException.class)
+                .isThrownBy(() -> verifyAssertionService.validateHubAssertion(assertion, "not-used", "not-used", IDPSSODescriptor.DEFAULT_ELEMENT_NAME))
+                .withMessage("Assertion Id is missing or blank.");
     }
 
     @Test
@@ -135,9 +117,9 @@ public class VerifyAssertionServiceTest {
         Assertion assertion = aMatchingDatasetAssertionWithSignature(emptyList(), anIdpSignature(), "requestId").buildUnencrypted();
         assertion.setID("");
 
-        exception.expect(SamlResponseValidationException.class);
-        exception.expectMessage("Assertion Id is missing or blank.");
-        verifyAssertionService.validateHubAssertion(assertion, "not-used", "not-used", IDPSSODescriptor.DEFAULT_ELEMENT_NAME);
+        assertThatExceptionOfType(SamlResponseValidationException.class)
+                .isThrownBy(() -> verifyAssertionService.validateHubAssertion(assertion, "not-used", "not-used", IDPSSODescriptor.DEFAULT_ELEMENT_NAME))
+                .withMessage("Assertion Id is missing or blank.");
     }
 
     @Test
@@ -145,9 +127,9 @@ public class VerifyAssertionServiceTest {
         Assertion assertion = aMatchingDatasetAssertionWithSignature(emptyList(), anIdpSignature(), "requestId").buildUnencrypted();
         assertion.setIssuer(null);
 
-        exception.expect(SamlResponseValidationException.class);
-        exception.expectMessage("Assertion with id mds-assertion has missing or blank Issuer.");
-        verifyAssertionService.validateHubAssertion(assertion, "not-used", "not-used", IDPSSODescriptor.DEFAULT_ELEMENT_NAME);
+        assertThatExceptionOfType(SamlResponseValidationException.class)
+                .isThrownBy(() -> verifyAssertionService.validateHubAssertion(assertion, "not-used", "not-used", IDPSSODescriptor.DEFAULT_ELEMENT_NAME))
+                .withMessage("Assertion with id mds-assertion has missing or blank Issuer.");
     }
 
     @Test
@@ -155,9 +137,9 @@ public class VerifyAssertionServiceTest {
         Assertion assertion = aMatchingDatasetAssertionWithSignature(emptyList(), anIdpSignature(), "requestId").buildUnencrypted();
         assertion.setIssuer(anIssuer().withIssuerId(null).build());
 
-        exception.expect(SamlResponseValidationException.class);
-        exception.expectMessage("Assertion with id mds-assertion has missing or blank Issuer.");
-        verifyAssertionService.validateHubAssertion(assertion, "not-used", "not-used", IDPSSODescriptor.DEFAULT_ELEMENT_NAME);
+        assertThatExceptionOfType(SamlResponseValidationException.class)
+                .isThrownBy(() -> verifyAssertionService.validateHubAssertion(assertion, "not-used", "not-used", IDPSSODescriptor.DEFAULT_ELEMENT_NAME))
+                .withMessage("Assertion with id mds-assertion has missing or blank Issuer.");
     }
 
     @Test
@@ -165,9 +147,9 @@ public class VerifyAssertionServiceTest {
         Assertion assertion = aMatchingDatasetAssertionWithSignature(emptyList(), anIdpSignature(), "requestId").buildUnencrypted();
         assertion.setIssuer(anIssuer().withIssuerId("").build());
 
-        exception.expect(SamlResponseValidationException.class);
-        exception.expectMessage("Assertion with id mds-assertion has missing or blank Issuer.");
-        verifyAssertionService.validateHubAssertion(assertion, "not-used", "not-used", IDPSSODescriptor.DEFAULT_ELEMENT_NAME);
+        assertThatExceptionOfType(SamlResponseValidationException.class)
+                .isThrownBy(() -> verifyAssertionService.validateHubAssertion(assertion, "not-used", "not-used", IDPSSODescriptor.DEFAULT_ELEMENT_NAME))
+                .withMessage("Assertion with id mds-assertion has missing or blank Issuer.");
     }
 
     @Test
@@ -175,9 +157,9 @@ public class VerifyAssertionServiceTest {
         Assertion assertion = aMatchingDatasetAssertionWithSignature(emptyList(), anIdpSignature(), "requestId").buildUnencrypted();
         assertion.setVersion(null);
 
-        exception.expect(SamlResponseValidationException.class);
-        exception.expectMessage("Assertion with id mds-assertion has missing Version.");
-        verifyAssertionService.validateHubAssertion(assertion, "not-used", "not-used", IDPSSODescriptor.DEFAULT_ELEMENT_NAME);
+        assertThatExceptionOfType(SamlResponseValidationException.class)
+                .isThrownBy(() -> verifyAssertionService.validateHubAssertion(assertion, "not-used", "not-used", IDPSSODescriptor.DEFAULT_ELEMENT_NAME))
+                .withMessage("Assertion with id mds-assertion has missing Version.");
     }
 
 
@@ -186,13 +168,15 @@ public class VerifyAssertionServiceTest {
         Assertion assertion = aMatchingDatasetAssertionWithSignature(emptyList(), anIdpSignature(), "requestId").buildUnencrypted();
         assertion.setVersion(SAMLVersion.VERSION_10);
 
-        exception.expect(SamlResponseValidationException.class);
-        exception.expectMessage("Assertion with id mds-assertion declared an illegal Version attribute value.");
-        verifyAssertionService.validateHubAssertion(assertion, "not-used", "not-used", IDPSSODescriptor.DEFAULT_ELEMENT_NAME);
+        assertThatExceptionOfType(SamlResponseValidationException.class)
+                .isThrownBy(() -> verifyAssertionService.validateHubAssertion(assertion, "not-used", "not-used", IDPSSODescriptor.DEFAULT_ELEMENT_NAME))
+                .withMessage("Assertion with id mds-assertion declared an illegal Version attribute value.");
     }
 
     @Test
     public void shouldCallValidatorsCorrectly() {
+        when(hubSignatureValidator.validate(any(), any())).thenReturn(mock(ValidatedAssertions.class));
+
         List<Assertion> assertions = asList(
                 aMatchingDatasetAssertionWithSignature(emptyList(), anIdpSignature(), "requestId").buildUnencrypted(),
                 anAuthnStatementAssertion(IdaAuthnContext.LEVEL_2_AUTHN_CTX, "requestId").buildUnencrypted());
@@ -221,36 +205,36 @@ public class VerifyAssertionServiceTest {
 
     public static AssertionBuilder aMatchingDatasetAssertionWithSignature(List<Attribute> attributes, Signature signature, String requestId) {
         return anAssertion()
-            .withId("mds-assertion")
-            .withIssuer(anIssuer().withIssuerId(STUB_IDP_ONE).build())
-            .withSubject(anAssertionSubject(requestId))
-            .withSignature(signature)
-            .addAttributeStatement(anAttributeStatement().addAllAttributes(attributes).build())
-            .withConditions(aConditions().build());
+                .withId("mds-assertion")
+                .withIssuer(anIssuer().withIssuerId(STUB_IDP_ONE).build())
+                .withSubject(anAssertionSubject(requestId))
+                .withSignature(signature)
+                .addAttributeStatement(anAttributeStatement().addAllAttributes(attributes).build())
+                .withConditions(aConditions().build());
     }
 
     public static AssertionBuilder anAuthnStatementAssertion(String authnContext, String inResponseTo) {
         return anAssertion()
                 .addAuthnStatement(
-                    anAuthnStatement()
-                        .withAuthnContext(
-                            anAuthnContext()
-                                .withAuthnContextClassRef(
-                                    anAuthnContextClassRef()
-                                        .withAuthnContextClasRefValue(authnContext)
-                                        .build())
+                        anAuthnStatement()
+                                .withAuthnContext(
+                                        anAuthnContext()
+                                                .withAuthnContextClassRef(
+                                                        anAuthnContextClassRef()
+                                                                .withAuthnContextClasRefValue(authnContext)
+                                                                .build())
+                                                .build())
                                 .build())
-                        .build())
                 .withSubject(
-                    aSubject()
-                        .withSubjectConfirmation(
-                            aSubjectConfirmation()
-                                .withSubjectConfirmationData(
-                                    aSubjectConfirmationData()
-                                        .withInResponseTo(inResponseTo)
-                                        .build()
-                                    ).build()
-                            ).build())
+                        aSubject()
+                                .withSubjectConfirmation(
+                                        aSubjectConfirmation()
+                                                .withSubjectConfirmationData(
+                                                        aSubjectConfirmationData()
+                                                                .withInResponseTo(inResponseTo)
+                                                                .build()
+                                                ).build()
+                                ).build())
                 .withIssuer(anIssuer().withIssuerId(STUB_IDP_ONE).build())
                 .addAttributeStatement(anAttributeStatement().addAttribute(anIPAddress().build()).build());
     }
@@ -261,7 +245,7 @@ public class VerifyAssertionServiceTest {
                         aSubjectConfirmation()
                                 .withSubjectConfirmationData(
                                         aSubjectConfirmationData()
-                                                .withNotOnOrAfter(DateTime.now())
+                                                .withNotOnOrAfter(Instant.now())
                                                 .withInResponseTo(inResponseTo)
                                                 .build()
                                 ).build()
@@ -271,7 +255,7 @@ public class VerifyAssertionServiceTest {
     public static Signature anIdpSignature() {
         return aSignature().withSigningCredential(
                 new TestCredentialFactory(STUB_IDP_PUBLIC_PRIMARY_CERT, STUB_IDP_PUBLIC_PRIMARY_PRIVATE_KEY)
-                    .getSigningCredential()).build();
+                        .getSigningCredential()).build();
 
     }
 }

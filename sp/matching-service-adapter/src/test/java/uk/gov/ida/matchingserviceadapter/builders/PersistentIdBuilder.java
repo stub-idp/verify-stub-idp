@@ -1,6 +1,6 @@
 package uk.gov.ida.matchingserviceadapter.builders;
 
-import uk.gov.ida.saml.core.domain.PersistentId;
+import stubidp.saml.domain.assertions.PersistentId;
 
 public class PersistentIdBuilder {
 

@@ -1,0 +1,407 @@
+package uk.gov.ida.integrationtest;
+
+import ch.qos.logback.classic.spi.ILoggingEvent;
+import ch.qos.logback.classic.spi.LoggingEvent;
+import ch.qos.logback.core.Appender;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import io.dropwizard.testing.ConfigOverride;
+import io.dropwizard.testing.junit5.DropwizardExtensionsSupport;
+import org.glassfish.jersey.client.JerseyClientBuilder;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentCaptor;
+import org.mockito.Mock;
+import org.opensaml.saml.saml2.core.Assertion;
+import org.opensaml.saml.saml2.core.AttributeQuery;
+import org.opensaml.saml.saml2.core.Response;
+import org.opensaml.xmlsec.algorithm.DigestAlgorithm;
+import org.opensaml.xmlsec.algorithm.SignatureAlgorithm;
+import org.opensaml.xmlsec.algorithm.descriptors.DigestSHA256;
+import org.opensaml.xmlsec.algorithm.descriptors.SignatureRSASHA256;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.w3c.dom.Document;
+import stubidp.saml.test.TestCredentialFactory;
+import stubidp.saml.test.builders.AttributeQueryBuilder;
+import stubidp.test.devpki.TestCertificateStrings;
+import stubidp.test.utils.httpstub.HttpStubRule;
+import stubidp.utils.rest.common.CommonUrls;
+import stubidp.utils.rest.common.ServiceNameDto;
+import uk.gov.ida.integrationtest.helpers.MatchingServiceAdapterAppExtension;
+import uk.gov.ida.matchingserviceadapter.resources.MatchingServiceResource;
+import uk.gov.ida.matchingserviceadapter.rest.MatchingServiceResponseDto;
+
+import javax.ws.rs.client.Client;
+import javax.ws.rs.client.Entity;
+import javax.ws.rs.core.MediaType;
+import java.time.LocalDate;
+import java.util.Collections;
+import java.util.Map;
+import java.util.Optional;
+
+import static java.util.Arrays.asList;
+import static javax.ws.rs.core.MediaType.TEXT_XML_TYPE;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.atLeastOnce;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.opensaml.saml.saml2.core.StatusCode.REQUESTER;
+import static org.opensaml.saml.saml2.core.StatusCode.RESPONDER;
+import static org.opensaml.saml.saml2.core.StatusCode.SUCCESS;
+import static stubidp.saml.extensions.domain.SamlStatusCode.HEALTHY;
+import static stubidp.saml.extensions.domain.SamlStatusCode.MATCH;
+import static stubidp.saml.extensions.domain.SamlStatusCode.NO_MATCH;
+import static stubidp.saml.test.builders.AssertionBuilder.aCycle3DatasetAssertion;
+import static stubidp.saml.test.builders.AssertionBuilder.anAssertion;
+import static stubidp.saml.test.builders.AuthnStatementBuilder.anAuthnStatement;
+import static stubidp.saml.test.builders.IPAddressAttributeBuilder.anIPAddress;
+import static stubidp.saml.test.builders.IssuerBuilder.anIssuer;
+import static stubidp.saml.test.builders.PersonNameAttributeBuilder_1_1.aPersonName_1_1;
+import static stubidp.saml.test.builders.PersonNameAttributeValueBuilder.aPersonNameValue;
+import static stubidp.saml.test.builders.SignatureBuilder.aSignature;
+import static stubidp.saml.test.builders.SubjectBuilder.aSubject;
+import static stubidp.test.devpki.TestCertificateStrings.STUB_IDP_PUBLIC_SECONDARY_PRIVATE_KEY;
+import static stubidp.test.devpki.TestCertificateStrings.TEST_RP_MS_PRIVATE_SIGNING_KEY;
+import static stubidp.test.devpki.TestCertificateStrings.TEST_RP_MS_PUBLIC_SIGNING_CERT;
+import static stubidp.test.devpki.TestEntityIds.HUB_ENTITY_ID;
+import static stubidp.test.devpki.TestEntityIds.STUB_IDP_ONE;
+import static stubidp.test.devpki.TestEntityIds.STUB_IDP_TWO;
+import static uk.gov.ida.integrationtest.helpers.AssertionHelper.aMatchingDatasetAssertion;
+import static uk.gov.ida.integrationtest.helpers.AssertionHelper.aMatchingDatasetAssertionWithSignature;
+import static uk.gov.ida.integrationtest.helpers.AssertionHelper.aSubjectWithAssertions;
+import static uk.gov.ida.integrationtest.helpers.AssertionHelper.anAuthnStatementAssertion;
+import static uk.gov.ida.integrationtest.helpers.RequestHelper.getAttributeQueryToElementTransformer;
+import static uk.gov.ida.integrationtest.helpers.RequestHelper.makeAttributeQueryRequest;
+import static uk.gov.ida.matchingserviceadapter.builders.AttributeStatementBuilder.anAttributeStatement;
+import static uk.gov.ida.matchingserviceadapter.saml.matchers.SignableSAMLObjectBaseMatcher.signedBy;
+
+@ExtendWith(DropwizardExtensionsSupport.class)
+public class VerifyMatchingIntegrationTest {
+    private static final String REQUEST_ID = "default-request-id";
+    private static final String MATCHING_REQUEST_PATH = "/matching-request";
+    
+    public static final HttpStubRule localMatchingService = new HttpStubRule();
+
+    public static final MatchingServiceAdapterAppExtension applicationRule = new MatchingServiceAdapterAppExtension(
+            Map.of("localMatchingService.matchUrl", "http://localhost:" + localMatchingService.getPort() + MATCHING_REQUEST_PATH)
+    );
+
+    private final String MATCHING_SERVICE_URI = "http://localhost:" + applicationRule.getLocalPort() + "/matching-service/POST";
+    private Client client = JerseyClientBuilder.createClient();
+
+    private final SignatureAlgorithm signatureAlgorithmForHub = new SignatureRSASHA256();
+    private final DigestAlgorithm digestAlgorithmForHub = new DigestSHA256();
+
+    @SuppressWarnings("unchecked")
+    @Mock
+    private Appender<ILoggingEvent> appender = mock(Appender.class);
+
+    private ch.qos.logback.classic.Logger logger = (ch.qos.logback.classic.Logger) LoggerFactory.getLogger(Logger.ROOT_LOGGER_NAME);
+
+    @Mock
+    private ArgumentCaptor<LoggingEvent> argumentCaptor = ArgumentCaptor.forClass(LoggingEvent.class);
+
+    @BeforeEach
+    void setup() throws Exception {
+        localMatchingService.reset();
+        localMatchingService.register(MATCHING_REQUEST_PATH, 200, "application/json", "{\"result\": \"match\"}");
+
+        logger.addAppender(appender);
+    }
+
+    @AfterEach
+    void tearDown() {
+        logger.detachAppender(appender);
+    }
+
+    @Test
+    void shouldReturnASuccessResponseWhenLocalMatchingServiceReturnsAMatch() {
+        AttributeQuery attributeQuery = AttributeQueryBuilder.anAttributeQuery()
+                .withId(REQUEST_ID)
+                .withIssuer(anIssuer().withIssuerId(HUB_ENTITY_ID).build())
+                .withSubject(aSubjectWithAssertions(asList(
+                        anAuthnStatementAssertion(REQUEST_ID),
+                        aDefaultMatchingDatasetAssertion()), REQUEST_ID, HUB_ENTITY_ID))
+                .build();
+        Response response = makeAttributeQueryRequest(MATCHING_SERVICE_URI, attributeQuery, signatureAlgorithmForHub, digestAlgorithmForHub, HUB_ENTITY_ID);
+
+        assertThat(response.getStatus().getStatusCode().getValue()).isEqualTo(SUCCESS);
+        assertThat(response.getStatus().getStatusCode().getStatusCode().getValue()).isEqualTo(MATCH);
+        assertThat(response).is(signedBy(TEST_RP_MS_PUBLIC_SIGNING_CERT, TEST_RP_MS_PRIVATE_SIGNING_KEY));
+
+        assertMatchStatusLogMessage("default-request-id", MatchingServiceResponseDto.MATCH);
+    }
+
+    @Test
+    void shouldReturnASuccessResponseWhenLocalMatchingServiceReturnsNoMatch() throws JsonProcessingException {
+        localMatchingService.reset();
+        localMatchingService.register(MATCHING_REQUEST_PATH, 200, "application/json", "{\"result\": \"no-match\"}");
+
+        AttributeQuery attributeQuery = AttributeQueryBuilder.anAttributeQuery()
+                .withId(REQUEST_ID)
+                .withIssuer(anIssuer().withIssuerId(HUB_ENTITY_ID).build())
+                .withSubject(aSubjectWithAssertions(asList(
+                        anAuthnStatementAssertion(REQUEST_ID),
+                        aDefaultMatchingDatasetAssertion()), REQUEST_ID, HUB_ENTITY_ID))
+                .build();
+        Response response = makeAttributeQueryRequest(MATCHING_SERVICE_URI, attributeQuery, signatureAlgorithmForHub, digestAlgorithmForHub, HUB_ENTITY_ID);
+
+        assertThat(response.getStatus().getStatusCode().getValue()).isEqualTo(RESPONDER);
+        assertThat(response.getStatus().getStatusCode().getStatusCode().getValue()).isEqualTo(NO_MATCH);
+        assertThat(response).is(signedBy(TEST_RP_MS_PUBLIC_SIGNING_CERT, TEST_RP_MS_PRIVATE_SIGNING_KEY));
+
+        assertMatchStatusLogMessage("default-request-id", MatchingServiceResponseDto.NO_MATCH);
+    }
+
+    @Test
+    void shouldReturnSuccessResponseWhenLocalMatchingServiceMatchesWithCycle3Data() {
+        AttributeQuery attributeQuery = AttributeQueryBuilder.anAttributeQuery()
+                .withId(REQUEST_ID)
+                .withIssuer(anIssuer().withIssuerId(HUB_ENTITY_ID).build())
+                .withSubject(aSubjectWithAssertions(asList(
+                        anAuthnStatementAssertion(REQUEST_ID),
+                        aDefaultMatchingDatasetAssertion(),
+                        aCycle3DatasetAssertion("cycle-3-name", "cycle-3-value").buildUnencrypted()
+                ), REQUEST_ID, HUB_ENTITY_ID))
+                .build();
+
+        Response response = makeAttributeQueryRequest(MATCHING_SERVICE_URI, attributeQuery, signatureAlgorithmForHub, digestAlgorithmForHub, HUB_ENTITY_ID);
+
+        assertThat(response.getStatus().getStatusCode().getValue()).isEqualTo(SUCCESS);
+        assertThat(response.getStatus().getStatusCode().getStatusCode().getValue()).isEqualTo(MATCH);
+        assertThat(response).is(signedBy(TEST_RP_MS_PUBLIC_SIGNING_CERT, TEST_RP_MS_PRIVATE_SIGNING_KEY));
+
+        assertMatchStatusLogMessage(REQUEST_ID, MatchingServiceResponseDto.MATCH);
+    }
+
+    @Test
+    void shouldReturnSuccessResponseWhenMultipleCurrentFirstNamesAreProvided() {
+        AttributeQuery attributeQuery = AttributeQueryBuilder.anAttributeQuery()
+                .withId(REQUEST_ID)
+                .withIssuer(anIssuer().withIssuerId(HUB_ENTITY_ID).build())
+                .withSubject(aSubjectWithAssertions(asList(
+                        anAuthnStatementAssertion(REQUEST_ID),
+                        aMatchingDatasetAssertion(asList(
+                                aPersonName_1_1().addValue(aPersonNameValue().withValue("OldUnverifiedFirstName1")
+                                        .withFrom(LocalDate.of(1990, 1, 30))
+                                        .withTo(LocalDate.of(2000, 1, 29))
+                                        .withVerified(false).build()).buildAsFirstname(),
+                                aPersonName_1_1().addValue(aPersonNameValue().withValue("CurrentUnverifiedFirstName1")
+                                        .withFrom(LocalDate.of(1995, 1, 30))
+                                        .withVerified(false).build()).buildAsFirstname(),
+                                aPersonName_1_1().addValue(aPersonNameValue().withValue("CurrentVerifiedFirstName1")
+                                        .withFrom(LocalDate.of(2000, 1, 30))
+                                        .withVerified(true).build()).buildAsFirstname(),
+                                aPersonName_1_1().addValue(aPersonNameValue().withValue("OldVerifiedFirstName2")
+                                        .withFrom(LocalDate.of(2005, 1, 30))
+                                        .withTo(LocalDate.of(2010, 1, 30))
+                                        .withVerified(true).build()).buildAsFirstname(),
+                                aPersonName_1_1().addValue(aPersonNameValue().withValue("CurrentUnverifiedFirstName2")
+                                        .withFrom(LocalDate.of(2010, 1, 30))
+                                        .withVerified(false).build()).buildAsFirstname(),
+                                aPersonName_1_1().addValue(aPersonNameValue().withValue("CurrentVerifiedFirstName2")
+                                        .withFrom(LocalDate.of(2015, 1, 30))
+                                        .withVerified(true).build()).buildAsFirstname()
+                        ),false, REQUEST_ID)
+                ), REQUEST_ID, HUB_ENTITY_ID))
+                .build();
+        Response response = makeAttributeQueryRequest(MATCHING_SERVICE_URI, attributeQuery, signatureAlgorithmForHub, digestAlgorithmForHub, HUB_ENTITY_ID);
+
+        assertThat(response.getStatus().getStatusCode().getValue()).isEqualTo(SUCCESS);
+        assertThat(response.getStatus().getStatusCode().getStatusCode().getValue()).isEqualTo(MATCH);
+        assertMatchStatusLogMessage(REQUEST_ID, MatchingServiceResponseDto.MATCH);
+    }
+
+    @Test
+    void shouldReturnErrorResponseWhenIncorrectlySignedAssertionProvided() {
+        AttributeQuery attributeQuery = AttributeQueryBuilder.anAttributeQuery()
+                .withId(REQUEST_ID)
+                .withIssuer(anIssuer().withIssuerId(HUB_ENTITY_ID).build())
+                .withSubject(aSubjectWithAssertions(asList(
+                        anAuthnStatementAssertion(REQUEST_ID),
+                        aMatchingDatasetAssertionWithSignature(Collections.emptyList(),
+                                aSignature()
+                                        .withSigningCredential(
+                                                new TestCredentialFactory(
+                                                        TestCertificateStrings.STUB_IDP_PUBLIC_SECONDARY_CERT,
+                                                        STUB_IDP_PUBLIC_SECONDARY_PRIVATE_KEY
+                                                ).getSigningCredential()
+                                        ).build(), false, REQUEST_ID
+                        ),
+                        aCycle3DatasetAssertion("cycle-3-name", "cycle-3-value").buildUnencrypted()
+                ), REQUEST_ID, HUB_ENTITY_ID))
+                .build();
+
+        Response response = makeAttributeQueryRequest(MATCHING_SERVICE_URI, attributeQuery, signatureAlgorithmForHub, digestAlgorithmForHub, HUB_ENTITY_ID);
+
+        assertThat(response.getStatus().getStatusCode().getValue()).isEqualTo(REQUESTER);
+        assertThat(response.getStatus().getStatusMessage().getValue()).isEqualTo("SAML Validation Specification: Signature was not valid.\n" +
+                "DocumentReference{documentName='Hub Service Profile 1.1a', documentSection=''}");
+        assertThat(response).is(signedBy(TEST_RP_MS_PUBLIC_SIGNING_CERT, TEST_RP_MS_PRIVATE_SIGNING_KEY));
+    }
+
+    @Test
+    void shouldReturnErrorResponseWhenSentIncorrectlySignedAttributeQuery() {
+        AttributeQuery attributeQuery = AttributeQueryBuilder.anAttributeQuery()
+                .withId(REQUEST_ID)
+                .withIssuer(anIssuer().withIssuerId(STUB_IDP_ONE).build())
+                .withSubject(aSubjectWithAssertions(asList(
+                        anAuthnStatementAssertion(REQUEST_ID),
+                        aDefaultMatchingDatasetAssertion()), REQUEST_ID, HUB_ENTITY_ID))
+                .build();
+
+        Response response = makeAttributeQueryRequest(MATCHING_SERVICE_URI, attributeQuery, signatureAlgorithmForHub, digestAlgorithmForHub, HUB_ENTITY_ID);
+
+        assertThat(response.getStatus().getStatusCode().getValue()).isEqualTo(REQUESTER);
+        assertThat(response.getStatus().getStatusMessage().getValue()).isEqualTo("SAML Validation Specification: Signature was not valid.\n" +
+                "DocumentReference{documentName='Hub Service Profile 1.1a', documentSection=''}");
+        assertThat(response).is(signedBy(TEST_RP_MS_PUBLIC_SIGNING_CERT, TEST_RP_MS_PRIVATE_SIGNING_KEY));
+    }
+
+    @Test
+    void shouldReturnErrorResponseWhenLocalMatchingServiceRespondsWithError() throws Exception {
+        localMatchingService.reset();
+        localMatchingService.register(MATCHING_REQUEST_PATH, 500, "application/json", "foo");
+        AttributeQuery attributeQuery = AttributeQueryBuilder.anAttributeQuery()
+                .withId(REQUEST_ID)
+                .withIssuer(anIssuer().withIssuerId(HUB_ENTITY_ID).build())
+                .withSubject(aSubjectWithAssertions(asList(
+                        anAuthnStatementAssertion(REQUEST_ID),
+                        aDefaultMatchingDatasetAssertion()), REQUEST_ID, HUB_ENTITY_ID))
+                .build();
+        Document attributeQueryDocument = getAttributeQueryToElementTransformer(signatureAlgorithmForHub, digestAlgorithmForHub, HUB_ENTITY_ID).apply(attributeQuery).getOwnerDocument();
+
+        javax.ws.rs.core.Response response = client.target(MATCHING_SERVICE_URI).request()
+                .post(Entity.entity(attributeQueryDocument, TEXT_XML_TYPE));
+
+        assertThat(response.getStatus()).isEqualTo(500);
+    }
+
+    @Test
+    void shouldReturnErrorResponseWhenAnAttributeQueryContainsAnExpiredAssertion() {
+        AttributeQuery attributeQuery = AttributeQueryBuilder.anAttributeQuery()
+                .withId(REQUEST_ID)
+                .withIssuer(anIssuer().withIssuerId(HUB_ENTITY_ID).build())
+                .withSubject(aSubjectWithAssertions(asList(
+                        anAuthnStatementAssertion("default-request-id"),
+                        aMatchingDatasetAssertion(Collections.emptyList(), true, REQUEST_ID)), REQUEST_ID, HUB_ENTITY_ID))
+                .build();
+
+        Response response = makeAttributeQueryRequest(MATCHING_SERVICE_URI, attributeQuery, signatureAlgorithmForHub, digestAlgorithmForHub, HUB_ENTITY_ID);
+
+        assertThat(response.getStatus().getStatusCode().getValue()).isEqualTo(REQUESTER);
+        assertThat(response.getStatus().getStatusMessage().getValue()).contains("Assertion is not valid on or after");
+        assertThat(response).is(signedBy(TEST_RP_MS_PUBLIC_SIGNING_CERT, TEST_RP_MS_PRIVATE_SIGNING_KEY));
+    }
+
+    @Test
+    void shouldReturnErrorResponseWhenAnAttributeQueryContainsIdpAssertionsWithDifferentPids() {
+        AttributeQuery attributeQuery = AttributeQueryBuilder.anAttributeQuery()
+                .withId(REQUEST_ID)
+                .withIssuer(anIssuer().withIssuerId(HUB_ENTITY_ID).build())
+                .withSubject(aSubjectWithAssertions(asList(
+                        anAssertion()
+                                .addAuthnStatement(anAuthnStatement().build())
+                                .withIssuer(anIssuer().withIssuerId(STUB_IDP_ONE).build())
+                                .addAttributeStatement(anAttributeStatement().addAttribute(anIPAddress().build()).build())
+                                .withSubject(aSubject().withPersistentId("pid-one").build())
+                                .buildUnencrypted(),
+                        anAssertion()
+                                .withId("mds-assertion")
+                                .withIssuer(anIssuer().withIssuerId(STUB_IDP_ONE).build())
+                                .withSubject(
+                                        aSubject().withPersistentId("pid-two").build()
+                                )
+                                .addAttributeStatement(
+                                        anAttributeStatement()
+                                                .addAllAttributes(Collections.emptyList())
+                                                .build()
+                                )
+                                .buildUnencrypted()
+                ), REQUEST_ID, HUB_ENTITY_ID))
+                .build();
+
+        Response response = makeAttributeQueryRequest(MATCHING_SERVICE_URI, attributeQuery, signatureAlgorithmForHub, digestAlgorithmForHub, HUB_ENTITY_ID);
+
+        assertThat(response.getStatus().getStatusCode().getValue()).isEqualTo(REQUESTER);
+        assertThat(response.getStatus().getStatusMessage().getValue()).contains("assertions do not contain matching persistent identifiers");
+    }
+
+    @Test
+    void shouldReturnErrorResponseWhenAnAttributeQueryContainsIdpAssertionsWithDifferentIssuers() {
+        AttributeQuery attributeQuery = AttributeQueryBuilder.anAttributeQuery()
+                .withId(REQUEST_ID)
+                .withIssuer(anIssuer().withIssuerId(HUB_ENTITY_ID).build())
+                .withSubject(aSubjectWithAssertions(asList(
+                        anAssertion()
+                                .addAuthnStatement(anAuthnStatement().build())
+                                .withIssuer(anIssuer().withIssuerId(STUB_IDP_ONE).build())
+                                .addAttributeStatement(anAttributeStatement().build())
+                                .withSubject(aSubject().build())
+                                .buildUnencrypted(),
+                        anAssertion()
+                                .withId("mds-assertion")
+                                .withIssuer(anIssuer().withIssuerId(STUB_IDP_TWO).build())
+                                .withSubject(aSubject().build())
+                                .addAttributeStatement(
+                                        anAttributeStatement()
+                                                .addAllAttributes(Collections.emptyList())
+                                                .build()
+                                )
+                                .buildUnencrypted()
+                ), REQUEST_ID, HUB_ENTITY_ID))
+                .build();
+
+        Response response = makeAttributeQueryRequest(MATCHING_SERVICE_URI, attributeQuery, signatureAlgorithmForHub, digestAlgorithmForHub, HUB_ENTITY_ID);
+
+        assertThat(response.getStatus().getStatusCode().getValue()).isEqualTo(REQUESTER);
+        assertThat(response.getStatus().getStatusMessage().getValue()).contains("IDP matching dataset and authn statement assertions do not contain matching issuers");
+    }
+
+
+    @Test
+    void shouldReturnAHealthyResponseToAValidHealthcheckGivenValidMetadata() {
+        AttributeQuery healthCheck = AttributeQueryBuilder.anAttributeQuery()
+                .withId(REQUEST_ID)
+                .withIssuer(anIssuer().withIssuerId(HUB_ENTITY_ID).build()).build();
+
+        Response response = makeAttributeQueryRequest(MATCHING_SERVICE_URI, healthCheck, signatureAlgorithmForHub, digestAlgorithmForHub, HUB_ENTITY_ID);
+
+        assertThat(response.getStatus().getStatusCode().getValue()).isEqualTo(SUCCESS);
+        assertThat(response.getStatus().getStatusCode().getStatusCode().getValue()).isEqualTo(HEALTHY);
+        assertThat(response).is(signedBy(TEST_RP_MS_PUBLIC_SIGNING_CERT, TEST_RP_MS_PRIVATE_SIGNING_KEY));
+    }
+
+    @Test
+    void shouldReturnServiceNameWhenRequested() {
+        ServiceNameDto serviceName = client.target("http://localhost:" + applicationRule.getLocalPort() + CommonUrls.SERVICE_NAME_ROOT)
+                .request(MediaType.APPLICATION_JSON)
+                .get(ServiceNameDto.class);
+
+        assertThat(serviceName.getServiceName()).isEqualTo("matching-service-adapter");
+    }
+
+    private Assertion aDefaultMatchingDatasetAssertion() {
+        return aMatchingDatasetAssertion(asList(
+                aPersonName_1_1().addValue(aPersonNameValue().withValue("OldSurname2").withFrom(LocalDate.of(1990, 1, 30)).withTo(LocalDate.of(2000, 1, 29)).withVerified(true).build()).buildAsSurname(),
+                aPersonName_1_1().addValue(aPersonNameValue().withValue("CurrentSurname").withVerified(true).build()).buildAsSurname(),
+                aPersonName_1_1().addValue(aPersonNameValue().withValue("OldSurname1").withFrom(LocalDate.of(2000, 1, 30)).withTo(LocalDate.of(2010, 1, 30)).withVerified(true).build()).buildAsSurname()
+                ),
+                false, REQUEST_ID);
+    }
+
+    private void assertMatchStatusLogMessage(String requestId, String matchStatus) {
+        verify(appender, atLeastOnce()).doAppend(argumentCaptor.capture());
+
+        Optional<LoggingEvent> event = argumentCaptor.getAllValues()
+                .stream()
+                .filter(loggingEvent -> loggingEvent.getLoggerName().equals(MatchingServiceResource.class.getName()))
+                .filter(loggingEvent -> loggingEvent.getFormattedMessage().equals("Result from matching service for id " + requestId + " is " + matchStatus))
+                .findFirst();
+
+        assertThat(event.isPresent()).isTrue();
+    }
+
+}

@@ -3,7 +3,11 @@ package uk.gov.ida.matchingserviceadapter.mappers;
 import com.google.common.base.Function;
 import com.google.common.collect.Collections2;
 import com.google.common.collect.Lists;
-import org.joda.time.LocalDate;
+import stubidp.saml.domain.assertions.Address;
+import stubidp.saml.domain.assertions.Gender;
+import stubidp.saml.domain.assertions.MatchingDataset;
+import stubidp.saml.domain.assertions.SimpleMdsValue;
+import stubidp.saml.domain.assertions.TransliterableMdsValue;
 import uk.gov.ida.matchingserviceadapter.ComparatorHelper;
 import uk.gov.ida.matchingserviceadapter.rest.matchingservice.GenderDto;
 import uk.gov.ida.matchingserviceadapter.rest.matchingservice.SimpleMdsValueDto;
@@ -12,13 +16,9 @@ import uk.gov.ida.matchingserviceadapter.rest.matchingservice.UniversalAddressDt
 import uk.gov.ida.matchingserviceadapter.rest.matchingservice.UniversalMatchingDatasetDto;
 import uk.gov.ida.matchingserviceadapter.rest.matchingservice.VerifyAddressDto;
 import uk.gov.ida.matchingserviceadapter.rest.matchingservice.VerifyMatchingDatasetDto;
-import uk.gov.ida.saml.core.domain.Address;
-import uk.gov.ida.saml.core.domain.Gender;
-import uk.gov.ida.saml.core.domain.MatchingDataset;
-import uk.gov.ida.saml.core.domain.SimpleMdsValue;
-import uk.gov.ida.saml.core.domain.TransliterableMdsValue;
 
 import javax.annotation.Nullable;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -95,11 +95,11 @@ public class MatchingDatasetToMatchingDatasetDtoMapper {
     }
 
     private List<VerifyAddressDto> mapVerifyAddresses(List<Address> addresses) {
-        return Lists.newArrayList(Collections2.transform(addresses, new Function<Address, VerifyAddressDto>() {
+        return Lists.newArrayList(Collections2.transform(addresses, new Function<>() {
             @Nullable
             @Override
             public VerifyAddressDto apply(Address input) {
-                return new VerifyAddressDto(input.getLines(), input.getPostCode(), input.getInternationalPostCode(), input.getUPRN(), input.getFrom(), input.getTo(), input.isVerified());
+                return new VerifyAddressDto(input.getLines(), input.getPostCode(), input.getInternationalPostCode(), input.getUPRN(), input.getFrom(), Optional.ofNullable(input.getTo()), input.isVerified());
             }
         }));
     }
@@ -112,7 +112,7 @@ public class MatchingDatasetToMatchingDatasetDtoMapper {
                         input.getInternationalPostCode(),
                         input.getUPRN(),
                         input.getFrom(),
-                        input.getTo(),
+                        Optional.ofNullable(input.getTo()),
                         input.isVerified()))
                 .collect(Collectors.toList());
     }

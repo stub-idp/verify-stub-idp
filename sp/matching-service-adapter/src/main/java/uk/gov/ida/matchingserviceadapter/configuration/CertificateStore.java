@@ -1,6 +1,6 @@
 package uk.gov.ida.matchingserviceadapter.configuration;
 
-import uk.gov.ida.common.shared.security.Certificate;
+import stubidp.utils.security.security.Certificate;
 
 import java.util.List;
 

@@ -1,11 +1,12 @@
 package uk.gov.ida.matchingserviceadapter.validators;
 
-import com.google.inject.Inject;
-import org.joda.time.DateTime;
 import org.opensaml.saml.saml2.core.Conditions;
+import stubidp.saml.utils.core.validation.conditions.AudienceRestrictionValidator;
 import uk.gov.ida.matchingserviceadapter.validators.validationrules.ConditionsElementMustNotBeNull;
 import uk.gov.ida.matchingserviceadapter.validators.validationrules.ConditionsShouldNotContainProxyRestrictionElement;
-import uk.gov.ida.saml.core.validation.conditions.AudienceRestrictionValidator;
+
+import javax.inject.Inject;
+import java.time.Instant;
 
 public class CountryConditionsValidator implements ConditionsValidator {
 
@@ -25,7 +26,7 @@ public class CountryConditionsValidator implements ConditionsValidator {
         ConditionsElementMustNotBeNull.validate(conditionsElement);
         ConditionsShouldNotContainProxyRestrictionElement.validate(conditionsElement);
 
-        DateTime notOnOrAfter = conditionsElement.getNotOnOrAfter();
+        Instant notOnOrAfter = conditionsElement.getNotOnOrAfter();
         if (notOnOrAfter != null) {
             timeRestrictionValidator.validateNotOnOrAfter(notOnOrAfter);
         }

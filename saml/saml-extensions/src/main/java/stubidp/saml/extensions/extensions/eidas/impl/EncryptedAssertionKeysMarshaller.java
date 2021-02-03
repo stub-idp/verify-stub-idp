@@ -7,6 +7,10 @@ import org.w3c.dom.Element;
 import stubidp.saml.extensions.extensions.eidas.EncryptedAssertionKeys;
 
 public class EncryptedAssertionKeysMarshaller extends AbstractSAMLObjectMarshaller {
+
+    public EncryptedAssertionKeysMarshaller() {
+    }
+
     @Override
     protected void marshallElementContent(XMLObject samlObject, Element domElement) {
         EncryptedAssertionKeys encryptedAssertionKeys = (EncryptedAssertionKeys) samlObject;

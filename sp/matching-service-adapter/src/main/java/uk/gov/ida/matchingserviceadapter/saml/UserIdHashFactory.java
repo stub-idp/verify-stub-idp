@@ -2,8 +2,8 @@ package uk.gov.ida.matchingserviceadapter.saml;
 
 import org.apache.commons.codec.binary.Hex;
 import org.opensaml.security.crypto.JCAConstants;
+import stubidp.saml.domain.assertions.AuthnContext;
 import uk.gov.ida.matchingserviceadapter.exceptions.AuthnContextMissingException;
-import uk.gov.ida.saml.core.domain.AuthnContext;
 
 import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;

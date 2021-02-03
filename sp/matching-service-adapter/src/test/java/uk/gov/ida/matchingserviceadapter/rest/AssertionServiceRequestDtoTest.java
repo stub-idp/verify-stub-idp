@@ -2,14 +2,12 @@ package uk.gov.ida.matchingserviceadapter.rest;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.util.ISO8601DateFormat;
+import com.fasterxml.jackson.databind.util.StdDateFormat;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import io.dropwizard.jackson.Jackson;
-import org.joda.time.DateTime;
-import org.joda.time.LocalDate;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import uk.gov.ida.matchingserviceadapter.builders.AddressDtoBuilder;
 import uk.gov.ida.matchingserviceadapter.builders.SimpleMdsValueDtoBuilder;
 import uk.gov.ida.matchingserviceadapter.rest.matchingservice.Cycle3DatasetDto;
@@ -21,6 +19,7 @@ import uk.gov.ida.matchingserviceadapter.rest.matchingservice.VerifyAddressDto;
 import uk.gov.ida.matchingserviceadapter.rest.matchingservice.VerifyMatchingDatasetDto;
 
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.Optional;
 
 import static io.dropwizard.testing.FixtureHelpers.fixture;
@@ -36,9 +35,9 @@ public class AssertionServiceRequestDtoTest {
 
     private ObjectMapper objectMapper;
 
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
-        objectMapper = Jackson.newObjectMapper().setDateFormat(ISO8601DateFormat.getDateInstance());
+        objectMapper = Jackson.newObjectMapper().setDateFormat(StdDateFormat.getDateInstance());
     }
 
     @Test
@@ -62,7 +61,7 @@ public class AssertionServiceRequestDtoTest {
 
     private VerifyMatchingServiceRequestDto getMatchingServiceRequestDto() {
         LevelOfAssuranceDto levelOfAssurance = LevelOfAssuranceDto.LEVEL_1;
-        VerifyMatchingDatasetDto matchingDataset = getVerifyMatchingDataset(DateTime.parse("2014-02-01T01:02:03.567Z"));
+        VerifyMatchingDatasetDto matchingDataset = getVerifyMatchingDataset(LocalDate.parse("2014-02-01"));
         Cycle3DatasetDto cycle3DatasetDto = Cycle3DatasetDto.createFromData(ImmutableMap.of("NI", "1234"));
         String hashedPid = "8f2f8c23-f767-4590-aee9-0842f7f1e36d";
         String matchId = "cda6126c-9695-4051-ba6f-27a8938a0b03";
@@ -74,11 +73,11 @@ public class AssertionServiceRequestDtoTest {
                 levelOfAssurance);
     }
 
-    private VerifyMatchingDatasetDto getVerifyMatchingDataset(DateTime dateTime) {
+    private VerifyMatchingDatasetDto getVerifyMatchingDataset(LocalDate dateTime) {
         return (VerifyMatchingDatasetDto) aVerifyMatchingDatasetDto()
                 .addSurname(getTransliterableMdsValue("walker", null, dateTime))
                 .withAddressHistory(ImmutableList.of(getAddressDto("EC2", dateTime), getAddressDto("WC1", dateTime)))
-                .withDateOfBirth(getSimpleMdsValue(LocalDate.fromDateFields(dateTime.toDate()), dateTime))
+                .withDateOfBirth(getSimpleMdsValue(dateTime, dateTime))
                 .withFirstname(getTransliterableMdsValue("walker", null, dateTime))
                 .withGender(getSimpleMdsValue(GenderDto.FEMALE, dateTime))
                 .withMiddleNames(getSimpleMdsValue("walker", dateTime))
@@ -94,7 +93,7 @@ public class AssertionServiceRequestDtoTest {
         return objectMapper.writeValueAsString(objectMapper.readValue(fixture(filename), JsonNode.class));
     }
 
-    private VerifyAddressDto getAddressDto(String postcode, DateTime dateTime) {
+    private VerifyAddressDto getAddressDto(String postcode, LocalDate dateTime) {
         return new AddressDtoBuilder()
                 .withFromDate(dateTime)
                 .withInternationalPostCode("123")
@@ -105,7 +104,7 @@ public class AssertionServiceRequestDtoTest {
                 .buildVerifyAddressDto();
     }
 
-    private <T> SimpleMdsValueDto<T> getSimpleMdsValue(T value, DateTime dateTime) {
+    private <T> SimpleMdsValueDto<T> getSimpleMdsValue(T value, LocalDate dateTime) {
         return new SimpleMdsValueDtoBuilder<T>()
                 .withFrom(dateTime)
                 .withTo(dateTime)
@@ -114,7 +113,7 @@ public class AssertionServiceRequestDtoTest {
                 .build();
     }
 
-    private TransliterableMdsValueDto getTransliterableMdsValue(String value, String nonLatinScriptValue, DateTime dateTime) {
+    private TransliterableMdsValueDto getTransliterableMdsValue(String value, String nonLatinScriptValue, LocalDate dateTime) {
         return new TransliterableMdsValueDto(value, nonLatinScriptValue, dateTime, dateTime, true);
     }
 }

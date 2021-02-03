@@ -7,6 +7,7 @@ import org.opensaml.saml.saml2.core.Attribute;
 import org.opensaml.saml.saml2.core.AttributeQuery;
 import org.opensaml.saml.saml2.core.Issuer;
 import org.opensaml.saml.saml2.core.Subject;
+import org.opensaml.xmlsec.algorithm.descriptors.SignatureRSASHA256;
 import org.opensaml.xmlsec.signature.Signature;
 import org.opensaml.xmlsec.signature.support.SignatureException;
 import org.opensaml.xmlsec.signature.support.Signer;
@@ -46,6 +47,8 @@ public class AttributeQueryBuilder {
         issueInstant.ifPresent(attributeQuery::setIssueInstant);
         id.ifPresent(attributeQuery::setID);
 
+        attributeQuery.getAttributes().addAll(attributes);
+
         if (signature.isPresent()) {
             attributeQuery.setSignature(signature.get());
             try {
@@ -57,8 +60,6 @@ public class AttributeQueryBuilder {
                 throw new RuntimeException(e);
             }
         }
-
-        attributeQuery.getAttributes().addAll(attributes);
 
         return attributeQuery;
     }

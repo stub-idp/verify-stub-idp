@@ -1,35 +1,35 @@
 package uk.gov.ida.matchingserviceadapter.mappers;
 
-import org.joda.time.LocalDate;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
+import stubidp.saml.domain.assertions.Gender;
+import stubidp.saml.domain.assertions.MatchingDataset;
 import uk.gov.ida.matchingserviceadapter.builders.SimpleMdsValueBuilder;
 import uk.gov.ida.matchingserviceadapter.rest.matchingservice.GenderDto;
 import uk.gov.ida.matchingserviceadapter.rest.matchingservice.SimpleMdsValueDto;
 import uk.gov.ida.matchingserviceadapter.rest.matchingservice.TransliterableMdsValueDto;
 import uk.gov.ida.matchingserviceadapter.rest.matchingservice.UniversalMatchingDatasetDto;
 import uk.gov.ida.matchingserviceadapter.rest.matchingservice.VerifyMatchingDatasetDto;
-import uk.gov.ida.saml.core.domain.Gender;
-import uk.gov.ida.saml.core.domain.MatchingDataset;
 
+import java.time.LocalDate;
+import java.util.Collections;
 import java.util.Optional;
 
-import static java.util.Arrays.asList;
 import static org.assertj.core.api.Assertions.assertThat;
+import static stubidp.saml.test.builders.MatchingDatasetBuilder.aMatchingDataset;
 import static uk.gov.ida.matchingserviceadapter.builders.AddressBuilder.aCurrentAddress;
 import static uk.gov.ida.matchingserviceadapter.builders.AddressBuilder.aHistoricalAddress;
 import static uk.gov.ida.matchingserviceadapter.builders.SimpleMdsValueBuilder.DEFAULT_FROM_DATE;
 import static uk.gov.ida.matchingserviceadapter.builders.SimpleMdsValueBuilder.DEFAULT_HISTORICAL_FROM_DATE;
 import static uk.gov.ida.matchingserviceadapter.builders.SimpleMdsValueBuilder.DEFAULT_HISTORICAL_TO_DATE;
-import static uk.gov.ida.saml.core.test.builders.MatchingDatasetBuilder.aMatchingDataset;
 
 public class MatchingDatasetToMatchingDatasetDtoMapperTest {
 
-    private MatchingDatasetToMatchingDatasetDtoMapper matchingDatasetToMatchingDatasetDtoMapper = new MatchingDatasetToMatchingDatasetDtoMapper();
+    private final MatchingDatasetToMatchingDatasetDtoMapper matchingDatasetToMatchingDatasetDtoMapper = new MatchingDatasetToMatchingDatasetDtoMapper();
 
     @Test
     public void shouldMapToVerifyMatchingDatasetDto() {
-        LocalDate dob = new LocalDate(1970, 1, 2);
-        LocalDate oldDob = new LocalDate(1970, 2, 1);
+        LocalDate dob = LocalDate.of(1970, 1, 2);
+        LocalDate oldDob = LocalDate.of(1970, 2, 1);
         MatchingDataset matchingDataset = aMatchingDataset()
                 .addFirstname(SimpleMdsValueBuilder.<String>aCurrentSimpleMdsValue().withValue("Joe").withVerifiedStatus(true).build())
                 .addFirstname(SimpleMdsValueBuilder.<String>aHistoricalSimpleMdsValue().withValue("Bob").build())
@@ -37,8 +37,8 @@ public class MatchingDatasetToMatchingDatasetDtoMapperTest {
                 .addSurname(SimpleMdsValueBuilder.<String>aHistoricalSimpleMdsValue().withValue("Smith").build())
                 .addDateOfBirth(SimpleMdsValueBuilder.<LocalDate>aCurrentSimpleMdsValue().withValue(dob).build())
                 .addDateOfBirth(SimpleMdsValueBuilder.<LocalDate>aHistoricalSimpleMdsValue().withValue(oldDob).build())
-                .withCurrentAddresses(asList(aCurrentAddress().withPostCode("AA12BB").build()))
-                .withPreviousAddresses(asList(aHistoricalAddress().withPostCode("CC12DD").build()))
+                .withCurrentAddresses(Collections.singletonList(aCurrentAddress().withPostCode("AA12BB").build()))
+                .withPreviousAddresses(Collections.singletonList(aHistoricalAddress().withPostCode("CC12DD").build()))
                 .withGender(SimpleMdsValueBuilder.<Gender>aCurrentSimpleMdsValue().withValue(Gender.NOT_SPECIFIED).build())
                 .build();
 
@@ -77,8 +77,8 @@ public class MatchingDatasetToMatchingDatasetDtoMapperTest {
 
     @Test
     public void shouldMapToUniversalMatchingDatasetDto() {
-        LocalDate dob = new LocalDate(1970, 1, 2);
-        LocalDate oldDob = new LocalDate(1970, 2, 1);
+        LocalDate dob = LocalDate.of(1970, 1, 2);
+        LocalDate oldDob = LocalDate.of(1970, 2, 1);
         MatchingDataset matchingDataset = aMatchingDataset()
                 .addFirstname(SimpleMdsValueBuilder.<String>aCurrentSimpleMdsValue().withValue("Joe").build())
                 .addFirstname(SimpleMdsValueBuilder.<String>aHistoricalSimpleMdsValue().withValue("Bob").build())
@@ -86,8 +86,8 @@ public class MatchingDatasetToMatchingDatasetDtoMapperTest {
                 .addSurname(SimpleMdsValueBuilder.<String>aHistoricalSimpleMdsValue().withValue("Smith").build())
                 .addDateOfBirth(SimpleMdsValueBuilder.<LocalDate>aCurrentSimpleMdsValue().withValue(dob).build())
                 .addDateOfBirth(SimpleMdsValueBuilder.<LocalDate>aHistoricalSimpleMdsValue().withValue(oldDob).build())
-                .withCurrentAddresses(asList(aCurrentAddress().withPostCode("AA12BB").build()))
-                .withPreviousAddresses(asList(aHistoricalAddress().withPostCode("CC12DD").build()))
+                .withCurrentAddresses(Collections.singletonList(aCurrentAddress().withPostCode("AA12BB").build()))
+                .withPreviousAddresses(Collections.singletonList(aHistoricalAddress().withPostCode("CC12DD").build()))
                 .withGender(SimpleMdsValueBuilder.<Gender>aCurrentSimpleMdsValue().withValue(Gender.NOT_SPECIFIED).build())
                 .build();
 
@@ -112,7 +112,7 @@ public class MatchingDatasetToMatchingDatasetDtoMapperTest {
 
     @Test
     public void shouldMapToUniversalMatchingDatasetDtoWithTypicalEidasDataset() {
-        LocalDate dob = new LocalDate(1970, 1, 2);
+        LocalDate dob = LocalDate.of(1970, 1, 2);
         MatchingDataset matchingDataset = aMatchingDataset()
                 .addFirstname(SimpleMdsValueBuilder.<String>aCurrentSimpleMdsValue().withValue("Joe").withFrom(null).withVerifiedStatus(true).build())
                 .addSurname(SimpleMdsValueBuilder.<String>aCurrentSimpleMdsValue().withValue("Bloggs").withFrom(null).withVerifiedStatus(true).build())
