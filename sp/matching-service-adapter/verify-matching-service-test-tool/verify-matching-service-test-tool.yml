@@ -1,0 +1,6 @@
+localMatchingService:
+  matchUrl: http://localhost:80/matching-service/match
+  accountCreationUrl: http://localhost:80/matching-service/account-creation
+  usesUniversalDataset: true
+
+examplesFolderLocation: examples/universal-dataset

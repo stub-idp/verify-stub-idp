@@ -1,0 +1,85 @@
+server:
+  applicationConnectors:
+    - type: http
+      port: ${PORT:-50210}
+  adminConnectors:
+    - type: http
+      port: 50211
+  requestLog:
+    appenders:
+      - type: console
+
+logging:
+  level: ${LOG_LEVEL}
+  appenders:
+    - type: console
+
+matchingServiceAdapter:
+  entityId: ${TEST_RP_MSA_ENTITY_ID:-http://www.test-rp-ms.gov.uk/SAML2/MD}
+  externalUrl: ${TEST_RP_MSA_URL}
+
+localMatchingService:
+  matchUrl: ${TEST_RP_ROUTE}/test-rp/matching-service/POST
+  accountCreationUrl: ${TEST_RP_ROUTE}/test-rp/unknown-user/POST
+
+hub:
+  ssoUrl: https://${SIGNIN_DOMAIN}/SAML2/SSO
+  republishHubCertificatesInLocalMetadata: true
+  hubEntityId: ${METADATA_ENTITY_ID}
+
+metadata:
+  url: ${METADATA_URL}
+  environment: ${ENVIRONMENT:-INTEGRATION}
+  trustStore:
+    path: ${TRUSTSTORE_PATH}
+    password: ${TRUSTSTORE_PASSWORD}
+  minRefreshDelay: 30000
+  maxRefreshDelay: 1800000
+  expectedEntityId: ${METADATA_ENTITY_ID}
+
+signingKeys:
+  primary:
+    publicKey:
+      type: encoded
+      cert: ${SIGNING_CERT}
+      name: http://www.test-rp-ms.gov.uk/SAML2/MD
+    privateKey:
+      type: encoded
+      key: ${SIGNING_KEY}
+
+encryptionKeys:
+  - publicKey:
+      type: encoded
+      cert: ${ENCRYPTION_CERT}
+      name: http://www.test-rp-ms.gov.uk/SAML2/MD
+    privateKey:
+      type: encoded
+      key: ${ENCRYPTION_KEY}
+
+returnStackTraceInErrorResponse: true
+
+europeanIdentity:
+  enabled: ${EUROPEAN_IDENTITY_ENABLED}
+  hubConnectorEntityId: ${HUB_CONNECTOR_ENTITY_ID}
+  aggregatedMetadata:
+    trustAnchorUri: ${TRUST_ANCHOR_URI}
+    metadataSourceUri: ${METADATA_SOURCE_URI}
+    trustStore:
+      path: ${TRUSTSTORE_PATH}
+      password: ${TRUSTSTORE_PASSWORD}
+    minRefreshDelay: 5000
+    maxRefreshDelay: 600000
+    jerseyClientName: trust-anchor-client
+    client:
+      timeout: 2s
+      timeToLive: 10m
+      cookiesEnabled: false
+      connectionTimeout: 1s
+      retries: 3
+      keepAlive: 60s
+      chunkedEncodingEnabled: false
+      validateAfterInactivityPeriod: 5s
+      tls:
+        protocol: TLSv1.2
+        verifyHostname: false
+        trustSelfSignedCertificates: true

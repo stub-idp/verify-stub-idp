@@ -1,0 +1,88 @@
+server:
+  applicationConnectors:
+    - type: http
+      port: 80
+  adminConnectors:
+    - type: http
+      port: 81
+  requestLog:
+    appenders:
+      - type: console
+
+logging:
+  level: ${LOG_LEVEL:-INFO}
+  appenders:
+    - type: console
+      logFormat: '%-5p [%d{ISO8601,UTC}] %c: %X{logPrefix}%m%n%xEx'
+
+matchingServiceAdapter:
+  entityId: ${MSA_ENTITY_ID}
+  externalUrl: ${ASSERTION_CONSUMER_SERVICE_URL}
+
+localMatchingService:
+  matchUrl: ${LMS_MATCH_URL}
+  accountCreationUrl: ${LMS_UAC_URL}
+
+hub:
+  ssoUrl: ${HUB_SSO_URL}
+  republishHubCertificatesInLocalMetadata: true
+  hubEntityId: ${METADATA_ENTITY_ID}
+
+metadata:
+  url: ${METADATA_URL}
+  trustStore:
+    path: /data/pki/metadata.ts
+    password: marshmallow
+  hubTrustStore:
+      path: /data/pki/hub_federation.ts
+      password: marshmallow
+  idpTrustStore:
+      path: /data/pki/idp_federation.ts
+      password: marshmallow
+  minRefreshDelay: 60000
+  maxRefreshDelay: 600000
+  expectedEntityId: ${METADATA_ENTITY_ID}
+  hubFederationId: VERIFY-FEDERATION
+
+signingKeys:
+  primary:
+    publicKey:
+      certFile: /data/pki/sample_rp_msa_signing_primary.crt
+      name: http://www.test-rp-ms.gov.uk/SAML2/MD
+    privateKey:
+      keyFile: /data/pki/sample_rp_msa_signing_primary.pk8
+
+encryptionKeys:
+  - publicKey:
+      certFile: /data/pki/sample_rp_msa_encryption_primary.crt
+      name: http://www.test-rp-ms.gov.uk/SAML2/MD
+    privateKey:
+      keyFile: /data/pki/sample_rp_msa_encryption_primary.pk8
+
+returnStackTraceInErrorResponse: true
+
+europeanIdentity:
+  enabled: ${EUROPEAN_IDENTITY_ENABLED}
+  hubConnectorEntityId: ${HUB_CONNECTOR_ENTITY_ID}
+  aggregatedMetadata:
+    trustAnchorUri: ${TRUST_ANCHOR_URI}
+    metadataSourceUri: ${METADATA_SOURCE_URI}
+    trustStore:
+      path: /data/pki/metadata.ts
+      password: marshmallow
+    minRefreshDelay: 5000
+    maxRefreshDelay: 600000
+    jerseyClientName: trust-anchor-client
+    client:
+      timeout: 2s
+      timeToLive: 10m
+      cookiesEnabled: false
+      connectionTimeout: 1s
+      retries: 3
+      keepAlive: 60s
+      chunkedEncodingEnabled: false
+      validateAfterInactivityPeriod: 5s
+      tls:
+        protocol: TLSv1.2
+        verifyHostname: false
+        trustSelfSignedCertificates: true

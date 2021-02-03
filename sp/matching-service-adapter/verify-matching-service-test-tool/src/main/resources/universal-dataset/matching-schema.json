@@ -1,0 +1,174 @@
+{
+  "properties": {
+    "cycle3Dataset": {
+      "properties": {
+        "attributes": {
+          "additionalProperties": {
+            "type": "string"
+          },
+          "type": "object"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object"
+    },
+    "hashedPid": {
+      "type": "string"
+    },
+    "levelOfAssurance": {
+      "enum": [
+        "LEVEL_1",
+        "LEVEL_2",
+        "LEVEL_3",
+        "LEVEL_4"
+      ]
+    },
+    "matchId": {
+      "type": "string"
+    },
+    "matchingDataset": {
+      "properties": {
+        "addresses": {
+          "items": {
+            "properties": {
+              "from": {
+                "format": "date-time"
+              },
+              "internationalPostCode": {
+                "type": "string"
+              },
+              "lines": {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              "postCode": {
+                "type": "string"
+              },
+              "to": {
+                "format": "date-time"
+              },
+              "uprn": {
+                "type": "string"
+              },
+              "verified": {
+                "type": "boolean"
+              }
+            },
+            "additionalProperties": false,
+            "type": "object"
+          },
+          "type": "array"
+        },
+        "dateOfBirth": {
+          "properties": {
+            "from": {
+              "format": "date-time"
+            },
+            "to": {
+              "format": "date-time"
+            },
+            "value": {
+              "format": "date"
+            },
+            "verified": {
+              "type": "boolean"
+            }
+          },
+          "additionalProperties": false,
+          "type": "object"
+        },
+        "firstName": {
+          "properties": {
+            "from": {
+              "format": "date-time"
+            },
+            "to": {
+              "format": "date-time"
+            },
+            "value": {
+              "type": "string"
+            },
+            "nonLatinScriptValue": {
+              "type": "string"
+            },
+            "verified": {
+              "type": "boolean"
+            }
+          },
+          "additionalProperties": false,
+          "type": "object"
+        },
+        "gender": {
+          "properties": {
+            "from": {
+              "format": "date-time"
+            },
+            "to": {
+              "format": "date-time"
+            },
+            "value": {
+              "enum": [
+                "FEMALE",
+                "MALE",
+                "NOT_SPECIFIED"
+              ]
+            },
+            "verified": {
+              "type": "boolean"
+            }
+          },
+          "type": "object"
+        },
+        "middleNames": {
+          "properties": {
+            "from": {
+              "format": "date-time"
+            },
+            "to": {
+              "format": "date-time"
+            },
+            "value": {
+              "type": "string"
+            },
+            "verified": {
+              "type": "boolean"
+            }
+          },
+          "type": "object"
+        },
+        "surnames": {
+          "items": {
+            "properties": {
+              "from": {
+                "format": "date-time"
+              },
+              "to": {
+                "format": "date-time"
+              },
+              "value": {
+                "type": "string"
+              },
+              "nonLatinScriptValue": {
+                "type": "string"
+              },
+              "verified": {
+                "type": "boolean"
+              }
+            },
+            "additionalProperties": false,
+            "type": "object"
+          },
+          "type": "array"
+        }
+      },
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["dateOfBirth", "firstName", "surnames"]
+    }
+  },
+  "type": "object",
+  "additionalProperties": false,
+  "required": [ "matchId", "levelOfAssurance", "hashedPid", "matchingDataset" ]
+}
