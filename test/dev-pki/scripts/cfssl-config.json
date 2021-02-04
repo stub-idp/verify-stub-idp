@@ -1,0 +1,55 @@
+{
+    "signing": {
+        "default": {
+            "expiry": "876000h"
+        },
+        "profiles": {
+            "intermediate": {
+                "usages": [
+                    "cert sign",
+                    "crl sign"
+                ],
+                "expiry": "876000h",
+                "ca_constraint": {
+                    "is_ca": true,
+                    "max_path_len": 0,
+                    "max_path_len_zero": true
+                }
+            },
+            "signing": {
+                "usages": [
+                    "digital signature"
+                ],
+                "expiry": "876000h"
+            },
+            "signing_low_date": {
+                "usages": [
+                    "digital signature"
+                ],
+                "expiry": "800000h"
+            },
+            "encipherment": {
+                "usages": [
+                    "key encipherment"
+                ],
+                "expiry": "876000h"
+            },
+            "signing_expired": {
+                "usages": [
+                    "digital signature"
+                ],
+                "not_before": "2018-10-18T12:00:00+00:00",
+                "not_after": "2018-11-18T12:00:00+00:00",
+                "expiry": "876000h"
+            },
+            "signing_not_yet_valid": {
+                "usages": [
+                    "digital signature"
+                ],
+                "not_before": "2128-10-18T12:00:00+00:00",
+                "not_after": "2128-11-18T12:00:00+00:00",
+                "expiry": "876000h"
+            }
+        }
+    }
+}

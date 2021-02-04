@@ -26,6 +26,7 @@ public final class TestCertificateStrings {
     }
 
     public static final String TEST_ENTITY_ID = "a-test-entity";
+    public static final String TEST_ENTITY_ID_EC = "a-test-entity-ec";
     public static final Map<String, String> PUBLIC_SIGNING_CERTS;
     public static final Map<String, List<String>> PUBLIC_ENCRYPTION_CERTS;
     public static final Map<String, String> PRIVATE_SIGNING_KEYS;
@@ -34,16 +35,19 @@ public final class TestCertificateStrings {
     // stub-idp signing
     public static final String TEST_PRIVATE_KEY = readPrivateKey("stub_idp_signing_primary.pk8");
 
+    public static final String TEST_PRIVATE_EC_KEY = readPrivateKey("hub_ec.pk8");
+
     // stub-idp signing
     public static final String TEST_PUBLIC_CERT = createInlineCertificate(PemCertificateStrings.STUB_IDP_PUBLIC_SIGNING_CERT);
+
+    public static final String TEST_PUBLIC_EC_CERT = createInlineCertificate(PemCertificateStrings.HUB_TEST_EC_CERT);
 
     public static final String EXPIRED_SIGNING_PUBLIC_CERT = createInlineCertificate(PemCertificateStrings.EXPIRED_SIGNING_PUBLIC_CERT);
 
     public static final String EXPIRED_SELF_SIGNED_SIGNING_PUBLIC_CERT = createInlineCertificate(PemCertificateStrings.EXPIRED_SELF_SIGNED_SIGNING_PUBLIC_CERT);
 
     public static final String EXPIRED_SIGNING_PRIVATE_KEY = readPrivateKey("expired_signing.pk8");
-
-
+    
     public static final String HUB_TEST_PRIVATE_ENCRYPTION_KEY = readPrivateKey("hub_encryption_primary.pk8");
 
     public static final String HUB_TEST_PRIVATE_SIGNING_KEY = readPrivateKey("hub_signing_primary.pk8");
@@ -152,6 +156,7 @@ public final class TestCertificateStrings {
     static {
         PUBLIC_SIGNING_CERTS = Map.ofEntries(
                 Map.entry(TEST_ENTITY_ID, TEST_PUBLIC_CERT),
+                Map.entry(TEST_ENTITY_ID_EC, TEST_PUBLIC_EC_CERT),
                 Map.entry(TestEntityIds.HUB_ENTITY_ID, HUB_TEST_PUBLIC_SIGNING_CERT),
                 Map.entry(TestEntityIds.HUB_SECONDARY_ENTITY_ID, HUB_TEST_SECONDARY_PUBLIC_SIGNING_CERT),
                 Map.entry(TestEntityIds.HUB_CONNECTOR_ENTITY_ID, HUB_CONNECTOR_TEST_PUBLIC_SIGNING_CERT),
@@ -169,6 +174,7 @@ public final class TestCertificateStrings {
 
         PRIVATE_SIGNING_KEYS = Map.ofEntries(
                 Map.entry(TEST_ENTITY_ID, TEST_PRIVATE_KEY),
+                Map.entry(TEST_ENTITY_ID_EC, TEST_PRIVATE_EC_KEY),
                 Map.entry(TestEntityIds.HUB_ENTITY_ID, HUB_TEST_PRIVATE_SIGNING_KEY),
                 Map.entry(TestEntityIds.HUB_SECONDARY_ENTITY_ID, HUB_TEST_PRIVATE_SECONDARY_SIGNING_KEY),
                 Map.entry(TestEntityIds.HUB_CONNECTOR_ENTITY_ID, HUB_CONNECTOR_TEST_PRIVATE_SIGNING_KEY),
@@ -186,6 +192,7 @@ public final class TestCertificateStrings {
 
         PUBLIC_ENCRYPTION_CERTS = Map.ofEntries(
                 Map.entry(TEST_ENTITY_ID, List.of(TEST_PUBLIC_CERT)),
+                Map.entry(TEST_ENTITY_ID_EC, List.of(TEST_PUBLIC_EC_CERT)),
                 Map.entry(TestEntityIds.HUB_ENTITY_ID, List.of(HUB_TEST_PUBLIC_ENCRYPTION_CERT, TEST_PUBLIC_CERT)),
                 Map.entry(TestEntityIds.HUB_CONNECTOR_ENTITY_ID, List.of(HUB_CONNECTOR_TEST_PUBLIC_ENCRYPTION_CERT)),
                 Map.entry(TestEntityIds.TEST_RP, List.of(TEST_RP_PUBLIC_ENCRYPTION_CERT)),
@@ -196,6 +203,7 @@ public final class TestCertificateStrings {
 
         PRIVATE_ENCRYPTION_KEYS = Map.ofEntries(
                 Map.entry(TEST_ENTITY_ID, List.of(TEST_PRIVATE_KEY)),
+                Map.entry(TEST_ENTITY_ID_EC, List.of(TEST_PRIVATE_EC_KEY)),
                 Map.entry(TestEntityIds.HUB_ENTITY_ID, List.of(HUB_TEST_PRIVATE_ENCRYPTION_KEY, TEST_PRIVATE_KEY)),
                 Map.entry(TestEntityIds.HUB_SECONDARY_ENTITY_ID, List.of(HUB_TEST_PRIVATE_ENCRYPTION_KEY, TEST_PRIVATE_KEY)),
                 Map.entry(TestEntityIds.HUB_CONNECTOR_ENTITY_ID, List.of(HUB_CONNECTOR_TEST_PRIVATE_ENCRYPTION_KEY)),

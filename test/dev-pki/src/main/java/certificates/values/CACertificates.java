@@ -22,4 +22,22 @@ public class CACertificates {
     public static final String TEST_RP_CA = readCertificateFile("ida-intermediary-rp-ca.pem.test");
 
     public static final String TEST_CORE_CA = readCertificateFile("idap-core-ca.pem.test");
+
+    // New generation of CAs
+
+    public static final String TEST_VERIFY_ROOT_CA = readCertificateFile("verify-root-ca.pem.test");
+
+    public static final String TEST_VERIFY_ROOT_CA_EC = readCertificateFile("verify-root-ca-ec.pem.test");
+
+    public static final String TEST_VERIFY_METADATA_CA = readCertificateFile("verify-metadata-ca.pem.test");
+
+    public static final String TEST_VERIFY_METADATA_CA_EC = readCertificateFile("verify-metadata-ca-ec.pem.test");
+
+    public static final String TEST_VERIFY_IDP_CA = readCertificateFile("verify-intermediary-ca.pem.test");
+
+    public static final String TEST_VERIFY_RP_CA = readCertificateFile("verify-intermediary-rp-ca.pem.test");
+
+    public static final String TEST_VERIFY_CORE_CA = readCertificateFile("verify-core-ca.pem.test");
+
+    public static final String TEST_VERIFY_CORE_CA_EC = readCertificateFile("verify-core-ca-ec.pem.test");
 }
