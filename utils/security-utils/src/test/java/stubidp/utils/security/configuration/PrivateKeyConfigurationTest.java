@@ -22,6 +22,13 @@ public class PrivateKeyConfigurationTest {
     }
 
     @Test
+    void shouldAttemptToGenerateECPrivateKeyWhenRSAGivesInvalidKeySpecException() throws Exception {
+        String path = getClass().getClassLoader().getResource("ec_private_key.pk8").getPath();
+        PrivateKeyConfiguration config = objectMapper.readValue("{\"key\": \"" + path + "\"}", PrivateKeyConfiguration.class);
+        assertThat(config.getClass()).isEqualTo(PrivateKeyFileConfiguration.class);
+    }
+
+    @Test
     void shouldUseFileTypeWhenSpecified() throws Exception {
         String path = getClass().getClassLoader().getResource("private_key.pk8").getPath();
         PrivateKeyConfiguration config = objectMapper.readValue("{\"type\": \"file\", \"key\": \"" + path + "\"}", PrivateKeyConfiguration.class);

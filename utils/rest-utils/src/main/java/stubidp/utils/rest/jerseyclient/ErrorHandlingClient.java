@@ -38,6 +38,10 @@ public class ErrorHandlingClient {
         return get(uri, Collections.emptyList(), Collections.emptyMap());
     }
 
+    public Response get(final URI uri, final Map<String, String> headers) {
+        return get(uri, Collections.emptyList(), headers);
+    }
+    
     public Response get(final URI uri, final List<Cookie> cookies, final Map<String, String> headers) {
         try {
             Invocation.Builder requestBuilder = jerseyClient.target(uri).request();
@@ -51,7 +55,7 @@ public class ErrorHandlingClient {
             if (numberOfRetries!=0){
                 RetryCommand<Response> retryCommand = new RetryCommand<>(numberOfRetries);
                 return retryCommand.execute(client::get);
-            }else {
+            } else {
                return client.get();
             }
 

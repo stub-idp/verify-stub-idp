@@ -16,4 +16,5 @@ module stubidp.security.utils {
     requires transitive jakarta.inject;
     requires transitive com.fasterxml.jackson.core;
     requires transitive com.fasterxml.jackson.databind;
+    requires transitive simpleclient;
 }

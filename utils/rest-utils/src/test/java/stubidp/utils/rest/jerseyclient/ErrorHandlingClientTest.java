@@ -23,6 +23,7 @@ import java.util.Map;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.anyString;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -46,6 +47,24 @@ public class ErrorHandlingClientTest {
     @BeforeEach
     void setup() {
         errorHandlingClient = new ErrorHandlingClient(client);
+    }
+
+    @Test
+    public void getWithHeadersShouldAddHeadersToRequest() {
+        String headerName = "X-Sausages";
+        String headerValue = "Yes please";
+        final Map<String, String> headers = Map.of(headerName, headerValue);
+
+        when(client.target(any(URI.class))).thenReturn(webTarget);
+        when(webTarget.request()).thenReturn(webTargetBuilder);
+        when(webTargetBuilder.accept(ArgumentMatchers.<MediaType>any())).thenReturn(webTargetBuilder);
+        when(webTargetBuilder.header(anyString(), any())).thenReturn(webTargetBuilder);
+
+        errorHandlingClient.get(testUri, headers);
+
+        verify(webTargetBuilder, times(1)).header(headerName, headerValue);
+        verify(webTargetBuilder, times(1)).get();
+        verify(webTargetBuilder, never()).cookie(any(Cookie.class));
     }
 
     @Test
@@ -97,7 +116,7 @@ public class ErrorHandlingClientTest {
     void shouldRetryPostRequestIfConfigured() {
         when(client.target(any(URI.class))).thenReturn(webTarget);
         when(webTarget.request(MediaType.APPLICATION_JSON_TYPE)).thenReturn(webTargetBuilder);
-        when(webTargetBuilder.post(Entity.json(""))).thenThrow(RuntimeException.class);
+        when(webTargetBuilder.post(Entity.json(""))).thenThrow(ProcessingException.class);
 
         ErrorHandlingClient retryEnabledErrorHandlingClient = new ErrorHandlingClient(client, 2);
         Assertions.assertThrows(ApplicationException.class, () -> retryEnabledErrorHandlingClient.post(testUri, Collections.emptyMap(), ""));
@@ -110,7 +129,7 @@ public class ErrorHandlingClientTest {
         when(client.target(any(URI.class))).thenReturn(webTarget);
         when(webTarget.request()).thenReturn(webTargetBuilder);
         when(webTargetBuilder.accept(ArgumentMatchers.<MediaType>any())).thenReturn(webTargetBuilder);
-        when(webTargetBuilder.get()).thenThrow(RuntimeException.class);
+        when(webTargetBuilder.get()).thenThrow(ProcessingException.class);
 
         ErrorHandlingClient retryEnabledErrorHandlingClient = new ErrorHandlingClient(client, 2);
         Assertions.assertThrows(ApplicationException.class, () -> retryEnabledErrorHandlingClient.get(testUri));
