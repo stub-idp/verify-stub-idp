@@ -9,7 +9,7 @@ import stubidp.saml.extensions.extensions.PostCode;
 import stubidp.saml.extensions.extensions.UPRN;
 
 import javax.xml.namespace.QName;
-import java.time.Instant;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -17,8 +17,8 @@ import java.util.List;
 public class AddressImpl extends XSAnyImpl implements Address {
     private final List<Line> lines = new ArrayList<>();
     private PostCode postCode;
-    private Instant from;
-    private Instant to;
+    private LocalDate from;
+    private LocalDate to;
     private InternationalPostCode internationalPostCode;
     private UPRN uprn;
     private boolean verified;
@@ -33,22 +33,22 @@ public class AddressImpl extends XSAnyImpl implements Address {
     }
 
     @Override
-    public Instant getFrom() {
+    public LocalDate getFrom() {
         return from;
     }
 
     @Override
-    public void setFrom(Instant from) {
+    public void setFrom(LocalDate from) {
         this.from = prepareForAssignment(this.from, from);
     }
 
     @Override
-    public Instant getTo() {
+    public LocalDate getTo() {
         return to;
     }
 
     @Override
-    public void setTo(Instant to) {
+    public void setTo(LocalDate to) {
         this.to = prepareForAssignment(this.to, to);
     }
 

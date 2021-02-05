@@ -24,7 +24,7 @@ import stubidp.stubidp.security.BCryptHelper
 import stubidp.utils.rest.common.HttpHeaders
 import java.io.IOException
 import java.text.MessageFormat
-import java.time.Instant
+import java.time.LocalDate
 import java.util.Optional
 import javax.ws.rs.client.Client
 import javax.ws.rs.client.Entity
@@ -73,7 +73,7 @@ class UserRepositoryIntegrationTests : IntegrationTestHelper() {
                 createOptionalMdsValue(Optional.of("some user firstname")),
                 createOptionalMdsValue(Optional.of("some user middlename")), listOf(SimpleMdsValueBuilder.aSimpleMdsValue<String>().withValue("some user addSurname").build()),
                 createOptionalMdsValue(Optional.of(Gender.FEMALE)),
-                createOptionalMdsValue(Optional.of(Instant.now())),
+                createOptionalMdsValue(Optional.of(LocalDate.now())),
                 Optional.ofNullable(AddressBuilder.anAddress().withLines(listOf("blah", "blah2")).withPostCode("WC1V7AA").withVerified(true).build()),
                 AuthnContext.LEVEL_4.toString()
         )

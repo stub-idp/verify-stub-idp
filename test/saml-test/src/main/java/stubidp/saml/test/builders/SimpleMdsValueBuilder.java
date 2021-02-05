@@ -3,12 +3,13 @@ package stubidp.saml.test.builders;
 import stubidp.saml.domain.assertions.SimpleMdsValue;
 
 import java.time.Instant;
+import java.time.LocalDate;
 import java.time.ZoneId;
 
 public class SimpleMdsValueBuilder<T> {
     private T value = null;
-    private Instant from = Instant.now().atZone(ZoneId.of("UTC")).minusDays(5).toInstant();
-    private Instant to = Instant.now();
+    private LocalDate from = LocalDate.now().minusDays(5);
+    private LocalDate to = LocalDate.now();
     private boolean verified = false;
 
     private SimpleMdsValueBuilder() {}
@@ -26,12 +27,12 @@ public class SimpleMdsValueBuilder<T> {
         return this;
     }
 
-    public SimpleMdsValueBuilder<T> withFrom(Instant from) {
+    public SimpleMdsValueBuilder<T> withFrom(LocalDate from) {
         this.from = from;
         return this;
     }
 
-    public SimpleMdsValueBuilder<T> withTo(Instant to) {
+    public SimpleMdsValueBuilder<T> withTo(LocalDate to) {
         this.to = to;
         return this;
     }

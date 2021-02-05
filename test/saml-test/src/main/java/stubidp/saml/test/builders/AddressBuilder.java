@@ -1,9 +1,8 @@
 package stubidp.saml.test.builders;
 
 import stubidp.saml.domain.assertions.Address;
-import stubidp.saml.extensions.extensions.impl.BaseMdsSamlObjectUnmarshaller;
 
-import java.time.Instant;
+import java.time.LocalDate;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -13,8 +12,8 @@ public class AddressBuilder {
     private Optional<String> postCode = Optional.empty();
     private Optional<String> internationalPostCode = Optional.empty();
     private Optional<String> uprn = Optional.empty();
-    private Instant fromDate = BaseMdsSamlObjectUnmarshaller.InstantFromDate.of("2001-01-01");
-    private Instant toDate = null;
+    private LocalDate fromDate = LocalDate.parse("2001-01-01");
+    private LocalDate toDate = null;
     private boolean verified = false;
 
     private AddressBuilder() {}
@@ -54,12 +53,12 @@ public class AddressBuilder {
         return this;
     }
 
-    public AddressBuilder withFromDate(final Instant fromDate) {
+    public AddressBuilder withFromDate(final LocalDate fromDate) {
         this.fromDate = fromDate;
         return this;
     }
 
-    public AddressBuilder withToDate(final Instant toDate) {
+    public AddressBuilder withToDate(final LocalDate toDate) {
         this.toDate = toDate;
         return this;
     }

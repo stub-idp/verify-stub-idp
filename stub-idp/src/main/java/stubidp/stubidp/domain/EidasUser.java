@@ -5,7 +5,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import stubidp.saml.domain.assertions.Gender;
 
-import java.time.Instant;
+import java.time.LocalDate;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -17,7 +17,7 @@ public class EidasUser {
     private final String familyName;
     private final Optional<String> familyNameNonLatin;
     private final String persistentId;
-    private final Instant dateOfBirth;
+    private final LocalDate dateOfBirth;
     private Optional<EidasAddress> address;
     private Optional<Gender> gender;
 
@@ -27,7 +27,7 @@ public class EidasUser {
                      @JsonProperty("familyName") String familyName,
                      @JsonProperty("familyNameNonLatin") Optional<String> familyNameNonLatin,
                      @JsonProperty("persistentId") String persistentId,
-                     @JsonProperty("dateOfBirth") Instant dateOfBirth,
+                     @JsonProperty("dateOfBirth") LocalDate dateOfBirth,
                      @JsonProperty("address") Optional<EidasAddress> address,
                      @JsonProperty("gender") Optional<Gender> gender) {
         this.firstName = firstName;
@@ -64,7 +64,7 @@ public class EidasUser {
         return address;
     }
 
-    public Instant getDateOfBirth() {
+    public LocalDate getDateOfBirth() {
         return dateOfBirth;
     }
 

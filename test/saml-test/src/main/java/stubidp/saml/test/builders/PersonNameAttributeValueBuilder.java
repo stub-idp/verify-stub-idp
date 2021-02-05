@@ -4,14 +4,14 @@ import org.opensaml.saml.saml2.core.AttributeValue;
 import stubidp.saml.extensions.extensions.PersonName;
 import stubidp.saml.test.OpenSamlXmlObjectFactory;
 
-import java.time.Instant;
+import java.time.LocalDate;
 import java.util.Optional;
 
 public class PersonNameAttributeValueBuilder {
     private static final OpenSamlXmlObjectFactory openSamlXmlObjectFactory = new OpenSamlXmlObjectFactory();
 
-    private Optional<Instant> from = Optional.empty();
-    private Optional<Instant> to = Optional.empty();
+    private Optional<LocalDate> from = Optional.empty();
+    private Optional<LocalDate> to = Optional.empty();
     private String value = "John";
     private final Optional<String> language = Optional.empty();
     private Optional<Boolean> verified = Optional.empty();
@@ -33,12 +33,12 @@ public class PersonNameAttributeValueBuilder {
         return personNameAttributeValue;
     }
 
-    public PersonNameAttributeValueBuilder withFrom(Instant from) {
+    public PersonNameAttributeValueBuilder withFrom(LocalDate from) {
         this.from = Optional.ofNullable(from);
         return this;
     }
 
-    public PersonNameAttributeValueBuilder withTo(Instant to) {
+    public PersonNameAttributeValueBuilder withTo(LocalDate to) {
         this.to = Optional.ofNullable(to);
         return this;
     }

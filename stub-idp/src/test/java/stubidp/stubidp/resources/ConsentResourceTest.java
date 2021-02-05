@@ -9,7 +9,6 @@ import stubidp.saml.domain.assertions.AuthnContext;
 import stubidp.saml.domain.assertions.Gender;
 import stubidp.saml.domain.assertions.SimpleMdsValue;
 import stubidp.saml.domain.request.IdaAuthnRequestFromHub;
-import stubidp.saml.extensions.extensions.impl.BaseMdsSamlObjectUnmarshaller;
 import stubidp.saml.utils.core.domain.AddressFactory;
 import stubidp.shared.cookies.CookieNames;
 import stubidp.shared.views.SamlMessageRedirectViewFactory;
@@ -27,6 +26,7 @@ import stubidp.utils.rest.common.SessionId;
 
 import javax.ws.rs.core.Response;
 import java.time.Instant;
+import java.time.LocalDate;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -123,7 +123,7 @@ public class ConsentResourceTest {
                 Collections.emptyList(),
                 Collections.singletonList(createMdsValue("Griffin")),
                 Optional.of(createMdsValue(Gender.NOT_SPECIFIED)),
-                Collections.singletonList(createMdsValue(BaseMdsSamlObjectUnmarshaller.InstantFromDate.of("1983-06-21"))),
+                Collections.singletonList(createMdsValue(LocalDate.parse("1983-06-21"))),
                 Collections.singletonList(AddressFactory.createNoDates(Collections.singletonList("Lion's Head Inn"), "1A 2BC", null, null, true)),
                 levelOfAssurance));
     }

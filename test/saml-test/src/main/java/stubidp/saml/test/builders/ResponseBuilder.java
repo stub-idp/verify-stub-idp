@@ -15,6 +15,8 @@ import org.opensaml.xmlsec.algorithm.descriptors.SignatureRSASHA256;
 import org.opensaml.xmlsec.signature.support.SignatureException;
 import org.opensaml.xmlsec.signature.support.Signer;
 import stubidp.saml.test.OpenSamlXmlObjectFactory;
+import stubidp.saml.test.TestCredentialFactory;
+import stubidp.test.devpki.TestCertificateStrings;
 
 import javax.validation.constraints.NotNull;
 import java.time.Instant;
@@ -29,8 +31,8 @@ import static java.util.Optional.ofNullable;
 public class ResponseBuilder {
     private static final OpenSamlXmlObjectFactory openSamlXmlObjectFactory = new OpenSamlXmlObjectFactory();
 
-    public static final String DEFAULT_REQUEST_ID = "default-request-id";
-    public static final String DEFAULT_RESPONSE_ID = "default-response-id";
+    public static final String DEFAULT_REQUEST_ID = "_default-request-id_min-20-chars";
+    public static final String DEFAULT_RESPONSE_ID = "_default-response-id_min-20-chars";
 
     private EncryptedAssertion defaultEncryptedAssertion;
     private boolean addDefaultEncryptedAssertionIfNoneIsAdded = true;
@@ -53,8 +55,12 @@ public class ResponseBuilder {
 
     public static ResponseBuilder aResponse() {
         ResponseBuilder responseBuilder = new ResponseBuilder();
-        responseBuilder.defaultEncryptedAssertion = AssertionBuilder.anAssertion().build();
+        responseBuilder.defaultEncryptedAssertion = AssertionBuilder.anAssertion().withId("foo").buildWithEncrypterCredential(new TestCredentialFactory(TestCertificateStrings.HUB_TEST_PUBLIC_ENCRYPTION_CERT, null).getEncryptingCredential());
         return responseBuilder;
+    }
+
+    public static ResponseBuilder aResponseWithNoEncryptedAssertions() {
+        return new ResponseBuilder();
     }
 
     public static ResponseBuilder aValidIdpResponse() {

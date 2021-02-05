@@ -12,6 +12,7 @@ import stubidp.stubidp.domain.DatabaseIdpUser;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import java.time.Instant;
+import java.time.LocalDate;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
@@ -53,7 +54,7 @@ public class AllIdpsUserRepository {
                                      List<SimpleMdsValue<String>> middleNames,
                                      List<SimpleMdsValue<String>> surnames,
                                      Optional<SimpleMdsValue<Gender>> gender,
-                                     List<SimpleMdsValue<Instant>> dateOfBirths,
+                                     List<SimpleMdsValue<LocalDate>> dateOfBirths,
                                      List<Address> addresses,
                                      String username,
                                      String password,
@@ -86,7 +87,7 @@ public class AllIdpsUserRepository {
                                                Optional<SimpleMdsValue<String>> nonLatinFirstName,
                                                SimpleMdsValue<String> surname,
                                                Optional<SimpleMdsValue<String>> nonLatinSurname,
-                                               SimpleMdsValue<Instant> dob,
+                                               SimpleMdsValue<LocalDate> dob,
                                                AuthnContext levelOfAssurance){
         DatabaseEidasUser user = new DatabaseEidasUser(
                 username, persistentId, password,

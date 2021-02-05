@@ -9,9 +9,10 @@ import stubidp.saml.domain.assertions.SimpleMdsValue;
 import stubidp.stubidp.domain.DatabaseIdpUser;
 import stubidp.stubidp.security.BCryptHelper;
 
-import java.time.Instant;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_NULL;
@@ -27,7 +28,7 @@ public class IdpUserDto {
     private Optional<SimpleMdsValue<String>> middleNames = Optional.empty();
     private List<SimpleMdsValue<String>> surname = new ArrayList<>();
     private Optional<SimpleMdsValue<Gender>> gender = Optional.empty();
-    private Optional<SimpleMdsValue<Instant>> dateOfBirth = Optional.empty();
+    private Optional<SimpleMdsValue<LocalDate>> dateOfBirth = Optional.empty();
     private Optional<Address> address = Optional.empty();
     private String levelOfAssurance;
 
@@ -42,7 +43,7 @@ public class IdpUserDto {
             Optional<SimpleMdsValue<String>> middleNames,
             List<SimpleMdsValue<String>> surnames,
             Optional<SimpleMdsValue<Gender>> gender,
-            Optional<SimpleMdsValue<Instant>> dateOfBirth,
+            Optional<SimpleMdsValue<LocalDate>> dateOfBirth,
             Optional<Address> address,
             String levelOfAssurance) {
 
@@ -78,7 +79,7 @@ public class IdpUserDto {
         return surname;
     }
 
-    public Optional<SimpleMdsValue<Instant>> getDateOfBirth() {
+    public Optional<SimpleMdsValue<LocalDate>> getDateOfBirth() {
         return dateOfBirth;
     }
 
@@ -125,5 +126,18 @@ public class IdpUserDto {
         if(!BCryptHelper.alreadyCrypted(this.password)) {
             this.password = BCrypt.hashpw(this.password, BCrypt.gensalt());
         }
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        IdpUserDto that = (IdpUserDto) o;
+        return Objects.equals(pid, that.pid) && Objects.equals(username, that.username) && Objects.equals(password, that.password) && Objects.equals(firstName, that.firstName) && Objects.equals(middleNames, that.middleNames) && Objects.equals(surname, that.surname) && Objects.equals(gender, that.gender) && Objects.equals(dateOfBirth, that.dateOfBirth) && Objects.equals(address, that.address) && Objects.equals(levelOfAssurance, that.levelOfAssurance);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(pid, username, password, firstName, middleNames, surname, gender, dateOfBirth, address, levelOfAssurance);
     }
 }

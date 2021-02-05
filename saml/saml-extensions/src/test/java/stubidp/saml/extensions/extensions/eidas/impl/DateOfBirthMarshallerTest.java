@@ -6,10 +6,9 @@ import org.opensaml.core.xml.config.XMLObjectProviderRegistrySupport;
 import org.opensaml.core.xml.io.Marshaller;
 import org.w3c.dom.Element;
 import stubidp.saml.extensions.extensions.eidas.DateOfBirth;
-import stubidp.saml.extensions.extensions.impl.BaseMdsSamlObjectUnmarshaller;
 import stubidp.saml.test.OpenSAMLRunner;
 
-import java.time.Instant;
+import java.time.LocalDate;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static stubidp.saml.extensions.IdaConstants.EIDAS_NATURUAL_PREFIX;
@@ -19,7 +18,7 @@ class DateOfBirthMarshallerTest extends OpenSAMLRunner {
     @Test
     void shouldMarshallDateOfBirth() throws Exception {
         final String dateString = "1965-01-01";
-        final Instant date = BaseMdsSamlObjectUnmarshaller.InstantFromDate.of(dateString);
+        final LocalDate date = LocalDate.parse(dateString);
         final DateOfBirth dateOfBirth = new DateOfBirthBuilder().buildObject();
         final Marshaller dateOfBirthMarshaller = XMLObjectProviderRegistrySupport.getMarshallerFactory().getMarshaller(dateOfBirth);
         dateOfBirth.setDateOfBirth(date);

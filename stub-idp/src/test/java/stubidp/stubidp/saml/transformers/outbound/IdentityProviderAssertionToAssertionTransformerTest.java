@@ -18,7 +18,6 @@ import stubidp.saml.domain.assertions.IpAddress;
 import stubidp.saml.domain.assertions.MatchingDataset;
 import stubidp.saml.domain.assertions.SimpleMdsValue;
 import stubidp.saml.domain.assertions.TransliterableMdsValue;
-import stubidp.saml.extensions.extensions.impl.BaseMdsSamlObjectUnmarshaller;
 import stubidp.saml.test.OpenSAMLRunner;
 import stubidp.saml.test.builders.MatchingDatasetBuilder;
 import stubidp.saml.test.builders.SimpleMdsValueBuilder;
@@ -29,6 +28,7 @@ import stubidp.saml.utils.core.transformers.outbound.OutboundAssertionToSubjectT
 import stubidp.saml.utils.hub.factories.AttributeFactory;
 
 import java.time.Instant;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -39,9 +39,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import static stubidp.saml.test.builders.IdentityProviderAuthnStatementBuilder.anIdentityProviderAuthnStatement;
 import static stubidp.saml.test.builders.IPAddressAttributeBuilder.anIPAddress;
 import static stubidp.saml.test.builders.IdentityProviderAssertionBuilder.anIdentityProviderAssertion;
+import static stubidp.saml.test.builders.IdentityProviderAuthnStatementBuilder.anIdentityProviderAuthnStatement;
 
 @ExtendWith(MockitoExtension.class)
 class IdentityProviderAssertionToAssertionTransformerTest extends OpenSAMLRunner {
@@ -95,7 +95,7 @@ class IdentityProviderAssertionToAssertionTransformerTest extends OpenSAMLRunner
                 .addMiddleNames(TransliterableMdsValueBuilder.asTransliterableMdsValue().withValue("subject-middlename").withVerifiedStatus(true).build())
                 .withSurnameHistory(asList(previousSurname, currentSurname))
                 .withGender(SimpleMdsValueBuilder.<Gender>aSimpleMdsValue().withValue(Gender.FEMALE).withVerifiedStatus(true).build())
-                .addDateOfBirth(SimpleMdsValueBuilder.<Instant>aSimpleMdsValue().withValue(BaseMdsSamlObjectUnmarshaller.InstantFromDate.of("2000-02-09")).withVerifiedStatus(true).build())
+                .addDateOfBirth(SimpleMdsValueBuilder.<LocalDate>aSimpleMdsValue().withValue(LocalDate.parse("2000-02-09")).withVerifiedStatus(true).build())
                 .withCurrentAddresses(singletonList(currentAddress))
                 .withPreviousAddresses(singletonList(previousAddress))
                 .build();
@@ -123,7 +123,7 @@ class IdentityProviderAssertionToAssertionTransformerTest extends OpenSAMLRunner
                 .addFirstname(TransliterableMdsValueBuilder.asTransliterableMdsValue().withValue("subject-firstname").withVerifiedStatus(true).build())
                 .withSurnameHistory(asList(previousSurname, currentSurname))
                 .withGender(SimpleMdsValueBuilder.<Gender>aSimpleMdsValue().withValue(Gender.FEMALE).withVerifiedStatus(true).build())
-                .addDateOfBirth(SimpleMdsValueBuilder.<Instant>aSimpleMdsValue().withValue(BaseMdsSamlObjectUnmarshaller.InstantFromDate.of("2000-02-09")).withVerifiedStatus(true).build())
+                .addDateOfBirth(SimpleMdsValueBuilder.<LocalDate>aSimpleMdsValue().withValue(LocalDate.parse("2000-02-09")).withVerifiedStatus(true).build())
                 .withCurrentAddresses(singletonList(currentAddress))
                 .withPreviousAddresses(singletonList(previousAddress))
                 .build();
@@ -174,7 +174,7 @@ class IdentityProviderAssertionToAssertionTransformerTest extends OpenSAMLRunner
 
     @Test
     void shouldTransformAssertionSubjectsDateOfBirth() {
-        SimpleMdsValue<Instant> dateOfBirth = SimpleMdsValueBuilder.<Instant>aSimpleMdsValue().withValue(BaseMdsSamlObjectUnmarshaller.InstantFromDate.of("1986-12-05")).build();
+        SimpleMdsValue<LocalDate> dateOfBirth = SimpleMdsValueBuilder.<LocalDate>aSimpleMdsValue().withValue(LocalDate.parse("1986-12-05")).build();
         IdentityProviderAssertion assertion = anIdentityProviderAssertion().withMatchingDataset(MatchingDatasetBuilder.aMatchingDataset().addDateOfBirth(dateOfBirth).build()).build();
 
         transformer.transform(assertion);

@@ -7,7 +7,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import io.dropwizard.client.JerseyClientConfiguration;
 
 import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
 import java.net.URI;
 import java.security.KeyStore;
 import java.time.Duration;
@@ -15,7 +14,6 @@ import java.time.Duration;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class TrustStoreBackedMetadataConfiguration extends MetadataConfiguration {
 
-    @NotNull
     @Valid
     private final TrustStoreConfiguration trustStore;
 

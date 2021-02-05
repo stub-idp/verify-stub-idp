@@ -5,7 +5,6 @@ import stubidp.saml.domain.assertions.Address;
 import stubidp.saml.domain.assertions.AuthnContext;
 import stubidp.saml.domain.assertions.Gender;
 import stubidp.saml.domain.assertions.SimpleMdsValue;
-import stubidp.saml.extensions.extensions.impl.BaseMdsSamlObjectUnmarshaller;
 import stubidp.stubidp.domain.DatabaseIdpUser;
 import stubidp.stubidp.exceptions.IncompleteRegistrationException;
 import stubidp.stubidp.exceptions.InvalidSessionIdException;
@@ -18,7 +17,7 @@ import stubidp.stubidp.repositories.IdpStubsRepository;
 import stubidp.utils.rest.common.SessionId;
 
 import javax.inject.Inject;
-import java.time.Instant;
+import java.time.LocalDate;
 import java.util.Collections;
 import java.util.Optional;
 import java.util.UUID;
@@ -89,7 +88,7 @@ public class IdpUserService {
             throw new IncompleteRegistrationException();
         }
 
-        Instant parsedDateOfBirth = BaseMdsSamlObjectUnmarshaller.InstantFromDate.of(dateOfBirth);
+        LocalDate parsedDateOfBirth = LocalDate.parse(dateOfBirth);
         boolean usernameAlreadyTaken = idp.userExists(username);
         if (usernameAlreadyTaken) {
             throw new UsernameAlreadyTakenException();
@@ -140,13 +139,13 @@ public class IdpUserService {
                 Optional.of(createSimpleMdsValue2(Gender.FEMALE)),
                 Collections.emptyList(),
                 Collections.singletonList(
-                        new Address(asList("line1", "line2"), "KT23 4XD", null, "fhfhf", BaseMdsSamlObjectUnmarshaller.InstantFromDate.of("2000-01-01"), BaseMdsSamlObjectUnmarshaller.InstantFromDate.of("2013-05-05"), false)
+                        new Address(asList("line1", "line2"), "KT23 4XD", null, "fhfhf", LocalDate.parse("2000-01-01"), LocalDate.parse("2013-05-05"), false)
                 ),
                 AuthnContext.LEVEL_2);
     }
 
     private static <T> SimpleMdsValue<T> createSimpleMdsValue2(T value) {
-        return new SimpleMdsValue<>(value, BaseMdsSamlObjectUnmarshaller.InstantFromDate.of("2000-01-01"), BaseMdsSamlObjectUnmarshaller.InstantFromDate.of("2013-01-03"), false);
+        return new SimpleMdsValue<>(value, LocalDate.parse("2000-01-01"), LocalDate.parse("2013-01-03"), false);
     }
 
 }

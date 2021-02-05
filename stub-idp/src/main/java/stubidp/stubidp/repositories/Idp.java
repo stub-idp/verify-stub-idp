@@ -8,6 +8,7 @@ import stubidp.saml.domain.assertions.SimpleMdsValue;
 import stubidp.stubidp.domain.DatabaseIdpUser;
 
 import java.time.Instant;
+import java.time.LocalDate;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
@@ -62,7 +63,7 @@ public class Idp {
             List<SimpleMdsValue<String>> middleNames,
             List<SimpleMdsValue<String>> surnames,
             Optional<SimpleMdsValue<Gender>> gender,
-            List<SimpleMdsValue<Instant>> dateOfBirths,
+            List<SimpleMdsValue<LocalDate>> dateOfBirths,
             List<Address> addresses,
             String username,
             String password,

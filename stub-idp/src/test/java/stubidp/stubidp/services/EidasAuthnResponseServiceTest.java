@@ -26,7 +26,6 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.time.Instant;
 import java.time.LocalDate;
-import java.time.ZoneId;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -51,7 +50,7 @@ class EidasAuthnResponseServiceTest {
     @Mock
     private MetadataRepository metadataRepository;
 
-    private final Instant dateOfBirth = LocalDate.of(1990, 1, 1).atStartOfDay().atZone(ZoneId.of("UTC")).toInstant();
+    private final LocalDate dateOfBirth = LocalDate.of(1990, 1, 1);
 
     @BeforeEach
     void setUp() {

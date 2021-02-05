@@ -4,10 +4,8 @@ import stubidp.saml.domain.assertions.Address;
 import stubidp.saml.domain.assertions.AuthnContext;
 import stubidp.saml.domain.assertions.Gender;
 import stubidp.saml.domain.assertions.SimpleMdsValue;
-import stubidp.saml.extensions.extensions.impl.BaseMdsSamlObjectUnmarshaller;
 
-import java.time.Instant;
-import java.time.ZoneId;
+import java.time.LocalDate;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -21,7 +19,7 @@ public class DatabaseIdpUserBuilder {
     private List<SimpleMdsValue<String>> middleNames = List.of();
     private List<SimpleMdsValue<String>> surnames = List.of();
     private Optional<SimpleMdsValue<Gender>> gender = Optional.empty();
-    private List<SimpleMdsValue<Instant>> datesOfBirth = List.of();
+    private List<SimpleMdsValue<LocalDate>> datesOfBirth = List.of();
     private List<Address> addresses = List.of();
     private AuthnContext authnContext;
     
@@ -97,7 +95,7 @@ public class DatabaseIdpUserBuilder {
     }
 
     public DatabaseIdpUserBuilder withGender(Gender gender, boolean verified) {
-        this.gender = Optional.ofNullable(createCurrentMdsValue(gender, verified));
+        this.gender = Optional.of(createCurrentMdsValue(gender, verified));
         return this;
     }
 
@@ -110,7 +108,7 @@ public class DatabaseIdpUserBuilder {
         return this;
     }
 
-    public DatabaseIdpUserBuilder withDatesOfBirth(List<SimpleMdsValue<Instant>> datesOfBirth) {
+    public DatabaseIdpUserBuilder withDatesOfBirth(List<SimpleMdsValue<LocalDate>> datesOfBirth) {
         this.datesOfBirth = datesOfBirth;
         return this;
     }
@@ -130,11 +128,11 @@ public class DatabaseIdpUserBuilder {
         return this;
     }
 
-    private static Instant dateToInstant(String date) {
-        return BaseMdsSamlObjectUnmarshaller.InstantFromDate.of(date);
+    private static LocalDate dateToInstant(String date) {
+        return LocalDate.parse(date);
     }
 
     private static <T> SimpleMdsValue<T> createCurrentMdsValue(T value, boolean verified) {
-        return new SimpleMdsValue<>(value, Instant.now().atZone(ZoneId.of("UTC")).minusDays(1).toInstant(), null, verified);
+        return new SimpleMdsValue<>(value, LocalDate.now().minusDays(1), null, verified);
     }
 }

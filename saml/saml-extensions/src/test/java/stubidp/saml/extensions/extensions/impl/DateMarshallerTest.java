@@ -10,6 +10,7 @@ import org.w3c.dom.Element;
 import stubidp.saml.extensions.extensions.Date;
 import stubidp.saml.test.OpenSAMLRunner;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -44,7 +45,7 @@ class DateMarshallerTest extends OpenSAMLRunner {
     @Test
     void marshall_shouldMarshallFromDateInCorrectFormat() throws Exception {
         String fromDate = "2012-02-09";
-        date.setFrom(BaseMdsSamlObjectUnmarshaller.InstantFromDate.of(fromDate));
+        date.setFrom(LocalDate.parse(fromDate));
 
         Element marshalledElement = marshaller.marshall(date);
 
@@ -53,7 +54,7 @@ class DateMarshallerTest extends OpenSAMLRunner {
 
     @Test
     void marshall_shouldMarshallFromDateWithNamespacePrefix() throws Exception {
-        date.setFrom(BaseMdsSamlObjectUnmarshaller.InstantFromDate.of("2012-02-09"));
+        date.setFrom(LocalDate.parse("2012-02-09"));
 
         Element marshalledElement = marshaller.marshall(date);
 
@@ -63,7 +64,7 @@ class DateMarshallerTest extends OpenSAMLRunner {
     @Test
     void marshall_shouldMarshallToDateInCorrectFormat() throws Exception {
         String toDate = "2012-02-09";
-        date.setTo(BaseMdsSamlObjectUnmarshaller.InstantFromDate.of(toDate));
+        date.setTo(LocalDate.parse(toDate));
 
         Element marshalledElement = marshaller.marshall(date);
 
@@ -72,7 +73,7 @@ class DateMarshallerTest extends OpenSAMLRunner {
 
     @Test
     void marshall_shouldMarshallToDateWithNamespacePrefix() throws Exception {
-        date.setTo(BaseMdsSamlObjectUnmarshaller.InstantFromDate.of("2012-02-09"));
+        date.setTo(LocalDate.parse("2012-02-09"));
 
         Element marshalledElement = marshaller.marshall(date);
 

@@ -4,15 +4,15 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.io.Serializable;
-import java.time.Instant;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
 public class Address implements MdsAttributeValue, Serializable {
     private final boolean verified;
-    private final Instant from;
-    private final Instant to;
+    private final LocalDate from;
+    private final LocalDate to;
     private final Optional<String> postCode;
     private final List<String> lines;
     private final Optional<String> internationalPostCode;
@@ -23,8 +23,8 @@ public class Address implements MdsAttributeValue, Serializable {
             String postCode,
             String internationalPostCode,
             String uprn,
-            Instant from,
-            Instant to,
+            LocalDate from,
+            LocalDate to,
             boolean verified) {
 
         this.internationalPostCode = Optional.ofNullable(internationalPostCode);
@@ -42,8 +42,8 @@ public class Address implements MdsAttributeValue, Serializable {
             @JsonProperty("postCode") Optional<String> postCode,
             @JsonProperty("internationalPostCode") Optional<String> internationalPostCode,
             @JsonProperty("uprn") Optional<String> uprn,
-            @JsonProperty("from") Instant from,
-            @JsonProperty("to") Instant to,
+            @JsonProperty("from") LocalDate from,
+            @JsonProperty("to") LocalDate to,
             @JsonProperty("verified") boolean verified) {
         this.lines = lines;
         this.postCode = postCode;
@@ -71,12 +71,12 @@ public class Address implements MdsAttributeValue, Serializable {
     }
 
     @Override
-    public Instant getFrom() {
+    public LocalDate getFrom() {
         return from;
     }
 
     @Override
-    public Instant getTo() {
+    public LocalDate getTo() {
         return to;
     }
 

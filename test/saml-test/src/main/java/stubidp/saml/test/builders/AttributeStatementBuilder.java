@@ -13,7 +13,7 @@ import stubidp.saml.extensions.extensions.eidas.impl.DateOfBirthBuilder;
 import stubidp.saml.extensions.extensions.eidas.impl.PersonIdentifierBuilder;
 import stubidp.saml.test.OpenSamlXmlObjectFactory;
 
-import java.time.Instant;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -46,7 +46,7 @@ public class AttributeStatementBuilder {
 
         Attribute dateOfBirth =  anAttribute(IdaConstants.Eidas_Attributes.DateOfBirth.NAME);
         DateOfBirth dateOfBirthValue = new DateOfBirthBuilder().buildObject();
-        dateOfBirthValue.setDateOfBirth(Instant.now());
+        dateOfBirthValue.setDateOfBirth(LocalDate.now());
         dateOfBirth.getAttributeValues().add(dateOfBirthValue);
 
         return anAttributeStatement()

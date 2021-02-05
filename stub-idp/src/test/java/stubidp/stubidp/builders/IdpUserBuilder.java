@@ -6,8 +6,7 @@ import stubidp.saml.domain.assertions.Gender;
 import stubidp.saml.domain.assertions.SimpleMdsValue;
 import stubidp.stubidp.domain.DatabaseIdpUser;
 
-import java.time.Instant;
-import java.time.ZoneId;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -23,26 +22,26 @@ public class IdpUserBuilder {
     private String password = "default-password";
     private final List<SimpleMdsValue<String>> firstnames = singletonList(new SimpleMdsValue<>(
             "default-first-name",
-            Instant.now().atZone(ZoneId.of("UTC")).minusYears(20).toInstant(),
+            LocalDate.now().minusYears(20),
             null,
             true
     ));
     private final List<SimpleMdsValue<String>> middleNames = singletonList(new SimpleMdsValue<>(
             "default-middle-name",
-            Instant.now().atZone(ZoneId.of("UTC")).minusYears(20).toInstant(),
+            LocalDate.now().minusYears(20),
             null,
             true
     ));
     private final List<SimpleMdsValue<String>> surnames = singletonList(new SimpleMdsValue<>(
             "default-surname",
-            Instant.now().atZone(ZoneId.of("UTC")).minusYears(20).toInstant(),
+            LocalDate.now().minusYears(20),
             null,
             true
     ));
     private final Optional<SimpleMdsValue<Gender>> gender = Optional.empty();
-    private final List<SimpleMdsValue<Instant>> dateOfBirths = singletonList(new SimpleMdsValue<>(
-            Instant.now().atZone(ZoneId.of("UTC")).minusYears(20).toInstant(),
-            Instant.now().atZone(ZoneId.of("UTC")).minusYears(20).toInstant(),
+    private final List<SimpleMdsValue<LocalDate>> dateOfBirths = singletonList(new SimpleMdsValue<>(
+            LocalDate.now().minusYears(20),
+            LocalDate.now().minusYears(20),
             null,
             true
     ));

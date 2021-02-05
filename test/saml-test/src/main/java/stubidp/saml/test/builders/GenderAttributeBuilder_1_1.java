@@ -5,14 +5,14 @@ import stubidp.saml.extensions.IdaConstants;
 import stubidp.saml.extensions.extensions.Gender;
 import stubidp.saml.test.OpenSamlXmlObjectFactory;
 
-import java.time.Instant;
+import java.time.LocalDate;
 import java.util.Optional;
 
 public class GenderAttributeBuilder_1_1 {
     private static final OpenSamlXmlObjectFactory openSamlXmlObjectFactory = new OpenSamlXmlObjectFactory();
 
-    private Optional<Instant> from = Optional.empty();
-    private Optional<Instant> to = Optional.empty();
+    private Optional<LocalDate> from = Optional.empty();
+    private Optional<LocalDate> to = Optional.empty();
     private Optional<String> value = Optional.empty();
     private boolean verified = false;
 
@@ -51,12 +51,12 @@ public class GenderAttributeBuilder_1_1 {
         return genderAttribute;
     }
 
-    public GenderAttributeBuilder_1_1 withFrom(Instant from) {
+    public GenderAttributeBuilder_1_1 withFrom(LocalDate from) {
         this.from = Optional.ofNullable(from);
         return this;
     }
 
-    public GenderAttributeBuilder_1_1 withTo(Instant to) {
+    public GenderAttributeBuilder_1_1 withTo(LocalDate to) {
         this.to = Optional.ofNullable(to);
         return this;
     }

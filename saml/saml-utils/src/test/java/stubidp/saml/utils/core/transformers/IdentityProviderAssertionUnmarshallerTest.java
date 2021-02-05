@@ -12,18 +12,18 @@ import stubidp.saml.domain.assertions.AssertionRestrictions;
 import stubidp.saml.domain.assertions.IdentityProviderAssertion;
 import stubidp.saml.domain.assertions.IdentityProviderAuthnStatement;
 import stubidp.saml.domain.assertions.MatchingDataset;
-import stubidp.saml.extensions.extensions.impl.BaseMdsSamlObjectUnmarshaller;
 import stubidp.saml.test.OpenSAMLRunner;
 import stubidp.saml.test.builders.AddressAttributeBuilder_1_1;
 import stubidp.saml.test.builders.AddressAttributeValueBuilder_1_1;
 import stubidp.saml.test.builders.AssertionBuilder;
 import stubidp.saml.test.builders.DateAttributeBuilder_1_1;
 import stubidp.saml.test.builders.GenderAttributeBuilder_1_1;
-import stubidp.saml.utils.core.test.builders.IdentityProviderAuthnStatementBuilder;
 import stubidp.saml.test.builders.MatchingDatasetBuilder;
 import stubidp.saml.test.builders.PersonNameAttributeBuilder_1_1;
 import stubidp.saml.test.builders.PersonNameAttributeValueBuilder;
+import stubidp.saml.utils.core.test.builders.IdentityProviderAuthnStatementBuilder;
 
+import java.time.LocalDate;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -63,7 +63,7 @@ public class IdentityProviderAssertionUnmarshallerTest extends OpenSAMLRunner {
 
     @Test
     void transform_shouldDelegateMatchingDatasetTransformationWhenAssertionContainsMatchingDataset() {
-        Attribute firstName = PersonNameAttributeBuilder_1_1.aPersonName_1_1().addValue(PersonNameAttributeValueBuilder.aPersonNameValue().withTo(BaseMdsSamlObjectUnmarshaller.InstantFromDate.of("1066-01-05")).build()).buildAsFirstname();
+        Attribute firstName = PersonNameAttributeBuilder_1_1.aPersonName_1_1().addValue(PersonNameAttributeValueBuilder.aPersonNameValue().withTo(LocalDate.parse("1066-01-05")).build()).buildAsFirstname();
         Assertion assertion = AssertionBuilder.aMatchingDatasetAssertion(
                 firstName,
                 PersonNameAttributeBuilder_1_1.aPersonName_1_1().buildAsMiddlename(),

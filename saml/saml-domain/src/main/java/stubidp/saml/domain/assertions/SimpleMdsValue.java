@@ -4,19 +4,19 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.io.Serializable;
-import java.time.Instant;
+import java.time.LocalDate;
 import java.util.Objects;
 
 public class SimpleMdsValue<T> implements MdsAttributeValue, Serializable {
     private final T value;
-    private final Instant from;
-    private final Instant to;
+    private final LocalDate from;
+    private final LocalDate to;
     private final boolean verified;
 
     @JsonCreator
     public SimpleMdsValue(@JsonProperty("value") T value,
-                          @JsonProperty("from") Instant from,
-                          @JsonProperty("to") Instant to,
+                          @JsonProperty("from") LocalDate from,
+                          @JsonProperty("to") LocalDate to,
                           @JsonProperty("verified") boolean verified) {
         this.value = value;
         this.from = from;
@@ -29,12 +29,12 @@ public class SimpleMdsValue<T> implements MdsAttributeValue, Serializable {
     }
 
     @Override
-    public Instant getFrom() {
+    public LocalDate getFrom() {
         return from;
     }
 
     @Override
-    public Instant getTo() {
+    public LocalDate getTo() {
         return to;
     }
 

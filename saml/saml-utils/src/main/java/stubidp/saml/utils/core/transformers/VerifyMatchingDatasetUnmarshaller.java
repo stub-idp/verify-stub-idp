@@ -35,7 +35,7 @@ public class VerifyMatchingDatasetUnmarshaller extends MatchingDatasetUnmarshall
                 stubidp.saml.extensions.extensions.Gender gender = (stubidp.saml.extensions.extensions.Gender) attribute.getAttributeValues().get(0);
                 datasetBuilder.gender(new SimpleMdsValue<>(Gender.fromString(gender.getValue()), gender.getFrom(), gender.getTo(), gender.getVerified()));
             }
-            case IdaConstants.Attributes_1_1.DateOfBirth.NAME -> datasetBuilder.dateOfBirth(getBirthdates(attribute));
+            case IdaConstants.Attributes_1_1.DateOfBirth.NAME -> datasetBuilder.dateOfBirth(getBirthDates(attribute));
             case IdaConstants.Attributes_1_1.CurrentAddress.NAME -> {
                 List<Address> transformedCurrentAddresses = AddressFactory.create(attribute);
                 datasetBuilder.addCurrentAddresses(transformedCurrentAddresses);

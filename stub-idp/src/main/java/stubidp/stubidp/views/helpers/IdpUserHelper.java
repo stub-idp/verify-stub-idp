@@ -2,8 +2,9 @@ package stubidp.stubidp.views.helpers;
 
 import stubidp.saml.domain.assertions.Address;
 import stubidp.saml.domain.assertions.SimpleMdsValue;
-import stubidp.saml.extensions.extensions.impl.BaseMdsSamlObjectMarshaller;
 import stubidp.stubidp.domain.DatabaseIdpUser;
+
+import java.time.LocalDate;
 
 import static java.util.stream.Collectors.joining;
 
@@ -48,7 +49,7 @@ public class IdpUserHelper {
                 .stream()
                 .findFirst()
                 .map(SimpleMdsValue::getValue)
-                .map(BaseMdsSamlObjectMarshaller.DateFromInstant::of)
+                .map(LocalDate::toString)
                 .orElse("");
     }
 

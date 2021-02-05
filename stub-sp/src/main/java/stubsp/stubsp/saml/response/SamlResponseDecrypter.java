@@ -60,7 +60,6 @@ import stubidp.saml.utils.core.transformers.EidasMatchingDatasetUnmarshaller;
 import stubidp.saml.utils.core.transformers.IdentityProviderAssertionUnmarshaller;
 import stubidp.saml.utils.core.transformers.IdentityProviderAuthnStatementUnmarshaller;
 import stubidp.saml.utils.core.transformers.VerifyMatchingDatasetUnmarshaller;
-import stubidp.saml.utils.hub.validators.StringSizeValidator;
 import stubsp.stubsp.Urls;
 import stubsp.stubsp.saml.response.eidas.EidasAttributeStatementAssertionValidator;
 import stubsp.stubsp.saml.response.eidas.EidasAuthnResponseIssuerValidator;
@@ -94,7 +93,7 @@ public class SamlResponseDecrypter {
     // Manual Guice injection
     private final StringToOpenSamlObjectTransformer<Response> stringToOpenSamlObjectTransformer = new StringToOpenSamlObjectTransformer<>(new NotNullSamlStringValidator(),
             new Base64StringDecoder(),
-            new ResponseSizeValidator(new StringSizeValidator()),
+            new ResponseSizeValidator(),
             new OpenSamlXMLObjectUnmarshaller<>(new SamlObjectParser()));
 
     private final URI spAssertionConsumerServices;
@@ -261,15 +260,14 @@ public class SamlResponseDecrypter {
         }
     }
 
-    private void responseAssertionFromCountryValidatorValidate(ValidatedResponse validatedResponse, Assertion validatedIdentityAssertion, boolean signedAssertions) {
+    private void responseAssertionFromCountryValidatorValidate(ValidatedResponse validatedResponse, Assertion validatedIdentityAssertion) {
 
         new IdentityProviderAssertionValidator(
                 new IssuerValidator(),
                 new AssertionSubjectValidator(),
                 new AssertionAttributeStatementValidator(),
-                new AssertionSubjectConfirmationValidator(),
-                signedAssertions
-        ).validate(validatedIdentityAssertion, validatedResponse.getInResponseTo(), spAssertionConsumerServices.toASCIIString());
+                new AssertionSubjectConfirmationValidator()
+        ).validateEidas(validatedIdentityAssertion, validatedResponse.getInResponseTo(), spAssertionConsumerServices.toASCIIString());
 
         if (validatedResponse.isSuccess()) {
 
@@ -302,7 +300,7 @@ public class SamlResponseDecrypter {
     private Optional<Assertion> validateAssertion(ValidatedResponse validatedResponse, List<Assertion> decryptedAssertions, boolean signedAssertions) {
         getValidatedAssertion(decryptedAssertions, signedAssertions);
         Optional<Assertion> identityAssertion = decryptedAssertions.stream().findFirst();
-        identityAssertion.ifPresent(assertion -> responseAssertionFromCountryValidatorValidate(validatedResponse, assertion, signedAssertions));
+        identityAssertion.ifPresent(assertion -> responseAssertionFromCountryValidatorValidate(validatedResponse, assertion));
         return identityAssertion;
     }
 

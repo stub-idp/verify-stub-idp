@@ -5,9 +5,8 @@ import stubidp.saml.domain.assertions.Gender;
 import stubidp.saml.domain.assertions.MatchingDataset;
 import stubidp.saml.domain.assertions.SimpleMdsValue;
 import stubidp.saml.domain.assertions.TransliterableMdsValue;
-import stubidp.saml.extensions.extensions.impl.BaseMdsSamlObjectUnmarshaller;
 
-import java.time.Instant;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -19,7 +18,7 @@ public class MatchingDatasetBuilder {
     private final List<SimpleMdsValue<String>> middleNames = new ArrayList<>();
     private final List<TransliterableMdsValue> surnames = new ArrayList<>();
     private Optional<SimpleMdsValue<Gender>> gender = Optional.empty();
-    private final List<SimpleMdsValue<Instant>> dateOfBirths = new ArrayList<>();
+    private final List<SimpleMdsValue<LocalDate>> dateOfBirths = new ArrayList<>();
     private List<Address> currentAddresses = new ArrayList<>();
     private List<Address> previousAddresses = new ArrayList<>();
     private String personalId = "default-pid";
@@ -31,15 +30,15 @@ public class MatchingDatasetBuilder {
     }
 
     public static MatchingDatasetBuilder aFullyPopulatedMatchingDataset() {
-        final List<Address> currentAddressList = Collections.singletonList(new Address(Collections.singletonList("subject-address-line-1"), "subject-address-post-code", "internation-postcode", "uprn", BaseMdsSamlObjectUnmarshaller.InstantFromDate.of("1999-03-15"), BaseMdsSamlObjectUnmarshaller.InstantFromDate.of("2000-02-09"), true));
-        final List<Address> previousAddressList = Collections.singletonList(new Address(Collections.singletonList("previous-address-line-1"), "subject-address-post-code", "internation-postcode", "uprn", BaseMdsSamlObjectUnmarshaller.InstantFromDate.of("1999-03-15"), BaseMdsSamlObjectUnmarshaller.InstantFromDate.of("2000-02-09"), true));
+        final List<Address> currentAddressList = Collections.singletonList(new Address(Collections.singletonList("subject-address-line-1"), "subject-address-post-code", "internation-postcode", "uprn", LocalDate.parse("1999-03-15"), LocalDate.parse("2000-02-09"), true));
+        final List<Address> previousAddressList = Collections.singletonList(new Address(Collections.singletonList("previous-address-line-1"), "subject-address-post-code", "internation-postcode", "uprn", LocalDate.parse("1999-03-15"), LocalDate.parse("2000-02-09"), true));
         final SimpleMdsValue<String> currentSurname = SimpleMdsValueBuilder.<String>aSimpleMdsValue().withValue("subject-currentSurname").withVerifiedStatus(true).build();
         return aMatchingDataset()
                 .addFirstname(SimpleMdsValueBuilder.<String>aSimpleMdsValue().withValue("subject-firstname").withVerifiedStatus(true).build())
                 .addMiddleNames(SimpleMdsValueBuilder.<String>aSimpleMdsValue().withValue("subject-middlename").withVerifiedStatus(true).build())
                 .withSurnameHistory(Collections.singletonList(currentSurname))
                 .withGender(SimpleMdsValueBuilder.<Gender>aSimpleMdsValue().withValue(Gender.FEMALE).withVerifiedStatus(true).build())
-                .addDateOfBirth(SimpleMdsValueBuilder.<Instant>aSimpleMdsValue().withValue(BaseMdsSamlObjectUnmarshaller.InstantFromDate.of("2000-02-09")).withVerifiedStatus(true).build())
+                .addDateOfBirth(SimpleMdsValueBuilder.<LocalDate>aSimpleMdsValue().withValue(LocalDate.parse("2000-02-09")).withVerifiedStatus(true).build())
                 .withCurrentAddresses(currentAddressList)
                 .withPreviousAddresses(previousAddressList);
     }
@@ -73,7 +72,7 @@ public class MatchingDatasetBuilder {
         return this;
     }
 
-    public MatchingDatasetBuilder addDateOfBirth(SimpleMdsValue<Instant> dateOfBirth) {
+    public MatchingDatasetBuilder addDateOfBirth(SimpleMdsValue<LocalDate> dateOfBirth) {
         this.dateOfBirths.add(dateOfBirth);
         return this;
     }

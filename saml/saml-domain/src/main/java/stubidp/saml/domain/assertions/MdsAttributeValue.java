@@ -1,11 +1,11 @@
 package stubidp.saml.domain.assertions;
 
-import java.time.Instant;
+import java.time.LocalDate;
 
 public interface MdsAttributeValue {
-    Instant getFrom();
+    LocalDate getFrom();
 
-    Instant getTo();
+    LocalDate getTo();
 
     boolean isVerified();
 }

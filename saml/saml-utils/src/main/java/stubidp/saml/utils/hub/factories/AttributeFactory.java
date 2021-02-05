@@ -5,7 +5,7 @@ import stubidp.saml.domain.assertions.Address;
 import stubidp.saml.domain.assertions.Gender;
 import stubidp.saml.domain.assertions.SimpleMdsValue;
 
-import java.time.Instant;
+import java.time.LocalDate;
 import java.util.List;
 
 public interface AttributeFactory {
@@ -17,7 +17,7 @@ public interface AttributeFactory {
 
     Attribute createGenderAttribute(SimpleMdsValue<Gender> gender);
 
-    Attribute createDateOfBirthAttribute(List<SimpleMdsValue<Instant>> dateOfBirths);
+    Attribute createDateOfBirthAttribute(List<SimpleMdsValue<LocalDate>> dateOfBirths);
 
     Attribute createCurrentAddressesAttribute(List<Address> currentAddresses);
 

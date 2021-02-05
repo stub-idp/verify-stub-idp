@@ -1,5 +1,6 @@
 package stubidp.saml.extensions.validation.errors;
 
+import org.slf4j.event.Level;
 import stubidp.saml.extensions.validation.SamlDocumentReference;
 import stubidp.saml.extensions.validation.SamlValidationSpecificationFailure;
 
@@ -16,11 +17,12 @@ public class BearerSubjectConfirmationValidationSpecification extends SamlValida
     public static final String EXCEEDED_NOT_ON_OR_AFTER = "Bearer subject confirmation data''s ''NotOnOrAfter'' timestamp of {0} has been exceeded.";
     public static final String NOT_BEFORE_ATTRIBUTE_EXISTS = "Bearer subject confirmation data contains a ''NotBefore'' attribute.";
 
-
-
-
     public BearerSubjectConfirmationValidationSpecification(String message, Object... parameters) {
         super(format(message, parameters), true);
+    }
+
+    public BearerSubjectConfirmationValidationSpecification(Level logLevel, String message, Object... parameters) {
+        super(format(message, parameters), true, logLevel);
     }
 
     @Override

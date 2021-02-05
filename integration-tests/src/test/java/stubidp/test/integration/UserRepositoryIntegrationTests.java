@@ -27,7 +27,7 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriBuilder;
 import java.io.IOException;
 import java.text.MessageFormat;
-import java.time.Instant;
+import java.time.LocalDate;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -102,7 +102,7 @@ public class UserRepositoryIntegrationTests extends IntegrationTestHelper {
                 createOptionalMdsValue(Optional.of("some user middlename")),
                 Collections.singletonList(SimpleMdsValueBuilder.<String>aSimpleMdsValue().withValue("some user addSurname").build()),
                 createOptionalMdsValue(Optional.of(Gender.FEMALE)),
-                createOptionalMdsValue(Optional.of(Instant.now())),
+                createOptionalMdsValue(Optional.of(LocalDate.now())),
                 Optional.ofNullable(anAddress().withLines(asList("blah", "blah2")).withPostCode("WC1V7AA").withVerified(true).build()),
                 AuthnContext.LEVEL_4.toString()
         );

@@ -34,6 +34,7 @@ import java.security.cert.X509Certificate;
 import java.text.ParseException;
 import java.time.Duration;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -47,6 +48,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.reset;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
@@ -68,6 +70,15 @@ public class EidasMetadataResolverRepositoryTest {
 
     @Mock
     private JerseyClientMetadataResolver metadataResolver;
+
+    @Mock
+    private JerseyClientMetadataResolver metadataResolver2;
+
+    @Mock
+    private JerseyClientMetadataResolver metadataResolver3;
+
+    @Mock
+    private JerseyClientMetadataResolver metadataResolver4;
 
     @Mock
     private MetadataSignatureTrustEngineFactory metadataSignatureTrustEngineFactory;
@@ -196,6 +207,8 @@ public class EidasMetadataResolverRepositoryTest {
             TestCertificateStrings.STUB_COUNTRY_PUBLIC_EXPIRED_CERT
         );
         trustAnchors.add(createJWK(entityId, certificateChain, false));
+        trustAnchors.add(createJWK(entityId, certificateChain, false));
+        trustAnchors.add(createJWK(entityId, certificateChain, false));
 
         EidasMetadataResolverRepository metadataResolverRepository = new EidasMetadataResolverRepository(
             trustAnchorResolver,
@@ -208,8 +221,8 @@ public class EidasMetadataResolverRepositoryTest {
 
         assertThat(metadataResolverRepository.getMetadataResolver(entityId)).isEmpty();
         assertThat(metadataResolverRepository.getSignatureTrustEngine(entityId)).isEmpty();
-        verify(mockAppender).doAppend(loggingEventCaptor.capture());
-        assertThat(loggingEventCaptor.getValue().getMessage())
+        verify(mockAppender, times(3)).doAppend(loggingEventCaptor.capture());
+        assertThat(loggingEventCaptor.getAllValues().stream().map(LoggingEvent::getMessage).collect(Collectors.toList()))
             .contains(String.format("Error creating MetadataResolver for %s", entityId));
     }
 
@@ -234,6 +247,94 @@ public class EidasMetadataResolverRepositoryTest {
                 new MetadataResolverConfigBuilder(),
                 metadataClient));
         assertThat(e.getMessage()).startsWith("Managed to generate an invalid anchor: Certificate CN=IDA Stub Country Signing Dev");
+    }
+
+    @Test
+    public void shouldNotRefreshMetadataResolversIfNewTrustAnchorsAreTheSameAsCurrentDespiteOrder() throws CertificateException, SignatureException, ParseException, JOSEException {
+        when(dropwizardMetadataResolverFactory.createMetadataResolverWithClient(any(), eq(true), eq(metadataClient)))
+                .thenReturn(metadataResolver, metadataResolver2);
+
+        List<String> certificateChain1 = asList(
+                CACertificates.TEST_ROOT_CA,
+                CACertificates.TEST_METADATA_CA,
+                TestCertificateStrings.METADATA_SIGNING_A_PUBLIC_CERT
+        );
+        List<String> certificateChain2 = asList(
+                CACertificates.TEST_ROOT_CA,
+                CACertificates.TEST_METADATA_CA,
+                TestCertificateStrings.METADATA_SIGNING_B_PUBLIC_CERT
+        );
+
+        String entityId1 = "http://signin.gov.uk/entity/1";
+        String entityId2 = "http://signin.gov.uk/entity/2";
+
+        JWK trustAnchor1 = createJWK(entityId1, certificateChain1,true);
+        JWK trustAnchor2 = createJWK(entityId2, certificateChain2,true);
+
+        EidasMetadataResolverRepository metadataResolverRepository = createMetadataResolverRepositoryWithTrustAnchors(
+                trustAnchor1,
+                trustAnchor2
+        );
+
+        MetadataResolver metadataResolver1 = metadataResolverRepository.getMetadataResolver(entityId1).get();
+        MetadataResolver metadataResolver2 = metadataResolverRepository.getMetadataResolver(entityId2).get();
+
+        when(trustAnchorResolver.getTrustAnchors()).thenReturn(Arrays.asList(trustAnchor2, trustAnchor1));
+
+        metadataResolverRepository.refresh();
+
+        MetadataResolver metadataResolver1AfterRefresh = metadataResolverRepository.getMetadataResolver(entityId1).get();
+        MetadataResolver metadataResolver2AfterRefresh = metadataResolverRepository.getMetadataResolver(entityId2).get();
+
+        assertThat(metadataResolver1).isSameAs(metadataResolver1AfterRefresh);
+        assertThat(metadataResolver2).isSameAs(metadataResolver2AfterRefresh);
+    }
+
+    @Test
+    public void shouldRefreshMetadataResolversIfNewTrustAnchorsAreDifferentToCurrent() throws CertificateException, SignatureException, ParseException, JOSEException {
+        when(dropwizardMetadataResolverFactory.createMetadataResolverWithClient(any(), eq(true), eq(metadataClient)))
+                .thenReturn(metadataResolver, metadataResolver2, metadataResolver3, metadataResolver4);
+
+        List<String> certificateChain1 = asList(
+                CACertificates.TEST_ROOT_CA,
+                CACertificates.TEST_METADATA_CA,
+                TestCertificateStrings.METADATA_SIGNING_A_PUBLIC_CERT
+        );
+        List<String> certificateChain2 = asList(
+                CACertificates.TEST_ROOT_CA,
+                CACertificates.TEST_METADATA_CA,
+                TestCertificateStrings.METADATA_SIGNING_B_PUBLIC_CERT
+        );
+        List<String> certificateChain3 = asList(
+                CACertificates.TEST_ROOT_CA,
+                CACertificates.TEST_RP_CA,
+                TestCertificateStrings.TEST_RP_PUBLIC_SIGNING_CERT
+        );
+
+        String entityId1 = "http://signin.gov.uk/entity/1";
+        String entityId2 = "http://signin.gov.uk/entity/2";
+
+        JWK trustAnchor1 = createJWK(entityId1, certificateChain1,true);
+        JWK trustAnchor2 = createJWK(entityId2, certificateChain2,true);
+        JWK trustAnchor3 = createJWK(entityId2, certificateChain3,true);
+
+        EidasMetadataResolverRepository metadataResolverRepository = createMetadataResolverRepositoryWithTrustAnchors(
+                trustAnchor1,
+                trustAnchor2
+        );
+
+        MetadataResolver metadataResolver1 = metadataResolverRepository.getMetadataResolver(entityId1).get();
+        MetadataResolver metadataResolver2 = metadataResolverRepository.getMetadataResolver(entityId2).get();
+
+        when(trustAnchorResolver.getTrustAnchors()).thenReturn(Arrays.asList(trustAnchor1, trustAnchor3));
+
+        metadataResolverRepository.refresh();
+
+        MetadataResolver metadataResolver1AfterRefresh = metadataResolverRepository.getMetadataResolver(entityId1).get();
+        MetadataResolver metadataResolver2AfterRefresh = metadataResolverRepository.getMetadataResolver(entityId2).get();
+
+        assertThat(metadataResolver1).isNotSameAs(metadataResolver1AfterRefresh);
+        assertThat(metadataResolver2).isNotSameAs(metadataResolver2AfterRefresh);
     }
 
     @Test

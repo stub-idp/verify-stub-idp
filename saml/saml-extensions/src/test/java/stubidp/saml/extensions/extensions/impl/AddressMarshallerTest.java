@@ -17,6 +17,8 @@ import stubidp.saml.extensions.extensions.PostCode;
 import stubidp.saml.extensions.extensions.UPRN;
 import stubidp.saml.test.OpenSAMLRunner;
 
+import java.time.LocalDate;
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static stubidp.saml.extensions.IdaConstants.IDA_NS;
 import static stubidp.saml.extensions.IdaConstants.IDA_PREFIX;
@@ -94,7 +96,7 @@ class AddressMarshallerTest extends OpenSAMLRunner {
     @Test
     void marshall_shouldMarshallFromDateInCorrectFormat() throws Exception {
         String fromDate = "2012-02-09";
-        address.setFrom(BaseMdsSamlObjectUnmarshaller.InstantFromDate.of(fromDate));
+        address.setFrom(LocalDate.parse(fromDate));
 
         Element marshalledElement = marshaller.marshall(address);
 
@@ -103,7 +105,7 @@ class AddressMarshallerTest extends OpenSAMLRunner {
 
     @Test
     void marshall_shouldMarshallFromDateWithNamespacePrefix() throws Exception {
-        address.setFrom(BaseMdsSamlObjectUnmarshaller.InstantFromDate.of("2012-02-09"));
+        address.setFrom(LocalDate.parse("2012-02-09"));
 
         Element marshalledElement = marshaller.marshall(address);
 
@@ -113,7 +115,7 @@ class AddressMarshallerTest extends OpenSAMLRunner {
     @Test
     void marshall_shouldMarshallToDateInCorrectFormat() throws Exception {
         String toDate = "2012-02-09";
-        address.setTo(BaseMdsSamlObjectUnmarshaller.InstantFromDate.of(toDate));
+        address.setTo(LocalDate.parse(toDate));
 
         Element marshalledElement = marshaller.marshall(address);
 
@@ -122,7 +124,7 @@ class AddressMarshallerTest extends OpenSAMLRunner {
 
     @Test
     void marshall_shouldMarshallToDateWithNamespacePrefix() throws Exception {
-        address.setTo(BaseMdsSamlObjectUnmarshaller.InstantFromDate.of("2012-02-09"));
+        address.setTo(LocalDate.parse("2012-02-09"));
 
         Element marshalledElement = marshaller.marshall(address);
 
@@ -188,8 +190,8 @@ class AddressMarshallerTest extends OpenSAMLRunner {
 
     private static Address createAddress() {
         Address address = new AddressImpl(SAMLConstants.SAML20_NS, Address.DEFAULT_ELEMENT_LOCAL_NAME, SAMLConstants.SAML20_PREFIX);
-        address.setFrom(BaseMdsSamlObjectUnmarshaller.InstantFromDate.of(FROM_DATE));
-        address.setTo(BaseMdsSamlObjectUnmarshaller.InstantFromDate.of(TO_DATE));
+        address.setFrom(LocalDate.parse(FROM_DATE));
+        address.setTo(LocalDate.parse(TO_DATE));
 
         PostCode postCode = new PostCodeImpl(IDA_NS, PostCode.DEFAULT_ELEMENT_LOCAL_NAME, IDA_PREFIX);
         postCode.setValue(POST_CODE_VALUE);

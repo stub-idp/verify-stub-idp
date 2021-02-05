@@ -48,6 +48,12 @@ public class TestCredentialFactory {
         return credential;
     }
 
+    public Credential getEncryptionKeyPair() {
+        BasicCredential credential = new BasicCredential(getPublicKey(), getPrivateKey());
+        credential.setUsageType(UsageType.ENCRYPTION);
+        return credential;
+    }
+
     private PublicKey getPublicKey() {
         try {
             return createPublicKey(publicCert);

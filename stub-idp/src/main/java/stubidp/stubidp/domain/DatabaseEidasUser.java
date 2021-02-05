@@ -12,7 +12,7 @@ import stubidp.stubidp.exceptions.UnHashedPasswordException;
 import stubidp.stubidp.security.BCryptHelper;
 
 import java.io.Serializable;
-import java.time.Instant;
+import java.time.LocalDate;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -29,7 +29,7 @@ public class DatabaseEidasUser implements Serializable {
     private final Optional<SimpleMdsValue<String>> nonLatinFirstname;
     private final SimpleMdsValue<String> surname;
     private final Optional<SimpleMdsValue<String>> nonLatinSurname;
-    private final SimpleMdsValue<Instant> dateOfBirth;
+    private final SimpleMdsValue<LocalDate> dateOfBirth;
     private final AuthnContext levelOfAssurance;
 
     @JsonCreator
@@ -41,7 +41,7 @@ public class DatabaseEidasUser implements Serializable {
         @JsonProperty("firstnameNonLatin") Optional<SimpleMdsValue<String>> nonLatinFirstname,
         @JsonProperty("surname") SimpleMdsValue<String> surname,
         @JsonProperty("surnameNonLatin") Optional<SimpleMdsValue<String>> nonLatinSurname,
-        @JsonProperty("dateOfBirth") SimpleMdsValue<Instant> dateOfBirth,
+        @JsonProperty("dateOfBirth") SimpleMdsValue<LocalDate> dateOfBirth,
         @JsonProperty("levelOfAssurance") AuthnContext levelOfAssurance) {
 
         this.username = username;
@@ -87,7 +87,7 @@ public class DatabaseEidasUser implements Serializable {
         return nonLatinSurname;
     }
 
-    public SimpleMdsValue<Instant> getDateOfBirth() {
+    public SimpleMdsValue<LocalDate> getDateOfBirth() {
         return dateOfBirth;
     }
 

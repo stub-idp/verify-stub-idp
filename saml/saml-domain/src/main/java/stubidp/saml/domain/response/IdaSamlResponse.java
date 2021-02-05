@@ -4,6 +4,7 @@ import stubidp.saml.domain.IdaSamlMessage;
 
 import java.net.URI;
 import java.time.Instant;
+import java.time.LocalDate;
 
 public abstract class IdaSamlResponse extends IdaSamlMessage implements IdaResponse {
 

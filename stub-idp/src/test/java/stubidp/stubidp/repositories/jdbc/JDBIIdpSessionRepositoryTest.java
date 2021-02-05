@@ -170,7 +170,7 @@ class JDBIIdpSessionRepositoryTest {
 				Collections.emptyList(),
 				Collections.singletonList(new SimpleMdsValue<>("Bloggs", null, null, true)),
 				Optional.of(new SimpleMdsValue<>(Gender.MALE, null, null, true)),
-				Collections.singletonList(new SimpleMdsValue<>(authnRequestFromHub.getIssueInstant(), null, null, true)),
+				Collections.singletonList(new SimpleMdsValue<>(LocalDate.from(authnRequestFromHub.getIssueInstant().atZone(ZoneId.of("UTC"))), null, null, true)),
 				Collections.singletonList(AddressBuilder.anAddress().build()),
 				AuthnContext.LEVEL_1)));
 		return session;

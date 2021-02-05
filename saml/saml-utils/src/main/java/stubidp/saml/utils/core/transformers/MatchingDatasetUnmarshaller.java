@@ -8,9 +8,8 @@ import stubidp.saml.domain.assertions.MatchingDataset;
 import stubidp.saml.domain.assertions.SimpleMdsValue;
 import stubidp.saml.domain.matching.MatchingDatasetBuilder;
 import stubidp.saml.extensions.extensions.StringBasedMdsAttributeValue;
-import stubidp.saml.extensions.extensions.impl.BaseMdsSamlObjectUnmarshaller;
 
-import java.time.Instant;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -45,14 +44,14 @@ public abstract class MatchingDatasetUnmarshaller {
 
     protected abstract String getPersonalIdentifier(Assertion assertion);
 
-    final List<SimpleMdsValue<Instant>> getBirthdates(Attribute attribute) {
-        List<SimpleMdsValue<Instant>> birthDates = new ArrayList<>();
+    final List<SimpleMdsValue<LocalDate>> getBirthDates(Attribute attribute) {
+        List<SimpleMdsValue<LocalDate>> birthDates = new ArrayList<>();
 
         for (XMLObject xmlObject : attribute.getAttributeValues()) {
             StringBasedMdsAttributeValue stringBasedMdsAttributeValue = (StringBasedMdsAttributeValue) xmlObject;
             String dateOfBirthString = stringBasedMdsAttributeValue.getValue();
             birthDates.add(new SimpleMdsValue<>(
-                    BaseMdsSamlObjectUnmarshaller.InstantFromDate.of(dateOfBirthString),
+                    LocalDate.parse(dateOfBirthString),
                     stringBasedMdsAttributeValue.getFrom(),
                     stringBasedMdsAttributeValue.getTo(),
                     stringBasedMdsAttributeValue.getVerified()));

@@ -1,6 +1,6 @@
 package stubidp.saml.extensions.extensions;
 
-import java.time.Instant;
+import java.time.LocalDate;
 
 public interface BaseMdsSamlObject {
 
@@ -8,13 +8,13 @@ public interface BaseMdsSamlObject {
     String TO_ATTRIB_NAME = "To";
     String VERIFIED_ATTRIB_NAME = "Verified";
 
-    Instant getFrom();
+    LocalDate getFrom();
 
-    void setFrom(Instant fromTime);
+    void setFrom(LocalDate fromTime);
 
-    Instant getTo();
+    LocalDate getTo();
 
-    void setTo(Instant toTime);
+    void setTo(LocalDate toTime);
 
     boolean getVerified();
 

@@ -10,11 +10,10 @@ import stubidp.saml.extensions.IdaConstants;
 import stubidp.saml.extensions.extensions.Date;
 import stubidp.saml.extensions.extensions.Line;
 import stubidp.saml.extensions.extensions.PersonName;
-import stubidp.saml.extensions.extensions.impl.BaseMdsSamlObjectMarshaller;
 import stubidp.saml.utils.core.OpenSamlXmlObjectFactory;
 
 import javax.inject.Inject;
-import java.time.Instant;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -56,7 +55,7 @@ public class AttributeFactory_1_1 implements AttributeFactory {
     }
 
     @Override
-    public Attribute createDateOfBirthAttribute(List<SimpleMdsValue<Instant>> dateOfBirths) {
+    public Attribute createDateOfBirthAttribute(List<SimpleMdsValue<LocalDate>> dateOfBirths) {
         return createAttribute(
                 IdaConstants.Attributes_1_1.DateOfBirth.NAME,
                 IdaConstants.Attributes_1_1.DateOfBirth.FRIENDLY_NAME,
@@ -192,10 +191,10 @@ public class AttributeFactory_1_1 implements AttributeFactory {
         return personNameAttributeValues;
     }
 
-    private List<AttributeValue> createAttributeValuesForDate(List<SimpleMdsValue<Instant>> dateValues) {
+    private List<AttributeValue> createAttributeValuesForDate(List<SimpleMdsValue<LocalDate>> dateValues) {
         List<AttributeValue> personNameAttributeValues = new ArrayList<>();
-        for (SimpleMdsValue<Instant> value : dateValues) {
-            final Date personNameAttributeValue = openSamlXmlObjectFactory.createDateAttributeValue(BaseMdsSamlObjectMarshaller.DateFromInstant.of(value.getValue()));
+        for (SimpleMdsValue<LocalDate> value : dateValues) {
+            final Date personNameAttributeValue = openSamlXmlObjectFactory.createDateAttributeValue(value.getValue().toString());
             personNameAttributeValue.setFrom(value.getFrom());
             personNameAttributeValue.setTo(value.getTo());
             personNameAttributeValue.setVerified(value.isVerified());

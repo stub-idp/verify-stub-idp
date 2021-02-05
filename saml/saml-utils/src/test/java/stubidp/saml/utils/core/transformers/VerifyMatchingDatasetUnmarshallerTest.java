@@ -9,7 +9,6 @@ import stubidp.saml.extensions.extensions.Address;
 import stubidp.saml.extensions.extensions.Date;
 import stubidp.saml.extensions.extensions.Gender;
 import stubidp.saml.extensions.extensions.PersonName;
-import stubidp.saml.extensions.extensions.impl.BaseMdsSamlObjectUnmarshaller;
 import stubidp.saml.test.OpenSAMLRunner;
 import stubidp.saml.test.builders.AddressAttributeBuilder_1_1;
 import stubidp.saml.test.builders.AddressAttributeValueBuilder_1_1;
@@ -23,6 +22,7 @@ import stubidp.saml.test.builders.PersonNameAttributeBuilder_1_1;
 import stubidp.saml.test.builders.PersonNameAttributeValueBuilder;
 import stubidp.saml.test.builders.SubjectBuilder;
 
+import java.time.LocalDate;
 import java.util.Collections;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -33,16 +33,16 @@ class VerifyMatchingDatasetUnmarshallerTest extends OpenSAMLRunner {
 
     @Test
     void transform_shouldTransformAnAssertionIntoAMatchingDataset_1_1() {
-        Attribute firstname = PersonNameAttributeBuilder_1_1.aPersonName_1_1().addValue(PersonNameAttributeValueBuilder.aPersonNameValue().withValue("Bob").withFrom(BaseMdsSamlObjectUnmarshaller.InstantFromDate.of("2000-03-05")).withTo(BaseMdsSamlObjectUnmarshaller.InstantFromDate.of("2001-02-06")).withVerified(true).build()).buildAsFirstname();
-        Attribute middlenames = PersonNameAttributeBuilder_1_1.aPersonName_1_1().addValue(PersonNameAttributeValueBuilder.aPersonNameValue().withValue("foo").withFrom(BaseMdsSamlObjectUnmarshaller.InstantFromDate.of("2000-03-05")).withTo(BaseMdsSamlObjectUnmarshaller.InstantFromDate.of("2001-02-06")).withVerified(true).build()).buildAsMiddlename();
-        Attribute surname = PersonNameAttributeBuilder_1_1.aPersonName_1_1().addValue(PersonNameAttributeValueBuilder.aPersonNameValue().withValue("Bobbins").withFrom(BaseMdsSamlObjectUnmarshaller.InstantFromDate.of("2000-03-05")).withTo(BaseMdsSamlObjectUnmarshaller.InstantFromDate.of("2001-02-06")).withVerified(true).build()).buildAsSurname();
-        Attribute gender = GenderAttributeBuilder_1_1.aGender_1_1().withValue("Male").withFrom(BaseMdsSamlObjectUnmarshaller.InstantFromDate.of("2000-03-05")).withTo(BaseMdsSamlObjectUnmarshaller.InstantFromDate.of("2001-02-06")).withVerified(true).build();
-        Attribute dateOfBirth = DateAttributeBuilder_1_1.aDate_1_1().addValue(DateAttributeValueBuilder.aDateValue().withValue("1986-12-05").withFrom(BaseMdsSamlObjectUnmarshaller.InstantFromDate.of("2001-09-08")).withTo(BaseMdsSamlObjectUnmarshaller.InstantFromDate.of("2002-03-05")).withVerified(false).build()).buildAsDateOfBirth();
-        Address address = AddressAttributeValueBuilder_1_1.anAddressAttributeValue().addLines(Collections.singletonList("address-line-1")).withFrom(BaseMdsSamlObjectUnmarshaller.InstantFromDate.of("2012-08-08")).withTo(BaseMdsSamlObjectUnmarshaller.InstantFromDate.of("2012-09-09")).build();
+        Attribute firstname = PersonNameAttributeBuilder_1_1.aPersonName_1_1().addValue(PersonNameAttributeValueBuilder.aPersonNameValue().withValue("Bob").withFrom(LocalDate.parse("2000-03-05")).withTo(LocalDate.parse("2001-02-06")).withVerified(true).build()).buildAsFirstname();
+        Attribute middlenames = PersonNameAttributeBuilder_1_1.aPersonName_1_1().addValue(PersonNameAttributeValueBuilder.aPersonNameValue().withValue("foo").withFrom(LocalDate.parse("2000-03-05")).withTo(LocalDate.parse("2001-02-06")).withVerified(true).build()).buildAsMiddlename();
+        Attribute surname = PersonNameAttributeBuilder_1_1.aPersonName_1_1().addValue(PersonNameAttributeValueBuilder.aPersonNameValue().withValue("Bobbins").withFrom(LocalDate.parse("2000-03-05")).withTo(LocalDate.parse("2001-02-06")).withVerified(true).build()).buildAsSurname();
+        Attribute gender = GenderAttributeBuilder_1_1.aGender_1_1().withValue("Male").withFrom(LocalDate.parse("2000-03-05")).withTo(LocalDate.parse("2001-02-06")).withVerified(true).build();
+        Attribute dateOfBirth = DateAttributeBuilder_1_1.aDate_1_1().addValue(DateAttributeValueBuilder.aDateValue().withValue("1986-12-05").withFrom(LocalDate.parse("2001-09-08")).withTo(LocalDate.parse("2002-03-05")).withVerified(false).build()).buildAsDateOfBirth();
+        Address address = AddressAttributeValueBuilder_1_1.anAddressAttributeValue().addLines(Collections.singletonList("address-line-1")).withFrom(LocalDate.parse("2012-08-08")).withTo(LocalDate.parse("2012-09-09")).build();
         Attribute currentAddress = AddressAttributeBuilder_1_1.anAddressAttribute().addAddress(address).buildCurrentAddress();
 
-        Address previousAddress1 = AddressAttributeValueBuilder_1_1.anAddressAttributeValue().addLines(Collections.singletonList("address-line-2")).withFrom(BaseMdsSamlObjectUnmarshaller.InstantFromDate.of("2011-08-08")).withTo(BaseMdsSamlObjectUnmarshaller.InstantFromDate.of("2012-08-07")).build();
-        Address previousAddress2 = AddressAttributeValueBuilder_1_1.anAddressAttributeValue().addLines(Collections.singletonList("address-line-3")).withFrom(BaseMdsSamlObjectUnmarshaller.InstantFromDate.of("2010-08-08")).withTo(BaseMdsSamlObjectUnmarshaller.InstantFromDate.of("2011-08-07")).build();
+        Address previousAddress1 = AddressAttributeValueBuilder_1_1.anAddressAttributeValue().addLines(Collections.singletonList("address-line-2")).withFrom(LocalDate.parse("2011-08-08")).withTo(LocalDate.parse("2012-08-07")).build();
+        Address previousAddress2 = AddressAttributeValueBuilder_1_1.anAddressAttributeValue().addLines(Collections.singletonList("address-line-3")).withFrom(LocalDate.parse("2010-08-08")).withTo(LocalDate.parse("2011-08-07")).build();
         Attribute previousAddresses = AddressAttributeBuilder_1_1.anAddressAttribute().addAddress(previousAddress1).addAddress(previousAddress2).buildPreviousAddress();
 
         String pid = "PID12345";
@@ -72,7 +72,7 @@ class VerifyMatchingDatasetUnmarshallerTest extends OpenSAMLRunner {
         assertThat(matchingDataset.getGender().get().getFrom()).isEqualTo(genderAttributeValue.getFrom());
         assertThat(matchingDataset.getGender().get().getTo()).isEqualTo(genderAttributeValue.getTo());
 
-        assertThat(matchingDataset.getDateOfBirths().get(0).getValue()).isEqualTo(BaseMdsSamlObjectUnmarshaller.InstantFromDate.of(dateOfBirthAttributeValue.getValue()));
+        assertThat(matchingDataset.getDateOfBirths().get(0).getValue()).isEqualTo(LocalDate.parse(dateOfBirthAttributeValue.getValue()));
         assertThat(matchingDataset.getDateOfBirths().get(0).getFrom()).isEqualTo(dateOfBirthAttributeValue.getFrom());
         assertThat(matchingDataset.getDateOfBirths().get(0).getTo()).isEqualTo(dateOfBirthAttributeValue.getTo());
 
@@ -148,7 +148,7 @@ class VerifyMatchingDatasetUnmarshallerTest extends OpenSAMLRunner {
 
     @Test
     void transform_shoulHandleWhenMatchingDatasetIsPresentAndToDateIsPresentInFirstName() {
-        Attribute firstName = PersonNameAttributeBuilder_1_1.aPersonName_1_1().addValue(PersonNameAttributeValueBuilder.aPersonNameValue().withTo(BaseMdsSamlObjectUnmarshaller.InstantFromDate.of("1066-01-05")).build()).buildAsFirstname();
+        Attribute firstName = PersonNameAttributeBuilder_1_1.aPersonName_1_1().addValue(PersonNameAttributeValueBuilder.aPersonNameValue().withTo(LocalDate.parse("1066-01-05")).build()).buildAsFirstname();
         Assertion assertion = AssertionBuilder.aMatchingDatasetAssertion(
                 firstName,
                 PersonNameAttributeBuilder_1_1.aPersonName_1_1().buildAsMiddlename(),

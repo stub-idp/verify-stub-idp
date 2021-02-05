@@ -34,8 +34,8 @@ class AddressUnmarshallerTest extends OpenSAMLRunner {
 
         Address address = Utils.unmarshall(addressXmlString);
 
-        assertThat(BaseMdsSamlObjectMarshaller.DateFromInstant.of(address.getFrom())).isEqualTo(fromDateValue);
-        assertThat(BaseMdsSamlObjectMarshaller.DateFromInstant.of(address.getTo())).isEqualTo(toDateValue);
+        assertThat(address.getFrom()).isEqualTo(fromDateValue);
+        assertThat(address.getTo()).isEqualTo(toDateValue);
         assertThat(address.getVerified()).isEqualTo(verifiedValue);
         List<Line> lines = address.getLines();
         assertThat(lines.size()).isEqualTo(2);

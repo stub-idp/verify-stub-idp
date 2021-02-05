@@ -6,6 +6,8 @@ import org.opensaml.saml.common.AbstractSAMLObjectUnmarshaller;
 import stubidp.saml.extensions.extensions.eidas.DateOfBirth;
 import stubidp.saml.extensions.extensions.impl.BaseMdsSamlObjectUnmarshaller;
 
+import java.time.LocalDate;
+
 public class DateOfBirthUnmarshaller extends AbstractSAMLObjectUnmarshaller {
 
     public static final Unmarshaller UNMARSHALLER = new DateOfBirthUnmarshaller();
@@ -16,6 +18,6 @@ public class DateOfBirthUnmarshaller extends AbstractSAMLObjectUnmarshaller {
     /** {@inheritDoc} */
     protected void processElementContent(XMLObject samlObject, String elementContent) {
         DateOfBirth dateOfBirth = (DateOfBirth) samlObject;
-        dateOfBirth.setDateOfBirth(BaseMdsSamlObjectUnmarshaller.InstantFromDate.of(elementContent));
+        dateOfBirth.setDateOfBirth(LocalDate.parse(elementContent));
     }
 }

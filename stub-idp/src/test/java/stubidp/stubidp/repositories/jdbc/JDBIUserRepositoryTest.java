@@ -13,7 +13,7 @@ import stubidp.stubidp.domain.DatabaseEidasUser;
 import stubidp.stubidp.domain.DatabaseIdpUser;
 import stubidp.stubidp.repositories.jdbc.migrations.DatabaseMigrationRunner;
 
-import java.time.Instant;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -114,7 +114,7 @@ public class JDBIUserRepositoryTest {
     void addOrUpdateUserForStubCountryShouldAddRecordIfUserDoesNotExist(){
         ensureNoUserExistsFor("stub-country-friendly-id");
 
-        DatabaseEidasUser eidasUser = new DatabaseEidasUser("some-username", null, "some-password", createMdsValue("firstName"), Optional.of(createMdsValue("firstNameNonLatin")), createMdsValue("surname"), Optional.of(createMdsValue("surnameNonLatin")), createMdsValue(Instant.now()), AuthnContext.LEVEL_2);
+        DatabaseEidasUser eidasUser = new DatabaseEidasUser("some-username", null, "some-password", createMdsValue("firstName"), Optional.of(createMdsValue("firstNameNonLatin")), createMdsValue("surname"), Optional.of(createMdsValue("surnameNonLatin")), createMdsValue(LocalDate.now()), AuthnContext.LEVEL_2);
 
         repository.addOrUpdateEidasUserForStubCountry("stub-country-friendly-id", eidasUser);
 

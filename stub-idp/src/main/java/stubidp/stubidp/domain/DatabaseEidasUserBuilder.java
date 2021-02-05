@@ -2,10 +2,8 @@ package stubidp.stubidp.domain;
 
 import stubidp.saml.domain.assertions.AuthnContext;
 import stubidp.saml.domain.assertions.SimpleMdsValue;
-import stubidp.saml.extensions.extensions.impl.BaseMdsSamlObjectUnmarshaller;
 
-import java.time.Instant;
-import java.time.ZoneId;
+import java.time.LocalDate;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -17,7 +15,7 @@ public class DatabaseEidasUserBuilder {
     private Optional<SimpleMdsValue<String>> nonLatinFirstname = Optional.empty();
     private SimpleMdsValue<String> surname;
     private Optional<SimpleMdsValue<String>> nonLatinSurname = Optional.empty();
-    private SimpleMdsValue<Instant> dateOfBirth;
+    private SimpleMdsValue<LocalDate> dateOfBirth;
     private AuthnContext authnContext;
 
     private DatabaseEidasUserBuilder() {}
@@ -87,12 +85,12 @@ public class DatabaseEidasUserBuilder {
         return this;
     }
 
-    private static Instant dateToInstant(String date) {
-        return BaseMdsSamlObjectUnmarshaller.InstantFromDate.of(date);
+    private static LocalDate dateToInstant(String date) {
+        return LocalDate.parse(date);
     }
 
     private static <T> SimpleMdsValue<T> createCurrentMdsValue(T value, boolean verified) {
-        return new SimpleMdsValue<>(value, Instant.now().atZone(ZoneId.of("UTC")).minusDays(1).toInstant(), null, verified);
+        return new SimpleMdsValue<>(value, LocalDate.now().minusDays(1), null, verified);
     }
 
 }

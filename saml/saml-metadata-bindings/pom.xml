@@ -130,7 +130,7 @@
             <groupId>stub-idp</groupId>
             <artifactId>saml-security</artifactId>
             <version>1.0-SNAPSHOT</version>
-            <scope>test</scope>
+            <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>stub-idp</groupId>

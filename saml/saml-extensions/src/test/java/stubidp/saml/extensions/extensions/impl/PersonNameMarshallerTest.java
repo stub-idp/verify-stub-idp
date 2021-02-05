@@ -10,6 +10,8 @@ import org.w3c.dom.Element;
 import stubidp.saml.extensions.extensions.PersonName;
 import stubidp.saml.test.OpenSAMLRunner;
 
+import java.time.LocalDate;
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static stubidp.saml.extensions.IdaConstants.IDA_NS;
 import static stubidp.saml.extensions.IdaConstants.IDA_PREFIX;
@@ -51,7 +53,7 @@ class PersonNameMarshallerTest extends OpenSAMLRunner {
     @Test
     void marshall_shouldMarshallFromDateInCorrectFormat() throws Exception {
         String fromDate = "2012-02-09";
-        personName.setFrom(BaseMdsSamlObjectUnmarshaller.InstantFromDate.of(fromDate));
+        personName.setFrom(LocalDate.parse(fromDate));
 
         Element marshalledElement = marshaller.marshall(personName);
 
@@ -60,7 +62,7 @@ class PersonNameMarshallerTest extends OpenSAMLRunner {
 
     @Test
     void marshall_shouldMarshallFromDateWithNamespacePrefix() throws Exception {
-        personName.setFrom(BaseMdsSamlObjectUnmarshaller.InstantFromDate.of("2012-02-09"));
+        personName.setFrom(LocalDate.parse("2012-02-09"));
 
         Element marshalledElement = marshaller.marshall(personName);
 
@@ -70,7 +72,7 @@ class PersonNameMarshallerTest extends OpenSAMLRunner {
     @Test
     void marshall_shouldMarshallToDateInCorrectFormat() throws Exception {
         String toDate = "2012-02-09";
-        personName.setTo(BaseMdsSamlObjectUnmarshaller.InstantFromDate.of(toDate));
+        personName.setTo(LocalDate.parse(toDate));
 
         Element marshalledElement = marshaller.marshall(personName);
 
@@ -79,7 +81,7 @@ class PersonNameMarshallerTest extends OpenSAMLRunner {
 
     @Test
     void marshall_shouldMarshallToDateWithNamespacePrefix() throws Exception {
-        personName.setTo(BaseMdsSamlObjectUnmarshaller.InstantFromDate.of("2012-02-09"));
+        personName.setTo(LocalDate.parse("2012-02-09"));
 
         Element marshalledElement = marshaller.marshall(personName);
 

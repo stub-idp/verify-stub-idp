@@ -8,7 +8,6 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import stubidp.saml.domain.assertions.AuthnContext;
 import stubidp.saml.domain.assertions.SimpleMdsValue;
-import stubidp.saml.extensions.extensions.impl.BaseMdsSamlObjectUnmarshaller;
 import stubidp.stubidp.domain.DatabaseEidasUser;
 import stubidp.stubidp.domain.EidasAuthnRequest;
 import stubidp.stubidp.domain.EidasScheme;
@@ -23,6 +22,7 @@ import stubidp.stubidp.repositories.StubCountryRepository;
 import stubidp.utils.rest.common.SessionId;
 
 import java.time.Instant;
+import java.time.LocalDate;
 import java.util.Collections;
 import java.util.Optional;
 import java.util.UUID;
@@ -99,7 +99,7 @@ class StubCountryServiceTest {
     }
 
     private Optional<DatabaseEidasUser> newUser() {
-        return Optional.of(new DatabaseEidasUser("stub-country", UUID.randomUUID().toString(), "bar", createMdsValue("Jack"), Optional.of(createMdsValue("JackNonLatin")), createMdsValue("Griffin"), Optional.of(createMdsValue("GriffinNonLatin")), createMdsValue(BaseMdsSamlObjectUnmarshaller.InstantFromDate.of("1983-06-21")), AuthnContext.LEVEL_2));
+        return Optional.of(new DatabaseEidasUser("stub-country", UUID.randomUUID().toString(), "bar", createMdsValue("Jack"), Optional.of(createMdsValue("JackNonLatin")), createMdsValue("Griffin"), Optional.of(createMdsValue("GriffinNonLatin")), createMdsValue(LocalDate.parse("1983-06-21")), AuthnContext.LEVEL_2));
     }
 
     private static <T> SimpleMdsValue<T> createMdsValue(T value) {

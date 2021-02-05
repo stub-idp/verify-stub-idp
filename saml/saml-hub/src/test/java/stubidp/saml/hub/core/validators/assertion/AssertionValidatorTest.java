@@ -8,6 +8,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.opensaml.saml.common.SAMLVersion;
 import org.opensaml.saml.saml2.core.Assertion;
 import org.opensaml.saml.saml2.core.SubjectConfirmation;
+import stubidp.saml.extensions.validation.SamlTransformationErrorException;
 import stubidp.saml.extensions.validation.SamlValidationSpecificationFailure;
 import stubidp.saml.hub.core.errors.SamlTransformationErrorFactory;
 import stubidp.saml.hub.core.validators.subject.AssertionSubjectValidator;
@@ -18,6 +19,7 @@ import stubidp.saml.test.support.SamlTransformationErrorManagerTestHelper;
 
 import java.util.UUID;
 
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.verify;
 import static stubidp.saml.test.builders.AssertionBuilder.anAssertion;
 import static stubidp.saml.test.builders.SubjectBuilder.aSubject;
@@ -85,6 +87,22 @@ public class AssertionValidatorTest extends OpenSAMLRunner {
         Assertion assertion = anAssertion().withSignature(null).withId(someID).buildUnencrypted();
 
         assertExceptionMessage(assertion, SamlTransformationErrorFactory.assertionSignatureMissing(someID));
+    }
+
+    @Test
+    void validateEidasShouldAllowAnEidasAssertionToNotContainASignature() {
+        String someID = UUID.randomUUID().toString();
+        Assertion assertion = anAssertion().withSignature(null).withId(someID).buildUnencrypted();
+
+        validator.validateEidas(assertion, "", assertion.getID());
+    }
+
+    @Test
+    public void validateEidasShouldValidateSignaturePresentIfSignatureExists() {
+        String someID = UUID.randomUUID().toString();
+        Assertion assertion = anAssertion().withoutSigning().withId(someID).buildUnencrypted();
+
+        assertThrows(SamlTransformationErrorException.class, () -> validator.validateEidas(assertion, "", assertion.getID()));
     }
 
     @Test

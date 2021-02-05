@@ -19,7 +19,7 @@ import stubidp.saml.extensions.extensions.eidas.impl.DateOfBirthBuilder;
 import stubidp.saml.extensions.extensions.eidas.impl.EidasGenderBuilder;
 import stubidp.saml.extensions.extensions.eidas.impl.PersonIdentifierBuilder;
 
-import java.time.Instant;
+import java.time.LocalDate;
 import java.util.Arrays;
 
 public class EidasAttributeFactory {
@@ -48,7 +48,7 @@ public class EidasAttributeFactory {
         return buildAttribute(FamilyName.FRIENDLY_NAME, FamilyName.NAME, familyNameAttributeValue);
     }
 
-    public Attribute createDateOfBirth(Instant dateOfBirth) {
+    public Attribute createDateOfBirth(LocalDate dateOfBirth) {
         DateOfBirth dateOfBirthAttributeValue = new DateOfBirthBuilder().buildObject();
         dateOfBirthAttributeValue.setDateOfBirth(dateOfBirth);
         return buildAttribute(Eidas_Attributes.DateOfBirth.FRIENDLY_NAME, Eidas_Attributes.DateOfBirth.NAME, dateOfBirthAttributeValue);

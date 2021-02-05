@@ -223,7 +223,7 @@ public class HubTransformersFactory {
 
     public StringToOpenSamlObjectTransformer<Response> getStringToResponseTransformer() {
         return coreTransformersFactory.getStringtoOpenSamlObjectTransformer(
-                new ResponseSizeValidator(new StringSizeValidator())
+                new ResponseSizeValidator()
         );
     }
 

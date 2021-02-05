@@ -222,7 +222,7 @@ public class MetadataBackedSignatureValidatorTest extends OpenSAMLRunner {
         URL authnRequestUrl = getClass().getClassLoader().getResource("authnRequestNormal.xml");//sha1 authnrequest
         String input = StringEncoding.toBase64Encoded(Resources.toString(authnRequestUrl, UTF_8));
         //md5 authnrequests throw an exception here as they are not allowed to be unmarshalled
-        AuthnRequest request = getStringtoOpenSamlObjectTransformer().apply(input);
+        AuthnRequest request = getStringToOpenSamlObjectTransformer().apply(input);
         assertThat(createMetadataBackedSignatureValidator().validate(request, issuerId, SPSSODescriptor.DEFAULT_ELEMENT_NAME)).isFalse();
     }
 
@@ -317,11 +317,11 @@ public class MetadataBackedSignatureValidatorTest extends OpenSAMLRunner {
     private void validateAuthnRequestFile(String fileName) throws Exception {
         URL authnRequestUrl = getClass().getClassLoader().getResource(fileName);
         String input = StringEncoding.toBase64Encoded(Resources.toString(authnRequestUrl, UTF_8));
-        AuthnRequest request = getStringtoOpenSamlObjectTransformer().apply(input);
+        AuthnRequest request = getStringToOpenSamlObjectTransformer().apply(input);
         createMetadataBackedSignatureValidator().validate(request, issuerId, SPSSODescriptor.DEFAULT_ELEMENT_NAME);
     }
 
-    private StringToOpenSamlObjectTransformer getStringtoOpenSamlObjectTransformer() {
+    private StringToOpenSamlObjectTransformer getStringToOpenSamlObjectTransformer() {
         return new StringToOpenSamlObjectTransformer(new AuthnRequestUnmarshaller(new SamlObjectParser()));
     }
 }

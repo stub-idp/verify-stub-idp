@@ -15,7 +15,7 @@ import stubidp.stubidp.exceptions.UnHashedPasswordException;
 import stubidp.stubidp.security.BCryptHelper;
 
 import java.io.Serializable;
-import java.time.Instant;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -33,7 +33,7 @@ public class DatabaseIdpUser implements Serializable {
     private final List<SimpleMdsValue<String>> middleNames;
     private final List<SimpleMdsValue<String>> surnames;
     private final Optional<SimpleMdsValue<Gender>> gender;
-    private final List<SimpleMdsValue<Instant>> dateOfBirths;
+    private final List<SimpleMdsValue<LocalDate>> dateOfBirths;
     private final List<Address> addresses;
     private final AuthnContext levelOfAssurance;
 
@@ -46,7 +46,7 @@ public class DatabaseIdpUser implements Serializable {
         @JsonProperty("middleNames") List<SimpleMdsValue<String>> middleNames,
         @JsonProperty("surnames") List<SimpleMdsValue<String>> surnames,
         @JsonProperty("gender") Optional<SimpleMdsValue<Gender>> gender,
-        @JsonProperty("dateOfBirths") List<SimpleMdsValue<Instant>> dateOfBirths,
+        @JsonProperty("dateOfBirths") List<SimpleMdsValue<LocalDate>> dateOfBirths,
         @JsonProperty("addresses") List<Address> addresses,
         @JsonProperty("levelOfAssurance") AuthnContext levelOfAssurance) {
 
@@ -94,7 +94,7 @@ public class DatabaseIdpUser implements Serializable {
         return gender;
     }
 
-    public List<SimpleMdsValue<Instant>> getDateOfBirths() {
+    public List<SimpleMdsValue<LocalDate>> getDateOfBirths() {
         return dateOfBirths;
     }
 

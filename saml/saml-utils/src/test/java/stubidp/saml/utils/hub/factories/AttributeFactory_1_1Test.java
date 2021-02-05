@@ -13,13 +13,12 @@ import stubidp.saml.extensions.extensions.IPAddress;
 import stubidp.saml.extensions.extensions.IdpFraudEventId;
 import stubidp.saml.extensions.extensions.PersonName;
 import stubidp.saml.extensions.extensions.StringBasedMdsAttributeValue;
-import stubidp.saml.extensions.extensions.impl.BaseMdsSamlObjectUnmarshaller;
-import stubidp.saml.test.builders.AddressBuilder;
 import stubidp.saml.test.OpenSAMLRunner;
-import stubidp.saml.utils.core.OpenSamlXmlObjectFactory;
+import stubidp.saml.test.builders.AddressBuilder;
 import stubidp.saml.test.builders.SimpleMdsValueBuilder;
+import stubidp.saml.utils.core.OpenSamlXmlObjectFactory;
 
-import java.time.Instant;
+import java.time.LocalDate;
 import java.util.Collections;
 import java.util.List;
 
@@ -38,8 +37,8 @@ public class AttributeFactory_1_1Test extends OpenSAMLRunner {
     @Test
     void createFirstNameAttribute_shouldSetUpTheAttribute() {
         SimpleMdsValue<String> firstName = new SimpleMdsValue<>("Bob",
-                BaseMdsSamlObjectUnmarshaller.InstantFromDate.of("2012-03-02"),
-                BaseMdsSamlObjectUnmarshaller.InstantFromDate.of("2013-09-04"),
+                LocalDate.parse("2012-03-02"),
+                LocalDate.parse("2013-09-04"),
                 true);
 
         Attribute createdAttribute = attributeFactory.createFirstnameAttribute(Collections.singletonList(firstName));
@@ -69,8 +68,8 @@ public class AttributeFactory_1_1Test extends OpenSAMLRunner {
     @Test
     void createMiddlenameAttribute_shouldSetUpTheAttribute() {
         SimpleMdsValue<String> middlename = new SimpleMdsValue<>("Robert",
-                BaseMdsSamlObjectUnmarshaller.InstantFromDate.of("2012-03-02"),
-                BaseMdsSamlObjectUnmarshaller.InstantFromDate.of("2013-09-04"),
+                LocalDate.parse("2012-03-02"),
+                LocalDate.parse("2013-09-04"),
                 false);
 
         Attribute createdAttribute = attributeFactory.createMiddlenamesAttribute(Collections.singletonList(middlename));
@@ -89,8 +88,8 @@ public class AttributeFactory_1_1Test extends OpenSAMLRunner {
     @Test
     void createSurnameAttribute_shouldSetUpTheAttribute() {
         SimpleMdsValue<String> surname = new SimpleMdsValue<>("McBoberson",
-                BaseMdsSamlObjectUnmarshaller.InstantFromDate.of("2012-03-02"),
-                BaseMdsSamlObjectUnmarshaller.InstantFromDate.of("2013-09-04"),
+                LocalDate.parse("2012-03-02"),
+                LocalDate.parse("2013-09-04"),
                 false);
 
         Attribute createdAttribute = attributeFactory.createSurnameAttribute(Collections.singletonList(surname));
@@ -109,8 +108,8 @@ public class AttributeFactory_1_1Test extends OpenSAMLRunner {
     @Test
     void createGenderAttribute_shouldSetUpTheAttribute() {
         SimpleMdsValue<Gender> genderSimpleMdsValue = new SimpleMdsValue<>(Gender.FEMALE,
-                BaseMdsSamlObjectUnmarshaller.InstantFromDate.of("2012-03-02"),
-                BaseMdsSamlObjectUnmarshaller.InstantFromDate.of("2013-09-04"),
+                LocalDate.parse("2012-03-02"),
+                LocalDate.parse("2013-09-04"),
                 false);
 
         Attribute createdAttribute = attributeFactory.createGenderAttribute(genderSimpleMdsValue);
@@ -140,9 +139,9 @@ public class AttributeFactory_1_1Test extends OpenSAMLRunner {
 
     @Test
     void createDateOfBirthAttribute_shouldSetUpTheAttribute() {
-        SimpleMdsValue<Instant> dateOfBirth = new SimpleMdsValue<>(BaseMdsSamlObjectUnmarshaller.InstantFromDate.of("1981-03-29"),
-                BaseMdsSamlObjectUnmarshaller.InstantFromDate.of("2012-03-02"),
-                BaseMdsSamlObjectUnmarshaller.InstantFromDate.of("2013-09-04"),
+        SimpleMdsValue<LocalDate> dateOfBirth = new SimpleMdsValue<>(LocalDate.parse("1981-03-29"),
+                LocalDate.parse("2012-03-02"),
+                LocalDate.parse("2013-09-04"),
                 true);
 
         Attribute createdAttribute = attributeFactory.createDateOfBirthAttribute(Collections.singletonList(dateOfBirth));
@@ -152,7 +151,7 @@ public class AttributeFactory_1_1Test extends OpenSAMLRunner {
         assertThat(createdAttribute.getNameFormat()).isEqualTo(Attribute.UNSPECIFIED);
         assertThat(createdAttribute.getAttributeValues().size()).isEqualTo(1);
         Date dateOfBirthAttributeValue = (Date) createdAttribute.getAttributeValues().get(0);
-        Instant dateOfBirthFromDom = BaseMdsSamlObjectUnmarshaller.InstantFromDate.of(dateOfBirthAttributeValue.getValue());
+        LocalDate dateOfBirthFromDom = LocalDate.parse(dateOfBirthAttributeValue.getValue());
         assertThat(dateOfBirthFromDom).isEqualTo(dateOfBirth.getValue());
         assertThat(dateOfBirthAttributeValue.getFrom()).isEqualTo(dateOfBirth.getFrom());
         assertThat(dateOfBirthAttributeValue.getTo()).isEqualTo(dateOfBirth.getTo());
@@ -166,9 +165,9 @@ public class AttributeFactory_1_1Test extends OpenSAMLRunner {
         String postCodeValue = "RG99 1YY";
         String internationalPostCodeValue = "RG88 1ZZ";
         String uprnValue = "RG88 1ZZ";
-        Instant fromDateValue = BaseMdsSamlObjectUnmarshaller.InstantFromDate.of("2012-09-09");
+        LocalDate fromDateValue = LocalDate.parse("2012-09-09");
         boolean verified = true;
-        Instant toDateValue = BaseMdsSamlObjectUnmarshaller.InstantFromDate.of("2012-10-11");
+        LocalDate toDateValue = LocalDate.parse("2012-10-11");
         Address currentAddress = AddressBuilder.anAddress()
                 .withLines(asList(line1Value, line2Value))
                 .withPostCode(postCodeValue)
@@ -239,8 +238,8 @@ public class AttributeFactory_1_1Test extends OpenSAMLRunner {
         String line2Value = "Wurpel Lane";
         String postCodeValue = "RG99 1YY";
         String internationalPostCodeValue = "RG88 1ZZ";
-        Instant fromDateValue = BaseMdsSamlObjectUnmarshaller.InstantFromDate.of("2012-11-12");
-        Instant toDateValue = BaseMdsSamlObjectUnmarshaller.InstantFromDate.of("2012-09-09");
+        LocalDate fromDateValue = LocalDate.parse("2012-11-12");
+        LocalDate toDateValue = LocalDate.parse("2012-09-09");
         String uprnValue = "134279";
         Address previousAddress = AddressBuilder.anAddress()
                 .withLines(asList(line1Value, line2Value))

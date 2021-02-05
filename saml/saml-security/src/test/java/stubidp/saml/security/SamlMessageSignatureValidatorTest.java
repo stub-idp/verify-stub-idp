@@ -42,6 +42,20 @@ public class SamlMessageSignatureValidatorTest extends OpenSAMLRunner {
     }
 
     @Test
+    public void validateEidasAssertionShouldAcceptUnsignedAssertionsFromEidasCountries() {
+        final Assertion unsignedAssertion = anAssertion()
+                .withIssuer(anIssuer().withIssuerId(issuerId).build())
+                .withSignature(null)
+                .buildUnencrypted();
+
+        SamlMessageSignatureValidator eidasSamlMessageSignatureValidator = new SamlMessageSignatureValidator(signatureValidator);
+
+        SamlValidationResponse signatureValidationResponse = eidasSamlMessageSignatureValidator.validateEidasAssertion(unsignedAssertion, SPSSODescriptor.DEFAULT_ELEMENT_NAME);
+
+        assertThat(signatureValidationResponse.isOK()).isTrue();
+    }
+
+    @Test
     void validateWithIssue_shouldReturnBadResponseIfRequestIsNotSigned() {
         final AuthnRequest unsignedAuthnRequest = anAuthnRequest()
                 .withIssuer(anIssuer().withIssuerId(issuerId).build())

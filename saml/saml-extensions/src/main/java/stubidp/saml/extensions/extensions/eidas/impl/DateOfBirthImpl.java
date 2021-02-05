@@ -5,13 +5,13 @@ import org.opensaml.core.xml.XMLObject;
 import org.opensaml.core.xml.schema.impl.XSAnyImpl;
 import stubidp.saml.extensions.extensions.eidas.DateOfBirth;
 
-import java.time.Instant;
+import java.time.LocalDate;
 import java.util.List;
 
 public class DateOfBirthImpl extends XSAnyImpl implements DateOfBirth {
 
     /** String to hold the date of birth. */
-    private Instant dateOfBirth;
+    private LocalDate dateOfBirth;
 
     /**
      * Constructor.
@@ -25,12 +25,12 @@ public class DateOfBirthImpl extends XSAnyImpl implements DateOfBirth {
     }
 
     /** {@inheritDoc} */
-    public Instant getDateOfBirth() {
+    public LocalDate getDateOfBirth() {
         return dateOfBirth;
     }
 
     /** {@inheritDoc} */
-    public void setDateOfBirth(Instant dob) {
+    public void setDateOfBirth(LocalDate dob) {
         dateOfBirth = prepareForAssignment(dateOfBirth, dob);
     }
 

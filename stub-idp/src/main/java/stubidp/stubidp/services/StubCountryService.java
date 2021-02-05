@@ -2,7 +2,6 @@ package stubidp.stubidp.services;
 
 import stubidp.saml.domain.assertions.AuthnContext;
 import stubidp.saml.domain.assertions.SimpleMdsValue;
-import stubidp.saml.extensions.extensions.impl.BaseMdsSamlObjectUnmarshaller;
 import stubidp.stubidp.domain.DatabaseEidasUser;
 import stubidp.stubidp.domain.EidasScheme;
 import stubidp.stubidp.domain.EidasUser;
@@ -17,6 +16,7 @@ import stubidp.stubidp.repositories.StubCountryRepository;
 
 import javax.inject.Inject;
 import java.time.Instant;
+import java.time.LocalDate;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -70,7 +70,7 @@ public class StubCountryService {
             throw new IncompleteRegistrationException();
         }
 
-        Instant parsedDateOfBirth = BaseMdsSamlObjectUnmarshaller.InstantFromDate.of(dob);
+        LocalDate parsedDateOfBirth = LocalDate.parse(dob);
 
         boolean usernameAlreadyTaken = stubCountry.userExists(username);
         if (usernameAlreadyTaken) {

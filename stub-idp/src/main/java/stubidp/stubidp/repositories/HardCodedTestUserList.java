@@ -3,13 +3,11 @@ package stubidp.stubidp.repositories;
 import stubidp.saml.domain.assertions.AuthnContext;
 import stubidp.saml.domain.assertions.Gender;
 import stubidp.saml.domain.assertions.SimpleMdsValue;
-import stubidp.saml.extensions.extensions.impl.BaseMdsSamlObjectUnmarshaller;
 import stubidp.saml.utils.core.domain.AddressFactory;
 import stubidp.stubidp.domain.DatabaseEidasUser;
 import stubidp.stubidp.domain.DatabaseIdpUser;
 
-import java.time.Instant;
-import java.time.ZoneId;
+import java.time.LocalDate;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -64,8 +62,8 @@ final class HardCodedTestUserList {
                         .withSurname("Griffin")
                         .withGender(Gender.NOT_SPECIFIED)
                         .withDateOfBirth("1983-06-21")
-                        .withAddresses(List.of(AddressFactory.create(Collections.singletonList("Lion's Head Inn"), "1A 2BC", null, null, Instant.now().atZone(ZoneId.of("UTC")).minusYears(1).toInstant(), null, true),
-                                AddressFactory.create(Collections.singletonList("Ye Olde Inn"), "1A 2BB", null, null, Instant.now().atZone(ZoneId.of("UTC")).minusYears(3).toInstant(), Instant.now().atZone(ZoneId.of("UTC")).minusYears(1).toInstant(), false)))
+                        .withAddresses(List.of(AddressFactory.create(Collections.singletonList("Lion's Head Inn"), "1A 2BC", null, null, LocalDate.now().minusYears(1), null, true),
+                                AddressFactory.create(Collections.singletonList("Ye Olde Inn"), "1A 2BB", null, null, LocalDate.now().minusYears(3), LocalDate.now().minusYears(1), false)))
                         .withAuthnContext(AuthnContext.LEVEL_2)
                         .build(),
 
@@ -102,8 +100,8 @@ final class HardCodedTestUserList {
                         .withGender(Gender.MALE)
                         .withDatesOfBirth(List.of(createCurrentMdsValue(dateToInstant("1984-02-29"), true),
                                 createOldMdsValue(dateToInstant("1984-03-01"), true)))
-                        .withAddresses(List.of(AddressFactory.create(Collections.singletonList("1 Two St"), "1A 2BC", "Something", "dummy uprn", Instant.now(), Instant.now(), true),
-                                AddressFactory.create(Collections.singletonList("2 Three St"), "1B 2CD", "Something else", "dummy second uprn", Instant.now(), Instant.now(), true)))
+                        .withAddresses(List.of(AddressFactory.create(Collections.singletonList("1 Two St"), "1A 2BC", "Something", "dummy uprn", LocalDate.now(), LocalDate.now(), true),
+                                AddressFactory.create(Collections.singletonList("2 Three St"), "1B 2CD", "Something else", "dummy second uprn", LocalDate.now(), LocalDate.now(), true)))
                         .withAuthnContext(AuthnContext.LEVEL_2)
                         .build(),
 
@@ -115,8 +113,8 @@ final class HardCodedTestUserList {
                         .withSurname("Rabbit", false)
                         .withGender(Gender.FEMALE, false)
                         .withDateOfBirth("1960-03-23", false)
-                        .withAddresses(List.of(AddressFactory.create(Collections.singletonList("1 Two St"), "1A 2BC", "Something", "dummy uprn", Instant.now(), null, false),
-                                AddressFactory.create(Collections.singletonList("2 Three St"), "1B 2CD", "Something else", "dummy second uprn", Instant.now(), Instant.now(), false)))
+                        .withAddresses(List.of(AddressFactory.create(Collections.singletonList("1 Two St"), "1A 2BC", "Something", "dummy uprn", LocalDate.now(), null, false),
+                                AddressFactory.create(Collections.singletonList("2 Three St"), "1B 2CD", "Something else", "dummy second uprn", LocalDate.now(), LocalDate.now(), false)))
                         .withAuthnContext(AuthnContext.LEVEL_1)
                         .build(),
 
@@ -128,8 +126,8 @@ final class HardCodedTestUserList {
                         .withSurname("Rabbit")
                         .withGender(Gender.MALE)
                         .withDateOfBirth("1958-04-09")
-                        .withAddresses(List.of(AddressFactory.create(Collections.singletonList("1 Two St"), "1A 2BC", "Something", "dummy uprn", Instant.now(), Instant.now(), true),
-                                AddressFactory.create(Collections.singletonList("2 Three St"), "1B 2CD", "Something else", "dummy second uprn", Instant.now(), Instant.now(), true)))
+                        .withAddresses(List.of(AddressFactory.create(Collections.singletonList("1 Two St"), "1A 2BC", "Something", "dummy uprn", LocalDate.now(), LocalDate.now(), true),
+                                AddressFactory.create(Collections.singletonList("2 Three St"), "1B 2CD", "Something else", "dummy second uprn", LocalDate.now(), LocalDate.now(), true)))
                         .withAuthnContext(AuthnContext.LEVEL_2)
                         .build(),
 
@@ -141,8 +139,8 @@ final class HardCodedTestUserList {
                         .withSurname("Eagle")
                         .withGender(Gender.FEMALE)
                         .withDateOfBirth("1969-07-20")
-                        .withAddresses(List.of(AddressFactory.create(Collections.singletonList("1 Four St"), "1A 2BD", "Something", "dummy uprn", Instant.now(), null, true),
-                                AddressFactory.create(Collections.singletonList("2 Five St"), "1B 2RD", "Something else", "dummy second uprn", Instant.now(), Instant.now(), true)))
+                        .withAddresses(List.of(AddressFactory.create(Collections.singletonList("1 Four St"), "1A 2BD", "Something", "dummy uprn", LocalDate.now(), null, true),
+                                AddressFactory.create(Collections.singletonList("2 Five St"), "1B 2RD", "Something else", "dummy second uprn", LocalDate.now(), LocalDate.now(), true)))
                         .withAuthnContext(AuthnContext.LEVEL_3)
                         .build(),
 
@@ -154,8 +152,8 @@ final class HardCodedTestUserList {
                         .withSurname("Nummy")
                         .withGender(Gender.MALE)
                         .withDateOfBirth("1958-04-09")
-                        .withAddresses(List.of(AddressFactory.create(Collections.singletonList("1 Two St"), "1A 2BC", "Something", "dummy uprn", Instant.now(), Instant.now(), true),
-                                AddressFactory.create(Collections.singletonList("2 Three St"), "1B 2CD", "Something else", "dummy second uprn", Instant.now(), Instant.now(), true)))
+                        .withAddresses(List.of(AddressFactory.create(Collections.singletonList("1 Two St"), "1A 2BC", "Something", "dummy uprn", LocalDate.now(), LocalDate.now(), true),
+                                AddressFactory.create(Collections.singletonList("2 Three St"), "1B 2CD", "Something else", "dummy second uprn", LocalDate.now(), LocalDate.now(), true)))
                         .withAuthnContext(AuthnContext.LEVEL_X)
                         .build(),
 
@@ -181,7 +179,7 @@ final class HardCodedTestUserList {
                         .withGender(Gender.NOT_SPECIFIED)
                         .withDateOfBirth("1970-01-01")
                         .withAddresses(List.of(AddressFactory.create(List.of("The White Chapel Building, 10 Whitechapel High St", "London", "United Kingdom"), "E1 8DX",
-                                null, null, Instant.now().atZone(ZoneId.of("UTC")).minusYears(1).toInstant(), null, true)))
+                                null, null, LocalDate.now().minusYears(1), null, true)))
                         .withAuthnContext(AuthnContext.LEVEL_2)
                         .build()
         );
@@ -316,15 +314,15 @@ final class HardCodedTestUserList {
         );
     }
 
-    private static Instant dateToInstant(String date) {
-        return BaseMdsSamlObjectUnmarshaller.InstantFromDate.of(date);
+    private static LocalDate dateToInstant(String date) {
+        return LocalDate.parse(date);
     }
 
     private static <T> SimpleMdsValue<T> createCurrentMdsValue(T value, boolean verified) {
-        return new SimpleMdsValue<>(value, Instant.now().atZone(ZoneId.of("UTC")).minusDays(1).toInstant(), null, verified);
+        return new SimpleMdsValue<>(value, LocalDate.now().minusDays(1), null, verified);
     }
 
     private static <T> SimpleMdsValue<T> createOldMdsValue(T value, boolean verified) {
-        return new SimpleMdsValue<>(value, Instant.now().atZone(ZoneId.of("UTC")).minusDays(5).toInstant(), Instant.now().atZone(ZoneId.of("UTC")).minusDays(1).toInstant(), verified);
+        return new SimpleMdsValue<>(value, LocalDate.now().minusDays(5), LocalDate.now().minusDays(1), verified);
     }
 }

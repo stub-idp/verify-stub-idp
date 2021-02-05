@@ -2,12 +2,12 @@ package stubidp.saml.extensions.extensions.impl;
 
 import stubidp.saml.extensions.extensions.StringBasedMdsAttributeValue;
 
-import java.time.Instant;
+import java.time.LocalDate;
 
 public class StringBasedMdsAttributeValueImpl extends StringValueSamlObjectImpl implements StringBasedMdsAttributeValue {
 
-    private Instant fromTime;
-    private Instant toTime;
+    private LocalDate fromTime;
+    private LocalDate toTime;
     private boolean verified;
 
     protected StringBasedMdsAttributeValueImpl(String namespaceURI, String elementLocalName, String namespacePrefix) {
@@ -15,22 +15,22 @@ public class StringBasedMdsAttributeValueImpl extends StringValueSamlObjectImpl 
     }
 
     @Override
-    public Instant getFrom() {
+    public LocalDate getFrom() {
         return fromTime;
     }
 
     @Override
-    public void setFrom(Instant fromTime) {
+    public void setFrom(LocalDate fromTime) {
         this.fromTime = fromTime;
     }
 
     @Override
-    public Instant getTo() {
+    public LocalDate getTo() {
         return toTime;
     }
 
     @Override
-    public void setTo(Instant toTime) {
+    public void setTo(LocalDate toTime) {
         this.toTime = toTime;
     }
 

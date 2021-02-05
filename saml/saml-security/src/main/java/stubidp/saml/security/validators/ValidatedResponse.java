@@ -1,5 +1,6 @@
 package stubidp.saml.security.validators;
 
+import org.opensaml.core.xml.Namespace;
 import org.opensaml.saml.saml2.core.EncryptedAssertion;
 import org.opensaml.saml.saml2.core.Issuer;
 import org.opensaml.saml.saml2.core.Response;
@@ -9,6 +10,7 @@ import org.opensaml.xmlsec.signature.Signature;
 
 import java.time.Instant;
 import java.util.List;
+import java.util.Set;
 
 public class ValidatedResponse implements ValidatedEncryptedAssertionContainer {
     private final Response response;
@@ -45,6 +47,10 @@ public class ValidatedResponse implements ValidatedEncryptedAssertionContainer {
 
     public String getDestination() {
         return response.getDestination();
+    }
+
+    public Set<Namespace> getNamespaces() {
+        return response.getNamespaces();
     }
 
     @Override

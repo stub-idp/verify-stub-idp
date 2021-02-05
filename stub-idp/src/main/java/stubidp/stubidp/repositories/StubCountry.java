@@ -6,6 +6,7 @@ import stubidp.saml.domain.assertions.SimpleMdsValue;
 import stubidp.stubidp.domain.DatabaseEidasUser;
 
 import java.time.Instant;
+import java.time.LocalDate;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -39,7 +40,7 @@ public class StubCountry {
                                         Optional<SimpleMdsValue<String>> nonLatinFirstName,
                                         SimpleMdsValue<String> surname,
                                         Optional<SimpleMdsValue<String>> nonLatinSurname,
-                                        SimpleMdsValue<Instant> dateOfBirth,
+                                        SimpleMdsValue<LocalDate> dateOfBirth,
                                         AuthnContext levelOfAssurance){
         return allIdpsUserRepository.createUserForStubCountry(
                 friendlyId, UUID.randomUUID().toString(),

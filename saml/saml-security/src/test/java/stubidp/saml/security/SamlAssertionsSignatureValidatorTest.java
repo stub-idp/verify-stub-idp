@@ -50,6 +50,18 @@ public class SamlAssertionsSignatureValidatorTest extends OpenSAMLRunner {
     }
 
     @Test
+    public void shouldValidateEidasAssertionsWithAndWithoutSignature() {
+        final Assertion assertion1 = AssertionBuilder.anAssertion().withSignature(null).buildUnencrypted();
+        final Assertion assertion2 = AssertionBuilder.anAssertion().buildUnencrypted();
+        final List<Assertion> assertions = asList(assertion1, assertion2);
+
+        samlAssertionsSignatureValidator.validateEidas(assertions, IDPSSODescriptor.DEFAULT_ELEMENT_NAME);
+
+        verify(samlMessageSignatureValidator).validateEidasAssertion(assertion1, IDPSSODescriptor.DEFAULT_ELEMENT_NAME);
+        verify(samlMessageSignatureValidator).validateEidasAssertion(assertion2, IDPSSODescriptor.DEFAULT_ELEMENT_NAME);
+    }
+
+    @Test
     void shouldFailOnFirstBadlySignedAssertion() {
         final Assertion assertion1 = AssertionBuilder.anAssertion().withoutSigning().buildUnencrypted();
         final Assertion assertion2 = AssertionBuilder.anAuthnStatementAssertion().buildUnencrypted();

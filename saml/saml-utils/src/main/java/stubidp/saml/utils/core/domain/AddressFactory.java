@@ -4,9 +4,8 @@ import org.opensaml.core.xml.XMLObject;
 import org.opensaml.saml.saml2.core.Attribute;
 import stubidp.saml.domain.assertions.Address;
 import stubidp.saml.extensions.extensions.Line;
-import stubidp.saml.extensions.extensions.impl.BaseMdsSamlObjectUnmarshaller;
 
-import java.time.Instant;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,12 +14,12 @@ public class AddressFactory {
     private AddressFactory() {}
 
     public static Address create(List<String> lines, String postCode, String internationalPostCode, String uprn, String from, String to, boolean isVerified) {
-        Instant fromInstant = BaseMdsSamlObjectUnmarshaller.InstantFromDate.of(from);
-        Instant toInstant = BaseMdsSamlObjectUnmarshaller.InstantFromDate.of(to);
+        LocalDate fromInstant = LocalDate.parse(from);
+        LocalDate toInstant = LocalDate.parse(to);
         return new Address(lines, postCode, internationalPostCode, uprn, fromInstant, toInstant, isVerified);
     }
 
-    public static Address create(List<String> lines, String postCode, String internationalPostCode, String uprn, Instant from, Instant to, boolean isVerified) {
+    public static Address create(List<String> lines, String postCode, String internationalPostCode, String uprn, LocalDate from, LocalDate to, boolean isVerified) {
         return new Address(lines, postCode, internationalPostCode, uprn, from, to, isVerified);
     }
 
@@ -43,9 +42,9 @@ public class AddressFactory {
             lines.add(originalLine.getValue());
         }
 
-        Instant toDate = addressAttributeValue.getTo();
+        LocalDate toDate = addressAttributeValue.getTo();
 
-        Instant fromDate = addressAttributeValue.getFrom();
+        LocalDate fromDate = addressAttributeValue.getFrom();
 
         String postCodeString = null;
         if (addressAttributeValue.getPostCode() != null) {

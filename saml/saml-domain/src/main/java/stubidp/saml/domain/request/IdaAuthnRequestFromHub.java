@@ -3,8 +3,8 @@ package stubidp.saml.domain.request;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.opensaml.saml.saml2.core.AuthnContextComparisonTypeEnumeration;
-import stubidp.saml.domain.assertions.AuthnContext;
 import stubidp.saml.domain.IdaSamlMessage;
+import stubidp.saml.domain.assertions.AuthnContext;
 
 import java.net.URI;
 import java.time.Instant;

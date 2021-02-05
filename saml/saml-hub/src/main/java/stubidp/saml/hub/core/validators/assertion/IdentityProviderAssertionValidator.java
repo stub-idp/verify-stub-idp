@@ -23,16 +23,8 @@ public class IdentityProviderAssertionValidator extends AssertionValidator {
             AssertionSubjectValidator subjectValidator,
             AssertionAttributeStatementValidator assertionAttributeStatementValidator,
             AssertionSubjectConfirmationValidator subjectConfirmationValidator) {
-        this(issuerValidator, subjectValidator, assertionAttributeStatementValidator, subjectConfirmationValidator, true);
-    }
 
-    public IdentityProviderAssertionValidator(
-            IssuerValidator issuerValidator,
-            AssertionSubjectValidator subjectValidator,
-            AssertionAttributeStatementValidator assertionAttributeStatementValidator,
-            AssertionSubjectConfirmationValidator subjectConfirmationValidator,
-            boolean signedAssertions) {
-        super(issuerValidator, subjectValidator, assertionAttributeStatementValidator, subjectConfirmationValidator, signedAssertions);
+        super(issuerValidator, subjectValidator, assertionAttributeStatementValidator, subjectConfirmationValidator);
 
         this.subjectConfirmationValidator = subjectConfirmationValidator;
     }
@@ -49,9 +41,9 @@ public class IdentityProviderAssertionValidator extends AssertionValidator {
 
     private void ensurePidsMatch(List<Assertion> assertions) {
         boolean pidsDoNotMatch = assertions.stream()
-            .map(assertion -> assertion.getSubject().getNameID().getValue())
-            .distinct()
-            .count() > 1;
+                .map(assertion -> assertion.getSubject().getNameID().getValue())
+                .distinct()
+                .count() > 1;
 
         if (pidsDoNotMatch) {
             SamlValidationSpecificationFailure failure = SamlTransformationErrorFactory.mismatchedPersistentIdentifiers();
@@ -61,9 +53,9 @@ public class IdentityProviderAssertionValidator extends AssertionValidator {
 
     private void ensureIssuersMatch(List<Assertion> assertions) {
         boolean issuerValuesDoNotMatch = assertions.stream()
-            .map(assertion -> assertion.getIssuer().getValue())
-            .distinct()
-            .count() > 1;
+                .map(assertion -> assertion.getIssuer().getValue())
+                .distinct()
+                .count() > 1;
 
         if (issuerValuesDoNotMatch) {
             SamlValidationSpecificationFailure failure = SamlTransformationErrorFactory.mismatchedIssuers();
@@ -72,7 +64,7 @@ public class IdentityProviderAssertionValidator extends AssertionValidator {
     }
 
     @Override
-    protected void validateSubject(
+    public void validateSubject(
             Assertion assertion,
             String requestId,
             String expectedRecipientId) {

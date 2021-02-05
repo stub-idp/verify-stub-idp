@@ -15,7 +15,7 @@ import stubidp.saml.extensions.extensions.eidas.DateOfBirth;
 import stubidp.saml.extensions.extensions.eidas.PersonIdentifier;
 import stubidp.saml.extensions.extensions.eidas.TransliterableString;
 
-import java.time.Instant;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -108,8 +108,8 @@ public class EidasMatchingDatasetUnmarshaller extends MatchingDatasetUnmarshalle
                         .orElse(null)));
     }
 
-    private List<SimpleMdsValue<Instant>> transformEidasDateOfBirthAttribute(Attribute attribute) {
-        List<SimpleMdsValue<Instant>> datesOfBirth = new ArrayList<>();
+    private List<SimpleMdsValue<LocalDate>> transformEidasDateOfBirthAttribute(Attribute attribute) {
+        List<SimpleMdsValue<LocalDate>> datesOfBirth = new ArrayList<>();
 
         for (XMLObject xmlObject : attribute.getAttributeValues()) {
             DateOfBirth dateOfBirth = (DateOfBirth) xmlObject;

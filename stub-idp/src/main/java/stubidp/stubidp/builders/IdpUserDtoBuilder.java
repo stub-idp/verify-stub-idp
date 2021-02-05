@@ -5,7 +5,7 @@ import stubidp.saml.domain.assertions.Gender;
 import stubidp.saml.domain.assertions.SimpleMdsValue;
 import stubidp.stubidp.dtos.IdpUserDto;
 
-import java.time.Instant;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -17,7 +17,7 @@ public class IdpUserDtoBuilder {
     private Optional<SimpleMdsValue<String>> middleNames = Optional.empty();
     private final List<SimpleMdsValue<String>> surnames = new ArrayList<>();
     private Optional<SimpleMdsValue<Gender>> gender = Optional.empty();
-    private Optional<SimpleMdsValue<Instant>> dateOfBirth = Optional.empty();
+    private Optional<SimpleMdsValue<LocalDate>> dateOfBirth = Optional.empty();
     private Optional<Address> address = Optional.empty();
     private String userName;
     private String password;
@@ -77,7 +77,7 @@ public class IdpUserDtoBuilder {
         return this;
     }
 
-    public IdpUserDtoBuilder withDateOfBirth(final SimpleMdsValue<Instant> dateOfBirth) {
+    public IdpUserDtoBuilder withDateOfBirth(final SimpleMdsValue<LocalDate> dateOfBirth) {
         this.dateOfBirth = Optional.ofNullable(dateOfBirth);
         return this;
     }

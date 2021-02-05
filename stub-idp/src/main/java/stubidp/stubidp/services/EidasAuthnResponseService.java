@@ -31,6 +31,7 @@ import javax.ws.rs.core.UriBuilder;
 import javax.xml.namespace.QName;
 import java.net.URI;
 import java.time.Instant;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -181,7 +182,7 @@ public class EidasAuthnResponseService {
     }
 
     @SuppressWarnings({"unchecked", "cast"})
-    private Attribute buildDateOfBirthAttribute(Instant dateOfBirth) {
+    private Attribute buildDateOfBirthAttribute(LocalDate dateOfBirth) {
         XMLObjectBuilder<? extends DateOfBirth> eidasTypeBuilder = (XMLObjectBuilder<? extends DateOfBirth>) XMLObjectSupport.getBuilder(DateOfBirth.TYPE_NAME);
         DateOfBirth dateOfBirthAttributeValue = eidasTypeBuilder.buildObject(AttributeValue.DEFAULT_ELEMENT_NAME, DateOfBirth.TYPE_NAME);
         dateOfBirthAttributeValue.setDateOfBirth(dateOfBirth);

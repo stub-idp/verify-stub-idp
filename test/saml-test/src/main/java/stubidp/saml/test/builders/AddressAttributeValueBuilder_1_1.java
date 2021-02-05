@@ -3,7 +3,7 @@ package stubidp.saml.test.builders;
 import stubidp.saml.extensions.extensions.Address;
 import stubidp.saml.test.OpenSamlXmlObjectFactory;
 
-import java.time.Instant;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -11,8 +11,8 @@ import java.util.Optional;
 public class AddressAttributeValueBuilder_1_1 {
     private static final OpenSamlXmlObjectFactory openSamlXmlObjectFactory = new OpenSamlXmlObjectFactory();
 
-    private Optional<Instant> from = Optional.empty();
-    private Optional<Instant> to = Optional.empty();
+    private Optional<LocalDate> from = Optional.empty();
+    private Optional<LocalDate> to = Optional.empty();
 
     private final List<String> lines = new ArrayList<>();
     private Optional<String> postCode = Optional.of("RG99 1YY");
@@ -41,12 +41,12 @@ public class AddressAttributeValueBuilder_1_1 {
         return addressAttributeValue;
     }
 
-    public AddressAttributeValueBuilder_1_1 withFrom(Instant from) {
+    public AddressAttributeValueBuilder_1_1 withFrom(LocalDate from) {
         this.from = Optional.ofNullable(from);
         return this;
     }
 
-    public AddressAttributeValueBuilder_1_1 withTo(Instant to) {
+    public AddressAttributeValueBuilder_1_1 withTo(LocalDate to) {
         this.to = Optional.ofNullable(to);
         return this;
     }

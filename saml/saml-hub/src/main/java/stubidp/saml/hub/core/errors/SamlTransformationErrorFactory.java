@@ -1,5 +1,6 @@
 package stubidp.saml.hub.core.errors;
 
+import org.slf4j.event.Level;
 import stubidp.saml.extensions.validation.SamlValidationSpecificationFailure;
 import stubidp.saml.extensions.validation.SamlValidationSpecificationWarning;
 import stubidp.saml.extensions.validation.errors.AuthnContextMissingError;
@@ -182,7 +183,7 @@ public final class SamlTransformationErrorFactory {
     }
 
     public static SamlValidationSpecificationFailure duplicateMatchingDataset(final String id, final String responseIssuerId) {
-        return new GenericHubProfileValidationSpecification(GenericHubProfileValidationSpecification.DUPLICATE_MATCHING_DATASET, id, responseIssuerId);
+        return new GenericHubProfileValidationSpecification(Level.WARN, GenericHubProfileValidationSpecification.DUPLICATE_MATCHING_DATASET, id, responseIssuerId);
     }
 
     public static SamlValidationSpecificationFailure mdsStatementMissing() {
@@ -274,7 +275,7 @@ public final class SamlTransformationErrorFactory {
     }
 
     public static SamlValidationSpecificationFailure exceededNotOnOrAfter(Instant expiredTime) {
-        return new BearerSubjectConfirmationValidationSpecification(format(BearerSubjectConfirmationValidationSpecification.EXCEEDED_NOT_ON_OR_AFTER, expiredTime));
+        return new BearerSubjectConfirmationValidationSpecification(Level.WARN, format(BearerSubjectConfirmationValidationSpecification.EXCEEDED_NOT_ON_OR_AFTER, expiredTime));
     }
 
     public static SamlValidationSpecificationFailure notBeforeExists() {
