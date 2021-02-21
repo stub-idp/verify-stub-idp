@@ -1,0 +1,66 @@
+# This is an example configuration file to show how to configure
+# the application using a YAML file.
+
+# Dropwizard server connector configuration
+server:
+  type: simple
+  applicationContextPath: /
+  adminContextPath: /admin
+  connector:
+    type: http
+    port: ${PORT:-50400}
+
+# Dropwizard logging configuration
+logging:
+  level: ${LOG_LEVEL:-INFO}
+  appenders:
+    - type: console
+    - type: file
+      currentLogFilename: logs/verify-service-provider.log
+      archivedLogFilenamePattern: logs/verify-service-provider.log.%d.gz
+
+clockSkew: ${CLOCK_SKEW:-PT30s}
+
+# Entity ID (or IDs) that uniquely identifies your service (or services)
+#
+# `serviceEntityIds` is a JSON array, for example '["service-entity-id"]'.
+# To connect more than one service to a single VSP deployment, add all the
+# service entity IDs to the JSON array, for example:
+# '["service-one-entity-id", "service-two-entity-id"]'
+serviceEntityIds: ${SERVICE_ENTITY_IDS:-[]}
+
+# Use `hashingEntityId` if you're connecting
+# more than one service to a single VSP deployment.
+#
+# The VSP uses the `hashingEntityId` instead of the value in `serviceEntityIds`
+# when generating a user's hashed personal identifier (PID). This is to make
+# sure a user verified by a particular identity provider is linked to a unique
+# hashed PID no matter which one of your services they're requesting to use.
+hashingEntityId: ${HASHING_ENTITY_ID:-}
+
+# Verify Hub Environment. This tells the service provider where the Verify Hub
+# authentication flow begins and where to find the hub metadata the Verify Service
+# Provider consumes to identify the hub.
+# For example: INTEGRATION, PRODUCTION
+verifyHubConfiguration:
+  environment: ${VERIFY_ENVIRONMENT:-}
+
+# Private key that is used to sign an AuthnRequest
+samlSigningKey: ${SAML_SIGNING_KEY:-}
+
+# Private key used to decrypt Assertions in the Response
+samlPrimaryEncryptionKey: ${SAML_PRIMARY_ENCRYPTION_KEY:-}
+
+# Secondary private key used to decrypt Assertions in the Response
+# This only needs to be set during key rotations, for example if your primary
+# encryption certificate is about to expire.
+samlSecondaryEncryptionKey: ${SAML_SECONDARY_ENCRYPTION_KEY:-}
+
+# Enable European identities (optional)
+# Include this section to enable your VSP to process European identities.
+europeanIdentity:
+  # `enabled: true` to allow your VSP to process European identities
+  # `enabled: false` means your VSP won't process European identities, but
+  # the section must contain valid key-value pairs.
+  enabled: ${EUROPEAN_IDENTITY_ENABLED:-false}
+

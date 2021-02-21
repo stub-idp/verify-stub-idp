@@ -1,0 +1,232 @@
+plugins {
+    id 'com.github.ben-manes.versions' version '0.17.0'
+}
+
+apply plugin: 'java'
+apply plugin: 'application'
+apply plugin: 'idea'
+
+if (JavaVersion.current() > JavaVersion.VERSION_1_8) {
+    apply plugin: 'jacoco'
+
+    jacocoTestReport {
+        reports {
+            html.enabled = true
+            xml.enabled = true
+        }
+    }
+}
+
+repositories {
+    if (System.getenv('VERIFY_USE_PUBLIC_BINARIES') == 'true') {
+        logger.warn('Production builds MUST NOT be built with public binaries.\nUse artifactory/allowed-repos for production builds.\n\n')
+        maven { url 'https://dl.bintray.com/alphagov/maven' } // For dropwizard-logstash
+        maven { url 'https://dl.bintray.com/alphagov/maven-test' }
+        maven { url 'https://build.shibboleth.net/nexus/content/repositories/releases' }
+        jcenter()
+    }
+    else {
+        maven { url 'https://gds.jfrog.io/artifactory/allowed-repos' }
+    }
+}
+
+project.ext {
+    version_number = '2.2.0'
+    openSamlVersion = '3.4.3'
+    verifyCommonUtils = '2.0.0-374'
+    samlLibVersion = "$openSamlVersion-249"
+    dropwizardVersion = '1.3.17'
+    jaxbapiVersion = '2.2.9'
+}
+
+dependencies {
+    implementation(
+        "io.dropwizard:dropwizard-core:$dropwizardVersion",
+        "io.dropwizard:dropwizard-json-logging:${dropwizardVersion}",
+        "org.json:json:20171018",
+        "org.opensaml:opensaml-core:$openSamlVersion",
+        "org.opensaml:opensaml-saml-impl:$openSamlVersion",
+        "uk.gov.ida:common-utils:$verifyCommonUtils",
+        "uk.gov.ida:dropwizard-logstash:$dropwizardVersion-79",
+        "uk.gov.ida:rest-utils:2.0.0-370",
+        "uk.gov.ida:saml-lib:$samlLibVersion",
+        "org.bouncycastle:bcprov-jdk15on:1.60",
+        "org.bouncycastle:bcpkix-jdk15on:1.60",
+        "javax.activation:javax.activation-api:1.2.0",
+    )
+    implementation("commons-collections:commons-collections:3.2.2") { force = true }
+
+    testImplementation(
+        "org.junit.jupiter:junit-jupiter-api:5.5.2",
+        "io.dropwizard:dropwizard-testing:$dropwizardVersion",
+        'org.mockito:mockito-core:3.2.0',
+        "uk.gov.ida:common-test-utils:2.0.0-49",
+        "org.jsoup:jsoup:1.11.1",
+        "uk.gov.ida:saml-test:$samlLibVersion",
+        "javax.activation:javax.activation-api:1.2.0",
+    )
+    testImplementation('com.github.tomakehurst:wiremock:2.11.0'){ transitive = false }
+}
+
+sourceSets {
+    java9 {
+        if(JavaVersion.current() >= JavaVersion.VERSION_1_9) {
+            java {
+                srcDir 'src/main/java9'
+            }
+        }
+    }
+    java10 {
+        if(JavaVersion.current() >= JavaVersion.VERSION_1_10) {
+            java {
+                srcDir 'src/main/java10'
+            }
+        }
+    }
+    java11 {
+        if(JavaVersion.current() >= JavaVersion.VERSION_11) {
+            java {
+                srcDir 'src/main/java11'
+            }
+        }
+    }
+
+    acceptanceTest {
+        dependencies {
+            "javax.xml.bind:jaxb-api:$jaxbapiVersion"
+        }
+        java {
+            srcDir 'src/acceptance-test/java'
+        }
+        resources {
+            srcDir 'src/acceptance-test/resources'
+        }
+        compileClasspath += sourceSets.main.runtimeClasspath
+        compileClasspath += sourceSets.test.runtimeClasspath
+        compileClasspath += sourceSets.test.output
+    }
+    test {
+        resources {
+            srcDir 'src/test/resources'
+        }
+    }
+}
+
+compileJava {
+    if(JavaVersion.current() >= JavaVersion.VERSION_1_9) {
+        options.compilerArgs.addAll(['--release', '8'])
+    }
+}
+
+compileJava9Java {
+    if(JavaVersion.current() >= JavaVersion.VERSION_1_9) {
+        options.compilerArgs.addAll(['--release', '9'])
+    }
+}
+
+compileJava10Java {
+    if(JavaVersion.current() >= JavaVersion.VERSION_1_10) {
+        options.compilerArgs.addAll(['--release', '10'])
+    }
+}
+
+compileJava11Java {
+    if(JavaVersion.current() >= JavaVersion.VERSION_11) {
+        options.compilerArgs.addAll(['--release', '11'])
+    }
+}
+
+version = "$version_number"
+
+distributions {
+    main {
+        contents {
+            from {
+              [
+                  'README.md',
+                  'RELEASE_NOTES.md',
+                  'verify-service-provider.yml'
+              ]
+            }
+        }
+    }
+}
+distributions {
+    testing {
+        contents {
+            from {
+                [
+                    'configuration/vsp-with-matching.yml',
+                    'configuration/vsp-with-matching-custom.yml',
+                    'configuration/vsp-no-eidas.yml',
+                    'configuration/vsp-eidas-without-matching.yml',
+                    'verify-service-provider.yml',
+                    'src/main/resources/test-metadata-truststore.ts'
+
+                ]
+            }
+            with distributions.main.contents
+        }
+    }
+}
+
+jar {
+    into('META-INF/versions/9') {
+        from sourceSets.java9.output
+    }
+    into('META-INF/versions/10') {
+        from sourceSets.java10.output
+    }
+    into('META-INF/versions/11') {
+        from sourceSets.java11.output
+    }
+    manifest {
+        attributes(
+                "Version": archiveVersion
+        )
+        if(JavaVersion.current() >= JavaVersion.VERSION_1_9) {
+            attributes.put("Multi-Release", "true")
+        }
+    }
+}
+
+task testAcceptance(type: Test) {
+    testClassesDirs = sourceSets.acceptanceTest.output.classesDirs
+    classpath += sourceSets.acceptanceTest.runtimeClasspath
+}
+
+task buildDockerImage(type: Exec) {
+    commandLine = [
+        "docker", "build",
+        "-t", "govukverify/verify-service-provider:${version_number}",
+        "-f", "Dockerfile.internal",
+        "."
+    ]
+}
+
+task dockerRun(type: Exec) {
+    commandLine = [
+        "docker", "run", "--detach", "--rm",
+        "--name", "verify-service-provider",
+        "--env", "SERVICE_ENTITY_IDS",
+        "--env", "VERIFY_ENVIRONMENT",
+        "--env", "MSA_METADATA_URL",
+        "--env", "MSA_ENTITY_ID",
+        "--env", "SAML_SIGNING_KEY",
+        "--env", "SAML_PRIMARY_ENCRYPTION_KEY",
+        "--publish", "50400:50400",
+        "govukverify/verify-service-provider:${version_number}",
+    ]
+}
+
+task dockerStop(type: Exec) {
+    commandLine = [
+        "docker", "stop", "verify-service-provider"
+    ]
+}
+
+run {
+    args = ["server", "verify-service-provider.yml"]
+}
+
+mainClassName = 'uk.gov.ida.verifyserviceprovider.VerifyServiceProviderApplication'
