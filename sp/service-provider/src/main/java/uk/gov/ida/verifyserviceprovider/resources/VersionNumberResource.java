@@ -2,7 +2,7 @@ package uk.gov.ida.verifyserviceprovider.resources;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import uk.gov.ida.shared.utils.manifest.ManifestReader;
+import stubidp.utils.common.manifest.ManifestReader;
 import uk.gov.ida.verifyserviceprovider.VerifyServiceProviderApplication;
 
 import javax.ws.rs.GET;

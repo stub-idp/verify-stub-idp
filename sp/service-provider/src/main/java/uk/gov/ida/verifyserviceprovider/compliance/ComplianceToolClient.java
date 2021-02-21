@@ -10,6 +10,7 @@ import java.net.URI;
 import java.security.cert.CertificateEncodingException;
 import java.security.cert.X509Certificate;
 import java.util.Base64;
+import java.util.Map;
 
 public class ComplianceToolClient {
 
@@ -29,7 +30,7 @@ public class ComplianceToolClient {
         this.encryptionCertificate = encryptionCertificate;
     }
 
-    private Response makeRequest(Entity initialisationRequestBody) {
+    private <T> Response makeRequest(Entity<T> initialisationRequestBody) {
         Response complianceToolResponse = client
                 .target(URI.create(HOST + "/relying-party-service-test-run"))
                 .request()
@@ -39,7 +40,7 @@ public class ComplianceToolClient {
         return complianceToolResponse;
     }
 
-    private Entity buildRequestBody(MatchingDataset matchingDataset) throws CertificateEncodingException {
+    private Entity<Map<Object, Object>> buildRequestBody(MatchingDataset matchingDataset) throws CertificateEncodingException {
         String encodedSigningCertificate = Base64.getEncoder().encodeToString(signingCertificate.getEncoded());
         String encodedEncryptionCertificate = Base64.getEncoder().encodeToString(encryptionCertificate.getEncoded());
         ImmutableMap.Builder<Object, Object> builder = ImmutableMap.builder();
@@ -53,7 +54,7 @@ public class ComplianceToolClient {
     }
 
     public Response initializeComplianceTool(MatchingDataset matchingDataset) throws CertificateEncodingException {
-        Entity initialisationRequestBody = buildRequestBody(matchingDataset);
+        Entity<Map<Object, Object>> initialisationRequestBody = buildRequestBody(matchingDataset);
         Response response = makeRequest(initialisationRequestBody);
         if(response.getStatus() != 200) {
            throw new RuntimeException(String.format("Compliance Tool Initialization Failure: %s %s", response.getStatus(), response.readEntity(String.class)));

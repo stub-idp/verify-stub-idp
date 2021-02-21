@@ -1,5 +1,6 @@
 package uk.gov.ida.verifyserviceprovider;
 
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.util.StdDateFormat;
 import io.dropwizard.Application;
 import io.dropwizard.client.JerseyClientBuilder;
@@ -7,9 +8,9 @@ import io.dropwizard.configuration.EnvironmentVariableSubstitutor;
 import io.dropwizard.configuration.SubstitutingSourceProvider;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
-import uk.gov.ida.dropwizard.logstash.LogstashBundle;
-import uk.gov.ida.saml.core.IdaSamlBootstrap;
-import uk.gov.ida.saml.metadata.bundle.MetadataResolverBundle;
+import stubidp.dropwizard.logstash.LogstashBundle;
+import stubidp.saml.extensions.IdaSamlBootstrap;
+import stubidp.saml.metadata.bundle.MetadataResolverBundle;
 import uk.gov.ida.verifyserviceprovider.compliance.ComplianceToolMode;
 import uk.gov.ida.verifyserviceprovider.configuration.VerifyServiceProviderConfiguration;
 import uk.gov.ida.verifyserviceprovider.exceptions.InvalidEntityIdExceptionMapper;
@@ -30,7 +31,7 @@ public class VerifyServiceProviderApplication extends Application<VerifyServiceP
 
     public VerifyServiceProviderApplication() {
         hubMetadataBundle = new MetadataResolverBundle<>(configuration -> Optional.ofNullable(configuration.getVerifyHubMetadata()));
-        msaMetadataBundle = new MetadataResolverBundle<>(VerifyServiceProviderConfiguration::getMsaMetadata, false);
+        msaMetadataBundle = new MetadataResolverBundle<>(VerifyServiceProviderConfiguration::getMsaMetadata, false, "msaMetadata");
     }
 
     public static void main(String[] args) throws Exception {
@@ -52,10 +53,11 @@ public class VerifyServiceProviderApplication extends Application<VerifyServiceP
         );
         IdaSamlBootstrap.bootstrap();
         bootstrap.getObjectMapper().setDateFormat(StdDateFormat.getInstance());
+        bootstrap.getObjectMapper().configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, true);
         bootstrap.addBundle(hubMetadataBundle);
         bootstrap.addBundle(msaMetadataBundle);
         bootstrap.addCommand(new ComplianceToolMode(bootstrap.getObjectMapper(), bootstrap.getValidatorFactory().getValidator(), this));
-        bootstrap.addBundle(new LogstashBundle());
+        bootstrap.addBundle(new LogstashBundle<>());
     }
 
     @Override

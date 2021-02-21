@@ -13,7 +13,7 @@ public class AddressAttributeBuilder_1_1 {
 
     private final List<Address> addresses = new ArrayList<>();
 
-    private AddressAttributeBuilder_1_1() {}
+    public AddressAttributeBuilder_1_1() {}
 
     public static AddressAttributeBuilder_1_1 anAddressAttribute() {
         return new AddressAttributeBuilder_1_1();

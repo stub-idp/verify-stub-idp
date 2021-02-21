@@ -1,9 +1,13 @@
 package unit.uk.gov.ida.verifyserviceprovider.factories.saml;
 
 import com.google.common.collect.ImmutableList;
+import io.dropwizard.testing.junit5.DropwizardExtensionsSupport;
 import org.apache.commons.codec.binary.Base64;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.opensaml.saml.saml2.core.Attribute;
 import org.opensaml.saml.saml2.core.AuthnRequest;
 import org.opensaml.saml.saml2.core.EncryptedAttribute;
@@ -12,16 +16,16 @@ import org.opensaml.saml.saml2.encryption.Decrypter;
 import org.opensaml.saml.saml2.encryption.Encrypter;
 import org.opensaml.security.credential.BasicCredential;
 import org.opensaml.security.crypto.KeySupport;
-import uk.gov.ida.common.shared.security.PrivateKeyFactory;
-import uk.gov.ida.common.shared.security.PrivateKeyStore;
-import uk.gov.ida.common.shared.security.PublicKeyFactory;
-import uk.gov.ida.common.shared.security.X509CertificateFactory;
-import uk.gov.ida.saml.core.IdaSamlBootstrap;
-import uk.gov.ida.saml.core.extensions.versioning.Version;
-import uk.gov.ida.saml.core.test.PrivateKeyStoreFactory;
-import uk.gov.ida.saml.core.test.TestEntityIds;
-import uk.gov.ida.saml.security.DecrypterFactory;
-import uk.gov.ida.shared.utils.manifest.ManifestReader;
+import stubidp.saml.extensions.extensions.versioning.Version;
+import stubidp.saml.security.DecrypterFactory;
+import stubidp.saml.test.OpenSAMLRunner;
+import stubidp.saml.test.support.PrivateKeyStoreFactory;
+import stubidp.test.devpki.TestEntityIds;
+import stubidp.utils.common.manifest.ManifestReader;
+import stubidp.utils.security.security.PrivateKeyFactory;
+import stubidp.utils.security.security.PrivateKeyStore;
+import stubidp.utils.security.security.PublicKeyFactory;
+import stubidp.utils.security.security.X509CertificateFactory;
 import uk.gov.ida.verifyserviceprovider.VerifyServiceProviderApplication;
 import uk.gov.ida.verifyserviceprovider.factories.EncrypterFactory;
 import uk.gov.ida.verifyserviceprovider.factories.saml.AuthnRequestFactory;
@@ -34,31 +38,33 @@ import java.security.PrivateKey;
 import java.security.PublicKey;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.reset;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import static uk.gov.ida.saml.core.test.TestCertificateStrings.HUB_TEST_PRIVATE_ENCRYPTION_KEY;
-import static uk.gov.ida.saml.core.test.TestCertificateStrings.HUB_TEST_PUBLIC_ENCRYPTION_CERT;
+import static stubidp.test.devpki.TestCertificateStrings.HUB_TEST_PUBLIC_ENCRYPTION_CERT;
+import static stubidp.test.devpki.TestCertificateStrings.HUB_TEST_PRIVATE_ENCRYPTION_KEY;
 
-public class AuthnRequestFactoryTest {
+@ExtendWith({MockitoExtension.class, DropwizardExtensionsSupport.class})
+public class AuthnRequestFactoryTest extends OpenSAMLRunner {
 
     private static final URI DESTINATION = URI.create("http://example.com");
     private static final String SERVICE_ENTITY_ID = "http://entity-id";
-    private static final ManifestReader manifestReader = mock(ManifestReader.class);
-    private static final EncrypterFactory encrypterFactory = mock(EncrypterFactory.class);
     private static Encrypter encrypter;
     private static Decrypter decrypter;
     private static AuthnRequestFactory factory;
 
-    @Before
+    @Mock
+    private ManifestReader manifestReader;
+    @Mock
+    private EncrypterFactory encrypterFactory;
+
+    @BeforeEach
     public void setUp() throws KeyException {
-        IdaSamlBootstrap.bootstrap();
         reset(manifestReader);
 
         final BasicCredential basicCredential = createBasicCredential();
-        encrypter = new uk.gov.ida.saml.security.EncrypterFactory().createEncrypter(basicCredential);
+        encrypter = new stubidp.saml.security.EncrypterFactory().createEncrypter(basicCredential);
         decrypter = new DecrypterFactory().createDecrypter(ImmutableList.of(basicCredential));
         when(encrypterFactory.createEncrypter()).thenReturn(encrypter);
         PrivateKeyStore privateKeyStore = new PrivateKeyStoreFactory().create(TestEntityIds.TEST_RP);

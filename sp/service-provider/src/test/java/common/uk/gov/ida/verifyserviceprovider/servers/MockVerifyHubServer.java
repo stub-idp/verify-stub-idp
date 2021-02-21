@@ -1,7 +1,7 @@
 package common.uk.gov.ida.verifyserviceprovider.servers;
 
 import com.github.tomakehurst.wiremock.junit.WireMockClassRule;
-import uk.gov.ida.saml.metadata.test.factories.metadata.MetadataFactory;
+import stubidp.saml.test.metadata.MetadataFactory;
 
 import static com.github.tomakehurst.wiremock.client.WireMock.aResponse;
 import static com.github.tomakehurst.wiremock.client.WireMock.get;

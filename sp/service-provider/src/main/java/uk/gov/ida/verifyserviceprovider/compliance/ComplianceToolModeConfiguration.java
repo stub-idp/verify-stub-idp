@@ -3,7 +3,6 @@ package uk.gov.ida.verifyserviceprovider.compliance;
 import io.dropwizard.client.JerseyClientBuilder;
 import io.dropwizard.client.JerseyClientConfiguration;
 import io.dropwizard.setup.Environment;
-import io.dropwizard.util.Duration;
 import uk.gov.ida.verifyserviceprovider.configuration.HubEnvironment;
 import uk.gov.ida.verifyserviceprovider.configuration.VerifyHubConfiguration;
 import uk.gov.ida.verifyserviceprovider.configuration.VerifyServiceProviderConfiguration;
@@ -11,10 +10,11 @@ import uk.gov.ida.verifyserviceprovider.configuration.VerifyServiceProviderConfi
 import javax.ws.rs.client.Client;
 import java.security.PrivateKey;
 import java.security.cert.X509Certificate;
+import java.time.Duration;
+import java.util.Collections;
 import java.util.Optional;
 
 import static java.util.Arrays.asList;
-
 
 public class ComplianceToolModeConfiguration extends VerifyServiceProviderConfiguration {
     private final String serviceEntityId;
@@ -22,15 +22,15 @@ public class ComplianceToolModeConfiguration extends VerifyServiceProviderConfig
     private KeysAndCert encryptionKeysAndCert;
 
     public ComplianceToolModeConfiguration(String serviceEntityId, KeysAndCert signingKeysAndCert, KeysAndCert encryptionKeysAndCert) {
-        super(asList(serviceEntityId),
-              serviceEntityId,
-              new VerifyHubConfiguration(HubEnvironment.COMPLIANCE_TOOL),
-              signingKeysAndCert.getPrivate(),
-              encryptionKeysAndCert.getPrivate(),
-              encryptionKeysAndCert.getPrivate(),
-              Optional.empty(),
-              org.joda.time.Duration.standardMinutes(2),
-              Optional.empty());
+        super(Collections.singletonList(serviceEntityId),
+                serviceEntityId,
+                new VerifyHubConfiguration(HubEnvironment.COMPLIANCE_TOOL),
+                signingKeysAndCert.getPrivate(),
+                encryptionKeysAndCert.getPrivate(),
+                encryptionKeysAndCert.getPrivate(),
+                Optional.empty(),
+                Duration.ofMinutes(2),
+                Optional.empty());
 
         this.serviceEntityId = serviceEntityId;
         this.signingKeysAndCert = signingKeysAndCert;
@@ -64,9 +64,9 @@ public class ComplianceToolModeConfiguration extends VerifyServiceProviderConfig
 
     public ComplianceToolClient createComplianceToolService(Environment environment, String url, Integer timeout) {
         JerseyClientConfiguration configuration = new JerseyClientConfiguration();
-        configuration.setConnectionRequestTimeout(Duration.seconds(timeout));
-        configuration.setTimeout(Duration.seconds(timeout));
-        configuration.setConnectionTimeout(Duration.seconds(timeout));
+        configuration.setConnectionRequestTimeout(io.dropwizard.util.Duration.seconds(timeout));
+        configuration.setTimeout(io.dropwizard.util.Duration.seconds(timeout));
+        configuration.setConnectionTimeout(io.dropwizard.util.Duration.seconds(timeout));
         Client client = new JerseyClientBuilder(environment).using(configuration).build("Compliance Tool Initiation Client");
         return new ComplianceToolClient(client, url, serviceEntityId, getSigningCertificate(), getEncryptionCertificate());
     }

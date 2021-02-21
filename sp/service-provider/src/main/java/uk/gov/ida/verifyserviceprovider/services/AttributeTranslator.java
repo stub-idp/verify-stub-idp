@@ -2,10 +2,10 @@ package uk.gov.ida.verifyserviceprovider.services;
 
 import org.opensaml.saml.saml2.core.Attribute;
 import org.opensaml.saml.saml2.core.AttributeStatement;
-import uk.gov.ida.saml.core.extensions.StringValueSamlObject;
-import uk.gov.ida.saml.core.extensions.Verified;
-import uk.gov.ida.saml.core.extensions.impl.AddressImpl;
-import uk.gov.ida.saml.core.validation.SamlResponseValidationException;
+import stubidp.saml.extensions.extensions.StringValueSamlObject;
+import stubidp.saml.extensions.extensions.Verified;
+import stubidp.saml.extensions.extensions.impl.AddressImpl;
+import stubidp.saml.utils.core.validation.SamlResponseValidationException;
 import uk.gov.ida.verifyserviceprovider.dto.Address;
 import uk.gov.ida.verifyserviceprovider.dto.Attributes;
 import uk.gov.ida.verifyserviceprovider.dto.VerifiableAttribute;
@@ -103,8 +103,8 @@ public class AttributeTranslator {
             getValueOrNull(address.getPostCode()),
             getValueOrNull(address.getInternationalPostCode()),
             getValueOrNull(address.getUPRN()),
-            convertToJavaLocalDate(address.getFrom()),
-            convertToJavaLocalDate(address.getTo())
+            address.getFrom(),
+            address.getTo()
         );
     }
 
@@ -114,13 +114,5 @@ public class AttributeTranslator {
 
     private static String getValueOrNull(StringValueSamlObject attributeValue) {
         return Optional.ofNullable(attributeValue).map(StringValueSamlObject::getValue).orElse(null);
-    }
-
-    private static LocalDate convertToJavaLocalDate(org.joda.time.DateTime joda) {
-        if (joda == null) {
-            return null;
-        }
-
-        return LocalDate.of(joda.getYear(), joda.getMonthOfYear(), joda.getDayOfMonth());
     }
 }

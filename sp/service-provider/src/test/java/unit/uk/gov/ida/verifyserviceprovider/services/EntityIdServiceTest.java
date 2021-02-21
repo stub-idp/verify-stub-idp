@@ -1,6 +1,6 @@
 package unit.uk.gov.ida.verifyserviceprovider.services;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import uk.gov.ida.verifyserviceprovider.dto.RequestGenerationBody;
 import uk.gov.ida.verifyserviceprovider.dto.TranslateSamlResponseBody;
 import uk.gov.ida.verifyserviceprovider.exceptions.InvalidEntityIdException;

@@ -11,8 +11,7 @@ import net.sourceforge.argparse4j.inf.ArgumentParser;
 import net.sourceforge.argparse4j.inf.ArgumentParserException;
 import net.sourceforge.argparse4j.inf.Namespace;
 import net.sourceforge.argparse4j.inf.Subparser;
-import org.json.JSONObject;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import uk.gov.ida.verifyserviceprovider.VerifyServiceProviderApplication;
 import uk.gov.ida.verifyserviceprovider.compliance.dto.MatchingDataset;
 import uk.gov.ida.verifyserviceprovider.compliance.dto.MatchingDatasetBuilder;
@@ -51,7 +50,7 @@ public class ComplianceToolModeTest {
         );
 
         MatchingDataset actual = namespace.get(ComplianceToolMode.IDENTITY_DATASET);
-        assertThat(actual).isEqualToComparingFieldByFieldRecursively(suppliedMatchingDataset);
+        assertThat(actual).isEqualTo(suppliedMatchingDataset);
 
         String url = namespace.get(ComplianceToolMode.ASSERTION_CONSUMER_URL);
         assertThat(url).isEqualTo(suppliedCallbackUrl);
@@ -76,11 +75,9 @@ public class ComplianceToolModeTest {
 
         Namespace namespace = subparser.parseArgs(noArguments());
 
-        MatchingDataset actual = namespace.get(ComplianceToolMode.IDENTITY_DATASET);
-        String expectedMatchingDataset = FixtureHelpers.fixture("default-test-identity-dataset.json");
-        String receivedMatchingDataset = objectMapper.writeValueAsString(actual);
-        assertThat(new JSONObject(receivedMatchingDataset))
-                .isEqualToComparingFieldByFieldRecursively(new JSONObject(expectedMatchingDataset));
+        MatchingDataset receivedMatchingDataset = namespace.get(ComplianceToolMode.IDENTITY_DATASET);
+        MatchingDataset expectedMatchingDataset = objectMapper.readValue(FixtureHelpers.fixture("default-test-identity-dataset.json"), MatchingDataset.class);
+        assertThat(receivedMatchingDataset).isEqualTo(expectedMatchingDataset);
 
         String url = namespace.get(ComplianceToolMode.ASSERTION_CONSUMER_URL);
         assertThat(url).isEqualTo(ComplianceToolMode.DEFAULT_CONSUMER_URL);
@@ -97,7 +94,7 @@ public class ComplianceToolModeTest {
     }
 
     @Test
-    public void itWillErrorIfTheMatchingDatasetIsNotValid() throws ArgumentParserException {
+    public void itWillErrorIfTheMatchingDatasetIsNotValid() {
         ComplianceToolMode complianceToolMode = new ComplianceToolMode(objectMapper, Validators.newValidator(), mock(VerifyServiceProviderApplication.class));
         final Subparser subparser = createParser();
         complianceToolMode.configure(subparser);
@@ -116,7 +113,7 @@ public class ComplianceToolModeTest {
     }
 
     private Subparser createParser() {
-        final ArgumentParser p = ArgumentParsers.newArgumentParser("Usage:", false);
+        final ArgumentParser p = ArgumentParsers.newFor("Usage:").addHelp(false).build();
         return p.addSubparsers().addParser("development", false);
     }
 

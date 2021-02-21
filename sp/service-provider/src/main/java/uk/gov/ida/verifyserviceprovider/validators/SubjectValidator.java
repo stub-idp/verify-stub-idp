@@ -1,10 +1,11 @@
 package uk.gov.ida.verifyserviceprovider.validators;
 
-import org.joda.time.DateTime;
 import org.opensaml.saml.saml2.core.Subject;
 import org.opensaml.saml.saml2.core.SubjectConfirmation;
 import org.opensaml.saml.saml2.core.SubjectConfirmationData;
-import uk.gov.ida.saml.core.validation.SamlResponseValidationException;
+import stubidp.saml.utils.core.validation.SamlResponseValidationException;
+
+import java.time.Instant;
 
 import static org.opensaml.saml.saml2.core.SubjectConfirmation.METHOD_BEARER;
 
@@ -36,7 +37,7 @@ public class SubjectValidator {
 
         timeRestrictionValidator.validateNotBefore(subjectConfirmationData.getNotBefore());
 
-        DateTime notOnOrAfter = subjectConfirmationData.getNotOnOrAfter();
+        Instant notOnOrAfter = subjectConfirmationData.getNotOnOrAfter();
         if (notOnOrAfter == null) {
             throw new SamlResponseValidationException("Subject confirmation data must contain 'NotOnOrAfter'.");
         }

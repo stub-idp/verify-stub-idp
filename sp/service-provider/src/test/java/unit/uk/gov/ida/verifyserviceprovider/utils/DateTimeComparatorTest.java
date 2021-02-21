@@ -1,83 +1,85 @@
 package unit.uk.gov.ida.verifyserviceprovider.utils;
 
-import org.joda.time.DateTime;
-import org.joda.time.Duration;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import uk.gov.ida.verifyserviceprovider.utils.DateTimeComparator;
+
+import java.time.Duration;
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class DateTimeComparatorTest {
 
-    private static final DateTime baseTime = new DateTime(2017, 1, 1, 12, 0);
-    private static final DateTimeComparator comparator = new DateTimeComparator(Duration.standardSeconds(5));
+    private static final Instant baseTime = Instant.now();
+    private static final DateTimeComparator comparator = new DateTimeComparator(Duration.ofSeconds(5));
 
     @Test
-    public void isAfterReturnsTrueWhenAIsAfterB() throws Exception {
-        DateTime newTime = baseTime.plusMinutes(1);
+    void isAfterReturnsTrueWhenAIsAfterB() {
+        Instant newTime = baseTime.plus(1, ChronoUnit.MINUTES);
 
         assertThat(comparator.isAfterFuzzy(newTime, baseTime)).isTrue();
     }
 
     @Test
-    public void isAfterReturnsFalseWhenAIsBeforeB() throws Exception {
-        DateTime newTime = baseTime.minusMinutes(1);
+    void isAfterReturnsFalseWhenAIsBeforeB() {
+        Instant newTime = baseTime.minus(1, ChronoUnit.MINUTES);
 
         assertThat(comparator.isAfterFuzzy(newTime, baseTime)).isFalse();
     }
 
     @Test
-    public void isAfterReturnsTrueWhenAIsWithinSkewOfB() throws Exception {
-        DateTime newTime = baseTime.minusSeconds(4);
+    void isAfterReturnsTrueWhenAIsWithinSkewOfB() {
+        Instant newTime = baseTime.minusSeconds(4);
 
         assertThat(comparator.isAfterFuzzy(newTime, baseTime)).isTrue();
     }
 
     @Test
-    public void isBeforeReturnsTrueWhenAIsBeforeB() throws Exception {
-        DateTime newTime = baseTime.minusMinutes(1);
+    void isBeforeReturnsTrueWhenAIsBeforeB() {
+        Instant newTime = baseTime.minus(1, ChronoUnit.MINUTES);
 
         assertThat(comparator.isBeforeFuzzy(newTime, baseTime)).isTrue();
     }
 
     @Test
-    public void isBeforeReturnsFalseWhenAIsAfterB() throws Exception {
-        DateTime newTime = baseTime.plusMinutes(1);
+    void isBeforeReturnsFalseWhenAIsAfterB() {
+        Instant newTime = baseTime.plus(1, ChronoUnit.MINUTES);
 
         assertThat(comparator.isBeforeFuzzy(newTime, baseTime)).isFalse();
     }
 
     @Test
-    public void isBeforeReturnsTrueWhenAIsWithinSkewOfB() throws Exception {
-        DateTime newTime = baseTime.plusSeconds(4);
+    void isBeforeReturnsTrueWhenAIsWithinSkewOfB() {
+        Instant newTime = baseTime.plusSeconds(4);
 
         assertThat(comparator.isBeforeFuzzy(newTime, baseTime)).isTrue();
     }
 
     @Test
-    public void isBeforeNowReturnsTrueWhenInThePast() {
-        DateTime pastDateTime = new DateTime().minusMinutes(1);
+    void isBeforeNowReturnsTrueWhenInThePast() {
+        Instant pastDateTime = Instant.now().minus(1, ChronoUnit.MINUTES);
 
         assertThat(comparator.isBeforeNow(pastDateTime)).isTrue();
     }
 
     @Test
-    public void isBeforeNowReturnsFalseWhenInThePast() {
-        DateTime dateTime = new DateTime().plusMillis(1);
+    void isBeforeNowReturnsFalseWhenInThePast() {
+        Instant dateTime = Instant.now().plusMillis(1);
 
         assertThat(comparator.isBeforeNow(dateTime)).isFalse();
     }
 
     @Test
-    public void isAfterNowReturnsTrueWhenInTheFuture() {
-        DateTime futureDateTime = new DateTime().plusMinutes(1);
+    void isAfterNowReturnsTrueWhenInTheFuture() {
+        Instant futureDateTime = Instant.now().plus(1, ChronoUnit.MINUTES);
 
         assertThat(comparator.isAfterNow(futureDateTime)).isTrue();
     }
 
     @Test
-    public void isAfterNowReturnsFalseWhenInThePast() {
-        DateTime pastDateTime = new DateTime().minusMillis(1);
+    void isAfterNowReturnsFalseWhenInThePast() {
+        Instant pastDateTime = Instant.now().minusMillis(1);
 
         assertThat(comparator.isAfterNow(pastDateTime)).isFalse();
     }

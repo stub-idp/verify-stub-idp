@@ -6,8 +6,8 @@ import org.opensaml.saml.saml2.core.AuthnContext;
 import org.opensaml.saml.saml2.core.AuthnContextClassRef;
 import org.opensaml.saml.saml2.core.AuthnStatement;
 import org.opensaml.saml.saml2.metadata.IDPSSODescriptor;
-import uk.gov.ida.saml.core.validation.SamlResponseValidationException;
-import uk.gov.ida.saml.security.SamlAssertionsSignatureValidator;
+import stubidp.saml.security.SamlAssertionsSignatureValidator;
+import stubidp.saml.utils.core.validation.SamlResponseValidationException;
 import uk.gov.ida.verifyserviceprovider.dto.LevelOfAssurance;
 import uk.gov.ida.verifyserviceprovider.dto.TranslatedMatchingResponseBody;
 import uk.gov.ida.verifyserviceprovider.dto.TranslatedResponseBody;
@@ -21,7 +21,6 @@ import static uk.gov.ida.verifyserviceprovider.dto.MatchingScenario.ACCOUNT_CREA
 import static uk.gov.ida.verifyserviceprovider.dto.MatchingScenario.SUCCESS_MATCH;
 
 public class MatchingAssertionTranslator implements AssertionTranslator {
-
 
     private AssertionValidator assertionValidator;
     private LevelOfAssuranceValidator levelOfAssuranceValidator;
@@ -82,7 +81,7 @@ public class MatchingAssertionTranslator implements AssertionTranslator {
     private LevelOfAssurance extractLevelOfAssurance(AuthnStatement authnStatement) {
         String levelOfAssuranceString = ofNullable(authnStatement.getAuthnContext())
             .map(AuthnContext::getAuthnContextClassRef)
-            .map(AuthnContextClassRef::getAuthnContextClassRef)
+            .map(AuthnContextClassRef::getURI)
             .orElseThrow(() -> new SamlResponseValidationException("Expected a level of assurance."));
 
         try {

@@ -1,6 +1,6 @@
 package uk.gov.ida.verifyserviceprovider.exceptions;
 
-import uk.gov.ida.saml.core.validation.SamlResponseValidationException;
+import stubidp.saml.utils.core.validation.SamlResponseValidationException;
 
 public class RequestedOnlyVerifiedException extends SamlResponseValidationException {
     public RequestedOnlyVerifiedException() {

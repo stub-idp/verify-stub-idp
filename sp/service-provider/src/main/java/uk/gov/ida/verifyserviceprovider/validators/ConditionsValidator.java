@@ -2,8 +2,10 @@ package uk.gov.ida.verifyserviceprovider.validators;
 
 import org.joda.time.DateTime;
 import org.opensaml.saml.saml2.core.Conditions;
-import uk.gov.ida.saml.core.validation.SamlResponseValidationException;
-import uk.gov.ida.saml.core.validation.conditions.AudienceRestrictionValidator;
+import stubidp.saml.utils.core.validation.SamlResponseValidationException;
+import stubidp.saml.utils.core.validation.conditions.AudienceRestrictionValidator;
+
+import java.time.Instant;
 
 public class ConditionsValidator {
 
@@ -31,7 +33,7 @@ public class ConditionsValidator {
             throw new SamlResponseValidationException("Conditions should not contain one time use element.");
         }
 
-        DateTime notOnOrAfter = conditionsElement.getNotOnOrAfter();
+        Instant notOnOrAfter = conditionsElement.getNotOnOrAfter();
         if (notOnOrAfter != null) {
             timeRestrictionValidator.validateNotOnOrAfter(notOnOrAfter);
         }

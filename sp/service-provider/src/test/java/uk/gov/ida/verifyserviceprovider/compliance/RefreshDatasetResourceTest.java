@@ -1,9 +1,10 @@
 package uk.gov.ida.verifyserviceprovider.compliance;
 
 import io.dropwizard.jersey.validation.ValidationErrorMessage;
-import io.dropwizard.testing.junit.ResourceTestRule;
-import org.junit.Rule;
-import org.junit.Test;
+import io.dropwizard.testing.junit5.DropwizardExtensionsSupport;
+import io.dropwizard.testing.junit5.ResourceExtension;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import uk.gov.ida.verifyserviceprovider.compliance.dto.MatchingDataset;
 import uk.gov.ida.verifyserviceprovider.compliance.dto.MatchingDatasetBuilder;
 
@@ -17,12 +18,12 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+@ExtendWith(DropwizardExtensionsSupport.class)
 public class RefreshDatasetResourceTest {
 
     ComplianceToolClient complianceToolClient = mock(ComplianceToolClient.class);
 
-    @Rule
-    public ResourceTestRule refreshDatasetResource = ResourceTestRule.builder()
+    public ResourceExtension refreshDatasetResource = ResourceExtension.builder()
             .addResource(new RefreshDatasetResource(complianceToolClient))
             .build();
 
@@ -35,7 +36,7 @@ public class RefreshDatasetResourceTest {
         assertThat(response.getStatus()).isEqualTo(422);
         ValidationErrorMessage errorMessage = response.readEntity(ValidationErrorMessage.class);
         assertThat(errorMessage.getErrors()).isNotEmpty();
-        assertThat(errorMessage.getErrors()).contains("firstName may not be null");
+        assertThat(errorMessage.getErrors()).contains("firstName must not be null");
     }
 
     @Test

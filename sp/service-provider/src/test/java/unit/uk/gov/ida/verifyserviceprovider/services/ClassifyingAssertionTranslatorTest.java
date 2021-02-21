@@ -1,8 +1,10 @@
 package unit.uk.gov.ida.verifyserviceprovider.services;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.opensaml.saml.saml2.core.Assertion;
 import org.opensaml.xmlsec.signature.impl.SignatureImpl;
 import uk.gov.ida.verifyserviceprovider.dto.LevelOfAssurance;
@@ -13,14 +15,16 @@ import uk.gov.ida.verifyserviceprovider.services.EidasUnsignedAssertionTranslato
 import uk.gov.ida.verifyserviceprovider.services.VerifyAssertionTranslator;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
-import static org.mockito.MockitoAnnotations.initMocks;
+import static org.mockito.MockitoAnnotations.openMocks;
 
+@ExtendWith(MockitoExtension.class)
 public class ClassifyingAssertionTranslatorTest {
 
     private final String expectedInResponseTo = "inResponseTo";
@@ -38,10 +42,8 @@ public class ClassifyingAssertionTranslatorTest {
     @Mock
     private EidasUnsignedAssertionTranslator eidasUnsignedAssertionTranslator;
 
-    @Before
-    public void setUp() {
-        initMocks(this);
-
+    @BeforeEach
+    public void setUp() throws Exception {
         classifyingAssertionService = new ClassifyingAssertionTranslator(
                 verifyAssertionService,
                 eidasAssertionService,
@@ -88,7 +90,7 @@ public class ClassifyingAssertionTranslatorTest {
     @Test
     public void shouldUseEidasUnsignedAssertionTranslatorIfAssertionsAreUnsigned() {
         Assertion assertion = mock(Assertion.class);
-        List<Assertion> assertions = Arrays.asList(assertion);
+        List<Assertion> assertions = Collections.singletonList(assertion);
         TranslatedNonMatchingResponseBody expectedResult = mock(TranslatedNonMatchingResponseBody.class);
 
         when(assertion.getSignature()).thenReturn(null);

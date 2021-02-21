@@ -1,63 +1,59 @@
 package unit.uk.gov.ida.verifyserviceprovider.validators;
 
-import org.joda.time.DateTime;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.ExpectedException;
-import uk.gov.ida.saml.core.validation.SamlResponseValidationException;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+import stubidp.saml.utils.core.validation.SamlResponseValidationException;
 import uk.gov.ida.verifyserviceprovider.utils.DateTimeComparator;
 import uk.gov.ida.verifyserviceprovider.validators.InstantValidator;
 
-import static org.joda.time.DateTimeZone.UTC;
-import static org.joda.time.format.ISODateTimeFormat.dateHourMinuteSecond;
-import static org.mockito.Mockito.mock;
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
+
+import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 import static org.mockito.Mockito.when;
 
+@ExtendWith({MockitoExtension.class})
 public class InstantValidatorTest {
 
+    @Mock
     private DateTimeComparator dateTimeComparator;
 
     private InstantValidator validator;
 
-    @Rule
-    public ExpectedException expectedException = ExpectedException.none();
-
-    @Before
+    @BeforeEach
     public void setUp() {
-        dateTimeComparator = mock(DateTimeComparator.class);
-
         validator = new InstantValidator(dateTimeComparator);
     }
 
     @Test
     public void shouldValidateInstantIsInExpectedRange() {
-        DateTime instant = new DateTime().minusMinutes(1);
+        Instant instant = Instant.now().minus(1, ChronoUnit.MINUTES);
 
         validator.validate(instant, "any-instant-name");
     }
 
     @Test
     public void shouldThrowExceptionIfInstantOldenThanFiveMinutes() {
-        DateTime instant = new DateTime().minusMinutes(6);
-        expectedException.expect(SamlResponseValidationException.class);
-        expectedException.expectMessage("some-instant-name is too far in the past ");
-
-        validator.validate(instant, "some-instant-name");
+        Instant instant = Instant.now().minus(6, ChronoUnit.MINUTES);
+        assertThatExceptionOfType(SamlResponseValidationException.class)
+                .isThrownBy(() -> validator.validate(instant, "some-instant-name"))
+                .withMessageContaining("some-instant-name is too far in the past ");
     }
 
     @Test
     public void shouldThrowExceptionWhenInstantIsInTheFuture() {
-        DateTime instant = new DateTime().plusMinutes(1);
+        Instant instant = Instant.now().plus(1, ChronoUnit.MINUTES);
         String errorMessage = String.format("%s is in the future %s",
-            "some-instant-name",
-            instant.withZone(UTC).toString(dateHourMinuteSecond()));
+                "some-instant-name",
+                instant);
 
         when(dateTimeComparator.isAfterNow(instant)).thenReturn(true);
 
-        expectedException.expect(SamlResponseValidationException.class);
-        expectedException.expectMessage(errorMessage);
-
-        validator.validate(instant, "some-instant-name");
+        assertThatExceptionOfType(SamlResponseValidationException.class)
+                .isThrownBy(() -> validator.validate(instant, "some-instant-name"))
+                .withMessage(errorMessage);
     }
 }

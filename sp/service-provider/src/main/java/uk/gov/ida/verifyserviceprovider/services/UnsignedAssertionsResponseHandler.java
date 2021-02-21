@@ -6,19 +6,19 @@ import org.opensaml.saml.saml2.core.Response;
 import org.opensaml.saml.saml2.metadata.SPSSODescriptor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import uk.gov.ida.saml.core.IdaConstants;
-import uk.gov.ida.saml.core.extensions.eidas.CountrySamlResponse;
-import uk.gov.ida.saml.core.extensions.eidas.EncryptedAssertionKeys;
-import uk.gov.ida.saml.core.validation.SamlResponseValidationException;
-import uk.gov.ida.saml.deserializers.StringToOpenSamlObjectTransformer;
-import uk.gov.ida.saml.security.AssertionDecrypter;
-import uk.gov.ida.saml.security.EidasValidatorFactory;
-import uk.gov.ida.saml.security.SamlAssertionsSignatureValidator;
-import uk.gov.ida.saml.security.SecretKeyDecryptorFactory;
-import uk.gov.ida.saml.security.exception.SamlFailedToDecryptException;
-import uk.gov.ida.saml.security.validators.ValidatedAssertions;
-import uk.gov.ida.saml.security.validators.ValidatedResponse;
-import uk.gov.ida.saml.security.validators.encryptedelementtype.EncryptionAlgorithmValidator;
+import stubidp.saml.extensions.IdaConstants;
+import stubidp.saml.extensions.extensions.eidas.CountrySamlResponse;
+import stubidp.saml.extensions.extensions.eidas.EncryptedAssertionKeys;
+import stubidp.saml.metadata.EidasValidatorFactory;
+import stubidp.saml.security.AssertionDecrypter;
+import stubidp.saml.security.SamlAssertionsSignatureValidator;
+import stubidp.saml.security.SecretKeyDecryptorFactory;
+import stubidp.saml.security.exception.SamlFailedToDecryptException;
+import stubidp.saml.security.validators.ValidatedAssertions;
+import stubidp.saml.security.validators.ValidatedResponse;
+import stubidp.saml.security.validators.encryptedelementtype.EncryptionAlgorithmValidator;
+import stubidp.saml.serializers.deserializers.StringToOpenSamlObjectTransformer;
+import stubidp.saml.utils.core.validation.SamlResponseValidationException;
 import uk.gov.ida.verifyserviceprovider.validators.InstantValidator;
 
 import javax.crypto.NoSuchPaddingException;
@@ -28,7 +28,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import static uk.gov.ida.saml.security.errors.SamlTransformationErrorFactory.unableToDecrypt;
+import static stubidp.saml.security.errors.SamlTransformationErrorFactory.unableToDecrypt;
 
 public class UnsignedAssertionsResponseHandler {
     private static final Logger LOG = LoggerFactory.getLogger(UnsignedAssertionsResponseHandler.class);

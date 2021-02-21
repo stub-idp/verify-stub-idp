@@ -1,7 +1,7 @@
 package uk.gov.ida.verifyserviceprovider.services;
 
 import org.opensaml.saml.saml2.core.StatusCode;
-import uk.gov.ida.saml.core.validation.SamlResponseValidationException;
+import stubidp.saml.utils.core.validation.SamlResponseValidationException;
 import uk.gov.ida.verifyserviceprovider.dto.NonMatchingScenario;
 import uk.gov.ida.verifyserviceprovider.dto.TranslatedNonMatchingResponseBody;
 

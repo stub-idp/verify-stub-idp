@@ -1,6 +1,6 @@
 package uk.gov.ida.verifyserviceprovider.validators;
 
-import uk.gov.ida.saml.core.validation.SamlResponseValidationException;
+import stubidp.saml.utils.core.validation.SamlResponseValidationException;
 import uk.gov.ida.verifyserviceprovider.dto.LevelOfAssurance;
 
 public class LevelOfAssuranceValidator {

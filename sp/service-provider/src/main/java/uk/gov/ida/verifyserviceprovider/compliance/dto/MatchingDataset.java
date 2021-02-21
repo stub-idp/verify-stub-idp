@@ -3,55 +3,56 @@ package uk.gov.ida.verifyserviceprovider.compliance.dto;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import org.hibernate.validator.constraints.NotEmpty;
-import uk.gov.ida.saml.core.domain.AuthnContext;
+import stubidp.saml.domain.assertions.AuthnContext;
 
 import javax.validation.Valid;
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.util.List;
+import java.util.Objects;
 
 public class MatchingDataset {
     @NotNull
     @Valid
     @JsonProperty
-    private MatchingAttribute firstName;
+    protected MatchingAttribute firstName;
 
     @NotNull
     @Valid
     @JsonProperty
-    private MatchingAttribute middleNames;
+    protected MatchingAttribute middleNames;
 
     @NotNull
     @Valid
     @JsonProperty
     @NotEmpty
-    private List<MatchingAttribute> surnames;
+    protected List<MatchingAttribute> surnames;
 
 
     @JsonInclude(Include.NON_NULL)
     @Valid
     @JsonProperty
-    private MatchingAttribute gender;
+    protected MatchingAttribute gender;
 
     @NotNull
     @Valid
     @JsonProperty
-    private MatchingAttribute dateOfBirth;
+    protected MatchingAttribute dateOfBirth;
 
     @Valid
     @JsonProperty
     @JsonInclude(Include.NON_NULL)
-    private List<MatchingAddress> addresses;
+    protected List<MatchingAddress> addresses;
 
     @NotNull
     @Valid
     @JsonProperty
-    private AuthnContext levelOfAssurance;
+    protected AuthnContext levelOfAssurance;
 
     @NotNull
     @Valid
     @JsonProperty
-    private String persistentId;
+    protected String persistentId;
 
     public MatchingDataset() {}
 
@@ -105,4 +106,30 @@ public class MatchingDataset {
         return persistentId;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        MatchingDataset that = (MatchingDataset) o;
+        return Objects.equals(firstName, that.firstName) && Objects.equals(middleNames, that.middleNames) && Objects.equals(surnames, that.surnames) && Objects.equals(gender, that.gender) && Objects.equals(dateOfBirth, that.dateOfBirth) && Objects.equals(addresses, that.addresses) && levelOfAssurance == that.levelOfAssurance && Objects.equals(persistentId, that.persistentId);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(firstName, middleNames, surnames, gender, dateOfBirth, addresses, levelOfAssurance, persistentId);
+    }
+
+    @Override
+    public String toString() {
+        return "MatchingDataset{" +
+                "firstName=" + firstName +
+                ", middleNames=" + middleNames +
+                ", surnames=" + surnames +
+                ", gender=" + gender +
+                ", dateOfBirth=" + dateOfBirth +
+                ", addresses=" + addresses +
+                ", levelOfAssurance=" + levelOfAssurance +
+                ", persistentId='" + persistentId + '\'' +
+                '}';
+    }
 }

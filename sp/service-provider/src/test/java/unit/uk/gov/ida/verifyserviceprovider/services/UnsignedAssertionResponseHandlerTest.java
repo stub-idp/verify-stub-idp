@@ -1,11 +1,10 @@
 package unit.uk.gov.ida.verifyserviceprovider.services;
 
-import com.google.common.collect.ImmutableSet;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.opensaml.core.xml.util.XMLObjectSupport;
 import org.opensaml.saml.saml2.core.Assertion;
 import org.opensaml.saml.saml2.core.Attribute;
@@ -14,27 +13,29 @@ import org.opensaml.saml.saml2.core.Response;
 import org.opensaml.saml.saml2.encryption.Decrypter;
 import org.opensaml.saml.saml2.metadata.SPSSODescriptor;
 import org.opensaml.xmlsec.encryption.support.EncryptionConstants;
-import uk.gov.ida.saml.core.IdaConstants;
-import uk.gov.ida.saml.core.IdaSamlBootstrap;
-import uk.gov.ida.saml.core.extensions.eidas.CountrySamlResponse;
-import uk.gov.ida.saml.core.extensions.eidas.EncryptedAssertionKeys;
-import uk.gov.ida.saml.core.extensions.eidas.impl.CountrySamlResponseBuilder;
-import uk.gov.ida.saml.core.extensions.eidas.impl.EncryptedAssertionKeysBuilder;
-import uk.gov.ida.saml.core.validation.SamlResponseValidationException;
-import uk.gov.ida.saml.deserializers.StringToOpenSamlObjectTransformer;
-import uk.gov.ida.saml.security.EidasValidatorFactory;
-import uk.gov.ida.saml.security.SamlAssertionsSignatureValidator;
-import uk.gov.ida.saml.security.SecretKeyDecryptorFactory;
-import uk.gov.ida.saml.security.exception.SamlFailedToDecryptException;
-import uk.gov.ida.saml.security.validators.ValidatedAssertions;
-import uk.gov.ida.saml.security.validators.ValidatedResponse;
-import uk.gov.ida.saml.security.validators.encryptedelementtype.EncryptionAlgorithmValidator;
+import stubidp.saml.extensions.IdaConstants;
+import stubidp.saml.extensions.extensions.eidas.CountrySamlResponse;
+import stubidp.saml.extensions.extensions.eidas.EncryptedAssertionKeys;
+import stubidp.saml.extensions.extensions.eidas.impl.CountrySamlResponseBuilder;
+import stubidp.saml.extensions.extensions.eidas.impl.EncryptedAssertionKeysBuilder;
+import stubidp.saml.metadata.EidasValidatorFactory;
+import stubidp.saml.security.SamlAssertionsSignatureValidator;
+import stubidp.saml.security.SecretKeyDecryptorFactory;
+import stubidp.saml.security.exception.SamlFailedToDecryptException;
+import stubidp.saml.security.validators.ValidatedAssertions;
+import stubidp.saml.security.validators.ValidatedResponse;
+import stubidp.saml.security.validators.encryptedelementtype.EncryptionAlgorithmValidator;
+import stubidp.saml.serializers.deserializers.StringToOpenSamlObjectTransformer;
+import stubidp.saml.test.OpenSAMLRunner;
+import stubidp.saml.utils.core.validation.SamlResponseValidationException;
 import uk.gov.ida.verifyserviceprovider.services.UnsignedAssertionsResponseHandler;
 import uk.gov.ida.verifyserviceprovider.validators.InstantValidator;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -42,13 +43,13 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import static uk.gov.ida.saml.core.test.builders.AssertionBuilder.anAssertion;
-import static uk.gov.ida.saml.core.test.builders.AssertionBuilder.anEidasAssertion;
-import static uk.gov.ida.saml.core.test.builders.AttributeStatementBuilder.anAttributeStatement;
-import static uk.gov.ida.saml.core.test.builders.ResponseBuilder.aResponse;
+import static stubidp.saml.test.builders.AssertionBuilder.anAssertion;
+import static stubidp.saml.test.builders.AssertionBuilder.anEidasAssertion;
+import static stubidp.saml.test.builders.AttributeStatementBuilder.anAttributeStatement;
+import static stubidp.saml.test.builders.ResponseBuilder.aResponse;
 
-@RunWith(MockitoJUnitRunner.class)
-public class UnsignedAssertionResponseHandlerTest {
+@ExtendWith(MockitoExtension.class)
+public class UnsignedAssertionResponseHandlerTest extends OpenSAMLRunner {
 
     @Mock
     private EidasValidatorFactory eidasValidatorFactory;
@@ -69,16 +70,14 @@ public class UnsignedAssertionResponseHandlerTest {
     private SamlAssertionsSignatureValidator hubAssertionSignatureValidator;
 
     private UnsignedAssertionsResponseHandler handler;
-    private final List<String> singleKeyList = Arrays.asList("aKey");
+    private final List<String> singleKeyList = Collections.singletonList("aKey");
     private final String samlString = "eidasSaml";
     private final String inResponseTo = "inResponseTo";
     private ValidatedResponse validatedResponse;
     private Response eidasResponse;
 
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
-        IdaSamlBootstrap.bootstrap();
-
         handler = new UnsignedAssertionsResponseHandler(
                 eidasValidatorFactory,
                 stringToResponseTransformer,
@@ -93,7 +92,7 @@ public class UnsignedAssertionResponseHandlerTest {
 
     @Test
     public void getValidatedResponseShouldValidateResponse() {
-        List<Assertion> eidasSamlAssertion = Arrays.asList(anEidasSamlAssertion(singleKeyList));
+        List<Assertion> eidasSamlAssertion = Collections.singletonList(anEidasSamlAssertion(singleKeyList));
 
         when(hubAssertionSignatureValidator.validate(eidasSamlAssertion, SPSSODescriptor.DEFAULT_ELEMENT_NAME)).thenReturn(new ValidatedAssertions(eidasSamlAssertion));
         when(stringToResponseTransformer.apply(samlString)).thenReturn(eidasResponse);
@@ -109,15 +108,14 @@ public class UnsignedAssertionResponseHandlerTest {
 
     @Test
     public void getValidatedResponseShouldThrowIfInResponseToIsNotExpected() {
-        List<Assertion> eidasSamlAssertion = Arrays.asList(anEidasSamlAssertion(singleKeyList));
+        List<Assertion> eidasSamlAssertion = Collections.singletonList(anEidasSamlAssertion(singleKeyList));
 
         when(hubAssertionSignatureValidator.validate(eidasSamlAssertion, SPSSODescriptor.DEFAULT_ELEMENT_NAME)).thenReturn(new ValidatedAssertions(eidasSamlAssertion));
         when(stringToResponseTransformer.apply(samlString)).thenReturn(eidasResponse);
         when(eidasValidatorFactory.getValidatedResponse(eidasResponse)).thenReturn(validatedResponse);
 
-        assertThrows(SamlResponseValidationException.class, () -> {
-            handler.getValidatedResponse(eidasSamlAssertion, "thisIsNotTheResponseIdYouAreLookingFor");
-        });
+        assertThrows(SamlResponseValidationException.class,
+                () -> handler.getValidatedResponse(eidasSamlAssertion, "thisIsNotTheResponseIdYouAreLookingFor"));
     }
 
     @Test
@@ -152,9 +150,8 @@ public class UnsignedAssertionResponseHandlerTest {
     public void decryptAssertionShouldThrowIfNoKeysCanDecrypt() throws Exception {
         Assertion eidasSamlAssertion = anEidasSamlAssertion(Arrays.asList("wrongKey", "anotherWrongKey", "ohNo!"));
 
-        assertThrows(SamlFailedToDecryptException.class, () -> {
-            handler.decryptAssertion(validatedResponse, eidasSamlAssertion);
-        });
+        assertThrows(SamlFailedToDecryptException.class,
+                () -> handler.decryptAssertion(validatedResponse, eidasSamlAssertion));
 
         verify(secretKeyDecryptorFactory, times(3)).createDecrypter(any());
     }
@@ -167,10 +164,10 @@ public class UnsignedAssertionResponseHandlerTest {
                 instantValidator,
                 secretKeyDecryptorFactory,
                 new EncryptionAlgorithmValidator(
-                        ImmutableSet.of(
+                        Set.of(
                                 EncryptionConstants.ALGO_ID_BLOCKCIPHER_TRIPLEDES
                         ),
-                        ImmutableSet.of(
+                        Set.of(
                                 EncryptionConstants.ALGO_ID_KEYTRANSPORT_RSAOAEP
                         )
                 ),
@@ -178,9 +175,8 @@ public class UnsignedAssertionResponseHandlerTest {
         );
         Assertion eidasSamlAssertion = anEidasSamlAssertion(singleKeyList);
 
-        assertThrows(SamlFailedToDecryptException.class, () -> {
-            handler.decryptAssertion(validatedResponse, eidasSamlAssertion);
-        });
+        assertThrows(SamlFailedToDecryptException.class,
+                () -> handler.decryptAssertion(validatedResponse, eidasSamlAssertion));
     }
 
     private Assertion anEidasSamlAssertion(List<String> keys) {
@@ -233,10 +229,10 @@ public class UnsignedAssertionResponseHandlerTest {
 
     private EncryptionAlgorithmValidator getEncryptionAlgorithmValidator() {
         return new EncryptionAlgorithmValidator(
-                ImmutableSet.of(
+                Set.of(
                         EncryptionConstants.ALGO_ID_BLOCKCIPHER_AES128
                 ),
-                ImmutableSet.of(
+                Set.of(
                         EncryptionConstants.ALGO_ID_KEYTRANSPORT_RSAOAEP
                 )
         );

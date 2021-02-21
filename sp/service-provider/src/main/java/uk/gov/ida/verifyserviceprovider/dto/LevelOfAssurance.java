@@ -1,6 +1,6 @@
 package uk.gov.ida.verifyserviceprovider.dto;
 
-import uk.gov.ida.saml.core.extensions.IdaAuthnContext;
+import stubidp.saml.extensions.extensions.IdaAuthnContext;
 
 public enum LevelOfAssurance {
 

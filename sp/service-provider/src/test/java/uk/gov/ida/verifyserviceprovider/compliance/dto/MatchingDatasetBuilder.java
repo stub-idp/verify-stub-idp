@@ -1,6 +1,6 @@
 package uk.gov.ida.verifyserviceprovider.compliance.dto;
 
-import uk.gov.ida.saml.core.domain.AuthnContext;
+import stubidp.saml.domain.assertions.AuthnContext;
 
 import java.time.LocalDateTime;
 import java.util.Collections;

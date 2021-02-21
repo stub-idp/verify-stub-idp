@@ -1,19 +1,18 @@
 package unit.uk.gov.ida.verifyserviceprovider.services;
 
-import com.google.common.collect.ImmutableList;
-import org.joda.time.DateTime;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.opensaml.saml.saml2.core.Assertion;
 import org.opensaml.saml.saml2.core.Subject;
-import uk.gov.ida.saml.core.domain.AuthnContext;
-import uk.gov.ida.saml.core.test.builders.AssertionBuilder;
-import uk.gov.ida.saml.core.transformers.EidasMatchingDatasetUnmarshaller;
-import uk.gov.ida.saml.core.transformers.MatchingDatasetToNonMatchingAttributesMapper;
-import uk.gov.ida.saml.core.validation.SamlResponseValidationException;
-import uk.gov.ida.saml.hub.factories.UserIdHashFactory;
-import uk.gov.ida.saml.metadata.EidasMetadataResolverRepository;
-import uk.gov.ida.saml.security.SamlAssertionsSignatureValidator;
+import stubidp.saml.domain.assertions.AuthnContext;
+import stubidp.saml.metadata.EidasMetadataResolverRepository;
+import stubidp.saml.security.SamlAssertionsSignatureValidator;
+import stubidp.saml.test.OpenSAMLRunner;
+import stubidp.saml.test.builders.AssertionBuilder;
+import stubidp.saml.utils.core.transformers.EidasMatchingDatasetUnmarshaller;
+import stubidp.saml.utils.core.transformers.MatchingDatasetToNonMatchingAttributesMapper;
+import stubidp.saml.utils.core.validation.SamlResponseValidationException;
+import stubidp.saml.utils.hub.factories.UserIdHashFactory;
 import uk.gov.ida.verifyserviceprovider.dto.LevelOfAssurance;
 import uk.gov.ida.verifyserviceprovider.dto.NonMatchingScenario;
 import uk.gov.ida.verifyserviceprovider.dto.TestTranslatedNonMatchingResponseBody;
@@ -26,52 +25,55 @@ import uk.gov.ida.verifyserviceprovider.validators.InstantValidator;
 import uk.gov.ida.verifyserviceprovider.validators.LevelOfAssuranceValidator;
 import uk.gov.ida.verifyserviceprovider.validators.SubjectValidator;
 
+import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
 
 import static java.util.Arrays.asList;
 import static java.util.Collections.singletonList;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import static uk.gov.ida.saml.core.extensions.EidasAuthnContext.EIDAS_LOA_SUBSTANTIAL;
-import static uk.gov.ida.saml.core.test.TestEntityIds.STUB_COUNTRY_ONE;
-import static uk.gov.ida.saml.core.test.builders.AssertionBuilder.anAssertion;
-import static uk.gov.ida.saml.core.test.builders.AttributeStatementBuilder.anAttributeStatement;
-import static uk.gov.ida.saml.core.test.builders.AuthnContextBuilder.anAuthnContext;
-import static uk.gov.ida.saml.core.test.builders.AuthnContextClassRefBuilder.anAuthnContextClassRef;
-import static uk.gov.ida.saml.core.test.builders.AuthnStatementBuilder.anAuthnStatement;
-import static uk.gov.ida.saml.core.test.builders.IPAddressAttributeBuilder.anIPAddress;
-import static uk.gov.ida.saml.core.test.builders.IssuerBuilder.anIssuer;
-import static uk.gov.ida.saml.core.test.builders.SubjectBuilder.aSubject;
-import static uk.gov.ida.saml.core.test.builders.SubjectConfirmationBuilder.aSubjectConfirmation;
-import static uk.gov.ida.saml.core.test.builders.SubjectConfirmationDataBuilder.aSubjectConfirmationData;
+import static stubidp.saml.extensions.extensions.EidasAuthnContext.EIDAS_LOA_SUBSTANTIAL;
+import static stubidp.saml.test.builders.AssertionBuilder.anAssertion;
+import static stubidp.saml.test.builders.AttributeStatementBuilder.anAttributeStatement;
+import static stubidp.saml.test.builders.AuthnContextBuilder.anAuthnContext;
+import static stubidp.saml.test.builders.AuthnContextClassRefBuilder.anAuthnContextClassRef;
+import static stubidp.saml.test.builders.AuthnStatementBuilder.anAuthnStatement;
+import static stubidp.saml.test.builders.IPAddressAttributeBuilder.anIPAddress;
+import static stubidp.saml.test.builders.IssuerBuilder.anIssuer;
+import static stubidp.saml.test.builders.SubjectBuilder.aSubject;
+import static stubidp.saml.test.builders.SubjectConfirmationBuilder.aSubjectConfirmation;
+import static stubidp.saml.test.builders.SubjectConfirmationDataBuilder.aSubjectConfirmationData;
+import static stubidp.test.devpki.TestEntityIds.STUB_COUNTRY_ONE;
 import static uk.gov.ida.verifyserviceprovider.dto.LevelOfAssurance.LEVEL_2;
 
-public abstract class BaseEidasAssertionTranslatorTestBase {
+public abstract class BaseEidasAssertionTranslatorTestBase extends OpenSAMLRunner {
 
     protected BaseEidasAssertionTranslator assertionService;
-    @Mock
+
+    @Mock(lenient = true)
     SubjectValidator subjectValidator;
-    @Mock
+    @Mock(lenient = true)
     EidasMatchingDatasetUnmarshaller eidasMatchingDatasetUnmarshaller;
-    @Mock
+    @Mock(lenient = true)
     MatchingDatasetToNonMatchingAttributesMapper mdsMapper;
-    @Mock
+    @Mock(lenient = true)
     InstantValidator instantValidator;
-    @Mock
+    @Mock(lenient = true)
     ConditionsValidator conditionsValidator;
-    @Mock
+    @Mock(lenient = true)
     LevelOfAssuranceValidator levelOfAssuranceValidator;
-    @Mock
+    @Mock(lenient = true)
     EidasMetadataResolverRepository metadataResolverRepository;
-    @Mock
+    @Mock(lenient = true)
     SignatureValidatorFactory signatureValidatorFactory;
-    @Mock
+    @Mock(lenient = true)
     SamlAssertionsSignatureValidator samlAssertionsSignatureValidator;
-    @Mock
+    @Mock(lenient = true)
     UserIdHashFactory userIdHashFactory;
 
     protected abstract void shouldCallValidatorsCorrectly();
@@ -107,17 +109,18 @@ public abstract class BaseEidasAssertionTranslatorTestBase {
         when(userIdHashFactory.hashId(eq(issuerId), eq(nameId), eq(Optional.of(AuthnContext.LEVEL_2))))
                 .thenReturn(expectedHashed);
 
-        TranslatedNonMatchingResponseBody responseBody = assertionService.translateSuccessResponse(ImmutableList.of(eidasAssertion), "requestId", LEVEL_2, "default-entity-id");
+        TranslatedNonMatchingResponseBody responseBody = assertionService.translateSuccessResponse(List.of(eidasAssertion), "requestId", LEVEL_2, "default-entity-id");
 
         verify(userIdHashFactory, times(1)).hashId(issuerId,nameId, Optional.of(AuthnContext.LEVEL_2));
         assertThat(responseBody.toString()).contains(expectedNonMatchingResponseBody.getPid());
     }
 
-    @Test(expected = SamlResponseValidationException.class)
+    @Test
     public void shouldThrowAnExceptionIfMultipleAssertionsReceived() {
         Assertion eidasAssertion1 = anAssertionWithAuthnStatement(EIDAS_LOA_SUBSTANTIAL, "requestId").buildUnencrypted();
         Assertion eidasAssertion2 = anAssertionWithAuthnStatement(EIDAS_LOA_SUBSTANTIAL, "requestId").buildUnencrypted();
-        assertionService.translateSuccessResponse(asList(eidasAssertion1, eidasAssertion2), "requestId", LEVEL_2, null);
+        assertThatExceptionOfType(SamlResponseValidationException.class)
+                .isThrownBy(() -> assertionService.translateSuccessResponse(asList(eidasAssertion1, eidasAssertion2), "requestId", LEVEL_2, null));
     }
 
     @Test
@@ -135,32 +138,32 @@ public abstract class BaseEidasAssertionTranslatorTestBase {
 
     protected static AssertionBuilder anAssertionWithAuthnStatement(String authnContext, String inResponseTo) {
         return anAssertion()
-            .addAuthnStatement(
-                anAuthnStatement()
-                    .withAuthnContext(
-                        anAuthnContext()
-                            .withAuthnContextClassRef(
-                                anAuthnContextClassRef()
-                                    .withAuthnContextClasRefValue(authnContext)
-                                    .build())
-                            .build())
-                    .build())
-            .withSubject(anAssertionSubject(inResponseTo))
-            .withIssuer(anIssuer().withIssuerId(STUB_COUNTRY_ONE).build())
-            .addAttributeStatement(anAttributeStatement().addAttribute(anIPAddress().build()).build());
+                .addAuthnStatement(
+                        anAuthnStatement()
+                                .withAuthnContext(
+                                        anAuthnContext()
+                                                .withAuthnContextClassRef(
+                                                        anAuthnContextClassRef()
+                                                                .withAuthnContextClasRefValue(authnContext)
+                                                                .build())
+                                                .build())
+                                .build())
+                .withSubject(anAssertionSubject(inResponseTo))
+                .withIssuer(anIssuer().withIssuerId(STUB_COUNTRY_ONE).build())
+                .addAttributeStatement(anAttributeStatement().addAttribute(anIPAddress().build()).build());
     }
 
     private static Subject anAssertionSubject(final String inResponseTo) {
         return aSubject()
-            .withSubjectConfirmation(
-                aSubjectConfirmation()
-                    .withSubjectConfirmationData(
-                        aSubjectConfirmationData()
-                            .withNotOnOrAfter(DateTime.now())
-                            .withInResponseTo(inResponseTo)
-                            .build()
-                    ).build()
-            ).build();
+                .withSubjectConfirmation(
+                        aSubjectConfirmation()
+                                .withSubjectConfirmationData(
+                                        aSubjectConfirmationData()
+                                                .withNotOnOrAfter(Instant.now())
+                                                .withInResponseTo(inResponseTo)
+                                                .build()
+                                ).build()
+                ).build();
     }
 
     EidasAssertionTranslatorValidatorContainer getEidasAssertionTranslatorValidatorContainer() {

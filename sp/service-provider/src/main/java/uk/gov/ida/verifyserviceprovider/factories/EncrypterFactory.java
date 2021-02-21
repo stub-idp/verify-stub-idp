@@ -2,9 +2,9 @@ package uk.gov.ida.verifyserviceprovider.factories;
 
 import org.opensaml.saml.saml2.encryption.Encrypter;
 import org.opensaml.security.credential.Credential;
-import uk.gov.ida.saml.security.EncryptionCredentialResolver;
+import stubidp.saml.security.EncryptionCredentialResolver;
 
-public class EncrypterFactory extends uk.gov.ida.saml.security.EncrypterFactory {
+public class EncrypterFactory extends stubidp.saml.security.EncrypterFactory {
 
     private final EncryptionCredentialResolver encryptionCredentialResolver;
     private final String hubEntityId;

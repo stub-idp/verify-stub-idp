@@ -3,8 +3,8 @@ package common.uk.gov.ida.verifyserviceprovider.utils;
 import org.opensaml.core.xml.XMLObjectBuilderFactory;
 import org.opensaml.core.xml.config.XMLObjectProviderRegistrySupport;
 import org.opensaml.saml.saml2.core.Attribute;
-import uk.gov.ida.saml.core.extensions.Verified;
-import uk.gov.ida.saml.core.test.OpenSamlXmlObjectFactory;
+import stubidp.saml.extensions.extensions.Verified;
+import stubidp.saml.utils.core.OpenSamlXmlObjectFactory;
 
 public class SamlResponseHelper {
 

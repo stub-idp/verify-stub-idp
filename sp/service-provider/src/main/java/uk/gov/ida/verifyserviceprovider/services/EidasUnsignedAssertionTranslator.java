@@ -1,10 +1,10 @@
 package uk.gov.ida.verifyserviceprovider.services;
 
 import org.opensaml.saml.saml2.core.Assertion;
-import uk.gov.ida.saml.core.transformers.MatchingDatasetToNonMatchingAttributesMapper;
-import uk.gov.ida.saml.core.transformers.MatchingDatasetUnmarshaller;
-import uk.gov.ida.saml.hub.factories.UserIdHashFactory;
-import uk.gov.ida.saml.metadata.EidasMetadataResolverRepository;
+import stubidp.saml.metadata.EidasMetadataResolverRepository;
+import stubidp.saml.utils.core.transformers.MatchingDatasetToNonMatchingAttributesMapper;
+import stubidp.saml.utils.core.transformers.MatchingDatasetUnmarshaller;
+import stubidp.saml.utils.hub.factories.UserIdHashFactory;
 import uk.gov.ida.verifyserviceprovider.validators.EidasAssertionTranslatorValidatorContainer;
 
 import java.util.List;

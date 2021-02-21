@@ -4,13 +4,14 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.dropwizard.client.JerseyClientConfiguration;
-import uk.gov.ida.saml.metadata.EidasMetadataConfiguration;
-import uk.gov.ida.saml.metadata.TrustStoreConfiguration;
+import stubidp.saml.metadata.EidasMetadataConfiguration;
+import stubidp.saml.metadata.TrustStoreConfiguration;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.net.URI;
 import java.security.KeyStore;
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -31,10 +32,10 @@ public class EuropeanIdentityConfiguration extends EidasMetadataConfiguration {
                                          @JsonProperty("acceptableHubConnectorEntityIds") List<String> acceptableHubConnectorEntityIds,
                                          @NotNull @Valid @JsonProperty("enabled") boolean enabled,
                                          @JsonProperty("trustAnchorUri") URI trustAnchorUri,
-                                         @JsonProperty("minRefreshDelay") Long minRefreshDelay,
-                                         @JsonProperty("maxRefreshDelay") Long maxRefreshDelay,
-                                         @JsonProperty("trustAnchorMaxRefreshDelay") Long trustAnchorMaxRefreshDelay,
-                                         @JsonProperty("trustAnchorMinRefreshDelay") Long trustAnchorMinRefreshDelay,
+                                         @JsonProperty("minRefreshDelay") Duration minRefreshDelay,
+                                         @JsonProperty("maxRefreshDelay") Duration maxRefreshDelay,
+                                         @JsonProperty("trustAnchorMaxRefreshDelay") Duration trustAnchorMaxRefreshDelay,
+                                         @JsonProperty("trustAnchorMinRefreshDelay") Duration trustAnchorMinRefreshDelay,
                                          @JsonProperty("client") JerseyClientConfiguration client,
                                          @JsonProperty("jerseyClientName") String jerseyClientName,
                                          @JsonProperty("trustStore") TrustStoreConfiguration trustStore,

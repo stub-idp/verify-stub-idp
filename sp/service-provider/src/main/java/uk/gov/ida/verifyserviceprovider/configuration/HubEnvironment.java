@@ -2,7 +2,7 @@ package uk.gov.ida.verifyserviceprovider.configuration;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import io.dropwizard.servlets.assets.ResourceNotFoundException;
-import uk.gov.ida.saml.metadata.KeyStoreLoader;
+import stubidp.saml.metadata.KeyStoreLoader;
 
 import java.io.FileNotFoundException;
 import java.io.InputStream;

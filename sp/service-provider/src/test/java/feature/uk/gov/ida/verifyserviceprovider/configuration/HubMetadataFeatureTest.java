@@ -4,19 +4,18 @@ import com.github.tomakehurst.wiremock.WireMockServer;
 import common.uk.gov.ida.verifyserviceprovider.servers.MockMsaServer;
 import io.dropwizard.client.JerseyClientBuilder;
 import io.dropwizard.testing.DropwizardTestSupport;
-import keystore.KeyStoreResource;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.ClassRule;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.opensaml.xmlsec.algorithm.descriptors.DigestMD5;
 import org.opensaml.xmlsec.signature.Signature;
-import uk.gov.ida.saml.core.IdaSamlBootstrap;
-import uk.gov.ida.saml.core.test.TestCertificateStrings;
-import uk.gov.ida.saml.core.test.TestCredentialFactory;
-import uk.gov.ida.saml.core.test.builders.SignatureBuilder;
-import uk.gov.ida.saml.metadata.test.factories.metadata.EntitiesDescriptorFactory;
-import uk.gov.ida.saml.metadata.test.factories.metadata.MetadataFactory;
+import stubidp.saml.test.OpenSAMLRunner;
+import stubidp.saml.test.TestCredentialFactory;
+import stubidp.saml.test.builders.SignatureBuilder;
+import stubidp.saml.test.metadata.EntitiesDescriptorFactory;
+import stubidp.saml.test.metadata.MetadataFactory;
+import stubidp.test.devpki.TestCertificateStrings;
+import stubidp.test.utils.keystore.KeyStoreResource;
 import uk.gov.ida.verifyserviceprovider.VerifyServiceProviderApplication;
 import uk.gov.ida.verifyserviceprovider.configuration.VerifyServiceProviderConfiguration;
 
@@ -36,27 +35,26 @@ import static io.dropwizard.testing.ConfigOverride.config;
 import static java.lang.String.format;
 import static javax.ws.rs.core.Response.Status.INTERNAL_SERVER_ERROR;
 import static javax.ws.rs.core.Response.Status.OK;
-import static keystore.builders.KeyStoreResourceBuilder.aKeyStoreResource;
 import static org.assertj.core.api.Assertions.assertThat;
-import static uk.gov.ida.saml.core.test.TestCertificateStrings.METADATA_SIGNING_A_PUBLIC_CERT;
-import static uk.gov.ida.saml.core.test.TestCertificateStrings.TEST_RP_PRIVATE_ENCRYPTION_KEY;
-import static uk.gov.ida.saml.core.test.TestCertificateStrings.TEST_RP_PRIVATE_SIGNING_KEY;
-import static uk.gov.ida.saml.core.test.TestEntityIds.HUB_ENTITY_ID;
-import static uk.gov.ida.saml.core.test.builders.CertificateBuilder.aCertificate;
+import static stubidp.saml.test.builders.CertificateBuilder.aCertificate;
+import static stubidp.test.devpki.PemCertificateStrings.METADATA_SIGNING_A_PUBLIC_CERT;
+import static stubidp.test.devpki.TestCertificateStrings.TEST_RP_PRIVATE_ENCRYPTION_KEY;
+import static stubidp.test.devpki.TestCertificateStrings.TEST_RP_PRIVATE_SIGNING_KEY;
+import static stubidp.test.devpki.TestEntityIds.HUB_ENTITY_ID;
+import static stubidp.test.utils.keystore.builders.KeyStoreResourceBuilder.aKeyStoreResource;
 
-public class HubMetadataFeatureTest {
+public class HubMetadataFeatureTest extends OpenSAMLRunner {
 
     private final String HEALTHCHECK_URL = "http://localhost:%d/admin/healthcheck";
 
-    private static WireMockServer wireMockServer = new WireMockServer(wireMockConfig().dynamicPort());
+    private static final WireMockServer wireMockServer = new WireMockServer(wireMockConfig().dynamicPort());
 
-    @ClassRule
     public static MockMsaServer msaServer = new MockMsaServer();
+
     private DropwizardTestSupport<VerifyServiceProviderConfiguration> applicationTestSupport;
 
-    @Before
+    @BeforeEach
     public void setUp() {
-        IdaSamlBootstrap.bootstrap();
         wireMockServer.start();
         msaServer.serveDefaultMetadata();
 
@@ -103,14 +101,14 @@ public class HubMetadataFeatureTest {
         return format("http://localhost:%s/SAML2/metadata", wireMockServer.port());
     }
 
-    @After
+    @AfterEach
     public void tearDown() {
         applicationTestSupport.after();
         wireMockServer.stop();
     }
 
     @Test
-    public void shouldFailHealthcheckWhenHubMetadataUnavailable() {
+    public void shouldFailHealthcheckWhenHubMetadataUnavailable() throws Exception {
         wireMockServer.stubFor(
             get(urlEqualTo("/SAML2/metadata"))
                 .willReturn(aResponse()
@@ -136,7 +134,7 @@ public class HubMetadataFeatureTest {
     }
 
     @Test
-    public void shouldFailHealthcheckWhenHubMetadataIsSignedWithMD5() {
+    public void shouldFailHealthcheckWhenHubMetadataIsSignedWithMD5() throws Exception {
         String id = UUID.randomUUID().toString();
         Signature signature = SignatureBuilder.aSignature()
             .withDigestAlgorithm(id, new DigestMD5())
@@ -172,7 +170,7 @@ public class HubMetadataFeatureTest {
     }
 
     @Test
-    public void shouldPassHealthcheckWhenHubMetadataAvailable() {
+    public void shouldPassHealthcheckWhenHubMetadataAvailable() throws Exception {
         wireMockServer.stubFor(
             get(urlEqualTo("/SAML2/metadata"))
                 .willReturn(

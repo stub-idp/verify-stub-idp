@@ -1,16 +1,18 @@
 package uk.gov.ida.verifyserviceprovider.configuration;
 
 import certificates.values.CACertificates;
-import helpers.ResourceHelpers;
-import keystore.KeyStoreResource;
-import keystore.builders.KeyStoreResourceBuilder;
-import org.json.JSONObject;
-import org.junit.Before;
-import org.junit.Test;
-import uk.gov.ida.truststore.KeyStoreLoader;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import stubidp.saml.metadata.KeyStoreLoader;
+import stubidp.test.utils.helpers.ResourceHelpers;
+import stubidp.test.utils.keystore.KeyStoreResource;
+import stubidp.test.utils.keystore.builders.KeyStoreResourceBuilder;
 
 import java.security.KeyStore;
 import java.security.cert.Certificate;
+import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static uk.gov.ida.verifyserviceprovider.configuration.ConfigurationConstants.DEFAULT_TRUST_STORE_PASSWORD;
@@ -35,42 +37,38 @@ public class EuropeanIdentityConfigurationTest {
     private String configWithTrustStoreOnlyDefined;
     private String configWithMetadataSourceUri;
 
-    private static KeyStoreResource overriddenKeyStoreResource;
-
-    @Before
-    public void setUp() {
-        overriddenKeyStoreResource = KeyStoreResourceBuilder.aKeyStoreResource()
+    @BeforeEach
+    public void setUp() throws JsonProcessingException {
+        KeyStoreResource overriddenKeyStoreResource = KeyStoreResourceBuilder.aKeyStoreResource()
                 .withCertificate(OVERRIDDENMETADATACA, CACertificates.TEST_VERIFY_METADATA_CA)
                 .withCertificate(OVERRIDDENROOTCA, CACertificates.TEST_VERIFY_ROOT_CA).build();
 
         overriddenKeyStoreResource.create();
 
-        configEnabledOnly = new JSONObject().put("enabled", true).toString();
+        ObjectMapper objectMapper = new ObjectMapper();
 
-        configWithHubConnectorEntityIdOnly = new JSONObject()
-                .put("enabled", true)
-                .put("hubConnectorEntityId",overriddenHubConnectorEntityId)
-                .toString();
+        configEnabledOnly = objectMapper.writeValueAsString(Map.of("enabled", true));
 
-        configWithTrustAnchorUriOnly = new JSONObject()
-                .put("enabled", true)
-                .put("trustAnchorUri", overriddenTrustAnchorUri)
-                .toString();
+        configWithHubConnectorEntityIdOnly = objectMapper.writeValueAsString(Map.of(
+                "enabled", true,
+                "hubConnectorEntityId",overriddenHubConnectorEntityId));
 
-        configWithTrustStoreOnlyDefined = new JSONObject()
-                .put("enabled", true)
-                .put("trustStore", new JSONObject()
-                        .put("path", overriddenKeyStoreResource.getAbsolutePath())
-                        .put("password", overriddenKeyStoreResource.getPassword())
-                )
-                .toString();
+        configWithTrustAnchorUriOnly = objectMapper.writeValueAsString(Map.of(
+                "enabled", true,
+                "trustAnchorUri", overriddenTrustAnchorUri));
 
-        configWithMetadataSourceUri = new JSONObject()
-                .put("enabled", true)
-                .put("metadataSourceUri", overriddenMetadataSourceUri)
-                .toString();
+        configWithTrustStoreOnlyDefined = objectMapper.writeValueAsString(Map.of(
+                "enabled", true,
+                "trustStore", Map.of(
+                        "path", overriddenKeyStoreResource.getAbsolutePath(),
+                        "password", overriddenKeyStoreResource.getPassword())));
+
+        configWithMetadataSourceUri = objectMapper.writeValueAsString(Map.of(
+                "enabled", true,
+                "metadataSourceUri", overriddenMetadataSourceUri));
 
     }
+
     @Test
     public void shouldUseTestTrustStoreWithIntegrationTrustAnchorGivenEidasIsEnabledWithHubEnvironmentSetToIntegration() throws Exception {
         KeyStore integrationKeyStore = new KeyStoreLoader().load(ResourceHelpers.resourceFilePath(TEST_METADATA_TRUSTSTORE),DEFAULT_TRUST_STORE_PASSWORD);

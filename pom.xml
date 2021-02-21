@@ -63,6 +63,7 @@
         <assertj.version>3.19.0</assertj.version>
         <h2.version>1.4.200</h2.version>
         <junit.version>5.7.2</junit.version>
+        <jsonorg.version>20201115</jsonorg.version>
         <mockito.version>3.11.0</mockito.version>
         <wiremock.version>2.27.2</wiremock.version>
     </properties>
@@ -84,6 +85,7 @@
         <module>saml/saml-utils</module>
         <module>saml/trust-anchor</module>
         <module>sp/matching-service-adapter</module>
+        <module>sp/service-provider</module>
         <module>sp/test-rp</module>
         <module>test/dev-pki</module>
         <module>test/saml-test</module>

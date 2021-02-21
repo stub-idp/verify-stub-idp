@@ -1,7 +1,7 @@
 package uk.gov.ida.verifyserviceprovider.utils;
 
-import org.joda.time.DateTime;
-import org.joda.time.Duration;
+import java.time.Duration;
+import java.time.Instant;
 
 public class DateTimeComparator {
 
@@ -11,19 +11,19 @@ public class DateTimeComparator {
 
     private final Duration clockSkew;
 
-    public boolean isAfterFuzzy(DateTime source, DateTime target) {
+    public boolean isAfterFuzzy(Instant source, Instant target) {
         return source.isAfter(target.minus(clockSkew));
     }
 
-    public boolean isBeforeFuzzy(DateTime source, DateTime target) {
+    public boolean isBeforeFuzzy(Instant source, Instant target) {
         return source.isBefore(target.plus(clockSkew));
     }
 
-    public boolean isBeforeNow(DateTime dateTime) {
-        return !isBeforeFuzzy(DateTime.now(), dateTime);
+    public boolean isBeforeNow(Instant instant) {
+        return !isBeforeFuzzy(Instant.now(), instant);
     }
 
-    public boolean isAfterNow(DateTime dateTime) {
-        return !isAfterFuzzy(DateTime.now(), dateTime);
+    public boolean isAfterNow(Instant instant) {
+        return !isAfterFuzzy(Instant.now(), instant);
     }
 }

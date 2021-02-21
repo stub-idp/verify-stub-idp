@@ -11,7 +11,7 @@ public class SimpleStringAttributeBuilder {
     private Optional<String> name = Optional.empty();
     private Optional<String> simpleStringValue = Optional.empty();
 
-    private SimpleStringAttributeBuilder() {}
+    public SimpleStringAttributeBuilder() {}
 
     public static SimpleStringAttributeBuilder aSimpleStringAttribute() {
         return new SimpleStringAttributeBuilder();

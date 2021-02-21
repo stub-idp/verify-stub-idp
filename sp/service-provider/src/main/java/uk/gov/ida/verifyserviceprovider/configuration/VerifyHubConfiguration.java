@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import java.net.URI;
 
 import static java.util.Optional.ofNullable;
+import static uk.gov.ida.verifyserviceprovider.configuration.HubMetadataConfiguration.generateExpectedEntityId;
 
 public class VerifyHubConfiguration {
 
@@ -47,6 +48,6 @@ public class VerifyHubConfiguration {
     }
 
     private HubMetadataConfiguration createHubMetadataConfigurationWithDefaults() {
-        return new HubMetadataConfiguration(null, null, null, null, null, null, null, null, null, null);
+        return new HubMetadataConfiguration(null, null, null, generateExpectedEntityId(HubEnvironment.PRODUCTION), null, null, null, null, null, null);
     }
 }

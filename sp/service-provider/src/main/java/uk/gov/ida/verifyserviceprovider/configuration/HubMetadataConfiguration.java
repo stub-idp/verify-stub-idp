@@ -4,13 +4,14 @@ import com.fasterxml.jackson.annotation.JsonAlias;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.dropwizard.client.JerseyClientConfiguration;
-import uk.gov.ida.saml.metadata.MetadataConfiguration;
-import uk.gov.ida.saml.metadata.TrustStoreConfiguration;
-import uk.gov.ida.saml.metadata.exception.EmptyTrustStoreException;
+import stubidp.saml.metadata.MetadataConfiguration;
+import stubidp.saml.metadata.TrustStoreConfiguration;
+import stubidp.saml.metadata.exception.EmptyTrustStoreException;
 
 import java.net.URI;
 import java.security.KeyStore;
 import java.security.KeyStoreException;
+import java.time.Duration;
 import java.util.Optional;
 import java.util.function.Function;
 
@@ -28,8 +29,8 @@ public class HubMetadataConfiguration extends MetadataConfiguration {
     @JsonCreator
     public HubMetadataConfiguration(
             @JsonProperty("uri") @JsonAlias({"url"}) URI uri,
-            @JsonProperty("minRefreshDelay") Long minRefreshDelay,
-            @JsonProperty("maxRefreshDelay") Long maxRefreshDelay,
+            @JsonProperty("minRefreshDelay") Duration minRefreshDelay,
+            @JsonProperty("maxRefreshDelay") Duration maxRefreshDelay,
             @JsonProperty("expectedEntityId") String expectedEntityId,
             @JsonProperty("client") JerseyClientConfiguration client,
             @JsonProperty("jerseyClientName") String jerseyClientName,
@@ -37,7 +38,7 @@ public class HubMetadataConfiguration extends MetadataConfiguration {
             @JsonProperty("trustStore") TrustStoreConfiguration trustStoreConfiguration,
             @JsonProperty("hubTrustStore") TrustStoreConfiguration hubTrustStoreConfiguration,
             @JsonProperty("idpTrustStore") TrustStoreConfiguration idpTrustStoreConfiguration) {
-        super(uri, minRefreshDelay, maxRefreshDelay, expectedEntityId, client,
+        super(uri, minRefreshDelay, maxRefreshDelay, ofNullable(expectedEntityId).orElse(generateExpectedEntityId(HubEnvironment.PRODUCTION)), client,
                 ofNullable(jerseyClientName).orElse(HUB_JERSEY_CLIENT_NAME), hubFederationId);
         this.trustStoreConfiguration = trustStoreConfiguration;
         this.hubTrustStoreConfiguration = hubTrustStoreConfiguration;
@@ -68,7 +69,7 @@ public class HubMetadataConfiguration extends MetadataConfiguration {
     }
 
     @Override
-    public Optional<KeyStore> getHubTrustStore() {
+    public Optional<KeyStore> getSpTrustStore() {
         return of(ofNullable(hubTrustStoreConfiguration)
                 .map(this::tryGetTrustStore)
                 .map(this::validateTruststore)
@@ -83,7 +84,7 @@ public class HubMetadataConfiguration extends MetadataConfiguration {
                 .orElseGet(() -> getValueFromEnvironment(HubEnvironment::getIdpTrustStore, "metadata.idpTrustStore")));
     }
 
-    private static String generateExpectedEntityId(HubEnvironment hubEnvironment) {
+    public static String generateExpectedEntityId(HubEnvironment hubEnvironment) {
         String expectedEntityId;
         switch (hubEnvironment) {
             case PRODUCTION:

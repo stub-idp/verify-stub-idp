@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 public class MatchingAddress {
@@ -69,5 +70,18 @@ public class MatchingAddress {
 
     public Optional<String> getUprn() {
         return uprn;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        MatchingAddress that = (MatchingAddress) o;
+        return verified == that.verified && Objects.equals(from, that.from) && Objects.equals(to, that.to) && Objects.equals(postCode, that.postCode) && Objects.equals(lines, that.lines) && Objects.equals(internationalPostCode, that.internationalPostCode) && Objects.equals(uprn, that.uprn);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(verified, from, to, postCode, lines, internationalPostCode, uprn);
     }
 }

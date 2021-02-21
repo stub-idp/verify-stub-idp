@@ -1,9 +1,9 @@
 package uk.gov.ida.verifyserviceprovider.factories.saml;
 
 import org.opensaml.xmlsec.signature.support.impl.ExplicitKeySignatureTrustEngine;
-import uk.gov.ida.saml.security.MetadataBackedSignatureValidator;
-import uk.gov.ida.saml.security.SamlAssertionsSignatureValidator;
-import uk.gov.ida.saml.security.SamlMessageSignatureValidator;
+import stubidp.saml.security.MetadataBackedSignatureValidator;
+import stubidp.saml.security.SamlAssertionsSignatureValidator;
+import stubidp.saml.security.SamlMessageSignatureValidator;
 
 import javax.validation.constraints.NotNull;
 import java.util.Optional;

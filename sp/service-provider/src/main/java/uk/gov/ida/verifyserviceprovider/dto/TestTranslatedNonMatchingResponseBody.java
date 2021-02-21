@@ -2,7 +2,7 @@ package uk.gov.ida.verifyserviceprovider.dto;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import uk.gov.ida.saml.core.domain.NonMatchingAttributes;
+import stubidp.saml.domain.matching.assertions.NonMatchingAttributes;
 
 public class TestTranslatedNonMatchingResponseBody extends TranslatedNonMatchingResponseBody {
 

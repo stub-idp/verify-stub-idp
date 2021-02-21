@@ -1,8 +1,9 @@
 package unit.uk.gov.ida.verifyserviceprovider.utils;
 
-import com.google.common.collect.ImmutableList;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import uk.gov.ida.verifyserviceprovider.utils.StringTableFormatter;
+
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -21,7 +22,7 @@ public class StringTableFormatterTest {
         String actual = StringTableFormatter.format(
             5,
             "some-title",
-            ImmutableList.of("row-1", "row-2")
+            List.of("row-1", "row-2")
         );
 
         assertThat(actual).isEqualTo(expected);

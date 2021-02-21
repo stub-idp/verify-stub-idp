@@ -1,11 +1,13 @@
 package unit.uk.gov.ida.verifyserviceprovider.resources;
 
-import io.dropwizard.testing.junit.ResourceTestRule;
-import org.junit.Before;
-import org.junit.ClassRule;
-import org.junit.Test;
-import uk.gov.ida.saml.core.IdaSamlBootstrap;
-import uk.gov.ida.shared.utils.manifest.ManifestReader;
+import io.dropwizard.testing.junit5.DropwizardExtensionsSupport;
+import io.dropwizard.testing.junit5.ResourceExtension;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+import stubidp.utils.common.manifest.ManifestReader;
 import uk.gov.ida.verifyserviceprovider.VerifyServiceProviderApplication;
 import uk.gov.ida.verifyserviceprovider.exceptions.JerseyViolationExceptionMapper;
 import uk.gov.ida.verifyserviceprovider.exceptions.JsonProcessingExceptionMapper;
@@ -22,19 +24,19 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+@ExtendWith({MockitoExtension.class, DropwizardExtensionsSupport.class})
 public class VersionNumberResourceTest {
-    private static final ManifestReader manifestReader = mock(ManifestReader.class);
 
-    @ClassRule
-    public static final ResourceTestRule resources = ResourceTestRule.builder()
-        .addProvider(JerseyViolationExceptionMapper.class)
-        .addProvider(JsonProcessingExceptionMapper.class)
-        .addResource(new VersionNumberResource(manifestReader))
-        .build();
+    private final ManifestReader manifestReader = mock(ManifestReader.class);
 
-    @Before
-    public void bootStrapOpenSaml() {
-        IdaSamlBootstrap.bootstrap();
+    private final ResourceExtension resources = ResourceExtension.builder()
+            .addProvider(JerseyViolationExceptionMapper.class)
+                .addProvider(JsonProcessingExceptionMapper.class)
+                .addResource(new VersionNumberResource(manifestReader))
+            .build();;
+
+    @BeforeEach
+    public void beforeEach() {
         reset(manifestReader);
     }
 

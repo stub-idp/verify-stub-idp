@@ -3,10 +3,10 @@ package common.uk.gov.ida.verifyserviceprovider.servers;
 import certificates.values.CACertificates;
 import com.github.tomakehurst.wiremock.junit.WireMockClassRule;
 import com.nimbusds.jose.JOSEException;
-import uk.gov.ida.common.shared.security.PrivateKeyFactory;
-import uk.gov.ida.common.shared.security.X509CertificateFactory;
-import uk.gov.ida.eidas.trustanchor.Generator;
-import uk.gov.ida.saml.core.test.TestCertificateStrings;
+import stubidp.eidas.trustanchor.Generator;
+import stubidp.test.devpki.TestCertificateStrings;
+import stubidp.utils.security.security.PrivateKeyFactory;
+import stubidp.utils.security.security.X509CertificateFactory;
 
 import java.security.PrivateKey;
 import java.security.cert.CertificateEncodingException;
@@ -20,7 +20,7 @@ import static com.github.tomakehurst.wiremock.client.WireMock.get;
 import static com.github.tomakehurst.wiremock.client.WireMock.urlEqualTo;
 import static com.github.tomakehurst.wiremock.core.WireMockConfiguration.wireMockConfig;
 import static java.util.Collections.singletonList;
-import static uk.gov.ida.saml.core.test.TestCertificateStrings.METADATA_SIGNING_A_PRIVATE_KEY;
+import static stubidp.test.devpki.TestCertificateStrings.METADATA_SIGNING_A_PRIVATE_KEY;
 
 public class MockTrustAnchorServer extends WireMockClassRule {
 

@@ -1,11 +1,12 @@
 package unit.uk.gov.ida.verifyserviceprovider.services;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.opensaml.saml.saml2.core.Assertion;
 import org.opensaml.xmlsec.signature.support.impl.ExplicitKeySignatureTrustEngine;
-import uk.gov.ida.saml.core.IdaSamlBootstrap;
-import uk.gov.ida.saml.core.domain.NonMatchingAttributes;
+import stubidp.saml.domain.matching.assertions.NonMatchingAttributes;
 import uk.gov.ida.verifyserviceprovider.services.EidasAssertionTranslator;
 
 import java.util.List;
@@ -19,18 +20,16 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import static org.mockito.MockitoAnnotations.initMocks;
-import static uk.gov.ida.saml.core.extensions.EidasAuthnContext.EIDAS_LOA_HIGH;
-import static uk.gov.ida.saml.core.test.TestEntityIds.HUB_CONNECTOR_ENTITY_ID;
-import static uk.gov.ida.saml.core.test.TestEntityIds.STUB_COUNTRY_ONE;
+import static stubidp.saml.extensions.extensions.EidasAuthnContext.EIDAS_LOA_HIGH;
+import static stubidp.test.devpki.TestEntityIds.HUB_CONNECTOR_ENTITY_ID;
+import static stubidp.test.devpki.TestEntityIds.STUB_COUNTRY_ONE;
 import static uk.gov.ida.verifyserviceprovider.dto.LevelOfAssurance.LEVEL_2;
 
+@ExtendWith(MockitoExtension.class)
 public class EidasAssertionTranslatorTest extends BaseEidasAssertionTranslatorTestBase {
 
-    @Before
-    public void setUp() {
-        IdaSamlBootstrap.bootstrap();
-        initMocks(this);
+    @BeforeEach
+    public void setUp() throws Exception {
         assertionService = new EidasAssertionTranslator(
                 getEidasAssertionTranslatorValidatorContainer(),
                 eidasMatchingDatasetUnmarshaller,

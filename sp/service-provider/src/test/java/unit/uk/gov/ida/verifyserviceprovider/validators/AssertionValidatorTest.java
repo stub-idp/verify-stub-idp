@@ -1,64 +1,62 @@
 package unit.uk.gov.ida.verifyserviceprovider.validators;
 
-import com.google.common.collect.ImmutableList;
-import org.joda.time.DateTime;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.ExpectedException;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Answers;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.opensaml.saml.saml2.core.Assertion;
 import org.opensaml.saml.saml2.core.AuthnStatement;
 import org.opensaml.saml.saml2.core.Conditions;
 import org.opensaml.saml.saml2.core.Subject;
-import uk.gov.ida.saml.core.IdaSamlBootstrap;
-import uk.gov.ida.saml.core.validation.SamlResponseValidationException;
+import stubidp.saml.test.OpenSAMLRunner;
+import stubidp.saml.utils.core.validation.SamlResponseValidationException;
 import uk.gov.ida.verifyserviceprovider.validators.AssertionValidator;
 import uk.gov.ida.verifyserviceprovider.validators.ConditionsValidator;
 import uk.gov.ida.verifyserviceprovider.validators.InstantValidator;
 import uk.gov.ida.verifyserviceprovider.validators.SubjectValidator;
 
+import java.time.Instant;
 import java.util.Collections;
+import java.util.List;
 
+import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import static uk.gov.ida.saml.core.test.builders.AuthnStatementBuilder.anAuthnStatement;
+import static stubidp.saml.test.builders.AuthnStatementBuilder.anAuthnStatement;
 
-public class AssertionValidatorTest {
+@ExtendWith({MockitoExtension.class})
+public class AssertionValidatorTest extends OpenSAMLRunner {
 
     private AssertionValidator validator;
 
+    @Mock
     private InstantValidator instantValidator;
+    @Mock
     private SubjectValidator subjectValidator;
+    @Mock
     private ConditionsValidator conditionsValidator;
+    @Mock
     private Assertion assertion;
 
-    @Rule
-    public ExpectedException expectedException = ExpectedException.none();
-
-    @Before
+    @BeforeEach
     public void setUp() {
-        instantValidator = mock(InstantValidator.class);
-        subjectValidator = mock(SubjectValidator.class);
-        conditionsValidator = mock(ConditionsValidator.class);
-        assertion = mock(Assertion.class);
         AuthnStatement authnStatement = mock(AuthnStatement.class);
 
         validator = new AssertionValidator(
-            instantValidator,
-            subjectValidator,
-            conditionsValidator
+                instantValidator,
+                subjectValidator,
+                conditionsValidator
         );
 
-        when(assertion.getAuthnStatements()).thenReturn(ImmutableList.of(authnStatement));
-
-        IdaSamlBootstrap.bootstrap();
+        when(assertion.getAuthnStatements()).thenReturn(List.of(authnStatement));
     }
 
     @Test
     public void shouldValidateAssertionIssueInstant() {
-        DateTime issueInstant = new DateTime();
+        Instant issueInstant = Instant.now();
         when(assertion.getIssueInstant()).thenReturn(issueInstant);
 
         validator.validate(assertion, "any-expected-in-response-to", "any-entity-id");
@@ -70,7 +68,6 @@ public class AssertionValidatorTest {
     public void shouldValidateAssertionSubject() {
         Subject subject = mock(Subject.class, Answers.RETURNS_DEEP_STUBS);
         when(assertion.getSubject()).thenReturn(subject);
-        when(subject.getNameID().getValue()).thenReturn("any-value");
 
         validator.validate(assertion, "some-expected-in-response-to", "any-entity-id");
 
@@ -89,40 +86,37 @@ public class AssertionValidatorTest {
 
     @Test
     public void shouldThrowExceptionIfAuthnStatementsIsNull() {
-        expectedException.expect(SamlResponseValidationException.class);
-        expectedException.expectMessage("Exactly one authn statement is expected.");
-
         when(assertion.getAuthnStatements()).thenReturn(null);
 
-        validator.validate(assertion, "some-expected-in-response-to", "any-entity-id");
+        assertThatExceptionOfType(SamlResponseValidationException.class)
+                .isThrownBy(() -> validator.validate(assertion, "some-expected-in-response-to", "any-entity-id"))
+                .withMessage("Exactly one authn statement is expected.");
     }
 
     @Test
     public void shouldThrowExceptionIfAuthnStatementsIsEmpty() {
-        expectedException.expect(SamlResponseValidationException.class);
-        expectedException.expectMessage("Exactly one authn statement is expected.");
-
         when(assertion.getAuthnStatements()).thenReturn(Collections.emptyList());
 
-        validator.validate(assertion, "some-expected-in-response-to", "any-entity-id");
+        assertThatExceptionOfType(SamlResponseValidationException.class)
+                .isThrownBy(() -> validator.validate(assertion, "some-expected-in-response-to", "any-entity-id"))
+                .withMessage("Exactly one authn statement is expected.");
     }
 
     @Test
     public void shouldThrowExceptionIfMoreThanOneAuthnStatements() {
-        expectedException.expect(SamlResponseValidationException.class);
-        expectedException.expectMessage("Exactly one authn statement is expected.");
-
-        when(assertion.getAuthnStatements()).thenReturn(ImmutableList.of(
-            anAuthnStatement().build(),
-            anAuthnStatement().build()
+        when(assertion.getAuthnStatements()).thenReturn(List.of(
+                anAuthnStatement().build(),
+                anAuthnStatement().build()
         ));
 
-        validator.validate(assertion, "some-expected-in-response-to", "any-entity-id");
+        assertThatExceptionOfType(SamlResponseValidationException.class)
+                .isThrownBy(() -> validator.validate(assertion, "some-expected-in-response-to", "any-entity-id"))
+                .withMessage("Exactly one authn statement is expected.");
     }
 
     @Test
     public void shouldValidateAssertionAuthnInstant() {
-        DateTime issueInstant = new DateTime();
+        Instant issueInstant = Instant.now();
         when(assertion.getAuthnStatements().get(0).getAuthnInstant()).thenReturn(issueInstant);
 
         validator.validate(assertion, "any-expected-in-response-to", "any-entity-id");

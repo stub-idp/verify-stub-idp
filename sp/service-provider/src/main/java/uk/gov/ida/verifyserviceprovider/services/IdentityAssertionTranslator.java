@@ -4,12 +4,12 @@ import org.opensaml.saml.saml2.core.Assertion;
 import org.opensaml.saml.saml2.core.AuthnContext;
 import org.opensaml.saml.saml2.core.AuthnContextClassRef;
 import org.opensaml.saml.saml2.core.AuthnStatement;
-import uk.gov.ida.saml.core.domain.MatchingDataset;
-import uk.gov.ida.saml.core.domain.NonMatchingAttributes;
-import uk.gov.ida.saml.core.transformers.MatchingDatasetToNonMatchingAttributesMapper;
-import uk.gov.ida.saml.core.transformers.MatchingDatasetUnmarshaller;
-import uk.gov.ida.saml.core.validation.SamlResponseValidationException;
-import uk.gov.ida.saml.hub.factories.UserIdHashFactory;
+import stubidp.saml.domain.assertions.MatchingDataset;
+import stubidp.saml.domain.matching.assertions.NonMatchingAttributes;
+import stubidp.saml.utils.core.transformers.MatchingDatasetToNonMatchingAttributesMapper;
+import stubidp.saml.utils.core.transformers.MatchingDatasetUnmarshaller;
+import stubidp.saml.utils.core.validation.SamlResponseValidationException;
+import stubidp.saml.utils.hub.factories.UserIdHashFactory;
 import uk.gov.ida.verifyserviceprovider.dto.LevelOfAssurance;
 import uk.gov.ida.verifyserviceprovider.dto.TranslatedNonMatchingResponseBody;
 import uk.gov.ida.verifyserviceprovider.dto.TranslatedResponseBody;
@@ -51,7 +51,7 @@ public abstract class IdentityAssertionTranslator implements AssertionTranslator
     TranslatedNonMatchingResponseBody translateAssertion(
             Assertion assertion,
             LevelOfAssurance levelOfAssurance,
-            Optional<uk.gov.ida.saml.core.domain.AuthnContext> authnContext) {
+            Optional<stubidp.saml.domain.assertions.AuthnContext> authnContext) {
         final String nameID = getNameIdFrom(assertion);
         final String issuerID = assertion.getIssuer().getValue();
         final String hashId = userIdHashFactory.hashId(issuerID, nameID, authnContext);
@@ -64,7 +64,7 @@ public abstract class IdentityAssertionTranslator implements AssertionTranslator
         AuthnStatement authnStatement = getAuthnStatementFrom(assertion);
         return ofNullable(authnStatement.getAuthnContext())
                 .map(AuthnContext::getAuthnContextClassRef)
-                .map(AuthnContextClassRef::getAuthnContextClassRef)
+                .map(AuthnContextClassRef::getURI)
                 .orElseThrow(() -> new SamlResponseValidationException("Expected a level of assurance."));
     }
 

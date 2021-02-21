@@ -1,30 +1,26 @@
 package unit.uk.gov.ida.verifyserviceprovider.services;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.opensaml.saml.saml2.core.Assertion;
-import uk.gov.ida.saml.core.IdaSamlBootstrap;
-import uk.gov.ida.saml.core.extensions.IdaAuthnContext;
-import uk.gov.ida.saml.core.test.builders.AssertionBuilder;
+import stubidp.saml.extensions.extensions.IdaAuthnContext;
+import stubidp.saml.test.OpenSAMLRunner;
+import stubidp.saml.test.builders.AssertionBuilder;
 import uk.gov.ida.verifyserviceprovider.services.AssertionClassifier;
 import uk.gov.ida.verifyserviceprovider.services.AssertionClassifier.AssertionType;
-import static org.assertj.core.api.Assertions.assertThat;
-import static uk.gov.ida.saml.core.test.TestEntityIds.STUB_IDP_ONE;
-import static uk.gov.ida.saml.core.test.builders.AssertionBuilder.anAssertion;
-import static uk.gov.ida.saml.core.test.builders.AttributeStatementBuilder.anAttributeStatement;
-import static uk.gov.ida.saml.core.test.builders.AuthnContextBuilder.anAuthnContext;
-import static uk.gov.ida.saml.core.test.builders.AuthnContextClassRefBuilder.anAuthnContextClassRef;
-import static uk.gov.ida.saml.core.test.builders.AuthnStatementBuilder.anAuthnStatement;
-import static uk.gov.ida.saml.core.test.builders.IssuerBuilder.anIssuer;
-import static uk.gov.ida.saml.core.test.builders.SubjectBuilder.aSubject;
-import static uk.gov.ida.saml.core.test.builders.SubjectConfirmationBuilder.aSubjectConfirmation;
-import static uk.gov.ida.saml.core.test.builders.SubjectConfirmationDataBuilder.aSubjectConfirmationData;
 
-public class AssertionClassifierTests {
-    @Before
-    public void setUp() {
-        IdaSamlBootstrap.bootstrap();
-    }
+import static org.assertj.core.api.Assertions.assertThat;
+import static stubidp.saml.test.builders.AssertionBuilder.anAssertion;
+import static stubidp.saml.test.builders.AttributeStatementBuilder.anAttributeStatement;
+import static stubidp.saml.test.builders.AuthnContextBuilder.anAuthnContext;
+import static stubidp.saml.test.builders.AuthnContextClassRefBuilder.anAuthnContextClassRef;
+import static stubidp.saml.test.builders.AuthnStatementBuilder.anAuthnStatement;
+import static stubidp.saml.test.builders.IssuerBuilder.anIssuer;
+import static stubidp.saml.test.builders.SubjectBuilder.aSubject;
+import static stubidp.saml.test.builders.SubjectConfirmationBuilder.aSubjectConfirmation;
+import static stubidp.saml.test.builders.SubjectConfirmationDataBuilder.aSubjectConfirmationData;
+import static stubidp.test.devpki.TestEntityIds.STUB_IDP_ONE;
+
+public class AssertionClassifierTests extends OpenSAMLRunner {
 
     @Test
     public void shouldClassifyAnAssertionBasedOnWhetherItContainsAuthnStatements() {

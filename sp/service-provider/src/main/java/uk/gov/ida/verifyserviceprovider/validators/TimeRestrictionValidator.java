@@ -1,11 +1,9 @@
 package uk.gov.ida.verifyserviceprovider.validators;
 
-import org.joda.time.DateTime;
-import uk.gov.ida.saml.core.validation.SamlResponseValidationException;
+import stubidp.saml.utils.core.validation.SamlResponseValidationException;
 import uk.gov.ida.verifyserviceprovider.utils.DateTimeComparator;
 
-import static org.joda.time.DateTimeZone.UTC;
-import static org.joda.time.format.ISODateTimeFormat.dateHourMinuteSecond;
+import java.time.Instant;
 
 public class TimeRestrictionValidator {
 
@@ -15,20 +13,20 @@ public class TimeRestrictionValidator {
         this.dateTimeComparator = dateTimeComparator;
     }
 
-    public void validateNotOnOrAfter(DateTime notOnOrAfter) {
+    public void validateNotOnOrAfter(Instant notOnOrAfter) {
         if (dateTimeComparator.isBeforeNow(notOnOrAfter)) {
             throw new SamlResponseValidationException(String.format(
                 "Assertion is not valid on or after %s",
-                notOnOrAfter.withZone(UTC).toString(dateHourMinuteSecond())
+                notOnOrAfter
             ));
         }
     }
 
-    public void validateNotBefore(DateTime notBefore) {
+    public void validateNotBefore(Instant notBefore) {
         if (notBefore != null && dateTimeComparator.isAfterNow(notBefore)) {
             throw new SamlResponseValidationException(String.format(
                 "Assertion is not valid before %s",
-                notBefore.withZone(UTC).toString(dateHourMinuteSecond())
+                notBefore
             ));
         }
     }

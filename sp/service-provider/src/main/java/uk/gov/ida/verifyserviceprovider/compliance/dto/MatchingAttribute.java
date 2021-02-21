@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 public class MatchingAttribute {
     @NotNull
@@ -52,5 +53,18 @@ public class MatchingAttribute {
         this.verified = verified;
         this.from = from;
         this.to = to;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        MatchingAttribute that = (MatchingAttribute) o;
+        return verified == that.verified && Objects.equals(value, that.value) && Objects.equals(from, that.from) && Objects.equals(to, that.to);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(value, from, to, verified);
     }
 }

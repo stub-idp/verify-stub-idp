@@ -15,6 +15,7 @@ import uk.gov.ida.verifyserviceprovider.configuration.VerifyServiceProviderConfi
 import javax.validation.Validator;
 import java.io.IOException;
 import java.net.URL;
+import java.util.Objects;
 
 public class ComplianceToolMode extends ServerCommand<VerifyServiceProviderConfiguration> {
 
@@ -29,7 +30,7 @@ public class ComplianceToolMode extends ServerCommand<VerifyServiceProviderConfi
     static final String DEFAULT_HOST = "0.0.0.0";
     private final MatchingDataset defaultIdentityDataset;
 
-    private IdentityDatasetArgumentResolver identityDatasetArgumentResolver;
+    private final IdentityDatasetArgumentResolver identityDatasetArgumentResolver;
 
     public ComplianceToolMode(ObjectMapper objectMapper, Validator validator, Application<VerifyServiceProviderConfiguration> application) {
         super(application, "development", "Run the VSP in development mode");
@@ -77,6 +78,7 @@ public class ComplianceToolMode extends ServerCommand<VerifyServiceProviderConfi
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public void run(Bootstrap<?> wildcardBootstrap, Namespace namespace) throws Exception {
         Integer port = namespace.get(PORT);
         String bindHost = namespace.get(BIND_HOST);
@@ -122,6 +124,18 @@ public class ComplianceToolMode extends ServerCommand<VerifyServiceProviderConfi
         @Override
         public String toString() {
             return "See the README for a description of this field";
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            MatchingDataset that = (MatchingDataset) o;
+            return Objects.equals(firstName, that.getFirstName()) && Objects.equals(middleNames, that.getMiddleNames()) && Objects.equals(surnames, that.getSurnames()) && Objects.equals(gender, that.getGender()) && Objects.equals(dateOfBirth, that.getDateOfBirth()) && Objects.equals(addresses, that.getAddresses()) && levelOfAssurance == that.getLevelOfAssurance() && Objects.equals(persistentId, that.getPersistentId());
+        }
+
+        @Override
+        public int hashCode() {
+            return super.hashCode();
         }
     }
 }

@@ -1,6 +1,5 @@
 package uk.gov.ida.verifyserviceprovider.factories.saml;
 
-import org.joda.time.DateTime;
 import org.opensaml.core.xml.config.XMLObjectProviderRegistrySupport;
 import org.opensaml.core.xml.io.MarshallingException;
 import org.opensaml.saml.common.SAMLRuntimeException;
@@ -21,20 +20,21 @@ import org.opensaml.xmlsec.signature.support.SignatureException;
 import org.opensaml.xmlsec.signature.support.Signer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import uk.gov.ida.saml.core.extensions.versioning.Version;
-import uk.gov.ida.saml.core.extensions.versioning.VersionImpl;
-import uk.gov.ida.saml.core.extensions.versioning.application.ApplicationVersion;
-import uk.gov.ida.saml.core.extensions.versioning.application.ApplicationVersionImpl;
-import uk.gov.ida.saml.security.IdaKeyStore;
-import uk.gov.ida.saml.security.IdaKeyStoreCredentialRetriever;
-import uk.gov.ida.saml.security.SignatureFactory;
-import uk.gov.ida.shared.utils.manifest.ManifestReader;
+import stubidp.saml.extensions.extensions.versioning.Version;
+import stubidp.saml.extensions.extensions.versioning.VersionImpl;
+import stubidp.saml.extensions.extensions.versioning.application.ApplicationVersion;
+import stubidp.saml.extensions.extensions.versioning.application.ApplicationVersionImpl;
+import stubidp.saml.security.IdaKeyStore;
+import stubidp.saml.security.IdaKeyStoreCredentialRetriever;
+import stubidp.saml.security.SignatureFactory;
+import stubidp.utils.common.manifest.ManifestReader;
 import uk.gov.ida.verifyserviceprovider.VerifyServiceProviderApplication;
 import uk.gov.ida.verifyserviceprovider.factories.EncrypterFactory;
 
 import java.io.IOException;
 import java.net.URI;
 import java.security.KeyPair;
+import java.time.Instant;
 import java.util.Collections;
 import java.util.UUID;
 
@@ -62,7 +62,7 @@ public class AuthnRequestFactory {
     public AuthnRequest build(String serviceEntityId) {
         AuthnRequest authnRequest = new AuthnRequestBuilder().buildObject();
         authnRequest.setID(String.format("_%s", UUID.randomUUID()));
-        authnRequest.setIssueInstant(DateTime.now());
+        authnRequest.setIssueInstant(Instant.now());
         authnRequest.setForceAuthn(false);
         authnRequest.setDestination(destination.toString());
         authnRequest.setExtensions(createExtensions());

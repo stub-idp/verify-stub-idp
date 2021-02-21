@@ -3,25 +3,26 @@ package unit.uk.gov.ida.verifyserviceprovider.resources;
 import ch.qos.logback.classic.Logger;
 import ch.qos.logback.classic.spi.ILoggingEvent;
 import ch.qos.logback.core.Appender;
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.google.common.collect.ImmutableMap;
 import io.dropwizard.jersey.errors.ErrorMessage;
-import io.dropwizard.testing.junit.ResourceTestRule;
+import io.dropwizard.testing.junit5.DropwizardExtensionsSupport;
+import io.dropwizard.testing.junit5.ResourceExtension;
 import org.assertj.core.api.Assertions;
-import org.joda.time.DateTime;
-import org.junit.Before;
-import org.junit.ClassRule;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
+import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.opensaml.saml.saml2.core.AuthnRequest;
 import org.opensaml.saml.saml2.core.Issuer;
 import org.opensaml.saml.saml2.core.impl.AuthnRequestBuilder;
 import org.opensaml.saml.saml2.core.impl.IssuerBuilder;
 import org.slf4j.LoggerFactory;
 import org.slf4j.MDC;
-import uk.gov.ida.saml.core.IdaSamlBootstrap;
+import stubidp.saml.test.OpenSAMLRunner;
 import uk.gov.ida.verifyserviceprovider.dto.LevelOfAssurance;
 import uk.gov.ida.verifyserviceprovider.dto.RequestGenerationBody;
 import uk.gov.ida.verifyserviceprovider.dto.RequestResponseBody;
@@ -38,6 +39,7 @@ import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.net.URI;
+import java.time.Instant;
 import java.util.Base64;
 import java.util.Map;
 
@@ -49,8 +51,8 @@ import static org.mockito.Mockito.reset;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-@RunWith(MockitoJUnitRunner.class)
-public class GenerateAuthnRequestResourceTest {
+@ExtendWith({MockitoExtension.class, DropwizardExtensionsSupport.class})
+public class GenerateAuthnRequestResourceTest extends OpenSAMLRunner {
 
     private static final String GENERATE_REQUEST_RESOURCE_PATH = "/generate-request";
     private static final URI HUB_SSO_LOCATION = URI.create("http://example.com/SAML2/SSO");
@@ -61,57 +63,52 @@ public class GenerateAuthnRequestResourceTest {
     private static final String TEST_ISSUER = "http://acme.service";
     private static final String AUTHN_REQUEST_ATTRIBUTES_LOG_MESSAGE = "AuthnRequest Attributes:";
 
-    private static AuthnRequestFactory authnRequestFactory = mock(AuthnRequestFactory.class);
-    private static EntityIdService entityIdService = mock(EntityIdService.class);
+    private final AuthnRequestFactory authnRequestFactory = mock(AuthnRequestFactory.class);
+    private final EntityIdService entityIdService = mock(EntityIdService.class);
+
+    @Mock
+    private Appender<ILoggingEvent> appender;
 
     private AuthnRequest authnRequest;
 
-    @ClassRule
-    public static final ResourceTestRule resources = ResourceTestRule.builder()
+    private final ResourceExtension resources = ResourceExtension.builder()
             .addProvider(JerseyViolationExceptionMapper.class)
             .addProvider(JsonProcessingExceptionMapper.class)
             .addProvider(InvalidEntityIdExceptionMapper.class)
             .addResource(new GenerateAuthnRequestResource(authnRequestFactory, HUB_SSO_LOCATION, entityIdService))
             .build();
 
-    @Before
-    public void mockAuthnRequestFactory() {
+    @BeforeEach
+    void mockAuthnRequestFactory() {
+        resources.getObjectMapper().configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, true);
+
         authnRequest = new AuthnRequestBuilder().buildObject();
         authnRequest.setID(TEST_REQUEST_ID);
         authnRequest.setDestination(TEST_DESTINATION);
-        authnRequest.setIssueInstant(DateTime.parse(TEST_ISSUE_INSTANT));
+        authnRequest.setIssueInstant(Instant.parse(TEST_ISSUE_INSTANT));
         Issuer issuer = new IssuerBuilder().buildObject();
         issuer.setValue(TEST_ISSUER);
         authnRequest.setIssuer(issuer);
         reset(authnRequestFactory);
-    }
-
-    @Before
-    public void bootStrapOpenSaml() {
-        IdaSamlBootstrap.bootstrap();
-    }
-
-    @Before
-    public void mockEntityIdService() {
         when(entityIdService.getEntityId(any(RequestGenerationBody.class))).thenReturn(DEFAULT_ENTITY_ID);
     }
 
     @Test
-    public void returnsAnOKResponseWithoutLoaParam() {
+    void returnsAnOKResponseWithoutLoaParam() {
         when(authnRequestFactory.build(any())).thenReturn(authnRequest);
         Response response = resources.target(GENERATE_REQUEST_RESOURCE_PATH).request().post(Entity.entity(ImmutableMap.of(), MediaType.APPLICATION_JSON_TYPE));
         assertThat(response.getStatus()).isEqualTo(Response.Status.OK.getStatusCode());
     }
 
     @Test
-    public void returnsAnOKResponseWhenNoParams() {
+    void returnsAnOKResponseWhenNoParams() {
         when(authnRequestFactory.build(any())).thenReturn(authnRequest);
         Response response = resources.target(GENERATE_REQUEST_RESOURCE_PATH).request().post(Entity.entity(null, MediaType.APPLICATION_JSON_TYPE));
         assertThat(response.getStatus()).isEqualTo(Response.Status.OK.getStatusCode());
     }
 
     @Test
-    public void returnsAnOKResponse() {
+    void returnsAnOKResponse() {
         when(authnRequestFactory.build(any())).thenReturn(authnRequest);
         RequestGenerationBody requestGenerationBody = new RequestGenerationBody(LevelOfAssurance.LEVEL_2, null);
 
@@ -120,7 +117,7 @@ public class GenerateAuthnRequestResourceTest {
     }
 
     @Test
-    public void responseContainsExpectedFields() {
+    void responseContainsExpectedFields() {
         when(authnRequestFactory.build(eq(DEFAULT_ENTITY_ID))).thenReturn(authnRequest);
         RequestResponseBody requestResponseBody = generateRequest();
         assertThat(requestResponseBody.getSamlRequest()).isNotEmpty();
@@ -129,14 +126,14 @@ public class GenerateAuthnRequestResourceTest {
     }
 
     @Test
-    public void ssoLocationIsSameAsConfiguration() {
+    void ssoLocationIsSameAsConfiguration() {
         when(authnRequestFactory.build(eq(DEFAULT_ENTITY_ID))).thenReturn(authnRequest);
         RequestResponseBody requestResponseBody = generateRequest();
         assertThat(requestResponseBody.getSsoLocation()).isEqualTo(HUB_SSO_LOCATION);
     }
 
     @Test
-    public void samlRequestIsBase64EncodedAuthnRequest() {
+    void samlRequestIsBase64EncodedAuthnRequest() {
         when(authnRequestFactory.build(eq(DEFAULT_ENTITY_ID))).thenReturn(authnRequest);
         RequestResponseBody requestResponseBody = generateRequest();
         try {
@@ -147,10 +144,10 @@ public class GenerateAuthnRequestResourceTest {
     }
 
     @Test
-    public void returns422ForBadJson() {
+    void returns422ForBadJson() {
         Response response = resources.target(GENERATE_REQUEST_RESOURCE_PATH)
                 .request()
-                .post(Entity.entity(ImmutableMap.of("bad", "json"), MediaType.APPLICATION_JSON_TYPE));
+                .post(Entity.json(Map.of("bad", "json")));
         assertThat(response.getStatus()).isEqualTo(422);
         ErrorMessage errorMessage = response.readEntity(ErrorMessage.class);
         assertThat(errorMessage.getCode()).isEqualTo(422);
@@ -158,21 +155,19 @@ public class GenerateAuthnRequestResourceTest {
     }
 
     @Test
-    public void returns422ForMalformedJson() {
+    void returns422ForMalformedJson() {
         Response response = resources.target(GENERATE_REQUEST_RESOURCE_PATH)
                 .request()
                 .post(Entity.entity("this is not json", MediaType.APPLICATION_JSON_TYPE));
         assertThat(response.getStatus()).isEqualTo(422);
         assertThat(response.readEntity(ErrorMessage.class)).isEqualTo(new ErrorMessage(
                 422,
-                "Unrecognized token 'this': was expecting 'null', 'true', 'false' or NaN")
+                "Unrecognized token 'this': was expecting (JSON String, Number, Array, Object or token 'null', 'true' or 'false')")
         );
     }
 
     @Test
-    public void returns500IfARuntimeExceptionIsThrown() {
-        when(authnRequestFactory.build(any())).thenThrow(RuntimeException.class);
-
+    void returns500IfARuntimeExceptionIsThrown() {
         RequestGenerationBody requestGenerationBody = new RequestGenerationBody(LevelOfAssurance.LEVEL_2, null);
         Response response = resources.target(GENERATE_REQUEST_RESOURCE_PATH).request().post(Entity.entity(requestGenerationBody, MediaType.APPLICATION_JSON_TYPE));
 
@@ -183,9 +178,8 @@ public class GenerateAuthnRequestResourceTest {
     }
 
     @Test
-    public void shouldLogAuthnRequestAttributesToMDC() throws Exception {
+    void shouldLogAuthnRequestAttributesToMDC() {
         Logger logger = (Logger) LoggerFactory.getLogger(AuthnRequestAttributesHelper.class);
-        Appender<ILoggingEvent> appender = mock(Appender.class);
         logger.addAppender(appender);
 
         when(authnRequestFactory.build(any())).thenReturn(authnRequest);
@@ -213,9 +207,8 @@ public class GenerateAuthnRequestResourceTest {
     }
 
     @Test
-    public void shouldLeaveMDCInPreviousStateAfterLogging() throws Exception {
+    void shouldLeaveMDCInPreviousStateAfterLogging() {
         Logger logger = (Logger) LoggerFactory.getLogger(AuthnRequestAttributesHelper.class);
-        Appender<ILoggingEvent> appender = mock(Appender.class);
         logger.addAppender(appender);
 
         // Log and then Check state of MDC before calling the resource

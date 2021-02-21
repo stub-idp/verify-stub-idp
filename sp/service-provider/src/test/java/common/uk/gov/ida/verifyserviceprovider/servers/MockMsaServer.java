@@ -3,19 +3,21 @@ package common.uk.gov.ida.verifyserviceprovider.servers;
 import com.github.tomakehurst.wiremock.junit.WireMockClassRule;
 import com.google.common.base.Throwables;
 import com.google.common.collect.ImmutableList;
-import org.joda.time.DateTime;
 import org.opensaml.core.xml.io.MarshallingException;
 import org.opensaml.saml.saml2.metadata.EntityDescriptor;
 import org.opensaml.xmlsec.signature.support.SignatureException;
-import uk.gov.ida.saml.metadata.test.factories.metadata.EntityDescriptorFactory;
-import uk.gov.ida.saml.metadata.test.factories.metadata.MetadataFactory;
+import stubidp.saml.test.metadata.EntityDescriptorFactory;
+import stubidp.saml.test.metadata.MetadataFactory;
+
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 
 import static com.github.tomakehurst.wiremock.client.WireMock.aResponse;
 import static com.github.tomakehurst.wiremock.client.WireMock.get;
 import static com.github.tomakehurst.wiremock.client.WireMock.urlEqualTo;
 import static com.github.tomakehurst.wiremock.core.WireMockConfiguration.wireMockConfig;
-import static uk.gov.ida.saml.core.test.TestEntityIds.TEST_RP_MS;
-import static uk.gov.ida.saml.core.test.builders.metadata.EntitiesDescriptorBuilder.anEntitiesDescriptor;
+import static stubidp.saml.test.builders.EntitiesDescriptorBuilder.anEntitiesDescriptor;
+import static stubidp.test.devpki.TestEntityIds.TEST_RP_MS;
 
 public class  MockMsaServer extends WireMockClassRule {
 
@@ -26,7 +28,7 @@ public class  MockMsaServer extends WireMockClassRule {
         try {
             return new MetadataFactory().metadata(anEntitiesDescriptor()
                     .withEntityDescriptors(ImmutableList.of(entityDescriptor))
-                    .withValidUntil(DateTime.now().plusWeeks(2)).build());
+                    .withValidUntil(Instant.now().plus(14, ChronoUnit.DAYS)).build());
         } catch (MarshallingException | SignatureException e) {
             Throwables.throwIfUnchecked(e);
             throw new RuntimeException(e);

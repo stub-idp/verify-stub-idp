@@ -2,7 +2,7 @@ package uk.gov.ida.verifyserviceprovider.resources;
 
 import org.opensaml.saml.saml2.core.AuthnRequest;
 import org.slf4j.LoggerFactory;
-import uk.gov.ida.saml.serializers.XmlObjectToBase64EncodedStringTransformer;
+import stubidp.saml.serializers.serializers.XmlObjectToBase64EncodedStringTransformer;
 import uk.gov.ida.verifyserviceprovider.dto.RequestGenerationBody;
 import uk.gov.ida.verifyserviceprovider.dto.RequestResponseBody;
 import uk.gov.ida.verifyserviceprovider.factories.saml.AuthnRequestFactory;
@@ -39,7 +39,7 @@ public class GenerateAuthnRequestResource {
     public Response generateAuthnRequest(@Valid @Nullable RequestGenerationBody requestGenerationBody) {
         String entityId = entityIdService.getEntityId(requestGenerationBody);
         AuthnRequest authnRequest = this.authnRequestFactory.build(entityId);
-        XmlObjectToBase64EncodedStringTransformer xmlToBase64Transformer = new XmlObjectToBase64EncodedStringTransformer();
+        XmlObjectToBase64EncodedStringTransformer<AuthnRequest> xmlToBase64Transformer = new XmlObjectToBase64EncodedStringTransformer<>();
         String samlRequest = xmlToBase64Transformer.apply(authnRequest);
 
         RequestResponseBody requestResponseBody = new RequestResponseBody(samlRequest, authnRequest.getID(), ssoLocation);

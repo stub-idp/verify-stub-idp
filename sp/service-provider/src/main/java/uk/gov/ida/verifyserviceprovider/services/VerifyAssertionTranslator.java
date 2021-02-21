@@ -3,12 +3,12 @@ package uk.gov.ida.verifyserviceprovider.services;
 import org.opensaml.saml.common.SAMLVersion;
 import org.opensaml.saml.saml2.core.Assertion;
 import org.opensaml.saml.saml2.metadata.IDPSSODescriptor;
-import uk.gov.ida.saml.core.transformers.MatchingDatasetToNonMatchingAttributesMapper;
-import uk.gov.ida.saml.core.transformers.MatchingDatasetUnmarshaller;
-import uk.gov.ida.saml.core.validation.SamlResponseValidationException;
-import uk.gov.ida.saml.core.validation.assertion.AssertionAttributeStatementValidator;
-import uk.gov.ida.saml.hub.factories.UserIdHashFactory;
-import uk.gov.ida.saml.security.SamlAssertionsSignatureValidator;
+import stubidp.saml.hub.core.validators.assertion.AssertionAttributeStatementValidator;
+import stubidp.saml.security.SamlAssertionsSignatureValidator;
+import stubidp.saml.utils.core.transformers.MatchingDatasetToNonMatchingAttributesMapper;
+import stubidp.saml.utils.core.transformers.MatchingDatasetUnmarshaller;
+import stubidp.saml.utils.core.validation.SamlResponseValidationException;
+import stubidp.saml.utils.hub.factories.UserIdHashFactory;
 import uk.gov.ida.verifyserviceprovider.dto.LevelOfAssurance;
 import uk.gov.ida.verifyserviceprovider.dto.TranslatedNonMatchingResponseBody;
 import uk.gov.ida.verifyserviceprovider.services.AssertionClassifier.AssertionType;
@@ -24,8 +24,8 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static java.util.Collections.singletonList;
-import static uk.gov.ida.saml.core.validation.errors.GenericHubProfileValidationSpecification.MISMATCHED_ISSUERS;
-import static uk.gov.ida.saml.core.validation.errors.GenericHubProfileValidationSpecification.MISMATCHED_PIDS;
+import static stubidp.saml.extensions.validation.errors.GenericHubProfileValidationSpecification.MISMATCHED_ISSUERS;
+import static stubidp.saml.extensions.validation.errors.GenericHubProfileValidationSpecification.MISMATCHED_PIDS;
 
 public class VerifyAssertionTranslator extends IdentityAssertionTranslator {
 
@@ -128,8 +128,8 @@ public class VerifyAssertionTranslator extends IdentityAssertionTranslator {
         return mdsAssertions.get(0);
     }
 
-    private Optional<uk.gov.ida.saml.core.domain.AuthnContext> getAuthnContext(String uri) {
-        return Arrays.stream(uk.gov.ida.saml.core.domain.AuthnContext.values())
+    private Optional<stubidp.saml.domain.assertions.AuthnContext> getAuthnContext(String uri) {
+        return Arrays.stream(stubidp.saml.domain.assertions.AuthnContext.values())
                 .filter(ctx -> uri.equals(ctx.getUri()))
                 .findFirst();
     }
