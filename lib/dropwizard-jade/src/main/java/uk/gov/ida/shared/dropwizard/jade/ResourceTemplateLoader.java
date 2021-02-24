@@ -14,6 +14,12 @@ public class ResourceTemplateLoader implements TemplateLoader {
 
     private static final String JADE_SUFFIX = ".jade";
 
+    @Override
+    public String getExtension() {
+        return JADE_SUFFIX;
+    }
+
+    @Override
     public long getLastModified(String name) {
         return -1;
     }
