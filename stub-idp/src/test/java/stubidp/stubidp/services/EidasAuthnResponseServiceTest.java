@@ -66,7 +66,7 @@ class EidasAuthnResponseServiceTest {
     @Test
     void getEidasSuccessResponse() throws URISyntaxException {
         EidasAuthnRequest request = new EidasAuthnRequest("request-id", "issuer", "destination", "loa", Collections.emptyList());
-        EidasSession session = new EidasSession(new SessionId("session-id"), Instant.now(), request, "relay-state", Collections.emptyList(), Collections.emptyList(), Optional.empty(), Optional.empty());
+        EidasSession session = new EidasSession(new SessionId("session-id"), Instant.now(), request, "relay-state", Collections.emptyList(), Collections.emptyList(), Optional.empty(), Optional.empty(), null, true);
         session.setEidasUser(new EidasUser("Firstname", Optional.empty(), "Familyname", Optional.empty(), "pid", dateOfBirth, null, null));
         when(metadataRepository.getAssertionConsumerServiceLocation()).thenReturn(new URI("http://hub.url"));
         when(eidasResponseTransformerProvider.getTransformer(any())).thenReturn(x -> SAML_RESPONSE_AS_STRING);
@@ -84,7 +84,34 @@ class EidasAuthnResponseServiceTest {
 
         assertThat(samlResponse.getResponseString()).isEqualTo(SAML_RESPONSE_AS_STRING);
 
+        verify(eidasResponseTransformerProvider, times(1)).getTransformer(any());
         verify(eidasResponseTransformerProvider, times(0)).getUnsignedAssertionTransformer(any());
+    }
+
+    @Test
+    void getEidasSuccessResponseWithoutAssertions() throws URISyntaxException {
+        EidasAuthnRequest request = new EidasAuthnRequest("request-id", "issuer", "destination", "loa", Collections.emptyList());
+        EidasSession session = new EidasSession(new SessionId("session-id"), Instant.now(), request, "relay-state", Collections.emptyList(), Collections.emptyList(), Optional.empty(), Optional.empty(), null, false);
+        session.setEidasUser(new EidasUser("Firstname", Optional.empty(), "Familyname", Optional.empty(), "pid", dateOfBirth, null, null));
+        when(metadataRepository.getAssertionConsumerServiceLocation()).thenReturn(new URI("http://hub.url"));
+        when(eidasResponseTransformerProvider.getUnsignedAssertionTransformer(any())).thenReturn(x -> SAML_RESPONSE_AS_STRING);
+
+        SamlResponseFromValue<Response> samlResponse = service.getSuccessResponse(session, SCHEME_ID);
+        Response response = samlResponse.getResponseObject();
+        assertThat(response.getIssuer().getValue()).isEqualTo("http://stub/stub-country/ServiceMetadata");
+        assertThat(response.getStatus().getStatusCode().getValue()).isEqualTo(StatusCode.SUCCESS);
+        assertThat(response.getInResponseTo()).isEqualTo("request-id");
+        assertThat(response.getDestination()).isEqualTo("http://hub.url");
+
+        assertThat(response.getAssertions()).hasSize(1);
+        assertThat(response.getAssertions().get(0).isSigned()).isFalse();
+        assertThat(response.getAssertions().get(0).getAttributeStatements()).hasSize(1);
+        assertThatRequiredAssertionsAreIncluded(response.getAssertions().get(0).getAttributeStatements().get(0).getAttributes());
+
+        assertThat(samlResponse.getResponseString()).isEqualTo(SAML_RESPONSE_AS_STRING);
+
+        verify(eidasResponseTransformerProvider, times(0)).getTransformer(any());
+        verify(eidasResponseTransformerProvider, times(1)).getUnsignedAssertionTransformer(any());
     }
 
     @Test

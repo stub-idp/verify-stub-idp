@@ -9,6 +9,7 @@ import stubidp.utils.rest.common.SessionId;
 import stubidp.saml.domain.request.IdaAuthnRequestFromHub;
 
 import java.time.Instant;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -49,7 +50,7 @@ public class IdpSession extends Session {
 	}
 
 	public IdpSession(SessionId sessionId) {
-		this(sessionId, Instant.now(), null, null, null, null, null, null);
+		this(sessionId, Instant.now(), null, null, Collections.emptyList(), Collections.emptyList(), Optional.empty(), Optional.empty(), Optional.empty(), null);
 	}
 
 	public IdaAuthnRequestFromHub getIdaAuthnRequestFromHub() {

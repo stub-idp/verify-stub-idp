@@ -124,7 +124,11 @@ public class EidasAuthnResponseService {
 
         sentEidasAuthnFailureResponses.labels(FailureType.authn_failed.name()).inc();
 
-        return new SamlResponseFromValue<>(eidasInvalidResponse, eidasResponseTransformerProvider.getTransformer(issuerId), session.getRelayState(), hubUrl);
+        boolean shouldSignAssertions = session.getSignAssertions();
+        Function<Response,String> transformer = shouldSignAssertions?
+                eidasResponseTransformerProvider.getTransformer(issuerId):eidasResponseTransformerProvider.getUnsignedAssertionTransformer(issuerId);
+
+        return new SamlResponseFromValue<>(eidasInvalidResponse, transformer, session.getRelayState(), hubUrl);
     }
 
     private List<Attribute> getEidasAttributes(EidasSession session) {
