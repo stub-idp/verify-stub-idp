@@ -24,7 +24,7 @@
         <maven_surefire_plugin.version>3.0.0-M5</maven_surefire_plugin.version>
 
         <!-- runtime dependencies -->
-        <caffeine.version>3.0.0</caffeine.version>
+        <caffeine.version>3.0.1</caffeine.version>
         <checker_qual.version>3.10.0</checker_qual.version>
         <commons_codec.version>1.15</commons_codec.version>
         <commons_text.version>1.9</commons_text.version>
