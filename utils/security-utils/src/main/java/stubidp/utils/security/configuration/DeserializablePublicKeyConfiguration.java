@@ -27,6 +27,9 @@ public abstract class DeserializablePublicKeyConfiguration {
     protected Certificate certificate;
     protected String name;
 
+    public DeserializablePublicKeyConfiguration() {
+    }
+
     public PublicKey getPublicKey() {
         return certificate.getPublicKey();
     }

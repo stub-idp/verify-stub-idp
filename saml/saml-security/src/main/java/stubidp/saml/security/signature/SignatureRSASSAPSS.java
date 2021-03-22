@@ -7,6 +7,9 @@ import org.opensaml.xmlsec.algorithm.SignatureAlgorithm;
 
 public final class SignatureRSASSAPSS implements SignatureAlgorithm {
 
+    public SignatureRSASSAPSS() {
+    }
+
     /** {@inheritDoc} */
     @NonNull public String getKey() {
         return JCAConstants.KEY_ALGO_RSA;

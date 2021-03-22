@@ -99,6 +99,8 @@ public abstract class IdaSamlBootstrap {
     private static boolean hasBeenBootstrapped;
     private static final Object lock = new Object();
 
+    private IdaSamlBootstrap() {}
+
     public static class BootstrapException extends RuntimeException {
         public BootstrapException(Exception e) {
             super(e);

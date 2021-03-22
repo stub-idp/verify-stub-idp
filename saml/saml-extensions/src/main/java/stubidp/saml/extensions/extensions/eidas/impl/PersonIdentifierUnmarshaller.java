@@ -9,6 +9,9 @@ public class PersonIdentifierUnmarshaller extends AbstractSAMLObjectUnmarshaller
 
     public static final Unmarshaller UNMARSHALLER = new PersonIdentifierUnmarshaller();
 
+    public PersonIdentifierUnmarshaller() {
+    }
+
     /** {@inheritDoc} */
     protected void processElementContent(XMLObject samlObject, String elementContent) {
         PersonIdentifier personIdentifier = (PersonIdentifier) samlObject;

@@ -4,6 +4,9 @@ public class KeyConfigurationBuilder {
 
     private String keyUri = "private key";
 
+    private KeyConfigurationBuilder() {
+    }
+
     public static KeyConfigurationBuilder aKeyConfiguration() {
         return new KeyConfigurationBuilder();
     }

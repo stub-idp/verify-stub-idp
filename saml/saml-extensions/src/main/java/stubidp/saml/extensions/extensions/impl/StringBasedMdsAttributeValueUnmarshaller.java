@@ -5,6 +5,9 @@ import stubidp.saml.extensions.extensions.StringBasedMdsAttributeValue;
 
 public class StringBasedMdsAttributeValueUnmarshaller extends BaseMdsSamlObjectUnmarshaller {
 
+    public StringBasedMdsAttributeValueUnmarshaller() {
+    }
+
     @Override
     protected void processElementContent(XMLObject samlObject, String elementContent) {
         StringBasedMdsAttributeValue stringBasedMdsAttributeValue = (StringBasedMdsAttributeValue) samlObject;

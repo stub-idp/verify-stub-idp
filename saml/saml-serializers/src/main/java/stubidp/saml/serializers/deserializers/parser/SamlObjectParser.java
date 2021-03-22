@@ -15,6 +15,9 @@ import java.nio.charset.StandardCharsets;
 
 public class SamlObjectParser {
 
+    public SamlObjectParser() {
+    }
+
     @SuppressWarnings("unchecked")
     public <T extends XMLObject> T getSamlObject(String xmlString) throws UnmarshallingException, XMLParserException {
         ParserPool parserPool = XMLObjectProviderRegistrySupport.getParserPool();

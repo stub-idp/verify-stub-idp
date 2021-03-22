@@ -4,7 +4,6 @@ import stubidp.utils.security.configuration.SecureCookieKeyStore;
 
 import javax.crypto.Mac;
 import javax.inject.Inject;
-import java.io.UnsupportedEncodingException;
 import java.nio.charset.StandardCharsets;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
@@ -41,6 +40,10 @@ public class HmacDigest {
     }
 
     public static class HmacSha256MacFactory {
+
+        public HmacSha256MacFactory() {
+        }
+
         public Mac getInstance() throws NoSuchAlgorithmException {
             return Mac.getInstance("HmacSHA256");
         }

@@ -10,6 +10,9 @@ public class DateOfBirthUnmarshaller extends AbstractSAMLObjectUnmarshaller {
 
     public static final Unmarshaller UNMARSHALLER = new DateOfBirthUnmarshaller();
 
+    public DateOfBirthUnmarshaller() {
+    }
+
     /** {@inheritDoc} */
     protected void processElementContent(XMLObject samlObject, String elementContent) {
         DateOfBirth dateOfBirth = (DateOfBirth) samlObject;

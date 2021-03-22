@@ -10,6 +10,9 @@ import org.checkerframework.checker.nullness.qual.NonNull;
 
 public class SPTypeBuilder extends AbstractSAMLObjectBuilder<SPType> {
 
+    public SPTypeBuilder() {
+    }
+
     @NonNull
     @Override
     public SPType buildObject() {

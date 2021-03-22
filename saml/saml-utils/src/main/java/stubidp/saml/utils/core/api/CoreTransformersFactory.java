@@ -42,6 +42,10 @@ import java.security.cert.CertificateEncodingException;
 import java.util.Base64;
 
 public class CoreTransformersFactory {
+
+    public CoreTransformersFactory() {
+    }
+
     public KeyDescriptorsUnmarshaller getCertificatesToKeyDescriptorsTransformer() {
         return new KeyDescriptorsUnmarshaller(
                 new OpenSamlXmlObjectFactory()

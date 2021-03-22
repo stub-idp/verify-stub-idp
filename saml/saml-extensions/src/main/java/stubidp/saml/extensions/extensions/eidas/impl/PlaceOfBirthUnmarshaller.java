@@ -9,6 +9,9 @@ public class PlaceOfBirthUnmarshaller extends AbstractSAMLObjectUnmarshaller {
 
     public static final Unmarshaller UNMARSHALLER = new PlaceOfBirthUnmarshaller();
 
+    public PlaceOfBirthUnmarshaller() {
+    }
+
     /** {@inheritDoc} */
     protected void processElementContent(XMLObject samlObject, String elementContent) {
         PlaceOfBirth placeOfBirth = (PlaceOfBirth) samlObject;

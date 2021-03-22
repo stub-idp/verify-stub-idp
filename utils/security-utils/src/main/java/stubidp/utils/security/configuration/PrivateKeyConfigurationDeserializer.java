@@ -9,6 +9,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
 
 public class PrivateKeyConfigurationDeserializer extends JsonDeserializer<PrivateKeyConfiguration> {
+
+    public PrivateKeyConfigurationDeserializer() {
+    }
+
     @Override
     public PrivateKeyConfiguration deserialize(JsonParser p, DeserializationContext ctxt) throws IOException {
         // Setting the Codec explicitly is needed when this executes with the YAMLParser

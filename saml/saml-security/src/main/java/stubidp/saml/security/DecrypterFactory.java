@@ -13,6 +13,10 @@ import java.util.Arrays;
 import java.util.List;
 
 public class DecrypterFactory {
+
+    public DecrypterFactory() {
+    }
+
     public Decrypter createDecrypter(List<Credential> credentials) {
 
         // Resolves local credentials by using information in the EncryptedKey/KeyInfo to query the supplied

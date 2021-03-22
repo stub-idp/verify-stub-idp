@@ -3,6 +3,9 @@ package stubidp.utils.security.configuration;
 
 public class SecureCookieConfigurationBuilder {
 
+    private SecureCookieConfigurationBuilder() {
+    }
+
     public static SecureCookieConfigurationBuilder aSecureCookieConfiguration() {
         return new SecureCookieConfigurationBuilder();
     }

@@ -6,6 +6,9 @@ import stubidp.saml.extensions.extensions.UPRN;
 
 public class UPRNBuilder extends AbstractSAMLObjectBuilder<UPRN> {
 
+    public UPRNBuilder() {
+    }
+
     @Override
     public UPRN buildObject() {
         return buildObject(InternationalPostCode.DEFAULT_ELEMENT_NAME);

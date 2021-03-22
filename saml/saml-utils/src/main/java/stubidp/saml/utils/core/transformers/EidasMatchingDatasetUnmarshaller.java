@@ -29,6 +29,9 @@ public class EidasMatchingDatasetUnmarshaller extends MatchingDatasetUnmarshalle
 
     private static final Logger LOG = LoggerFactory.getLogger(EidasMatchingDatasetUnmarshaller.class);
 
+    public EidasMatchingDatasetUnmarshaller() {
+    }
+
     @Override
     protected void transformAttribute(Attribute attribute, MatchingDatasetBuilder datasetBuilder) {
         switch (attribute.getName()) {

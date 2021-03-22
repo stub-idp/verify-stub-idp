@@ -7,6 +7,9 @@ import stubidp.saml.extensions.extensions.LocalisableAttributeValue;
 
 public class LocalisableStringBasedMdsAttributeValueUnmarshaller extends StringBasedMdsAttributeValueUnmarshaller {
 
+    public LocalisableStringBasedMdsAttributeValueUnmarshaller() {
+    }
+
     @Override
     protected void processAttribute(XMLObject samlObject, Attr attribute) throws UnmarshallingException {
         LocalisableAttributeValue localisableAttributeValue = (LocalisableAttributeValue) samlObject;

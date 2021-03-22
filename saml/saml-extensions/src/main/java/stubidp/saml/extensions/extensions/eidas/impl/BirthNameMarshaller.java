@@ -11,6 +11,9 @@ public class BirthNameMarshaller extends AbstractSAMLObjectMarshaller {
 
     public static final Marshaller MARSHALLER = new BirthNameMarshaller();
 
+    public BirthNameMarshaller() {
+    }
+
     /** {@inheritDoc} */
     protected void marshallElementContent(XMLObject samlObject, Element domElement) {
         BirthName birthName = (BirthName) samlObject;

@@ -6,6 +6,9 @@ import org.opensaml.saml.common.AbstractSAMLObjectBuilder;
 
 public class VersionBuilder extends AbstractSAMLObjectBuilder<Version> {
 
+    public VersionBuilder() {
+    }
+
     @NonNull
     @Override
     public Version buildObject() {

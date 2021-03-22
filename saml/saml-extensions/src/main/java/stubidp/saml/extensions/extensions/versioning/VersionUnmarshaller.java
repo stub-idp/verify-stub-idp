@@ -8,6 +8,9 @@ import stubidp.saml.extensions.extensions.versioning.application.ApplicationVers
 public class VersionUnmarshaller extends AbstractSAMLObjectUnmarshaller {
     public static final Unmarshaller UNMARSHALLER = new VersionUnmarshaller();
 
+    public VersionUnmarshaller() {
+    }
+
     protected void processChildElement(XMLObject parentObject, XMLObject childObject) {
         Version version = (Version) parentObject;
         version.setApplicationVersion((ApplicationVersion) childObject);

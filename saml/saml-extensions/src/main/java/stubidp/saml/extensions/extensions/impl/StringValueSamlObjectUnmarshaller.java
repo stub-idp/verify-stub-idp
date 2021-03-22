@@ -7,6 +7,9 @@ import stubidp.saml.extensions.extensions.StringValueSamlObject;
 
 public class StringValueSamlObjectUnmarshaller extends AbstractSAMLObjectUnmarshaller {
 
+    public StringValueSamlObjectUnmarshaller() {
+    }
+
     @Override
     protected void processElementContent(XMLObject samlObject, String elementContent) {
         StringValueSamlObject stringValueSamlObject = (StringValueSamlObject) samlObject;

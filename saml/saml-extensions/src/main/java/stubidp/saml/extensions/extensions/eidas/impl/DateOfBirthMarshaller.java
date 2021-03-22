@@ -12,6 +12,9 @@ public class DateOfBirthMarshaller extends AbstractSAMLObjectMarshaller {
 
     public static final Marshaller MARSHALLER = new DateOfBirthMarshaller();
 
+    public DateOfBirthMarshaller() {
+    }
+
     /** {@inheritDoc} */
     protected void marshallElementContent(XMLObject samlObject, Element domElement) {
         DateOfBirth dateOfBirth = (DateOfBirth) samlObject;

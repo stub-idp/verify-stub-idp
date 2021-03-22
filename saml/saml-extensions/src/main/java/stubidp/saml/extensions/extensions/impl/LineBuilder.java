@@ -5,6 +5,9 @@ import stubidp.saml.extensions.extensions.Line;
 
 public class LineBuilder extends AbstractSAMLObjectBuilder<Line> {
 
+    public LineBuilder() {
+    }
+
     @Override
     public Line buildObject() {
         return buildObject(Line.DEFAULT_ELEMENT_NAME);

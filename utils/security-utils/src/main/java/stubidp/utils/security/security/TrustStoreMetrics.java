@@ -15,7 +15,7 @@ import java.util.Enumeration;
  * </pre>
  */
 public class TrustStoreMetrics {
-    private Gauge expiryDateGauge;
+    private final Gauge expiryDateGauge;
 
     /**
      * Initialises the TrustStoreMetrics gauge with a reference to a different gauge
@@ -54,7 +54,7 @@ public class TrustStoreMetrics {
             while (aliases.hasMoreElements()) {
                 String alias = aliases.nextElement();
                 X509Certificate certificate = (X509Certificate) trustStore.getCertificate(alias);
-                expiryDateGauge.labels(name, certificate.getSubjectDN().getName(), certificate.getSerialNumber().toString(10))
+                expiryDateGauge.labels(name, certificate.getSubjectX500Principal().getName(), certificate.getSerialNumber().toString(10))
                         .set(certificate.getNotAfter().getTime());
             }
         } catch (KeyStoreException e) {

@@ -5,6 +5,9 @@ import stubidp.saml.extensions.extensions.PostCode;
 
 public class PostCodeBuilder extends AbstractSAMLObjectBuilder<PostCode> {
 
+    public PostCodeBuilder() {
+    }
+
     @Override
     public PostCode buildObject() {
         return buildObject(PostCode.DEFAULT_ELEMENT_NAME);

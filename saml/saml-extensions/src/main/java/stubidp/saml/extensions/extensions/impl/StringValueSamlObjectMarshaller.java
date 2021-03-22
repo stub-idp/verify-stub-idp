@@ -9,6 +9,9 @@ import stubidp.saml.extensions.extensions.StringValueSamlObject;
 
 public class StringValueSamlObjectMarshaller extends AbstractSAMLObjectMarshaller {
 
+    public StringValueSamlObjectMarshaller() {
+    }
+
     @Override
     protected void marshallElementContent(XMLObject xmlObject, Element domElement) {
         StringValueSamlObject stringValueSamlObject = (StringValueSamlObject) xmlObject;

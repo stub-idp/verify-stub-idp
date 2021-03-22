@@ -5,6 +5,9 @@ import stubidp.saml.extensions.extensions.IdpFraudEventId;
 
 public class IdpFraudEventIdBuilder extends AbstractSAMLObjectBuilder<IdpFraudEventId> {
 
+    public IdpFraudEventIdBuilder() {
+    }
+
     @Override
     public IdpFraudEventId buildObject() {
         return buildObject(IdpFraudEventId.DEFAULT_ELEMENT_NAME);

@@ -5,6 +5,9 @@ import stubidp.saml.extensions.extensions.StringBasedMdsAttributeValue;
 
 public class StringBasedMdsAttributeValueBuilder extends AbstractSAMLObjectBuilder<StringBasedMdsAttributeValue> {
 
+    public StringBasedMdsAttributeValueBuilder() {
+    }
+
     @Override
     public StringBasedMdsAttributeValue buildObject() {
         return buildObject(StringBasedMdsAttributeValue.DEFAULT_ELEMENT_NAME);

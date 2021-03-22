@@ -11,6 +11,9 @@ public class CurrentAddressMarshaller extends AbstractSAMLObjectMarshaller {
 
     public static final Marshaller MARSHALLER = new CurrentAddressMarshaller();
 
+    public CurrentAddressMarshaller() {
+    }
+
     /** {@inheritDoc} */
     protected void marshallElementContent(XMLObject samlObject, Element domElement) {
         CurrentAddress currentAddress = (CurrentAddress) samlObject;

@@ -21,6 +21,9 @@ import java.util.stream.Collectors;
 
 public class CountryTrustAnchor {
 
+    public CountryTrustAnchor() {
+    }
+
     public static JWK make(List<X509Certificate> certificates, String keyId) {
         return make(certificates, keyId, true);
     }

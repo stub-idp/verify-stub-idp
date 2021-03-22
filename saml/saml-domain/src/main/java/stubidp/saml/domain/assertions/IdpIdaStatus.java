@@ -82,6 +82,10 @@ public final class IdpIdaStatus implements IdaStatus {
     }
 
     public static class IdpIdaStatusFactory implements AuthenticationStatusFactory<IdpIdaStatus.Status, IdpIdaStatus> {
+
+        public IdpIdaStatusFactory() {
+        }
+
         public IdpIdaStatus create(
                 final IdpIdaStatus.Status statusCode,
                 final Optional<String> message) {

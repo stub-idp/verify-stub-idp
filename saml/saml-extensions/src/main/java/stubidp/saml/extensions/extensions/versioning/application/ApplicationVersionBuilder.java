@@ -5,6 +5,10 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 import org.opensaml.saml.common.AbstractSAMLObjectBuilder;
 
 public class ApplicationVersionBuilder extends AbstractSAMLObjectBuilder<ApplicationVersion> {
+
+    public ApplicationVersionBuilder() {
+    }
+
     @NonNull
     @Override
     public ApplicationVersion buildObject() {

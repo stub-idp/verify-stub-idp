@@ -11,6 +11,9 @@ import static java.nio.charset.StandardCharsets.UTF_8;
 
 public class XmlObjectToBase64EncodedStringTransformer<TInput extends XMLObject> implements Function<TInput, String> {
 
+    public XmlObjectToBase64EncodedStringTransformer() {
+    }
+
     @Override
     public String apply(XMLObject signableXMLObject) {
         Element signedElement = marshallToElement(signableXMLObject);

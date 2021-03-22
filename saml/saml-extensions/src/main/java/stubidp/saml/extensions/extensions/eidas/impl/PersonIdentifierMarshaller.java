@@ -11,6 +11,9 @@ public class PersonIdentifierMarshaller extends AbstractSAMLObjectMarshaller {
 
     public static final Marshaller MARSHALLER = new PersonIdentifierMarshaller();
 
+    public PersonIdentifierMarshaller() {
+    }
+
     /** {@inheritDoc} */
     protected void marshallElementContent(XMLObject samlObject, Element domElement) {
         PersonIdentifier personIdentifier = (PersonIdentifier) samlObject;

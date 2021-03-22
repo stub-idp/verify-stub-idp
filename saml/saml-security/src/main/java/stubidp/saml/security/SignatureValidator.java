@@ -20,6 +20,9 @@ import java.util.List;
 public abstract class SignatureValidator {
     private final SAMLSignatureProfileValidator samlSignatureProfileValidator = new SAMLSignatureProfileValidator();
 
+    public SignatureValidator() {
+    }
+
     public final boolean validate(SignableSAMLObject signableSAMLObject, String entityId, QName role) throws SecurityException, SignatureException {
         Signature signature = signableSAMLObject.getSignature();
 

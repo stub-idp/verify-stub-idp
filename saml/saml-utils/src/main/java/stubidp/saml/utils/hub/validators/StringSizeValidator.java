@@ -6,6 +6,9 @@ import stubidp.saml.utils.hub.errors.SamlTransformationErrorFactory;
 
 public class StringSizeValidator {
 
+    public StringSizeValidator() {
+    }
+
     public void validate(String input, int lowerBound, int upperBound) {
 
         if(input.length() < lowerBound){

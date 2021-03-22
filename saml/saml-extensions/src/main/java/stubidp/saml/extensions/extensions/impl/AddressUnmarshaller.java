@@ -13,6 +13,9 @@ public class AddressUnmarshaller extends BaseMdsSamlObjectUnmarshaller {
 
     public static final Unmarshaller UNMARSHALLER = new AddressUnmarshaller();
 
+    public AddressUnmarshaller() {
+    }
+
     protected void processChildElement(XMLObject parentObject, XMLObject childObject) throws UnmarshallingException {
         Address address = (Address) parentObject;
 

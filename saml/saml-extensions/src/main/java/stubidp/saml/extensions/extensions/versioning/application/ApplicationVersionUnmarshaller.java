@@ -7,6 +7,9 @@ import org.opensaml.saml.common.AbstractSAMLObjectUnmarshaller;
 public class ApplicationVersionUnmarshaller extends AbstractSAMLObjectUnmarshaller {
     public static final Unmarshaller UNMARSHALLER = new ApplicationVersionUnmarshaller();
 
+    public ApplicationVersionUnmarshaller() {
+    }
+
     /** {@inheritDoc} */
     protected void processElementContent(XMLObject samlObject, String elementContent) {
         ApplicationVersion applicationVersion = (ApplicationVersion) samlObject;

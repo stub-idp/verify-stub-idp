@@ -22,8 +22,10 @@ import stubidp.saml.extensions.extensions.eidas.impl.PersonIdentifierBuilder;
 import java.time.Instant;
 import java.util.Arrays;
 
-
 public class EidasAttributeFactory {
+
+    public EidasAttributeFactory() {
+    }
 
     private Attribute buildAttribute(String friendlyName, String name, AttributeValue... attributeValues) {
         Attribute attribute = new AttributeBuilder().buildObject();

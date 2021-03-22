@@ -10,6 +10,9 @@ import org.w3c.dom.Element;
 public class VersionMarshaller extends AbstractSAMLObjectMarshaller {
     public static final Marshaller MARSHALLER = new VersionMarshaller();
 
+    public VersionMarshaller() {
+    }
+
     @Override
     protected void marshallAttributes(XMLObject xmlObject, Element domElement) {
         XMLObjectSupport.marshallAttribute(XMLConstants.XSI_TYPE_ATTRIB_NAME, Version.NAMESPACE_PREFIX + ":" + Version.TYPE_LOCAL_NAME, domElement, false);

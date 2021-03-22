@@ -1,6 +1,10 @@
 package stubidp.saml.extensions.domain;
 
 public abstract class SamlStatusCode {
+
+    private SamlStatusCode() {
+    }
+
     public static final String MATCH = "urn:uk:gov:cabinet-office:tc:saml:statuscode:match";
     public static final String NO_MATCH = "urn:uk:gov:cabinet-office:tc:saml:statuscode:no-match";
     public static final String MULTI_MATCH = "urn:uk:gov:cabinet-office:tc:saml:statuscode:multiple-match";

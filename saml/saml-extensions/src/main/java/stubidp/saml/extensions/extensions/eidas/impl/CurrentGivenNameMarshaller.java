@@ -10,6 +10,9 @@ public class CurrentGivenNameMarshaller extends AbstractTransliterableStringMars
 
     public static final Marshaller MARSHALLER = new CurrentGivenNameMarshaller();
 
+    public CurrentGivenNameMarshaller() {
+    }
+
     /** {@inheritDoc} */
     protected void marshallElementContent(XMLObject samlObject, Element domElement) {
         CurrentGivenName currentGivenName = (CurrentGivenName) samlObject;

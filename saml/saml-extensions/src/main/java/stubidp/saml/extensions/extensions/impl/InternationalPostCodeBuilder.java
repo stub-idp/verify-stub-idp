@@ -5,6 +5,9 @@ import stubidp.saml.extensions.extensions.InternationalPostCode;
 
 public class InternationalPostCodeBuilder extends AbstractSAMLObjectBuilder<InternationalPostCode> {
 
+    public InternationalPostCodeBuilder() {
+    }
+
     @Override
     public InternationalPostCode buildObject() {
         return buildObject(InternationalPostCode.DEFAULT_ELEMENT_NAME);

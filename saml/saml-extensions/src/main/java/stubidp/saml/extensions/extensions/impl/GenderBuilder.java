@@ -6,6 +6,9 @@ import stubidp.saml.extensions.extensions.Gender;
 
 public class GenderBuilder extends AbstractSAMLObjectBuilder<Gender> {
 
+    public GenderBuilder() {
+    }
+
     @Override
     public Gender buildObject() {
         return buildObject(Gender.DEFAULT_ELEMENT_NAME, Gender.TYPE_NAME);

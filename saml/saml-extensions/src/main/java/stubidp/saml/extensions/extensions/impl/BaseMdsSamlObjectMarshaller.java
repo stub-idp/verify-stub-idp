@@ -18,6 +18,9 @@ import java.time.format.DateTimeFormatter;
 public class BaseMdsSamlObjectMarshaller extends AbstractSAMLObjectMarshaller {
 
     public static class DateFromInstant {
+        private DateFromInstant() {
+        }
+
         private static final DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ISO_LOCAL_DATE.withZone(ZoneId.of("UTC"));
         public static String of(Instant instant) {
             return dateTimeFormatter.format(instant);

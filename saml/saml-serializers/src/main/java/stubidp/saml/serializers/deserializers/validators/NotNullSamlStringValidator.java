@@ -5,6 +5,10 @@ import stubidp.saml.extensions.validation.SamlValidationSpecificationFailure;
 import stubidp.saml.serializers.errors.SamlTransformationErrorFactory;
 
 public class NotNullSamlStringValidator {
+
+    public NotNullSamlStringValidator() {
+    }
+
     public void validate(String input) {
         if (input == null) {
             SamlValidationSpecificationFailure failure = SamlTransformationErrorFactory.noSamlMessage();

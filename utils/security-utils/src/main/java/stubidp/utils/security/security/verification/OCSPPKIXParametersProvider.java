@@ -5,6 +5,10 @@ import java.security.Security;
 import java.security.cert.PKIXParameters;
 
 public class OCSPPKIXParametersProvider extends PKIXParametersProvider {
+
+    public OCSPPKIXParametersProvider() {
+    }
+
     @Override
     public PKIXParameters getPkixParameters(KeyStore keyStore) {
         PKIXParameters pkixParameters = super.getPkixParameters(keyStore);

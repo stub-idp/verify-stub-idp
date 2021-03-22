@@ -9,6 +9,9 @@ public class BirthNameUnmarshaller extends AbstractSAMLObjectUnmarshaller {
 
     public static final Unmarshaller UNMARSHALLER = new BirthNameUnmarshaller();
 
+    public BirthNameUnmarshaller() {
+    }
+
     /** {@inheritDoc} */
     protected void processElementContent(XMLObject samlObject, String elementContent) {
         BirthName birthName = (BirthName) samlObject;

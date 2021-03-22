@@ -5,6 +5,9 @@ import stubidp.saml.extensions.extensions.IPAddress;
 
 public class IPAddressBuilder extends AbstractSAMLObjectBuilder<IPAddress> {
 
+    public IPAddressBuilder() {
+    }
+
     @Override
     public IPAddress buildObject() {
         return buildObject(IPAddress.DEFAULT_ELEMENT_NAME);

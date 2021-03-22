@@ -8,6 +8,9 @@ public class CurrentFamilyNameUnmarshaller extends AbstractTransliterableStringU
 
     public static final Unmarshaller UNMARSHALLER = new CurrentFamilyNameUnmarshaller();
 
+    public CurrentFamilyNameUnmarshaller() {
+    }
+
     /** {@inheritDoc} */
     protected void processElementContent(XMLObject samlObject, String elementContent) {
         CurrentFamilyName currentFamilyName = (CurrentFamilyName) samlObject;

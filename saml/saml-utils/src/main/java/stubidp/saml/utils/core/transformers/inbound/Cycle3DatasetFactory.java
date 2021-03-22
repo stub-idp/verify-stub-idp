@@ -16,6 +16,9 @@ import static stubidp.saml.utils.hub.errors.SamlTransformationErrorFactory.missi
 
 public class Cycle3DatasetFactory {
 
+    public Cycle3DatasetFactory() {
+    }
+
     public Cycle3Dataset createCycle3DataSet(Assertion assertion) {
         List<AttributeStatement> attributeStatements = assertion.getAttributeStatements();
 

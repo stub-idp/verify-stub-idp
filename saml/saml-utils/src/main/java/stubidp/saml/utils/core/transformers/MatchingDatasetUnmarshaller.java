@@ -20,6 +20,9 @@ import java.util.List;
  */
 public abstract class MatchingDatasetUnmarshaller {
 
+    public MatchingDatasetUnmarshaller() {
+    }
+
     public MatchingDataset fromAssertion(Assertion assertion) {
         List<AttributeStatement> attributeStatements = assertion.getAttributeStatements();
         if (attributeStatements.isEmpty()) {

@@ -21,6 +21,9 @@ public class MatchingDatasetBuilder {
     private final List<Address> previousAddresses = new ArrayList<>();
     private String personalId;
 
+    public MatchingDatasetBuilder() {
+    }
+
     public void addFirstNames(List<TransliterableMdsValue> firstnames) {
         this.firstnames.addAll(firstnames);
     }

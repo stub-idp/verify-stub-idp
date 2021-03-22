@@ -10,6 +10,9 @@ import java.security.cert.PKIXParameters;
 
 public class PKIXParametersProvider {
 
+    public PKIXParametersProvider() {
+    }
+
     public PKIXParameters getPkixParameters(KeyStore keyStore) {
         PKIXParameters certPathParameters;
 

@@ -11,6 +11,9 @@ public class EncrypterFactory {
     private String dataEncryptionAlgorithm = EncryptionConstants.ALGO_ID_BLOCKCIPHER_AES128;
     private Encrypter.KeyPlacement keyPlacement = Encrypter.KeyPlacement.PEER;
 
+    public EncrypterFactory() {
+    }
+
     public EncrypterFactory withKeyEncryptionAlgorithm(String algorithm) {
         keyEncryptionAlgorithm = algorithm;
         return this;

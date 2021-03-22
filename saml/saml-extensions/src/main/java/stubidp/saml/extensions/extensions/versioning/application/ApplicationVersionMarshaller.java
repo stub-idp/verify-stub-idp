@@ -9,6 +9,9 @@ import org.w3c.dom.Element;
 public class ApplicationVersionMarshaller extends AbstractSAMLObjectMarshaller {
     public static final Marshaller MARSHALLER = new ApplicationVersionMarshaller();
 
+    public ApplicationVersionMarshaller() {
+    }
+
     /**
      * {@inheritDoc}
      */

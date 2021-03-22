@@ -70,8 +70,8 @@ public class CertificateChainValidator {
     }
 
     private String getDnForCertificate(X509Certificate certificate) {
-        if (certificate != null && certificate.getSubjectDN() != null) {
-            return certificate.getSubjectDN().getName();
+        if (certificate != null && certificate.getSubjectX500Principal() != null) {
+            return certificate.getSubjectX500Principal().getName();
         }
         return "Unable to get DN";
     }

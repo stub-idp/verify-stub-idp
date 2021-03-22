@@ -9,6 +9,9 @@ public class SamlTransformationErrorManager {
 
     private static final Logger LOG = LoggerFactory.getLogger(SamlTransformationErrorManager.class);
 
+    private SamlTransformationErrorManager() {
+    }
+
     public static void warn(SamlValidationSpecificationFailure warning) {
         LOG.warn(VALIDATION_WARNING_FORMAT, warning.getErrorMessage());
     }

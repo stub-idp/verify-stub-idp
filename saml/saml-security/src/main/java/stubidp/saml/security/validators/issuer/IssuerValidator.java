@@ -9,6 +9,10 @@ import stubidp.saml.security.errors.SamlTransformationErrorFactory;
 import java.util.Objects;
 
 public class IssuerValidator {
+
+    public IssuerValidator() {
+    }
+
     public void validate(Issuer assertionIssuer) {
         if (Objects.isNull(assertionIssuer)) {
             SamlValidationSpecificationFailure failure = SamlTransformationErrorFactory.missingIssuer();

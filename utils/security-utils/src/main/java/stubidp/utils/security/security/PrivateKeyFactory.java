@@ -9,6 +9,9 @@ import java.security.spec.PKCS8EncodedKeySpec;
 
 public class PrivateKeyFactory {
 
+    public PrivateKeyFactory() {
+    }
+
     public PrivateKey createPrivateKey(byte[] privateKeyBytes) {
         KeySpec keySpec = new PKCS8EncodedKeySpec(privateKeyBytes);
 

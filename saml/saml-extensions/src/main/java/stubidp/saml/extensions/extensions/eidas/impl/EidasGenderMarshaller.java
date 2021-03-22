@@ -11,6 +11,9 @@ public class EidasGenderMarshaller extends AbstractSAMLObjectMarshaller {
 
     public static final Marshaller MARSHALLER = new EidasGenderMarshaller();
 
+    public EidasGenderMarshaller() {
+    }
+
     /** {@inheritDoc} */
     protected void marshallElementContent(XMLObject samlObject, Element domElement) {
         EidasGender eidasGender = (EidasGender) samlObject;

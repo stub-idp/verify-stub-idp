@@ -7,6 +7,9 @@ import org.opensaml.xmlsec.signature.impl.SignatureImpl;
 
 public abstract class SamlSignatureUtil {
 
+    private SamlSignatureUtil() {
+    }
+
     public static boolean isSignaturePresent(Signature signature) {
         SignatureImpl signatureImpl = (SignatureImpl) signature;
         if (signatureImpl.getXMLSignature() == null) {

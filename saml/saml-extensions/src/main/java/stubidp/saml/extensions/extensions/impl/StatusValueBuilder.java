@@ -6,6 +6,9 @@ import stubidp.saml.extensions.extensions.StatusValue;
 
 public class StatusValueBuilder extends AbstractSAMLObjectBuilder<StatusValue> {
 
+    public StatusValueBuilder() {
+    }
+
     @Override
     public StatusValue buildObject() {
         return buildObject(StatusValue.DEFAULT_ELEMENT_NAME);

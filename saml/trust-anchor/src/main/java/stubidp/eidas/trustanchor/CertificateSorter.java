@@ -11,6 +11,10 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 public class CertificateSorter {
+
+    private CertificateSorter() {
+    }
+
     public static List<X509Certificate> sort(List<X509Certificate> certificates) {
 
         List<X500Principal> issuers = issuerX500s(certificates);

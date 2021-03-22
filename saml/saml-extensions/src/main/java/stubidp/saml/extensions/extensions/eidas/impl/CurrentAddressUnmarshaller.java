@@ -9,6 +9,9 @@ public class CurrentAddressUnmarshaller extends AbstractSAMLObjectUnmarshaller {
 
     public static final Unmarshaller UNMARSHALLER = new CurrentAddressUnmarshaller();
 
+    public CurrentAddressUnmarshaller() {
+    }
+
     /** {@inheritDoc} */
     protected void processElementContent(XMLObject samlObject, String elementContent) {
         CurrentAddress currentAddress = (CurrentAddress) samlObject;

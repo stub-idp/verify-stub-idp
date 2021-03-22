@@ -10,6 +10,9 @@ public class CurrentFamilyNameMarshaller extends AbstractTransliterableStringMar
 
     public static final Marshaller MARSHALLER = new CurrentFamilyNameMarshaller();
 
+    public CurrentFamilyNameMarshaller() {
+    }
+
     /** {@inheritDoc} */
     protected void marshallElementContent(XMLObject samlObject, Element domElement) {
         CurrentFamilyName currentFamilyName = (CurrentFamilyName) samlObject;

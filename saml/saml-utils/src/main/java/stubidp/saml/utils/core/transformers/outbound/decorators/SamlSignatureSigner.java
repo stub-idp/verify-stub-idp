@@ -11,6 +11,9 @@ import org.opensaml.xmlsec.signature.support.Signer;
 
 public class SamlSignatureSigner<T extends SignableXMLObject> {
 
+    public SamlSignatureSigner() {
+    }
+
     public T sign(T input) {
 
         Signature rootObjectSignature = input.getSignature();

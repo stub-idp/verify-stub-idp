@@ -5,6 +5,9 @@ import stubidp.saml.extensions.extensions.Gpg45Status;
 
 public class Gpg45StatusBuilder extends AbstractSAMLObjectBuilder<Gpg45Status> {
 
+    public Gpg45StatusBuilder() {
+    }
+
     @Override
     public Gpg45Status buildObject() {
         return buildObject(Gpg45Status.DEFAULT_ELEMENT_NAME);

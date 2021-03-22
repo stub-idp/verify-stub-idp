@@ -35,6 +35,9 @@ public abstract class XmlUtils {
 
     private static final Logger LOG = LoggerFactory.getLogger(XmlUtils.class);
 
+    private XmlUtils() {
+    }
+
     public static String writeToString(Node node) {
         try {
             StringWriter docWriter = new StringWriter();

@@ -14,6 +14,7 @@ import org.slf4j.LoggerFactory;
 import stubidp.saml.metadata.exception.CertificateConversionException;
 import stubidp.utils.security.security.verification.CertificateChainValidator;
 
+import javax.annotation.Nonnull;
 import javax.xml.namespace.QName;
 import java.security.KeyStore;
 import java.security.cert.CertificateException;
@@ -54,7 +55,7 @@ public final class CertificateChainValidationFilter implements MetadataFilter {
 
     @Nullable
     @Override
-    public XMLObject filter(@Nullable XMLObject metadata, MetadataFilterContext metadataFilterContext) {
+    public XMLObject filter(@Nullable XMLObject metadata, @Nonnull MetadataFilterContext metadataFilterContext) {
         if (metadata == null) {
             return null;
         }
@@ -92,7 +93,7 @@ public final class CertificateChainValidationFilter implements MetadataFilter {
 
         // Can't use IndexedXMLObjectChildrenList sublist iterator remove() to remove members,
         // so just note them in a set and then remove after iteration has completed.
-        final HashSet<XMLObject> toRemove = new HashSet<>();
+        final HashSet<EntityDescriptor> toRemove = new HashSet<>();
 
         entitiesDescriptor.getEntityDescriptors().forEach(
         entityDescriptor -> {
@@ -136,7 +137,7 @@ public final class CertificateChainValidationFilter implements MetadataFilter {
                 try {
                     for (final X509Certificate certificate : getCertificates(keyInfo)) {
                         if (!getCertificateChainValidator().validate(certificate, getKeyStore()).isValid()) {
-                            LOG.warn("Certificate chain validation failed for metadata entry {}", certificate.getSubjectDN());
+                            LOG.warn("Certificate chain validation failed for metadata entry {}", certificate.getSubjectX500Principal());
                             return true;
                         }
                     }

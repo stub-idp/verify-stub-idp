@@ -14,7 +14,13 @@ import java.util.Objects;
 
 public class BaseMdsSamlObjectUnmarshaller extends AbstractSAMLObjectUnmarshaller {
 
+    public BaseMdsSamlObjectUnmarshaller() {
+    }
+
     public static class InstantFromDate {
+        private InstantFromDate() {
+        }
+
         public static Instant of(String date) {
             return LocalDate.parse(date).atStartOfDay(ZoneId.of("UTC")).toInstant();
         }

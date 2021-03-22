@@ -7,6 +7,9 @@ import stubidp.saml.extensions.extensions.RequestedAttribute;
 
 public class RequestedAttributeBuilder extends AbstractSAMLObjectBuilder<RequestedAttribute> {
 
+    public RequestedAttributeBuilder() {
+    }
+
     @NonNull
     @Override
     public RequestedAttribute buildObject() {

@@ -10,6 +10,9 @@ import java.util.function.Function;
 
 public class XmlObjectToElementTransformer<TInput extends XMLObject> implements Function<TInput,Element> {
 
+    public XmlObjectToElementTransformer() {
+    }
+
     public Element apply(TInput rootObject) {
         try {
             return XMLObjectSupport.marshall(rootObject);
