@@ -51,20 +51,14 @@ public abstract class IdaStatusUnmarshaller<T extends IdaStatus> {
 
     private IdaStatusMapperStatus getResponderStatus(StatusCode topLevelStatusCode) {
         StatusCode subStatusCode = topLevelStatusCode.getStatusCode();
-        switch (subStatusCode.getValue()) {
-            case StatusCode.AUTHN_FAILED:
-                return IdaStatusMapperStatus.AuthenticationFailed;
-            case SamlStatusCode.NO_MATCH:
-                return IdaStatusMapperStatus.NoMatchingServiceMatchFromMatchingService;
-            case StatusCode.NO_AUTHN_CONTEXT:
-                return IdaStatusMapperStatus.NoAuthenticationContext;
-            case StatusCode.REQUESTER:
-                return IdaStatusMapperStatus.RequesterErrorFromIdpAsSentByHub;
-            case SamlStatusCode.CREATE_FAILURE:
-                return IdaStatusMapperStatus.CreateFailed;
-            default:
-                throw new IllegalArgumentException(format("{0} - Unrecognised sub-status code.", topLevelStatusCode.getValue()));
-        }
+        return switch (subStatusCode.getValue()) {
+            case StatusCode.AUTHN_FAILED -> IdaStatusMapperStatus.AuthenticationFailed;
+            case SamlStatusCode.NO_MATCH -> IdaStatusMapperStatus.NoMatchingServiceMatchFromMatchingService;
+            case StatusCode.NO_AUTHN_CONTEXT -> IdaStatusMapperStatus.NoAuthenticationContext;
+            case StatusCode.REQUESTER -> IdaStatusMapperStatus.RequesterErrorFromIdpAsSentByHub;
+            case SamlStatusCode.CREATE_FAILURE -> IdaStatusMapperStatus.CreateFailed;
+            default -> throw new IllegalArgumentException(format("{0} - Unrecognised sub-status code.", topLevelStatusCode.getValue()));
+        };
     }
 
     private IdaStatusMapperStatus getSubStatusForTopLevelSuccessStatus(StatusCode topLevelStatusCode) {

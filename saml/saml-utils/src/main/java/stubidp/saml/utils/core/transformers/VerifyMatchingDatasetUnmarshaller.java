@@ -28,41 +28,27 @@ public class VerifyMatchingDatasetUnmarshaller extends MatchingDatasetUnmarshall
 
     protected void transformAttribute(Attribute attribute, MatchingDatasetBuilder datasetBuilder) {
         switch (attribute.getName()) {
-            case IdaConstants.Attributes_1_1.Firstname.NAME:
-                datasetBuilder.addFirstNames(transformPersonNameAttribute(attribute).stream().map(TransliterableMdsValue::new).collect(Collectors.toList()));
-                break;
-
-            case IdaConstants.Attributes_1_1.Middlename.NAME:
-                datasetBuilder.middlenames(transformPersonNameAttribute(attribute));
-                break;
-
-            case IdaConstants.Attributes_1_1.Surname.NAME:
-                datasetBuilder.addSurnames(transformPersonNameAttribute(attribute).stream().map(TransliterableMdsValue::new).collect(Collectors.toList()));
-                break;
-
-            case IdaConstants.Attributes_1_1.Gender.NAME:
+            case IdaConstants.Attributes_1_1.Firstname.NAME -> datasetBuilder.addFirstNames(transformPersonNameAttribute(attribute).stream().map(TransliterableMdsValue::new).collect(Collectors.toList()));
+            case IdaConstants.Attributes_1_1.Middlename.NAME -> datasetBuilder.middlenames(transformPersonNameAttribute(attribute));
+            case IdaConstants.Attributes_1_1.Surname.NAME -> datasetBuilder.addSurnames(transformPersonNameAttribute(attribute).stream().map(TransliterableMdsValue::new).collect(Collectors.toList()));
+            case IdaConstants.Attributes_1_1.Gender.NAME -> {
                 stubidp.saml.extensions.extensions.Gender gender = (stubidp.saml.extensions.extensions.Gender) attribute.getAttributeValues().get(0);
                 datasetBuilder.gender(new SimpleMdsValue<>(Gender.fromString(gender.getValue()), gender.getFrom(), gender.getTo(), gender.getVerified()));
-                break;
-
-            case IdaConstants.Attributes_1_1.DateOfBirth.NAME:
-                datasetBuilder.dateOfBirth(getBirthdates(attribute));
-                break;
-
-            case IdaConstants.Attributes_1_1.CurrentAddress.NAME:
+            }
+            case IdaConstants.Attributes_1_1.DateOfBirth.NAME -> datasetBuilder.dateOfBirth(getBirthdates(attribute));
+            case IdaConstants.Attributes_1_1.CurrentAddress.NAME -> {
                 List<Address> transformedCurrentAddresses = AddressFactory.create(attribute);
                 datasetBuilder.addCurrentAddresses(transformedCurrentAddresses);
-                break;
-
-            case IdaConstants.Attributes_1_1.PreviousAddress.NAME:
+            }
+            case IdaConstants.Attributes_1_1.PreviousAddress.NAME -> {
                 List<Address> transformedPreviousAddresses = AddressFactory.create(attribute);
                 datasetBuilder.addPreviousAddresses(transformedPreviousAddresses);
-                break;
-
-            default:
+            }
+            default -> {
                 String errorMessage = format("Attribute {0} is not a supported Matching Dataset attribute.", attribute.getName());
                 LOG.warn(errorMessage);
                 throw new IllegalArgumentException(errorMessage);
+            }
         }
     }
 

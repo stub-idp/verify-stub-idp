@@ -30,14 +30,14 @@ public class SamlResponseResource {
     public Response receiveSamlResponse(@FormParam(Urls.SAML_RESPONSE_PARAM) String samlResponse,
                                         @FormParam(Urls.RELAY_STATE_PARAM) String relayState) {
         SamlResponseFromIdpDto samlResponseFromIdpDto = samlResponseService.processResponse(samlResponse, relayState);
-        switch(samlResponseFromIdpDto.getResponseStatus()) {
-            case SUCCESS: {
+        switch (samlResponseFromIdpDto.getResponseStatus()) {
+            case SUCCESS -> {
                 return Response.ok(new SuccessView(samlResponseFromIdpDto)).build();
             }
-            case AUTHENTICATION_FAILED: {
+            case AUTHENTICATION_FAILED -> {
                 return Response.ok(new AuthenticationFailedView(samlResponseFromIdpDto)).build();
             }
-            default: {
+            default -> {
                 return Response.seeOther(UriBuilder.fromPath(Urls.ROOT_RESOURCE).build())
                         .build();
             }

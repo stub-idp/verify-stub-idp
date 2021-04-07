@@ -25,8 +25,8 @@ public class SamlResponseService {
         Document document = Jsoup.parse(new String(Base64.getMimeDecoder().decode(samlResponse)));
         document.outputSettings().prettyPrint(true);
         InboundResponseFromIdp<IdentityProviderAssertion> inboundResponseFromIdp = samlResponseDecrypter.decryptSaml(samlResponse);
-        switch(inboundResponseFromIdp.getStatus().getStatusCode()) {
-            case Success: {
+        switch (inboundResponseFromIdp.getStatus().getStatusCode()) {
+            case Success -> {
                 try {
                     return new SamlResponseFromIdpDto(ResponseStatus.SUCCESS,
                             Jackson.newObjectMapper().writerWithDefaultPrettyPrinter().writeValueAsString(inboundResponseFromIdp),
@@ -36,10 +36,10 @@ public class SamlResponseService {
                     throw new RuntimeException(e);
                 }
             }
-            default: {
+            default -> {
                 try {
                     return new SamlResponseFromIdpDto(ResponseStatus.AUTHENTICATION_FAILED,
-                    Jackson.newObjectMapper().writerWithDefaultPrettyPrinter().writeValueAsString(inboundResponseFromIdp),
+                            Jackson.newObjectMapper().writerWithDefaultPrettyPrinter().writeValueAsString(inboundResponseFromIdp),
                             document.toString(),
                             relayState);
                 } catch (JsonProcessingException e) {

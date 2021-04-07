@@ -135,14 +135,14 @@ public class EidasRegistrationPageResource {
         final String samlRequestId = session.get().getEidasAuthnRequest().getRequestId();
 
         switch (submitButtonValue) {
-            case Cancel: {
+            case Cancel -> {
 
                 session = sessionRepository.deleteAndGet(sessionCookie);
 
                 final SamlResponse cancelResponse = nonSuccessAuthnResponseService.generateAuthnCancel(schemeId, samlRequestId, session.get().getRelayState());
                 return samlMessageRedirectViewFactory.sendSamlResponse(cancelResponse);
             }
-            case Register: {
+            case Register -> {
                 try {
                     session.get().setSignAssertions(signAssertions);
                     stubCountryService.createAndAttachIdpUserToSession(
@@ -170,7 +170,7 @@ public class EidasRegistrationPageResource {
                     return createErrorResponse(ErrorMessageType.INVALID_USERNAME_OR_PASSWORD, schemeId);
                 }
             }
-            default: {
+            default -> {
                 throw new GenericStubIdpException("invalid submit button value", Response.Status.BAD_REQUEST);
             }
         }

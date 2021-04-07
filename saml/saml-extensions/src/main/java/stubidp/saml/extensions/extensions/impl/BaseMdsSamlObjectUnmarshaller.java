@@ -30,19 +30,19 @@ public class BaseMdsSamlObjectUnmarshaller extends AbstractSAMLObjectUnmarshalle
         BaseMdsSamlObject address = (BaseMdsSamlObject) samlObject;
 
         switch (attribute.getLocalName()) {
-            case Address.FROM_ATTRIB_NAME: {
+            case Address.FROM_ATTRIB_NAME -> {
                 address.setFrom(Objects.isNull(attribute.getValue()) ? null : InstantFromDate.of(attribute.getValue()));
                 break;
             }
-            case Address.TO_ATTRIB_NAME: {
+            case Address.TO_ATTRIB_NAME -> {
                 address.setTo(Objects.isNull(attribute.getValue()) ? null : InstantFromDate.of(attribute.getValue()));
                 break;
             }
-            case Address.VERIFIED_ATTRIB_NAME: {
+            case Address.VERIFIED_ATTRIB_NAME -> {
                 address.setVerified(Boolean.parseBoolean(attribute.getValue()));
                 break;
             }
-            default: {
+            default -> {
                 super.processAttribute(samlObject, attribute);
             }
         }

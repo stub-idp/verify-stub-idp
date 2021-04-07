@@ -43,22 +43,15 @@ public abstract class AbstractHardCodedKeyStore implements InternalPublicKeyStor
 
     @Override
     public InputStream createInputStream(String publicKeyUri) {
-        switch (publicKeyUri) {
-            case "../deploy/keys/test-rp.crt":
-                return new ByteArrayInputStream(TestCertificateStrings.TEST_RP_PUBLIC_SIGNING_CERT.getBytes());
-            case "../deploy/keys/test-rp.pk8":
-                return new ByteArrayInputStream(Base64.getMimeDecoder().decode(TestCertificateStrings.TEST_RP_PRIVATE_SIGNING_KEY));
-            case "../deploy/keys/hub_encryption.crt":
-                return new ByteArrayInputStream(TestCertificateStrings.HUB_TEST_PUBLIC_ENCRYPTION_CERT.getBytes());
-            case "../deploy/keys/hub_signing.crt":
-                return new ByteArrayInputStream(TestCertificateStrings.HUB_TEST_PUBLIC_SIGNING_CERT.getBytes());
-            case "../deploy/keys/hub_encryption.pk8":
-                return new ByteArrayInputStream(Base64.getMimeDecoder().decode(TestCertificateStrings.HUB_TEST_PRIVATE_ENCRYPTION_KEY));
-            case "../deploy/keys/hub_signing.pk8":
-                return new ByteArrayInputStream(Base64.getMimeDecoder().decode(TestCertificateStrings.HUB_TEST_PRIVATE_SIGNING_KEY));
-            default:
-                throw new RuntimeException("Cert not found: " + publicKeyUri);
-        }
+        return switch (publicKeyUri) {
+            case "../deploy/keys/test-rp.crt" -> new ByteArrayInputStream(TestCertificateStrings.TEST_RP_PUBLIC_SIGNING_CERT.getBytes());
+            case "../deploy/keys/test-rp.pk8" -> new ByteArrayInputStream(Base64.getMimeDecoder().decode(TestCertificateStrings.TEST_RP_PRIVATE_SIGNING_KEY));
+            case "../deploy/keys/hub_encryption.crt" -> new ByteArrayInputStream(TestCertificateStrings.HUB_TEST_PUBLIC_ENCRYPTION_CERT.getBytes());
+            case "../deploy/keys/hub_signing.crt" -> new ByteArrayInputStream(TestCertificateStrings.HUB_TEST_PUBLIC_SIGNING_CERT.getBytes());
+            case "../deploy/keys/hub_encryption.pk8" -> new ByteArrayInputStream(Base64.getMimeDecoder().decode(TestCertificateStrings.HUB_TEST_PRIVATE_ENCRYPTION_KEY));
+            case "../deploy/keys/hub_signing.pk8" -> new ByteArrayInputStream(Base64.getMimeDecoder().decode(TestCertificateStrings.HUB_TEST_PRIVATE_SIGNING_KEY));
+            default -> throw new RuntimeException("Cert not found: " + publicKeyUri);
+        };
     }
 
     private PublicKey getPrimaryEncryptionKeyForEntity(String entityId) {

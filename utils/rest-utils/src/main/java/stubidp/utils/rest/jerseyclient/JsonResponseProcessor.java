@@ -59,14 +59,11 @@ public class JsonResponseProcessor {
     }
 
     private Response filterErrorResponses(URI uri, Response response) {
-        switch (response.getStatusInfo().getFamily()) {
-            case SERVER_ERROR:
-                throw createErrorStatus(response, ExceptionType.REMOTE_SERVER_ERROR, uri);
-            case CLIENT_ERROR:
-                throw createErrorStatus(response, ExceptionType.CLIENT_ERROR, uri);
-            default:
-                return response;
-        }
+        return switch (response.getStatusInfo().getFamily()) {
+            case SERVER_ERROR -> throw createErrorStatus(response, ExceptionType.REMOTE_SERVER_ERROR, uri);
+            case CLIENT_ERROR -> throw createErrorStatus(response, ExceptionType.CLIENT_ERROR, uri);
+            default -> response;
+        };
     }
 
     private ApplicationException createErrorStatus(Response response, ExceptionType exceptionType, URI uri) {

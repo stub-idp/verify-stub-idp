@@ -96,15 +96,11 @@ public class ConsentResource {
         IdpSession session = getAndValidateSession(idpName, sessionCookie);
         sessionRepository.deleteSession(sessionCookie);
 
-        switch (submitButtonValue) {
-            case I_AGREE_SUBMIT_VALUE:
-                return samlMessageRedirectViewFactory.sendSamlResponse(successAuthnResponseService.getSuccessResponse(randomisePid, httpServletRequest.getRemoteAddr(), idpName, session));
-            case I_REFUSE_SUBMIT_VALUE:
-                return samlMessageRedirectViewFactory.sendSamlResponse(nonSuccessAuthnResponseService.generateNoAuthnContext(idpName, session.getIdaAuthnRequestFromHub().getId(), session.getRelayState()));
-
-            default:
-                throw errorResponse("Invalid button value " + submitButtonValue);
-        }
+        return switch (submitButtonValue) {
+            case I_AGREE_SUBMIT_VALUE -> samlMessageRedirectViewFactory.sendSamlResponse(successAuthnResponseService.getSuccessResponse(randomisePid, httpServletRequest.getRemoteAddr(), idpName, session));
+            case I_REFUSE_SUBMIT_VALUE -> samlMessageRedirectViewFactory.sendSamlResponse(nonSuccessAuthnResponseService.generateNoAuthnContext(idpName, session.getIdaAuthnRequestFromHub().getId(), session.getRelayState()));
+            default -> throw errorResponse("Invalid button value " + submitButtonValue);
+        };
     }
 
     private IdpSession getAndValidateSession(String idpName, SessionId sessionCookie) {

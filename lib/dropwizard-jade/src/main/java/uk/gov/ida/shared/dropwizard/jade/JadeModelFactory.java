@@ -13,7 +13,7 @@ public class JadeModelFactory {
     public static final String GET_METHOD_NAME_PREFIX = "get";
 
     public JadeModel createModel(final View view) {
-        final JadeModel jadeModel = new JadeModel(new HashMap<String, Object>() {});
+        final JadeModel jadeModel = new JadeModel(new HashMap<>() {});
         addMethodsFromClassHierarchy(view, jadeModel);
         return jadeModel;
     }

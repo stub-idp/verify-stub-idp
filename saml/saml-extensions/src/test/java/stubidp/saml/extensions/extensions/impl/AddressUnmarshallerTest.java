@@ -66,14 +66,11 @@ class AddressUnmarshallerTest extends OpenSAMLRunner {
 
     @Test
     void unmarshall_shouldSetVerifiedToDefaultValueWhenAbsent() throws Exception {
-        String addressXmlString = "  <saml:AttributeValue" +
-                "        xmlns:saml=\"urn:oasis:names:tc:SAML:2.0:assertion\"" +
-                "        xmlns:ida=\"http://www.cabinetoffice.gov.uk/resource-library/ida/attributes\"" +
-                "        xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"" +
-                "        xsi:type=\"ida:AddressType\">\n" +
-                "    <ida:Line>a</ida:Line>\n" +
-                "    <ida:Line>a</ida:Line>\n" +
-                "  </saml:AttributeValue>";
+        String addressXmlString = """
+                <saml:AttributeValue xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion" xmlns:ida="http://www.cabinetoffice.gov.uk/resource-library/ida/attributes" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="ida:AddressType">
+                  <ida:Line>a</ida:Line>
+                  <ida:Line>a</ida:Line>
+                </saml:AttributeValue>""".indent(2);
 
         Address address = Utils.unmarshall(addressXmlString);
 
@@ -90,21 +87,14 @@ class AddressUnmarshallerTest extends OpenSAMLRunner {
             boolean verifiedValue,
             String uprn) {
 
-        return String.format("" +
-                "  <saml:AttributeValue" +
-                "        ida:From=\"%s\"" +
-                "        ida:To=\"%s\"" +
-                "        ida:Verified=\"%b\"" +
-                "        xmlns:saml=\"urn:oasis:names:tc:SAML:2.0:assertion\"" +
-                "        xmlns:ida=\"http://www.cabinetoffice.gov.uk/resource-library/ida/attributes\"" +
-                "        xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"" +
-                "        xsi:type=\"ida:AddressType\">\n" +
-                "    <ida:Line>%s</ida:Line>\n" +
-                "    <ida:Line>%s</ida:Line>\n" +
-                "    <ida:PostCode>%s</ida:PostCode>\n" +
-                "    <ida:InternationalPostCode>%s</ida:InternationalPostCode>\n" +
-                "    <ida:UPRN>%s</ida:UPRN>\n" +
-                "  </saml:AttributeValue>",
+        return String.format("""
+                        <saml:AttributeValue  ida:From="%s"  ida:To="%s"  ida:Verified="%b"  xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion"  xmlns:ida="http://www.cabinetoffice.gov.uk/resource-library/ida/attributes"  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"  xsi:type="ida:AddressType">
+                          <ida:Line>%s</ida:Line>
+                          <ida:Line>%s</ida:Line>
+                          <ida:PostCode>%s</ida:PostCode>
+                          <ida:InternationalPostCode>%s</ida:InternationalPostCode>
+                          <ida:UPRN>%s</ida:UPRN>
+                        </saml:AttributeValue>""".indent(2),
                 fromDateValue,
                 toDateValue,
                 verifiedValue,

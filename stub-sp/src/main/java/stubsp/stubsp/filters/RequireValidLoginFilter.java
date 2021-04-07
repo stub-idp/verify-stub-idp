@@ -146,17 +146,10 @@ public class RequireValidLoginFilter implements ContainerRequestFilter {
             status = Status.VERIFIED;
         }
 
-        switch (status) {
-            case VERIFIED:
-                return true;
-            case ID_NOT_PRESENT:
-            case HASH_NOT_PRESENT:
-            case DELETED_SESSION:
-            case INVALID_HASH:
-            case NOT_FOUND:
-            default:
-                return false;
-        }
+        return switch (status) {
+            case VERIFIED -> true;
+            default -> false;
+        };
     }
 
     private boolean sessionExists(SessionId sessionId) {

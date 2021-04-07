@@ -116,17 +116,17 @@ public class LoginPageResource {
             @CookieParam(StubIdpCookieNames.SESSION_COOKIE_NAME) SessionId sessionCookie) {
 
         switch (submitButtonValue) {
-            case Cancel: {
+            case Cancel -> {
 
                 Optional<IdpSession> session = sessionRepository.deleteAndGet(sessionCookie);
 
-                if(sessionHasIdaAuthnRequestFromHub(session)) {
+                if (sessionHasIdaAuthnRequestFromHub(session)) {
                     String samlRequestId = session.get().getIdaAuthnRequestFromHub().getId();
                     final SamlResponse cancelResponse =
                             nonSuccessAuthnResponseService.generateAuthnCancel(
-                                                                            idpName,
-                                                                            samlRequestId,
-                                                                            session.get().getRelayState());
+                                    idpName,
+                                    samlRequestId,
+                                    session.get().getRelayState());
 
                     return samlMessageRedirectViewFactory.sendSamlResponse(cancelResponse);
 
@@ -134,8 +134,7 @@ public class LoginPageResource {
                     return redirectToHomePage(idpName);
                 }
             }
-
-            case SignIn: {
+            case SignIn -> {
                 if (Objects.isNull(sessionCookie)) {
                     return createSessionAttachUserAndRedirectToHomePage(idpName, username, password, Optional.empty());
                 }
@@ -148,7 +147,7 @@ public class LoginPageResource {
                     return createSessionAttachUserAndRedirectToHomePage(idpName, username, password, session);
                 }
             }
-            default: {
+            default -> {
                 throw new GenericStubIdpException("unknown submit button value", Response.Status.BAD_REQUEST);
             }
         }

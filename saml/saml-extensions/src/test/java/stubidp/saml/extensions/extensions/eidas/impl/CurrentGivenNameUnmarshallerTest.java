@@ -31,14 +31,11 @@ class CurrentGivenNameUnmarshallerTest extends OpenSAMLRunner {
     }
 
     private String getCurrentGivenNameSamlString(boolean isLatinScript) {
-        return String.format(
-                "<saml2:AttributeValue " +
-                "%s" +
-                "   xmlns:eidas-natural=\"http://eidas.europa.eu/attributes/naturalperson\"\n " +
-                "   xmlns:saml2=\"urn:oasis:names:tc:SAML:2.0:assertion\"\n " +
-                "   xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\n " +
-                "   xsi:type=\"eidas-natural:CurrentGivenNameType\">\n" +
-                "Javier" +
-                "</saml2:AttributeValue>", isLatinScript ? "" : "LatinScript=\"false\"");
+        return String.format("""
+                   <saml2:AttributeValue %s xmlns:eidas-natural="http://eidas.europa.eu/attributes/naturalperson"
+                       xmlns:saml2="urn:oasis:names:tc:SAML:2.0:assertion"
+                       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                       xsi:type="eidas-natural:CurrentGivenNameType">
+                   Javier</saml2:AttributeValue>""", isLatinScript ? "" : "LatinScript=\"false\"");
     }
 }

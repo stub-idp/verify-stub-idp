@@ -140,11 +140,11 @@ public class RegistrationPageResource {
                                          SubmitButtonValue submitButtonValue,
                                          SessionId sessionCookie) {
         switch (submitButtonValue) {
-            case Cancel: {
+            case Cancel -> {
                 idpSessionRepository.deleteSession(sessionCookie);
                 return Response.seeOther(UriBuilder.fromPath(Urls.SINGLE_IDP_CANCEL_PRE_REGISTER_RESOURCE).build(idpName)).build();
             }
-            case Register: {
+            case Register -> {
                 try {
                     idpUserService.createAndAttachIdpUserToSession(idpName,
                             firstname, surname, addressLine1, addressLine2, addressTown, addressPostCode,
@@ -160,11 +160,11 @@ public class RegistrationPageResource {
                 }
 
                 return Response.seeOther(UriBuilder.fromPath(Urls.SINGLE_IDP_START_PROMPT_RESOURCE)
-                        .queryParam(Urls.SOURCE_PARAM,Urls.SOURCE_PARAM_PRE_REG_VALUE)
+                        .queryParam(Urls.SOURCE_PARAM, Urls.SOURCE_PARAM_PRE_REG_VALUE)
                         .build(idpName))
                         .build();
             }
-            default: {
+            default -> {
                 throw new GenericStubIdpException("unknown submit button value", Response.Status.BAD_REQUEST);
             }
         }
@@ -189,14 +189,14 @@ public class RegistrationPageResource {
         final String samlRequestId = session.get().getIdaAuthnRequestFromHub().getId();
 
         switch (submitButtonValue) {
-            case Cancel: {
+            case Cancel -> {
 
                 session = idpSessionRepository.deleteAndGet(sessionCookie);
 
                 final SamlResponse cancelResponse = nonSuccessAuthnResponseService.generateAuthnCancel(idpName, samlRequestId, session.get().getRelayState());
                 return samlMessageRedirectViewFactory.sendSamlResponse(cancelResponse);
             }
-            case Register: {
+            case Register -> {
                 try {
                     idpUserService.createAndAttachIdpUserToSession(idpName, firstname, surname, addressLine1, addressLine2, addressTown, addressPostCode, levelOfAssurance, dateOfBirth, gender, username, password, sessionCookie);
                     return Response.seeOther(UriBuilder.fromPath(Urls.IDP_CONSENT_RESOURCE)
@@ -212,7 +212,7 @@ public class RegistrationPageResource {
                     return createErrorResponse(ErrorMessageType.INVALID_USERNAME_OR_PASSWORD, idpName);
                 }
             }
-            default: {
+            default -> {
                 throw new GenericStubIdpException("unknown submit button value", Response.Status.BAD_REQUEST);
             }
         }

@@ -26,16 +26,12 @@ public enum LevelOfAssurance implements Comparable<LevelOfAssurance> {
     }
 
     public AuthnContext toVerifyLevelOfAssurance() {
-        switch (this) {
-            case LOW:
-                return AuthnContext.LEVEL_1;
-            case SUBSTANTIAL:
-                return AuthnContext.LEVEL_2;
-            case HIGH:
-                return AuthnContext.LEVEL_2; // Verify doesn't support LoA 3 yet, so return LoA 2
-            default:
-                throw new IllegalStateException("Unknown level of assurance from requested AuthnContext : " + this.value);
-        }
+        return switch (this) {
+            case LOW -> AuthnContext.LEVEL_1;
+            case SUBSTANTIAL -> AuthnContext.LEVEL_2;
+            case HIGH -> AuthnContext.LEVEL_2; // Verify doesn't support LoA 3 yet, so return LoA 2
+            default -> throw new IllegalStateException("Unknown level of assurance from requested AuthnContext : " + this.value);
+        };
     }
 
     @Override
