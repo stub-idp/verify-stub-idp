@@ -11,13 +11,13 @@ import java.util.Optional;
 
 public abstract class StubHandler extends AbstractHandler {
     protected void respondWith(Request baseRequest, HttpServletResponse response, RegisteredResponse registeredResponse) {
-        response.setStatus(registeredResponse.getStatus());
-        for (Map.Entry<String, String> headerEntry : registeredResponse.getHeaders().entrySet()) {
+        response.setStatus(registeredResponse.status());
+        for (Map.Entry<String, String> headerEntry : registeredResponse.headers().entrySet()) {
             response.setHeader(headerEntry.getKey(), headerEntry.getValue());
         }
-        response.setContentType(registeredResponse.getContentType());
+        response.setContentType(registeredResponse.contentType());
         try {
-            response.getWriter().append(registeredResponse.getBody());
+            response.getWriter().append(registeredResponse.body());
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

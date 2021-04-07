@@ -49,7 +49,7 @@ public class UserMapper {
 
     public DatabaseIdpUser mapToIdpUser(User user) {
         try {
-            return mapper.readValue(user.getData(), DatabaseIdpUser.class);
+            return mapper.readValue(user.data(), DatabaseIdpUser.class);
         } catch (JsonProcessingException e) {
             throw new InvalidUserInDatabaseException(e);
         }
@@ -57,7 +57,7 @@ public class UserMapper {
 
     public DatabaseEidasUser mapToEidasUser(User user) {
         try {
-            return mapper.readValue(user.getData(), DatabaseEidasUser.class);
+            return mapper.readValue(user.data(), DatabaseEidasUser.class);
         } catch (JsonProcessingException e) {
             throw new InvalidUserInDatabaseException(e);
         }

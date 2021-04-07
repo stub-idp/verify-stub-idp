@@ -72,10 +72,10 @@ public class JDBIUserRepository implements UserRepository {
                 handle.createUpdate(
                         "INSERT INTO users(username, password, identity_provider_friendly_id, \"data\") " +
                                 "VALUES (:username, :password, :idpFriendlyId, to_json(:json))")
-                        .bind("username", user.getUsername())
-                        .bind("password", user.getPassword())
+                        .bind("username", user.username())
+                        .bind("password", user.password())
                         .bind("idpFriendlyId", idpFriendlyId)
-                        .bind("json", user.getData())
+                        .bind("json", user.data())
                         .execute()
         );
     }
@@ -90,10 +90,10 @@ public class JDBIUserRepository implements UserRepository {
                 handle.createUpdate(
                         "INSERT INTO users(username, password, identity_provider_friendly_id, \"data\") " +
                                 "VALUES (:username, :password, :idpFriendlyId, to_json(:json))")
-                        .bind("username", user.getUsername())
-                        .bind("password", user.getPassword())
+                        .bind("username", user.username())
+                        .bind("password", user.password())
                         .bind("idpFriendlyId", stubCountryName)
-                        .bind("json", user.getData())
+                        .bind("json", user.data())
                         .execute()
         );
     }

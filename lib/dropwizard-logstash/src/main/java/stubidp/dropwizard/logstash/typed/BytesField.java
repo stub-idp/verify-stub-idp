@@ -1,9 +1,4 @@
 package stubidp.dropwizard.logstash.typed;
 
-public class BytesField {
-    public final long bytes;
-
-    public BytesField(long bytes) {
-        this.bytes = bytes;
-    }
+public record BytesField(long bytes) {
 }

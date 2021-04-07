@@ -118,8 +118,7 @@ public class DatabaseIdpUser implements Serializable {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof DatabaseIdpUser)) return false;
-        DatabaseIdpUser idpUser = (DatabaseIdpUser) o;
+        if (!(o instanceof DatabaseIdpUser idpUser)) return false;
         return Objects.equals(username, idpUser.username) &&
             Objects.equals(persistentId, idpUser.persistentId) &&
             Objects.equals(password, idpUser.password) &&

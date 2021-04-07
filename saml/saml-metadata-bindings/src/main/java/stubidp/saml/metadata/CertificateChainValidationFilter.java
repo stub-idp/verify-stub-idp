@@ -61,15 +61,13 @@ public final class CertificateChainValidationFilter implements MetadataFilter {
         }
 
         try {
-            if (metadata instanceof EntityDescriptor) {
-                EntityDescriptor entityDescriptor = (EntityDescriptor) metadata;
+            if (metadata instanceof EntityDescriptor entityDescriptor) {
                 filterOutUntrustedRoleDescriptors(entityDescriptor);
                 if (entityDescriptor.getRoleDescriptors().isEmpty()) {
                     LOG.warn("EntityDescriptor '{}' has empty role descriptor list, metadata will be filtered out", entityDescriptor.getEntityID());
                     return null;
                 }
-            } else if (metadata instanceof EntitiesDescriptor) {
-                EntitiesDescriptor entitiesDescriptor = (EntitiesDescriptor) metadata;
+            } else if (metadata instanceof EntitiesDescriptor entitiesDescriptor) {
                 filterOutUntrustedEntityDescriptors(entitiesDescriptor);
                 if (entitiesDescriptor.getEntityDescriptors().isEmpty()) {
                     LOG.warn("EntitiesDescriptor '{}' has empty entity descriptor list, metadata will be filtered out", entitiesDescriptor.getID());

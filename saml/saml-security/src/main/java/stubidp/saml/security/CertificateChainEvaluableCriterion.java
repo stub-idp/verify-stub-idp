@@ -57,11 +57,10 @@ public class CertificateChainEvaluableCriterion implements EvaluableCredentialCr
             log.error("Credential target was null");
             return Boolean.FALSE;
         }
-        if (!(target instanceof X509Credential)) {
+        if (!(target instanceof X509Credential x509Cred)) {
             log.info("Credential is not an X509Credential, can not evaluate X509CertSelector criteria");
             return Boolean.FALSE;
         }
-        X509Credential x509Cred = (X509Credential) target;
 
         X509Certificate entityCert = x509Cred.getEntityCertificate();
         if (Objects.isNull(entityCert)) {

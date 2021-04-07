@@ -25,8 +25,7 @@ public class AssertionAttributeStatementValidator {
         for (AttributeStatement attributeStatement : assertion.getAttributeStatements()) {
             for (Attribute attribute : attributeStatement.getAttributes()) {
                 for (XMLObject attributeValue : attribute.getAttributeValues()) {
-                    if (attributeValue instanceof PersonName) {
-                        PersonName personName = (PersonName) attributeValue;
+                    if (attributeValue instanceof PersonName personName) {
                         String language = personName.getLanguage();
                         if (language != null && !IdaConstants.IDA_LANGUAGE.equals(language)) {
                             SamlValidationSpecificationFailure failure = invalidAttributeLanguageInAssertion(attribute.getName(), language);

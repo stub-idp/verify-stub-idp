@@ -70,12 +70,12 @@ public class KeyStoreResource implements ManagedFileResource {
         X509CertificateFactory x509CertificateFactory = new X509CertificateFactory();
         PrivateKeyFactory privateKeyFactory = new PrivateKeyFactory();
         keys.forEach((entry) -> {
-            X509Certificate[] x509Certificates = Arrays.stream(entry.getCertificates())
+            X509Certificate[] x509Certificates = Arrays.stream(entry.certificates())
                     .map(x509CertificateFactory::createCertificate)
                     .toArray(X509Certificate[]::new);
-            PrivateKey key = privateKeyFactory.createPrivateKey(entry.getKey().getBytes());
+            PrivateKey key = privateKeyFactory.createPrivateKey(entry.key().getBytes());
             try {
-                keyStore.setKeyEntry(entry.getAlias(), key, getPassword().toCharArray(), x509Certificates);
+                keyStore.setKeyEntry(entry.alias(), key, getPassword().toCharArray(), x509Certificates);
             } catch (KeyStoreException e) {
                 throw new RuntimeException(e);
             }
@@ -85,9 +85,9 @@ public class KeyStoreResource implements ManagedFileResource {
     private void setCertificates() {
         X509CertificateFactory x509CertificateFactory = new X509CertificateFactory();
         certificates.forEach((entry) -> {
-            X509Certificate x509Certificate = x509CertificateFactory.createCertificate(entry.getCertificate());
+            X509Certificate x509Certificate = x509CertificateFactory.createCertificate(entry.certificate());
             try {
-                keyStore.setCertificateEntry(entry.getAlias(), x509Certificate);
+                keyStore.setCertificateEntry(entry.alias(), x509Certificate);
             } catch (KeyStoreException e) {
                 throw new RuntimeException(e);
             }
