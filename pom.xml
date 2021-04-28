@@ -37,7 +37,7 @@
         <jakarta_activation.version>1.2.2</jakarta_activation.version>
         <jakarta_inject.version>1.0.1</jakarta_inject.version>
         <jakarta_validation.version>2.0.2</jakarta_validation.version>
-        <jakarta_xml_bind.version>2.3.3</jakarta_xml_bind.version>
+        <jakarta_xml_bind.version>3.0.1</jakarta_xml_bind.version>
         <jbcrypt.version>0.4-atlassian-1</jbcrypt.version>
         <jdbi.version>3.20.0</jdbi.version>
         <jsoup.version>1.13.1</jsoup.version>
