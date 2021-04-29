@@ -210,6 +210,7 @@ class StubIdpAppExtension @JvmOverloads constructor(configOverrides: Map<String?
                     java.util.Map.entry("server.requestLog.appenders[0].type", "console"),
                     java.util.Map.entry("server.applicationConnectors[0].port", "0"),
                     java.util.Map.entry("server.adminConnectors[0].port", "0"),
+                    java.util.Map.entry("logging.level", "WARN"),
                     java.util.Map.entry("logging.appenders[0].type", "console"),
                     java.util.Map.entry("stubIdpsYmlFileLocation", STUB_IDPS_FILE.absolutePath),
                     java.util.Map.entry("signingKeyPairConfiguration.privateKeyConfiguration.type", "encoded"),

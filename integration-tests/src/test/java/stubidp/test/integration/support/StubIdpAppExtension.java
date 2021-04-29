@@ -104,6 +104,7 @@ public class StubIdpAppExtension extends DropwizardAppExtension<StubIdpConfigura
                 Map.entry("server.requestLog.appenders[0].type", "console"),
                 Map.entry("server.applicationConnectors[0].port", "0"),
                 Map.entry("server.adminConnectors[0].port", "0"),
+                Map.entry("logging.level", "WARN"),
                 Map.entry("logging.appenders[0].type", "console"),
                 Map.entry("stubIdpsYmlFileLocation", STUB_IDPS_FILE.getAbsolutePath()),
                 Map.entry("signingKeyPairConfiguration.privateKeyConfiguration.type", "encoded"),
