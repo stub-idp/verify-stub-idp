@@ -138,7 +138,7 @@ public class TestRpBinder extends AbstractBinder {
         if(configuration.isHubExpectedToSignAuthnResponse()) {
             bind(samlResponseToIdaResponseTransformer.compose(hubTransformersFactory.getStringToResponseTransformer())).to(new GenericType<Function<String, InboundResponseFromHub>>() {});
         } else {
-            bind(samlResponseToIdaResponseTransformer.compose(hubTransformersFactory.getStringToResponseTransformer(new ResponseSizeValidator(new NoOpStringSizeValidator())))).to(new GenericType<Function<String, InboundResponseFromHub>>() {});
+            bind(samlResponseToIdaResponseTransformer.compose(hubTransformersFactory.getStringToResponseTransformer(new ResponseSizeValidator()))).to(new GenericType<Function<String, InboundResponseFromHub>>() {});
         }
 
         bind(MatchingServiceRequestHandler.class).to(MatchingServiceRequestHandler.class);
