@@ -13,7 +13,7 @@
         <maven.compiler.target>16</maven.compiler.target>
         <kotlin.compiler.jvmTarget>14</kotlin.compiler.jvmTarget>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <kotlin.version>1.5.0</kotlin.version>
+        <kotlin.version>1.5.10</kotlin.version>
 
         <!-- build plugins -->
         <maven_assembly_plugin.version>3.3.0</maven_assembly_plugin.version>
