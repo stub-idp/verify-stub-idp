@@ -29,7 +29,7 @@
         <commons_codec.version>1.15</commons_codec.version>
         <commons_text.version>1.9</commons_text.version>
         <commons_validator.version>1.7</commons_validator.version>
-        <dropwizard.version>2.0.21</dropwizard.version>
+        <dropwizard.version>2.0.22</dropwizard.version>
         <flyway.version>7.9.1</flyway.version>
         <freemarker.version>2.3.31</freemarker.version>
         <jackson.version>2.12.3</jackson.version>
