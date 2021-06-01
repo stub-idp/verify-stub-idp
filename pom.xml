@@ -25,7 +25,7 @@
 
         <!-- runtime dependencies -->
         <caffeine.version>3.0.2</caffeine.version>
-        <checker_qual.version>3.13.0</checker_qual.version>
+        <checker_qual.version>3.14.0</checker_qual.version>
         <commons_codec.version>1.15</commons_codec.version>
         <commons_text.version>1.9</commons_text.version>
         <commons_validator.version>1.7</commons_validator.version>
