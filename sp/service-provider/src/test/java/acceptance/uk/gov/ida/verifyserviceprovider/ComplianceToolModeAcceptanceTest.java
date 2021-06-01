@@ -118,7 +118,7 @@ public class ComplianceToolModeAcceptanceTest {
     public DropwizardAppExtension<VerifyServiceProviderConfiguration> appRule = new DropwizardAppExtension<>(
             VerifyServiceProviderApplication.class,
             null,
-            Optional.of("dw"),
+            "dw",
             (application) -> commandLineInitiator(application, matchingDataset)
     );
 
