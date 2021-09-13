@@ -57,7 +57,7 @@
         <guava.version>30.1.1-jre</guava.version>
         <httpclient.version>4.5.13</httpclient.version>
         <spring.version>5.3.9</spring.version>
-        <xmlsec.version>2.2.2</xmlsec.version>
+        <xmlsec.version>2.2.3</xmlsec.version>
 
         <!-- test dependencies -->
         <assertj.version>3.20.2</assertj.version>
