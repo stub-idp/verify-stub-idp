@@ -22,7 +22,7 @@ class PreRegistrationSteps(private val client: Client, private val applicationRu
     val cookies: Cookies = Cookies()
     var csrfToken: String? = null
         private set
-    private var responseEntity: String? = null
+    private var responseEntity: String = null
 
     fun userSuccessfullyNavigatesTo(path: String): PreRegistrationSteps {
         response = client.target(getUri(path))
@@ -31,11 +31,11 @@ class PreRegistrationSteps(private val client: Client, private val applicationRu
                 .cookie(cookies.secureCookie)
                 .get()
         Assertions.assertThat(response?.status).isEqualTo(Response.Status.OK.statusCode)
-        responseEntity = response?.readEntity(String::class.java)
+        responseEntity = response!!.readEntity(String::class.java)
         val entity = Jsoup.parse(responseEntity)
         val csrfElement = entity.getElementById(AbstractCSRFCheckProtectionFilter.CSRF_PROTECT_FORM_KEY)
         if (!Objects.isNull(csrfElement)) {
-            csrfToken = entity.getElementById(AbstractCSRFCheckProtectionFilter.CSRF_PROTECT_FORM_KEY).`val`()
+            csrfToken = entity.getElementById(AbstractCSRFCheckProtectionFilter.CSRF_PROTECT_FORM_KEY)!!.`val`()
         }
         cookies.extractCookies(response)
         return this
@@ -64,7 +64,7 @@ class PreRegistrationSteps(private val client: Client, private val applicationRu
                 .cookie(cookies.secureCookie)
                 .get()
         cookies.extractCookies(response)
-        responseEntity = response?.readEntity(String::class.java)
+        responseEntity = response!!.readEntity(String::class.java)
         return this
     }
 
