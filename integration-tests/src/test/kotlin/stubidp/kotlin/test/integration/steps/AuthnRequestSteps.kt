@@ -82,17 +82,17 @@ class AuthnRequestSteps(private val client: Client, private val idpName: String,
         return getSamlResponseFromResponseString(response.readEntity(String::class.java))
     }
 
-    fun getSamlResponseFromResponseString(responseString: String?): String {
+    fun getSamlResponseFromResponseString(responseString: String): String {
         val page = Jsoup.parse(responseString)
         Assertions.assertThat(page.getElementsByTag("title").text()).isEqualTo("Saml Processing...")
         return page.getElementsByAttributeValue("name", "SAMLResponse").`val`()
     }
 
-    fun getRelayStateFromResponseHtml(entityString: String?): String {
+    fun getRelayStateFromResponseHtml(entityString: String): String {
         val page = Jsoup.parse(entityString)
         Assertions.assertThat(page.getElementsByTag("title").text()).isEqualTo("Saml Processing...")
         val relayStateElement = page.getElementById(Urls.RELAY_STATE_PARAM)
-        return relayStateElement.`val`()
+        return relayStateElement!!.`val`()
     }
 
     @JvmOverloads
@@ -188,7 +188,7 @@ class AuthnRequestSteps(private val client: Client, private val idpName: String,
         val entity = Jsoup.parse(response.readEntity(String::class.java))
         val csrfElement = entity.getElementById(AbstractCSRFCheckProtectionFilter.CSRF_PROTECT_FORM_KEY)
         if (!Objects.isNull(csrfElement)) {
-            form.param(AbstractCSRFCheckProtectionFilter.CSRF_PROTECT_FORM_KEY, entity.getElementById(AbstractCSRFCheckProtectionFilter.CSRF_PROTECT_FORM_KEY).`val`())
+            form.param(AbstractCSRFCheckProtectionFilter.CSRF_PROTECT_FORM_KEY, entity.getElementById(AbstractCSRFCheckProtectionFilter.CSRF_PROTECT_FORM_KEY)!!.`val`())
         }
         response = client.target(getStubIdpUri(Urls.IDP_FRAUD_FAILURE_RESOURCE))
                 .request()
@@ -225,7 +225,7 @@ class AuthnRequestSteps(private val client: Client, private val idpName: String,
         val entity = Jsoup.parse(response.readEntity(String::class.java))
         val csrfElement = entity.getElementById(AbstractCSRFCheckProtectionFilter.CSRF_PROTECT_FORM_KEY)
         if (!Objects.isNull(csrfElement)) {
-            form.param(AbstractCSRFCheckProtectionFilter.CSRF_PROTECT_FORM_KEY, entity.getElementById(AbstractCSRFCheckProtectionFilter.CSRF_PROTECT_FORM_KEY).`val`())
+            form.param(AbstractCSRFCheckProtectionFilter.CSRF_PROTECT_FORM_KEY, entity.getElementById(AbstractCSRFCheckProtectionFilter.CSRF_PROTECT_FORM_KEY)!!.`val`())
         }
         response = client.target(getStubIdpUri(loginUrl))
                 .request()
@@ -265,7 +265,7 @@ class AuthnRequestSteps(private val client: Client, private val idpName: String,
         val entity = Jsoup.parse(response.readEntity(String::class.java))
         val csrfElement = entity.getElementById(AbstractCSRFCheckProtectionFilter.CSRF_PROTECT_FORM_KEY)
         if (!Objects.isNull(csrfElement)) {
-            form.param(AbstractCSRFCheckProtectionFilter.CSRF_PROTECT_FORM_KEY, entity.getElementById(AbstractCSRFCheckProtectionFilter.CSRF_PROTECT_FORM_KEY).`val`())
+            form.param(AbstractCSRFCheckProtectionFilter.CSRF_PROTECT_FORM_KEY, entity.getElementById(AbstractCSRFCheckProtectionFilter.CSRF_PROTECT_FORM_KEY)!!.`val`())
         }
         signingAlgorithm.ifPresent { s: String? -> form.param(Urls.SIGNING_ALGORITHM_PARAM, s) } // only for eidas consent POST
         response = client.target(getStubIdpUri(consentUrl))

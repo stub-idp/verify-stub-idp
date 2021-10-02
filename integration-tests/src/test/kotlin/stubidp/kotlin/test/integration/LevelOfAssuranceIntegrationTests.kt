@@ -42,7 +42,7 @@ class LevelOfAssuranceIntegrationTests : IntegrationTestHelper() {
         val response = aUserVisitsTheDebugPage(IDP_NAME, cookies)
         Assertions.assertThat(response.status).isEqualTo(Response.Status.OK.statusCode)
         val doc = Jsoup.parse(response.readEntity(String::class.java))
-        Assertions.assertThat(doc.getElementById("authn-request-comparision-type").text()).isEqualTo("AuthnRequest comparison type is \"minimum\".")
+        Assertions.assertThat(doc.getElementById("authn-request-comparision-type")!!.text()).isEqualTo("AuthnRequest comparison type is \"minimum\".")
         Assertions.assertThat(getListItems(doc, "authn-contexts")).containsExactly("LEVEL_1", "LEVEL_2")
     }
 

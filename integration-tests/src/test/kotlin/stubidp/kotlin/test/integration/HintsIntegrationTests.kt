@@ -49,8 +49,8 @@ class HintsIntegrationTests : IntegrationTestHelper() {
         val doc = Jsoup.parse(response.readEntity(String::class.java))
         Assertions.assertThat(getListItems(doc, "known-hints")).containsExactly(IdpHint.has_apps.name)
         Assertions.assertThat(getListItems(doc, "unknown-hints")).containsExactlyInAnyOrder("snakes", "plane")
-        Assertions.assertThat(doc.getElementById("language-hint").text()).isEqualTo("No language hint was set.")
-        Assertions.assertThat(doc.getElementById("registration").text()).isEqualTo("\"registration\" hint is \"true\"")
+        Assertions.assertThat(doc.getElementById("language-hint")!!.text()).isEqualTo("No language hint was set.")
+        Assertions.assertThat(doc.getElementById("registration")!!.text()).isEqualTo("\"registration\" hint is \"true\"")
     }
 
     @Test
@@ -64,8 +64,8 @@ class HintsIntegrationTests : IntegrationTestHelper() {
         val doc = Jsoup.parse(response.readEntity(String::class.java))
         val languageHintElement = doc.getElementById("language-hint")
         Assertions.assertThat(languageHintElement).isNotNull
-        Assertions.assertThat(languageHintElement.text()).contains("\"cy\"")
-        Assertions.assertThat(doc.getElementById("registration").text()).isEqualTo("\"registration\" hint not received")
+        Assertions.assertThat(languageHintElement!!.text()).contains("\"cy\"")
+        Assertions.assertThat(doc.getElementById("registration")!!.text()).isEqualTo("\"registration\" hint not received")
     }
 
     private fun getListItems(doc: Document, parentClass: String): List<String> {

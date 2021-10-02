@@ -116,7 +116,7 @@ class SecurityIntegrationTests : IntegrationTestHelper() {
         val entity = Jsoup.parse(response.readEntity(String::class.java))
         val csrfElement = entity.getElementById(AbstractCSRFCheckProtectionFilter.CSRF_PROTECT_FORM_KEY)
         return if (!Objects.isNull(csrfElement)) {
-            csrfElement.`val`()
+            csrfElement!!.`val`()
         } else null
     }
     

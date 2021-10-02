@@ -38,10 +38,10 @@ class EmojiSupportIntegrationTests : IntegrationTestHelper() {
         val cookies = authnRequestSteps.userPostsAuthnRequestToStubIdp()
         authnRequestSteps.userLogsIn(cookies, "$IDP_NAME-emoji")
         val page = userConsents(cookies)
-        Assertions.assertThat(page.getElementById("firstName").text()).isEqualTo("😀")
+        Assertions.assertThat(page.getElementById("firstName")!!.text()).isEqualTo("😀")
         // can't do a direct comparison of the complete displayed text using jsoup
-        Assertions.assertThat(page.getElementById("address").text()).contains("🏠")
-        Assertions.assertThat(page.getElementById("address").text()).contains("🏘")
+        Assertions.assertThat(page.getElementById("address")!!.text()).contains("🏠")
+        Assertions.assertThat(page.getElementById("address")!!.text()).contains("🏘")
     }
 
     private fun userConsents(cookies: AuthnRequestSteps.Cookies): Document {
