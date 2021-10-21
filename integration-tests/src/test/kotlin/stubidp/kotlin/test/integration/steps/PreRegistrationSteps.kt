@@ -22,7 +22,7 @@ class PreRegistrationSteps(private val client: Client, private val applicationRu
     val cookies: Cookies = Cookies()
     var csrfToken: String? = null
         private set
-    private var responseEntity: String = null
+    private var responseEntity: String = ""
 
     fun userSuccessfullyNavigatesTo(path: String): PreRegistrationSteps {
         response = client.target(getUri(path))
