@@ -52,7 +52,7 @@
         <snakeyaml.version>1.29</snakeyaml.version>
 
         <!-- transitive dependencies (mainly updates to opensaml) -->
-        <bouncycastle.version>1.69</bouncycastle.version>
+        <bouncycastle.version>1.70</bouncycastle.version>
         <cryptacular.version>1.2.4</cryptacular.version>
         <guava.version>31.0.1-jre</guava.version>
         <httpclient.version>4.5.13</httpclient.version>
