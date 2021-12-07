@@ -11,6 +11,7 @@ import io.dropwizard.logging.ConsoleAppenderFactory;
 import io.dropwizard.logging.async.AsyncAppenderFactory;
 import io.dropwizard.logging.filter.LevelFilterFactory;
 import io.dropwizard.logging.layout.LayoutFactory;
+import net.logstash.logback.composite.AbstractCompositeJsonFormatter;
 import net.logstash.logback.composite.AbstractJsonProvider;
 import net.logstash.logback.composite.AbstractNestedJsonProvider;
 import net.logstash.logback.composite.CompositeJsonFormatter;
@@ -180,7 +181,7 @@ public class AccessLogstashConsoleAppenderFactory extends ConsoleAppenderFactory
 
     private static class MyAccessEventCompositeJsonEncoder extends AccessEventCompositeJsonEncoder {
         @Override
-        protected CompositeJsonFormatter<IAccessEvent> createFormatter() {
+        protected AbstractCompositeJsonFormatter<IAccessEvent> createFormatter() {
             return new CustomFormatter(this);
         }
     }
