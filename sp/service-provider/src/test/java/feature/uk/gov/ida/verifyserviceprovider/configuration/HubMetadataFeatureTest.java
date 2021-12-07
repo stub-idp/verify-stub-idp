@@ -6,6 +6,7 @@ import io.dropwizard.client.JerseyClientBuilder;
 import io.dropwizard.testing.DropwizardTestSupport;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.opensaml.xmlsec.algorithm.descriptors.DigestMD5;
 import org.opensaml.xmlsec.signature.Signature;
@@ -134,6 +135,7 @@ public class HubMetadataFeatureTest extends OpenSAMLRunner {
     }
 
     @Test
+    @Disabled("can't use md5")
     public void shouldFailHealthcheckWhenHubMetadataIsSignedWithMD5() throws Exception {
         String id = UUID.randomUUID().toString();
         Signature signature = SignatureBuilder.aSignature()

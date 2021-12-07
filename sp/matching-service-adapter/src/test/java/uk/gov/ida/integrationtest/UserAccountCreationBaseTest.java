@@ -25,6 +25,7 @@ import uk.gov.ida.matchingserviceadapter.domain.UserAccountCreationAttribute;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Stream;
 
 import static java.util.Arrays.asList;
@@ -92,6 +93,7 @@ public abstract class UserAccountCreationBaseTest {
     void shouldReturnCurrentAttributesWhenPassedFullMatchingDataset() {
         List<Attribute> requiredAttributes = attributesFromUacAttributes(Stream.of(
                 FIRST_NAME, FIRST_NAME_VERIFIED, MIDDLE_NAME, MIDDLE_NAME_VERIFIED, SURNAME, SURNAME_VERIFIED, CURRENT_ADDRESS, CURRENT_ADDRESS_VERIFIED, ADDRESS_HISTORY, CYCLE_3));
+        final String CYCLE3_ID = UUID.randomUUID().toString();
         AttributeQuery attributeQuery = anAttributeQuery()
             .withId(REQUEST_ID)
             .withAttributes(requiredAttributes)
@@ -99,7 +101,8 @@ public abstract class UserAccountCreationBaseTest {
             .withSubject(aSubjectWithAssertions(asList(
                 anAuthnStatementAssertion("default-request-id"),
                 aCompleteMatchingDatasetAssertion(REQUEST_ID),
-                AssertionBuilder.aCycle3DatasetAssertion("cycle3Name", "cycle3Value").withId(REQUEST_ID).withSignature(SignatureBuilder.aSignature().withDigestAlgorithm(REQUEST_ID, new DigestSHA256()).build()).buildUnencrypted()), REQUEST_ID, HUB_ENTITY_ID))
+                AssertionBuilder.aCycle3DatasetAssertion("cycle3Name", "cycle3Value").withId(CYCLE3_ID).withSignature(SignatureBuilder.aSignature().withDigestAlgorithm(CYCLE3_ID, new DigestSHA256()).build()).buildUnencrypted()),
+                    REQUEST_ID, HUB_ENTITY_ID))
             .build();
 
         Response response = makeAttributeQueryRequest(UNKNOWN_USER_URI, attributeQuery, signatureAlgorithmForHub, digestAlgorithmForHub, HUB_ENTITY_ID);
