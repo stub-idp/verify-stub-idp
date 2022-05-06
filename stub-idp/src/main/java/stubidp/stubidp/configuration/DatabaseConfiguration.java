@@ -5,9 +5,9 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.dropwizard.jackson.Jackson;
-import io.dropwizard.util.Strings;
 
 import java.io.IOException;
+import java.util.Objects;
 import java.util.Optional;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
@@ -20,9 +20,9 @@ public class DatabaseConfiguration {
     private String vcapServices;
 
     public String getUrl() {
-        if (!Strings.isNullOrEmpty(vcapServices)) {
+        if (Objects.nonNull(vcapServices)&&!vcapServices.isEmpty()) {
             return getUrlFromVcap(vcapServices);
-        } else if (!Strings.isNullOrEmpty(url)) {
+        } else if (Objects.nonNull(url)&&!url.isEmpty()) {
             return url;
         }
 

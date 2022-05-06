@@ -18,6 +18,7 @@ import stubidp.saml.test.builders.SignatureBuilder;
 import stubidp.test.devpki.TestCertificateStrings;
 import stubidp.test.devpki.TestEntityIds;
 
+import java.io.InputStream;
 import java.net.URL;
 import java.util.List;
 import java.util.Map;
@@ -75,8 +76,8 @@ public class CredentialFactorySignatureValidatorTest extends OpenSAMLRunner {
      */
     @Test
     void shouldNotValidateBadSignatureAlgorithm() throws Exception {
-        URL authnRequestUrl = getClass().getClassLoader().getResource("authnRequestNormal.xml");//sha1 authnrequest
-        String input = StringEncoding.toBase64Encoded(Resources.toString(authnRequestUrl, UTF_8));
+        InputStream authnRequestUrl = getClass().getClassLoader().getResourceAsStream("authnRequestNormal.xml");//sha1 authnrequest
+        String input = StringEncoding.toBase64Encoded(new String(authnRequestUrl.readAllBytes(), UTF_8));
         //md5 authnrequests throw an exception here as they are not allowed to be unmarshalled
         AuthnRequest request = getStringtoOpenSamlObjectTransformer().apply(input);
         assertThat(credentialFactorySignatureValidator.validate(request, issuerId, null)).isFalse();
@@ -171,8 +172,8 @@ public class CredentialFactorySignatureValidatorTest extends OpenSAMLRunner {
     }
 
     private void validateAuthnRequestFile(String fileName) throws Exception {
-        URL authnRequestUrl = getClass().getClassLoader().getResource(fileName);
-        String input = StringEncoding.toBase64Encoded(Resources.toString(authnRequestUrl, UTF_8));
+        InputStream authnRequestUrl = getClass().getClassLoader().getResourceAsStream(fileName);
+        String input = StringEncoding.toBase64Encoded(new String(authnRequestUrl.readAllBytes(), UTF_8));
         AuthnRequest request = getStringtoOpenSamlObjectTransformer().apply(input);
         credentialFactorySignatureValidator.validate(request, issuerId, null);
     }

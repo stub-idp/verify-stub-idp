@@ -5,7 +5,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import io.dropwizard.jackson.Jackson;
 import io.dropwizard.jersey.validation.Validators;
-import io.dropwizard.testing.FixtureHelpers;
 import net.sourceforge.argparse4j.ArgumentParsers;
 import net.sourceforge.argparse4j.inf.ArgumentParser;
 import net.sourceforge.argparse4j.inf.ArgumentParserException;
@@ -16,6 +15,7 @@ import uk.gov.ida.verifyserviceprovider.VerifyServiceProviderApplication;
 import uk.gov.ida.verifyserviceprovider.compliance.dto.MatchingDataset;
 import uk.gov.ida.verifyserviceprovider.compliance.dto.MatchingDatasetBuilder;
 
+import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.mock;
@@ -76,7 +76,7 @@ public class ComplianceToolModeTest {
         Namespace namespace = subparser.parseArgs(noArguments());
 
         MatchingDataset receivedMatchingDataset = namespace.get(ComplianceToolMode.IDENTITY_DATASET);
-        MatchingDataset expectedMatchingDataset = objectMapper.readValue(FixtureHelpers.fixture("default-test-identity-dataset.json"), MatchingDataset.class);
+        MatchingDataset expectedMatchingDataset = objectMapper.readValue(new String(getClass().getClassLoader().getResourceAsStream("default-test-identity-dataset.json").readAllBytes(), UTF_8), MatchingDataset.class);
         assertThat(receivedMatchingDataset).isEqualTo(expectedMatchingDataset);
 
         String url = namespace.get(ComplianceToolMode.ASSERTION_CONSUMER_URL);

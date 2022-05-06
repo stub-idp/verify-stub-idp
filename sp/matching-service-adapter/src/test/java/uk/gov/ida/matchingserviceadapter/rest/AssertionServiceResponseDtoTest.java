@@ -8,8 +8,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 
-import static io.dropwizard.testing.FixtureHelpers.fixture;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class AssertionServiceResponseDtoTest {
@@ -38,6 +38,6 @@ public class AssertionServiceResponseDtoTest {
     }
 
     private String jsonFixture(String filename) throws IOException {
-        return objectMapper.writeValueAsString(objectMapper.readValue(fixture(filename), JsonNode.class));
+        return objectMapper.writeValueAsString(objectMapper.readValue(new String(getClass().getClassLoader().getResourceAsStream(filename).readAllBytes(), StandardCharsets.UTF_8), JsonNode.class));
     }
 }

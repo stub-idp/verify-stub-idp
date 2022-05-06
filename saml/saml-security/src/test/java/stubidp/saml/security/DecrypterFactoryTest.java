@@ -1,6 +1,5 @@
 package stubidp.saml.security;
 
-import io.dropwizard.util.CharStreams;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.opensaml.core.xml.io.UnmarshallingException;
@@ -21,7 +20,6 @@ import stubidp.utils.security.security.X509CertificateFactory;
 
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.security.PrivateKey;
 import java.security.PublicKey;
@@ -95,7 +93,7 @@ public class DecrypterFactoryTest extends OpenSAMLRunner {
     private void testDecrypt(String fileName) throws IOException, UnmarshallingException, DecryptionException, ParserConfigurationException, SAXException {
         DecrypterFactory decrypterFactory = new DecrypterFactory();
 
-        String xml = CharStreams.toString(new InputStreamReader(getClass().getClassLoader().getResourceAsStream(fileName), StandardCharsets.UTF_8));
+        String xml = new String(getClass().getClassLoader().getResourceAsStream(fileName).readAllBytes(), StandardCharsets.UTF_8);
 
         EncryptedElementType xmlObject  = new SamlObjectParser().getSamlObject(xml);
         Credential basicCredential = new BasicCredential(unusedPublicKey, privateEncryptionKey);
