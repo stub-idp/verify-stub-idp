@@ -20,6 +20,7 @@ import org.junit.jupiter.api.extension.RegisterExtension;
 import org.opensaml.core.criterion.EntityIdCriterion;
 import org.opensaml.saml.metadata.resolver.MetadataResolver;
 import stubidp.saml.metadata.bundle.MetadataResolverBundle;
+import stubidp.saml.test.OpenSAMLRunner;
 import stubidp.saml.test.metadata.MetadataFactory;
 import stubidp.test.devpki.TestEntityIds;
 import stubidp.test.utils.httpstub.HttpStubRule;
@@ -36,7 +37,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static stubidp.saml.constants.Constants.APPLICATION_SAMLMETADATA_XML;
 
 @ExtendWith(DropwizardExtensionsSupport.class)
-public class FederationMetadataWithoutTrustStoresBundleTest {
+public class FederationMetadataWithoutTrustStoresBundleTest extends OpenSAMLRunner {
 
     private static final String VERIFY_METADATA_PATH = "/saml/metadata/sp";
     private static final HttpStubRule verifyMetadataServer = new HttpStubRule();

@@ -1,6 +1,5 @@
 package stubidp.shared.csrf;
 
-import io.dropwizard.util.Strings;
 import org.jboss.logging.MDC;
 import stubidp.shared.cookies.CookieNames;
 import stubidp.shared.cookies.HmacValidator;
@@ -105,9 +104,9 @@ public abstract class AbstractCSRFCheckProtectionFilter implements ContainerRequ
 
         final Status status;
 
-        if (Strings.isNullOrEmpty(sessionCookie.get())) {
+        if (sessionCookie.isEmpty()||sessionCookie.get().isEmpty()) {
             status = Status.ID_NOT_PRESENT;
-        } else if (isSecureCookieEnabled && (secureCookie.isEmpty() || Strings.isNullOrEmpty(secureCookie.get()))) {
+        } else if (isSecureCookieEnabled && (secureCookie.isEmpty() || secureCookie.get().isEmpty())) {
             status = Status.HASH_NOT_PRESENT;
         } else if (isSecureCookieEnabled && NO_CURRENT_SESSION_COOKIE_VALUE.equals(secureCookie.get())) {
             status = Status.DELETED_SESSION;

@@ -5,7 +5,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.util.StdDateFormat;
 import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
 import io.dropwizard.jackson.Jackson;
-import io.dropwizard.testing.FixtureHelpers;
 import org.assertj.core.api.Assertions;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
@@ -15,6 +14,7 @@ import uk.gov.ida.rp.testrp.builders.SimpleMdsValueDtoBuilder;
 import uk.gov.ida.rp.testrp.builders.UniversalAddressDtoBuilder;
 
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -90,7 +90,7 @@ public class MatchingServiceRequestDtoTest {
     }
 
     private String jsonFixture(String filename) throws IOException {
-        return objectMapper.writeValueAsString(objectMapper.readValue(FixtureHelpers.fixture(filename), JsonNode.class));
+        return objectMapper.writeValueAsString(objectMapper.readValue(new String(getClass().getClassLoader().getResourceAsStream(filename).readAllBytes(), StandardCharsets.UTF_8), JsonNode.class));
     }
 
     private UniversalAddressDto getAddressDto(String postcode, DateTime dateTime) {

@@ -19,10 +19,10 @@ import uk.gov.ida.matchingserviceadapter.rest.matchingservice.VerifyAddressDto;
 import uk.gov.ida.matchingserviceadapter.rest.matchingservice.VerifyMatchingDatasetDto;
 
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
 import java.util.Optional;
 
-import static io.dropwizard.testing.FixtureHelpers.fixture;
 import static org.assertj.core.api.Assertions.assertThat;
 import static uk.gov.ida.matchingserviceadapter.builders.VerifyMatchingDatasetDtoBuilder.aVerifyMatchingDatasetDto;
 
@@ -90,7 +90,7 @@ public class AssertionServiceRequestDtoTest {
     }
 
     private String jsonFixture(String filename) throws IOException {
-        return objectMapper.writeValueAsString(objectMapper.readValue(fixture(filename), JsonNode.class));
+        return objectMapper.writeValueAsString(objectMapper.readValue(new String(getClass().getClassLoader().getResourceAsStream(filename).readAllBytes(), StandardCharsets.UTF_8), JsonNode.class));
     }
 
     private VerifyAddressDto getAddressDto(String postcode, LocalDate dateTime) {
