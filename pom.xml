@@ -20,7 +20,7 @@
         <maven_compiler_plugin.version>3.10.1</maven_compiler_plugin.version>
         <maven_dependency_plugin.version>3.3.0</maven_dependency_plugin.version>
         <maven_failsafe_plugin.version>3.0.0-M8</maven_failsafe_plugin.version>
-        <maven_jar_plugin.version>3.2.2</maven_jar_plugin.version>
+        <maven_jar_plugin.version>3.3.0</maven_jar_plugin.version>
         <maven_surefire_plugin.version>3.0.0-M8</maven_surefire_plugin.version>
 
         <!-- runtime dependencies -->
