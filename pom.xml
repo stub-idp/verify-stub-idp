@@ -64,7 +64,7 @@
         <h2.version>2.1.214</h2.version>
         <junit.version>5.9.2</junit.version>
         <jsonorg.version>20220924</jsonorg.version>
-        <mockito.version>5.0.0</mockito.version>
+        <mockito.version>5.1.0</mockito.version>
         <wiremock.version>2.27.2</wiremock.version>
     </properties>
 
