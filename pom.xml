@@ -40,7 +40,7 @@
         <jakarta_xml_bind.version>2.3.3</jakarta_xml_bind.version>
         <jbcrypt.version>0.4-atlassian-1</jbcrypt.version>
         <jdbi.version>3.36.0</jdbi.version>
-        <jsoup.version>1.15.3</jsoup.version>
+        <jsoup.version>1.16.1</jsoup.version>
         <logback.version>1.2.11</logback.version>
         <logstash_logback_encoder.version>7.2</logstash_logback_encoder.version>
         <nimbus_jwt.version>9.23</nimbus_jwt.version>
