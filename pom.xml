@@ -54,7 +54,7 @@
         <!-- transitive dependencies (mainly updates to opensaml) -->
         <bouncycastle.version>1.70</bouncycastle.version>
         <cryptacular.version>1.2.5</cryptacular.version>
-        <guava.version>32.0.0-jre</guava.version>
+        <guava.version>32.1.1-jre</guava.version>
         <httpclient.version>4.5.14</httpclient.version>
         <spring.version>6.0.9</spring.version>
         <xmlsec.version>3.0.2</xmlsec.version>
