@@ -61,7 +61,7 @@
 
         <!-- test dependencies -->
         <assertj.version>3.24.2</assertj.version>
-        <h2.version>2.1.214</h2.version>
+        <h2.version>2.2.222</h2.version>
         <junit.version>5.9.3</junit.version>
         <jsonorg.version>20230227</jsonorg.version>
         <mockito.version>5.4.0</mockito.version>
