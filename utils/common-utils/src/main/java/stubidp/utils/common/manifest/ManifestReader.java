@@ -1,6 +1,7 @@
 package stubidp.utils.common.manifest;
 
 import java.io.IOException;
+import java.net.URI;
 import java.net.URL;
 import java.util.jar.Manifest;
 
@@ -21,7 +22,7 @@ public class ManifestReader {
     private Manifest getManifestFor(Class<?> clazz) throws IOException {
         String manifestFilePath = getManifestFilePath(clazz);
 
-        return new Manifest(new URL(manifestFilePath).openStream());
+        return new Manifest(URI.create(manifestFilePath).toURL().openStream());
     }
 
     private String getManifestFilePath(Class<?> clazz) throws IOException {
