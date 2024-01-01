@@ -60,7 +60,7 @@
         <xmlsec.version>3.0.2</xmlsec.version>
 
         <!-- test dependencies -->
-        <assertj.version>3.24.2</assertj.version>
+        <assertj.version>3.25.0</assertj.version>
         <h2.version>2.1.214</h2.version>
         <junit.version>5.10.0</junit.version>
         <jsonorg.version>20230227</jsonorg.version>
