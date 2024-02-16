@@ -56,7 +56,7 @@
         <cryptacular.version>1.2.5</cryptacular.version>
         <guava.version>32.1.2-jre</guava.version>
         <httpclient.version>4.5.14</httpclient.version>
-        <spring.version>6.0.11</spring.version>
+        <spring.version>6.1.4</spring.version>
         <xmlsec.version>3.0.2</xmlsec.version>
 
         <!-- test dependencies -->
